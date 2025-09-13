@@ -10,7 +10,7 @@ function registration(): void {
         return;
     }
 
-    $fields = ['id', 'fname', 'lname', 'gender', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city', 'year', 'parcours', 'td', 'tp', 'terms'];
+    $fields = ['id', 'fname', 'lname', 'gender', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city', 'year', 'parcours', 'td', 'tp', 'terms'];
 
     // Stocke les valeurs validées ici
     $validated = [];
@@ -20,6 +20,12 @@ function registration(): void {
 
         // Parcours est optionnel en 1ère année
         if ($field === 'parcours' && ($_POST['year'] ?? '') === '1' && empty($value)) continue;
+
+        // Champs year, parcours, td et tp sont optionnels pour les enseignants et partenaires
+        if ((in_array($field, ['year', 'parcours', 'td', 'tp']) ) && in_array($_POST['user_type'] ?? '', ['professor', 'companies'])) {
+            if (empty($value)) continue;
+            echo "<script>alert(\"Vous ne devez pas remplis le champs $field en tant que " . htmlspecialchars($_POST['user_type'] ?? '') . ".\");</script>";
+        }
 
         if (empty($value)) {
             echo "<script>alert(\"Le champ $field est requis.\");</script>";
@@ -31,6 +37,7 @@ function registration(): void {
 
         if ($error) {
             echo "<script>alert(\"$error\");</script>";
+            $_POST[$field] = "";
             return;
         }
 

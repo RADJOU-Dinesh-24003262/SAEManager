@@ -4,6 +4,10 @@ function validateField(string $field, $value, array $context): ?string {
         case 'gender':
             return isValidGender($value) ? null : "La civilité n'est pas valide.";
 
+        case 'user_type':
+            $valid_types = ['student', 'professor', 'companies'];
+            return in_array($value, $valid_types) ? null : "Le type d'utilisateur n'est pas valide.";
+
         case 'email':
             if (!isValidEmail($value)) return "L'adresse e-mail n'est pas valide.";
             if (!isOwnEmail($value, $context['lname'] ?? '', $context['fname'] ?? '')) return "Utilisez votre adresse e-mail.";
@@ -46,7 +50,6 @@ function validateField(string $field, $value, array $context): ?string {
             return ($value === 'on') ? null : "Vous devez accepter les conditions générales.";
 
         default:
-            echo "$value <br>";
             return null;
     }
 }
