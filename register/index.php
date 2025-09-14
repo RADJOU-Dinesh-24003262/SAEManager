@@ -19,7 +19,7 @@
 
 ?>
 
-        <form action="register/" method="post" autocomplete="on">
+        <form action="." method="post" autocomplete="on">
             <label for="id">Identifiant AMU :</label>
             <input required value="<?= htmlspecialchars($_POST['id'] ?? '') ?>" type="text" id="id" name="id" minlength="3" maxlength="30" pattern="[a-zA-Z0-9._-]+" title="L'identifiant doit contenir uniquement lettres, chiffres, points, tirets ou underscores"><br>
 
