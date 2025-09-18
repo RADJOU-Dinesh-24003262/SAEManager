@@ -1,0 +1,47 @@
+h1 {
+    width: 1238px;
+    height: 351px;
+    flex-shrink: 0;
+    color: #FFC925;
+    font-family: "Abril Fatface";
+    font-size: 140px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h2 {
+    width: 1188px;
+    height: 46px;
+    flex-shrink: 0;
+    color: #E8CE7E;
+    font-family: "Abril Fatface";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h3 {
+    width: 968px;
+    height: 101px;
+    flex-shrink: 0;
+    color: #FFC925;
+    font-family: "Abril Fatface";
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+#description_text {
+    width: 1518px;
+    flex-shrink: 0;
+    color: #000;
+    text-align: justify;
+    font-family: "Abril Fatface";
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
