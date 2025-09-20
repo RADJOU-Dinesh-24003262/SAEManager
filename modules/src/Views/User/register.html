@@ -1,0 +1,156 @@
+<div class="container">
+    <header>
+        <h1>SAEManager - Inscription</h1>
+        <nav>
+            <a href="/login">Se connecter</a>
+            <a href="/register" class="active">S'inscrire</a>
+        </nav>
+    </header>
+
+    <main>
+        {{SUCCESS_MESSAGE}}
+        {{ERROR_MESSAGES}}
+
+        <form action="/register" method="post" class="registration-form">
+            <div class="form-section">
+                <h3>Informations personnelles</h3>
+                
+                <div class="form-group">
+                    <label for="{{FIELD_ID}}">Identifiant AMU *</label>
+                    <input required value="{{VALUE_ID}}" type="text" id="id" name="id" 
+                           minlength="3" maxlength="30" pattern="[a-zA-Z0-9._-]+">
+                </div>
+
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Civilité *</legend>
+                        <label><input type="radio" name="gender" value="male" {{CHECKED_MALE}} required> Homme</label>
+                        <label><input type="radio" name="gender" value="female" {{CHECKED_FEMALE}}> Femme</label>
+                        <label><input type="radio" name="gender" value="other" {{CHECKED_OTHER}}> Autre</label>
+                    </fieldset>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fname">Prénom *</label>
+                        <input required value="{{VALUE_FNAME}}" type="text" id="fname" name="fname" 
+                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+">
+                    </div>
+                    <div class="form-group">
+                        <label for="lname">Nom *</label>
+                        <input required value="{{VALUE_LNAME}}" type="text" id="lname" name="lname" 
+                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="user_type">Statut *</label>
+                    <select name="user_type" id="user_type" required>
+                        <option value="">-- Sélectionner --</option>
+                        <option value="student" {{SELECTED_STUDENT}}>Étudiant</option>
+                        <option value="professor" {{SELECTED_PROFESSOR}}>Responsable SAE</option>
+                        <option value="companies" {{SELECTED_COMPANY}}>Partenaire</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Contact</h3>
+                
+                <div class="form-group">
+                    <label for="email">Email AMU *</label>
+                    <input required value="{{VALUE_EMAIL}}" type="email" id="email" name="email" 
+                           pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$">
+                </div>
+
+                <div class="form-group">
+                    <label for="tel">Téléphone *</label>
+                    <input required value="{{VALUE_PHONE}}" type="tel" id="tel" name="tel" 
+                           pattern="0[467][0-9]{8}" maxlength="10">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dob">Date de naissance *</label>
+                        <input required value="{{VALUE_DOB}}" type="date" id="dob" name="dob" 
+                               min="1940-01-01" max="{{MAX_BIRTH_DATE}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="city">Ville *</label>
+                        <input required value="{{VALUE_CITY}}" type="text" id="city" name="city" 
+                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\- ]+">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Sécurité</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pwd">Mot de passe *</label>
+                        <input required type="password" id="pwd" name="pwd" minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwdverif">Confirmer *</label>
+                        <input required type="password" id="pwdverif" name="pwdverif" minlength="8">
+                    </div>
+                </div>
+            </div>
+
+            <div id="etudiantFields" class="form-section">
+                <h3>Informations académiques</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="year">Année *</label>
+                        <select id="year" name="year">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="1" {{SELECTED_YEAR_1}}>BUT 1</option>
+                            <option value="2" {{SELECTED_YEAR_2}}>BUT 2</option>
+                            <option value="3" {{SELECTED_YEAR_3}}>BUT 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="parcours">Parcours</label>
+                        <select id="parcours" name="parcours">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="A" {{SELECTED_PARCOURS_A}}>Parcours A</option>
+                            <option value="B" {{SELECTED_PARCOURS_B}}>Parcours B</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="td">Groupe TD *</label>
+                        <select id="td" name="td">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="TD1" {{SELECTED_TD1}}>TD1</option>
+                            <option value="TD2" {{SELECTED_TD2}}>TD2</option>
+                            <option value="TD3" {{SELECTED_TD3}}>TD3</option>
+                            <option value="TD4" {{SELECTED_TD4}}>TD4</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tp">Groupe TP *</label>
+                        <select id="tp" name="tp">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="TPA" {{SELECTED_TPA}}>TP A</option>
+                            <option value="TPB" {{SELECTED_TPB}}>TP B</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="checkbox-label">
+                    <input required type="checkbox" name="terms">
+                    J'accepte les conditions générales
+                </label>
+                
+                <button type="submit" class="btn-primary">S'inscrire</button>
+            </div>
+        </form>
+    </main>
+</div>
