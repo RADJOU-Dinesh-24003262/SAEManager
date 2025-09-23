@@ -1,58 +1,65 @@
 <?php
 namespace Utilis;
 
+use _assets\includes\exeption\ExeptionValidationRegister;
+use _assets\includes\exeption\ExeptionValidationRegisters;
+
 class ValidationService
 {
-    public function validateRegistrationData(array $data): array
+    public function escape(array $data): array
     {
-        $errors = [];
-
         // Validation des champs requis
         $required = ['id', 'fname', 'lname', 'gender', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city'];
         
         foreach ($required as $field) {
             if (empty($data[$field])) {
                 $errors[$field] = "Le champ $field est requis.";
+            }else{
+                $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
             }
         }
+    }
+
+    public function validateRegistrationData(array $data): array
+    {
+        $errors = [];
 
         // Validations spécifiques
         if (!empty($data['gender']) && !$this->isValidGender($data['gender'])) {
-            $errors['gender'] = "Civilité invalide.";
+            $errors[] = new ExeptionValidationRegiste("gender", "string", "Civilité invalide.");
         }
 
         if (!empty($data['user_type']) && !$this->isValidUserType($data['user_type'])) {
-            $errors['user_type'] = "Type d'utilisateur invalide.";
+            $error[] = new ExeptionValidationRegiste("user_type", "string", "Type d'utilisateur invalide.");
         }
 
         if (!empty($data['email']) && !$this->isValidEmail($data['email'])) {
-            $errors['email'] = "Email invalide.";
+            $error[] = new ExeptionValidationRegiste("email", "string", "Email invalide.");
         } elseif (!$this->isOwnEmail($data['email'], $data['lname'], $data['fname'])) {
-            $errors['email'] = "Utilisez votre adresse e-mail universitaire.";
+            $error[] = new ExeptionValidationRegiste("email", "string", "Utilisez votre adresse e-mail universitaire.");
         }
-
 
         if (!empty($data['pwd'])) {
             if (!$this->isValidPassword($data['pwd'])) {
-                $errors['pwd'] = "Mot de passe trop court (min 8 caractères).";
+                $error[] = new ExeptionValidationRegiste("pwd", "string", "Mot de passe trop court (min 8 caractères).");
             }
             
             if ($data['pwd'] !== ($data['pwdverif'] ?? '')) {
-                $errors['pwdverif'] = "Les mots de passe ne correspondent pas.";
+                $error[] = new ExeptionValidationRegiste("pwdverif", "string", "Les mots de passe ne correspondent pas.");
             }
         }
 
         if (!empty($data['tel']) && !$this->isValidPhone($data['tel'])) {
-            $errors['tel'] = "Numéro de téléphone invalide.";
+            $error[] = new ExeptionValidationRegiste("tel", "int", "Numéro de téléphone invalide.");
         }
 
         if (!empty($data['dob'])) {
             if (!$this->isValidDate($data['dob'])) {
-                $errors['dob'] = "Date de naissance invalide.";
+                $error[] = new ExeptionValidationRegiste("dob", "string", "Date de naissance invalide.");
             } else {
                 $age = (new \DateTime())->diff(new \DateTime($data['dob']))->y;
                 if ($age < 16) {
-                    $errors['dob'] = "Vous devez avoir au moins 16 ans.";
+                    $error[] = new ExeptionValidationRegiste("dob", "string", "Vous devez avoir au moins 16 ans.");
                 }
             }
         }

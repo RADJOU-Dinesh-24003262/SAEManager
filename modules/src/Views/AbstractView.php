@@ -73,13 +73,6 @@ abstract class AbstractView
         return '';
     }
 
-    /**
-     * Méthode utilitaire pour échapper les données
-     */
-    protected function escape(string $data): string
-    {
-        return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    }
 
     /**
      * Vérifie si une valeur est sélectionnée pour les select/radio
