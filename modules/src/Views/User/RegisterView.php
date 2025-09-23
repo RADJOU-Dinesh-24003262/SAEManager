@@ -52,13 +52,13 @@ class RegisterView extends AbstractView
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
             
             // Valeurs des champs
-            'VALUE_ID' => $this->escape($oldData[self::FIELD_ID] ?? ''),
-            'VALUE_FNAME' => $this->escape($oldData[self::FIELD_FNAME] ?? ''),
-            'VALUE_LNAME' => $this->escape($oldData[self::FIELD_LNAME] ?? ''),
-            'VALUE_EMAIL' => $this->escape($oldData[self::FIELD_EMAIL] ?? ''),
-            'VALUE_PHONE' => $this->escape($oldData[self::FIELD_PHONE] ?? ''),
-            'VALUE_DOB' => $this->escape($oldData[self::FIELD_DOB] ?? ''),
-            'VALUE_CITY' => $this->escape($oldData[self::FIELD_CITY] ?? ''),
+            'VALUE_ID' => $this-> $oldData[self::FIELD_ID] ?? '',
+            'VALUE_FNAME' => $this-> $oldData[self::FIELD_FNAME] ?? '',
+            'VALUE_LNAME' => $this-> $oldData[self::FIELD_LNAME] ?? '',
+            'VALUE_EMAIL' => $this-> $oldData[self::FIELD_EMAIL] ?? '',
+            'VALUE_PHONE' => $this-> $oldData[self::FIELD_PHONE] ?? '',
+            'VALUE_DOB' => $this-> $oldData[self::FIELD_DOB] ?? '',
+            'VALUE_CITY' => $this-> $oldData[self::FIELD_CITY] ?? '',
             
             // Sélections pour les radios
             'CHECKED_MALE' => $this->isChecked(self::FIELD_GENDER, 'male'),
@@ -98,7 +98,7 @@ class RegisterView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $this->escape($error) . '</li>';
+            $html .= '<li>' . $this-> $error . '</li>';
         }
         $html .= '</ul></div>';
         
@@ -112,7 +112,7 @@ class RegisterView extends AbstractView
             return '';
         }
         
-        return '<div class="alert alert-success">' . $this->escape($success) . '</div>';
+        return '<div class="alert alert-success">' . $this-> $success . '</div>';
     }
 
     protected function getPageTitle(): string

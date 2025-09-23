@@ -79,11 +79,6 @@ class User
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    public function verifyPassword(string $password): bool
-    {
-        return password_verify($password, $this->passwordHash);
-    }
-
     public function save(): bool
     {
         // TODO: Implémentation de la sauvegarde en base de données

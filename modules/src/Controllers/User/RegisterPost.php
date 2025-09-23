@@ -14,18 +14,21 @@ class RegisterPost implements ControllerInterface
     {
         // Validation des données
         $validator = new ValidationService();
-        $errors = $validator->validateRegistrationData($_POST);
+        $data = $validator->escape($_POST);
         
-        if (!empty($errors)) {
-            // Affichage du formulaire avec les erreurs
-            SessionService::setFlash('errors', $errors);
-            SessionService::setFlash('old_data', $_POST);
-            $view = new RegisterView();
-            $view->render();
-            return;
-        }
         
         try {
+            $validator->validateRegistrationData($data);
+            if (!empty($errors)) {
+                // Affichage du formulaire avec les erreurs
+                throw new ExeptionValidationRegisters($errors);
+                //SessionService::setFlash('errors', $errors);
+                //SessionService::setFlash('old_data', $_POST);
+                $view = new RegisterView();
+                $view->render();
+                return;
+            }
+
             // Création de l'utilisateur
             $user = User::createFromRegistrationData($_POST);
             
