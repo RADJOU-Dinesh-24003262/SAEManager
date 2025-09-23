@@ -23,8 +23,8 @@ class RegisterSuccessView extends AbstractView
     protected function templateKeys(): array
     {
         return [
-            'USER_FULL_NAME' => $this->escape($this->user->getFullName()),
-            'USER_EMAIL' => $this->escape($this->user->getEmail()),
+            'USER_FULL_NAME' => $this->user->getFullName(),
+            'USER_EMAIL' => $this->user->getEmail(),
             'USER_TYPE_LABEL' => $this->getUserTypeLabel(),
             'ACADEMIC_INFO' => $this->getAcademicInfo()
         ];
@@ -52,14 +52,14 @@ class RegisterSuccessView extends AbstractView
 
         $info = '<div class="academic-info">';
         $info .= '<h4>Informations académiques</h4>';
-        $info .= '<p><strong>Année :</strong> BUT ' . $this->escape($this->user->getYear()) . '</p>';
+        $info .= '<p><strong>Année :</strong> BUT ' . $this->user->getYear() . '</p>';
         
         if ($this->user->getParcours()) {
-            $info .= '<p><strong>Parcours :</strong> ' . $this->escape($this->user->getParcours()) . '</p>';
+            $info .= '<p><strong>Parcours :</strong> ' . $this->user->getParcours() . '</p>';
         }
-        
-        $info .= '<p><strong>Groupe TD :</strong> ' . $this->escape($this->user->getTd()) . '</p>';
-        $info .= '<p><strong>Groupe TP :</strong> ' . $this->escape($this->user->getTp()) . '</p>';
+
+        $info .= '<p><strong>Groupe TD :</strong> ' . $this->user->getTd() . '</p>';
+        $info .= '<p><strong>Groupe TP :</strong> ' . $this->user->getTp() . '</p>';
         $info .= '</div>';
 
         return $info;
