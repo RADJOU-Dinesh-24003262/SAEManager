@@ -1,68 +1,86 @@
 <?php
 namespace Utilis;
 
+use includes\exception\ExceptionValidationRegister;
+use includes\exception\ExceptionValidationRegisters;
+
 class ValidationService
 {
-    public function validateRegistrationData(array $data): array
+    public function escape(array $data): array
     {
-        $errors = [];
-
         // Validation des champs requis
         $required = ['id', 'fname', 'lname', 'gender', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city'];
         
+        $errors = [];
+
         foreach ($required as $field) {
             if (empty($data[$field])) {
-                $errors[$field] = "Le champ $field est requis.";
+                $errors[] = new ExceptionValidationRegister($field, "string", "Le champ $field est requis.");
+            }else{
+                $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
             }
         }
+        
+        if (!empty($errors)) {
+            throw new ExceptionValidationRegisters($errors);
+        }
+
+        return $data;
+    }
+
+    public function validateRegistrationData(array $data) : void
+    {
+        $errors = [];
 
         // Validations spécifiques
         if (!empty($data['gender']) && !$this->isValidGender($data['gender'])) {
-            $errors['gender'] = "Civilité invalide.";
+            $errors[] = new ExceptionValidationRegister("gender", "string", "Civilité invalide.");
         }
 
         if (!empty($data['user_type']) && !$this->isValidUserType($data['user_type'])) {
-            $errors['user_type'] = "Type d'utilisateur invalide.";
+            $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
 
         if (!empty($data['email']) && !$this->isValidEmail($data['email'])) {
-            $errors['email'] = "Email invalide.";
+            $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
         } elseif (!$this->isOwnEmail($data['email'], $data['lname'], $data['fname'])) {
-            $errors['email'] = "Utilisez votre adresse e-mail universitaire.";
+            $errors[] = new ExceptionValidationRegister("email", "string", "Utilisez votre adresse e-mail universitaire.");
         }
-
 
         if (!empty($data['pwd'])) {
             if (!$this->isValidPassword($data['pwd'])) {
-                $errors['pwd'] = "Mot de passe trop court (min 8 caractères).";
+                $errors[] = new ExceptionValidationRegister("pwd", "string", "Mot de passe trop court (min 8 caractères).");
             }
             
             if ($data['pwd'] !== ($data['pwdverif'] ?? '')) {
-                $errors['pwdverif'] = "Les mots de passe ne correspondent pas.";
+                $errors[] = new ExceptionValidationRegister("pwdverif", "string", "Les mots de passe ne correspondent pas.");
             }
         }
 
         if (!empty($data['tel']) && !$this->isValidPhone($data['tel'])) {
-            $errors['tel'] = "Numéro de téléphone invalide.";
+            $errors[] = new ExceptionValidationRegister("tel", "int", "Numéro de téléphone invalide.");
         }
 
         if (!empty($data['dob'])) {
             if (!$this->isValidDate($data['dob'])) {
-                $errors['dob'] = "Date de naissance invalide.";
+                $errors[] = new ExceptionValidationRegister("dob", "string", "Date de naissance invalide.");
             } else {
                 $age = (new \DateTime())->diff(new \DateTime($data['dob']))->y;
                 if ($age < 16) {
-                    $errors['dob'] = "Vous devez avoir au moins 16 ans.";
+                    $errors[] = new ExceptionValidationRegister("dob", "string", "Vous devez avoir au moins 16 ans.");
                 }
             }
         }
 
         // Validation spécifique aux étudiants
         if (($data['user_type'] ?? '') === 'student') {
-            $errors = array_merge($errors, $this->validateStudentFields($data));
+            $studentErrors = $this->validateStudentFields($data);
+            $errors = array_merge($errors, $studentErrors);
         }
 
-        return $errors;
+        if (!empty($errors)) {
+            throw new ExceptionValidationRegisters($errors);
+        }
     }
 
     private function validateStudentFields(array $data): array
@@ -70,33 +88,33 @@ class ValidationService
         $errors = [];
 
         if (empty($data['year'])) {
-            $errors['year'] = "L'année est requise pour les étudiants.";
+            $errors[] = new ExceptionValidationRegister('year', 'string', "L'année est requise pour les étudiants.");
         } elseif (!$this->isValidYear($data['year'])) {
-            $errors['year'] = "Année invalide.";
+            $errors[] = new ExceptionValidationRegister('year', 'string', "Année invalide.");
         }
 
         if (in_array($data['year'] ?? '', ['2', '3'])) {
             if (empty($data['parcours'])) {
-                $errors['parcours'] = "Parcours requis en BUT 2 et BUT 3.";
+                $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours requis en BUT 2 et BUT 3.");
             } elseif (!$this->isValidParcours($data['parcours'])) {
-                $errors['parcours'] = "Parcours invalide.";
+                $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours invalide.");
+            } elseif ($data['td'] ?? '' === 'TD4') {
+                $errors[] = new ExceptionValidationRegister('td', 'string', "TD4 uniquement disponible en BUT 1.");
             }
+        } elseif (!empty($data['parcours'])) {
+            $errors[] = new ExceptionValidationRegister('parcours', 'string', "Le parcours n'est pas applicable pour cette année.");
         }
 
         if (empty($data['td'])) {
-            $errors['td'] = "Groupe TD requis pour les étudiants.";
+            $errors[] = new ExceptionValidationRegister('td', 'string', "Groupe TD requis pour les étudiants.");
         } elseif (!$this->isValidTD($data['td'])) {
-            $errors['td'] = "Groupe TD invalide.";
+            $errors[] = new ExceptionValidationRegister('td', 'string', "Groupe TD invalide.");
         }
 
         if (empty($data['tp'])) {
-            $errors['tp'] = "Groupe TP requis pour les étudiants.";
+            $errors[] = new ExceptionValidationRegister('tp', 'string', "Groupe TP requis pour les étudiants.");
         } elseif (!$this->isValidTP($data['tp'])) {
-            $errors['tp'] = "Groupe TP invalide.";
-        }
-
-        if (in_array($data['year'] ?? '', ['2', '3']) && ($data['td'] ?? '') === 'TD4') {
-            $errors['td'] = "TD4 uniquement disponible en BUT 1.";
+            $errors[] = new ExceptionValidationRegister('tp', 'string', "Groupe TP invalide.");
         }
 
         return $errors;

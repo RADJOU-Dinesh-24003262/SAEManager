@@ -30,8 +30,6 @@ class RegisterView extends AbstractView
     {
         $data = [
             'errors' => SessionService::getFlash('errors', []),
-            'old_data' => SessionService::getFlash('old_data', []),
-            'success' => SessionService::getFlash('success', '')
         ];
         parent::__construct($data);
     }
@@ -43,47 +41,11 @@ class RegisterView extends AbstractView
 
     protected function templateKeys(): array 
     {
-        $oldData = $this->data['old_data'];
         $errors = $this->data['errors'];
         
         return [
             // Messages d'erreur
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
-            
-            // Valeurs des champs
-            'VALUE_ID' => $this->escape($oldData[self::FIELD_ID] ?? ''),
-            'VALUE_FNAME' => $this->escape($oldData[self::FIELD_FNAME] ?? ''),
-            'VALUE_LNAME' => $this->escape($oldData[self::FIELD_LNAME] ?? ''),
-            'VALUE_EMAIL' => $this->escape($oldData[self::FIELD_EMAIL] ?? ''),
-            'VALUE_PHONE' => $this->escape($oldData[self::FIELD_PHONE] ?? ''),
-            'VALUE_DOB' => $this->escape($oldData[self::FIELD_DOB] ?? ''),
-            'VALUE_CITY' => $this->escape($oldData[self::FIELD_CITY] ?? ''),
-            
-            // Sélections pour les radios
-            'CHECKED_MALE' => $this->isChecked(self::FIELD_GENDER, 'male'),
-            'CHECKED_FEMALE' => $this->isChecked(self::FIELD_GENDER, 'female'),
-            'CHECKED_OTHER' => $this->isChecked(self::FIELD_GENDER, 'other'),
-            
-            // Sélections pour les selects
-            'SELECTED_STUDENT' => $this->isSelected(self::FIELD_USER_TYPE, 'student'),
-            'SELECTED_PROFESSOR' => $this->isSelected(self::FIELD_USER_TYPE, 'professor'),
-            'SELECTED_COMPANY' => $this->isSelected(self::FIELD_USER_TYPE, 'companies'),
-            
-            'SELECTED_YEAR_1' => $this->isSelected(self::FIELD_YEAR, '1'),
-            'SELECTED_YEAR_2' => $this->isSelected(self::FIELD_YEAR, '2'),
-            'SELECTED_YEAR_3' => $this->isSelected(self::FIELD_YEAR, '3'),
-            
-            'SELECTED_PARCOURS_A' => $this->isSelected(self::FIELD_PARCOURS, 'A'),
-            'SELECTED_PARCOURS_B' => $this->isSelected(self::FIELD_PARCOURS, 'B'),
-            
-            'SELECTED_TD1' => $this->isSelected(self::FIELD_TD, 'TD1'),
-            'SELECTED_TD2' => $this->isSelected(self::FIELD_TD, 'TD2'),
-            'SELECTED_TD3' => $this->isSelected(self::FIELD_TD, 'TD3'),
-            'SELECTED_TD4' => $this->isSelected(self::FIELD_TD, 'TD4'),
-            
-            'SELECTED_TPA' => $this->isSelected(self::FIELD_TP, 'TPA'),
-            'SELECTED_TPB' => $this->isSelected(self::FIELD_TP, 'TPB'),
             
             // Date maximale pour la date de naissance
             'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years'))
@@ -98,22 +60,13 @@ class RegisterView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $this->escape($error) . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></div>';
         
         return $html;
     }
 
-    private function renderSuccessMessage(): string
-    {
-        $success = $this->data['success'];
-        if (empty($success)) {
-            return '';
-        }
-        
-        return '<div class="alert alert-success">' . $this->escape($success) . '</div>';
-    }
 
     protected function getPageTitle(): string
     {
