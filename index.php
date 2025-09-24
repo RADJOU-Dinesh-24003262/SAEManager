@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../_assets/includes/Autoloader.php";
+include "_assets/includes/Autoloader.php";
 
 use Controllers\User\Login;
 use Controllers\User\Register;
