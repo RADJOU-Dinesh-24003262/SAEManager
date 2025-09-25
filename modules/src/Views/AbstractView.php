@@ -45,7 +45,7 @@ abstract class AbstractView
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
-            <link rel="stylesheet" href="/styles/style.css">
+            <link rel="stylesheet" href="_assets/styles/'. $this->getNameCss().'">
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>';
@@ -73,13 +73,6 @@ abstract class AbstractView
         return '';
     }
 
-    /**
-     * Méthode utilitaire pour échapper les données
-     */
-    protected function escape(string $data): string
-    {
-        return htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    }
 
     /**
      * Vérifie si une valeur est sélectionnée pour les select/radio
