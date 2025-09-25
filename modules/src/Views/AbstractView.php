@@ -57,6 +57,10 @@ abstract class AbstractView
         </body>
         </html>';
     }
+    protected function getNameCss(): string
+    {
+        return 'style.css';
+    }
 
     protected function getPageTitle(): string
     {

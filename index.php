@@ -11,7 +11,7 @@ use Controllers\AssetController;
 use Controllers\Menu\MenuController;
 // Liste des contrôleurs disponibles
 $controllers = [
-    //new Login(),
+    new Login(),
     new Register(), 
     //new LoginPost(),
     new RegisterPost(),
