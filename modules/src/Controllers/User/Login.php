@@ -21,6 +21,6 @@ class Login implements ControllerInterface
 
     public static function support(string $chemin, string $method): bool
     {
-        return ($chemin === "/login" || $chemin === "/") && $method === "GET";
+        return ($chemin === "/login") && $method === "GET";
     }
 }

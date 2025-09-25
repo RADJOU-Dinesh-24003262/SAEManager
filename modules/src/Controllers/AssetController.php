@@ -40,6 +40,6 @@ class AssetController implements ControllerInterface
 
     public static function support(string $chemin, string $method): bool
     {
-        return $method === 'GET' && preg_match('/\.(css|js)$/', $chemin);
+        return $method === 'GET' && preg_match('/\.(css|js|png)$/', $chemin);
     }
 }
