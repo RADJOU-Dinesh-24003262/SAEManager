@@ -42,7 +42,7 @@ class MenuView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $this->escape($error) . '</li>';
+            $html .= '<li>' . $this->$error . '</li>';
         }
         $html .= '</ul></div>';
 
@@ -56,7 +56,7 @@ class MenuView extends AbstractView
             return '';
         }
 
-        return '<div class="alert alert-success">' . $this->escape($success) . '</div>';
+        return '<div class="alert alert-success">' . $this->$success . '</div>';
     }
 
     protected function getPageTitle(): string
