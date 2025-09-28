@@ -1,7 +1,6 @@
 h1 {
-    width: 1238px;
-    height: 351px;
-    flex-shrink: 0;
+    text-align: center;  /* centre le texte */
+    margin: 0 auto;  
     color: #FFC925;
     font-family: "Abril Fatface";
     font-size: 140px;
@@ -11,8 +10,8 @@ h1 {
 }
 
 h2 {
-    width: 1188px;
-    height: 46px;
+    text-align: center;  /* centre le texte */
+    margin: 0 auto;  
     flex-shrink: 0;
     color: #E8CE7E;
     font-family: "Abril Fatface";
@@ -23,9 +22,8 @@ h2 {
 }
 
 h3 {
-    width: 968px;
-    height: 101px;
-    flex-shrink: 0;
+    text-align: center;  /* centre le texte */
+    margin: 0 auto;  
     color: #FFC925;
     font-family: "Abril Fatface";
     font-size: 60px;
@@ -34,7 +32,13 @@ h3 {
     line-height: normal;
 }
 
-#description_text {
+h1, h2, h3 {
+  text-align: center;
+  margin-top: 40px;   /* espace au-dessus */
+  margin-bottom: 40px; /* espace en dessous */
+}
+
+.description_text {
     width: 1518px;
     flex-shrink: 0;
     color: #000;
@@ -44,4 +48,37 @@ h3 {
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    display: block;       /* pour que le span se comporte comme un bloc */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;   /* centre horizontalement */
+    margin-right: auto;  /* centre horizontalement */
+}
+
+button {
+    display: block;
+    flex-direction: column;
+    background-color: #ffffff;   /* fond blanc */
+    color: #333333;              /* texte gris foncé */
+    border: 2px solid #1E90FF;   /* bordure bleu */
+    border-radius: 12px;         /* coins arrondis */
+    padding: 10px 30px;          /* espace vertical/horizontal */
+    font-size: 20px;             /* taille du texte */
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;  /* transition douce au survol */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+button:hover {
+    background-color: #1E90FF;   /* fond bleu au survol */
+    color: #ffffff;              /* texte blanc au survol */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* petite ombre */
+}
+
+button:active {
+    transform: scale(0.98);      /* léger effet de réduction au clic */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* ombre réduite au clic */
 }
