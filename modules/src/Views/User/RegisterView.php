@@ -77,4 +77,9 @@ class RegisterView extends AbstractView
     {
         return '<script src="/scripts/register.js"></script>';
     }
+
+    protected function getNameCss(): string
+    {
+        return 'register.css';
+    }
 }
