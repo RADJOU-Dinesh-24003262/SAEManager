@@ -1,155 +1,240 @@
-<div class="container">
-    <header>
-        <h1>SAEManager - Inscription</h1>
-        <nav>
-            <a href="/login">Se connecter</a>
-            <a href="/register" class="active">S'inscrire</a>
-        </nav>
-    </header>
 
-    <main>
-        {{ERROR_MESSAGES}}
+{{ERROR_MESSAGES}}
 
-        <form action="/register" method="post" class="registration-form">
-            <div class="form-section">
-                <h3>Informations personnelles</h3>
-                
-                <div class="form-group">
-                    <label for="id">Identifiant AMU *</label>
-                    <input required type="text" id="id" name="id" 
-                           minlength="3" maxlength="30" pattern="[a-zA-Z0-9._-]+">
-                </div>
+<form action="/register" method="post" autocomplete="on">
+    
+    <fieldset>
+        <legend>Informations personnelles</legend>
+        
 
-                <div class="form-group">
-                    <fieldset>
-                        <legend>Civilité *</legend>
-                        <label><input type="radio" name="gender" value="male" required> Homme</label>
-                        <label><input type="radio" name="gender" value="female" required> Femme</label>
-                        <label><input type="radio" name="gender" value="other" required> Autre</label>
-                    </fieldset>
-                </div>
+        <label for="id">
+            Identifiant AMU
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="text" 
+            id="id" 
+            name="id" 
+            minlength="3" 
+            maxlength="30" 
+            pattern="[a-zA-Z0-9._-]+" 
+            autocomplete="username"
+            aria-required="true"
+            aria-describedby="id-hint">
+        <small id="id-hint">3 à 30 caractères (lettres, chiffres, points, tirets, underscores)</small>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="fname">Prénom *</label>
-                        <input required type="text" id="fname" name="fname" 
-                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+">
-                    </div>
-                    <div class="form-group">
-                        <label for="lname">Nom *</label>
-                        <input required type="text" id="lname" name="lname" 
-                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+">
-                    </div>
-                </div>
+        <fieldset>
+            <legend>
+                Civilité
+                <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+            </legend>
 
-                <div class="form-group">
-                    <label for="user_type">Statut *</label>
-                    <select name="user_type" id="user_type" required>
-                        <option value="">-- Sélectionner --</option>
-                        <option value="student">Étudiant</option>
-                        <option value="professor">Responsable SAE</option>
-                        <option value="companies">Partenaire</option>
-                    </select>
-                </div>
+            <div class="radio-group">
+                <input type="radio" id="gender-male" name="gender" value="male" required aria-required="true">
+                <label for="gender-male">Homme</label>
             </div>
-
-            <div class="form-section">
-                <h3>Contact</h3>
-                
-                <div class="form-group">
-                    <label for="email">Email AMU *</label>
-                    <input required type="email" id="email" name="email" 
-                           pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$">
-                </div>
-
-                <div class="form-group">
-                    <label for="tel">Téléphone *</label>
-                    <input required type="tel" id="tel" name="tel" 
-                           pattern="0[467][0-9]{8}" maxlength="10">
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="dob">Date de naissance *</label>
-                        <input required type="date" id="dob" name="dob" 
-                               min="1940-01-01" max="{{MAX_BIRTH_DATE}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="city">Ville *</label>
-                        <input required type="text" id="city" name="city" 
-                               pattern="[A-Za-zÀ-ÖØ-öø-ÿ\- ]+">
-                    </div>
-                </div>
+            <div class="radio-group">
+                <input type="radio" id="gender-female" name="gender" value="female" required aria-required="true">
+                <label for="gender-female">Femme</label>
             </div>
-
-            <div class="form-section">
-                <h3>Sécurité</h3>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="pwd">Mot de passe *</label>
-                        <input required type="password" id="pwd" name="pwd" minlength="8">
-                    </div>
-                    <div class="form-group">
-                        <label for="pwdverif">Confirmer *</label>
-                        <input required type="password" id="pwdverif" name="pwdverif" minlength="8">
-                    </div>
-                </div>
+            <div class="radio-group">
+                <input type="radio" id="gender-other" name="gender" value="other" required aria-required="true">
+                <label for="gender-other">Autre</label>
             </div>
+        </fieldset>
 
-            <div id="etudiantFields" class="form-section">
-                <h3>Informations académiques</h3>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="year">Année *</label>
-                        <select id="year" name="year">
-                            <option value="">-- Sélectionner --</option>
-                            <option value="1" >BUT 1</option>
-                            <option value="2">BUT 2</option>
-                            <option value="3">BUT 3</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="parcours">Parcours</label>
-                        <select id="parcours" name="parcours">
-                            <option value="">-- Sélectionner --</option>
-                            <option value="A">Parcours A</option>
-                            <option value="B">Parcours B</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="td">Groupe TD *</label>
-                        <select id="td" name="td">
-                            <option value="">-- Sélectionner --</option>
-                            <option value="TD1" >TD1</option>
-                            <option value="TD2" >TD2</option>
-                            <option value="TD3" >TD3</option>
-                            <option value="TD4" >TD4</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="tp">Groupe TP *</label>
-                        <select id="tp" name="tp">
-                            <option value="">-- Sélectionner --</option>
-                            <option value="TPA" >TP A</option>
-                            <option value="TPB" >TP B</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+        <label for="fname">
+            Prénom
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="text" 
+            id="fname" 
+            name="fname" 
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
+            autocomplete="given-name"
+            aria-required="true">
 
-            <div class="form-section">
-                <label class="checkbox-label">
-                    <input required type="checkbox" name="terms">
-                    J'accepte les conditions générales
-                </label>
-                
-                <button type="submit" class="btn-primary">S'inscrire</button>
-            </div>
-        </form>
-    </main>
-</div>
+        <label for="lname">
+            Nom
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="text" 
+            id="lname" 
+            name="lname" 
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
+            autocomplete="family-name"
+            aria-required="true">
+
+        <label for="user_type">
+            Statut
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <select name="user_type" id="user_type" required aria-required="true">
+            <option value="">-- Sélectionner --</option>
+            <option value="student">Étudiant</option>
+            <option value="professor">Responsable SAE</option>
+            <option value="companies">Partenaire</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <legend>Contact</legend>
+        
+        <label for="email">
+            Email AMU
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="email" 
+            id="email" 
+            name="email" 
+            pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$" 
+            autocomplete="email"
+            aria-required="true"
+            aria-describedby="email-hint">
+        <small id="email-hint">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
+
+        <label for="tel">
+            Téléphone
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="tel" 
+            id="tel" 
+            name="tel" 
+            pattern="0[467][0-9]{8}" 
+            maxlength="10" 
+            autocomplete="tel"
+            aria-required="true"
+            aria-describedby="tel-hint">
+        <small id="tel-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
+
+        <label for="dob">
+            Date de naissance
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="date" 
+            id="dob" 
+            name="dob" 
+            min="1940-01-01" 
+            max="{{MAX_BIRTH_DATE}}" 
+            autocomplete="bday"
+            aria-required="true">
+
+        <label for="city">
+            Ville
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="text" 
+            id="city" 
+            name="city" 
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\- ]+" 
+            autocomplete="address-level2"
+            aria-required="true">  
+    </fieldset>
+
+    <fieldset>
+        <legend>Sécurité</legend>
+        
+        <label for="pwd">
+            Mot de passe
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="password" 
+            id="pwd" 
+            name="pwd" 
+            minlength="8" 
+            autocomplete="new-password" 
+            aria-required="true"
+            aria-describedby="pwd-desc">
+        <small id="pwd-desc">Au moins 8 caractères</small>
+        
+        <label for="pwdverif">
+            Confirmer le mot de passe
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <input 
+            required 
+            type="password" 
+            id="pwdverif" 
+            name="pwdverif" 
+            minlength="8" 
+            autocomplete="new-password"
+            aria-required="true">
+
+    </fieldset>
+
+    <fieldset id="etudiantFields" style="display:none;" aria-hidden="true">
+        <legend>Informations académiques</legend>
+        
+        <label for="year">
+            Année
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <select id="year" name="year" aria-required="false">
+            <option value="">-- Sélectionner --</option>
+            <option value="1">BUT 1</option>
+            <option value="2">BUT 2</option>
+            <option value="3">BUT 3</option>
+        </select>
+        
+
+        <label for="parcours">Parcours</label>
+        <select id="parcours" name="parcours">
+            <option value="">-- Sélectionner --</option>
+            <option value="A">Parcours A</option>
+            <option value="B">Parcours B</option>
+        </select>
+        
+        <label for="td">
+            Groupe TD
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <select id="td" name="td" aria-required="false">
+            <option value="">-- Sélectionner --</option>
+            <option value="TD1">TD1</option>
+            <option value="TD2">TD2</option>
+            <option value="TD3">TD3</option>
+            <option value="TD4">TD4</option>
+        </select>
+        
+        <label for="tp">
+            Groupe TP
+            <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+        </label>
+        <select id="tp" name="tp" aria-required="false">
+            <option value="">-- Sélectionner --</option>
+            <option value="TPA">TP A</option>
+            <option value="TPB">TP B</option>
+        </select>
+        
+    </fieldset>
+
+    <input 
+        required 
+        type="checkbox" 
+        id="terms" 
+        name="terms"
+        aria-required="true">
+    <label for="terms">
+        J'accepte les <a href="/conditions-generales" target="_blank" rel="noopener noreferrer">conditions générales</a>
+        <abbr title="requis" aria-label="champ obligatoire">*</abbr>
+    </label>
+    <small><abbr title="requis">*</abbr> Champs obligatoires</small>    
+
+    <button type="submit">S'inscrire</button>      
+</form>
