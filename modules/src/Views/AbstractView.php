@@ -50,6 +50,8 @@ abstract class AbstractView
         </head>
         <body>';
     }
+    
+    abstract protected function getNameCss(): string;
 
     protected function renderFooter(): void
     {
