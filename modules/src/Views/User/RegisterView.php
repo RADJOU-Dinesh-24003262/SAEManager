@@ -57,12 +57,12 @@ class RegisterView extends AbstractView
         if (empty($errors)) {
             return '';
         }
-
-        $html = '<div class="alert alert-error"><ul>';
+        
+        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
             $html .= '<li>' . $error . '</li>';
         }
-        $html .= '</ul></div>';
+        $html .= '</ul></section>';
         
         return $html;
     }
