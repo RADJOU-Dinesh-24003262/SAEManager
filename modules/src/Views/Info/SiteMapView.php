@@ -4,9 +4,9 @@ namespace Views\Info;
 
 use Views\AbstractView;
 
-class LegalNoticeView extends AbstractView
+class SiteMapView extends AbstractView
 {
-    private const TEMPLATE_HTML = __DIR__ . '/legalNotice.html';
+    private const TEMPLATE_HTML = __DIR__ . '/SiteMap.html';
 
 
     protected function templatePath(): string 
@@ -21,12 +21,12 @@ class LegalNoticeView extends AbstractView
 
     protected function getPageTitle(): string
     {
-        return 'Mentions Légales - SAEManager';
+        return 'Plan du Site - SAEManager';
     }
 
     protected function getNameCss(): string
     {
-        return 'legal-notice.css';
+        return 'plan-site.css';
     }
 }
 
