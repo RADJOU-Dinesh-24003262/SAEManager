@@ -9,6 +9,8 @@ use Controllers\User\RegisterPost;
 //use Controllers\Dashboard\Home;
 use Controllers\AssetController;    
 use Controllers\Index\IndexController;
+use Controllers\Info\LegalNoticeController;
+
 // Liste des contrôleurs disponibles
 $controllers = [
     //new Login(),
@@ -16,7 +18,7 @@ $controllers = [
     //new LoginPost(),
     new RegisterPost(),
     //new Home(),
-
+    new LegalNoticeController(),
     new IndexController(),
 ];
 
