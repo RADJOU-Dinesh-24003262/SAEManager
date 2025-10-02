@@ -16,7 +16,6 @@ $controllers = [
     //new LoginPost(),
     new RegisterPost(),
     //new Home(),
-    new AssetController(),
 
     new MenuController(),
 ];

@@ -45,7 +45,7 @@ abstract class AbstractView
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
-            <link rel="stylesheet" href="_assets/styles/'. $this->getNameCss().'">
+            <link rel="stylesheet" href="styles/'. $this->getNameCss().'">
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>';
@@ -73,24 +73,5 @@ abstract class AbstractView
     protected function getAdditionalScripts(): string
     {
         return '';
-    }
-
-
-    /**
-     * Vérifie si une valeur est sélectionnée pour les select/radio
-     */
-    protected function isSelected(string $fieldName, string $value): string
-    {
-        $oldData = $this->data['old_data'] ?? [];
-        return (($oldData[$fieldName] ?? '') === $value) ? 'selected' : '';
-    }
-
-    /**
-     * Vérifie si une valeur est cochée pour les checkbox/radio
-     */
-    protected function isChecked(string $fieldName, string $value): string
-    {
-        $oldData = $this->data['old_data'] ?? [];
-        return (($oldData[$fieldName] ?? '') === $value) ? 'checked' : '';
     }
 }
