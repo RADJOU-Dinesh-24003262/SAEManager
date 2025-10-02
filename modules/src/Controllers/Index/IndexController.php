@@ -15,6 +15,6 @@ class IndexController implements ControllerInterface
 
         public static function support(string $chemin, string $method): bool
     {
-        return ($chemin === "/index" ) && $method === "GET";
+        return ($chemin === "/index" || $chemin === "/" ) && $method === "GET";
     }
 }
