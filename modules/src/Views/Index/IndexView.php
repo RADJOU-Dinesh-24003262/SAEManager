@@ -1,14 +1,14 @@
 <?php
 
-namespace Views\Menu;
+namespace Views\Index;
 
 use Utilis\SessionService;
 use Views\AbstractView;
-use Controllers\Menu\MenuController;
-class MenuView extends AbstractView
+use Controllers\Index\IndexController;
+class IndexView extends AbstractView
 {
 
-    private const TEMPLATE_HTML = __DIR__ . '/menu.html';
+    private const TEMPLATE_HTML = __DIR__ . '/index.html';
 
     public function __construct()
 {
@@ -61,11 +61,11 @@ class MenuView extends AbstractView
 
     protected function getPageTitle(): string
     {
-        return 'Menu - SAEManager';
+        return 'Index - SAEManager';
     }
 
     protected function getNameCss(): string
     {
-        return 'menu.css';
+        return 'index.css';
     }
 }
