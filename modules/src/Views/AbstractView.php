@@ -45,7 +45,7 @@ abstract class AbstractView
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
-            <link rel="stylesheet" href="_assets/styles/'. $this->getNameCss().'">
+            <link rel="stylesheet" href="styles/'. $this->getNameCss().'">
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>';
