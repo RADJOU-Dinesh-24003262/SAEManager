@@ -74,23 +74,4 @@ abstract class AbstractView
     {
         return '';
     }
-
-
-    /**
-     * Vérifie si une valeur est sélectionnée pour les select/radio
-     */
-    protected function isSelected(string $fieldName, string $value): string
-    {
-        $oldData = $this->data['old_data'] ?? [];
-        return (($oldData[$fieldName] ?? '') === $value) ? 'selected' : '';
-    }
-
-    /**
-     * Vérifie si une valeur est cochée pour les checkbox/radio
-     */
-    protected function isChecked(string $fieldName, string $value): string
-    {
-        $oldData = $this->data['old_data'] ?? [];
-        return (($oldData[$fieldName] ?? '') === $value) ? 'checked' : '';
-    }
 }

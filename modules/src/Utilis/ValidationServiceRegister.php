@@ -4,7 +4,7 @@ namespace Utilis;
 use includes\exception\ExceptionValidationRegister;
 use includes\exception\ExceptionValidationRegisters;
 
-class ValidationService
+class ValidationServiceRegister
 {
     public function escape(array $data): array
     {

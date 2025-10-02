@@ -7,6 +7,7 @@ use Models\User\User;
 class RegisterSuccessView extends AbstractView
 {
     private const TEMPLATE_HTML = __DIR__ . '/register-success.html';
+    private const CSS_REGISTER_SUCCESS = 'register-success.css';
     private User $user;
 
     public function __construct(User $user)
@@ -68,5 +69,10 @@ class RegisterSuccessView extends AbstractView
     protected function getPageTitle(): string
     {
         return 'Inscription réussie - SAEManager';
+    }
+
+    protected function getNameCss(): string
+    {
+        return self::CSS_REGISTER_SUCCESS;
     }
 }
