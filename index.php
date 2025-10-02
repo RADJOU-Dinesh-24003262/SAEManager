@@ -10,6 +10,7 @@ use Controllers\User\RegisterPost;
 use Controllers\AssetController;    
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
+use Controllers\Info\SiteMapController;
 
 // Liste des contrôleurs disponibles
 $controllers = [
@@ -19,6 +20,7 @@ $controllers = [
     new RegisterPost(),
     //new Home(),
     new LegalNoticeController(),
+    new SiteMapController(),
     new IndexController(),
 ];
 
