@@ -1,20 +1,20 @@
 <?php
 
-namespace Controllers\Menu;
+namespace Controllers\Index;
 
 use Controllers\ControllerInterface;
-use Views\Menu\MenuView;
+use Views\Index\IndexView;
 
-class MenuController implements ControllerInterface
+class IndexController implements ControllerInterface
 {
         public function control(): void
     {
-        $view = new MenuView();
+        $view = new IndexView();
         $view->render();
     }
 
         public static function support(string $chemin, string $method): bool
     {
-        return ($chemin === "/menu") && $method === "GET";
+        return ($chemin === "/index" ) && $method === "GET";
     }
 }
