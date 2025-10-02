@@ -1,0 +1,65 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: #003366; /* bleu foncé AMU */
+  margin: 2rem auto;
+  max-width: 800px;
+  padding: 0 1rem;
+  line-height: 1.6;
+}
+
+h1 {
+  color: #0055a4; /* bleu AMU */
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+h2 {
+  color: #0078d7; /* bleu un peu plus clair */
+  border-bottom: 2px solid #0055a4;
+  padding-bottom: 0.3rem;
+  margin-top: 2rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+section p,
+section address {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #003366;
+}
+
+address {
+  font-style: normal;
+  color: #0055a4;
+}
+
+a {
+  color: #0078d7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover,
+a:focus {
+  color: #003366;
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  body {
+    margin: 1rem;
+    padding: 0 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+}
