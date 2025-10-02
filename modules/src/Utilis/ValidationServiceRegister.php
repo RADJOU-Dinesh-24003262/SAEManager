@@ -98,7 +98,7 @@ class ValidationServiceRegister
                 $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours requis en BUT 2 et BUT 3.");
             } elseif (!$this->isValidParcours($data['parcours'])) {
                 $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours invalide.");
-            } elseif ($data['td'] ?? '' === 'TD4') {
+            } elseif (($data['td'] ?? '') === 'TD4') {
                 $errors[] = new ExceptionValidationRegister('td', 'string', "TD4 uniquement disponible en BUT 1.");
             }
         } elseif (!empty($data['parcours'])) {
