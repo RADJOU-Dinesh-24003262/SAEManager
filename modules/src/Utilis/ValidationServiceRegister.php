@@ -9,7 +9,7 @@ class ValidationServiceRegister
     public function escape(array $data): array
     {
         // Validation des champs requis
-        $required = ['id', 'fname', 'lname', 'gender', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city'];
+        $required = ['id', 'fname', 'lname', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city'];
         
         $errors = [];
 
@@ -33,10 +33,6 @@ class ValidationServiceRegister
         $errors = [];
 
         // Validations spécifiques
-        if (!empty($data['gender']) && !$this->isValidGender($data['gender'])) {
-            $errors[] = new ExceptionValidationRegister("gender", "string", "Civilité invalide.");
-        }
-
         if (!empty($data['user_type']) && !$this->isValidUserType($data['user_type'])) {
             $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
@@ -119,12 +115,6 @@ class ValidationServiceRegister
 
         return $errors;
     }
-
-    private function isValidGender(string $gender): bool
-    {
-        return in_array($gender, ['male', 'female', 'other']);
-    }
-
     private function isValidUserType(string $userType): bool
     {
         return in_array($userType, ['student', 'professor', 'companies']);
