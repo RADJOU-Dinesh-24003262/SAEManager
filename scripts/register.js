@@ -43,6 +43,19 @@ function toggleStudentFields() {
         tpSelect.value = '';
     }
 }
+const pwd = document.getElementById('pwd');
+const pwdverif = document.getElementById('pwdverif');
+
+function validatePassword() {
+    if (pwd.value !== pwdverif.value) {
+        pwdverif.setCustomValidity('Les mots de passe ne correspondent pas');
+    } else {
+        pwdverif.setCustomValidity('');
+    }
+}
+
+pwd.addEventListener('change', validatePassword);
+pwdverif.addEventListener('input', validatePassword);
 
 // Appliquer immédiatement au chargement de la page (cas de rechargement après POST)
 toggleStudentFields();
