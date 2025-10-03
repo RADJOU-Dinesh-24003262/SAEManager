@@ -1,6 +1,7 @@
 <?php
 namespace Models\User;
 
+use includes\database;
 class User
 {
     private ?int $id = null;
@@ -18,7 +19,7 @@ class User
     private ?string $parcours = null;
     private ?string $td = null;
     private ?string $tp = null;
-    
+
     public function __construct(
         string $amuId = '',
         string $firstName = '',
@@ -66,11 +67,11 @@ class User
             $data['td'] ?? null,
             $data['tp'] ?? null
         );
-        
+
         if (!empty($data['pwd'])) {
             $user->setPassword($data['pwd']);
         }
-        
+
         return $user;
     }
 
@@ -81,8 +82,45 @@ class User
 
     public function save(): bool
     {
-        // TODO: Implémentation de la sauvegarde en base de données
-        // Pour l'instant, simulation d'une sauvegarde réussie
+        $connection = database::getInstance();
+
+
+        if ($this->userType === 'student') {
+
+            $str = "SELECT register_student(
+            '$this->email',
+            '$this->firstName',
+            '$this->lastName',
+            '$this->passwordHash',
+            '$this->city',
+            '$this->amuId',
+            '$this->parcours',
+            '$this->year',
+            '$this->td',
+            '$this->tp'
+        );";
+        }
+        elseif ($this->getUserType() === 'professor') {
+            $str = "SELECT register_teacher(
+            '$this->email',
+            '$this->firstName',
+            '$this->lastName',
+            '$this->passwordHash',
+            '$this->city',
+            '$this->amuId',
+        );";
+        }
+        else {
+            $str = "SELECT register_user(
+            '$this->email',
+            '$this->firstName',
+            '$this->lastName',
+            '$this->passwordHash',
+            '$this->city',
+            '$this->amuId',
+        );";
+        }
+        $connection->query($str);
         return true;
     }
 
