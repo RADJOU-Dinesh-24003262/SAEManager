@@ -8,7 +8,10 @@ use Controllers\User\Register;
 use Controllers\User\RegisterPost;
 //use Controllers\Dashboard\Home;
 use Controllers\AssetController;    
-use Controllers\Menu\MenuController;
+use Controllers\Index\IndexController;
+use Controllers\Info\LegalNoticeController;
+use Controllers\Info\SiteMapController;
+
 // Liste des contrôleurs disponibles
 $controllers = [
     //new Login(),
@@ -16,9 +19,9 @@ $controllers = [
     //new LoginPost(),
     new RegisterPost(),
     //new Home(),
-    new AssetController(),
-
-    new MenuController(),
+    new LegalNoticeController(),
+    new SiteMapController(),
+    new IndexController(),
 ];
 
 // Routing automatique
