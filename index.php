@@ -3,6 +3,7 @@ session_start();
 include "_assets/includes/Autoloader.php";
 
 use Controllers\User\Login;
+use Controllers\User\LoginPost;
 use Controllers\User\Register;
 //use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
@@ -14,9 +15,9 @@ use Controllers\Info\SiteMapController;
 
 // Liste des contrôleurs disponibles
 $controllers = [
-    //new Login(),
+    new Login(),
     new Register(), 
-    //new LoginPost(),
+    new LoginPost(),
     new RegisterPost(),
     //new Home(),
     new LegalNoticeController(),
