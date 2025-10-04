@@ -23,7 +23,7 @@ class RegisterPost implements ControllerInterface
             // Création de l'utilisateur
             $user = User::createFromRegistrationData($data);
             
-            // Sauvegarde en base (à implémenter)
+            // Sauvegarde en base
             if ($user->save()) {
                 SessionService::setFlash('success', 'Inscription réussie !');
                 $view = new RegisterSuccessView($user);
