@@ -1,7 +1,7 @@
 <?php
 namespace Models\User;
 
-use includes\DatabaseConnection;
+use includes\database;
 
 class User
 {
@@ -92,7 +92,7 @@ class User
     public static function existsByEmail(string $email): bool
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             return $stmt->fetchColumn() > 0;
@@ -108,7 +108,7 @@ class User
     public static function updatePasswordByEmail(string $email, string $newPassword): bool
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
             
