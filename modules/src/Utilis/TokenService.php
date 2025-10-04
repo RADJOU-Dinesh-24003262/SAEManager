@@ -1,7 +1,7 @@
 <?php
 namespace Utilis;
 
-use includes\DatabaseConnection;
+use includes\database;
 
 class TokenService
 {
@@ -20,7 +20,7 @@ class TokenService
     public static function createPasswordResetToken(string $email): string|false
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             // Nettoyer les anciens tokens de cet email
             self::cleanupOldTokens($email);
@@ -56,7 +56,7 @@ class TokenService
     public static function validateToken(string $token): array|false
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             $stmt = $db->prepare("
                 SELECT user_email, expires_at, used 
@@ -93,7 +93,7 @@ class TokenService
     public static function markTokenAsUsed(string $token): bool
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             $stmt = $db->prepare("
                 UPDATE password_resets 
@@ -115,7 +115,7 @@ class TokenService
     private static function cleanupOldTokens(string $email): void
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             $stmt = $db->prepare("
                 DELETE FROM password_resets 
@@ -136,7 +136,7 @@ class TokenService
     public static function cleanupExpiredTokens(): void
     {
         try {
-            $db = DatabaseConnection::getInstance()->getConnection();
+            $db = database::getInstance();
             
             $stmt = $db->prepare("
                 DELETE FROM password_resets 

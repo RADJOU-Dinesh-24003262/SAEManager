@@ -27,7 +27,7 @@ class ResetPasswordPostController implements ControllerInterface
             
             if ($tokenData === false) {
                 throw new \Exception(
-                    "Ce lien de réinitialisation est invalide ou a expiré. " .
+                    message: "Ce lien de réinitialisation est invalide ou a expiré. " .
                     "Veuillez faire une nouvelle demande."
                 );
             }
@@ -63,7 +63,7 @@ class ResetPasswordPostController implements ControllerInterface
             SessionService::setFlash('errors', [$e->getMessage()]);
             
             // Si on a le token et l'email, réafficher le formulaire
-            $token = $_POST['token'] ?? '';
+            $token = $_GET['token'] ?? '';
             if (!empty($token)) {
                 $tokenData = TokenService::validateToken($token);
                 if ($tokenData !== false) {
@@ -74,7 +74,7 @@ class ResetPasswordPostController implements ControllerInterface
             }
             
             // Sinon rediriger vers forgot-password
-            header("Location: /forgot-password?token={$token}");
+            header("Location: /forgot-password");
             exit();
         }
     }
