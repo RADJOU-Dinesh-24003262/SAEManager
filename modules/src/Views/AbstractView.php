@@ -52,11 +52,11 @@ abstract class AbstractView
         <body>
         <header>
                 <h1 class="saeManager">SAEManager</h1>
-                <img src="images/logoamu.png" alt="Logo AMU Header" >
+                <img src="Image/logoamu.png" alt="Logo AMU Header" >
                 <nav class="navBar">
                     <a href="/" class="nav-link">Accueil</a>
-                    <a href="/user/login" class="nav-link">Connexion</a>
-                    <a href="/user/register" class="nav-link">Inscription</a>
+                    <a href="/login" class="nav-link">Connexion</a>
+                    <a href="/register" class="nav-link">Inscription</a>
                 </nav>
          </header>
         ';
