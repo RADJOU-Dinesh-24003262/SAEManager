@@ -3,25 +3,26 @@ session_start();
 include "_assets/includes/Autoloader.php";
 
 use Controllers\User\Login;
+use Controllers\User\LoginPost;
 use Controllers\User\Register;
 //use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
 //use Controllers\Dashboard\Home;
-use Controllers\AssetController;    
-use Controllers\Index\IndexController;
+use Controllers\AssetController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
+use Controllers\Index\IndexController;
 
 // Liste des contrôleurs disponibles
 $controllers = [
-    //new Login(),
-    new Register(), 
-    //new LoginPost(),
+    new Login(),
+    new Register(),
     new RegisterPost(),
     //new Home(),
     new LegalNoticeController(),
     new SiteMapController(),
     new IndexController(),
+    new LoginPost()
 ];
 
 // Routing automatique

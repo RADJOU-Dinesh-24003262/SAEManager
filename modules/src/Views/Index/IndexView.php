@@ -4,7 +4,7 @@ namespace Views\Index;
 
 use Utilis\SessionService;
 use Views\AbstractView;
-use Controllers\Index\IndexController;
+use Controllers\Index\IndexControllerPost;
 class IndexView extends AbstractView
 {
 
