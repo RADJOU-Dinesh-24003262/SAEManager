@@ -46,9 +46,20 @@ abstract class AbstractView
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
             <link rel="stylesheet" href="_assets/styles/'. $this->getNameCss().'">
+            <link rel="stylesheet" href="_assets/styles/header.css">
             ' . $this->getAdditionalHeaders() . '
         </head>
-        <body>';
+        <body>
+        <header>
+                <h1 class="saeManager">SAEManager</h1>
+                <img src="_assets/images/logoamu.png" alt="Logo AMU Header" >
+                <nav class="navBar">
+                    <a href="/" class="nav-link">Accueil</a>
+                    <a href="/user/login" class="nav-link">Connexion</a>
+                    <a href="/user/register" class="nav-link">Inscription</a>
+                </nav>
+         </header>
+        ';
     }
 
     protected function renderFooter(): void

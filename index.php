@@ -3,6 +3,7 @@ session_start();
 include "_assets/includes/Autoloader.php";
 
 use Controllers\User\Login;
+use Controllers\User\LoginPost;
 use Controllers\User\Register;
 //use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
@@ -13,7 +14,7 @@ use Controllers\Menu\MenuController;
 $controllers = [
     new Login(),
     new Register(), 
-    //new LoginPost(),
+    new LoginPost(),
     new RegisterPost(),
     //new Home(),
     new AssetController(),
