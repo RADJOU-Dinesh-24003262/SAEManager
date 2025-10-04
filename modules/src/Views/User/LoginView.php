@@ -44,4 +44,8 @@ class LoginView extends AbstractView
         return $html;
     }
 
+    protected function getNameCss(): string
+    {
+        return 'style.css';
+    }
 }
