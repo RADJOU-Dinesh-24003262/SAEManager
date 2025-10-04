@@ -2,6 +2,8 @@
 namespace Models\User;
 
 use includes\database;
+use PDO;
+
 class User
 {
     private ?int $id = null;
@@ -123,6 +125,10 @@ class User
         $connection->query($str);
         return true;
     }
+
+
+
+
 
     // Getters
     public function getId(): ?int { return $this->id; }
