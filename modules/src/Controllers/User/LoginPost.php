@@ -58,9 +58,6 @@ class LoginPost implements ControllerInterface{
         $view->render();
     }
 
-    }
-
-
 
 
     public static function support(string $chemin, string $method): bool
