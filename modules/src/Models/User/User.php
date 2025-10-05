@@ -1,6 +1,8 @@
 <?php
 namespace Models\User;
 
+use includes\database;
+
 class User
 {
     private ?int $id = null;
@@ -67,9 +69,7 @@ class User
             $data['tp'] ?? null
         );
         
-        if (!empty($data['pwd'])) {
-            $user->setPassword($data['pwd']);
-        }
+        $user->setPassword($data['pwd']);
         
         return $user;
     }
@@ -84,6 +84,49 @@ class User
         // TODO: Implémentation de la sauvegarde en base de données
         // Pour l'instant, simulation d'une sauvegarde réussie
         return true;
+    }
+
+    /**
+     * Vérifie si un utilisateur existe par email
+     */
+    public static function existsByEmail(string $email): bool
+    {
+        try {
+            $db = database::getInstance();
+            $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log("Erreur vérification email: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Met à jour le mot de passe d'un utilisateur par email
+     */
+    public static function updatePasswordByEmail(string $email, string $newPassword): bool
+    {
+        try {
+            $db = database::getInstance();
+            
+            $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            
+            $stmt = $db->prepare("
+                UPDATE users 
+                SET password = :password_hash 
+                WHERE email = :email
+            ");
+            
+            return $stmt->execute([
+                'password_hash' => $passwordHash,
+                'email' => $email
+            ]);
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur mise à jour mot de passe: " . $e->getMessage());
+            return false;
+        }
     }
 
     // Getters

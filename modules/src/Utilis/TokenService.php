@@ -1,0 +1,152 @@
+<?php
+namespace Utilis;
+
+use includes\database;
+
+class TokenService
+{
+    /**
+     * Génère un token sécurisé aléatoire
+     */
+    public static function generate(): string
+    {
+        return bin2hex(random_bytes(32)); // 64 caractères hexadécimaux
+    }
+
+    /**
+     * Crée un token de réinitialisation pour un email
+     * Retourne le token généré ou false en cas d'erreur
+     */
+    public static function createPasswordResetToken(string $email): string|false
+    {
+        try {
+            $db = database::getInstance();
+            
+            // Nettoyer les anciens tokens de cet email
+            self::cleanupOldTokens($email);
+            
+            // Générer un nouveau token
+            $token = self::generate();
+            $createdAt = date('Y-m-d H:i:s');
+            $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+            
+            $stmt = $db->prepare("
+                INSERT INTO password_resets (user_email, token, created_at, expires_at, used)
+                VALUES (:email, :token, :created_at, :expires_at, FALSE)
+            ");
+            
+            $stmt->execute([
+                'email' => $email,
+                'token' => $token,
+                'created_at' => $createdAt,
+                'expires_at' => $expiresAt
+            ]);
+            
+            return $token;
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur création token: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Vérifie si un token est valide
+     */
+    public static function validateToken(string $token): array|false
+    {
+        try {
+            $db = database::getInstance();
+            
+            $stmt = $db->prepare("
+                SELECT user_email, expires_at, used 
+                FROM password_resets 
+                WHERE token = :token
+            ");
+            
+            $stmt->execute(['token' => $token]);
+            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            
+            if (!$result) {
+                return false; // Token n'existe pas
+            }
+            
+            if ($result['used']) {
+                return false; // Token déjà utilisé
+            }
+            
+            if (strtotime($result['expires_at']) < time()) {
+                return false; // Token expiré
+            }
+            
+            return $result;
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur validation token: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Marque un token comme utilisé
+     */
+    public static function markTokenAsUsed(string $token): bool
+    {
+        try {
+            $db = database::getInstance();
+            
+            $stmt = $db->prepare("
+                UPDATE password_resets 
+                SET used = TRUE 
+                WHERE token = :token
+            ");
+            
+            return $stmt->execute(['token' => $token]);
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur marquage token: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Nettoie les anciens tokens d'un email
+     */
+    private static function cleanupOldTokens(string $email): void
+    {
+        try {
+            $db = database::getInstance();
+            
+            $stmt = $db->prepare("
+                DELETE FROM password_resets 
+                WHERE user_email = :email 
+                AND (expires_at < NOW() OR used = TRUE)
+            ");
+            
+            $stmt->execute(['email' => $email]);
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur nettoyage tokens: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Nettoie tous les tokens expirés (à exécuter périodiquement)
+     */
+    public static function cleanupExpiredTokens(): void
+    {
+        try {
+            $db = database::getInstance();
+            
+            $stmt = $db->prepare("
+                DELETE FROM password_resets 
+                WHERE expires_at < NOW() OR used = TRUE
+            ");
+            
+            $stmt->execute();
+            
+        } catch (\PDOException $e) {
+            error_log("Erreur nettoyage global: " . $e->getMessage());
+        }
+    }
+}
