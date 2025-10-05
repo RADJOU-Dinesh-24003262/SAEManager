@@ -1,8 +1,8 @@
 <?php
 namespace Utilis\Validator;
 
-use includes\exception\ExceptionValidationRegister;
-use includes\exception\ExceptionValidationRegisters;
+use includes\exception\ExceptionValidationEmpty;
+use includes\exception\ExceptionValidationEmptys;
 
 /**
  * Classe abstraite pour la validation de formulaires.
@@ -20,21 +20,22 @@ abstract class FormValidator
      * Échappe les données du formulaire (HTML special chars).
      * @param array $data
      * @param array $fields Liste des champs à échapper
-     * @return array
+     * @return array Données échappées
+     * @throws ExceptionValidationEmptys si un champ requis est vide
      */
     public function escape(array $data): array
     {
         $errors = [];
         foreach ($this->required as $field) {
             if (empty($data[$field])) {
-                $errors[] = new ExceptionValidationRegister($field, "string", "Le champ $field est requis.");
+                $errors[] = new ExceptionValidationEmpty($field);
             } else {
                 $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
             }
         }
 
         if (!empty($errors)) {
-            throw new ExceptionValidationRegisters($errors);
+            throw new ExceptionValidationEmptys($errors);
         }
 
         return $data;
@@ -43,7 +44,7 @@ abstract class FormValidator
     /**
      * Valide les données du formulaire. À implémenter dans les classes enfants.
      * @param array $data
-     * @throws ExceptionValidationRegisters
+     * @throws \Exception
      */
     abstract public function validate(array $data): void;
 

@@ -6,7 +6,7 @@ use includes\exception\ExceptionValidationRegisters;
 
 class ValidationServiceRegister extends FormValidator
 {   
-    protected $required = ['id', 'fname', 'lname', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city'];
+    protected $required = ['id', 'fname', 'lname', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city', 'gender', 'terms'];
 
     public function validate(array $data): void
     {
