@@ -3,6 +3,7 @@ namespace Controllers\User;
 
 use Controllers\ControllerInterface;
 use includes\exception\ExceptionValidationLogin;
+use includes\exception\ExceptionValidationEmptys;
 use Views\User\LoginView;
 use Utilis\SessionService;
 use Utilis\Validator\LoginValidator;
@@ -37,12 +38,18 @@ class LoginPost implements ControllerInterface
             header('Location: /dashboard');
             exit();
 
+        }catch(ExceptionValidationEmptys $e){
+                        $errors = [];
+            foreach ($e->getErrors() as $error) {
+                $errors[] = $error->getMessage();
+            }
+            SessionService::setFlash('errors', $errors);
+
         } catch (ExceptionValidationLogin $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
-            $view = new LoginView();
-            $view->render();
-            return;
         }
+        $view = new LoginView();
+        $view->render();
     }
 
     public static function supportPost(string $chemin, string $method): bool

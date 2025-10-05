@@ -2,6 +2,7 @@
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
+use includes\exception\ExceptionValidationEmptys;
 use Models\User\User;
 use Utilis\Validator\ValidationServiceRegister;
 use Utilis\SessionService;
@@ -28,25 +29,24 @@ class RegisterPost implements ControllerInterface
                 SessionService::setFlash('success', 'Inscription réussie !');
                 $view = new RegisterSuccessView($user);
                 $view->render();
+                return;
             } else {
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
             
-        }catch (ExceptionValidationRegisters $e) {
+        
+        }catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
 
-
-            $view = new RegisterView();
-            $view->render();
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
-            $view = new RegisterView();
-            $view->render();
         }
+        $view = new RegisterView();
+        $view->render();
     }
 
     public static function support(string $chemin, string $method): bool

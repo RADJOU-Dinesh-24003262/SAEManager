@@ -6,7 +6,7 @@ use includes\exception\ExceptionValidationRegisters;
 
 class LoginValidator extends FormValidator
 {
-    protected array $required = ['username', 'password'];
+    protected $required = ['username', 'password'];
 
     public function validate(array $data): void
     {

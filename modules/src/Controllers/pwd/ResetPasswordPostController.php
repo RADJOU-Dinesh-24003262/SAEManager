@@ -9,59 +9,74 @@ use Utilis\Validator\ResetPasswordValidator;
 use Views\pwd\ResetPasswordView;
 use Views\pwd\ResetPasswordSuccessView;
 
+use includes\exception\ExceptionValidationResetPassword;
+use includes\exception\ExceptionValidationEmptys;
+use includes\exception\ExceptionInvalidToken;
+use includes\exception\ExceptionPasswordUpdateFailed;
+
 class ResetPasswordPostController implements ControllerInterface
 {
     public function control(): void
     {
         try {
-            // Récupération des données
+            // 1. Vérifie le token
             $token = $_GET['token'] ?? '';
+            if (empty($token)) {
+                throw new ExceptionInvalidToken("Token manquant.");
+            }
+
+            $tokenData = TokenService::validateToken($token);
+            if ($tokenData === false) {
+                throw new ExceptionInvalidToken("Ce lien de réinitialisation est invalide ou a expiré. Veuillez faire une nouvelle demande.");
+            }
+
+            // 2. Validation des données
             $validator = new ResetPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            // Validation du token
-            if (empty($token)) {
-                throw new \Exception("Token manquant.");
-            }
-            $tokenData = TokenService::validateToken($token);
-            if ($tokenData === false) {
-                throw new \Exception(
-                    message: "Ce lien de réinitialisation est invalide ou a expiré. " .
-                    "Veuillez faire une nouvelle demande."
-                );
-            }
-
-            // Mise à jour du mot de passe
+            // 3. Mise à jour du mot de passe
             $updated = User::updatePasswordByEmail($tokenData['user_email'], $password);
             if (!$updated) {
-                throw new \Exception("Erreur lors de la mise à jour du mot de passe.");
+                throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
             }
 
-            // Marquer le token comme utilisé
+            // 4. Marque le token comme utilisé
             TokenService::markTokenAsUsed($token);
 
-            // Afficher la page de succès
-            $view = new ResetPasswordSuccessView();
-            $view->render();
+            // 5. Affiche la page de succès
+            (new ResetPasswordSuccessView())->render();
+            return;
 
-        } catch (\Exception $e) {
+        } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
-            // Si on a le token et l'email, réafficher le formulaire
-            $token = $_GET['token'] ?? '';
-            if (!empty($token)) {
-                $tokenData = TokenService::validateToken($token);
-                if ($tokenData !== false) {
-                    $view = new ResetPasswordView($token, $tokenData['user_email']);
-                    $view->render();
-                    return;
-                }
-            }
-            // Sinon rediriger vers forgot-password
+            header("Location: /forgot-password");
+            exit();
+
+        } catch (ExceptionValidationEmptys $e) {
+            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            SessionService::setFlash('errors', $errors);
+
+        } catch (ExceptionValidationResetPassword $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+
+        } catch (ExceptionPasswordUpdateFailed $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+
+        } catch (\Throwable $e) {
+            // Fallback générique
+            SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
             header("Location: /forgot-password");
             exit();
         }
+        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['user_email'] ?? null);
+
+    }
+
+    private function renderFormWithToken(string $token, ?string $email): void
+    {
+        (new ResetPasswordView($token, $email))->render();
     }
 
     public static function support(string $chemin, string $method): bool

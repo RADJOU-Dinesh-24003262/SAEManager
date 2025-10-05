@@ -8,6 +8,8 @@ use Utilis\EmailService;
 use Utilis\SessionService;
 use Utilis\Validator\ForgotPasswordValidator;
 use Views\pwd\ForgotPasswordView;
+use includes\exception\ExceptionValidationForgotPassword;
+use includes\exception\ExceptionValidationEmptys;
 
 class ForgotPasswordPostController implements ControllerInterface
 {
@@ -41,15 +43,16 @@ class ForgotPasswordPostController implements ControllerInterface
                 "vous recevrez un lien de réinitialisation dans quelques minutes. " .
                 "Vérifiez également vos courriers indésirables."
             );
-            // Redirection vers la même page
-            header('Location: /forgot-password');
-            exit();
 
-        } catch (\Exception $e) {
+        } catch (ExceptionValidationEmptys $e) {
+            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            SessionService::setFlash('errors', $errors);
+
+        } catch (ExceptionValidationForgotPassword $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
-            $view = new ForgotPasswordView();
-            $view->render();
         }
+        $view = new ForgotPasswordView();
+        $view->render();
     }
 
     public static function support(string $chemin, string $method): bool
