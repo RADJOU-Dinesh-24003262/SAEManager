@@ -16,11 +16,23 @@ use includes\exception\ExceptionValidationRegisters;
 class LoginPost implements ControllerInterface{
     public function control(): void
     {
-        $username = $_POST["username"];
+
+
+        if (SessionService::has('user_id')) {
+            header('Location: /dashboard');
+            exit();
+        }
+
+        $email = $_POST["username"];
         $password = $_POST["password"];
-        if($this->login($username, $password)){
-            $view = new IndexView();
-            $view->render();
+        $user = new User(email: $email);
+        $user->setPassword($password);
+
+        if($user->login()){
+            SessionService::set('user_id', $user->getEmail());
+
+            header('Location: /dashboard');
+            exit();
         }else{
             $view = new LoginView();
             $view->render();
@@ -28,20 +40,6 @@ class LoginPost implements ControllerInterface{
 
     }
 
-    // A mettre dans le modèle
-    public function login(string $username, string $password): bool
-    {
-        $connexion = database::getInstance();
-        $str = "SELECT connection('$username', '$password')";
-        $result = $connexion->query($str);
-        $row = $result->fetch(PDO::FETCH_ASSOC);
-        // Parser la chaîne : "(email,pwd,t)" -> extraire le dernier élément
-        $data = trim($row['connection'], '()');
-        $parts = explode(',', $data);
-        $success = end($parts); // Récupère le dernier élément
-
-        return $success === 't' || $success === 'true';
-    }
 
 
 
