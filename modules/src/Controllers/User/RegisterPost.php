@@ -3,7 +3,7 @@ namespace Controllers\User;
 
 use Controllers\ControllerInterface;
 use Models\User\User;
-use Utilis\ValidationServiceRegister;
+use Utilis\Validator\ValidationServiceRegister;
 use Utilis\SessionService;
 use Views\User\RegisterView;
 use Views\User\RegisterSuccessView;
@@ -18,7 +18,7 @@ class RegisterPost implements ControllerInterface
         
         try {
             $data = $validator->escape($_POST);
-            $validator->validateRegistrationData($data);
+            $validator->validate($data);
 
             // Création de l'utilisateur
             $user = User::createFromRegistrationData($data);

@@ -33,6 +33,7 @@ class RegisterSuccessView extends AbstractView
 
     private function getUserTypeLabel(): string
     {
+        error_log("User type: " . $this->user->getUserType(), 0, 'php_errors.log');
         switch ($this->user->getUserType()) {
             case 'student':
                 return 'Étudiant';

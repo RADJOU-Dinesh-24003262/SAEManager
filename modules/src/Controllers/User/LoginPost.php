@@ -5,14 +5,19 @@ use Controllers\ControllerInterface;
 use includes\exception\ExceptionValidationLogin;
 use Views\User\LoginView;
 use Utilis\SessionService;
+use Utilis\Validator\LoginValidator;
 
 class LoginPost implements ControllerInterface
 {
     public function control(): void
     {
         try {
-            $username = trim($_POST['username'] ?? '');
-            $password = $_POST['password'] ?? '';
+            $validator = new LoginValidator();
+            $data = $validator->escape($_POST);
+            $validator->validate($data);
+
+            $username = trim($data['username'] ?? '');
+            $password = $data['password'] ?? '';
 
             error_log("Tentative de connexion - Username: '$username'");
 
@@ -23,9 +28,7 @@ class LoginPost implements ControllerInterface
             ];
 
             // VÉRIFICATION DE LA VALIDITÉ DES IDENTIFIANTS
-            // Si l'utilisateur n'existe pas OU si le mot de passe est incorrect
             if (!isset($fakeUsers[$username]) || $fakeUsers[$username] !== $password) {
-                // Déclenche l'exception si les identifiants sont invalides
                 throw new ExceptionValidationLogin();
             }
 
@@ -35,10 +38,8 @@ class LoginPost implements ControllerInterface
             exit();
 
         } catch (ExceptionValidationLogin $e) {
-            // 1. Capture l'exception.
-            // 2. Stocke le message d'erreur dans les données de la vue.
-            SessionService::setFlash('errors', ['general' => 'Erreur de connexion' . $e->getMessage()]);
-            $view = new LoginView() ;
+            SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
+            $view = new LoginView();
             $view->render();
             return;
         }
