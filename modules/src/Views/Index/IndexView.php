@@ -42,7 +42,7 @@ class IndexView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $this->$error . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></div>';
 
