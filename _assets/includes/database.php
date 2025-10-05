@@ -30,12 +30,4 @@ class database extends PDO{
         return self::$instance;
     }
 }
-
-//$test = BdSaeManager::getInstance();
-//$result = $test->query("SELECT last_name, email FROM users");
-//while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-//    echo "Name: " . $row['last_name'] . "\n" .
-//        "Email: " . $row['email'] . "\n";
-//}
-
 ?>

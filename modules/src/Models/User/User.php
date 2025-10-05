@@ -3,6 +3,7 @@ namespace Models\User;
 
 use includes\database;
 use PDO;
+use PDOException;
 
 class User
 {
@@ -79,53 +80,115 @@ class User
 
     public function setPassword(string $password): void
     {
-        $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        $this->passwordHash = md5($password);
+        //echo($this->email. $this->passwordHash);
     }
+
 
     public function save(): bool
     {
         $connection = database::getInstance();
 
-
         if ($this->userType === 'student') {
-
-            $str = "SELECT register_student(
-            '$this->email',
-            '$this->firstName',
-            '$this->lastName',
-            '$this->passwordHash',
-            '$this->city',
-            '$this->amuId',
-            '$this->parcours',
-            '$this->year',
-            '$this->td',
-            '$this->tp'
-        );";
+            $stmt = $connection->prepare("
+            SELECT * FROM register_student(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId, 
+                :parcours, 
+                :year, 
+                :td, 
+                :tp
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId,
+                'parcours' => $this->parcours,
+                'year' => $this->year,
+                'td' => $this->td,
+                'tp' => $this->tp
+            ]);
         }
-        elseif ($this->getUserType() === 'professor') {
-            $str = "SELECT register_teacher(
-            '$this->email',
-            '$this->firstName',
-            '$this->lastName',
-            '$this->passwordHash',
-            '$this->city',
-            '$this->amuId',
-        );";
+        elseif ($this->userType === 'professor') {
+            $stmt = $connection->prepare("
+            SELECT * FROM register_teacher(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId
+            ]);
         }
         else {
-            $str = "SELECT register_user(
-            '$this->email',
-            '$this->firstName',
-            '$this->lastName',
-            '$this->passwordHash',
-            '$this->city',
-            '$this->amuId',
-        );";
+            $stmt = $connection->prepare("
+            SELECT * FROM register_user(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId
+            ]);
         }
-        $connection->query($str);
-        return true;
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['success'] === true;
     }
 
+    public function login(): bool
+    {
+
+        $connection = database::getInstance();
+        //$str = "SELECT connection('$this->email', '$this->passwordHash')";
+        $stmt = $connection->prepare("SELECT connection(?, ?)");
+        $stmt->execute([$this->email, $this->passwordHash]);
+
+        $row = $stmt->fetch(PDO::FETCH_NUM); // ← Changé en FETCH_NUM
+
+        if (!$row || !isset($row[0])) {
+            return false;
+        }
+
+        $data = trim($row[0], '()');
+        $parts = explode(',', $data);
+        $success = trim(end($parts));
+
+        return $success === 't' || $success === 'true';
+    }
 
 
 
