@@ -21,14 +21,9 @@ class ResetPasswordPostController implements ControllerInterface
         try {
             // 1. Vérifie le token
             $token = $_GET['token'] ?? '';
-            if (empty($token)) {
-                throw new ExceptionInvalidToken("Token manquant.");
-            }
 
             $tokenData = TokenService::validateToken($token);
-            if ($tokenData === false) {
-                throw new ExceptionInvalidToken("Ce lien de réinitialisation est invalide ou a expiré. Veuillez faire une nouvelle demande.");
-            }
+
 
             // 2. Validation des données
             $validator = new ResetPasswordValidator();
@@ -64,6 +59,10 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
 
+        } catch (\PDOException $e) {
+            error_log("Erreur validation token: " . $e->getMessage());
+            SessionService::setFlash('errors', ['Erreur lors de la validation du lien: veuillez réessayer plus tard.']);
+            header('Location: /');
         } catch (\Throwable $e) {
             // Fallback générique
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
