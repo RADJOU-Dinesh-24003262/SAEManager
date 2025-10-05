@@ -8,26 +8,38 @@ use Controllers\User\Register;
 //use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
 //use Controllers\Dashboard\Home;
-use Controllers\AssetController;
+use Controllers\AssetController;    
+use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
-use Controllers\Index\IndexController;
+use Controllers\pwd\ForgotPasswordController;
+use Controllers\pwd\ForgotPasswordPostController;
+use Controllers\pwd\ResetPasswordController;
+use Controllers\pwd\ResetPasswordPostController;
+
+//phpinfo();
 
 // Liste des contrôleurs disponibles
 $controllers = [
     new Login(),
-    new Register(),
+    new Register(), 
+    new LoginPost(),
     new RegisterPost(),
     //new Home(),
     new LegalNoticeController(),
     new SiteMapController(),
     new IndexController(),
-    new LoginPost()
+
+    new ForgotPasswordController(),
+    new ForgotPasswordPostController(),
+    new ResetPasswordController(),
+    new ResetPasswordPostController()
 ];
 
 // Routing automatique
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 foreach ($controllers as $controller) {
-    if ($controller::support($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD'])) {
+    if ($controller::support($path, $_SERVER['REQUEST_METHOD'])) {
         try {
             $controller->control();
             exit();

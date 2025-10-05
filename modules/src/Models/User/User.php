@@ -22,7 +22,7 @@ class User
     private ?string $parcours = null;
     private ?string $td = null;
     private ?string $tp = null;
-
+    
     public function __construct(
         string $amuId = '',
         string $firstName = '',
@@ -70,11 +70,11 @@ class User
             $data['td'] ?? null,
             $data['tp'] ?? null
         );
-
+        
         if (!empty($data['pwd'])) {
             $user->setPassword($data['pwd']);
         }
-
+        
         return $user;
     }
 
@@ -84,7 +84,6 @@ class User
         $this->passwordHash = md5($password);
         //echo($this->email. $this->passwordHash);
     }
-
 
     public function save(): bool
     {
@@ -192,6 +191,35 @@ class User
 
 
 
+
+    public static function existsByEmail(string $email): bool
+    {
+        try {
+            $db = database::getInstance();
+            $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log("Erreur vérification email: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function updatePasswordByEmail(string $email, string $newPassword): bool
+    {
+        try {
+            $db = database::getInstance();
+            $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            $stmt = $db->prepare("UPDATE users SET password = :password_hash WHERE email = :email");
+            return $stmt->execute([
+                'password_hash' => $passwordHash,
+                'email' => $email
+            ]);
+        } catch (\PDOException $e) {
+            error_log("Erreur mise à jour mot de passe: " . $e->getMessage());
+            return false;
+        }
+    }
 
     // Getters
     public function getId(): ?int { return $this->id; }

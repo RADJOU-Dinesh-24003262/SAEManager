@@ -2,6 +2,8 @@
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
+use includes\exception\ExceptionValidationLogin;
+use includes\exception\ExceptionValidationEmptys;
 use includes\database;
 use PDO;
 use Models\User\User;
@@ -9,34 +11,52 @@ use Utilis\ValidationServiceRegister;
 use Utilis\SessionService;
 use Views\Index\IndexView;
 use Views\User\LoginView;
-use Views\User\RegisterView;
-use Views\User\RegisterSuccessView;
-use includes\exception\ExceptionValidationRegisters;
+use Utilis\Validator\LoginValidator;
 
 class LoginPost implements ControllerInterface{
     public function control(): void
     {
-
 
         if (SessionService::has('user_id')) {
             header('Location: /dashboard');
             exit();
         }
 
-        $email = $_POST["username"];
-        $password = $_POST["password"];
-        $user = new User(email: $email);
-        $user->setPassword($password);
+        try {
+            $validator = new LoginValidator();
+            $data = $validator->escape($_POST);
+            $validator->validate($data);
 
-        if($user->login()){
-            SessionService::set('user_id', $user->getEmail());
+            $username = trim($data['username'] ?? '');
+            $password = $data['password'] ?? '';
 
-            header('Location: /dashboard');
-            exit();
-        }else{
-            $view = new LoginView();
-            $view->render();
+            error_log("Tentative de connexion - Username: '$username'");
+
+            $user = new User(email: $username);
+            $user->setPassword($password);
+
+            if($user->login()){
+
+                SessionService::set('user_id', $user->getEmail());
+
+                header('Location: /dashboard');
+                exit();
+            }
+
+
+        }catch(ExceptionValidationEmptys $e){
+                        $errors = [];
+            foreach ($e->getErrors() as $error) {
+                $errors[] = $error->getMessage();
+            }
+            SessionService::setFlash('errors', $errors);
+
+        } catch (ExceptionValidationLogin $e) {
+            SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
         }
+        $view = new LoginView();
+        $view->render();
+    }
 
     }
 

@@ -3,6 +3,7 @@
 namespace Views\User;
 
 use Views\AbstractView;
+use Utilis\SessionService;
 
 class LoginView extends AbstractView
 {
@@ -12,14 +13,39 @@ class LoginView extends AbstractView
     {
         return self::TEMPLATE_HTML;
     }
-
     protected function templateKeys(): array
     {
-        return [];
+        $errors = $this->data['errors'];
+
+        return [
+            // Messages d'erreur
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
+        ];
+    }
+    public function __construct()
+    {
+        $data = [
+            'errors' => SessionService::getFlash('errors', []),
+        ];
+        parent::__construct($data);
+    }
+    private function renderErrorMessages(array $errors): string
+    {
+        if (empty($errors)) {
+            return '';
+        }
+
+        $html = '<div class="alert alert-error"><ul>';
+        foreach ($errors as $error) {
+            $html .= '<li>' . $error . '</li>';
+        }
+        $html .= '</ul></div>';
+
+        return $html;
     }
 
     protected function getNameCss(): string
     {
-        return 'login.css';
+        return 'style.css';
     }
 }
