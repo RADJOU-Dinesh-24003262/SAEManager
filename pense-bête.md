@@ -11,7 +11,7 @@
 ## 5.2.5 Bonnes pratiques professionnelles  
 - [x] Héberger site accessible sur le Web (2,5%)  
 - [x] Ajouter favicon sur toutes les pages (1,25%)  
-- [ ] Renseigner balise meta description (1,25%)  
+- [x] Renseigner balise meta description (1,25%)  
 - [x] Intégrer menu permanent de navigation (2,5%)  
 - [x] Rendre site adaptatif (smartphones, tablettes, PC) (5%)  
 - [ ] Soigner architecture répertoires, code PHP/HTML/CSS, balises sémantiques (3,75%)  
