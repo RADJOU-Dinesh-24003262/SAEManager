@@ -18,10 +18,10 @@ class User
     private string $phone;
     private string $dateOfBirth;
     private string $city;
-    private ?string $year = null;
+    private ?int $year = null;
     private ?string $parcours = null;
-    private ?string $td = null;
-    private ?string $tp = null;
+    private ?int $td = null;
+    private ?int $tp = null;
     
     public function __construct(
         string $amuId = '',
@@ -33,10 +33,10 @@ class User
         string $phone = '',
         string $dateOfBirth = '',
         string $city = '',
-        ?string $year = null,
+        ?int $year = null,
         ?string $parcours = null,
-        ?string $td = null,
-        ?string $tp = null
+        ?int $td = null,
+        ?int $tp = null
     ) {
         $this->amuId = $amuId;
         $this->firstName = $firstName;
@@ -81,7 +81,7 @@ class User
     public function setPassword(string $password): void
     {
 
-        $this->passwordHash = md5($password);
+        $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
         //echo($this->email. $this->passwordHash);
     }
 
@@ -172,21 +172,12 @@ class User
     {
 
         $connection = database::getInstance();
-        //$str = "SELECT connection('$this->email', '$this->passwordHash')";
         $stmt = $connection->prepare("SELECT connection(?, ?)");
         $stmt->execute([$this->email, $this->passwordHash]);
 
-        $row = $stmt->fetch(PDO::FETCH_NUM); // ← Changé en FETCH_NUM
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $row['success'] === true;
 
-        if (!$row || !isset($row[0])) {
-            return false;
-        }
-
-        $data = trim($row[0], '()');
-        $parts = explode(',', $data);
-        $success = trim(end($parts));
-
-        return $success === 't' || $success === 'true';
     }
 
 
