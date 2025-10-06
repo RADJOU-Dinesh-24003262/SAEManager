@@ -73,4 +73,11 @@ class ForgotPasswordView extends AbstractView
         return 'pwd-forgot.css';
     }
 
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
+                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
+
 }

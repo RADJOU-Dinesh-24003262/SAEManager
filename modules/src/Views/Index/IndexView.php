@@ -68,4 +68,12 @@ class IndexView extends AbstractView
     {
         return 'index.css';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page d\'accueil de SAEManager">
+                <meta name="keywords" content="SAEManager, Accueil, Gestion">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
+
 }
