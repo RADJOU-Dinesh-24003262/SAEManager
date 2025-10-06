@@ -28,5 +28,12 @@ class LegalNoticeView extends AbstractView
     {
         return 'legal-notice.css';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Mentions légales de SAEManager">
+                <meta name="keywords" content="SAEManager, Mentions légales">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }
 

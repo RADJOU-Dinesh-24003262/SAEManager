@@ -88,4 +88,11 @@ class ResetPasswordView extends AbstractView
     {
         return '<script src="scripts/reset-password.js"></script>';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
+                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }

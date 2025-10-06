@@ -47,4 +47,11 @@ class ResetPasswordSuccessView extends AbstractView
             }, 1000);
         </script>';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAEManager">
+                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe, Succès">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }

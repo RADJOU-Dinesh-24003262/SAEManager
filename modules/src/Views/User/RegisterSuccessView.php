@@ -76,4 +76,11 @@ class RegisterSuccessView extends AbstractView
     {
         return self::CSS_REGISTER_SUCCESS;
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de succès d\'inscription de SAEManager">
+                <meta name="keywords" content="SAEManager, Inscription, Succès">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }

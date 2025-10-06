@@ -82,4 +82,11 @@ class RegisterView extends AbstractView
     {
         return 'register.css';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page d\'inscription de SAEManager">
+                <meta name="keywords" content="SAEManager, Inscription">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }
