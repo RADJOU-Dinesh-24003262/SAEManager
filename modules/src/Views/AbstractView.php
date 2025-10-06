@@ -22,20 +22,37 @@ abstract class AbstractView
         echo $template;
     }
 
-    abstract protected function templatePath(): string;
-    
     /**
-     * @return array<string, string>
+     * Returns the path to the HTML template file.
+     *
+     * @return string
+     */
+    abstract protected function templatePath(): string;
+
+    /** Returns an associative array of keys and values to be used in the HTML template.
+     *
+     * This method retrieves error messages and success messages from the session
+     * and prepares them for rendering in the template.
+     *
+     * @return array An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
-
+    /** Renders the complete HTML page including header, body, and footer.
+     *
+     * This method orchestrates the rendering of the entire HTML page by calling
+     * the methods to render the header, body, and footer in sequence.
+     */
     public function render(): void
     {
         $this->renderHeader();
         $this->renderBody();
         $this->renderFooter();
     }
-
+    /** Renders the HTML header section of the page.
+     *
+     * This method outputs the HTML for the header section, including meta tags,
+     * title, CSS links, and navigation bar.
+     */
     protected function renderHeader(): void
     {
         echo '<!DOCTYPE html>
@@ -63,9 +80,19 @@ abstract class AbstractView
 
         ';
     }
-    
+    /** Returns the name of the CSS file associated with the view.
+     *
+     * This method should be implemented by subclasses to specify the CSS file
+     * that should be included in the HTML header for styling the page.
+     *
+     * @return string The name of the CSS file.
+     */
     abstract protected function getNameCss(): string;
-
+    /** Renders the HTML footer section of the page.
+     *
+     * This method outputs the HTML for the footer section, including contact information
+     * and social media links.
+     */
     protected function renderFooter(): void
     {
         echo $this->getAdditionalScripts() . '
@@ -107,12 +134,18 @@ abstract class AbstractView
     {
         return 'SAEManager';
     }
-
+    /** Returns additional HTML headers for any view class page which will extend this class.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '';
     }
-
+    /** Returns additional scripts to be included before closing a body tag.
+     *
+     * @return string The additional scripts.
+     */
     protected function getAdditionalScripts(): string
     {
         return '';
