@@ -45,7 +45,7 @@ abstract class AbstractView
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
-            <link rel="stylesheet" href="styles/'. $this->getNameCss().'">
+            <link rel="stylesheet" href="styles/'.$this->getNameCss().'">
             <link rel="stylesheet" href="styles/header.css">
             ' . $this->getAdditionalHeaders() . '
         </head>
@@ -68,7 +68,7 @@ abstract class AbstractView
     protected function renderFooter(): void
     {
         echo $this->getAdditionalScripts() . '
-<footer class="footer">
+<footer>
 <link rel="stylesheet" href="styles/footer.css">
     <div class="footer-container">
         <div class="footer-left">
@@ -81,6 +81,10 @@ abstract class AbstractView
             <ul>
                 <li>📞 Tel : +33 02 50 65 14 4</li>
                 <li>📧 Mail : sae.manager@gmail.com</li>
+            </ul>
+            
+            <ul>
+                <li><a href="/legal-notice">Mentions légales</a> </li>
             </ul>
         </div>
 

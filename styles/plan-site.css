@@ -3,7 +3,7 @@ body {
     background-color: #f9f9f9;
     color: #003366; /* bleu foncé AMU */
     margin: 2rem auto;
-    max-width: 600px;
+    max-width: 100vw;
     padding: 0 1rem;
     line-height: 1.6;
     text-align: center;
