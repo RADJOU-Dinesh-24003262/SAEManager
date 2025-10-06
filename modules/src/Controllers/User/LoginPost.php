@@ -44,8 +44,8 @@ class LoginPost implements ControllerInterface{
             }
 
 
-        } catch(ExceptionValidationEmptys $e){
-            $errors = [];
+        }catch(ExceptionValidationEmptys $e){
+                        $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
@@ -53,11 +53,12 @@ class LoginPost implements ControllerInterface{
 
         } catch (ExceptionValidationLogin $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
-        } // <- Cette accolade fermante était manquante
-
+        }
         $view = new LoginView();
         $view->render();
     }
+
+
 
     public static function support(string $chemin, string $method): bool
     {
