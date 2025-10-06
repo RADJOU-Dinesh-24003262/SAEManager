@@ -28,5 +28,12 @@ class SiteMapView extends AbstractView
     {
         return 'plan-site.css';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Plan du Site de SAEManager">
+                <meta name="keywords" content="SAEManager, Plan du Site">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }
 
