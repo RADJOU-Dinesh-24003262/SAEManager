@@ -25,7 +25,7 @@
 - [x] Utiliser gestion de version (GitHub) (1,25%)  
 - [ ] Utiliser analyse de code (PHP Linter, PHPStan, Psalm) (1,25%)  
 - [ ] Utiliser autre outil qualité (1,25%)  
-- [ ] Ajouter fonctionnalités avancées (PHPDoc, PHPUnit, CI) (5%)
+- [x/2] Ajouter fonctionnalités avancées (PHPDoc, PHPUnit, CI) (5%)
 - [ ] Réparer le formulaire d'inscription. ("could not find driver" + adresse univ-amu.fr pas acceptées)
 
 ---
