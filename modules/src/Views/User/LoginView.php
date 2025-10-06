@@ -5,6 +5,13 @@ namespace Views\User;
 use Views\AbstractView;
 use Utilis\SessionService;
 
+/**
+ * Class LoginView
+ *
+ * This class represents the view for the login page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the login page, including handling error messages.
+ */
 class LoginView extends AbstractView
 {
     private const TEMPLATE_HTML = __DIR__ . '/loginview.html';
@@ -48,7 +55,10 @@ class LoginView extends AbstractView
     {
         return 'style.css';
     }
-
+    /** Returns additional HTML headers for the Login page.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de connexion de SAEManager">
