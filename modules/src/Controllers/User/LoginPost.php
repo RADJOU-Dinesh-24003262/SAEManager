@@ -34,6 +34,7 @@ class LoginPost implements ControllerInterface{
 
             $user = new User(email: $username);
             $user->setPassword($password);
+            $user->setClearPassword($password);
 
             if($user->login()){
 
