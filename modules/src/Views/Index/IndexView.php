@@ -5,11 +5,18 @@ namespace Views\Index;
 use Utilis\SessionService;
 use Views\AbstractView;
 use Controllers\Index\IndexControllerPost;
+
+/**
+ * Class IndexView
+ *
+ * This class represents the view for the index page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the index page, including handling error and success messages.
+ */
 class IndexView extends AbstractView
 {
-
+    // Chemin vers le template HTML
     private const TEMPLATE_HTML = __DIR__ . '/index.html';
-
     public function __construct()
 {
     $data = [
@@ -18,6 +25,7 @@ class IndexView extends AbstractView
     ];
     parent::__construct($data);
 }
+
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -58,7 +66,6 @@ class IndexView extends AbstractView
 
         return '<div class="alert alert-success">' . $this->$success . '</div>';
     }
-
     protected function getPageTitle(): string
     {
         return 'Index - SAEManager';
