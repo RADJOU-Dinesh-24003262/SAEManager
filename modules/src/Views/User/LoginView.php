@@ -48,4 +48,11 @@ class LoginView extends AbstractView
     {
         return 'style.css';
     }
+
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de connexion de SAEManager">
+                <meta name="keywords" content="SAEManager, Connexion">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+    }
 }
