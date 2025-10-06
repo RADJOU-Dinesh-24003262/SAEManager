@@ -50,15 +50,16 @@ abstract class AbstractView
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>
-        <header>
-                <h1 class="saeManager">SAEManager</h1>
-                <img src="Image/logoamu.png" alt="Logo AMU Header" >
-                <nav class="navBar">
-                    <a href="/" class="nav-link">Accueil</a>
-                    <a href="/login" class="nav-link">Connexion</a>
-                    <a href="/register" class="nav-link">Inscription</a>
-                </nav>
-         </header>
+        <header class="global-header">
+            <h1 class="saeManager">SAEManager</h1>
+                <img src="/image/logoamu.png" alt="Logo AMU Header">
+            <nav class="navBar">
+            <a href="/" class="nav-link">Accueil</a>
+            <a href="/login" class="nav-link">Connexion</a>
+            <a href="/register" class="nav-link">Inscription</a>
+    </nav>
+</header>
+
         ';
     }
     
@@ -67,6 +68,32 @@ abstract class AbstractView
     protected function renderFooter(): void
     {
         echo $this->getAdditionalScripts() . '
+<footer class="footer">
+<link rel="stylesheet" href="styles/footer.css">
+    <div class="footer-container">
+        <div class="footer-left">
+            <h1 class="saeManager">SAEManager</h1>
+            <img src="/image/logo-footer.png" alt="AMU Logo" class="footer-logo-amu">
+        </div>
+
+        <div class="footer-middle">
+            <h3>Nous contacter :</h3>
+            <ul>
+                <li>📞 Tel : +33 02 50 65 14 4</li>
+                <li>📧 Mail : sae.manager@gmail.com</li>
+            </ul>
+        </div>
+
+        <div class="footer-right">
+            <h3>Nous suivre :</h3>
+            <ul>
+                <li>Instagram</li>
+                <li>Facebook</li>
+                <li>LinkedIn</li>
+            </ul>
+        </div>
+    </div>
+</footer>
         </body>
         </html>';
     }
