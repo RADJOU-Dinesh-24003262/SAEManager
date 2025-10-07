@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<url>
+  <loc>http://saemanager.alwaysdata.net/</loc>
+  <priority>0.7</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/login</loc>
+  <priority>0.4</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/register</loc>
+  <priority>0.4</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/legal-notice</loc>
+  <priority>0.4</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/forgot-password</loc>
+  <priority>0.4</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/conditions-generales</loc>
+  <priority>0.4</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+<url>
+  <loc>http://saemanager.alwaysdata.net/site-map</loc>
+  <priority>0.8</priority>
+  <changefreq>weekly</changefreq>
+  <lastmod>2025-10-07</lastmod>
+</url>
+</urlset>
