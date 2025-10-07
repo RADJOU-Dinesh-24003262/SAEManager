@@ -16,6 +16,11 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    white-space: nowrap;
+}
+
+footer a{
+    color : #FFD0D0;
 }
 
 /* Correction : h1 de footer (classe saeManager) */
@@ -66,6 +71,11 @@ footer .saeManager {
 
 /* MILIEU - Contact */
 .footer-middle {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     flex-wrap: wrap;
     text-align: left;
@@ -95,6 +105,12 @@ footer .saeManager {
     text-align: left;
     border-left: 2px solid white;
     padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .footer-right h3 {
@@ -113,8 +129,12 @@ footer .saeManager {
     font-size: 0.95rem;
 }
 
+footer h1{
+    color : white;
+}
+
 /* ADAPTATION MOBILE */
-@media (max-width: 900px) {
+@media (max-width: 1210px) {
     .footer-container {
         flex-direction: column;
         flex-wrap: wrap;
