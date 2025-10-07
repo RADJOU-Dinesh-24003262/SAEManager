@@ -21,6 +21,7 @@ footer {
 
 footer a{
     color : #FFD0D0;
+    text-decoration: none;
 }
 
 /* Correction : h1 de footer (classe saeManager) */
