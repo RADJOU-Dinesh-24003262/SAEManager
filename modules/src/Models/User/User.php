@@ -2,54 +2,213 @@
 namespace Models\User;
 
 use includes\database;
+use PDO;
+use PDOException;
 
 class User
 {
-    private array $fields = [
-        'amuId' => '',
-        'fname' => '',
-        'lname' => '',
-        'gender' => '',
-        'user_type' => '',
-        'email' => '',
-        'tel' => '',
-        'dateOfBirth' => '',
-        'city' => '',
-        'year' => null,
-        'parcours' => null,
-        'td' => null,
-        'tp' => null
-    ];
-
-    private string $passwordHash = '';
-
-
-    public function __construct(array $data = [])
-    {
-        foreach ($this->fields as $property => $default) {
-            $this->fields[$property] = $data[$property] ?? $default;
-        }
+    private string $amuId;
+    private string $firstName;
+    private string $lastName;
+    private string $gender;
+    private string $userType;
+    private string $email;
+    private string $passwordHash;
+    private string $phone;
+    private string $dateOfBirth;
+    private string $city;
+    private ?int $year = null;
+    private ?string $parcours = null;
+    private ?int $td = null;
+    private ?int $tp = null;
+    private string $clearpassword;
+    
+    public function __construct(
+        string $amuId = '',
+        string $firstName = '',
+        string $lastName = '',
+        string $gender = '',
+        string $userType = '',
+        string $email = '',
+        string $phone = '',
+        string $dateOfBirth = '',
+        string $city = '',
+        ?int $year = null,
+        ?string $parcours = null,
+        ?int $td = null,
+        ?int $tp = null,
+        string $clearpassword = ''
+    ) {
+        $this->amuId = $amuId;
+        $this->firstName = $firstName;
+        $this->lastName = $lastName;
+        $this->gender = $gender;
+        $this->userType = $userType;
+        $this->email = $email;
+        $this->phone = $phone;
+        $this->dateOfBirth = $dateOfBirth;
+        $this->city = $city;
+        $this->year = $year;
+        $this->parcours = $parcours;
+        $this->td = $td;
+        $this->tp = $tp;
+        $this->clearpassword = $clearpassword;
     }
 
     public static function createFromRegistrationData(array $data): self
     {
-        $user = new self($data);
+        $user = new self(
+            $data['id'] ?? '',
+            $data['fname'] ?? '',
+            $data['lname'] ?? '',
+            $data['gender'] ?? '',
+            $data['user_type'] ?? '',
+            $data['email'] ?? '',
+            $data['tel'] ?? '',
+            $data['dob'] ?? '',
+            $data['city'] ?? '',
+            $data['year'] ?? null,
+            $data['parcours'] ?? null,
+            $data['td'] ?? null,
+            $data['tp'] ?? null
+        );
+        
         if (!empty($data['pwd'])) {
             $user->setPassword($data['pwd']);
         }
+        
         return $user;
     }
 
     public function setPassword(string $password): void
     {
+
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+        //echo($this->email. $this->passwordHash);
+    }
+
+
+    public function getClearPassword(): string
+    {
+        return $this->clearpassword;
+    }
+
+    public function setClearPassword(string $clearpassword): void
+    {
+        $this->clearpassword = $clearpassword;
     }
 
     public function save(): bool
     {
-        // TODO: Implémentation de la sauvegarde en base de données
-        return true;
+        $connection = database::getInstance();
+
+        if ($this->userType === 'student') {
+            $stmt = $connection->prepare("
+            SELECT * FROM register_student(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId, 
+                :parcours, 
+                :year, 
+                :td, 
+                :tp
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId,
+                'parcours' => $this->parcours,
+                'year' => $this->year,
+                'td' => $this->td,
+                'tp' => $this->tp
+            ]);
+        }
+        elseif ($this->userType === 'professor') {
+            $stmt = $connection->prepare("
+            SELECT * FROM register_teacher(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId
+            ]);
+        }
+        else {
+            $stmt = $connection->prepare("
+            SELECT * FROM register_user(
+                :email, 
+                :lastName, 
+                :firstName, 
+                :passwordHash, 
+                :phone, 
+                :city, 
+                :amuId
+            )
+        ");
+            $stmt->execute([
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'city' => $this->city,
+                'amuId' => $this->amuId
+            ]);
+        }
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['success'] === true;
     }
+
+    public function login(): bool
+    {
+
+        $connection = database::getInstance();
+        $stmt = $connection->prepare("SELECT connection(?)");
+        $stmt->execute([$this->email]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        var_dump($row);
+        // Parser le type composite: '(email,hash,t)'
+        $composite = trim($row['connection'], '()');
+        $parts = explode(',', $composite);
+
+        $user_id = $parts[0];
+        $passwordHash = $parts[1];
+        $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
+
+        var_dump($success, $user_id, $passwordHash);
+
+        if($success == true){
+            return password_verify($this->clearpassword, $passwordHash);
+        }
+        return false;
+    }
+
+
+
 
     public static function existsByEmail(string $email): bool
     {
@@ -81,23 +240,22 @@ class User
     }
 
     // Getters
-    public function getAmuId(): string { return $this->fields['amuId']; }
-    public function getFFname(): string { return $this->fields['fname']; }
-    public function getLLname(): string { return $this->fields['lname']; }
-    public function getFullName(): string { return $this->fields['fname'] . ' ' . $this->fields['lname']; }
-    public function getGender(): string { return $this->fields['gender']; }
-    public function getUserType(): string { return $this->fields['user_type']; }
-    public function getEmail(): string { return $this->fields['email']; }
-    public function getPasswordHash(): string { return $this->passwordHash; }
-    public function getPhone(): string { return $this->fields['tel']; }
-    public function getDateOfBirth(): string { return $this->fields['dateOfBirth']; }
-    public function getCity(): string { return $this->fields['city']; }
-    public function getYear(): ?string { return $this->fields['year'] ?? null; }
-    public function getParcours(): ?string { return $this->fields['parcours'] ?? null; }
-    public function getTd(): ?string { return $this->fields['td'] ?? null; }
-    public function getTp(): ?string { return $this->fields['tp'] ?? null; }
+    public function getAmuId(): string { return $this->amuId; }
+    public function getFirstName(): string { return $this->firstName; }
+    public function getLastName(): string { return $this->lastName; }
+    public function getFullName(): string { return $this->firstName . ' ' . $this->lastName; }
+    public function getGender(): string { return $this->gender; }
+    public function getUserType(): string { return $this->userType; }
+    public function getEmail(): string { return $this->email; }
+    public function getPhone(): string { return $this->phone; }
+    public function getDateOfBirth(): string { return $this->dateOfBirth; }
+    public function getCity(): string { return $this->city; }
+    public function getYear(): ?int { return $this->year; }
+    public function getParcours(): ?string { return $this->parcours; }
+    public function getTd(): ?int { return $this->td; }
+    public function getTp(): ?int { return $this->tp; }
 
-    public function isStudent(): bool { return $this->fields['user_type'] === 'student'; }
-    public function isProfessor(): bool { return $this->fields['user_type'] === 'professor'; }
-    public function isCompany(): bool { return $this->fields['user_type'] === 'companies'; }
+    public function isStudent(): bool { return $this->userType === 'student'; }
+    public function isProfessor(): bool { return $this->userType === 'professor'; }
+    public function isCompany(): bool { return $this->userType === 'companies'; }
 }

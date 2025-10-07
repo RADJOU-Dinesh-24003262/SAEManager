@@ -7,7 +7,7 @@ use PDO;
 
 class database extends PDO{
     private static ?database $instance = null;
-    public function __construct($file = 'my_settings.ini'){
+    public function __construct(string $file = 'my_settings.ini'){
         if (!$settings = parse_ini_file($file, TRUE))
             throw new exception('Unable to open ' . $file . '.');
 

@@ -18,8 +18,7 @@ abstract class FormValidator
 
     /**
      * Échappe les données du formulaire (HTML special chars).
-     * @param array $data
-     * @param array $fields Liste des champs à échapper
+     * @param array $data Données du formulaire
      * @return array Données échappées
      * @throws ExceptionValidationEmptys si un champ requis est vide
      */
