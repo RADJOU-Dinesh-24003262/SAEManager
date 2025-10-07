@@ -77,7 +77,7 @@ class ForgotPasswordView extends AbstractView
 
     protected function getNameCss(): string
     {
-        return 'pwd-forgot.css';
+        return 'forgot-password.css';
     }
     /** Returns additional HTML headers for the forgot password page.
      *
