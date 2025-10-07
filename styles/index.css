@@ -1,85 +1,124 @@
-h1 {
-    text-align: center;  /* centre le texte */
-    margin: 0 auto;  
-    color: #FFC925;
-    font-family: "Abril Fatface";
-    font-size: 140px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    background-image: url("/image/Index.png");
+/* Conteneur principal pour isoler les styles */
+.sae-manager-page {
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 
-h2 {
-    text-align: center;  /* centre le texte */
-    margin: 0 auto;  
-    flex-shrink: 0;
+/* Titres */
+.sae-manager-page h1,
+.sae-manager-page h2,
+.sae-manager-page h3 {
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.sae-manager-page h1 {
+    color: #FFC925;
+    font-family: "Abril Fatface", serif;
+    font-size: clamp(2.5rem, 8vw, 8.75rem);
+    font-weight: 400;
+    line-height: 1.1;
+    background-image: url("/image/index.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.sae-manager-page h2 {
     color: #E8CE7E;
-    font-family: "Abril Fatface";
-    font-size: 40px;
-    font-style: normal;
+    font-family: "Abril Fatface", serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 400;
-    line-height: normal;
+    line-height: 1.2;
 }
 
-h3 {
-    text-align: center;  /* centre le texte */
-    margin: 0 auto;  
+.sae-manager-page h3 {
     color: #FFC925;
-    font-family: "Abril Fatface";
-    font-size: 60px;
-    font-style: normal;
+    font-family: "Abril Fatface", serif;
+    font-size: clamp(1.8rem, 5vw, 3.75rem);
     font-weight: 400;
-    line-height: normal;
+    line-height: 1.2;
 }
 
-h1, h2, h3 {
-  text-align: center;
-  margin-top: 40px;   /* espace au-dessus */
-  margin-bottom: 40px; /* espace en dessous */
-}
-
-.description_text {
-    width: 1518px;
-    flex-shrink: 0;
+/* Texte descriptif */
+.sae-manager-page .description_text {
+    max-width: 90%;
     color: #000;
     text-align: justify;
-    font-family: "Abril Fatface";
-    font-size: 40px;
-    font-style: normal;
+    font-family: "Abril Fatface", serif;
+    font-size: clamp(1rem, 3vw, 2.5rem);
     font-weight: 400;
-    line-height: normal;
-    display: block;       /* pour que le span se comporte comme un bloc */
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: auto;   /* centre horizontalement */
-    margin-right: auto;  /* centre horizontalement */
+    line-height: 1.4;
+    margin: 20px auto;
+    padding: 0 10px;
 }
 
-button {
-    display: block;
-    flex-direction: column;
-    background-color: #ffffff;   /* fond blanc */
-    color: #333333;              /* texte gris foncé */
-    border: 2px solid #1E90FF;   /* bordure bleu */
-    border-radius: 12px;         /* coins arrondis */
-    padding: 10px 30px;          /* espace vertical/horizontal */
-    font-size: 20px;             /* taille du texte */
+/* Bouton transformé en lien stylisé */
+.sae-manager-page .sae-button {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #333333;
+    border: 2px solid #1E90FF;
+    border-radius: 12px;
+    padding: 10px 30px;
+    font-size: clamp(0.9rem, 2vw, 1.25rem);
     font-family: Arial, sans-serif;
     cursor: pointer;
-    transition: all 0.3s ease;  /* transition douce au survol */
-    margin-left: auto;
-    margin-right: auto;
+    transition: all 0.3s ease;
+    margin: 20px auto;
+    text-decoration: none;
 }
 
-
-button:hover {
-    background-color: #1E90FF;   /* fond bleu au survol */
-    color: #ffffff;              /* texte blanc au survol */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* petite ombre */
+.sae-manager-page .sae-button:hover {
+    background-color: #1E90FF;
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-button:active {
-    transform: scale(0.98);      /* léger effet de réduction au clic */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* ombre réduite au clic */
+.sae-manager-page .sae-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- MEDIA QUERIES --- */
+
+/* Tablettes */
+@media (max-width: 1024px) {
+    .sae-manager-page h1 {
+        margin-bottom: 30px;
+    }
+
+    .sae-manager-page .description_text {
+        font-size: clamp(1rem, 2.5vw, 1.8rem);
+        line-height: 1.5;
+    }
+}
+
+/* Mobiles */
+@media (max-width: 600px) {
+    .sae-manager-page h1 {
+        font-size: clamp(2rem, 10vw, 3.5rem);
+        margin-bottom: 20px;
+    }
+
+    .sae-manager-page h2 {
+        font-size: clamp(1.2rem, 6vw, 2rem);
+    }
+
+    .sae-manager-page h3 {
+        font-size: clamp(1.2rem, 6vw, 2.5rem);
+    }
+
+    .sae-manager-page .description_text {
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        text-align: left;
+    }
+
+    .sae-manager-page .sae-button {
+        width: 80%;
+        padding: 12px 0;
+    }
 }

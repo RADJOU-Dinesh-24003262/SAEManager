@@ -4,14 +4,24 @@ namespace Controllers\User;
 use Controllers\ControllerInterface;
 use includes\exception\ExceptionValidationLogin;
 use includes\exception\ExceptionValidationEmptys;
-use Views\User\LoginView;
+use includes\database;
+use PDO;
+use Models\User\User;
+use Utilis\ValidationServiceRegister;
 use Utilis\SessionService;
+use Views\Index\IndexView;
+use Views\User\LoginView;
 use Utilis\Validator\LoginValidator;
 
-class LoginPost implements ControllerInterface
-{
+class LoginPost implements ControllerInterface{
     public function control(): void
     {
+
+        if (SessionService::has('user_id')) {
+            header('Location: /dashboard');
+            exit();
+        }
+
         try {
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
@@ -22,21 +32,18 @@ class LoginPost implements ControllerInterface
 
             error_log("Tentative de connexion - Username: '$username'");
 
-            // Pour l'exemple, on utilise des utilisateurs "fictifs"
-            $fakeUsers = [
-                'admin' => 'admin',    // username => password
-                'user' => 'password123'
-            ];
+            $user = new User(email: $username);
+            $user->setPassword($password);
+            $user->setClearPassword($password);
 
-            // VÉRIFICATION DE LA VALIDITÉ DES IDENTIFIANTS
-            if (!isset($fakeUsers[$username]) || $fakeUsers[$username] !== $password) {
-                throw new ExceptionValidationLogin();
+            if($user->login()){
+
+                SessionService::set('user_id', $user->getEmail());
+
+                header('Location: /dashboard');
+                exit();
             }
 
-            // Si les identifiants sont corrects
-            SessionService::set('user_id', $username);
-            header('Location: /dashboard');
-            exit();
 
         }catch(ExceptionValidationEmptys $e){
                         $errors = [];
@@ -47,17 +54,16 @@ class LoginPost implements ControllerInterface
 
         } catch (ExceptionValidationLogin $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
+            throw new ExceptionValidationLogin();
         }
         $view = new LoginView();
         $view->render();
     }
 
-    public static function supportPost(string $chemin, string $method): bool
-    {
-        return $chemin === "/login" && $method === 'POST';
-    }
+
+
     public static function support(string $chemin, string $method): bool
     {
-        return self::supportPost($chemin, $method);
+        return $chemin === "/login" && $method === "POST";
     }
 }

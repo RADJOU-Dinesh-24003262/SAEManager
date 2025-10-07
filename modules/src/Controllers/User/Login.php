@@ -14,17 +14,13 @@ class Login implements ControllerInterface
             header('Location: /dashboard');
             exit();
         }
-        // Affichage initial du formulaire
+
         $view = new LoginView();
         $view->render();
     }
 
-    public static function supportGet(string $chemin, string $method): bool
-    {
-        return $chemin === "/login" && $method === 'GET';
-    }
     public static function support(string $chemin, string $method): bool
     {
-        return self::supportGet($chemin, $method) ;
+        return $chemin === "/login" && $method === "GET";
     }
 }

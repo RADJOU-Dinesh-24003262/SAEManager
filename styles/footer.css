@@ -1,0 +1,150 @@
+/* Supprime les marges par défaut */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* FOOTER GLOBAL */
+footer {
+    width: 100%;
+    background-color: #0B5E8A;
+    color: white;
+    font-family: "Arial", sans-serif;
+    padding: 15px 30px;
+    box-sizing: border-box;
+    border-top: 3px solid #003C63;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+footer a{
+    color : #FFD0D0;
+}
+
+/* Correction : h1 de footer (classe saeManager) */
+footer .saeManager {
+    color: white; /* empêche le bleu */
+    background-color: transparent; /* supprime la couleur héritée */
+    font-size: 45px;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/* Style de base pour .saeManager (ailleurs que dans le footer) */
+.saeManager {
+    background-color: var(--secondary-color-header);
+    color: var(--main-color-header);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 45px;
+    font-weight: 16;
+    line-height: normal;
+}
+
+/* CONTENEUR PRINCIPAL */
+.footer-container {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+/* GAUCHE - Logos */
+.footer-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-logo {
+    height: 60px;
+}
+
+.footer-logo-amu {
+    height: 70px;
+}
+
+/* MILIEU - Contact */
+.footer-middle {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    flex-wrap: wrap;
+    text-align: left;
+    border-left: 2px solid white;
+    padding-left: 20px;
+}
+
+.footer-middle h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.footer-middle ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-middle li {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+/* DROITE - Réseaux sociaux */
+.footer-right {
+    flex: 1;
+    text-align: left;
+    border-left: 2px solid white;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-right h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.footer-right ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-right li {
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+footer h1{
+    color : white;
+}
+
+/* ADAPTATION MOBILE */
+@media (max-width: 1210px) {
+    .footer-container {
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-middle,
+    .footer-right {
+        border-left: none;
+        padding-left: 0;
+    }
+}
