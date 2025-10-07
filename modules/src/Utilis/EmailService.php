@@ -132,7 +132,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
     ): bool {
         try {
             // En-têtes pour email multipart (HTML + texte)
-            $boundary = md5(uniqid(time()));
+            $boundary = md5(uniqid('boundary_', true));
             
             $headers = [
                 'From' => self::$fromName . ' <' . self::$fromEmail . '>',
