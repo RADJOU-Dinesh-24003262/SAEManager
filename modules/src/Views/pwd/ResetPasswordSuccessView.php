@@ -3,6 +3,13 @@ namespace Views\pwd;
 
 use Views\AbstractView;
 
+/**
+ * Class ResetPasswordSuccessView
+ *
+ * This class represents the view for the reset password success page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the reset password success page.
+ */
 class ResetPasswordSuccessView extends AbstractView
 {
     private const TEMPLATE_HTML = __DIR__ . '/reset-password-success.html';
@@ -46,5 +53,32 @@ class ResetPasswordSuccessView extends AbstractView
                 }
             }, 1000);
         </script>';
+    }
+    /** Returns additional HTML headers for the Reset password success page.
+     *
+     * @return string The additional HTML headers.
+     */
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAEManager">
+                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe, Succès">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 }

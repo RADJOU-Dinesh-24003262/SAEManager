@@ -12,7 +12,7 @@
   --color-primary-light: #3b82f6;
   --color-primary-lighter: #dbeafe;
   --color-primary-pale: #eff6ff;
-  
+
   /* Couleurs de base */
   --color-text: #1f2937;
   --color-text-light: #6b7280;
@@ -20,12 +20,12 @@
   --color-bg-alt: #f9fafb;
   --color-border: #e5e7eb;
   --color-border-dark: #d1d5db;
-  
+
   /* Couleurs feedback - contrastes WCAG AAA */
   --color-success: #059669;
   --color-error: #dc2626;
   --color-warning: #d97706;
-  
+
   /* Espacements (échelle cohérente) */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -33,17 +33,17 @@
   --space-lg: 1.5rem;
   --space-xl: 2rem;
   --space-2xl: 3rem;
-  
+
   /* Typographie système (zéro requête HTTP) */
   --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  
+
   /* Tailles (hiérarchie claire) */
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.5rem;
   --text-2xl: 2rem;
-  
+
   /* Autres */
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
@@ -63,7 +63,6 @@
 
 /* === BASE === */
 html {
-  -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
@@ -73,7 +72,7 @@ body {
   line-height: 1.6;
   color: var(--color-text);
   background: var(--color-bg);
-  max-width: 60rem;
+  /* max-width: 60rem; /*/
   margin: 0 auto;
   padding: 0;
   -webkit-font-smoothing: antialiased;
@@ -380,7 +379,7 @@ abbr {
 
 /* === LIENS === */
 a {
-  color: var(--color-primary);
+  color: #5491F6;
   text-decoration: underline;
   transition: color var(--transition);
 }
@@ -455,23 +454,23 @@ footer p {
     --text-xl: 1.25rem;
     --space-2xl: 2rem;
   }
-  
+
   header {
     padding: var(--space-lg) var(--space-md);
   }
-  
+
   main {
     padding: var(--space-xl) var(--space-md);
   }
-  
+
   fieldset {
     padding: var(--space-lg);
   }
-  
+
   nav ul {
     gap: var(--space-sm);
   }
-  
+
   nav a {
     padding: var(--space-xs) var(--space-sm);
     font-size: var(--text-sm);
@@ -482,11 +481,11 @@ footer p {
   fieldset {
     padding: var(--space-md);
   }
-  
+
   fieldset fieldset {
     padding: var(--space-md);
   }
-  
+
   input[type="text"],
   input[type="email"],
   input[type="tel"],
@@ -495,7 +494,7 @@ footer p {
   select {
     font-size: 1rem; /* Évite le zoom automatique sur iOS */
   }
-  
+
   button[type="submit"] {
     font-size: var(--text-base);
     padding: var(--space-sm) var(--space-lg);
@@ -521,12 +520,12 @@ footer p {
 }
 
 /* Contraste élevé */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   :root {
     --color-border: #000000;
     --color-text: #000000;
   }
-  
+
   input[type="text"],
   input[type="email"],
   input[type="tel"],
@@ -555,7 +554,7 @@ footer p {
     --color-success: #10b981;
     --color-error: #ef4444;
   }
-  
+
   [role="alert"] {
     background: #450a0a;
   }
@@ -568,27 +567,27 @@ footer p {
     color: black;
     max-width: 100%;
   }
-  
+
   header {
     background: white;
     color: black;
     border-bottom: 2px solid black;
   }
-  
+
   header h1 {
     color: black;
   }
-  
+
   nav, footer, button {
     display: none;
   }
-  
+
   fieldset {
     border: 1px solid black;
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  
+
   [role="alert"]:empty {
     display: none;
   }

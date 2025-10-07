@@ -1,69 +1,53 @@
-:root{
+:root {
     --main-color-header: #064b82;
     --secondary-color-header: white;
     --hover-color-header: lightgray;
     --active-color-header: gray;
 }
 
-body {
-    margin: 0;
-    padding: 0;
-}
-header {
-
+.global-header {
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
     justify-content: space-between;
-    gap : 10vw;
     background-color: var(--main-color-header);
+    color: var(--secondary-color-header);
+    padding: 10px 5vw;
     width: 100%;
-    height: 6vw;
-    border-radius: 0px;
-    padding: 10px;
-    font-size: 1vw;
-    text-align: center;
-    z-index: 1000;
-    margin-bottom: 1vw;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin: 0;
 
-    .navBar {
-        margin-right: 5vw;
-        justify-content: flex-end;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 20px;
-        height: 100%;
-    }
 
-    img {
-        margin-top: 1vw;
-        justify-content: center;
-        height: 4vw;
-        width: auto;
-    }
+}
 
-    a {
-        color: var(--secondary-color-header);
-        text-decoration: none;
-        font-size: 1.3vw;
-        font-weight: bold;
-    }
+.global-header img {
+    height: 50px;
+    width: auto;
+}
 
-    a:hover {
-        text-decoration: underline;
-    }
+.global-header .saeManager {
+    background-color: var(--secondary-color-header);
+    color: var(--main-color-header);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 45px;
+    font-weight: 16;
+    line-height: normal;
+}
 
-    a:active {
-        color: lightgray;
-    }
+.global-header .navBar {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+}
 
-    .saeManager {
-        justify-content: flex-start;
-        background-color: var(--secondary-color-header);
-        color: var(--main-color-header);
-        padding: 1px;
-    }
-    .saeManager:hover {
-        background-color: var(--hover-color-header);
-    }
+.global-header .navBar a {
+color: var(--secondary-color-header);
+text-decoration: none;
+font-weight: bold;
+}
+
+.global-header .navBar a:hover {
+text-decoration: underline;
 }

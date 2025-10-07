@@ -5,6 +5,13 @@ namespace Views\pwd;
 use Utilis\SessionService;
 use Views\AbstractView;
 
+/**
+ * Class ForgotPasswordView
+ *
+ * This class represents the view for the "forgot password" page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the forgot password page, including handling error and success messages.
+ */
 class ForgotPasswordView extends AbstractView
 {
     //Constant for of the form
@@ -70,7 +77,34 @@ class ForgotPasswordView extends AbstractView
 
     protected function getNameCss(): string
     {
-        return 'pwd-forgot.css';
+        return 'forgot-password.css';
+    }
+    /** Returns additional HTML headers for the forgot password page.
+     *
+     * @return string The additional HTML headers.
+     */
+    protected function getAdditionalHeaders(): string
+    {
+        return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
+                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 
 }

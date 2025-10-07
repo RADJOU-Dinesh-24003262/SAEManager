@@ -73,6 +73,22 @@ class User
             $data['tp'] ?? null
         );
         
+        $user = new self(
+            $data['id'] ?? '',
+            $data['fname'] ?? '',
+            $data['lname'] ?? '',
+            $data['gender'] ?? '',
+            $data['user_type'] ?? '',
+            $data['email'] ?? '',
+            $data['tel'] ?? '',
+            $data['dob'] ?? '',
+            $data['city'] ?? '',
+            $data['year'] ?? null,
+            $data['parcours'] ?? null,
+            $data['td'] ?? null,
+            $data['tp'] ?? null
+        );
+        
         if (!empty($data['pwd'])) {
             $user->setPassword($data['pwd']);
         }
@@ -217,7 +233,7 @@ class User
             $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur vérification email: " . $e->getMessage());
             return false;
         }
