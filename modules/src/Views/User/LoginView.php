@@ -18,7 +18,7 @@ class LoginView extends AbstractView
         $errors = $this->data['errors'];
 
         return [
-            // Messages d'erreur
+            // Error messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
         ];
     }

@@ -33,7 +33,7 @@ class ForgotPasswordView extends AbstractView
         $success = $this->data['success'];
 
         return [
-            // Messages d'erreur
+            // Error and success messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage($success),
         ];
