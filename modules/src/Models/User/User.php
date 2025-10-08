@@ -18,10 +18,11 @@ class User
     private string $phone;
     private string $dateOfBirth;
     private string $city;
-    private ?string $year = null;
+    private ?int $year = null;
     private ?string $parcours = null;
-    private ?string $td = null;
-    private ?string $tp = null;
+    private ?int $td = null;
+    private ?int $tp = null;
+    private string $clearpassword;
     
     public function __construct(
         string $amuId = '',
@@ -33,10 +34,11 @@ class User
         string $phone = '',
         string $dateOfBirth = '',
         string $city = '',
-        ?string $year = null,
+        ?int $year = null,
         ?string $parcours = null,
-        ?string $td = null,
-        ?string $tp = null
+        ?int $td = null,
+        ?int $tp = null,
+        string $clearpassword = ''
     ) {
         $this->amuId = $amuId;
         $this->firstName = $firstName;
@@ -51,6 +53,7 @@ class User
         $this->parcours = $parcours;
         $this->td = $td;
         $this->tp = $tp;
+        $this->clearpassword = $clearpassword;
     }
 
     public static function createFromRegistrationData(array $data): self
@@ -81,8 +84,20 @@ class User
     public function setPassword(string $password): void
     {
 
-        $this->passwordHash = md5($password);
+        $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
         //echo($this->email. $this->passwordHash);
+    }
+
+
+    public function getClearPassword(): string
+    {
+        return $this->clearpassword;
+    }
+
+    public function setClearPassword(string $clearpassword): void
+    {
+        $this->clearpassword = $clearpassword;
     }
 
     public function save(): bool
@@ -172,21 +187,25 @@ class User
     {
 
         $connection = database::getInstance();
-        //$str = "SELECT connection('$this->email', '$this->passwordHash')";
-        $stmt = $connection->prepare("SELECT connection(?, ?)");
-        $stmt->execute([$this->email, $this->passwordHash]);
+        $stmt = $connection->prepare("SELECT connection(?)");
+        $stmt->execute([$this->email]);
 
-        $row = $stmt->fetch(PDO::FETCH_NUM); // ← Changed to FETCH_NUM
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        var_dump($row);
+        // Parser le type composite: '(email,hash,t)'
+        $composite = trim($row['connection'], '()');
+        $parts = explode(',', $composite);
 
-        if (!$row || !isset($row[0])) {
-            return false;
+        $user_id = $parts[0];
+        $passwordHash = $parts[1];
+        $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
+
+        var_dump($success, $user_id, $passwordHash);
+
+        if($success == true){
+            return password_verify($this->clearpassword, $passwordHash);
         }
-
-        $data = trim($row[0], '()');
-        $parts = explode(',', $data);
-        $success = trim(end($parts));
-
-        return $success === 't' || $success === 'true';
+        return false;
     }
 
 

@@ -34,6 +34,7 @@ class LoginPost implements ControllerInterface{
 
             $user = new User(email: $username);
             $user->setPassword($password);
+            $user->setClearPassword($password);
 
             if($user->login()){
 
@@ -53,6 +54,7 @@ class LoginPost implements ControllerInterface{
 
         } catch (ExceptionValidationLogin $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
+            throw new ExceptionValidationLogin();
         }
         $view = new LoginView();
         $view->render();

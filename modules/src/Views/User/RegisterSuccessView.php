@@ -4,6 +4,13 @@ namespace Views\User;
 use Views\AbstractView;
 use Models\User\User;
 
+/**
+ * Class RegisterSuccessView
+ *
+ * This class represents the view for the registration success page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the registration success page, including displaying user information.
+ */
 class RegisterSuccessView extends AbstractView
 {
     private const TEMPLATE_HTML = __DIR__ . '/register-success.html';
@@ -76,7 +83,10 @@ class RegisterSuccessView extends AbstractView
     {
         return self::CSS_REGISTER_SUCCESS;
     }
-
+    /** Returns additional HTML headers for the Register Success page.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de succès d\'inscription de SAEManager">

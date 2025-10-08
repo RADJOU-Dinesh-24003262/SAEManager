@@ -4,6 +4,13 @@ namespace Views\User;
 use Views\AbstractView;
 use Utilis\SessionService;
 
+/**
+ * Class RegisterView
+ *
+ * This class represents the view for the registration page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the registration page, including handling error messages.
+ */
 class RegisterView extends AbstractView 
 {
     // Constant for form field names
@@ -82,7 +89,10 @@ class RegisterView extends AbstractView
     {
         return 'register.css';
     }
-
+    /** Returns additional HTML headers for the Register page.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page d\'inscription de SAEManager">
