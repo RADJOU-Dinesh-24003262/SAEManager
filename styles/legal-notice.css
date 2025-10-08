@@ -9,7 +9,7 @@ body {
 }
 
 section h1 {
-  color: #005898; /* bleu AMU */
+  color: #005898; /* light blue AMU */
   font-size: 2.5rem;
   text-align: center;
   margin-bottom: 2rem;
@@ -17,7 +17,7 @@ section h1 {
 }
 
 section h2 {
-  color: #005898; /* bleu un peu plus clair */
+  color: #005898; /* light blue AMU */
   border-bottom: 2px solid #006ABE;
   padding-bottom: 0.3rem;
   margin-top: 2rem;
