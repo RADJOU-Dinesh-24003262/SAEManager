@@ -191,7 +191,6 @@ class User
         $stmt->execute([$this->email]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        var_dump($row);
         // Parser le type composite: '(email,hash,t)'
         $composite = trim($row['connection'], '()');
         $parts = explode(',', $composite);
@@ -199,8 +198,6 @@ class User
         $user_id = $parts[0];
         $passwordHash = $parts[1];
         $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
-
-        var_dump($success, $user_id, $passwordHash);
 
         if($success == true){
             return password_verify($this->clearpassword, $passwordHash);
