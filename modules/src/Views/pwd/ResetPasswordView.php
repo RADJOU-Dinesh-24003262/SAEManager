@@ -4,6 +4,13 @@ namespace Views\pwd;
 use Utilis\SessionService;
 use Views\AbstractView;
 
+/**
+ * Class ResetPasswordView
+ *
+ * This class represents the view for the "reset password" page of the application.
+ * It extends the AbstractView class and provides specific implementations
+ * for rendering the reset password page, including handling error messages.
+ */
 class ResetPasswordView extends AbstractView
 {
 
@@ -88,7 +95,10 @@ class ResetPasswordView extends AbstractView
     {
         return '<script src="scripts/reset-password.js"></script>';
     }
-
+    /** Returns additional HTML headers for the Reset Password page.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">

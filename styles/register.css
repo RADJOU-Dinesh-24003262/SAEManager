@@ -379,7 +379,7 @@ abbr {
 
 /* === LINKS === */
 a {
-  color: var(--color-primary);
+  color: #5491F6;
   text-decoration: underline;
   transition: color var(--transition);
 }

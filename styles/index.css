@@ -14,12 +14,12 @@
 }
 
 .sae-manager-page h1 {
-    color: #FFC925;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(2.5rem, 8vw, 8.75rem);
     font-weight: 400;
     line-height: 1.1;
-    background-image: url("/image/Index.png");
+    background-image: url("/image/index.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-clip: text;
@@ -28,7 +28,7 @@
 }
 
 .sae-manager-page h2 {
-    color: #E8CE7E;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 400;
@@ -36,7 +36,7 @@
 }
 
 .sae-manager-page h3 {
-    color: #FFC925;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(1.8rem, 5vw, 3.75rem);
     font-weight: 400;
