@@ -12,7 +12,7 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        // Validations spécifiques
+        // Specific validations
         if (!$this->isValidUserType($data['user_type'])) {
             $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
@@ -49,7 +49,7 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("gender", "string", "Veuillez sélectionner un genre valide.");
         }
 
-        // Validation spécifique aux étudiants
+        // Specific validation for students
         if (($data['user_type'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);

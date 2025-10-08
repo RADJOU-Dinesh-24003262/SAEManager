@@ -10,7 +10,7 @@ class LoginValidator extends FormValidator
 
     public function validate(array $data): void
     {
-        //vide car pas de validation spécifique
-        //les champs requis sont déjà gérés dans la méthode escape() de la classe parente
+        //Void because no validation rules for login form
+        //The required fields are already handled in the escape() method of the parent class
     }
 }

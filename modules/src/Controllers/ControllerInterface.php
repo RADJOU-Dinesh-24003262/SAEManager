@@ -4,12 +4,12 @@ namespace Controllers;
 interface ControllerInterface 
 {
     /**
-     * Méthode principale du contrôleur
+     * Principal manager of the controller
      */
     function control(): void;
     
     /**
-     * Vérifie si ce contrôleur peut traiter la requête
+     * Check if this controller can handle the request
      */
     static function support(string $chemin, string $method): bool;
 }
