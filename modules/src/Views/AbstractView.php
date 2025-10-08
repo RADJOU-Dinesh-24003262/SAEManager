@@ -14,7 +14,7 @@ abstract class AbstractView
     {
         $template = file_get_contents($this->templatePath());
         
-        // Remplacement des clés du template
+        // Replacement of template keys with actual values
         foreach ($this->templateKeys() as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }

@@ -1,7 +1,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
-    color: #003366; /* bleu foncé AMU */
+    color: #003366; /* Dark blue AMU */
     margin: 2rem auto;
     max-width: 600px;
     padding: 0 1rem;
@@ -10,7 +10,7 @@ body {
   }
 
   h1 {
-    color: #0055a4; /* bleu AMU */
+    color: #0055a4; /* blue AMU */
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 2.5rem;
@@ -35,7 +35,7 @@ body {
   }
 
   a {
-    color: #0078d7; /* bleu clair AMU */
+    color: #0078d7; /* Light blue AMU */
     text-decoration: none;
     transition: color 0.3s ease, text-decoration 0.3s ease;
     font-size: larger;
@@ -43,7 +43,7 @@ body {
 
   a:hover,
   a:focus {
-    color: #003366; /* bleu foncé AMU */
+    color: #003366; /* Dark blue AMU */
     text-decoration: underline;
     outline: none;
   }

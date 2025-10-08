@@ -2,10 +2,10 @@ const yearSelect = document.getElementById('year');
 const tdSelect = document.getElementById('td');
 const parcoursSelect = document.getElementById('parcours');
 
-// On récupère la valeur du champ input email
+// Get the email input field
 const emailInput = document.getElementById('email');
 
-// Désactivation TD4 si année 2 ou 3
+// Disable TD4 if year is 2 or 3
 const td4Option = Array.from(tdSelect.options).find(opt => opt.value === 'TD4');
 
 yearSelect.addEventListener('change', () => {
@@ -22,7 +22,7 @@ yearSelect.addEventListener('change', () => {
     }
 });
 
-// Désactivation des champs pour les enseignants et partenaires
+// Disable fields for teachers and partners
 const userTypeSelect = document.getElementById('user_type');
 const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
@@ -57,8 +57,8 @@ function validatePassword() {
 pwd.addEventListener('change', validatePassword);
 pwdverif.addEventListener('input', validatePassword);
 
-// Appliquer immédiatement au chargement de la page (cas de rechargement après POST)
+// Apply immediately on page load (case of reload after POST)
 toggleStudentFields();
 
-// Appliquer à chaque changement de statut
+// Apply on each status change
 userTypeSelect.addEventListener('change', toggleStudentFields);

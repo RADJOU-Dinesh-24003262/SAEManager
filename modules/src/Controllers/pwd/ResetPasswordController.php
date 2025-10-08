@@ -10,7 +10,7 @@ class ResetPasswordController implements ControllerInterface
 {
     public function control(): void
     {
-        // Récupérer le token depuis l'URL
+        // Get the token from the URL
         $token = $_GET['token'] ?? '';
         
         if (empty($token)) {
@@ -19,7 +19,7 @@ class ResetPasswordController implements ControllerInterface
             exit();
         }
         
-        // Valider le token
+        // Validate the token
         $tokenData = TokenService::validateToken($token);
         
         if ($tokenData === false) {
@@ -31,7 +31,7 @@ class ResetPasswordController implements ControllerInterface
             exit();
         }
         
-        // Token valide, afficher le formulaire
+        // Token is valid, render the reset password view
         $view = new ResetPasswordView($token, $tokenData['user_email']);
         $view->render();
     }

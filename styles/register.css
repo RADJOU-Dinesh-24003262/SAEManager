@@ -1,19 +1,19 @@
 /* ============================================
    CSS ÉCO-CONÇU - SAEManager
-   Principes : Sobriété, Accessibilité, Performance
-   Couleurs AMU : Bleu institutionnel
+   Principes : Sobriety, Accessibility, Performance
+   Colors AMU : Institutional Blue
    ============================================ */
 
-/* === VARIABLES CSS (Palette AMU optimisée) === */
+/* === VARIABLES CSS (Palette AMU optimised) === */
 :root {
-  /* Couleurs AMU - Bleu institutionnel */
+  /* Colors AMU : Institutional Blue */
   --color-primary: #1e40af;
   --color-primary-dark: #1e3a8a;
   --color-primary-light: #3b82f6;
   --color-primary-lighter: #dbeafe;
   --color-primary-pale: #eff6ff;
 
-  /* Couleurs de base */
+  /* Base colors */
   --color-text: #1f2937;
   --color-text-light: #6b7280;
   --color-bg: #ffffff;
@@ -21,12 +21,12 @@
   --color-border: #e5e7eb;
   --color-border-dark: #d1d5db;
 
-  /* Couleurs feedback - contrastes WCAG AAA */
+  /* Colors feedback - contrastes WCAG AAA */
   --color-success: #059669;
   --color-error: #dc2626;
   --color-warning: #d97706;
 
-  /* Espacements (échelle cohérente) */
+  /* Space (coherent scale) */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -34,17 +34,17 @@
   --space-xl: 2rem;
   --space-2xl: 3rem;
 
-  /* Typographie système (zéro requête HTTP) */
+  /* System typography (zero HTTP request) */
   --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-  /* Tailles (hiérarchie claire) */
+  /* Heights (clear hierarchy) */
   --text-sm: 0.875rem;
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: 1.5rem;
   --text-2xl: 2rem;
 
-  /* Autres */
+  /* Others */
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
   --focus-width: 3px;
@@ -79,7 +79,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* === TYPOGRAPHIE === */
+/* === TYPOGRAPHY === */
 h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
   font-weight: 600;
@@ -135,7 +135,7 @@ main {
   padding: var(--space-2xl) var(--space-lg);
 }
 
-/* === MESSAGES D'ALERTE === */
+/* === WARNINGS === */
 [role="alert"] {
   padding: var(--space-md);
   margin-bottom: var(--space-xl);
@@ -149,7 +149,7 @@ main {
   display: none;
 }
 
-/* === FORMULAIRE === */
+/* === FORM === */
 form {
   display: flex;
   flex-direction: column;
@@ -184,7 +184,7 @@ legend {
   padding: 0 var(--space-sm);
 }
 
-/* Fieldset imbriqué (radio) */
+/* Fieldset imbriqued (radio) */
 fieldset fieldset {
   border-color: var(--color-border-dark);
   background: var(--color-bg-alt);
@@ -216,7 +216,7 @@ label {
   font-size: var(--text-base);
 }
 
-/* Labels des radio dans fieldset - CÔTE À CÔTE */
+/* Labels of radio in fieldset - NEXT TO EACH OTHER */
 fieldset fieldset label {
   display: flex;
   flex-direction: row;
@@ -234,7 +234,7 @@ fieldset fieldset label:hover {
   background: var(--color-bg);
 }
 
-/* === GROUPES DE CHAMPS === */
+/* === Groups of fields === */
 form > fieldset > label,
 form > fieldset > input,
 form > fieldset > select,
@@ -273,7 +273,7 @@ select:focus {
   background: var(--color-primary-pale);
 }
 
-/* Validation visuelle simple */
+/* Simple visual validation */
 input:invalid:not(:placeholder-shown):not(:focus) {
   border-color: var(--color-error);
 }
@@ -310,7 +310,7 @@ input[type="checkbox"]:focus {
   outline-offset: 2px;
 }
 
-/* Label du checkbox terms - LAYOUT FLEX */
+/* Label of checkbox terms - LAYOUT FLEX */
 form > input[type="checkbox"] {
   display: none;
 }
@@ -361,7 +361,7 @@ form > input[type="checkbox"]:focus + label {
   outline-offset: 2px;
 }
 
-/* === TEXTE D'AIDE === */
+/* === HELP TEXT === */
 small {
   display: block;
   font-size: var(--text-sm);
@@ -370,14 +370,14 @@ small {
   line-height: 1.4;
 }
 
-/* === ABBR (astérisque requis) === */
+/* === ABBR (required asterisk) === */
 abbr {
   color: var(--color-error);
   text-decoration: none;
   font-weight: 600;
 }
 
-/* === LIENS === */
+/* === LINKS === */
 a {
   color: var(--color-primary);
   text-decoration: underline;
@@ -394,7 +394,7 @@ a:focus {
   border-radius: var(--radius-xs);
 }
 
-/* === BOUTON === */
+/* === BUTTON === */
 button[type="submit"] {
   background: var(--color-primary);
   color: var(--color-bg);
@@ -425,7 +425,7 @@ button[type="submit"]:active {
   transform: translateY(1px);
 }
 
-/* === FIELDSET CONDITIONNEL === */
+/* === CONDITIONNAL FIELDSET === */
 #etudiantFields[style*="display: none"] {
   display: none;
 }
@@ -492,7 +492,7 @@ footer p {
   input[type="password"],
   input[type="date"],
   select {
-    font-size: 1rem; /* Évite le zoom automatique sur iOS */
+    font-size: 1rem; /* Avoid automatic zoom on iOS */
   }
 
   button[type="submit"] {
@@ -501,15 +501,15 @@ footer p {
   }
 }
 
-/* === ACCESSIBILITÉ === */
+/* === ACCESSIBILITY === */
 
-/* Focus visible pour tous les éléments interactifs */
+/* Focus visible for all interactive elements */
 *:focus-visible {
   outline: var(--focus-width) solid var(--color-primary);
   outline-offset: 2px;
 }
 
-/* Respect des préférences utilisateur */
+/* Respect of user preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -519,7 +519,7 @@ footer p {
   }
 }
 
-/* Contraste élevé */
+/* High contrast */
 @media (prefers-contrast: more) {
   :root {
     --color-border: #000000;
@@ -537,7 +537,7 @@ footer p {
   }
 }
 
-/* Mode sombre */
+/* Dark mode */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-primary: #3b82f6;
@@ -560,7 +560,7 @@ footer p {
   }
 }
 
-/* Impression (sobriété papier) */
+/* Impression (paper sobriety) */
 @media print {
   body {
     background: white;
@@ -593,7 +593,7 @@ footer p {
   }
 }
 
-/* === UTILITAIRES === */
+/* === UTILITY === */
 .sr-only {
   position: absolute;
   width: 1px;

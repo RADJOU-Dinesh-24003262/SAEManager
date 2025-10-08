@@ -28,7 +28,7 @@ class IndexView extends AbstractView
         $errors = $this->data['errors'];
 
         return [
-            // Messages d'erreur
+            // Error and success messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage()
         ];

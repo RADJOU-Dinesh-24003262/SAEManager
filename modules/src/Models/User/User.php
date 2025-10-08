@@ -176,7 +176,7 @@ class User
         $stmt = $connection->prepare("SELECT connection(?, ?)");
         $stmt->execute([$this->email, $this->passwordHash]);
 
-        $row = $stmt->fetch(PDO::FETCH_NUM); // ← Changé en FETCH_NUM
+        $row = $stmt->fetch(PDO::FETCH_NUM); // ← Changed to FETCH_NUM
 
         if (!$row || !isset($row[0])) {
             return false;

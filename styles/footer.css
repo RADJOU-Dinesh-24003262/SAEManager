@@ -1,4 +1,4 @@
-/* Supprime les marges par défaut */
+/* Delete default margins */
 body {
     margin: 0;
     padding: 0;
@@ -20,14 +20,14 @@ body {
 
 /* Correction : h1 de footer (classe saeManager) */
 footer .saeManager {
-    color: white; /* empêche le bleu */
-    background-color: transparent; /* supprime la couleur héritée */
+    color: white; /* Prevent blue */
+    background-color: transparent; /* Remove inherited color */
     font-size: 45px;
     font-weight: 400;
     line-height: normal;
 }
 
-/* Style de base pour .saeManager (ailleurs que dans le footer) */
+/* Base style for .saeManager (everywhere else than footer) */
 .saeManager {
     background-color: var(--secondary-color-header);
     color: var(--main-color-header);
@@ -38,7 +38,7 @@ footer .saeManager {
     line-height: normal;
 }
 
-/* CONTENEUR PRINCIPAL */
+/* Principal container */
 .footer-container {
     width: 90%;
     display: flex;
@@ -48,7 +48,7 @@ footer .saeManager {
     gap: 30px;
 }
 
-/* GAUCHE - Logos */
+/* Left - Logos */
 .footer-left {
     display: flex;
     flex-wrap: wrap;
@@ -64,7 +64,7 @@ footer .saeManager {
     height: 70px;
 }
 
-/* MILIEU - Contact */
+/* MIDDLE - Contact */
 .footer-middle {
     flex: 1;
     flex-wrap: wrap;
@@ -89,7 +89,7 @@ footer .saeManager {
     font-size: 0.95rem;
 }
 
-/* DROITE - Réseaux sociaux */
+/* RIGHT - Social Networks */
 .footer-right {
     flex: 1;
     text-align: left;
@@ -113,7 +113,7 @@ footer .saeManager {
     font-size: 0.95rem;
 }
 
-/* ADAPTATION MOBILE */
+/* Mobile adaptation */
 @media (max-width: 900px) {
     .footer-container {
         flex-direction: column;
