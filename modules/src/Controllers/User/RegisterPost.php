@@ -26,8 +26,10 @@ class RegisterPost implements ControllerInterface
             
             // Sauvegarde en base
             if ($user->save()) {
+                SessionService::set('user_id', $user->getEmail());
                 $view = new RegisterSuccessView($user);
                 $view->render();
+
                 return;
             } else {
                 throw new \Exception("Erreur lors de la sauvegarde");
