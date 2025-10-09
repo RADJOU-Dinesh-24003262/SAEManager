@@ -4,6 +4,7 @@ namespace Models\User;
 use includes\database;
 use PDO;
 use PDOException;
+use includes\exception\ExceptionValidationLogin;
 
 class User
 {
@@ -42,9 +43,9 @@ class User
     public static function createFromLoginData(array $data): self
     {
         $user = new self($data);
-        var_dump($data);
+        //var_dump($data);
         $user->login($user->email, $user->password);
-        $user->fetchDataFromDatabase($email);
+        $user->fetchDataFromDatabase($user->$email);
         return $user;
     }
 
@@ -147,7 +148,7 @@ class User
         $stmt->execute([$email]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        var_dump($row);
+        //var_dump($row);
         // Parser le type composite: '(email,hash,t)'
         $composite = trim($row['connection'], '()');
         $parts = explode(',', $composite);
@@ -156,10 +157,10 @@ class User
         $passwordHash = $parts[1];
         $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
 
-        var_dump($success, $user_id, $passwordHash);
+        //var_dump($success, $user_id, $passwordHash);
 
         if( !($success === true && password_verify($password, $passwordHash)) ) {
-            throw ExeptionValidationLogin(); 
+            throw new ExceptionValidationLogin; 
         }
     }
 
@@ -182,7 +183,7 @@ class User
                 $this->phone = $data['phone'];
                 $this->dateOfBirth = $data['date_of_birth'];
                 $this->city = $data['city'];
-                if (isuserType() === 'student') {
+                if ($this->isStudent()) {
                     $this->year = (int)$data['year'];
                     $this->parcours = $this->year !== 1 ? $data['parcours'] : null;
                     $this->td = (int)$data['td'];
