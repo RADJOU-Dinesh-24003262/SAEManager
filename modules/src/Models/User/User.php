@@ -4,75 +4,34 @@ namespace Models\User;
 use includes\database;
 use PDO;
 use PDOException;
+use includes\exception\ExceptionValidationLogin;
 
 class User
 {
-    private ?int $id = null;
-    private string $amuId;
-    private string $firstName;
-    private string $lastName;
-    private string $gender;
-    private string $userType;
-    private string $email;
-    private string $passwordHash;
-    private string $phone;
-    private string $dateOfBirth;
-    private string $city;
+    private string $amuId = '';
+    private string $firstName = '';
+    private string $lastName = '';
+    private string $gender = '';
+    private string $userType = '';
+    private string $email = '';
+    private string $passwordHash = '';
+    private string $phone = '';
+    private string $dateOfBirth = '';
+    private string $city = '';
     private ?int $year = null;
     private ?string $parcours = null;
-    private ?string $td = null;
-    private ?string $tp = null;
-    private string $clearpassword;
+    private ?int $td = null;
+    private ?int $tp = null;
     
-    public function __construct(
-        string $amuId = '',
-        string $firstName = '',
-        string $lastName = '',
-        string $gender = '',
-        string $userType = '',
-        string $email = '',
-        string $phone = '',
-        string $dateOfBirth = '',
-        string $city = '',
-        ?int $year = null,
-        ?string $parcours = null,
-        ?string $td = null,
-        ?string $tp = null,
-        string $clearpassword = ''
-    ) {
-        $this->amuId = $amuId;
-        $this->lastName = $lastName;
-        $this->firstName = $firstName;
-        $this->gender = $gender;
-        $this->userType = $userType;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->dateOfBirth = $dateOfBirth;
-        $this->city = $city;
-        $this->year = $year;
-        $this->parcours = $parcours;
-        $this->td = $td;
-        $this->tp = $tp;
-        $this->clearpassword = $clearpassword;
+    private function __construct(array $data = []) {
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
     public static function createFromRegistrationData(array $data): self
     {
-        $user = new self(
-            $data['id'] ?? '',
-            $data['lname'] ?? '',
-            $data['fname'] ?? '',
-            $data['gender'] ?? '',
-            $data['user_type'] ?? '',
-            $data['email'] ?? '',
-            $data['tel'] ?? '',
-            $data['dob'] ?? '',
-            $data['city'] ?? '',
-            $data['year'] ?? null,
-            $data['parcours'] ?? null,
-            $data['td'] ?? null,
-            $data['tp'] ?? null
-        );
+        $user = new self($data);
         
         if (!empty($data['pwd'])) {
             $user->setPassword($data['pwd']);
@@ -81,21 +40,18 @@ class User
         return $user;
     }
 
+    public static function createFromLoginData(array $data): self
+    {
+        $user = new self($data);
+        $user->login($user->email, $user->password);
+        $user->fetchDataFromDatabase($user->$email);
+        return $user;
+    }
+
     public function setPassword(string $password): void
     {
 
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
-    }
-
-
-    public function getClearPassword(): string
-    {
-        return $this->clearpassword;
-    }
-
-    public function setClearPassword(string $clearpassword): void
-    {
-        $this->clearpassword = $clearpassword;
     }
 
     public function save(): bool
@@ -185,12 +141,12 @@ class User
         return $row['success'] === true;
     }
 
-    public function login(): bool
+    public function login(string $email, string $password): void
     {
 
         $connection = database::getInstance();
         $stmt = $connection->prepare("SELECT connection(?)");
-        $stmt->execute([$this->email]);
+        $stmt->execute([$email]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $composite = trim($row['connection'], '()');
@@ -200,14 +156,44 @@ class User
         $passwordHash = $parts[1];
         $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
 
-        if($success == true){
-            return password_verify($this->clearpassword, $passwordHash);
+        if( !($success === true && password_verify($password, $passwordHash)) ) {
+            throw new ExceptionValidationLogin; 
         }
-        return false;
     }
 
+    public function fetchDataFromDatabase(string $email): bool
+    {
+        try {
+            $db = database::getInstance();
+            $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt->execute(['email' => $email]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+            if ($data) {
+                $this->amuId = $data['amu_id'];
+                $this->firstName = $data['first_name'];
+                $this->lastName = $data['last_name'];
+                $this->gender = $data['gender'];
+                $this->userType = $data['user_type'];
+                $this->email = $data['email'];
+                $this->passwordHash = $data['password'];
+                $this->phone = $data['phone'];
+                $this->dateOfBirth = $data['date_of_birth'];
+                $this->city = $data['city'];
+                if ($this->isStudent()) {
+                    $this->year = (int)$data['year'];
+                    $this->parcours = $this->year !== 1 ? $data['parcours'] : null;
+                    $this->td = (int)$data['td'];
+                    $this->tp = (int)$data['tp'];
+                }
+            }else {
+                return false; // No user found
+            }
+        } catch (PDOException $e) {
+            error_log("Erreur récupération données utilisateur: " . $e->getMessage());
+            return false;
+        }
+    }
 
     public static function existsByEmail(string $email): bool
     {
@@ -216,7 +202,7 @@ class User
             $stmt = $db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur vérification email: " . $e->getMessage());
             return false;
         }
@@ -239,7 +225,6 @@ class User
     }
 
     // Getters
-    public function getId(): ?int { return $this->id; }
     public function getAmuId(): string { return $this->amuId; }
     public function getFirstName(): string { return $this->firstName; }
     public function getLastName(): string { return $this->lastName; }
@@ -250,10 +235,10 @@ class User
     public function getPhone(): string { return $this->phone; }
     public function getDateOfBirth(): string { return $this->dateOfBirth; }
     public function getCity(): string { return $this->city; }
-    public function getYear(): ?string { return $this->year; }
+    public function getYear(): ?int { return $this->year; }
     public function getParcours(): ?string { return $this->parcours; }
-    public function getTd(): ?string { return $this->td; }
-    public function getTp(): ?string { return $this->tp; }
+    public function getTd(): ?int { return $this->td; }
+    public function getTp(): ?int { return $this->tp; }
 
     public function isStudent(): bool { return $this->userType === 'student'; }
     public function isProfessor(): bool { return $this->userType === 'professor'; }
