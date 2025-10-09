@@ -193,6 +193,7 @@ class User
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             return false;
         }
+        return true;
     }
 
     public static function existsByEmail(string $email): bool
