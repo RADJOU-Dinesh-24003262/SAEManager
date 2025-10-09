@@ -19,7 +19,7 @@ class ResetPasswordPostController implements ControllerInterface
     public function control(): void
     {
         try {
-            // 1. Vérifie le token
+            // Verify the token
             $token = $_GET['token'] ?? '';
             if (empty($token)) {
                 throw new ExceptionInvalidToken("Token manquant.");
@@ -30,23 +30,23 @@ class ResetPasswordPostController implements ControllerInterface
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation est invalide ou a expiré. Veuillez faire une nouvelle demande.");
             }
 
-            // 2. Validation des données
+            // 2. Validate the data
             $validator = new ResetPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            // 3. Mise à jour du mot de passe
+            // 3. Update the password
             $updated = User::updatePasswordByEmail($tokenData['user_email'], $password);
             if (!$updated) {
                 throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
                 error_log("Erreur mise à jour mot de passe pour: " . $tokenData['user_email']);
             }
 
-            // 4. Marque le token comme utilisé
+            // Mark the token as used
             TokenService::markTokenAsUsed($token);
 
-            // 5. Affiche la page de succès
+            // 5. Render the success page
             (new ResetPasswordSuccessView())->render();
             log_info("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
             return;
@@ -67,7 +67,7 @@ class ResetPasswordPostController implements ControllerInterface
             SessionService::setFlash('errors', [$e->getMessage()]);
 
         } catch (\Throwable $e) {
-            // Fallback générique
+            // generical fallback for unexpected errors
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
             error_log("Erreur inattendue: " . $e->getMessage());
             header("Location: /forgot-password");

@@ -1,4 +1,4 @@
-/* Supprime les marges par défaut */
+/* Delete default margins */
 body {
     margin: 0;
     padding: 0;
@@ -16,18 +16,24 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    white-space: nowrap;
+}
+
+footer a{
+    color : #FFD0D0;
+    text-decoration: none;
 }
 
 /* Correction : h1 de footer (classe saeManager) */
 footer .saeManager {
-    color: white; /* empêche le bleu */
-    background-color: transparent; /* supprime la couleur héritée */
+    color: white; /* Prevent blue */
+    background-color: transparent; /* Remove inherited color */
     font-size: 45px;
     font-weight: 400;
     line-height: normal;
 }
 
-/* Style de base pour .saeManager (ailleurs que dans le footer) */
+/* Base style for .saeManager (everywhere else than footer) */
 .saeManager {
     background-color: var(--secondary-color-header);
     color: var(--main-color-header);
@@ -38,7 +44,7 @@ footer .saeManager {
     line-height: normal;
 }
 
-/* CONTENEUR PRINCIPAL */
+/* Principal container */
 .footer-container {
     width: 90%;
     display: flex;
@@ -48,7 +54,7 @@ footer .saeManager {
     gap: 30px;
 }
 
-/* GAUCHE - Logos */
+/* Left - Logos */
 .footer-left {
     display: flex;
     flex-wrap: wrap;
@@ -64,8 +70,13 @@ footer .saeManager {
     height: 70px;
 }
 
-/* MILIEU - Contact */
+/* MIDDLE - Contact */
 .footer-middle {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     flex-wrap: wrap;
     text-align: left;
@@ -89,12 +100,18 @@ footer .saeManager {
     font-size: 0.95rem;
 }
 
-/* DROITE - Réseaux sociaux */
+/* RIGHT - Social Networks */
 .footer-right {
     flex: 1;
     text-align: left;
     border-left: 2px solid white;
     padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .footer-right h3 {
@@ -113,8 +130,12 @@ footer .saeManager {
     font-size: 0.95rem;
 }
 
+footer h1{
+    color : white;
+}
+
 /* ADAPTATION MOBILE */
-@media (max-width: 900px) {
+@media (max-width: 1210px) {
     .footer-container {
         flex-direction: column;
         flex-wrap: wrap;

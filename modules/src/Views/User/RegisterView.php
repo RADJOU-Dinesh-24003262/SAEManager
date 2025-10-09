@@ -13,7 +13,7 @@ use Utilis\SessionService;
  */
 class RegisterView extends AbstractView 
 {
-    // Constantes pour les champs du formulaire
+    // Constant for form field names
     public const FIELD_ID = 'id';
     public const FIELD_FNAME = 'fname';
     public const FIELD_LNAME = 'lname';
@@ -51,10 +51,10 @@ class RegisterView extends AbstractView
         $errors = $this->data['errors'];
         
         return [
-            // Messages d'erreur
+            // Error messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
             
-            // Date maximale pour la date de naissance
+            // Max birth date for 16 years old
             'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years'))
         ];
     }
@@ -97,6 +97,23 @@ class RegisterView extends AbstractView
     {
         return '<meta name="description" content="Page d\'inscription de SAEManager">
                 <meta name="keywords" content="SAEManager, Inscription">
-                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 }

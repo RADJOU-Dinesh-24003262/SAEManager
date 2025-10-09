@@ -40,7 +40,7 @@ class ForgotPasswordView extends AbstractView
         $success = $this->data['success'];
 
         return [
-            // Messages d'erreur
+            // Error and success messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage($success),
         ];
@@ -77,7 +77,7 @@ class ForgotPasswordView extends AbstractView
 
     protected function getNameCss(): string
     {
-        return 'pwd-forgot.css';
+        return 'forgot-password.css';
     }
     /** Returns additional HTML headers for the forgot password page.
      *
@@ -87,7 +87,24 @@ class ForgotPasswordView extends AbstractView
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
                 <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
-                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 
 }

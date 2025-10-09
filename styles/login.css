@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     width: 55%;
-    height: 95vh; /* prend presque toute la hauteur de la fenêtre */
+    height: 95vh; /* Take almost the full height of the window */
     background-color: rgb(200, 200, 200);
     border-radius: 40px;
     margin: auto;
@@ -13,7 +13,7 @@
     padding: 50px;
 }
 
-/* Sous-éléments */
+/* Sub-elements */
 .mainContainer .titlediv {
     display: flex;
     flex-direction: column;

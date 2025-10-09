@@ -40,7 +40,7 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-     * Masque partiellement l'email pour la sécurité
+     * Partially masks the email for security
      * Ex: jean.dupont@etu.univ-amu.fr → j***n.d***t@etu.univ-amu.fr
      */
     private function maskEmail(string $email): string
@@ -53,7 +53,7 @@ class ResetPasswordView extends AbstractView
         $localPart = $parts[0];
         $domain = $parts[1];
 
-        // Masquer la partie locale
+        // Mask the local part
         if (strlen($localPart) > 4) {
             $masked = substr($localPart, 0, 1) . 
                       str_repeat('*', strlen($localPart) - 2) . 
@@ -103,6 +103,24 @@ class ResetPasswordView extends AbstractView
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
                 <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
-                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 }
