@@ -27,34 +27,29 @@ class LoginPost implements ControllerInterface{
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
-            $username = trim($data['username'] ?? '');
-            $password = $data['password'] ?? '';
+            $data['email'] = trim($data['email'] ?? '');
+            $data['password'] = $data['password'] ?? '';
 
-            error_log("Tentative de connexion - Username: '$username'");
+            error_log("Tentative de connexion - Username: {$data['email']}");
 
-            $user = new User(email: $username);
-            $user->setPassword($password);
-            $user->setClearPassword($password);
+            $user = User::createFromLoginData($data);
 
-            if($user->login()){
+            SessionService::set('user_id', $user->getEmail());
+            log_info("Utilisateur connecté: " . $user->getEmail());
 
-                SessionService::set('user_id', $user->getEmail());
-                log_info("Utilisateur connecté: " . $user->getEmail());
-
-                header('Location: /dashboard');
-                exit();
-            }
+            header('Location: /dashboard');
+            exit();
 
 
         }catch(ExceptionValidationEmptys $e){
-                        $errors = [];
+            $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
 
         } catch (ExceptionValidationLogin $e) {
-            SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
+            SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         }
         $view = new LoginView();
         $view->render();
