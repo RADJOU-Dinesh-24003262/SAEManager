@@ -1,8 +1,7 @@
 <?php
 namespace Utilis\Validator;
 
-use includes\exception\ExceptionValidationRegister;
-use includes\exception\ExceptionValidationRegisters;
+use includes\exception\ExceptionValidationLogin;
 
 class LoginValidator extends FormValidator
 {
@@ -10,7 +9,8 @@ class LoginValidator extends FormValidator
 
     public function validate(array $data): void
     {
-        //vide car pas de validation spécifique
-        //les champs requis sont déjà gérés dans la méthode escape() de la classe parente
+        if (!$this->isValidEmail($data['username'])) {
+            throw new ExceptionValidationLogin( "L'adresse email n'est pas valide.");
+        }
     }
 }

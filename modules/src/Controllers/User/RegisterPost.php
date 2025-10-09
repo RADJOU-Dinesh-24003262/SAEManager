@@ -14,17 +14,17 @@ class RegisterPost implements ControllerInterface
 {
     public function control(): void
     {
-        // Validation des données
+        // Validate the data
         $validator = new ValidationServiceRegister();        
         
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
-            // Création de l'utilisateur
+            // Create the user
             $user = User::createFromRegistrationData($data);
             
-            // Sauvegarde en base
+            // Save the user
             if ($user->save()) {
                 SessionService::set('user_id', $user->getEmail());
                 $view = new RegisterSuccessView($user);

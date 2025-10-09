@@ -5,23 +5,24 @@ use includes\exception\ExceptionValidationEmpty;
 use includes\exception\ExceptionValidationEmptys;
 
 /**
- * Classe abstraite pour la validation de formulaires.
+ * Abstract class for form validation.
+ * Provides methods to escape and validate form data.
  */
 abstract class FormValidator
 {
     /**
-     * Liste des champs requis pour la validation du formulaire.
-     * À définir dans les classes enfants.
+     * List of required fields for form validation.
+     * To be defined in child classes.
      * @var array
      */
     protected $required = [];
 
     /**
-     * Échappe les données du formulaire (HTML special chars).
+     * Escapes form data (HTML special chars).
      * @param array $data
-     * @param array $fields Liste des champs à échapper
-     * @return array Données échappées
-     * @throws ExceptionValidationEmptys si un champ requis est vide
+     * @param array $fields List of fields to escape
+     * @return array Data with escaped fields
+     * @throws ExceptionValidationEmptys if a required field is empty
      */
     public function escape(array $data): array
     {
@@ -42,7 +43,7 @@ abstract class FormValidator
     }
 
     /**
-     * Valide les données du formulaire. À implémenter dans les classes enfants.
+     * Validates form data. To be implemented in child classes.
      * @param array $data
      * @throws \Exception
      */

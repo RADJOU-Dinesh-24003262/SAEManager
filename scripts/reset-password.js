@@ -1,4 +1,4 @@
-// Validation en temps réel du formulaire de réinitialisation
+// Validate in real-time the password and its confirmation
 document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const passwordConfirmInput = document.getElementById('password_confirm');
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const reqLength = document.getElementById('req-length');
     const reqMatch = document.getElementById('req-match');
     
-    // Validation de la longueur du mot de passe
+    // Validation of the password length
     function validateLength() {
         const isValid = passwordInput.value.length >= 8;
         
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     }
     
-    // Validation de la correspondance des mots de passe
+    // Validation of password match
     function validateMatch() {
         const password = passwordInput.value;
         const passwordConfirm = passwordConfirmInput.value;
@@ -52,16 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     }
     
-    // Événements sur le mot de passe
+    // Events on the password input
     passwordInput.addEventListener('input', () => {
         validateLength();
         validateMatch();
     });
     
-    // Événements sur la confirmation
+    // Events on the password confirmation input
     passwordConfirmInput.addEventListener('input', validateMatch);
     
-    // Validation avant soumission
+    // Validation before submission
     form.addEventListener('submit', (e) => {
         const lengthValid = validateLength();
         const matchValid = validateMatch();
