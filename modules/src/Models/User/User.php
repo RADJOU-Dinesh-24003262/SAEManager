@@ -20,8 +20,8 @@ class User
     private string $city;
     private ?int $year = null;
     private ?string $parcours = null;
-    private ?int $td = null;
-    private ?int $tp = null;
+    private ?string $td = null;
+    private ?string $tp = null;
     private string $clearpassword;
     
     public function __construct(
@@ -36,13 +36,13 @@ class User
         string $city = '',
         ?int $year = null,
         ?string $parcours = null,
-        ?int $td = null,
-        ?int $tp = null,
+        ?string $td = null,
+        ?string $tp = null,
         string $clearpassword = ''
     ) {
         $this->amuId = $amuId;
-        $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->firstName = $firstName;
         $this->gender = $gender;
         $this->userType = $userType;
         $this->email = $email;
@@ -60,8 +60,8 @@ class User
     {
         $user = new self(
             $data['id'] ?? '',
-            $data['fname'] ?? '',
             $data['lname'] ?? '',
+            $data['fname'] ?? '',
             $data['gender'] ?? '',
             $data['user_type'] ?? '',
             $data['email'] ?? '',
@@ -85,8 +85,6 @@ class User
     {
 
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        //echo($this->email. $this->passwordHash);
     }
 
 
@@ -112,6 +110,7 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
+                :dateOfBirth,
                 :city, 
                 :amuId, 
                 :parcours, 
@@ -126,6 +125,7 @@ class User
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
                 'phone' => $this->phone,
+                'dateOfBirth' => $this->dateOfBirth,
                 'city' => $this->city,
                 'amuId' => $this->amuId,
                 'parcours' => $this->parcours,
@@ -142,6 +142,7 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
+                :dateofBirth,
                 :city, 
                 :amuId
             )
@@ -152,6 +153,7 @@ class User
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
                 'phone' => $this->phone,
+                'dateOfBirth' => $this->dateOfBirth,
                 'city' => $this->city,
                 'amuId' => $this->amuId
             ]);
@@ -164,8 +166,8 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
-                :city, 
-                :amuId
+                :dateOfBirth,
+                :city
             )
         ");
             $stmt->execute([
@@ -174,8 +176,8 @@ class User
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
                 'phone' => $this->phone,
-                'city' => $this->city,
-                'amuId' => $this->amuId
+                'dateOfBirth' => $this->dateOfBirth,
+                'city' => $this->city
             ]);
         }
 
@@ -191,7 +193,6 @@ class User
         $stmt->execute([$this->email]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        // Parser le type composite: '(email,hash,t)'
         $composite = trim($row['connection'], '()');
         $parts = explode(',', $composite);
 
