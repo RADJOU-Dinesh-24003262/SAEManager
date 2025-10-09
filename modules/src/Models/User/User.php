@@ -41,8 +41,8 @@ class User
         string $clearpassword = ''
     ) {
         $this->amuId = $amuId;
-        $this->firstName = $firstName;
         $this->lastName = $lastName;
+        $this->firstName = $firstName;
         $this->gender = $gender;
         $this->userType = $userType;
         $this->email = $email;
@@ -60,8 +60,8 @@ class User
     {
         $user = new self(
             $data['id'] ?? '',
-            $data['fname'] ?? '',
             $data['lname'] ?? '',
+            $data['fname'] ?? '',
             $data['gender'] ?? '',
             $data['user_type'] ?? '',
             $data['email'] ?? '',
@@ -85,8 +85,6 @@ class User
     {
 
         $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
-
-        //echo($this->email. $this->passwordHash);
     }
 
 
@@ -112,6 +110,7 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
+                :dateOfBirth,
                 :city, 
                 :amuId, 
                 :parcours, 
@@ -126,6 +125,7 @@ class User
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
                 'phone' => $this->phone,
+                'dateOfBirth' => $this->dateOfBirth,
                 'city' => $this->city,
                 'amuId' => $this->amuId,
                 'parcours' => $this->parcours,
@@ -142,6 +142,7 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
+                :dateofBirth,
                 :city, 
                 :amuId
             )
@@ -151,6 +152,7 @@ class User
                 'lastName' => $this->lastName,
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
+                'dateOfBirth' => $this->dateOfBirth,
                 'phone' => $this->phone,
                 'city' => $this->city,
                 'amuId' => $this->amuId
@@ -164,8 +166,8 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
-                :city, 
-                :amuId
+                :dateOfBirth,
+                :city
             )
         ");
             $stmt->execute([
@@ -174,8 +176,8 @@ class User
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
                 'phone' => $this->phone,
-                'city' => $this->city,
-                'amuId' => $this->amuId
+                'dateOfBirth' => $this->dateOfBirth,
+                'city' => $this->city
             ]);
         }
 
@@ -191,16 +193,12 @@ class User
         $stmt->execute([$this->email]);
 
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        var_dump($row);
-        // Parser le type composite: '(email,hash,t)'
         $composite = trim($row['connection'], '()');
         $parts = explode(',', $composite);
 
         $user_id = $parts[0];
         $passwordHash = $parts[1];
         $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
-
-        var_dump($success, $user_id, $passwordHash);
 
         if($success == true){
             return password_verify($this->clearpassword, $passwordHash);
