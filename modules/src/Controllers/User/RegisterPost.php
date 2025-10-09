@@ -26,7 +26,7 @@ class RegisterPost implements ControllerInterface
             
             // Save the user
             if ($user->save()) {
-                log_info("Nouvel utilisateur enregistré: " . $user->getEmail());
+                error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
                 SessionService::set('user_id', $user->getEmail());
                 $view = new RegisterSuccessView($user);
                 $view->render();
@@ -45,6 +45,9 @@ class RegisterPost implements ControllerInterface
             }
             SessionService::setFlash('errors', $errors);
 
+        } catch (PDOException $e) {
+            error_log("Erreur récupération données utilisateur: " . $e->getMessage());
+            SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
