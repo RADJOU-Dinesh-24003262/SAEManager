@@ -235,10 +235,10 @@ class User
     public function getPhone(): string { return $this->phone; }
     public function getDateOfBirth(): string { return $this->dateOfBirth; }
     public function getCity(): string { return $this->city; }
-    public function getYear(): ?int { return $this->year; }
+    public function getYear(): ?string { return (string)$this->year; }
     public function getParcours(): ?string { return $this->parcours; }
-    public function getTd(): ?int { return $this->td; }
-    public function getTp(): ?int { return $this->tp; }
+    public function getTd(): ?string { return (string)$this->td; }
+    public function getTp(): ?string { return (string)$this->tp; }
 
     public function isStudent(): bool { return $this->userType === 'student'; }
     public function isProfessor(): bool { return $this->userType === 'professor'; }

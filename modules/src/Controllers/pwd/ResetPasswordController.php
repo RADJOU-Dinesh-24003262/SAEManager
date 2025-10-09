@@ -29,10 +29,6 @@ class ResetPasswordController implements ControllerInterface
             SessionService::setFlash('errors', ['Erreur lors de la validation du lien: veuillez réessayer plus tard.']);
             header('Location: /');
         }
-        
-        // Token is valid, render the reset password view
-        $view = new ResetPasswordView($token, $tokenData['user_email']);
-        $view->render();
     }
 
     public static function support(string $chemin, string $method): bool
