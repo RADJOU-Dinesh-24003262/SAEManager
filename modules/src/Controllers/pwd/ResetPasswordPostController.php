@@ -43,7 +43,7 @@ class ResetPasswordPostController implements ControllerInterface
 
             // 5. Render the success page
             (new ResetPasswordSuccessView())->render();
-            log_info("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
+            error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
             return;
 
         } catch (ExceptionInvalidToken $e) {
