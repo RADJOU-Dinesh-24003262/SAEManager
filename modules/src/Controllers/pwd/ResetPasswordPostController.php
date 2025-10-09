@@ -40,6 +40,7 @@ class ResetPasswordPostController implements ControllerInterface
             $updated = User::updatePasswordByEmail($tokenData['user_email'], $password);
             if (!$updated) {
                 throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
+                error_log("Erreur mise à jour mot de passe pour: " . $tokenData['user_email']);
             }
 
             // 4. Marque le token comme utilisé
@@ -47,6 +48,7 @@ class ResetPasswordPostController implements ControllerInterface
 
             // 5. Affiche la page de succès
             (new ResetPasswordSuccessView())->render();
+            log_info("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
             return;
 
         } catch (ExceptionInvalidToken $e) {
@@ -67,6 +69,7 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (\Throwable $e) {
             // Fallback générique
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
+            error_log("Erreur inattendue: " . $e->getMessage());
             header("Location: /forgot-password");
             exit();
         }

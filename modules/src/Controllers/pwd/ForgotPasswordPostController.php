@@ -21,9 +21,12 @@ class ForgotPasswordPostController implements ControllerInterface
             $validator->validate($data);
             $email = trim($data['email'] ?? '');
 
+            error_log("Demande réinitialisation pour: {$email}");
+
             // Vérifier si l'utilisateur existe (sans révéler dans le message)
             $userExists = User::existsByEmail($email);
             if ($userExists) {
+                error_log("Utilisateur trouvé pour: {$email}");
                 // Créer le token de réinitialisation
                 $token = TokenService::createPasswordResetToken($email);
                 if ($token === false) {
