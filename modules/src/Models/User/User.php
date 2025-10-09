@@ -18,11 +18,11 @@ class User
     private string $phone = '';
     private string $dateOfBirth = '';
     private string $city = '';
-    private ?int $year = null;
+    private ?string $year = null;
     private ?string $parcours = null;
-    private ?int $td = null;
-    private ?int $tp = null;
-    
+    private ?string $td = null;
+    private ?string $tp = null;
+
     private function __construct(array $data = []) {
         foreach ($data as $key => $value) {
             $this->$key = $value;
@@ -44,7 +44,7 @@ class User
     {
         $user = new self($data);
         $user->login($user->email, $user->password);
-        $user->fetchDataFromDatabase($user->$email);
+        //$user->fetchDataFromDatabase($data['email']);
         return $user;
     }
 
