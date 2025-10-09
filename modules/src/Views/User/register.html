@@ -15,7 +15,7 @@
             required 
             type="text" 
             id="id" 
-            name="id" 
+            name="amuId" 
             minlength="3" 
             maxlength="30" 
             pattern="[a-zA-Z0-9._-]+" 
@@ -53,7 +53,7 @@
             required 
             type="text" 
             id="fname" 
-            name="fname" 
+            name="firstName" 
             pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
             autocomplete="given-name"
             aria-required="true">
@@ -66,7 +66,7 @@
             required 
             type="text" 
             id="lname" 
-            name="lname" 
+            name="lastName" 
             pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
             autocomplete="family-name"
             aria-required="true">
@@ -75,7 +75,7 @@
             Statut
             <abbr title="requis" >*</abbr>
         </label>
-        <select name="user_type" id="user_type" required aria-required="true">
+        <select name="userType" id="user_type" required aria-required="true">
             <option value="">-- Sélectionner --</option>
             <option value="student">Étudiant</option>
             <option value="professor">Responsable SAE</option>
@@ -109,7 +109,7 @@
             required 
             type="tel" 
             id="tel" 
-            name="tel" 
+            name="phone" 
             pattern="0[467][0-9]{8}" 
             maxlength="10" 
             autocomplete="tel"
@@ -125,7 +125,7 @@
             required 
             type="date" 
             id="dob" 
-            name="dob" 
+            name="dateOfBirth" 
             min="1940-01-01" 
             max="{{MAX_BIRTH_DATE}}" 
             autocomplete="bday"

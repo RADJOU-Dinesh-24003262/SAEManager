@@ -6,15 +6,15 @@ use includes\exception\ExceptionValidationRegisters;
 
 class ValidationServiceRegister extends FormValidator
 {   
-    protected $required = ['id', 'fname', 'lname', 'user_type', 'email', 'pwd', 'pwdverif', 'tel', 'dob', 'city', 'gender', 'terms'];
+    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'pwd', 'pwdverif', 'phone', 'dobdateOfBirth', 'city', 'gender', 'terms'];
 
     public function validate(array $data): void
     {
         $errors = [];
 
         // Validations spécifiques
-        if (!$this->isValidUserType($data['user_type'])) {
-            $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
+        if (!$this->isValidUserType($data['userType'])) {
+            $errors[] = new ExceptionValidationRegister("userType", "string", "Type d'utilisateur invalide.");
         }
 
         if (!$this->isValidEmail($data['email'])) {
@@ -31,17 +31,17 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("pwdverif", "string", "Les mots de passe ne correspondent pas.");
         }
 
-        if (!$this->isValidPhone($data['tel'])) {
-            $errors[] = new ExceptionValidationRegister("tel", "int", "Numéro de téléphone invalide.");
+        if (!$this->isValidPhone($data['phone'])) {
+            $errors[] = new ExceptionValidationRegister("phone", "int", "Numéro de téléphone invalide.");
         }
 
 
-        if (!$this->isValidDate($data['dob'])) {
-            $errors[] = new ExceptionValidationRegister("dob", "string", "Date de naissance invalide.");
+        if (!$this->isValidDate($data['dateOfBirth'])) {
+            $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Date de naissance invalide.");
         } else {
-            $age = (new \DateTime())->diff(new \DateTime($data['dob']))->y;
+            $age = (new \DateTime())->diff(new \DateTime($data['dateOfBirth']))->y;
             if ($age < 16) {
-                $errors[] = new ExceptionValidationRegister("dob", "string", "Vous devez avoir au moins 16 ans.");
+                $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Vous devez avoir au moins 16 ans.");
             }
         }
 
@@ -50,7 +50,7 @@ class ValidationServiceRegister extends FormValidator
         }
 
         // Validation spécifique aux étudiants
-        if (($data['user_type'] ?? '') === 'student') {
+        if (($data['userType'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
         }
