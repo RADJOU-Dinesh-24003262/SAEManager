@@ -20,8 +20,8 @@ class User
     private string $city;
     private ?int $year = null;
     private ?string $parcours = null;
-    private ?int $td = null;
-    private ?int $tp = null;
+    private ?string $td = null;
+    private ?string $tp = null;
     private string $clearpassword;
     
     public function __construct(
@@ -36,8 +36,8 @@ class User
         string $city = '',
         ?int $year = null,
         ?string $parcours = null,
-        ?int $td = null,
-        ?int $tp = null,
+        ?string $td = null,
+        ?string $tp = null,
         string $clearpassword = ''
     ) {
         $this->amuId = $amuId;
@@ -152,8 +152,8 @@ class User
                 'lastName' => $this->lastName,
                 'firstName' => $this->firstName,
                 'passwordHash' => $this->passwordHash,
-                'dateOfBirth' => $this->dateOfBirth,
                 'phone' => $this->phone,
+                'dateOfBirth' => $this->dateOfBirth,
                 'city' => $this->city,
                 'amuId' => $this->amuId
             ]);
