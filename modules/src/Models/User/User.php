@@ -98,7 +98,7 @@ class User
                 :firstName, 
                 :passwordHash, 
                 :phone, 
-                :dateofBirth,
+                :dateOfBirth,
                 :city, 
                 :amuId
             )
