@@ -39,7 +39,7 @@ class LoginPost implements ControllerInterface{
             if($user->login()){
 
                 SessionService::set('user_id', $user->getEmail());
-                log_info("Utilisateur connecté: " . $user->getEmail());
+                //log_info("Utilisateur connecté: " . $user->getEmail());
 
                 header('Location: /dashboard');
                 exit();
