@@ -48,8 +48,7 @@ class LoginPost implements ControllerInterface{
             SessionService::setFlash('errors', $errors);
 
         } catch (ExceptionValidationLogin $e) {
-            SessionService::setFlash('errors', ['general' => 'Erreur de connexion ' . $e->getMessage()]);
-            throw new ExceptionValidationLogin();
+            SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         }
         $view = new LoginView();
         $view->render();
