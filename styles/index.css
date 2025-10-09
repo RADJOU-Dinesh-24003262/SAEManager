@@ -1,11 +1,11 @@
-/* Conteneur principal pour isoler les styles */
+/* Principal container for isolating styles */
 .sae-manager-page {
     margin: 0;
     padding: 0;
     text-align: center;
 }
 
-/* Titres */
+/* Titles */
 .sae-manager-page h1,
 .sae-manager-page h2,
 .sae-manager-page h3 {
@@ -14,12 +14,12 @@
 }
 
 .sae-manager-page h1 {
-    color: #FFC925;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(2.5rem, 8vw, 8.75rem);
     font-weight: 400;
     line-height: 1.1;
-    background-image: url("/image/Index.png");
+    background-image: url("/image/index.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-clip: text;
@@ -28,7 +28,7 @@
 }
 
 .sae-manager-page h2 {
-    color: #E8CE7E;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 400;
@@ -36,14 +36,14 @@
 }
 
 .sae-manager-page h3 {
-    color: #FFC925;
+    color: #cca01b;
     font-family: "Abril Fatface", serif;
     font-size: clamp(1.8rem, 5vw, 3.75rem);
     font-weight: 400;
     line-height: 1.2;
 }
 
-/* Texte descriptif */
+/* Description text */
 .sae-manager-page .description_text {
     max-width: 90%;
     color: #000;
@@ -56,7 +56,7 @@
     padding: 0 10px;
 }
 
-/* Bouton transformé en lien stylisé */
+/* Transformed button into styled link */
 .sae-manager-page .sae-button {
     display: inline-block;
     background-color: #ffffff;
@@ -85,7 +85,7 @@
 
 /* --- MEDIA QUERIES --- */
 
-/* Tablettes */
+/* Tablets */
 @media (max-width: 1024px) {
     .sae-manager-page h1 {
         margin-bottom: 30px;

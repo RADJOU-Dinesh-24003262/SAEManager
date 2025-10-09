@@ -19,7 +19,7 @@ use Controllers\pwd\ResetPasswordPostController;
 
 //phpinfo();
 
-// Liste des contrôleurs disponibles
+// List of available controllers
 $controllers = [
     new Login(),
     new Register(), 
@@ -36,7 +36,7 @@ $controllers = [
     new ResetPasswordPostController()
 ];
 
-// Routing automatique
+// automatic routing
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 foreach ($controllers as $controller) {
     if ($controller::support($path, $_SERVER['REQUEST_METHOD'])) {
@@ -44,7 +44,7 @@ foreach ($controllers as $controller) {
             $controller->control();
             exit();
         } catch (Exception $e) {
-            // Log de l'erreur et affichage d'une page d'erreur
+            // Log error and show error page
             error_log("Erreur contrôleur: " . $e->getMessage());
             http_response_code(500);
             echo "Erreur interne du serveur";
@@ -53,7 +53,7 @@ foreach ($controllers as $controller) {
     }
 }
 
-// 404 - Route non trouvée
+// 404 - Route not found
 http_response_code(404);
 echo "Page non trouvée";
 exit();

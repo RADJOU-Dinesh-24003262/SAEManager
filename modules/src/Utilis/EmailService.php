@@ -7,7 +7,7 @@ class EmailService
     private static string $fromName = 'SAEManager';
 
     /**
-     * Envoie un email de réinitialisation de mot de passe
+     * Send password reset email
      */
     public static function sendPasswordResetEmail(string $toEmail, string $token): bool
     {
@@ -22,7 +22,7 @@ class EmailService
     }
 
     /**
-     * Construit le lien de réinitialisation
+     * Builds the password reset link
      */
     private static function getResetLink(string $token): string
     {
@@ -32,7 +32,7 @@ class EmailService
     }
 
     /**
-     * Template HTML de l'email
+     * Template HTML of the email
      */
     private static function getHtmlTemplate(string $resetLink): string
     {
@@ -97,7 +97,7 @@ class EmailService
     }
 
     /**
-     * Template texte brut de l'email
+     * Template in plain text of the email
      */
     private static function getTextTemplate(string $resetLink): string
     {
@@ -122,7 +122,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
     }
 
     /**
-     * Envoie un email (méthode générique)
+     * Sends a email (generic method)
      */
     private static function sendEmail(
         string $to, 
@@ -131,7 +131,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
         string $textMessage
     ): bool {
         try {
-            // En-têtes pour email multipart (HTML + texte)
+            // Headers for multipart email (HTML + text)
             $boundary = md5(uniqid(time()));
             
             $headers = [
@@ -158,7 +158,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
                 $headerString .= "{$key}: {$value}\r\n";
             }
             
-            // Envoi de l'email
+            // Send the email
             $sent = mail($to, $subject, $message, $headerString);
             
             if ($sent) {

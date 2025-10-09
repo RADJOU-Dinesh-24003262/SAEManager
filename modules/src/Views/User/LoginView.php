@@ -25,7 +25,7 @@ class LoginView extends AbstractView
         $errors = $this->data['errors'];
 
         return [
-            // Messages d'erreur
+            // Error messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
         ];
     }
@@ -63,6 +63,23 @@ class LoginView extends AbstractView
     {
         return '<meta name="description" content="Page de connexion de SAEManager">
                 <meta name="keywords" content="SAEManager, Connexion">
-                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.facebook.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.linkedin.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />
+                
+                <meta property="og:title" content="Notre site" />
+                <meta property="og:url" content="http://www.instagram.com/" />
+                <meta property="og:description" content="Pour en savoir plus sur nous" />
+                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:type" content="website" />';
     }
 }

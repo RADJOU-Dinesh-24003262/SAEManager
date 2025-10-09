@@ -6,26 +6,26 @@ use includes\database;
 class TokenService
 {
     /**
-     * Génère un token sécurisé aléatoire
+     * Generate a secure random token
      */
     public static function generate(): string
     {
-        return bin2hex(random_bytes(32)); // 64 caractères hexadécimaux
+        return bin2hex(random_bytes(32)); // 64 hexadecimal characters
     }
 
     /**
-     * Crée un token de réinitialisation pour un email
-     * Retourne le token généré ou false en cas d'erreur
+     * Create a password reset token for a given email
+     * Returns the generated token or false on error
      */
     public static function createPasswordResetToken(string $email): string|false
     {
         try {
             $db = database::getInstance();
             
-            // Nettoyer les anciens tokens de cet email
+            // Clean up old tokens for this email
             self::cleanupOldTokens($email);
             
-            // Générer un nouveau token
+            // Generate new token
             $token = self::generate();
             $createdAt = date('Y-m-d H:i:s');
             $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
@@ -51,7 +51,7 @@ class TokenService
     }
 
     /**
-     * Vérifie si un token est valide
+     * Verify if a token is valid (exists, not expired, not used)
      */
     public static function validateToken(string $token): array|false
     {
@@ -73,15 +73,15 @@ class TokenService
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
             
             if (!$result) {
-                return false; // Token n'existe pas
+                return false; // Token does not exist
             }
             
             if ($result['used']) {
-                return false; // Token déjà utilisé
+                return false; // Token already used
             }
             
             if (strtotime($result['expires_at']) < time()) {
-                return false; // Token expiré
+                return false; // Token expired
             }
             
             return $result;
@@ -93,7 +93,7 @@ class TokenService
     }
 
     /**
-     * Marque un token comme utilisé
+     * Marks a token as used
      */
     public static function markTokenAsUsed(string $token): bool
     {
@@ -115,7 +115,7 @@ class TokenService
     }
 
     /**
-     * Nettoie les anciens tokens d'un email
+     * Cleans up old tokens for a given email
      */
     private static function cleanupOldTokens(string $email): void
     {
@@ -136,7 +136,7 @@ class TokenService
     }
 
     /**
-     * Nettoie tous les tokens expirés (à exécuter périodiquement)
+     * Cleans up all expired tokens (to be run periodically)
      */
     public static function cleanupExpiredTokens(): void
     {

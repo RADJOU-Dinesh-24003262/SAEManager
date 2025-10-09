@@ -9,7 +9,7 @@ class Login implements ControllerInterface
 {
     public function control(): void
     {
-        // Redirection si déjà connecté
+        // Redirect to dashboard if already logged in
         if (SessionService::has('user_id')) {
             header('Location: /dashboard');
             exit();
