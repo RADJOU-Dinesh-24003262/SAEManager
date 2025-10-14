@@ -81,7 +81,7 @@ class EmailService
             <div class='warning'>
                 <strong>⚠️ Important :</strong>
                 <ul>
-                    <li>Ce lien est valide pendant <strong>30 minutes</strong></li>
+                    <li>Ce lien est valide pendant <strong>10 minutes</strong></li>
                     <li>Il ne peut être utilisé qu'<strong>une seule fois</strong></li>
                     <li>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email</li>
                 </ul>
@@ -112,7 +112,7 @@ Pour créer un nouveau mot de passe, cliquez sur ce lien :
 {$resetLink}
 
 IMPORTANT :
-- Ce lien est valide pendant 30 minutes
+- Ce lien est valide pendant 10 minutes
 - Il ne peut être utilisé qu'une seule fois
 - Si vous n'avez pas demandé cette réinitialisation, ignorez cet email
 
