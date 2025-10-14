@@ -1,10 +1,42 @@
 <?php
 namespace Views;
 
+/**
+
+ * The abstract class which will will be used to create all of the views.
+
+ *
+
+ * It contains all the required methods and attributes to be used in the implemented views.
+
+ *
+
+ * @package     src
+
+ *
+
+ * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ */
 abstract class AbstractView 
 {
+    /**
+     * Stores the data used in the implemented page. The var line contains the type stored in this variable.
+     * @var array
+     */
     protected array $data = [];
 
+    /**
+
+     * Initializes the $data attribute with the array of data given when called.
+
+     *
+
+     * @param array $data The array of data to be instantiated
+
+     * @return void Creates the instance of the class.
+
+     */
     public function __construct(array $data = [])
     {
         $this->data = $data;
@@ -130,6 +162,15 @@ abstract class AbstractView
 </html>';
     }
 
+    /**
+
+     * Returns the name of the project 'SAEManager' ot be used in some cases like displaying it by some isolated texts.
+
+     *
+
+     * @return String the name of the project 'SAEManager'.
+
+     */
     protected function getPageTitle(): string
     {
         return 'SAEManager';
