@@ -6,11 +6,21 @@ use Views\AbstractView;
 use Utilis\SessionService;
 
 /**
- * Class LoginView
+
+ * The view to display the login page. It extends the AbstractView abstract class.
+
  *
- * This class represents the view for the login page of the application.
- * It extends the AbstractView class and provides specific implementations
- * for rendering the login page, including handling error messages.
+
+ * It implements the methods of the AbstractView extended class and behaves as a login page
+
+ *
+
+ * @package     src
+
+ * @subpackage  User
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
  */
 class LoginView extends AbstractView
 {
