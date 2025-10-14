@@ -16,6 +16,7 @@ use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ForgotPasswordPostController;
 use Controllers\pwd\ResetPasswordController;
 use Controllers\pwd\ResetPasswordPostController;
+use Controllers\PageSae\PageSaeController;
 
 //phpinfo();
 
@@ -33,7 +34,8 @@ $controllers = [
     new ForgotPasswordController(),
     new ForgotPasswordPostController(),
     new ResetPasswordController(),
-    new ResetPasswordPostController()
+    new ResetPasswordPostController(),
+    new PageSaeController()
 ];
 
 // automatic routing
