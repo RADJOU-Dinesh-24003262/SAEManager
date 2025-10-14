@@ -16,10 +16,22 @@ class TokenService
     }
 
     /**
-     * Create a password reset token for a given email
-     * Returns the generated token or false on error
+     * Creates a password reset token for the given email address.
+     *
+     * This method performs the following actions:
+     * - Deletes existing tokens for the email.
+     * - Removes expired tokens from the database.
+     * - Generates a new secure token.
+     * - Stores the token in the `password_resets` table with a 10-minute expiry.
+     *
+     * @param string $email The email address to associate with the reset token.
+     *
+     * @return string The newly generated token as a string.
+     *
+     * @throws \PDOException If a database error occurs (unless caught internally).
+     * @throws ExceptionSpam If too many reset requests are detected for the given email.
      */
-    public static function createPasswordResetToken(string $email): string|false
+    public static function createPasswordResetToken(string $email): string
     {
         try {
             $db = database::getInstance();
@@ -55,7 +67,6 @@ class TokenService
             } else {
                 throw $e;
             }
-            return false;
         }
     }
 
