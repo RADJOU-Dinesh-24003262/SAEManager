@@ -10,18 +10,18 @@ use Utilis\Validator\ForgotPasswordValidator;
 use Views\pwd\ForgotPasswordView;
 use includes\exception\ExceptionValidationForgotPassword;
 use includes\exception\ExceptionValidationEmptys;
+use includes\exception\ExceptionSpam;
 
 class ForgotPasswordPostController implements ControllerInterface
 {
     public function control(): void
     {
         try {
+            // Validate the form data and avoid feature spam
             $validator = new ForgotPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $email = trim($data['email'] ?? '');
-
-            error_log("Demande réinitialisation pour: {$email}");
 
             error_log("Demande réinitialisation pour: {$email}");
 
@@ -39,6 +39,10 @@ class ForgotPasswordPostController implements ControllerInterface
                     $emailSent = EmailService::sendPasswordResetEmail($email, $token);
                     if (!$emailSent) {
                         error_log("Échec envoi email à: {$email}");
+                        
+                    }else{
+                        error_log("Email de réinitialisation envoyé à: {$email}");
+                        $_SESSION['last_forgot_password_request'] = time();
                     }
                 }
             }
@@ -56,6 +60,12 @@ class ForgotPasswordPostController implements ControllerInterface
 
         } catch (ExceptionValidationForgotPassword $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
+        }catch (ExceptionSpam $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+
+        } catch (\Exception $e) {
+            error_log("Erreur inattendue: " . $e->getMessage());
+            SessionService::setFlash('errors', ["Une erreur inattendue est survenue. Veuillez réessayer plus tard."]);
         }
         $view = new ForgotPasswordView();
         $view->render();
