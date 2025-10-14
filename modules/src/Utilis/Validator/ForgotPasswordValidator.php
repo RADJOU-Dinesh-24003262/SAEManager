@@ -4,10 +4,42 @@ namespace Utilis\Validator;
 use includes\exception\ExceptionValidationForgotPassword;
 use includes\exception\ExceptionSpam;
 
+/**
+ * Class ForgotPasswordValidator
+ *
+ * Validates input data for the forgot password form.
+ *
+ * This validator ensures:
+ * - The "email" field is present and valid.
+ * - Password reset requests are not sent too frequently (spam protection).
+ *
+ * @package Utilis\Validator
+ * @version 1.0
+ * @author Dinesh
+ */
 class ForgotPasswordValidator extends FormValidator
 {
+    /**
+     * Fields that are required for validation.
+     *
+     * @var array<string>
+     */
     protected $required = ['email'];
 
+    /**
+     * Validates the provided data for a forgot password request.
+     *
+     * Checks:
+     * - Whether the email is syntactically valid.
+     * - Whether the user is allowed to make another reset request (2-minute cooldown).
+     *
+     * @param array $data The form data to validate.
+     *
+     * @throws ExceptionValidationForgotPassword If the email field is invalid.
+     * @throws ExceptionSpam If a reset request was made less than 2 minutes ago.
+     *
+     * @return void
+     */
     public function validate(array $data): void
     {
         $errors = [];
