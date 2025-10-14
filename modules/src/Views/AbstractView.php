@@ -34,9 +34,10 @@ abstract class AbstractView
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
      *
-     * @return array An associative array with keys for error and success messages.
+     * @return string[] An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
+
     /** Renders the complete HTML page including header, body, and footer.
      *
      * This method orchestrates the rendering of the entire HTML page by calling
