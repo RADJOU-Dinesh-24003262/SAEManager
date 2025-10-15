@@ -229,6 +229,7 @@ class User
     public function getFullName(): string { return $this->firstName . ' ' . $this->lastName; }
     public function getUserType(): string { return $this->userType; }
     public function getEmail(): string { return $this->email; }
+    public function getPasswordHash(): string { return $this->passwordHash; }
     public function getPhone(): string { return $this->phone; }
     public function getDateOfBirth(): string { return $this->dateOfBirth; }
     public function getCity(): string { return $this->city; }

@@ -23,14 +23,14 @@ class LoginPost implements ControllerInterface{
         }
 
         try {
-            $data['email'] = trim($data['email'] ?? '');
             
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
-
+            
+            $data['email'] = trim($data['email'] ?? '');
             error_log("Tentative de connexion - Username: {$data['email']}");
-
+            
             $user = User::createFromLoginData($data);
 
             SessionService::set('user_id', $user->getEmail());

@@ -90,7 +90,7 @@ class ForgotPasswordPostController implements ControllerInterface
     /**
      * Determines whether this controller supports a given route and method.
      *
-     * @param string $chemin The route path (e.g., "/forgot-password").
+     * @param string $path The route path (e.g., "/forgot-password").
      * @param string $method The HTTP method (e.g., "POST").
      * @return bool True if the controller should handle the request, false otherwise.
      */

@@ -6,4 +6,8 @@ class ExceptionValidationLogin extends \Exception{
         private string $additionalInfo = 'Credentials not valid.') {
         parent::__construct($additionalInfo);
     }
+
+    public function getAdditionalInfo(): string {
+        return $this->additionalInfo;
+    }
 }
