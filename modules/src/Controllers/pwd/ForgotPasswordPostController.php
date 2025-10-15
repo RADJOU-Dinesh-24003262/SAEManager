@@ -107,8 +107,8 @@ class ForgotPasswordPostController implements ControllerInterface
      * @return bool True if the controller should handle the request, false otherwise.
      */
 
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/forgot-password" && $method === "POST";
+        return $path === "/forgot-password" && $method === "POST";
     }
 }
