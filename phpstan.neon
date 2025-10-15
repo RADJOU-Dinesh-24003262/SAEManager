@@ -1,8 +1,8 @@
 parameters:
   level: 7
   paths:
-	- modules/
-	- _assets
+    - modules/
+    - _assets
   
   excludePaths:
     - */vendor/*
