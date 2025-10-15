@@ -1,0 +1,16 @@
+parameters:
+  level: 7
+  paths:
+	- modules/
+	- _assets
+  
+  excludePaths:
+    - */vendor/*
+  
+  ignoreErrors:
+    - '#Call to an undefined method PDO::#'
+  
+  checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false
+  
+  reportUnmatchedIgnoredErrors: false

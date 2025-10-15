@@ -1,0 +1,73 @@
+name: PHP Quality Checks
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, pdo, pdo_pgsql
+        coverage: xdebug
+        tools: composer, phpcs, phpstan, phpunit
+    
+    - name: Validate composer.json
+      run: composer validate --strict
+    
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    
+    # Code Style Check
+    - name: Check PHP Code Style (PSR-12)
+      run: |
+        phpcs --standard=PSR12 --colors \
+        --ignore=*/vendor/*,*/_assets/* \
+        modules/src/
+    
+    # Static Analysis
+    - name: Run PHPStan Static Analysis
+      run: |
+        phpstan analyse modules/src/ \
+        --level=7 \
+        --no-progress \
+        --error-format=github
+    
+    # Documentation Check
+    - name: Check PHPDoc Documentation
+      run: |
+        phpcs --standard=phpcs-phpdoc.xml modules/src/
+    
+    # Unit Tests
+    - name: Run PHPUnit Tests
+      run: |
+        phpunit --configuration phpunit.xml \
+        --coverage-text \
+        --coverage-clover=coverage.xml \
+        --testdox
+    
+    # Test Coverage Check
+    - name: Check Test Coverage
+      run: |
+        php coverage-checker.php coverage.xml 70
+    
+    # Security Check
+    - name: Security Check
+      run: |
+        composer audit
+    
+    # Upload Coverage
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: false
