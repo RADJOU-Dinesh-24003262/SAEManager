@@ -8,4 +8,16 @@ class ExceptionValidationResetPassword extends \Exception{
         private string $additionalInfo = '') {
         parent::__construct($additionalInfo);
     }
+
+    public function getField(): string {
+        return $this->field;
+    }
+
+    public function getType(): string {
+        return $this->type;
+    }
+
+    public function getAdditionalInfo(): string {
+        return $this->additionalInfo;
+    }
 }
