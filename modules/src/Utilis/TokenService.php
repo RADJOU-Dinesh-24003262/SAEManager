@@ -108,7 +108,7 @@ class TokenService
             
         } catch (\PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
-            return false;
+            throw new ExceptionInvalidToken("Erreur lors de la validation du lien. Veuillez réessayer plus tard.");
         }
     }
 
