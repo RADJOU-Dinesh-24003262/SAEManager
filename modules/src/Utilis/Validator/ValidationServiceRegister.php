@@ -6,7 +6,7 @@ use includes\exception\ExceptionValidationRegisters;
 
 class ValidationServiceRegister extends FormValidator
 {   
-    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'pwd', 'pwdverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
+    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
 
     public function validate(array $data): void
     {
@@ -23,12 +23,12 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("email", "string", "Utilisez votre adresse e-mail universitaire.");
         }
 
-        if (!$this->isValidPassword($data['pwd'])) {
-            $errors[] = new ExceptionValidationRegister("pwd", "string", "Mot de passe trop court (min 8 caractères).");
+        if (!$this->isValidPassword($data['password'])) {
+            $errors[] = new ExceptionValidationRegister("password", "string", "Mot de passe trop court (min 8 caractères).");
         }
-        
-        if ($data['pwd'] !== ($data['pwdverif'] ?? '')) {
-            $errors[] = new ExceptionValidationRegister("pwdverif", "string", "Les mots de passe ne correspondent pas.");
+
+        if ($data['password'] !== ($data['passwordverif'] ?? '')) {
+            $errors[] = new ExceptionValidationRegister("passwordverif", "string", "Les mots de passe ne correspondent pas.");
         }
 
         if (!$this->isValidPhone($data['phone'])) {
