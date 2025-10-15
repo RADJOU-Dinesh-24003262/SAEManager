@@ -23,12 +23,11 @@ class LoginPost implements ControllerInterface{
         }
 
         try {
+            $data['email'] = trim($data['email'] ?? '');
+            
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
-
-            $data['email'] = trim($data['email'] ?? '');
-            $data['password'] = $data['password'] ?? '';
 
             error_log("Tentative de connexion - Username: {$data['email']}");
 
