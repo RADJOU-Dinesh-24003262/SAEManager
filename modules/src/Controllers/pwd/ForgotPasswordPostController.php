@@ -10,18 +10,46 @@ use Utilis\Validator\ForgotPasswordValidator;
 use Views\pwd\ForgotPasswordView;
 use includes\exception\ExceptionValidationForgotPassword;
 use includes\exception\ExceptionValidationEmptys;
+use includes\exception\ExceptionSpam;
+
+/**
+ * Class ForgotPasswordPostController
+ *
+ * Handles the POST request to the "/forgot-password" route.
+ * Validates form input, checks if a user exists, generates a reset token,
+ * sends the reset email, and renders the view with appropriate feedback.
+ *
+ * @package Controllers\pwd
+ * @version 1.0
+ * @author Dinesh
+ */
 
 class ForgotPasswordPostController implements ControllerInterface
 {
+    /**
+     * Main controller logic for processing the forgot password request.
+     *
+     * Steps:
+     * - Validates and sanitizes the submitted form data.
+     * - Checks if the user exists by email.
+     * - If the user exists, generates a password reset token.
+     * - Sends a password reset email with the token.
+     * - Sets a generic success flash message (regardless of user existence).
+     * - Catches and handles validation exceptions with appropriate error messages.
+     * - Renders the ForgotPasswordView.
+     *
+     * @return void
+     * @author Dinesh
+     * @version 1.0
+     */
     public function control(): void
     {
         try {
+            // Validate the form data and avoid feature spam
             $validator = new ForgotPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $email = trim($data['email'] ?? '');
-
-            error_log("Demande réinitialisation pour: {$email}");
 
             error_log("Demande réinitialisation pour: {$email}");
 
@@ -39,6 +67,10 @@ class ForgotPasswordPostController implements ControllerInterface
                     $emailSent = EmailService::sendPasswordResetEmail($email, $token);
                     if (!$emailSent) {
                         error_log("Échec envoi email à: {$email}");
+                        
+                    }else{
+                        error_log("Email de réinitialisation envoyé à: {$email}");
+                        $_SESSION['last_forgot_password_request'] = time();
                     }
                 }
             }
@@ -56,13 +88,27 @@ class ForgotPasswordPostController implements ControllerInterface
 
         } catch (ExceptionValidationForgotPassword $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
+        }catch (ExceptionSpam $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+
+        } catch (\Exception $e) {
+            error_log("Erreur inattendue: " . $e->getMessage());
+            SessionService::setFlash('errors', ["Une erreur inattendue est survenue. Veuillez réessayer plus tard."]);
         }
         $view = new ForgotPasswordView();
         $view->render();
     }
 
-    public static function support(string $chemin, string $method): bool
+    /**
+     * Determines whether this controller supports a given route and method.
+     *
+     * @param string $chemin The route path (e.g., "/forgot-password").
+     * @param string $method The HTTP method (e.g., "POST").
+     * @return bool True if the controller should handle the request, false otherwise.
+     */
+
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/forgot-password" && $method === "POST";
+        return $path === "/forgot-password" && $method === "POST";
     }
 }
