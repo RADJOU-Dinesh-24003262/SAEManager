@@ -2,3 +2,4 @@
 _assets/includes/my_settings.ini
 
 *.ini
+/vendor

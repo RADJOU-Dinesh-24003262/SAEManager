@@ -1,0 +1,77 @@
+.PHONY: help install test coverage phpcs phpstan quality fix hooks
+
+# Couleurs
+GREEN=\033[0;32m
+YELLOW=\033[1;33m
+NC=\033[0m
+
+help: ## Affiche cette aide
+	@echo "Commandes disponibles:"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  ${GREEN}%-15s${NC} %s\n", $$1, $$2}'
+
+install: ## Installe les dépendances
+	@echo "${YELLOW}Installation des dépendances...${NC}"
+	composer install
+	@echo "${GREEN}✓ Dépendances installées${NC}"
+
+hooks: ## Installe les Git hooks
+	@echo "${YELLOW}Installation des hooks Git...${NC}"
+	chmod +x .git/hooks/pre-commit
+	@echo "${GREEN}✓ Hooks installés${NC}"
+
+test: ## Lance les tests unitaires
+	@echo "${YELLOW}Exécution des tests...${NC}"
+	./vendor/bin/phpunit --testdox
+
+test-unit: ## Lance uniquement les tests unitaires
+	@echo "${YELLOW}Tests unitaires...${NC}"
+	./vendor/bin/phpunit --testsuite="Unit Tests" --testdox
+
+test-integration: ## Lance uniquement les tests d'intégration
+	@echo "${YELLOW}Tests d'intégration...${NC}"
+	./vendor/bin/phpunit --testsuite="Integration Tests" --testdox
+
+coverage: ## Génère le rapport de couverture
+	@echo "${YELLOW}Génération du rapport de couverture...${NC}"
+	./vendor/bin/phpunit --coverage-html coverage --coverage-text
+	@echo "${GREEN}✓ Rapport disponible dans: coverage/index.html${NC}"
+
+phpcs: ## Vérifie le code style (PSR-12)
+	@echo "${YELLOW}Vérification du code style...${NC}"
+	./vendor/bin/phpcs --standard=PSR12 --colors modules/src/
+
+phpstan: ## Lance l'analyse statique
+	@echo "${YELLOW}Analyse statique...${NC}"
+	./vendor/bin/phpstan analyse . --level=7
+
+phpdoc: ## Vérifie la documentation
+	@echo "${YELLOW}Vérification de la documentation...${NC}"
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors modules/src/
+
+fix: ## Corrige automatiquement les erreurs de style
+	@echo "${YELLOW}Correction automatique...${NC}"
+	./vendor/bin/phpcbf --standard=PSR12 modules/src/
+	@echo "${GREEN}✓ Code formaté${NC}"
+
+quality: ## Lance toutes les vérifications de qualité
+	@echo "${YELLOW}=== Vérifications de qualité ===${NC}\n"
+	@make phpcs
+	@echo ""
+	@make phpstan
+	@echo ""
+	@make phpdoc
+	@echo ""
+	@make test
+	@echo "\n${GREEN}✅ Toutes les vérifications sont passées!${NC}"
+
+ci: ## Simule le pipeline CI en local
+	@echo "${YELLOW}=== Simulation du pipeline CI ===${NC}\n"
+	@make quality
+	@make coverage
+	@echo "\n${GREEN}✅ Pipeline CI simulé avec succès!${NC}"
+
+clean: ## Nettoie les fichiers temporaires
+	@echo "${YELLOW}Nettoyage...${NC}"
+	rm -rf coverage/
+	rm -f coverage.xml
+	@echo "${GREEN}✓ Nettoyage terminé${NC}"
