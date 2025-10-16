@@ -60,3 +60,4 @@ foreach ($controllers as $controller) {
 http_response_code(404);
 echo "Page non trouvée";
 exit();
+//test
