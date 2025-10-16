@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Script d'installation automatique des outils de qualité
-# Usage: bash setup-quality.sh
+# Automatic setup script for quality tools
+# Usage: bash setup-quality.sh  
 
 set -e
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -21,7 +21,7 @@ echo "║                                                       ║"
 echo "╚═══════════════════════════════════════════════════════╝"
 echo -e "${NC}\n"
 
-# Vérifier PHP
+# Check PHP
 echo -e "${YELLOW}🔍 Vérification de PHP...${NC}"
 if ! command -v php &> /dev/null; then
     echo -e "${RED}❌ PHP n'est pas installé${NC}"
@@ -30,7 +30,7 @@ fi
 PHP_VERSION=$(php -r "echo PHP_VERSION;")
 echo -e "${GREEN}✓ PHP $PHP_VERSION détecté${NC}\n"
 
-# Vérifier Composer
+# Check Composer
 echo -e "${YELLOW}🔍 Vérification de Composer...${NC}"
 if ! command -v composer &> /dev/null; then
     echo -e "${RED}❌ Composer n'est pas installé${NC}"
@@ -41,7 +41,7 @@ echo -e "${GREEN}✓ Composer détecté${NC}\n"
 sudo apt update
 sudo apt install php8.4-xml
 
-# Vérifier Git
+# Check Git
 echo -e "${YELLOW}🔍 Vérification de Git...${NC}"
 if ! command -v git &> /dev/null; then
     echo -e "${RED}❌ Git n'est pas installé${NC}"
@@ -49,19 +49,19 @@ if ! command -v git &> /dev/null; then
 fi
 echo -e "${GREEN}✓ Git détecté${NC}\n"
 
-# Installation des dépendances
+# Install dependencies
 echo -e "${YELLOW}📦 Installation des dépendances Composer...${NC}"
 composer install --prefer-dist --no-progress
 echo -e "${GREEN}✓ Dépendances installées${NC}\n"
 
-# Création des dossiers nécessaires
+# Create required directories
 echo -e "${YELLOW}📁 Création des dossiers de test...${NC}"
 mkdir -p tests/Unit
 mkdir -p tests/Integration
 mkdir -p coverage
 echo -e "${GREEN}✓ Dossiers créés${NC}\n"
 
-# Installation du hook pre-commit
+# Install Git pre-commit hook
 echo -e "${YELLOW}🎣 Installation du hook Git pre-commit...${NC}"
 if [ -f ".git/hooks/pre-commit" ]; then
     echo -e "${YELLOW}⚠ Hook pre-commit existant, création d'une sauvegarde...${NC}"
@@ -71,7 +71,7 @@ fi
 cat > .git/hooks/pre-commit << 'EOF'
 #!/bin/bash
 
-# Couleurs
+# Colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -88,7 +88,7 @@ fi
 
 ERRORS=0
 
-# Syntaxe PHP
+# Syntax PHP
 echo -e "${YELLOW}1. Syntaxe PHP...${NC}"
 for FILE in $PHP_FILES; do
     php -l "$FILE" > /dev/null 2>&1
@@ -126,7 +126,7 @@ EOF
 chmod +x .git/hooks/pre-commit
 echo -e "${GREEN}✓ Hook installé${NC}\n"
 
-# Création d'un test exemple si aucun test n'existe
+# Create example test if none exists
 if [ ! -f "tests/Unit/SessionServiceTest.php" ]; then
     echo -e "${YELLOW}📝 Création d'un test exemple...${NC}"
     cat > tests/Unit/ExampleTest.php << 'EOF'
@@ -153,7 +153,7 @@ EOF
     echo -e "${GREEN}✓ Test exemple créé${NC}\n"
 fi
 
-# Test de l'installation
+# Test the installation
 echo -e "${YELLOW}🧪 Test de l'installation...${NC}"
 echo -e "${YELLOW}   - PHPUnit...${NC}"
 if ./vendor/bin/phpunit --version &> /dev/null; then
