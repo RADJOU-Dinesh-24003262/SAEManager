@@ -3,3 +3,7 @@ _assets/includes/my_settings.ini
 
 *.ini
 /vendor
+
+.phpunit*
+coverage/
+coverage.xml

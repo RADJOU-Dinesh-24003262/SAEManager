@@ -1,15 +1,15 @@
 <?php
 
-namespace tests\Unit;
+namespace tests\Unit\Utilis;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Utilis\SessionService;
 
 /**
  * Unit tests for SessionService class.
- *
- * @covers \Utilis\SessionService
  */
+#[CoversClass(SessionService::class)]
 class SessionServiceTest extends TestCase
 {
     /**
