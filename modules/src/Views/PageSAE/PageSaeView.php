@@ -10,7 +10,7 @@ use Utilis\SessionService;
  
  * @package     src
 
- * @subpackage  Info
+ * @subpackage  PageSAE
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
  

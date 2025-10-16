@@ -11,7 +11,7 @@ use Controllers\Index\IndexControllerPost;
  
  * @package     src
 
- * @subpackage  Info
+ * @subpackage  Index
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
