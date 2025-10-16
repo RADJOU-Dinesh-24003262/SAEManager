@@ -17,6 +17,7 @@ use Controllers\pwd\ForgotPasswordPostController;
 use Controllers\pwd\ResetPasswordController;
 use Controllers\pwd\ResetPasswordPostController;
 use Controllers\PageSae\PageSaeController;
+use Controllers\ToDoList\ToDoListController;
 
 //phpinfo();
 
@@ -35,7 +36,8 @@ $controllers = [
     new ForgotPasswordPostController(),
     new ResetPasswordController(),
     new ResetPasswordPostController(),
-    new PageSaeController()
+    new PageSaeController(),
+    new ToDoListController()
 ];
 
 // automatic routing
