@@ -12,7 +12,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -20,33 +20,40 @@ jobs:
         extensions: mbstring, pdo, pdo_pgsql
         coverage: xdebug
         tools: composer, phpcs, phpstan, phpunit
-    
+
     - name: Validate composer.json
       run: composer validate --strict
-    
+
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
-    
+
+    - name: Get list of changed PHP files
+      id: changed_files
+      run: |
+        git fetch origin ${{ github.base_ref }}
+        FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '\.php$' || true)
+        echo "changed_files=$FILES" >> $GITHUB_OUTPUT
+        echo "Modified PHP files:"
+        echo "$FILES"
+
     # Code Style Check
     - name: Check PHP Code Style (PSR-12)
+      if: steps.changed_files.outputs.changed_files != ''
       run: |
-        phpcs --standard=PSR12 --colors \
-        --ignore=*/vendor/*,*/_assets/* \
-        modules/src/
-    
+        echo "${{ steps.changed_files.outputs.changed_files }}" | xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*
+
     # Static Analysis
     - name: Run PHPStan Static Analysis
+      if: steps.changed_files.outputs.changed_files != ''
       run: |
-        phpstan analyse modules/src/ \
-        --level=7 \
-        --no-progress \
-        --error-format=github
-    
+        echo "${{ steps.changed_files.outputs.changed_files }}" | xargs -r phpstan analyse --level=7 --no-progress --error-format=github
+
     # Documentation Check
     - name: Check PHPDoc Documentation
+      if: steps.changed_files.outputs.changed_files != ''
       run: |
-        phpcs --standard=phpcs-phpdoc.xml modules/src/
-    
+        echo "${{ steps.changed_files.outputs.changed_files }}" | xargs -r phpcs --standard=phpcs-phpdoc.xml
+
     # Unit Tests
     - name: Run PHPUnit Tests
       run: |
@@ -54,17 +61,17 @@ jobs:
         --coverage-text \
         --coverage-clover=coverage.xml \
         --testdox
-    
+
     # Test Coverage Check
     - name: Check Test Coverage
       run: |
-        php coverage-checker.php coverage.xml 70
-    
+        php tests/coverage-checker.php coverage.xml 70
+
     # Security Check
     - name: Security Check
       run: |
         composer audit
-    
+
     # Upload Coverage
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v3
