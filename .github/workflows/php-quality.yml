@@ -63,9 +63,9 @@ jobs:
         --testdox
 
     # Test Coverage Check
-    #- name: Check Test Coverage
-    #  run: |
-    #    php tests/coverage-checker.php coverage.xml 70
+    - name: Check Test Coverage
+      run: |
+        php tests/coverage-checker.php coverage.xml 70
 
     # Security Check
     - name: Security Check
@@ -73,8 +73,8 @@ jobs:
         composer audit
 
     # Upload Coverage
-    #- name: Upload Coverage to Codecov
-    #  uses: codecov/codecov-action@v3
-    #  with:
-    #    files: ./coverage.xml
-    #    fail_ci_if_error: false
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: false
