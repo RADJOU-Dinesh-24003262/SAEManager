@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
@@ -13,13 +14,14 @@ use Views\Index\IndexView;
 use Views\User\LoginView;
 use Utilis\Validator\LoginValidator;
 
-class LoginPost implements ControllerInterface{
+class LoginPost implements ControllerInterface
+{
     public function control(): void
     {
 
         if (SessionService::has('user_id')) {
             header('Location: /dashboard');
-            exit();
+            return;
         }
 
         try {
@@ -28,8 +30,6 @@ class LoginPost implements ControllerInterface{
             $validator->validate($data);
 
             $data['email'] = trim($data['email'] ?? '');
-            $data['password'] = $data['password'] ?? '';
-
             error_log("Tentative de connexion - Username: {$data['email']}");
 
             $user = User::createFromLoginData($data);
@@ -39,23 +39,18 @@ class LoginPost implements ControllerInterface{
 
             header('Location: /dashboard');
             exit();
-
-
-        }catch(ExceptionValidationEmptys $e){
+        } catch (ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-
         } catch (ExceptionValidationLogin $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         }
         $view = new LoginView();
         $view->render();
     }
-
-
 
     public static function support(string $chemin, string $method): bool
     {
