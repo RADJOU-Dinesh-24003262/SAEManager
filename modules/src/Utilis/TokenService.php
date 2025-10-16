@@ -2,6 +2,7 @@
 namespace Utilis;
 
 use includes\database;
+use includes\exception\ExceptionCreationTokenFailed;
 use includes\exception\ExceptionInvalidToken;
 use includes\exception\ExceptionSpam;
 
@@ -28,7 +29,7 @@ class TokenService
      *
      * @return string The newly generated token as a string.
      *
-     * @throws \PDOException If a database error occurs (unless caught internally).
+     * @throws ExceptionCreationTokenFailed If a database error occurs (unless caught internally).
      * @throws ExceptionSpam If too many reset requests are detected for the given email.
      */
     public static function createPasswordResetToken(string $email): string
@@ -57,15 +58,15 @@ class TokenService
                 'expires_at' => $expiresAt
             ]);
             
-            return $token;
+            return $token ? $token : throw new ExceptionCreationTokenFailed();
             
         } catch (\PDOException $e) {
             error_log("Erreur création token: " . $e->getMessage());
             if (strpos($e->getMessage(), 'TOO_MANY_RESET_REQUESTS') !== false) {
+                error_log("Trop de demandes de réinitialisation pour: {$email}");
                 throw new ExceptionSpam("Trop de demandes de réinitialisation. Veuillez réessayer plus tard dans quelques minutes.");
-                echo "Trop de demandes de réinitialisation pour: {$email}";
             } else {
-                throw $e;
+                throw new ExceptionCreationTokenFailed();
             }
         }
     }

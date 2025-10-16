@@ -2,6 +2,8 @@
 namespace Controllers\pwd;
 
 use Controllers\ControllerInterface;
+use includes\exception\ExceptionCreationTokenFailed;
+use includes\exception\ExceptionEmailSendingFailed;
 use Models\User\User;
 use Utilis\TokenService;
 use Utilis\EmailService;
@@ -60,20 +62,11 @@ class ForgotPasswordPostController implements ControllerInterface
                 
                 // Create the password reset token
                 $token = TokenService::createPasswordResetToken($email);
-                if ($token === false) {
-                    error_log("Échec création token pour: {$email}");
-                } else {
-                    // Send the email
-                    $emailSent = EmailService::sendPasswordResetEmail($email, $token);
-                    if (!$emailSent) {
-                        error_log("Échec envoi email à: {$email}");
-                        
-                    }else{
-                        error_log("Email de réinitialisation envoyé à: {$email}");
-                        $_SESSION['last_forgot_password_request'] = time();
-                    }
-                }
+                
+                // Send the email
+                EmailService::sendPasswordResetEmail($email, $token);
             }
+            $_SESSION['last_forgot_password_request'] = time();
 
             // Generic message to avoid revealing if the email exists
             SessionService::setFlash('success',
@@ -86,14 +79,9 @@ class ForgotPasswordPostController implements ControllerInterface
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
 
-        } catch (ExceptionValidationForgotPassword $e) {
-            SessionService::setFlash('errors', [$e->getMessage()]);
-        }catch (ExceptionSpam $e) {
+        } catch (ExceptionValidationForgotPassword | ExceptionCreationTokenFailed | ExceptionEmailSendingFailed | ExceptionSpam $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
 
-        } catch (\Exception $e) {
-            error_log("Erreur inattendue: " . $e->getMessage());
-            SessionService::setFlash('errors', ["Une erreur inattendue est survenue. Veuillez réessayer plus tard."]);
         }
         $view = new ForgotPasswordView();
         $view->render();
@@ -102,7 +90,7 @@ class ForgotPasswordPostController implements ControllerInterface
     /**
      * Determines whether this controller supports a given route and method.
      *
-     * @param string $chemin The route path (e.g., "/forgot-password").
+     * @param string $path The route path (e.g., "/forgot-password").
      * @param string $method The HTTP method (e.g., "POST").
      * @return bool True if the controller should handle the request, false otherwise.
      */
