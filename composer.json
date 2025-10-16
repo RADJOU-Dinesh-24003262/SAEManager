@@ -2,6 +2,7 @@
   "name": "saemanager/app",
   "description": "SAE Manager Application",
   "type": "project",
+  "license": "proprietary",
   "require": {
     "php": ">=8.1"
   },
