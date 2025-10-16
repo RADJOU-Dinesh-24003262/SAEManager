@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+namespace tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Utilis\SessionService;
 
 /**
  * Test class for SessionService
- * 
+ *
  * @covers \Utilis\SessionService
  */
 class SessionServiceTest extends TestCase
@@ -31,10 +31,10 @@ class SessionServiceTest extends TestCase
      * @covers \Utilis\SessionService::set
      * @covers \Utilis\SessionService::get
      */
-    public function it_can_set_and_get_session_value(): void
+    public function itCanSetAndGetSessionValue(): void
     {
         SessionService::set('test_key', 'test_value');
-        
+
         $this->assertEquals('test_value', SessionService::get('test_key'));
     }
 
@@ -42,10 +42,10 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::has
      */
-    public function it_can_check_if_session_key_exists(): void
+    public function itCanCheckIfSessionKeyExists(): void
     {
         SessionService::set('existing_key', 'value');
-        
+
         $this->assertTrue(SessionService::has('existing_key'));
         $this->assertFalse(SessionService::has('non_existing_key'));
     }
@@ -54,10 +54,10 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::get
      */
-    public function it_returns_default_value_when_key_not_exists(): void
+    public function itReturnsDefaultValueWhenKeyNotExists(): void
     {
         $result = SessionService::get('non_existing', 'default_value');
-        
+
         $this->assertEquals('default_value', $result);
     }
 
@@ -65,12 +65,12 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::remove
      */
-    public function it_can_remove_session_value(): void
+    public function itCanRemoveSessionValue(): void
     {
-        SessionService::set('key_to_remove', 'value');
-        SessionService::remove('key_to_remove');
-        
-        $this->assertFalse(SessionService::has('key_to_remove'));
+        SessionService::set('keyToRemove', 'value');
+        SessionService::remove('keyToRemove');
+
+        $this->assertFalse(SessionService::has('keyToRemove'));
     }
 
     /**
@@ -78,13 +78,13 @@ class SessionServiceTest extends TestCase
      * @covers \Utilis\SessionService::setFlash
      * @covers \Utilis\SessionService::getFlash
      */
-    public function it_can_set_and_get_flash_message(): void
+    public function itCanSetAndGetFlashMessage(): void
     {
         SessionService::setFlash('message', 'Flash message');
-        
+
         // First call should return the value
         $this->assertEquals('Flash message', SessionService::getFlash('message'));
-        
+
         // Second call should return default (flash is consumed)
         $this->assertNull(SessionService::getFlash('message'));
     }
@@ -93,10 +93,10 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::hasFlash
      */
-    public function it_can_check_if_flash_exists(): void
+    public function itCanCheckIfFlashExists(): void
     {
         SessionService::setFlash('flash_key', 'value');
-        
+
         $this->assertTrue(SessionService::hasFlash('flash_key'));
         $this->assertFalse(SessionService::hasFlash('non_existing_flash'));
     }
@@ -105,10 +105,10 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::getFlash
      */
-    public function it_returns_default_for_non_existing_flash(): void
+    public function itReturnsDefaultForNonExistingFlash(): void
     {
         $result = SessionService::getFlash('non_existing', 'default');
-        
+
         $this->assertEquals('default', $result);
     }
 
@@ -116,11 +116,11 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::set
      */
-    public function it_can_store_array_in_session(): void
+    public function itCanStoreArrayInSession(): void
     {
         $data = ['name' => 'John', 'age' => 30];
         SessionService::set('user_data', $data);
-        
+
         $this->assertEquals($data, SessionService::get('user_data'));
     }
 
@@ -128,11 +128,11 @@ class SessionServiceTest extends TestCase
      * @test
      * @covers \Utilis\SessionService::setFlash
      */
-    public function it_can_store_array_as_flash(): void
+    public function itCanStoreArrayAsFlash(): void
     {
         $errors = ['error1', 'error2'];
         SessionService::setFlash('errors', $errors);
-        
+
         $this->assertEquals($errors, SessionService::getFlash('errors'));
     }
 }

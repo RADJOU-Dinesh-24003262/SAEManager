@@ -51,6 +51,7 @@ phpdoc: ## Vérifie la documentation
 fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
 	./vendor/bin/phpcbf --standard=PSR12 modules/src/
+	./vendor/bin/phpcbf --standard=PSR12 tests/
 	@echo "${GREEN}✓ Code formaté${NC}"
 
 quality: ## Lance toutes les vérifications de qualité
