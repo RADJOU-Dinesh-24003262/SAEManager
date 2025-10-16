@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Integration;
+namespace tests\Integration;
 
 use PHPUnit\Framework\TestCase;
 use Controllers\User\LoginPost;
 
 /**
  * Integration test for LoginPost controller
- * 
+ *
  * @group integration
  * @covers \Controllers\User\LoginPost
  */
@@ -32,10 +32,10 @@ class LoginControllerTest extends TestCase
      * @test
      * @covers \Controllers\User\LoginPost::support
      */
-    public function it_supports_login_post_route(): void
+    public function itSupportsLoginPostRoute(): void
     {
         $supported = LoginPost::support('/login', 'POST');
-        
+
         $this->assertTrue($supported);
     }
 
@@ -43,10 +43,10 @@ class LoginControllerTest extends TestCase
      * @test
      * @covers \Controllers\User\LoginPost::support
      */
-    public function it_does_not_support_get_method(): void
+    public function itDoesNotSupportGetMethod(): void
     {
         $supported = LoginPost::support('/login', 'GET');
-        
+
         $this->assertFalse($supported);
     }
 
@@ -54,10 +54,10 @@ class LoginControllerTest extends TestCase
      * @test
      * @covers \Controllers\User\LoginPost::support
      */
-    public function it_does_not_support_other_routes(): void
+    public function itDoesNotSupportOtherRoutes(): void
     {
         $supported = LoginPost::support('/register', 'POST');
-        
+
         $this->assertFalse($supported);
     }
 
@@ -65,13 +65,13 @@ class LoginControllerTest extends TestCase
      * @test
      * @covers \Controllers\User\LoginPost::control
      */
-    public function it_redirects_if_already_logged_in(): void
+    public function itRedirectsIfAlreadyLoggedIn(): void
     {
         // Simulate logged in user
         $_SESSION['user_id'] = 'test@univ-amu.fr';
-        
+
         $controller = new LoginPost();
-        
+
         // Capture output and headers
         ob_start();
         try {
@@ -80,7 +80,7 @@ class LoginControllerTest extends TestCase
             // Expected to exit with header redirect
         }
         ob_end_clean();
-        
+
         // Verify session is still set
         $this->assertArrayHasKey('user_id', $_SESSION);
     }
@@ -89,19 +89,19 @@ class LoginControllerTest extends TestCase
      * @test
      * @covers \Controllers\User\LoginPost::control
      */
-    public function it_sets_error_flash_on_empty_credentials(): void
+    public function itSetsErrorFlashOnEmptyCredentials(): void
     {
         $_POST = [
             'email' => '',
             'password' => ''
         ];
-        
+
         $controller = new LoginPost();
-        
+
         ob_start();
         $controller->control();
         $output = ob_get_clean();
-        
+
         // Should have errors in session
         $this->assertArrayHasKey('flash', $_SESSION);
     }

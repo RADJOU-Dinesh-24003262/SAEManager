@@ -1,4 +1,7 @@
 <?php
+
+// phpcs:disable
+
 /**
  * PHPUnit Bootstrap File
  */
