@@ -6,12 +6,15 @@ use PHPUnit\Framework\TestCase;
 use Utilis\SessionService;
 
 /**
- * Test class for SessionService
+ * Unit tests for SessionService class.
  *
  * @covers \Utilis\SessionService
  */
 class SessionServiceTest extends TestCase
 {
+    /**
+     * Setup before each test.
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -19,19 +22,20 @@ class SessionServiceTest extends TestCase
         $_SESSION = [];
     }
 
+    /**
+     * Clean up after each test.
+     */
     protected function tearDown(): void
     {
-        // Clean up session after each test
+        // Clear session after each test
         $_SESSION = [];
         parent::tearDown();
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::set
-     * @covers \Utilis\SessionService::get
+     * Test that a session value can be set and retrieved.
      */
-    public function itCanSetAndGetSessionValue(): void
+    public function testCanSetAndGetSessionValue(): void
     {
         SessionService::set('test_key', 'test_value');
 
@@ -39,10 +43,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::has
+     * Test checking if a session key exists.
      */
-    public function itCanCheckIfSessionKeyExists(): void
+    public function testCanCheckIfSessionKeyExists(): void
     {
         SessionService::set('existing_key', 'value');
 
@@ -51,10 +54,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::get
+     * Test that getting a non-existing key returns the default value.
      */
-    public function itReturnsDefaultValueWhenKeyNotExists(): void
+    public function testReturnsDefaultValueWhenKeyNotExists(): void
     {
         $result = SessionService::get('non_existing', 'default_value');
 
@@ -62,10 +64,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::remove
+     * Test that a session value can be removed.
      */
-    public function itCanRemoveSessionValue(): void
+    public function testCanRemoveSessionValue(): void
     {
         SessionService::set('keyToRemove', 'value');
         SessionService::remove('keyToRemove');
@@ -74,26 +75,23 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::setFlash
-     * @covers \Utilis\SessionService::getFlash
+     * Test setting and getting flash messages.
      */
-    public function itCanSetAndGetFlashMessage(): void
+    public function testCanSetAndGetFlashMessage(): void
     {
         SessionService::setFlash('message', 'Flash message');
 
-        // First call should return the value
+        // First call should return the flash message
         $this->assertEquals('Flash message', SessionService::getFlash('message'));
 
-        // Second call should return default (flash is consumed)
+        // Second call should return null as flash is consumed
         $this->assertNull(SessionService::getFlash('message'));
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::hasFlash
+     * Test checking if a flash message exists.
      */
-    public function itCanCheckIfFlashExists(): void
+    public function testCanCheckIfFlashExists(): void
     {
         SessionService::setFlash('flash_key', 'value');
 
@@ -102,10 +100,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::getFlash
+     * Test that getting a non-existing flash returns the default value.
      */
-    public function itReturnsDefaultForNonExistingFlash(): void
+    public function testReturnsDefaultForNonExistingFlash(): void
     {
         $result = SessionService::getFlash('non_existing', 'default');
 
@@ -113,10 +110,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::set
+     * Test storing and retrieving an array in session.
      */
-    public function itCanStoreArrayInSession(): void
+    public function testCanStoreArrayInSession(): void
     {
         $data = ['name' => 'John', 'age' => 30];
         SessionService::set('user_data', $data);
@@ -125,10 +121,9 @@ class SessionServiceTest extends TestCase
     }
 
     /**
-     * @test
-     * @covers \Utilis\SessionService::setFlash
+     * Test storing and retrieving an array as flash message.
      */
-    public function itCanStoreArrayAsFlash(): void
+    public function testCanStoreArrayAsFlash(): void
     {
         $errors = ['error1', 'error2'];
         SessionService::setFlash('errors', $errors);
