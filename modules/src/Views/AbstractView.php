@@ -15,7 +15,7 @@ namespace Views;
 
  *
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  */
 abstract class AbstractView 
@@ -24,8 +24,23 @@ abstract class AbstractView
      * Stores the data used in the implemented page. The var line contains the type stored in this variable.
      * @var array
      */
+    /**
+     * Stores the data used in the implemented page. The var line contains the type stored in this variable.
+     * @var array
+     */
     protected array $data = [];
 
+    /**
+
+     * Initializes the $data attribute with the array of data given when called.
+
+     *
+
+     * @param array $data The array of data to be instantiated
+
+     * @return void Creates the instance of the class.
+
+     */
     /**
 
      * Initializes the $data attribute with the array of data given when called.
