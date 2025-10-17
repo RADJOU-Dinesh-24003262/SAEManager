@@ -1,1 +1,77 @@
-a,section h1,section h2{color:#005898}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f9f9f9;color:#036;margin:2rem auto;max-width:100vw;padding:0 1rem;line-height:1.6}section h1{font-size:2.5rem;text-align:center;margin-bottom:2rem;font-weight:700}section h2{border-bottom:2px solid #006abe;padding-bottom:.3rem;margin-top:2rem;font-weight:600;font-size:1.5rem}section address,section p{font-size:1rem;margin:.5rem 0;color:#036}address{font-style:normal;color:#0055a4}a{text-decoration:none;-webkit-transition:color .3s;-o-transition:color .3s;transition:color .3s}a:focus,a:hover{color:#036;text-decoration:underline}section{padding:25px}@media (max-width:600px){body{margin:1rem;padding:0 .5rem}h1{font-size:2rem}h2{font-size:1.25rem}section{padding:10px}}
+a,
+section h1,
+section h2 {
+    color: #005898;
+}
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9f9f9;
+    color: #036;
+    margin: 2rem auto;
+    max-width: 100vw;
+    padding: 0 1rem;
+    line-height: 1.6;
+}
+section h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+section h2 {
+    border-bottom: 2px solid #006abe;
+    padding-bottom: 0.3rem;
+    margin-top: 2rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+section address,
+section p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #036;
+}
+address {
+    font-style: normal;
+    color: #0055a4;
+}
+a {
+    text-decoration: none;
+    -webkit-transition: color 0.3s;
+    -o-transition: color 0.3s;
+    transition: color 0.3s;
+}
+a:focus,
+a:hover {
+    color: #036;
+    text-decoration: underline;
+}
+section {
+    padding: 25px;
+}
+@media (max-width: 900px) {
+    body {
+        padding: 0 1.5rem;
+    }
+    section {
+        padding: 20px;
+    }
+    section h1 {
+        font-size: 2.2rem;
+    }
+}
+@media (max-width: 600px) {
+    body {
+        margin: 1rem;
+        padding: 0 0.5rem;
+    }
+    section h1 {
+        font-size: 2rem;
+    }
+    section h2 {
+        font-size: 1.25rem;
+    }
+    section {
+        padding: 10px;
+    }
+}
