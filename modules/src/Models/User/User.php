@@ -1,7 +1,9 @@
 <?php
+
 namespace Models\User;
 
 use includes\database;
+use includes\exception\ExceptionFetchDataBD;
 use includes\exception\ExceptionPasswordUpdateFailed;
 use PDO;
 use PDOException;
@@ -23,7 +25,8 @@ class User
     private ?string $td = null;
     private ?string $tp = null;
 
-    private function __construct(array $data = []) {
+    private function __construct(array $data = [])
+    {
         foreach ($data as $key => $value) {
             if ($key === 'password') {
                 continue; // Skip password, use setPassword method instead
@@ -88,8 +91,7 @@ class User
                 'td' => $this->td,
                 'tp' => $this->tp
             ]);
-        }
-        elseif ($this->userType === 'professor') {
+        } elseif ($this->userType === 'professor') {
             $stmt = $connection->prepare("
             SELECT * FROM register_teacher(
                 :email, 
@@ -112,8 +114,7 @@ class User
                 'city' => $this->city,
                 'amuId' => $this->amuId
             ]);
-        }
-        else {
+        } else {
             $stmt = $connection->prepare("
             SELECT * FROM register_user(
                 :email, 
@@ -155,12 +156,12 @@ class User
         $passwordHash = $parts[1];
         $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
 
-        if( !($success === true && password_verify($password, $passwordHash)) ) {
-            throw new ExceptionValidationLogin; 
+        if (!($success === true && password_verify($password, $passwordHash))) {
+            throw new ExceptionValidationLogin();
         }
     }
 
-    public function fetchDataFromDatabase(string $email): bool
+    public function fetchDataFromDatabase(string $email): void
     {
         try {
             $db = database::getInstance();
@@ -184,14 +185,13 @@ class User
                     $this->td = $data['td'];
                     $this->tp = $data['tp'];
                 }
-            }else {
-                return false; // No user found
+            } else {
+                throw new ExceptionFetchDataBD();
             }
         } catch (PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
-            return false;
+            throw new ExceptionFetchDataBD();
         }
-        return true;
     }
 
     public static function existsByEmail(string $email): bool
@@ -213,7 +213,7 @@ class User
             $db = database::getInstance();
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $db->prepare("UPDATE users SET password = :password_hash WHERE email = :email");
-            if ( $stmt->execute(['password_hash' => $passwordHash, 'email' => $email]) && $stmt->rowCount() === 0) {
+            if ($stmt->execute(['password_hash' => $passwordHash, 'email' => $email]) && $stmt->rowCount() === 0) {
                 throw new ExceptionPasswordUpdateFailed("Aucun utilisateur trouvé avec cet email.");
             }
         } catch (\PDOException $e) {
@@ -223,22 +223,73 @@ class User
     }
 
     // Getters
-    public function getAmuId(): string { return $this->amuId; }
-    public function getFirstName(): string { return $this->firstName; }
-    public function getLastName(): string { return $this->lastName; }
-    public function getFullName(): string { return $this->firstName . ' ' . $this->lastName; }
-    public function getUserType(): string { return $this->userType; }
-    public function getEmail(): string { return $this->email; }
-    public function getPasswordHash(): string { return $this->passwordHash; }
-    public function getPhone(): string { return $this->phone; }
-    public function getDateOfBirth(): string { return $this->dateOfBirth; }
-    public function getCity(): string { return $this->city; }
-    public function getYear(): ?int { return $this->year; }
-    public function getParcours(): ?string { return $this->parcours; }
-    public function getTd(): ?string { return $this->td; }
-    public function getTp(): ?string { return $this->tp; }
+    public function getAmuId(): string
+    {
+        return $this->amuId;
+    }
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
+    public function getFullName(): string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+    public function getUserType(): string
+    {
+        return $this->userType;
+    }
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
+    }
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+    public function getDateOfBirth(): string
+    {
+        return $this->dateOfBirth;
+    }
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+    public function getParcours(): ?string
+    {
+        return $this->parcours;
+    }
+    public function getTd(): ?string
+    {
+        return $this->td;
+    }
+    public function getTp(): ?string
+    {
+        return $this->tp;
+    }
 
-    public function isStudent(): bool { return $this->userType === 'student'; }
-    public function isProfessor(): bool { return $this->userType === 'professor'; }
-    public function isCompany(): bool { return $this->userType === 'companies'; }
+    public function isStudent(): bool
+    {
+        return $this->userType === 'student';
+    }
+    public function isProfessor(): bool
+    {
+        return $this->userType === 'professor';
+    }
+    public function isCompany(): bool
+    {
+        return $this->userType === 'companies';
+    }
 }

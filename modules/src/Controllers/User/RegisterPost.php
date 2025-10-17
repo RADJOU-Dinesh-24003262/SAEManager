@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
@@ -15,19 +16,18 @@ class RegisterPost implements ControllerInterface
     public function control(): void
     {
         // Validate the data
-        $validator = new ValidationServiceRegister();        
-        
+        $validator = new ValidationServiceRegister();
+
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
             // Create the user
             $user = User::createFromRegistrationData($data);
-            
+
             // Save the user
             if ($user->save()) {
                 error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
-                SessionService::set('user_id', $user->getEmail());
                 $view = new RegisterSuccessView($user);
                 $view->render();
 
@@ -36,15 +36,12 @@ class RegisterPost implements ControllerInterface
                 error_log("Erreur sauvegarde utilisateur: " . $user->getEmail());
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
-            
-        
-        }catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
+        } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
