@@ -26,5 +26,5 @@ interface ControllerInterface
      * 
      * @return boolean Is the method supported?
      */
-    static function support(string $chemin, string $method): bool;
+    static function support(string $path, string $method): bool;
 }
