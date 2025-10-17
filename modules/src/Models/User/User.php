@@ -2,6 +2,7 @@
 namespace Models\User;
 
 use includes\database;
+use includes\exception\ExceptionPasswordUpdateFailed;
 use PDO;
 use PDOException;
 use includes\exception\ExceptionValidationLogin;
@@ -73,7 +74,7 @@ class User
      * The year of study of the user
      * @var string
      */
-    private ?string $year = null;
+    private ?int $year = null;
     /**
      * The major of the user
      * @var string
@@ -100,6 +101,9 @@ class User
      */
     private function __construct(array $data = []) {
         foreach ($data as $key => $value) {
+            if ($key === 'password') {
+                continue; // Skip password, use setPassword method instead
+            }
             $this->$key = $value;
         }
     }
@@ -117,11 +121,7 @@ class User
     public static function createFromRegistrationData(array $data): self
     {
         $user = new self($data);
-        
-        if (!empty($data['pwd'])) {
-            $user->setPassword($data['pwd']);
-        }
-        
+        $user->setPassword($data['password']);
         return $user;
     }
 
@@ -138,8 +138,8 @@ class User
     public static function createFromLoginData(array $data): self
     {
         $user = new self($data);
-        $user->login($user->email, $user->password);
-        //$user->fetchDataFromDatabase($data['email']);
+        $user->login($user->email, $data['password']);
+        $user->fetchDataFromDatabase($data['email']);
         return $user;
     }
 
@@ -303,21 +303,20 @@ class User
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($data) {
-                $this->amuId = $data['amu_id'];
+                $this->amuId = $data['amuid'] ?? $data['amuid2'] ?? '';
                 $this->firstName = $data['first_name'];
                 $this->lastName = $data['last_name'];
-                $this->gender = $data['gender'];
-                $this->userType = $data['user_type'];
+                $this->userType = $data['amuid'] ? 'student' : ($data['amuid2'] ? 'professor' : 'companies');
                 $this->email = $data['email'];
                 $this->passwordHash = $data['password'];
                 $this->phone = $data['phone'];
-                $this->dateOfBirth = $data['date_of_birth'];
+                $this->dateOfBirth = $data['dateofbirth'];
                 $this->city = $data['city'];
                 if ($this->isStudent()) {
                     $this->year = (int)$data['year'];
                     $this->parcours = $this->year !== 1 ? $data['parcours'] : null;
-                    $this->td = (int)$data['td'];
-                    $this->tp = (int)$data['tp'];
+                    $this->td = $data['td'];
+                    $this->tp = $data['tp'];
                 }
             }else {
                 return false; // No user found
@@ -353,29 +352,26 @@ class User
     }
 
     /**
-     * Return the success of updating the password of a user.
      * 
      * Attempts to update a user's password based on it's email
-     * returs true if it succeed, false otherwise.
      * 
-     * @param string $email
-     * @param string $newPassword
+     * @param string $email       The email of the user to update the password of.
+     * @param string $newPassword The new password to be updated.
      *  
-     * @return boolean
+     * @return void
      */
-    public static function updatePasswordByEmail(string $email, string $newPassword): bool
+    public static function updatePasswordByEmail(string $email, string $newPassword): void
     {
         try {
             $db = database::getInstance();
             $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $db->prepare("UPDATE users SET password = :password_hash WHERE email = :email");
-            return $stmt->execute([
-                'password_hash' => $passwordHash,
-                'email' => $email
-            ]);
+            if ( $stmt->execute(['password_hash' => $passwordHash, 'email' => $email]) && $stmt->rowCount() === 0) {
+                throw new ExceptionPasswordUpdateFailed("Aucun utilisateur trouvé avec cet email.");
+            }
         } catch (\PDOException $e) {
             error_log("Erreur mise à jour mot de passe: " . $e->getMessage());
-            return false;
+            throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
         }
     }
 
@@ -424,6 +420,12 @@ class User
      */
     public function getEmail(): string { return $this->email; }
     /**
+     * Returns the hashed password number of the user.
+     * 
+     * @return string the hashed password number of the user.
+     */
+    public function getPasswordHash(): string { return $this->passwordHash; }
+    /**
      * Returns the phone number of the user.
      * 
      * @return string the phone number of the user.
@@ -444,9 +446,9 @@ class User
     /**
      * Returns the year of study of the user.
      * 
-     * @return string the year of study of the user.
+     * @return int the year of study of the user.
      */
-    public function getYear(): ?string { return (string)$this->year; }
+    public function getYear(): ?int { return $this->year; }
     /**
      * Returns the major of the user.
      * 

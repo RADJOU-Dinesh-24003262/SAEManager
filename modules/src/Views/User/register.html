@@ -71,11 +71,11 @@
             autocomplete="family-name"
             aria-required="true">
 
-        <label for="user_type">
+        <label for="userType">
             Statut
             <abbr title="requis" >*</abbr>
         </label>
-        <select name="userType" id="user_type" required aria-required="true">
+        <select name="userType" id="userType" required aria-required="true">
             <option value="">-- Sélectionner --</option>
             <option value="student">Étudiant</option>
             <option value="professor">Responsable SAE</option>
@@ -148,30 +148,30 @@
     <fieldset>
         <legend>Sécurité</legend>
         
-        <label for="pwd">
+        <label for="password">
             Mot de passe
             <abbr title="requis" >*</abbr>
         </label>
         <input 
             required 
             type="password" 
-            id="pwd" 
-            name="pwd" 
+            id="password" 
+            name="password" 
             minlength="8" 
             autocomplete="new-password" 
             aria-required="true"
             aria-describedby="pwd-desc">
         <small id="pwd-desc">Au moins 8 caractères</small>
         
-        <label for="pwdverif">
+        <label for="passwordverif">
             Confirmer le mot de passe
             <abbr title="requis" >*</abbr>
         </label>
         <input 
             required 
             type="password" 
-            id="pwdverif" 
-            name="pwdverif" 
+            id="passwordverif" 
+            name="passwordverif" 
             minlength="8" 
             autocomplete="new-password"
             aria-required="true">

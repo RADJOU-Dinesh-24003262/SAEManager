@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationResetPassword;
@@ -35,12 +36,19 @@ class ResetPasswordValidator extends FormValidator
      */
     public function validate(array $data): void
     {
-        $errors = [];
         if (!$this->isValidPassword($data['pwdnew'])) {
-            throw new ExceptionValidationResetPassword('pwdnew', 'string', "Le mot de passe doit contenir au moins 8 caractères.");
+            throw new ExceptionValidationResetPassword(
+                'pwdnew',
+                'Not Valid',
+                "Le mot de passe doit contenir au moins 8 caractères."
+            );
         }
         if (($data['pwdnew'] ?? '') !== ($data['pwdverif'] ?? '')) {
-            throw new ExceptionValidationResetPassword('pwdverif', 'string', "Les mots de passe ne correspondent pas.");
+            throw new ExceptionValidationResetPassword(
+                'pwdverif',
+                'Mismatch',
+                "Les mots de passe ne correspondent pas."
+            );
         }
     }
 }

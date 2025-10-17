@@ -48,11 +48,7 @@ class ResetPasswordPostController implements ControllerInterface
             $password = $data['pwdnew'] ?? '';
 
             // 3. Update the password
-            $updated = User::updatePasswordByEmail($tokenData['user_email'], $password);
-            if (!$updated) {
-                throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
-                error_log("Erreur mise à jour mot de passe pour: " . $tokenData['user_email']);
-            }
+            User::updatePasswordByEmail($tokenData['user_email'], $password);
 
             // Mark the token as used
             TokenService::markTokenAsUsed($token);
@@ -71,22 +67,8 @@ class ResetPasswordPostController implements ControllerInterface
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
 
-        } catch (ExceptionValidationResetPassword $e) {
+        } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
-
-        } catch (ExceptionPasswordUpdateFailed $e) {
-            SessionService::setFlash('errors', [$e->getMessage()]);
-
-        } catch (\PDOException $e) {
-            error_log("Erreur validation token: " . $e->getMessage());
-            SessionService::setFlash('errors', ['Erreur lors de la validation du lien: veuillez réessayer plus tard.']);
-            header('Location: /');
-        } catch (\Throwable $e) {
-            // generical fallback for unexpected errors
-            SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
-            error_log("Erreur inattendue: " . $e->getMessage());
-            header("Location: /forgot-password");
-            exit();
         }
         $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['user_email'] ?? null);
 
