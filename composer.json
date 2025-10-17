@@ -1,0 +1,42 @@
+{
+  "name": "saemanager/app",
+  "description": "SAE Manager Application",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0",
+    "squizlabs/php_codesniffer": "^3.7",
+    "phpstan/phpstan": "^1.10",
+    "phpmd/phpmd": "^2.13",
+    "friendsofphp/php-cs-fixer": "^3.14"
+  },
+  "autoload": {
+    "psr-4": {
+      "Controllers\\": "modules/src/Controllers/",
+      "Models\\": "modules/src/Models/",
+      "Views\\": "modules/src/Views/",
+      "Utilis\\": "modules/src/Utilis/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "test-coverage": "phpunit --coverage-html coverage",
+    "phpcs": "phpcs --standard=PSR12 modules/src/",
+    "phpcbf": "phpcbf --standard=PSR12 modules/src/",
+    "phpstan": "phpstan analyse modules/src/ --level=7",
+    "quality": [
+      "@phpcs",
+      "@phpstan",
+      "@test"
+    ],
+    "fix": "phpcbf --standard=PSR12 modules/src/"
+  }
+}

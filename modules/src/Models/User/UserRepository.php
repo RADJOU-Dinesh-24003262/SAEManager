@@ -28,10 +28,10 @@ class UserRepository
     {
         try {
             $stmt = $this->db->prepare("
-                INSERT INTO users (amu_id, first_name, last_name, gender, user_type, 
+                INSERT INTO users (amu_id, first_name, last_name, user_type, 
                                    email, password, phone, date_of_birth, city, 
                                    year, parcours, td, tp)
-                VALUES (:amu_id, :first_name, :last_name, :gender, :user_type,
+                VALUES (:amu_id, :first_name, :last_name, :user_type,
                         :email, :password, :phone, :dob, :city,
                         :year, :parcours, :td, :tp)
             ");
@@ -40,7 +40,6 @@ class UserRepository
                 'amu_id' => $user->getAmuId(),
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
-                'gender' => $user->getGender(),
                 'user_type' => $user->getUserType(),
                 'email' => $user->getEmail(),
                 'password' => $user->getPasswordHash(),

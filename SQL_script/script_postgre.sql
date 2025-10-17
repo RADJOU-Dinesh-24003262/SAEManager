@@ -80,6 +80,30 @@ CREATE INDEX idx_password_resets_used ON public.password_resets USING btree (use
 
 CREATE INDEX idx_email_hash ON USERS USING HASH(email);
 
+--triggers pour éviter le spam de password_resets
+CREATE OR REPLACE FUNCTION check_password_reset_limit()
+RETURNS trigger AS $$
+DECLARE
+    reset_count INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO reset_count
+    FROM password_resets
+    WHERE user_email = NEW.user_email
+      AND created_at >= NOW() - INTERVAL '10 minutes';
+
+    IF reset_count >= 2 THEN
+        RAISE EXCEPTION 'TOO_MANY_RESET_REQUESTS';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_check_reset_limit
+BEFORE INSERT ON password_resets
+FOR EACH ROW
+EXECUTE FUNCTION check_password_reset_limit();
+
 -- **************************************************************************** Insertions des données test
 
 

@@ -33,8 +33,8 @@ class RegisterPost implements ControllerInterface
 
                 return;
             } else {
-                throw new \Exception("Erreur lors de la sauvegarde");
                 error_log("Erreur sauvegarde utilisateur: " . $user->getEmail());
+                throw new \Exception("Erreur lors de la sauvegarde");
             }
             
         

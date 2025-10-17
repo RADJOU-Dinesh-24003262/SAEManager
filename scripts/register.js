@@ -23,7 +23,7 @@ yearSelect.addEventListener('change', () => {
 });
 
 // Disable fields for teachers and partners
-const userTypeSelect = document.getElementById('user_type');
+const userTypeSelect = document.getElementById('userType');
 const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
 
@@ -43,8 +43,8 @@ function toggleStudentFields() {
         tpSelect.value = '';
     }
 }
-const pwd = document.getElementById('pwd');
-const pwdverif = document.getElementById('pwdverif');
+const pwd = document.getElementById('password');
+const pwdverif = document.getElementById('passwordverif');
 
 function validatePassword() {
     if (pwd.value !== pwdverif.value) {
