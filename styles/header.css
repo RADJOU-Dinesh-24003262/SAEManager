@@ -37,7 +37,7 @@
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 45px;
-    font-weight: 16;
+    font-weight: normal;
     line-height: normal;
 }
 .global-header .navBar {
@@ -78,8 +78,8 @@
     }
 
     .amuimg img {
-        width: 140px;   /* Change selon la taille souhaitée */
-        height: auto;   /* Garde le ratio original */
+        width: 140px;
+        height: auto;
     }
 
     .burger span {
