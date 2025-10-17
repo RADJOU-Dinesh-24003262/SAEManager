@@ -1,4 +1,5 @@
 <?php
+
 namespace Views\User;
 
 use Views\AbstractView;
@@ -40,13 +41,12 @@ class RegisterSuccessView extends AbstractView
 
     private function getUserTypeLabel(): string
     {
-        error_log("User type: " . $this->user->getUserType(), 0, 'php_errors.log');
         switch ($this->user->getUserType()) {
             case 'student':
                 return 'Étudiant';
             case 'professor':
                 return 'Responsable SAE';
-            case 'companies':
+            case 'client':
                 return 'Partenaire entreprise';
             default:
                 return 'Utilisateur';
@@ -62,7 +62,7 @@ class RegisterSuccessView extends AbstractView
         $info = '<div class="academic-info">';
         $info .= '<h4>Informations académiques</h4>';
         $info .= '<p><strong>Année :</strong> BUT ' . $this->user->getYear() . '</p>';
-        
+
         if ($this->user->getParcours()) {
             $info .= '<p><strong>Parcours :</strong> ' . $this->user->getParcours() . '</p>';
         }

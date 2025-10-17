@@ -38,6 +38,7 @@ class LoginPost implements ControllerInterface
 
             SessionService::set('user_id', $user->getEmail());
             error_log("Utilisateur connecté: " . $user->getEmail());
+            SessionService::set('USER', serialize($user));
 
             header('Location: /dashboard');
             exit();

@@ -3,11 +3,11 @@
 session_start();
 include "_assets/includes/Autoloader.php";
 
+use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
 use Controllers\User\Register;
 use Controllers\User\RegisterPost;
-//use Controllers\Dashboard\Home;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
@@ -37,7 +37,8 @@ $controllers = [
     new ResetPasswordController(),
     new ResetPasswordPostController(),
     new PageSaeController(),
-    new ToDoListController()
+    new ToDoListController(),
+    new DashboardController()
 ];
 
 // automatic routing
