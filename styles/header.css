@@ -24,24 +24,23 @@
 
 .global-header {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     background-color: var(--main-color-header);
     color: var(--secondary-color-header);
     padding: 10px 5vw;
     width: 100%;
+    gap: 2%;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     margin: 0;
-    transition: all 0.3s ease-in-out;
 }
+
 
 .global-header img {
     height: 50px;
     width: auto;
-    margin: 0 auto;
-    flex-shrink: 0;
 }
 
 .global-header .saeManager {
@@ -49,19 +48,16 @@
     color: var(--main-color-header);
     padding: 4px 8px;
     border-radius: 4px;
-    font-size: 1.8rem;
-    font-weight: 600;
+    font-size: 45px;
+    font-weight: normal;
     line-height: normal;
-    flex-shrink: 0;
-    margin-right: auto;
 }
+
 
 .global-header .navBar {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-left: auto;
-    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 15px;
 }
 
 .global-header .navBar a {
@@ -70,9 +66,9 @@
     font-weight: 700;
     padding: 5px 10px;
     border-radius: 4px;
-    font-size: var(--text-sm);
+    font-size: 1rem;
+    white-space: nowrap;
 }
-
 .global-header .navBar a:hover {
     background-color: var(--hover-color-header);
     text-decoration: none;
@@ -82,18 +78,20 @@
     outline-offset: 2px;
 }
 
+.burger span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
 @media (max-width: 768px) {
-    .global-header {
-        flex-direction: column;
-        padding: 10px 3vw;
-    }
 
-    .global-header .saeManager {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 10px;
-        font-size: 1.5rem;
-        margin-right: 0;
+    .burger {
+        display: flex;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 5px;
+        z-index: 1001;
     }
 
     .global-header img {
@@ -101,18 +99,48 @@
         margin: 10px auto;
     }
 
-    .global-header .navBar {
-        width: 100%;
-        justify-content: space-around;
-        gap: 5px;
-        margin-top: 10px;
-        margin-left: 0;
+
+    .burger span {
+        width: 25px;
+        height: 3px;
     }
 
-    .global-header .navBar a {
-        flex-grow: 1;
-        text-align: center;
-        font-size: var(--text-xs);
-        padding: 5px 2px;
+    .saeManager {
+        font-size: 1.5rem;
+    }
+
+    .global-header .saeManager {
+        font-size: 30px;
+    }
+
+    .navBar {
+        position: fixed;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #1e40af;
+        z-index: 1000;
+        transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        padding: 0;
+    }
+
+    .navBar a {
+        font-size: 3rem;
+        gap: 10rem;
+    }
+
+
+    .nav-links {
+        font-size: var(--text-lg);
+    }
+
+    .navBar.active {
+        top: 0;
     }
 }
