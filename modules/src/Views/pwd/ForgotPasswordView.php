@@ -8,6 +8,13 @@ use Views\AbstractView;
 /**
  * Class ForgotPasswordView
  *
+ * 
+ * @package     src
+
+ * @subpackage  pwd
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * 
  * This class represents the view for the "forgot password" page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the forgot password page, including handling error and success messages.
@@ -15,10 +22,26 @@ use Views\AbstractView;
 class ForgotPasswordView extends AbstractView
 {
     //Constant for of the form
+    /**
+     * The field for the user to enter their email.
+     * @var string
+     */
     public const FIELD_EMAIL = 'email';
 
+    /**
+     * The path of the HTML code to display for this view.
+     * @var string
+     */
     private const TEMPLATE_HTML = __DIR__ . '/forgot-password.html';
 
+    /**
+
+     * The constructor of the class, will use the constructor of the parent class AbstractView.
+     * Also fills the $data variable with success and errors data.
+
+     * @return void Creates the instance of the class.
+
+     */
     public function __construct()
     {
         $data = [
@@ -29,11 +52,23 @@ class ForgotPasswordView extends AbstractView
         parent::__construct($data);
     }
 
+    /**
+     * Returns the path to the HTML template file.
+     *
+     * @return string
+     */
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
 
+    /** Returns an associative array of keys and values to be used in the HTML template.
+     *
+     * This method retrieves error messages and success messages from the session
+     * and prepares them for rendering in the template.
+     *
+     * @return array An associative array with keys for error and success messages.
+     */
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -46,6 +81,18 @@ class ForgotPasswordView extends AbstractView
         ];
     }
 
+    /**
+
+     * Returns the HTML to display and error message for the user.
+     
+     * If $error contains an error message, the method prepares a display for it and returns it.
+     * Otherwise the method returns an empty string
+
+     *
+
+     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
+
+     */
     private function renderErrorMessages(array $errors): string
     {
         if (empty($errors)) {
@@ -61,6 +108,18 @@ class ForgotPasswordView extends AbstractView
         return $html;
     }
 
+    /**
+
+     * Returns the HTML to display and success message for the user.
+     
+     * If $success contains a success message, the method prepares a display for it and returns it.
+     * Otherwise the method returns an empty string
+
+     *
+
+     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
+
+     */
     private function renderSuccessMessage(string $success): string
     {
         if (empty($success)) {
@@ -70,11 +129,27 @@ class ForgotPasswordView extends AbstractView
         return '<div class="alert alert-success">' . htmlspecialchars($success) . '</div>';
     }
 
+    /**
+
+     * Returns the name of the page 'Password Forgot - SAEManager' or be used in some cases like displaying it by some isolated texts.
+
+     *
+
+     * @return string the name of the project 'Password Forgot - SAEManager'.
+
+     */
     protected function getPageTitle(): string
     {
         return 'Password Forgot - SAEManager';
     }
 
+    /** Returns the name of the CSS file associated with the view.
+     *
+     * This method should be implemented by subclasses to specify the CSS file
+     * that should be included in the HTML header for styling the page.
+     *
+     * @return string The name of the CSS file.
+     */
     protected function getNameCss(): string
     {
         return 'forgot-password.css';

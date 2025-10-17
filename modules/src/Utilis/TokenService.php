@@ -6,10 +6,26 @@ use includes\exception\ExceptionCreationTokenFailed;
 use includes\exception\ExceptionInvalidToken;
 use includes\exception\ExceptionSpam;
 
+/**
+ * Class TokenService
+ 
+ * @package     src
+
+ * @subpackage  Utilis
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class regroups the functions to manage the reset password tokens.
+ * It can generate, update, delete and check the validity of the tokkens.
+ * Need emails to work.
+ */
 class TokenService
 {
     /**
-     * Generate a secure random token
+     * Returns a 64 hexadecimal long random secure string
+     * 
+     * This method creates a 64 character secure random hexadecimal string and returns it
+     * @return string
      */
     public static function generate(): string
     {
@@ -72,7 +88,16 @@ class TokenService
     }
 
     /**
-     * Verify if a token is valid (exists, not expired, not used)
+     * Returns the infos about the token given in parameters, false if it fails to or is invalid.
+     * 
+     * This method looks for the token given in parameters and if it exist and is valid, returns it.
+     * Exeption relative to the invalidity or non-existence are thrown depending on it's state.
+     * 
+     * @param $token the token to validate.
+     * 
+     * @return string the token of the user, if valid
+     * 
+     * @throws ExceptionInvalidToken if the tokken expired, doesn't exist or is used, throws an exeption.
      */
     public static function validateToken(string $token): array
     {
@@ -114,7 +139,14 @@ class TokenService
     }
 
     /**
-     * Marks a token as used
+     * Returns a boolean depending on the success of marking used the tokken
+     * 
+     * This method tries to change the used column of the tokken in the database. It it secceed, true is returned, false otherwise.
+     * 
+     * @param $token the token to mark used.
+     * 
+     * @return boolean the success of marking the tokken used
+     * 
      */
     public static function markTokenAsUsed(string $token): bool
     {
@@ -136,7 +168,14 @@ class TokenService
     }
 
     /**
-     * Cleans up old tokens for a given email
+     * 
+     * 
+     * This method deletes, for an email given in parametters, all the expired tokkens depending on their expiry time.
+     * 
+     * @param $email the email to check the tokkens of.
+     * 
+     * @return void
+     * 
      */
     private static function cleanupOldTokens(string $email): void
     {
@@ -158,6 +197,14 @@ class TokenService
 
     /**
      * Cleans up all expired tokens (to be run periodically)
+     */
+    /**
+     * 
+     * 
+     * This method deletes all the expired tokkens depending on their expiry time.
+     * 
+     * @return void
+     * 
      */
     public static function cleanupExpiredTokens(): void
     {

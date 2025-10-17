@@ -6,16 +6,18 @@ use includes\exception\ExceptionSpam;
 
 /**
  * Class ForgotPasswordValidator
+ *  
+ * @package     src
+
+ * @subpackage  Utilis\Validator
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
  *
  * Validates input data for the forgot password form.
  *
  * This validator ensures:
  * - The "email" field is present and valid.
  * - Password reset requests are not sent too frequently (spam protection).
- *
- * @package Utilis\Validator
- * @version 1.0
- * @author Dinesh
  */
 class ForgotPasswordValidator extends FormValidator
 {
