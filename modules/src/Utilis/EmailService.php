@@ -1,6 +1,9 @@
 <?php
 namespace Utilis;
 
+use Exception;
+use includes\exception\ExceptionEmailSendingFailed;
+
 class EmailService
 {
     private static string $fromEmail = 'noreply@saemanager.alwaysdata.net';
@@ -9,7 +12,7 @@ class EmailService
     /**
      * Send password reset email
      */
-    public static function sendPasswordResetEmail(string $toEmail, string $token): bool
+    public static function sendPasswordResetEmail(string $toEmail, string $token): void
     {
         $resetLink = self::getResetLink($token);
         
@@ -18,7 +21,7 @@ class EmailService
         $htmlMessage = self::getHtmlTemplate($resetLink);
         $textMessage = self::getTextTemplate($resetLink);
         
-        return self::sendEmail($toEmail, $subject, $htmlMessage, $textMessage);
+        self::sendEmail($toEmail, $subject, $htmlMessage, $textMessage);
     }
 
     /**
@@ -81,7 +84,7 @@ class EmailService
             <div class='warning'>
                 <strong>⚠️ Important :</strong>
                 <ul>
-                    <li>Ce lien est valide pendant <strong>30 minutes</strong></li>
+                    <li>Ce lien est valide pendant <strong>10 minutes</strong></li>
                     <li>Il ne peut être utilisé qu'<strong>une seule fois</strong></li>
                     <li>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email</li>
                 </ul>
@@ -112,7 +115,7 @@ Pour créer un nouveau mot de passe, cliquez sur ce lien :
 {$resetLink}
 
 IMPORTANT :
-- Ce lien est valide pendant 30 minutes
+- Ce lien est valide pendant 10 minutes
 - Il ne peut être utilisé qu'une seule fois
 - Si vous n'avez pas demandé cette réinitialisation, ignorez cet email
 
@@ -124,54 +127,41 @@ Ceci est un email automatique, merci de ne pas y répondre.
     /**
      * Sends a email (generic method)
      */
-    private static function sendEmail(
-        string $to, 
-        string $subject, 
-        string $htmlMessage, 
-        string $textMessage
-    ): bool {
-        try {
-            // Headers for multipart email (HTML + text)
-            $boundary = md5(uniqid('boundary_', true));
-            
-            $headers = [
-                'From' => self::$fromName . ' <' . self::$fromEmail . '>',
-                'Reply-To' => self::$fromEmail,
-                'MIME-Version' => '1.0',
-                'Content-Type' => 'multipart/alternative; boundary="' . $boundary . '"'
-            ];
-            
-            $message = "--{$boundary}\r\n";
-            $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
-            $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-            $message .= $textMessage . "\r\n\r\n";
-            
-            $message .= "--{$boundary}\r\n";
-            $message .= "Content-Type: text/html; charset=UTF-8\r\n";
-            $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-            $message .= $htmlMessage . "\r\n\r\n";
-            
-            $message .= "--{$boundary}--";
-            
-            $headerString = '';
-            foreach ($headers as $key => $value) {
-                $headerString .= "{$key}: {$value}\r\n";
-            }
-            
-            // Send the email
-            $sent = mail($to, $subject, $message, $headerString);
-            
-            if ($sent) {
-                error_log("Email envoyé avec succès à: {$to}");
-            } else {
-                error_log("Échec d'envoi d'email à: {$to}");
-            }
-            
-            return $sent;
-            
-        } catch (\Exception $e) {
-            error_log("Erreur envoi email: " . $e->getMessage());
-            return false;
+    private static function sendEmail( string $to, string $subject, string $htmlMessage, string $textMessage ): void {
+        // Headers for multipart email (HTML + text)
+        $boundary = md5(uniqid('boundary_', true));
+        
+        $headers = [
+            'From' => self::$fromName . ' <' . self::$fromEmail . '>',
+            'Reply-To' => self::$fromEmail,
+            'MIME-Version' => '1.0',
+            'Content-Type' => 'multipart/alternative; boundary="' . $boundary . '"'
+        ];
+        
+        $message = "--{$boundary}\r\n";
+        $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
+        $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+        $message .= $textMessage . "\r\n\r\n";
+        
+        $message .= "--{$boundary}\r\n";
+        $message .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+        $message .= $htmlMessage . "\r\n\r\n";
+        
+        $message .= "--{$boundary}--";
+        
+        $headerString = '';
+        foreach ($headers as $key => $value) {
+            $headerString .= "{$key}: {$value}\r\n";
         }
+        
+        // Send the email
+        if (mail($to, $subject, $message, $headerString)) {
+            error_log("Email envoyé avec succès à: {$to}");
+        } else {
+            error_log("Échec d'envoi d'email à: {$to}");
+            throw new ExceptionEmailSendingFailed();
+        }
+
     }
 }

@@ -23,7 +23,7 @@ class Autoloader
             } else if (file_exists($assetFile)) {
                 require $assetFile;
             }
-            return false;
+            //return false;
         });
     }
 }
