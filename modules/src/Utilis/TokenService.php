@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis;
 
 use includes\database;
@@ -36,35 +37,36 @@ class TokenService
     {
         try {
             $db = database::getInstance();
-            
+
             // Clean up old tokens for this email
-            self::cleanupOldTokens($email);
             self::cleanupExpiredTokens();
-            
+
             // Generate new token
             $token = self::generate();
             $createdAt = date('Y-m-d H:i:s');
             $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-            
+
             $stmt = $db->prepare("
                 INSERT INTO password_resets (user_email, token, created_at, expires_at, used)
                 VALUES (:email, :token, :created_at, :expires_at, FALSE)
             ");
-            
+
             $stmt->execute([
                 'email' => $email,
                 'token' => $token,
                 'created_at' => $createdAt,
                 'expires_at' => $expiresAt
             ]);
-            
+
             return $token ? $token : throw new ExceptionCreationTokenFailed();
-            
         } catch (\PDOException $e) {
             error_log("Erreur création token: " . $e->getMessage());
             if (strpos($e->getMessage(), 'TOO_MANY_RESET_REQUESTS') !== false) {
                 error_log("Trop de demandes de réinitialisation pour: {$email}");
-                throw new ExceptionSpam("Trop de demandes de réinitialisation. Veuillez réessayer plus tard dans quelques minutes.");
+                throw new ExceptionSpam(
+                    "Trop de demandes de réinitialisation. "
+                    . "Veuillez réessayer plus tard dans quelques minutes."
+                );
             } else {
                 throw new ExceptionCreationTokenFailed();
             }
@@ -83,30 +85,32 @@ class TokenService
             }
 
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 SELECT user_email, expires_at, used 
                 FROM password_resets 
                 WHERE token = :token
             ");
-            
+
             $stmt->execute(['token' => $token]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
+
             if (!$result) {
-                throw new ExceptionInvalidToken("Ce lien de réinitialisation est invalide ou a expiré. Veuillez faire une nouvelle demande.");
+                throw new ExceptionInvalidToken(
+                    "Ce lien de réinitialisation est invalide ou a expiré. "
+                    . "Veuillez faire une nouvelle demande."
+                );
             }
-            
+
             if ($result['used']) {
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation a déjà été utilisé.");
             }
-            
+
             if (strtotime($result['expires_at']) < time()) {
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation a expiré.");
             }
-            
+
             return $result;
-            
         } catch (\PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
             throw new ExceptionInvalidToken("Erreur lors de la validation du lien. Veuillez réessayer plus tard.");
@@ -120,39 +124,17 @@ class TokenService
     {
         try {
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 UPDATE password_resets 
                 SET used = TRUE 
                 WHERE token = :token
             ");
-            
+
             return $stmt->execute(['token' => $token]);
-            
         } catch (\PDOException $e) {
             error_log("Erreur marquage token: " . $e->getMessage());
             return false;
-        }
-    }
-
-    /**
-     * Cleans up old tokens for a given email
-     */
-    private static function cleanupOldTokens(string $email): void
-    {
-        try {
-            $db = database::getInstance();
-            
-            $stmt = $db->prepare("
-                DELETE FROM password_resets 
-                WHERE user_email = :email 
-                AND (expires_at < NOW() OR used = TRUE)
-            ");
-            
-            $stmt->execute(['email' => $email]);
-            
-        } catch (\PDOException $e) {
-            error_log("Erreur nettoyage tokens: " . $e->getMessage());
         }
     }
 
@@ -163,14 +145,13 @@ class TokenService
     {
         try {
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 DELETE FROM password_resets 
                 WHERE expires_at < NOW() OR used = TRUE
             ");
-            
+
             $stmt->execute();
-            
         } catch (\PDOException $e) {
             error_log("Erreur nettoyage global: " . $e->getMessage());
         }

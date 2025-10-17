@@ -6,6 +6,7 @@ use Controllers\ControllerInterface;
 use includes\exception\ExceptionValidationLogin;
 use includes\exception\ExceptionValidationEmptys;
 use includes\database;
+use includes\exception\ExceptionFetchDataBD;
 use PDO;
 use Models\User\User;
 use Utilis\ValidationServiceRegister;
@@ -33,6 +34,7 @@ class LoginPost implements ControllerInterface
             error_log("Tentative de connexion - Username: {$data['email']}");
 
             $user = User::createFromLoginData($data);
+            SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
             error_log("Utilisateur connecté: " . $user->getEmail());
@@ -45,7 +47,7 @@ class LoginPost implements ControllerInterface
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationLogin $e) {
+        } catch (ExceptionValidationLogin | ExceptionFetchDataBD $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         }
         $view = new LoginView();
