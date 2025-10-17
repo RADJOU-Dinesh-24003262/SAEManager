@@ -2,6 +2,7 @@
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationForgotPassword;
+use includes\exception\ExceptionSpam;
 
 /**
  * Class ForgotPasswordValidator
@@ -11,33 +12,43 @@ use includes\exception\ExceptionValidationForgotPassword;
  * @subpackage  Utilis\Validator
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- * 
- * Provides method to validate the inputed form infos on the forgot password page.
+ *
+ * Validates input data for the forgot password form.
+ *
+ * This validator ensures:
+ * - The "email" field is present and valid.
+ * - Password reset requests are not sent too frequently (spam protection).
  */
 class ForgotPasswordValidator extends FormValidator
 {
     /**
-     * The list of the variables required for the password reset of a user.
-     * @var array
+     * Fields that are required for validation.
+     *
+     * @var array<string>
      */
     protected $required = ['email'];
 
     /**
-     * 
-     * 
-     * This this method validated the values given in $data to let a user try to reset their password with.
+     * Validates the provided data for a forgot password request.
      *
-     * @param array $data array, in adequation to the required value fields. 
-     * 
+     * Checks:
+     * - Whether the email is syntactically valid.
+     * - Whether the user is allowed to make another reset request (2-minute cooldown).
+     *
+     * @param array $data The form data to validate.
+     *
+     * @throws ExceptionValidationForgotPassword If the email field is invalid.
+     * @throws ExceptionSpam If a reset request was made less than 2 minutes ago.
+     *
      * @return void
-     * 
-     * @throws ExceptionValidationForgotPassword all the errors that might have been found
      */
     public function validate(array $data): void
     {
         $errors = [];
         if (!$this->isValidEmail($data['email'])) {
             throw new ExceptionValidationForgotPassword('email', 'string', "L'adresse email n'est pas valide.");
+        }if(($_SESSION['last_forgot_password_request'] ?? 0) > (time() - 120)) {
+            throw new ExceptionSpam("Veuillez attendre au moins 2 minutes avant de refaire une demande.");
         }
     }
 }
