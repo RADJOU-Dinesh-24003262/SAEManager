@@ -62,8 +62,8 @@ class DashboardView extends AbstractView
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
-            'USER_NAME' => htmlspecialchars($user->getFullName()),
-            'USER_EMAIL' => htmlspecialchars($user->getEmail()),
+            'USER_NAME' => $user->getFullName(),
+            'USER_EMAIL' => $user->getEmail(),
             'USER_TYPE_LABEL' => $this->getUserTypeLabel($user),
             'USER_META_INFO' => $this->renderUserMetaInfo($user),
             'SAE_NAVIGATION' => $this->renderSAENavigation($user),
@@ -138,10 +138,10 @@ class DashboardView extends AbstractView
         $html = '';
 
         if ($user->isStudent()) {
-            $html .= '<span>Année : ' . htmlspecialchars($user->getYear()) . '</span>';
-            $html .= '<span>Groupe : ' . htmlspecialchars($user->getTd()) . '-' . htmlspecialchars($user->getTp()) . '</span>';
+            $html .= '<span>Année : ' . $user->getYear() . '</span>';
+            $html .= '<span>Groupe : ' . $user->getTd() . '-' . $user->getTp() . '</span>';
             if ($user->getParcours()) {
-                $html .= '<span>Parcours : ' . htmlspecialchars($user->getParcours()) . '</span>';
+                $html .= '<span>Parcours : ' . $user->getParcours() . '</span>';
             }
         } elseif ($user->isProfessor()) {
             $html .= '<span>AMU ID : ' . 'TODO' . '</span>';
@@ -212,14 +212,14 @@ class DashboardView extends AbstractView
     {
         $html = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
-        $html .= '<div class="sae-icon" aria-hidden="true">' . htmlspecialchars($sae['code']) . '</div>';
+        $html .= '<div class="sae-icon" aria-hidden="true">' . $sae['code'] . '</div>';
         $html .= '</div>';
         $html .= '<div class="sae-body">';
-        $html .= '<h3>' . htmlspecialchars($sae['title']) . '</h3>';
-        $html .= '<p><strong>Compétences :</strong> ' . htmlspecialchars($sae['competences']) . '</p>';
+        $html .= '<h3>' . $sae['title'] . '</h3>';
+        $html .= '<p><strong>Compétences :</strong> ' . $sae['competences'] . '</p>';
 
         if (isset($sae['teacher'])) {
-            $html .= '<p><strong>Enseignant :</strong> ' . htmlspecialchars($sae['teacher']) . '</p>';
+            $html .= '<p><strong>Enseignant :</strong> ' . $sae['teacher'] . '</p>';
         }
 
         $html .= '<div class="sae-actions">';
