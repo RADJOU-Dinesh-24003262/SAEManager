@@ -27,7 +27,7 @@ class ValidationServiceRegister extends FormValidator
     /**
      * 
      * 
-     * This this method validated the values given in $data to make a new user with.
+     * This method validates the values given in $data to make a new user with.
      *
      * @param array $data array, in adequation to the required value fields. 
      * 

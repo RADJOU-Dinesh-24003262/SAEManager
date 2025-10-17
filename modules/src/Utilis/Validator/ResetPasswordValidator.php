@@ -25,7 +25,7 @@ class ResetPasswordValidator extends FormValidator
     /**
      * 
      * 
-     * This this method validated the values given in $data to reset the password of a user with.
+     * This method validates the values given in $data to reset the password of a user with.
      *
      * @param array $data array, in adequation to the required value fields. 
      * 
