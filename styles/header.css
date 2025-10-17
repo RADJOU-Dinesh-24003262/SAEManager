@@ -1,132 +1,118 @@
-.global-header, .global-header .navBar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-}
 :root {
-    --main-color-header: #064b82;
-    --secondary-color-header: white;
-    --hover-color-header: lightgray;
-    --active-color-header: gray;
+    --color-primary: #1e40af;
+    --color-primary-dark: #1e3a8a;
+    --color-primary-light: #f59e0b;
+    --color-bg-contrast: #ffffff;
+    --color-text: #212529;
+    --main-color-header: var(--color-primary);
+    --secondary-color-header: var(--color-bg-contrast);
+    --hover-color-header: rgba(255, 255, 255, 0.2);
+    --active-color-header: var(--color-primary-light);
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.5rem;
 }
+
+.global-header,
+.global-header .navBar {
+    display: flex;
+}
+
 .global-header {
     display: flex;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
     background-color: var(--main-color-header);
     color: var(--secondary-color-header);
     padding: 10px 5vw;
     width: 100%;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     margin: 0;
+    transition: all 0.3s ease-in-out;
 }
+
 .global-header img {
     height: 50px;
     width: auto;
+    margin: 0 auto;
+    flex-shrink: 0;
 }
+
 .global-header .saeManager {
     background-color: var(--secondary-color-header);
     color: var(--main-color-header);
     padding: 4px 8px;
     border-radius: 4px;
-    font-size: 45px;
-    font-weight: normal;
+    font-size: 1.8rem;
+    font-weight: 600;
     line-height: normal;
+    flex-shrink: 0;
+    margin-right: auto;
 }
+
 .global-header .navBar {
     display: flex;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     gap: 20px;
+    margin-left: auto;
+    justify-content: flex-end;
 }
+
 .global-header .navBar a {
     color: var(--secondary-color-header);
     text-decoration: none;
     font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: var(--text-sm);
 }
+
 .global-header .navBar a:hover {
-    text-decoration: underline;
+    background-color: var(--hover-color-header);
+    text-decoration: none;
+}
+.global-header .navBar a:focus {
+    outline: 3px solid var(--active-color-header);
+    outline-offset: 2px;
 }
 
-
-
-.burger span {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    transition: all 0.3s ease;
-}
-
-
-
-
-@media (max-width:900px) {
-
-    .burger {
-        display: flex;
+@media (max-width: 768px) {
+    .global-header {
         flex-direction: column;
-        cursor: pointer;
-        gap: 5px;
-        z-index: 1001;
-    }
-
-    .amuimg img {
-        width: 140px;
-        height: auto;
-    }
-
-    .burger span {
-        width: 25px;
-        height: 3px;
-    }
-
-    .saeManager {
-        font-size: 1.5rem;
+        padding: 10px 3vw;
     }
 
     .global-header .saeManager {
-        font-size: 30px;
-    }
-
-    .navBar {
-        position: fixed;
-        top: -100%;
-        left: 0;
         width: 100%;
-        height: 100vh;
-        background: #064b82;
-        z-index: 1000;
-        transition: top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 30px;
-        padding: 0;
-    }
-
-
-
-    .navBar a {
-        font-size: 1.5rem;
         text-align: center;
-        padding: 15px;
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+        margin-right: 0;
     }
 
-    .navBar.active {
-        top: 0;
+    .global-header img {
+        height: 40px;
+        margin: 10px auto;
     }
 
+    .global-header .navBar {
+        width: 100%;
+        justify-content: space-around;
+        gap: 5px;
+        margin-top: 10px;
+        margin-left: 0;
+    }
 
-
-
-
-
+    .global-header .navBar a {
+        flex-grow: 1;
+        text-align: center;
+        font-size: var(--text-xs);
+        padding: 5px 2px;
+    }
 }
