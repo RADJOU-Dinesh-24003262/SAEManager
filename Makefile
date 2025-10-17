@@ -76,3 +76,17 @@ clean: ## Nettoie les fichiers temporaires
 	rm -rf coverage/
 	rm -f coverage.xml
 	@echo "${GREEN}✓ Nettoyage terminé${NC}"
+
+fix-staged: ## Corrige les fichiers stagés en fonction du code style (PSR-12)
+	@echo "🔧 Correction des fichiers PHP en staging avec PHP-CS-Fixer..."
+	@FILES=$$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$$'); \
+	if [ -z "$$FILES" ]; then \
+		echo "✅ Aucun fichier PHP à corriger."; \
+	else \
+		for FILE in $$FILES; do \
+			echo "➡ Correction: $$FILE"; \
+			vendor/bin/php-cs-fixer fix --using-cache=no "$$FILE"; \
+			git add "$$FILE"; \
+		done; \
+		echo "✅ Tous les fichiers ont été corrigés et re-stagés."; \
+	fi
