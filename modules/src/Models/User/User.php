@@ -173,13 +173,17 @@ class User
                 $this->amuId = $data['amuid'] ?? $data['amuid2'] ?? '';
                 $this->firstName = $data['first_name'];
                 $this->lastName = $data['last_name'];
-                $this->userType = $data['amuid'] ? 'student' : ($data['amuid2'] ? 'professor' : 'companies');
+                $this->userType = $data['amuid'] ? 'Student' : ($data['amuid2'] ? 'Professor' : 'Client');
                 $this->email = $data['email'];
                 $this->passwordHash = $data['password'];
                 $this->phone = $data['phone'];
                 $this->dateOfBirth = $data['dateofbirth'];
                 $this->city = $data['city'];
                 if ($this->isStudent()) {
+                    $stmt = $db->prepare("SELECT * FROM student WHERE amuid = :amuid");
+                    $stmt->execute(['amuid' => $this->amuId]);
+                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
                     $this->year = (int)$data['year'];
                     $this->parcours = $this->year !== 1 ? $data['parcours'] : null;
                     $this->td = $data['td'];
@@ -279,7 +283,6 @@ class User
     {
         return $this->tp;
     }
-
     public function isStudent(): bool
     {
         return $this->userType === 'student';
@@ -288,8 +291,8 @@ class User
     {
         return $this->userType === 'professor';
     }
-    public function isCompany(): bool
+    public function isClient(): bool
     {
-        return $this->userType === 'companies';
+        return $this->userType === 'client';
     }
 }
