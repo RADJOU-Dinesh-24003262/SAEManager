@@ -1,4 +1,5 @@
 <?php
+
 namespace Views;
 
 /**
@@ -67,12 +68,12 @@ abstract class AbstractView
     protected function renderBody(): void
     {
         $template = file_get_contents($this->templatePath());
-        
+
         // Replacement of template keys with actual values
         foreach ($this->templateKeys() as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }
-        
+
         echo $template;
     }
 
@@ -117,19 +118,31 @@ abstract class AbstractView
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
             <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
-            <link rel="stylesheet" href="styles/'.$this->getNameCss().'">
+
+            <link rel="stylesheet" href="styles/' . $this->getNameCss() . '">
             <link rel="stylesheet" href="styles/header.css">
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>
         <header class="global-header">
-            <h1 class="saeManager">SAEManager</h1>
-                <img src="/image/logoamu.png" alt="Logo AMU Header">
+
+
+            <p class="saeManager">SAEManager</p>
+            <div class="amuimg" >
+            <img src="/image/logoamu.png" alt="Logo AMU Header" >
+</div>
+            
+             <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <nav class="navBar">
             <a href="/" class="nav-link">Accueil</a>
             <a href="/login" class="nav-link">Connexion</a>
             <a href="/register" class="nav-link">Inscription</a>
     </nav>
+
 </header>
 
         ';
@@ -180,6 +193,7 @@ abstract class AbstractView
                 </div>
             </div>
         </footer>
+        <script src="scripts/burgermenu.js"></script>
     </body>
 </html>';
     }
