@@ -64,6 +64,7 @@ class DashboardView extends AbstractView
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
             'USER_NAME' => $user->getFullName(),
             'USER_EMAIL' => $user->getEmail(),
+            'USER_TYPE_CLASS' => $this-> getUserTypeLabel($user),
             'USER_TYPE_LABEL' => $this->getUserTypeLabel($user),
             'USER_META_INFO' => $this->renderUserMetaInfo($user),
             'SAE_NAVIGATION' => $this->renderSAENavigation($user),
@@ -116,15 +117,15 @@ class DashboardView extends AbstractView
     private function getUserTypeLabel(User $user): string
     {
         if ($user->isStudent()) {
-            return 'Étudiant';
+            return 'etudiant';
         }
         if ($user->isProfessor()) {
-            return 'Professeur';
+            return 'professeur';
         }
         if ($user->isClient()) {
-            return 'Client';
+            return 'client';
         }
-        return 'Utilisateur';
+        return 'utilisateur';
     }
 
     /**
@@ -170,6 +171,7 @@ class DashboardView extends AbstractView
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
             $html .= '<a href="/sae">Mes SAE</a>';
+            $html .= '<a href="/group">Mon Groupe</a>';
         } elseif ($user->isClient()) {
             $html .= '<a href="/sae">Mes SAE</a>';
         }
