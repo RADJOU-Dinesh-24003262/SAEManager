@@ -26,6 +26,17 @@ use includes\exception\ExceptionSpam;
  * @author Dinesh
  */
 
+/**
+ * Class User
+ 
+ * @package     src
+
+ * @subpackage  Controllers\pwd
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class controls the forgot password process (post).
+ */
 class ForgotPasswordPostController implements ControllerInterface
 {
     /**
