@@ -19,12 +19,12 @@ body {
 /* Header Section */
 .profile-header {
     background: rgba(155, 197, 157, 0.87);
-    padding: 3rem 2rem;
+    padding: 3rem 0.5rem;
     border-bottom: 5px solid #000;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     gap: 2rem;
-    align-items: center;
+    align-items: start;
 }
 
 .profile-avatar {
@@ -36,23 +36,40 @@ body {
     border: 3px solid #000;
 }
 
+.profile-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: start;
+}
+
+.profile-info .user-badge {
+    grid-column: 1 / -1;
+    margin-bottom: 0.25rem;
+    font-size: 1.75rem;
+}
+
 .profile-info h1 {
     font-size: clamp(2rem, 4vw, 3.5rem);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    grid-column: 1;
 }
 
 .profile-info .email {
-    font-size: clamp(1rem, 2vw, 1.8rem);
-    margin-bottom: 1.5rem;
+    font-size: clamp(1.5rem, 2vw, 1.8rem);
+    margin-bottom: 0;
     word-break: break-word;
+    grid-column: 1;
 }
 
 .profile-meta {
+    grid-column: 2;
+    grid-row: 2 / 4;
     display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 0.5rem;
     font-size: clamp(0.9rem, 1.5vw, 1.5rem);
-    margin-bottom: 1.5rem;
+    align-items: flex-end;
 }
 
 .bio-section {
@@ -98,16 +115,25 @@ body {
 .sidebar a {
     color: #000;
     text-decoration: none;
-    font-size: clamp(1rem, 1.5vw, 1.5rem);
-    transition: opacity 0.3s;
+    font-size: clamp(1.5rem, 1.5vw, 1.5rem);
+    transition: all 0.3s ease;
     padding: 0.5rem 0;
 }
 
-.sidebar a:hover,
-.sidebar a:focus {
+.profile-info span {
+    font-size: clamp(1.5rem, 1.5vw, 1.5rem);
+}
+
+.sidebar a:hover {
     opacity: 0.7;
-    outline: 2px solid #000;
-    outline-offset: 4px;
+    background-color: #92DCE5;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.sidebar a:focus {
+    outline: 3px solid #000;
+    outline-offset: 2px;
 }
 
 .sidebar .divider {
@@ -120,8 +146,12 @@ body {
     padding: 2rem;
 }
 
+.content-area h3{
+    font-size: clamp(1.5rem, 1.5vw, 1.5rem);
+}
+
 .section-title {
-    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-size: clamp(3rem, 2vw, 1.8rem);
     margin-bottom: 2rem;
 }
 
@@ -211,7 +241,7 @@ body {
     }
 
     .profile-meta {
-        justify-content: center;
+        align-items: center;
     }
 
     .main-layout {
@@ -230,7 +260,7 @@ body {
         flex-wrap: wrap;
         gap: 1rem;
         justify-content: space-evenly;
-        
+
     }
 }
 

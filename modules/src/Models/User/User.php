@@ -310,7 +310,7 @@ class User
                 $this->amuId = $data['amuid'] ?? $data['amuid2'] ?? '';
                 $this->firstName = $data['first_name'];
                 $this->lastName = $data['last_name'];
-                $this->userType = $data['amuid'] ? 'Student' : ($data['amuid2'] ? 'Professor' : 'Client');
+                $this->userType = $data['amuid'] ? 'student' : ($data['amuid2'] ? 'professor' : 'client');
                 $this->email = $data['email'];
                 $this->passwordHash = $data['password'];
                 $this->phone = $data['phone'];
@@ -322,7 +322,7 @@ class User
                     $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
                     $this->year = (int)$data['year'];
-                    $this->parcours = $this->year !== 1 ? $data['parcours'] : null;
+                    $this->parcours = $this->year !== 1 ? $data['specialisation'] : null;
                     $this->td = $data['td'];
                     $this->tp = $data['tp'];
                 }

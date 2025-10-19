@@ -3,6 +3,7 @@
 namespace Controllers\Dashboard;
 
 use Controllers\ControllerInterface;
+use includes\exception\ExceptionDashboard;
 use Views\Dashboard\DashboardView;
 use Models\User\User;
 use Utilis\SessionService;
@@ -36,17 +37,27 @@ class DashboardController implements ControllerInterface
         if (!SessionService::has('user_id')) {
             SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource']);
             header('Location: /login');
-            return;
+            exit();
         }
 
-        // Retrieve the user object stored in the session
-        $user = unserialize(SessionService::get('USER'));
+        try {
+            // Retrieve the user object stored in the session
+            $user = unserialize(SessionService::get('USER'));
 
-        $data['user'] = $user;
+            $data['user'] = $user;
 
-        // Create and render the dashboard view
-        $view = new DashboardView($data);
-        $view->render();
+            if (!$user) {
+                throw new ExceptionDashboard('Utilisateur inconnu');
+            }
+
+            // Create and render the dashboard view
+            $view = new DashboardView($data);
+            $view->render();
+        } catch (ExceptionDashboard $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        }
     }
 
     /**
