@@ -11,8 +11,24 @@ use Views\User\RegisterView;
 use Views\User\RegisterSuccessView;
 use includes\exception\ExceptionValidationRegisters;
 
+/**
+ * Class User
+ 
+ * @package     src
+
+ * @subpackage  Controllers\User
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class controls the register process (post).
+ */
 class RegisterPost implements ControllerInterface
 {
+    /**
+     * Principal manager of the controller
+     * 
+     * @return void
+     */
     public function control(): void
     {
         // Validate the data
@@ -52,6 +68,11 @@ class RegisterPost implements ControllerInterface
         $view->render();
     }
 
+    /**
+     * Check if this controller can handle the request
+     * 
+     * @return boolean Is the method post?
+     */
     public static function support(string $chemin, string $method): bool
     {
         return $chemin === "/register" && $method === "POST";
