@@ -26,6 +26,7 @@ yearSelect.addEventListener('change', () => {
 const userTypeSelect = document.getElementById('userType');
 const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
+const idField = document.getElementById('id');
 
 function toggleStudentFields() {
     const isStudent = userTypeSelect.value === 'student';
@@ -43,6 +44,23 @@ function toggleStudentFields() {
         tpSelect.value = '';
     }
 }
+
+
+function toggleClientFields() {
+    const isClient = userTypeSelect.value === 'client';
+
+    idField.style.display = isClient ? 'block' : 'none';
+    idField.disabled = !isClient;
+
+    if (!isClient) {
+        parcoursSelect.value = '';
+        yearSelect.value = '';
+        tdSelect.value = '';
+        tpSelect.value = '';
+    }
+
+}
+
 const pwd = document.getElementById('password');
 const pwdverif = document.getElementById('passwordverif');
 
@@ -59,6 +77,8 @@ pwdverif.addEventListener('input', validatePassword);
 
 // Apply immediately on page load (case of reload after POST)
 toggleStudentFields();
+
+toggleClientFields();
 
 // Apply on each status change
 userTypeSelect.addEventListener('change', toggleStudentFields);

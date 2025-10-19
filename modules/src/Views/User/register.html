@@ -5,7 +5,18 @@
     
     <fieldset>
         <legend>Informations personnelles</legend>
-        
+
+        <label for="userType">
+            Statut
+            <abbr title="requis" >*</abbr>
+        </label>
+
+        <select name="userType" id="userType" required aria-required="true">
+            <option value="">-- Sélectionner --</option>
+            <option value="student">Étudiant</option>
+            <option value="professor">Responsable SAE</option>
+            <option value="companies">Partenaire</option>
+        </select>
 
         <label for="id">
             Identifiant AMU
@@ -71,16 +82,7 @@
             autocomplete="family-name"
             aria-required="true">
 
-        <label for="userType">
-            Statut
-            <abbr title="requis" >*</abbr>
-        </label>
-        <select name="userType" id="userType" required aria-required="true">
-            <option value="">-- Sélectionner --</option>
-            <option value="student">Étudiant</option>
-            <option value="professor">Responsable SAE</option>
-            <option value="companies">Partenaire</option>
-        </select>
+
     </fieldset>
 
     <fieldset>
