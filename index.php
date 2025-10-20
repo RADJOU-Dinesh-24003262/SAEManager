@@ -18,6 +18,7 @@ use Controllers\pwd\ResetPasswordPostController;
 use Controllers\PageSae\PageSaeController;
 use Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
+use Controllers\User\Logout;
 
 //phpinfo();
 
@@ -31,6 +32,7 @@ $controllers = [
     new LegalNoticeController(),
     new SiteMapController(),
     new IndexController(),
+    new Logout(),
 
     new ForgotPasswordController(),
     new ForgotPasswordPostController(),
