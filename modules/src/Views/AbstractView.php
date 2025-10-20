@@ -48,6 +48,10 @@ abstract class AbstractView
     {
         $template = file_get_contents($this->templatePath());
 
+        if ($template === false) {
+            throw new \Exception("Une eurreur est survenu lors la chargement de la page");
+        }
+
         // Replacement of template keys with actual values
         foreach ($this->templateKeys() as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
