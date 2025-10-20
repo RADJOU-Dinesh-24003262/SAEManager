@@ -175,6 +175,7 @@ form {
 }
 .radio-group,
 fieldset {
+    flex-direction: row;
     -ms-flex-direction: row;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
