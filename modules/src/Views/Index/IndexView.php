@@ -8,7 +8,7 @@ use Controllers\Index\IndexControllerPost;
 
 /**
  * Class IndexView
- 
+
  * @package     src
 
  * @subpackage  Index
@@ -36,13 +36,13 @@ class IndexView extends AbstractView
 
      */
     public function __construct()
-{
-    $data = [
-        'errors' => SessionService::getFlash('errors', []),
-        'success' => SessionService::getFlash('success', '')
-    ];
-    parent::__construct($data);
-}
+    {
+        $data = [
+            'errors' => SessionService::getFlash('errors', []),
+            'success' => SessionService::getFlash('success', '')
+        ];
+        parent::__construct($data);
+    }
 
     /**
      * Returns the path to the HTML template file.
@@ -64,18 +64,18 @@ class IndexView extends AbstractView
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
-
+        $success = $this->data['success'];
         return [
             // Error and success messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SUCCESS_MESSAGE' => $this->renderSuccessMessage()
+            'SUCCESS_MESSAGE' => $this->renderSuccessMessage($success)
         ];
     }
 
     /**
 
      * Returns the HTML to display and error message for the user.
-     
+
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
@@ -102,29 +102,28 @@ class IndexView extends AbstractView
     /**
 
      * Returns the HTML to display and success message for the user.
-     
+
      * If $success contains a success message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
-     *
+     *  @param string $success the success message to display
 
-     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
+     * @return string the HTML string to be displayed,
+     * or an empty string if nothing is to be displayed
 
      */
-    private function renderSuccessMessage(): string
+    private function renderSuccessMessage($success): string
     {
-        $success = $this->data['success'];
         if (empty($success)) {
             return '';
         }
 
-        return '<div class="alert alert-success">' . $this->$success . '</div>';
+        return '<div class="alert alert-success"><p>' . $success . '</p></div>';
     }
     /**
 
-     * Returns the name of the page 'Index - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Index - SAEManager'
+     * or be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Index - SAEManager'.
 
@@ -174,5 +173,4 @@ class IndexView extends AbstractView
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />' ;
     }
-
 }
