@@ -1,5 +1,5 @@
 <?php
-namespace Controllers\PageSae;;
+namespace Controllers\PageSae;
 
 use Controllers\ControllerInterface;
 use Views\PageSAE\PageSaeView;

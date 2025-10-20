@@ -3,6 +3,7 @@
 namespace Views\PageSAE;
 
 use Views\AbstractView;
+
 use Utilis\SessionService;
 
 /**
@@ -65,4 +66,3 @@ class PageSaeView extends AbstractView
                 <meta property="og:type" content="website" />' ;
     }
 }
-
