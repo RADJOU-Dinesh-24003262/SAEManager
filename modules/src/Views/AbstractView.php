@@ -2,22 +2,16 @@
 
 namespace Views;
 
+use Utilis\SessionService;
+
 /**
-
  * The abstract class which will will be used to create all of the views.
-
  *
-
  * It contains all the required methods and attributes to be used in the implemented views.
-
  *
-
  * @package     src
-
  *
-
  * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  */
 abstract class AbstractView
 {
@@ -43,12 +37,12 @@ abstract class AbstractView
         $this->data = $data;
     }
 
-    /** Renders a template HTML with predefined string to modify with the strings given by the templateKeys method
+    /** Renders an HTML template by replacing predefined placeholders with actual values.
      *
-     * This method retrieves an HTML template to modify with variables
-     * and renders it with given parametters.
+     * This method retrieves an HTML template and replaces placeholders with values
+     * returned by the templateKeys() method.
      *
-     * @return array An associative array with keys for error and success messages.
+     * @return void
      */
     protected function renderBody(): void
     {
@@ -77,6 +71,7 @@ abstract class AbstractView
      * @return array An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
+
     /** Renders the complete HTML page including header, body, and footer.
      *
      * This method orchestrates the rendering of the entire HTML page by calling
@@ -88,6 +83,7 @@ abstract class AbstractView
         $this->renderBody();
         $this->renderFooter();
     }
+
     /** Renders the HTML header section of the page.
      *
      * This method outputs the HTML for the header section, including meta tags,
@@ -96,42 +92,57 @@ abstract class AbstractView
     protected function renderHeader(): void
     {
         echo '<!DOCTYPE html>
-        <html lang="fr">
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>' . $this->getPageTitle() . '</title>
-            <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>' . $this->getPageTitle() . '</title>
+        <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
 
-            <link rel="stylesheet" href="styles/' . $this->getNameCss() . '">
-            <link rel="stylesheet" href="styles/header.css">
-            ' . $this->getAdditionalHeaders() . '
-        </head>
-        <body>
-        <header class="global-header">
-
-
-            <p class="saeManager">SAEManager</p>
-            <div class="amuimg" >
-            <img src="/image/logoamu.png" alt="Logo AMU Header" >
-</div>
-            
-             <div class="burger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <nav class="navBar">
+        <link rel="stylesheet" href="styles/' . $this->getNameCss() . '">
+        <link rel="stylesheet" href="styles/header.css">
+        ' . $this->getAdditionalHeaders() . '
+    </head>
+    <body>
+    <header class="global-header">
+        <p class="saeManager">SAEManager</p>
+        <div class="amuimg" >
+        <img src="/image/logoamu.png" alt="Logo AMU Header" >
+        </div>
+            <div class="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="navBar">
             <a href="/" class="nav-link">Accueil</a>
-            <a href="/login" class="nav-link">Connexion</a>
-            <a href="/register" class="nav-link">Inscription</a>
-    </nav>
-
-</header>
-
-        ';
+            ' . $this->getNavBar() . '
+        </nav>
+    </header>';
     }
+
+
+    /**
+     * Renders the HTML navigation bar of the page.
+     *
+     * Displays different links depending on whether a user is logged in or not.
+     *
+     * @return string The HTML string of the navigation bar.
+     */
+    protected function getNavBar(): string
+    {
+        if (SessionService::has('user_id')) {
+            return '
+            <a href="/dashboard" class="nav-link">Dashboard</a>
+            <a href="/logout" class="nav-link">Déconnexion</a>';
+        }
+        return '
+            <a href="/login" class="nav-link">Connexion</a>
+            <a href="/register" class="nav-link">Inscription</a>';
+    }
+
+
     /** Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
@@ -140,6 +151,7 @@ abstract class AbstractView
      * @return string The name of the CSS file.
      */
     abstract protected function getNameCss(): string;
+
     /** Renders the HTML footer section of the page.
      *
      * This method outputs the HTML for the footer section, including contact information
@@ -165,6 +177,7 @@ abstract class AbstractView
                     
                     <ul>
                         <li><a href="/legal-notice">Mentions légales</a> </li>
+                        <li><a href="/site-map">Plan du site</a> </li>
                     </ul>
                 </div>
 
@@ -187,8 +200,6 @@ abstract class AbstractView
 
      * Returns the name of the project 'SAEManager' or be used in some cases like displaying it by some isolated texts.
 
-     *
-
      * @return string the name of the project 'SAEManager'.
 
      */
@@ -196,6 +207,7 @@ abstract class AbstractView
     {
         return 'SAEManager';
     }
+
     /** Returns additional HTML headers for any view class page which will extend this class.
      *
      * @return string The additional HTML headers.
@@ -204,6 +216,7 @@ abstract class AbstractView
     {
         return '';
     }
+
     /** Returns additional scripts to be included before closing a body tag.
      *
      * @return string The additional scripts.
