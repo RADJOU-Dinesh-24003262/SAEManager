@@ -171,8 +171,6 @@ class TokenService
     }
 
     /**
-     *
-     *
      * This method deletes all the expired tokkens depending on their expiry time.
      *
      * @return void

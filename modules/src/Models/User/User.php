@@ -500,7 +500,7 @@ class User
      */
     public function getTd(): ?string
     {
-        return $this->td;
+        return (string)$this->td;
     }
     /**
      * Returns the sub-sub-group of the user.
@@ -509,7 +509,7 @@ class User
      */
     public function getTp(): ?string
     {
-        return $this->tp;
+        return (string)$this->tp;
     }
 
     /**
