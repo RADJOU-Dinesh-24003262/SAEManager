@@ -65,11 +65,14 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function controlMethodReturnsVoid(): void
     {
-        $reflection = new \ReflectionMethod($this->controller, 'control'); 
-    $returnType = $reflection->getReturnType();
+        $reflection = new \ReflectionMethod($this->controller, 'control');
+        $returnType = $reflection->getReturnType();
 
-    $this->assertNotNull($returnType);
-    $this->assertEquals('void', $returnType->getName());
+        $this->assertNotNull($returnType);
+        // REMPLACER :
+        // $this->assertEquals('void', $returnType->getName());
+        // PAR :
+        $this->assertEquals('void', (string)$returnType);
     }
 
     #[Test]
@@ -104,13 +107,16 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
         $parameters = $reflection->getParameters();
-        
+
         $this->assertCount(2, $parameters);
         $this->assertEquals('path', $parameters[0]->getName());
         $this->assertEquals('method', $parameters[1]->getName());
-        // Ne teste pas le type de la classe, teste le type des paramètres
-        $this->assertEquals('string', $parameters[0]->getType()->getName());
-        $this->assertEquals('string', $parameters[1]->getType()->getName());
+        // REMPLACER :
+        // $this->assertEquals('string', $parameters[0]->getType()->getName());
+        // $this->assertEquals('string', $parameters[1]->getType()->getName());
+        // PAR :
+        $this->assertEquals('string', (string)$parameters[0]->getType());
+        $this->assertEquals('string', (string)$parameters[1]->getType());
     }
 
     #[Test]
@@ -118,9 +124,15 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
         $returnType = $reflection->getReturnType();
-        
+
         $this->assertNotNull($returnType);
-        $this->assertEquals('bool', $returnType->getName()); // 'bool' pas 'true'
+        
+        // ALTERNATIVE COMPATIBLE :
+        if (method_exists($returnType, 'getName')) {
+            $this->assertEquals('bool', $returnType->getName());
+        } else {
+            $this->assertEquals('bool', (string)$returnType);
+    }
     }
 
     /**
