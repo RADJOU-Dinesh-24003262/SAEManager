@@ -7,19 +7,18 @@ use Views\SaeSujet\SaeSujetView;
 use Views\ToDoList\ToDoListView;
 
 /**
- * Controller for the form of the subject of the SAE.
- * Handles requests to display the form.
+ * @category Controller
  * @package Controllers\SaeSujet
- * @version 1.0
- * @author Benhafessa Alexandre
- * @author Dargentolle Francois
- * @author Edelstein William
- * @author Griguer Nathan
- * @author Radjou Dinesh
+ * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
+ *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
+ *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @see SaeSujetView
  * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License v3.0
  * @link /sae-sujet
- * @category Controller
+ * Controller for the form of the subject of the SAE.
+ * Handles requests to display the form.
  */
 class SaeSujetController implements ControllerInterface
 {
@@ -36,9 +35,9 @@ class SaeSujetController implements ControllerInterface
     /**
      *  @method static bool support(string $chemin, string $method)
      *  Determines if this controller supports the given path and method.
-     *  @param string $path The requested path
-     *  @param string $method The HTTP method
-     *  @return boolean true if the path and method are supported, false otherwise
+     *  @param string $path   The requested path.
+     *  @param string $method   The HTTP method.
+     *  @return boolean true if the path and method are supported, false otherwise.
      */
     public static function support(string $path, string $method): bool
     {
