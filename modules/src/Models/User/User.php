@@ -11,7 +11,7 @@ use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Models\User
@@ -95,13 +95,14 @@ class User
 
     /**
      * Creates an instance of the class
-     * 
+     *
      * This method constructs a user object with the data array given in parametters.
      * The integrity of the array should have been checked earlier in the user creation process.
-     * 
+     *
      * @param array $data The data to make a user with
      */
-    private function __construct(array $data = []) {
+    private function __construct(array $data = [])
+    {
         foreach ($data as $key => $value) {
             if ($key === 'password') {
                 continue; // Skip password, use setPassword method instead
@@ -112,12 +113,12 @@ class User
 
     /**
      * Creates an instance of the class
-     * 
+     *
      * This method creates a user object with the data array given in parametters.
      * If no password are set, the new object password field is filled with the inputed registration password.
-     * 
+     *
      * @param array $data The data to make a user with
-     * 
+     *
      * @return self the new object.
      */
     public static function createFromRegistrationData(array $data): self
@@ -129,12 +130,12 @@ class User
 
     /**
      * Creates an instance of the class
-     * 
+     *
      * This method creates a user object with the data array which should be login credentials.
      * uses the conection to the database.
-     * 
+     *
      * @param array $data The data to make a user with
-     * 
+     *
      * @return self the new object.
      */
     public static function createFromLoginData(array $data): self
@@ -146,12 +147,12 @@ class User
     }
 
     /**
-     * 
+     *
      * Sets the password_hash field to the current user.
      * To be used for security
-     * 
-     * @param string $password The password to hash 
-     * 
+     *
+     * @param string $password The password to hash
+     *
      * @return void
      */
     public function setPassword(string $password): void
@@ -162,10 +163,10 @@ class User
 
     /**
      * Returns the success of fetching a user in the database
-     * 
+     *
      * Tries to fetch a user in the database depending on it's user type.
      * Returns the success of this action.
-     *  
+     *
      * @return boolean
      */
     public function save(): bool
@@ -254,13 +255,13 @@ class User
     }
 
     /**
-     * 
+     *
      * Attempts to log a user using the credentials given in
      * parametters.
-     * 
+     *
      * @param string $email
      * @param string $password
-     *  
+     *
      * @return void
      */
     public function login(string $email, string $password): void
@@ -286,8 +287,8 @@ class User
     /**
      * Fetches user data from the database using their email address.
      *
-     * This method queries the database for a user record that matches the provided email address. 
-     * If a user is found, it populates the current object’s properties with the retrieved data, 
+     * This method queries the database for a user record that matches the provided email address.
+     * If a user is found, it populates the current object’s properties with the retrieved data,
      * including personal information and, if applicable, student-specific details.
      *
      * If no user is found or a database error occurs, an ExceptionFetchDataBD is thrown.
@@ -337,12 +338,12 @@ class User
 
     /**
      * Return the success of searching a user by email in the database
-     * 
+     *
      * Attempts to find a user in the user relation in the database based on
      * their email. If a user is found, returns true. False otherwise.
-     * 
+     *
      * @param string $email
-     *  
+     *
      * @return boolean
      */
     public static function existsByEmail(string $email): bool
@@ -359,12 +360,12 @@ class User
     }
 
     /**
-     * 
+     *
      * Attempts to update a user's password based on it's email
-     * 
+     *
      * @param string $email       The email of the user to update the password of.
      * @param string $newPassword The new password to be updated.
-     *  
+     *
      * @return void
      */
     public static function updatePasswordByEmail(string $email, string $newPassword): void
@@ -386,105 +387,156 @@ class User
 
     /**
      * Returns the amUID of the user.
-     * 
+     *
      * @return string the amUID of the user.
      */
-    public function getAmuId(): string { return $this->amuId; }
+    public function getAmuId(): string
+    {
+        return $this->amuId;
+    }
     /**
      * Returns the first name of the user.
-     * 
+     *
      * @return string the first name of the user.
      */
-    public function getFirstName(): string { return $this->firstName; }
+    public function getFirstName(): string
+    {
+        return $this->firstName;
+    }
     /**
      * Returns the last name of the user.
-     * 
+     *
      * @return string the last name of the user.
      */
-    public function getLastName(): string { return $this->lastName; }
+    public function getLastName(): string
+    {
+        return $this->lastName;
+    }
     /**
      * Returns the full name of the user. As [firstName]+[lastName]
-     * 
+     *
      * @return string the full name of the user.
      */
-    public function getFullName(): string { return $this->lastName . ' ' . $this->firstName; }
+    public function getFullName(): string
+    {
+        return $this->lastName . ' ' . $this->firstName;
+    }
     /**
      * Returns the user type of the user.
-     * 
+     *
      * @return string the user type of the user.
      */
-    public function getUserType(): string { return $this->userType; }
+    public function getUserType(): string
+    {
+        return $this->userType;
+    }
     /**
      * Returns the email of the user.
-     * 
+     *
      * @return string the email of the user.
      */
-    public function getEmail(): string { return $this->email; }
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
     /**
      * Returns the hashed password number of the user.
-     * 
+     *
      * @return string the hashed password number of the user.
      */
-    public function getPasswordHash(): string { return $this->passwordHash; }
+    public function getPasswordHash(): string
+    {
+        return $this->passwordHash;
+    }
     /**
      * Returns the phone number of the user.
-     * 
+     *
      * @return string the phone number of the user.
      */
-    public function getPhone(): string { return $this->phone; }
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
     /**
      * Returns the date of birth of the user.
-     * 
+     *
      * @return string the date of birth of the user.
      */
-    public function getDateOfBirth(): string { return $this->dateOfBirth; }
+    public function getDateOfBirth(): string
+    {
+        return $this->dateOfBirth;
+    }
     /**
      * Returns the city of study of the user.
-     * 
+     *
      * @return string the city of study of the user.
      */
-    public function getCity(): string { return $this->city; }
+    public function getCity(): string
+    {
+        return $this->city;
+    }
     /**
      * Returns the year of study of the user.
-     * 
+     *
      * @return int the year of study of the user.
      */
-    public function getYear(): ?int { return (int) $this->year; }
+    public function getYear(): ?int
+    {
+        return (int) $this->year;
+    }
     /**
      * Returns the major of the user.
-     * 
+     *
      * @return string the major of the user.
      */
-    public function getParcours(): ?string { return $this->parcours; }
+    public function getParcours(): ?string
+    {
+        return $this->parcours;
+    }
     /**
      * Returns the sub-group of the user.
-     * 
+     *
      * @return string the sub-group of the user.
      */
-    public function getTd(): ?string { return $this->td; }
+    public function getTd(): ?string
+    {
+        return $this->td;
+    }
     /**
      * Returns the sub-sub-group of the user.
-     * 
+     *
      * @return string the sub-sub-group of the user.
      */
-    public function getTp(): ?string { return $this->tp; }
+    public function getTp(): ?string
+    {
+        return $this->tp;
+    }
 
     /**
      * Returns true if the user is a student.
-     * 
+     *
      * @return boolean is the user a student?
      */
-    public function isStudent(): bool { return $this->userType === 'student'; }
+    public function isStudent(): bool
+    {
+        return $this->userType === 'student';
+    }
     /**
      * Returns true if the user is a professor.
-     * 
+     *
      * @return boolean is the user a professor?
      */
-    public function isProfessor(): bool { return $this->userType === 'professor'; }
+    public function isProfessor(): bool
+    {
+        return $this->userType === 'professor';
+    }
     /**
      * Returns true if the user is a client.
-     * 
+     *
      * @return boolean is the user a companie?
      */
-    public function isClient(): bool { return $this->userType === 'client'; }
+    public function isClient(): bool
+    {
+        return $this->userType === 'client';
+    }
 }
