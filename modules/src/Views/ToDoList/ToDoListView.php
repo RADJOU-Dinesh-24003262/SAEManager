@@ -70,4 +70,3 @@ class ToDoListView extends AbstractView
         return '<script src="scripts/to-do-list.js" defer></script>';
     }
 }
-
