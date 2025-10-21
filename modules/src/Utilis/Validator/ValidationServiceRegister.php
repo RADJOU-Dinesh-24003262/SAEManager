@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationRegister;
@@ -6,7 +7,7 @@ use includes\exception\ExceptionValidationRegisters;
 
 /**
  * Class ValidationServiceRegister
- 
+
  * @package     src
 
  * @subpackage  Utilis\Validator
@@ -16,7 +17,7 @@ use includes\exception\ExceptionValidationRegisters;
  * This class regroup function to validate the registration process of a user.
  */
 class ValidationServiceRegister extends FormValidator
-{   
+{
     /**
      * The list of the variables required for the registration process of a user.
      * @var array
@@ -24,14 +25,14 @@ class ValidationServiceRegister extends FormValidator
     protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
 
     /**
-     * 
-     * 
+     *
+     *
      * This method validates the values given in $data to make a new user with.
      *
-     * @param array $data array, in adequation to the required value fields. 
-     * 
+     * @param array $data array, in adequation to the required value fields.
+     *
      * @return void
-     * 
+     *
      * @throws ExceptionValidationRegisters all the errors that might have been found
      */
     public function validate(array $data): void
@@ -87,14 +88,14 @@ class ValidationServiceRegister extends FormValidator
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * This this method validated the values given in $data to make a new student user with.
      *
-     * @param array $data array, in adequation to the required value fields. 
-     * 
+     * @param array $data array, in adequation to the required value fields.
+     *
      * @return void
-     * 
+     *
      * @throws ExceptionValidationRegisters all the errors that might have been found
      */
     private function validateStudentFields(array $data): array

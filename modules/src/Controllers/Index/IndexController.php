@@ -7,7 +7,7 @@ use Views\Index\IndexView;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\PageSae
@@ -20,10 +20,10 @@ class IndexController implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
-        public function control(): void
+    public function control(): void
     {
         $view = new IndexView();
         $view->render();
@@ -31,10 +31,10 @@ class IndexController implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method get?
      */
-        public static function support(string $chemin, string $method): bool
+    public static function support(string $chemin, string $method): bool
     {
         return ($chemin === "/index" || $chemin === "/" ) && $method === "GET";
     }

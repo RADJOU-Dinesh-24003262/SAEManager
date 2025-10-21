@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
@@ -7,7 +8,7 @@ use Views\User\RegisterView;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\User
@@ -20,7 +21,7 @@ class Register implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
     public function control(): void
@@ -33,13 +34,11 @@ class Register implements ControllerInterface
 
         $view = new RegisterView();
         $view->render();
-
-
     }
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method get?
      */
     public static function support(string $chemin, string $method): bool

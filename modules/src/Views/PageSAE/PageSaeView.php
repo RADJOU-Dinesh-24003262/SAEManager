@@ -7,13 +7,13 @@ use Utilis\SessionService;
 
 /**
  * Class PageSaeView
- 
+
  * @package     src
 
  * @subpackage  PageSAE
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- 
+
  * This class represents the view for the page of the application where we will see the SAE .
  * It extends the AbstractView class and provides specific implementations
  * for rendering the SAE page.
@@ -102,4 +102,3 @@ class PageSaeView extends AbstractView
                 <meta property="og:type" content="website" />' ;
     }
 }
-

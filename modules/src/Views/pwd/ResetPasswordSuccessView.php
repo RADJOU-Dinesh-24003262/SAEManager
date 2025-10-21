@@ -1,11 +1,12 @@
 <?php
+
 namespace Views\pwd;
 
 use Views\AbstractView;
 
 /**
  * Class ResetPasswordSuccessView
- * 
+ *
  * @package     src
 
  * @subpackage  pwd

@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\pwd;
 
 use Controllers\ControllerInterface;
@@ -9,7 +10,7 @@ use includes\exception\ExceptionInvalidToken;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\pwd
@@ -22,14 +23,14 @@ class ResetPasswordController implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
     public function control(): void
     {
         // Get the token from the URL
         $token = $_GET['token'] ?? '';
-        try {         
+        try {
             // Validate the token
             $tokenData = TokenService::validateToken($token);
 
@@ -49,7 +50,7 @@ class ResetPasswordController implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method get?
      */
     public static function support(string $chemin, string $method): bool
