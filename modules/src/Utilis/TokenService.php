@@ -145,7 +145,8 @@ class TokenService
     /**
      * Returns a boolean depending on the success of marking used the tokken
      *
-     * This method tries to change the used column of the tokken in the database. It it secceed, true is returned, false otherwise.
+     * This method tries to change the used column of the tokken in the database.
+     * It it secceed, true is returned, false otherwise.
      *
      * @param $token the token to mark used.
      *
