@@ -97,7 +97,7 @@ class TokenService
      *
      * @param $token the token to validate.
      *
-     * @return string the token of the user, if valid
+     * @return array the token of the user, if valid
      *
      * @throws ExceptionInvalidToken if the tokken expired, doesn't exist or is used, throws an exeption.
      */
