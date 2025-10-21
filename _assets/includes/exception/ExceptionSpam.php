@@ -8,8 +8,7 @@ namespace includes\exception;
  * Custom exception for spam or abuse scenarios (e.g., too many password reset attempts).
  *
  * @package includes\exception
- * @author  Dinesh
- * @version 1.0
+ * @author  Dinesh <dinesh.radjou@etu.univ-amu.fr>
  */
 class ExceptionSpam extends \Exception
 {

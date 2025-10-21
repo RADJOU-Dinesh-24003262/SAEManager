@@ -75,7 +75,7 @@ class DashboardView extends AbstractView
     /**
      * Renders error messages into HTML format.
      *
-     * @param array $errors
+     * @param  array $errors
      * @return string
      */
     private function renderErrorMessages(array $errors): string
@@ -111,7 +111,7 @@ class DashboardView extends AbstractView
     /**
      * Returns a user-friendly label based on the user's role.
      *
-     * @param User $user
+     * @param  User $user
      * @return string
      */
     private function getUserTypeLabel(User $user): string
@@ -131,7 +131,7 @@ class DashboardView extends AbstractView
     /**
      * Renders additional user information based on user type.
      *
-     * @param User $user
+     * @param  User $user
      * @return string
      */
     private function renderUserMetaInfo(User $user): string
@@ -157,7 +157,7 @@ class DashboardView extends AbstractView
     /**
      * Renders the SAE navigation links and buttons depending on the user's role.
      *
-     * @param User $user
+     * @param  User $user
      * @return string
      */
     private function renderSAENavigation(User $user): string
@@ -183,8 +183,8 @@ class DashboardView extends AbstractView
     /**
      * Renders the SAE content section with SAE cards or an empty state.
      *
-     * @param User $user
-     * @param array $saes
+     * @param  User  $user
+     * @param  array $saes
      * @return string
      */
     private function renderSAEContent(User $user, array $saes): string
@@ -206,8 +206,8 @@ class DashboardView extends AbstractView
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User $user
-     * @param array $sae
+     * @param  User  $user
+     * @param  array $sae
      * @return string
      */
     private function renderSAECard(User $user, array $sae): string
@@ -236,7 +236,7 @@ class DashboardView extends AbstractView
     /**
      * Renders a message when there are no SAEs to display.
      *
-     * @param User $user
+     * @param  User $user
      * @return string
      */
     private function renderEmptyState(User $user): string

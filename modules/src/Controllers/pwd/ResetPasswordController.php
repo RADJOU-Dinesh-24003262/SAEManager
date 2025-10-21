@@ -10,14 +10,13 @@ use includes\exception\ExceptionInvalidToken;
 
 /**
  * Class User
-
- * @package     src
-
- * @subpackage  Controllers\pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class controls the reset password process (get).
+
+ * @package src
+
+ * @subpackage Controllers\pwd
+
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  */
 class ResetPasswordController implements ControllerInterface
 {
@@ -28,13 +27,13 @@ class ResetPasswordController implements ControllerInterface
      */
     public function control(): void
     {
-        // Get the token from the URL
+        // Get the token from the URL.
         $token = $_GET['token'] ?? '';
         try {
             // Validate the token
             $tokenData = TokenService::validateToken($token);
 
-            // Token is valid, render the reset password view
+            // Token is valid, render the reset password view.
             $view = new ResetPasswordView($token, $tokenData['user_email']);
             $view->render();
         } catch (ExceptionInvalidToken $e) {
@@ -51,10 +50,13 @@ class ResetPasswordController implements ControllerInterface
     /**
      * Check if this controller can handle the request
      *
-     * @return boolean Is the method get?
+     * @param string $path   The request URI path.
+     * @param string $method The HTTP request method (e.g., GET, POST).
+     *
+     * @return bool True if the path is "/reset-password" and the method is GET, false otherwise.
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/reset-password" && $method === "GET";
+        return $path === "/reset-password" && $method === "GET";
     }
 }

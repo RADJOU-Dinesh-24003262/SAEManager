@@ -7,11 +7,11 @@ use includes\exception\ExceptionValidationLogin;
 /**
  * Class LoginValidator
 
- * @package     src
+ * @package src
 
- * @subpackage  Utilis\Validator
+ * @subpackage Utilis\Validator
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class regroup function to validate the login process of a user.
  */
@@ -19,13 +19,12 @@ class LoginValidator extends FormValidator
 {
     /**
      * The list of the variables required for the loggin of a user.
+     *
      * @var array
      */
     protected $required = ['email', 'password'];
 
     /**
-     *
-     *
      * This this method validated the values given in $data to log a user with.
      *
      * @param array $data array, in adequation to the required value fields.

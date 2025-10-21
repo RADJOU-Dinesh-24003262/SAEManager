@@ -7,11 +7,11 @@ use includes\database;
 /**
  * Class UserRepository
 
- * @package     src
+ * @package src
 
- * @subpackage  Models\User
+ * @subpackage Models\User
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class regroup function to manage the users in the database
  */
@@ -19,6 +19,7 @@ class UserRepository
 {
     /**
      * Connection to the database, storred in this database object
+     *
      * @var database
      */
     private database $db;
@@ -72,16 +73,19 @@ class UserRepository
     public function save(User $user): bool
     {
         try {
-            $stmt = $this->db->prepare("
+            $stmt = $this->db->prepare(
+                "
                 INSERT INTO users (amu_id, first_name, last_name, user_type, 
                                    email, password, phone, date_of_birth, city, 
                                    year, parcours, td, tp)
                 VALUES (:amu_id, :first_name, :last_name, :user_type,
                         :email, :password, :phone, :dob, :city,
                         :year, :parcours, :td, :tp)
-            ");
+            "
+            );
 
-            return $stmt->execute([
+            return $stmt->execute(
+                [
                 'amu_id' => $user->getAmuId(),
                 'first_name' => $user->getFirstName(),
                 'last_name' => $user->getLastName(),
@@ -95,7 +99,8 @@ class UserRepository
                 'parcours' => $user->getParcours(),
                 'td' => $user->getTd(),
                 'tp' => $user->getTp()
-            ]);
+                ]
+            );
         } catch (\PDOException $e) {
             error_log("Erreur sauvegarde utilisateur: " . $e->getMessage());
             return false;

@@ -22,21 +22,11 @@ use includes\exception\ExceptionSpam;
  * Validates form input, checks if a user exists, generates a reset token,
  * sends the reset email, and renders the view with appropriate feedback.
  *
- * @package Controllers\pwd
- * @version 1.0
- * @author Dinesh
- */
+ * @package src
 
-/**
- * Class User
+ * @subpackage Controllers\pwd
 
- * @package     src
-
- * @subpackage  Controllers\pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class controls the forgot password process (post).
+ * @author  Dinesh <dinesh.radjou@etu.univ-amu.fr>
  */
 class ForgotPasswordPostController implements ControllerInterface
 {
@@ -52,14 +42,12 @@ class ForgotPasswordPostController implements ControllerInterface
      * - Catches and handles validation exceptions with appropriate error messages.
      * - Renders the ForgotPasswordView.
      *
-     * @return void
-     * @author Dinesh
-     * @version 1.0
+     * @return  void
      */
     public function control(): void
     {
         try {
-            // Validate the form data and avoid feature spam
+            // Validate the form data and avoid feature spam.
             $validator = new ForgotPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
@@ -67,20 +55,20 @@ class ForgotPasswordPostController implements ControllerInterface
 
             error_log("Demande réinitialisation pour: {$email}");
 
-            // Verify if the user exists
+            // Verify if the user exists.
             $userExists = User::existsByEmail($email);
             if ($userExists) {
                 error_log("Utilisateur trouvé pour: {$email}");
 
-                // Create the password reset token
+                // Create the password reset token.
                 $token = TokenService::createPasswordResetToken($email);
 
-                // Send the email
+                // Send the email.
                 EmailService::sendPasswordResetEmail($email, $token);
             }
             $_SESSION['last_forgot_password_request'] = time();
 
-            // Generic message to avoid revealing if the email exists
+            // Generic message to avoid revealing if the email exists.
             SessionService::setFlash(
                 'success',
                 "Si cette adresse email est enregistrée dans notre système, " .
@@ -103,11 +91,10 @@ class ForgotPasswordPostController implements ControllerInterface
     /**
      * Determines whether this controller supports a given route and method.
      *
-     * @param string $path The route path (e.g., "/forgot-password").
-     * @param string $method The HTTP method (e.g., "POST").
-     * @return bool True if the controller should handle the request, false otherwise.
+     * @param  string $path   The route path (e.g., "/forgot-password").
+     * @param  string $method The HTTP method (e.g., "POST").
+     * @return boolean True if the controller should handle the request, false otherwise.
      */
-
     public static function support(string $path, string $method): bool
     {
         return $path === "/forgot-password" && $method === "POST";

@@ -36,7 +36,8 @@ class ToDoListView extends AbstractView
     {
         return 'to-do-list.css';
     }
-    /** Returns additional HTML headers for the To-Do List page.
+    /**
+     * Returns additional HTML headers for the To-Do List page.
      *
      * @return string The additional HTML headers.
      */

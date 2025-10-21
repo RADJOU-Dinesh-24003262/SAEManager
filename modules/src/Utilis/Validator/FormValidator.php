@@ -8,11 +8,11 @@ use includes\exception\ExceptionValidationEmptys;
 /**
  * Class FormValidator
  *
- * @package     src
+ * @package src
 
- * @subpackage  Utilis\Validator
+ * @subpackage Utilis\Validator
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
  *
  * Abstract class for form validation.
  * Provides methods to escape and validate form data.
@@ -22,13 +22,15 @@ abstract class FormValidator
     /**
      * List of required fields for form validation.
      * To be defined in child classes.
+     *
      * @var array
      */
     protected $required = [];
 
     /**
      * Escapes form data (HTML special chars).
-     * @param array $data of form
+     *
+     * @param  array $data of form
      * @return array Data with escaped fields
      * @throws ExceptionValidationEmptys if a required field is empty
      */
@@ -52,7 +54,8 @@ abstract class FormValidator
 
     /**
      * Validates form data. To be implemented in child classes.
-     * @param array $data
+     *
+     * @param  array $data
      * @throws \Exception
      */
     abstract public function validate(array $data): void;

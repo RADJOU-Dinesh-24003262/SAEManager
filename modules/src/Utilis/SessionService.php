@@ -5,19 +5,17 @@ namespace Utilis;
 /**
  * Class SessionService
 
- * @package     src
+ * @package src
 
- * @subpackage  Utilis
+ * @subpackage Utilis
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class regroup function to manage the user session.
  */
 class SessionService
 {
     /**
-     *
-     *
      * This method starts a session if none exists.
      *
      * @return void
@@ -30,12 +28,10 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This method creates a key value pair with the key and value given in parametters in the session.
      *
-     * @param string $key the key to set the value of.
-     * @param mixed $value the value that will be set.
+     * @param string $key   the key to set the value of.
+     * @param mixed  $value the value that will be set.
      *
      * @return void
      */
@@ -50,8 +46,8 @@ class SessionService
      *
      * This method returns the assiociated value to the key given in parametters in the user session.
      *
-     * @param string $key the key to get the message of.
-     * @param mixed $default used for genericity
+     * @param string $key     the key to get the message of.
+     * @param mixed  $default used for genericity
      *
      * @return mixed
      */
@@ -90,7 +86,7 @@ class SessionService
     /**
      * This method created a flash message with the key and value given in parametters. It is set into the user session.
      *
-     * @param string $key     The key of the flash message to retrieve.
+     * @param string $key   The key of the flash message to retrieve.
      * @param mixed  $value The default value to return if the key is not found.
      *
      * @return void
@@ -131,8 +127,6 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This methods destroys the user session.
      *
      * @return void
@@ -144,8 +138,6 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This methods destroys the user session and
      * recreated a new one with a new id (keeping it's stored key value pairs).
      *

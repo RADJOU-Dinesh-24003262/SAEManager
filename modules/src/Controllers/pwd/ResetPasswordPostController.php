@@ -17,11 +17,11 @@ use includes\exception\ExceptionPasswordUpdateFailed;
 /**
  * Class User
 
- * @package     src
+ * @package src
 
- * @subpackage  Controllers\pwd
+ * @subpackage Controllers\pwd
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class controls the reset password process (post).
  */

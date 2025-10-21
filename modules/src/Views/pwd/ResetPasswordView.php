@@ -8,11 +8,11 @@ use Views\AbstractView;
 /**
  * Class ResetPasswordView
 
- * @package     src
+ * @package src
 
- * @subpackage  pwd
+ * @subpackage pwd
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class represents the view for the "reset password" page of the application.
  * It extends the AbstractView class and provides specific implementations
@@ -22,22 +22,19 @@ class ResetPasswordView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/reset-password.html';
 
     /**
-
      * The constructor of the class, will use the constructor of the parent class AbstractView.
      * Also fills the $data variable with: token => $token, email => $email, variables given in parametters.
-
      *
-
      * @param string $token The token the user is assigned to reset their password.
      * @param string $email The email the user filled the reset password field with.
 
      * @return void Creates the instance of the class.
-
      */
     public function __construct(string $token, string $email)
     {
@@ -59,7 +56,8 @@ class ResetPasswordView extends AbstractView
         return self::TEMPLATE_HTML;
     }
 
-    /** Returns an associative array of keys and values to be used in the HTML template.
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
      *
      * This method retrieves error messages, the token and the email of the user
      * and prepares them for rendering in the template.
@@ -75,7 +73,8 @@ class ResetPasswordView extends AbstractView
         ];
     }
 
-    /** Returns a masked version of the email
+    /**
+     * Returns a masked version of the email
      *
      * This method replaces all but the first, last and arount dots characters with '*'
      * for security.
@@ -107,16 +106,12 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-
      * Returns the HTML to display and error message for the user.
 
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
-
      *
-
      * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
-
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -134,19 +129,18 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-
      * Returns the name of the page 'Password Renew - SAEManager' or
      * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Password Renew - SAEManager'.
-
      */
     protected function getPageTitle(): string
     {
         return 'Password Renew - SAEManager';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -158,7 +152,8 @@ class ResetPasswordView extends AbstractView
         return 'pwd-renew.css';
     }
 
-    /** Returns additional HTML headers for the Login page.
+    /**
+     * Returns additional HTML headers for the Login page.
      *
      * @return string The additional HTML headers.
      */
@@ -166,7 +161,8 @@ class ResetPasswordView extends AbstractView
     {
         return '<script src="scripts/reset-password.js"></script>';
     }
-    /** Returns additional HTML headers for the Reset Password page.
+    /**
+     * Returns additional HTML headers for the Reset Password page.
      *
      * @return string The additional HTML headers.
      */

@@ -5,11 +5,11 @@ namespace Controllers;
 /**
  * Class User
 
- * @package     src
+ * @package Src
 
- * @subpackage  Controllers
+ * @subpackage Controllers
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class is the interface to be implemented for all the controllers.
  */
