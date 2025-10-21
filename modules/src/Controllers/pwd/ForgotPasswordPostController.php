@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\pwd;
 
 use Controllers\ControllerInterface;
@@ -26,6 +27,17 @@ use includes\exception\ExceptionSpam;
  * @author Dinesh
  */
 
+/**
+ * Class User
+
+ * @package     src
+
+ * @subpackage  Controllers\pwd
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class controls the forgot password process (post).
+ */
 class ForgotPasswordPostController implements ControllerInterface
 {
     /**
@@ -59,29 +71,27 @@ class ForgotPasswordPostController implements ControllerInterface
             $userExists = User::existsByEmail($email);
             if ($userExists) {
                 error_log("Utilisateur trouvé pour: {$email}");
-                
+
                 // Create the password reset token
                 $token = TokenService::createPasswordResetToken($email);
-                
+
                 // Send the email
                 EmailService::sendPasswordResetEmail($email, $token);
             }
             $_SESSION['last_forgot_password_request'] = time();
 
             // Generic message to avoid revealing if the email exists
-            SessionService::setFlash('success',
+            SessionService::setFlash(
+                'success',
                 "Si cette adresse email est enregistrée dans notre système, " .
                 "vous recevrez un lien de réinitialisation dans quelques minutes. " .
                 "Vérifiez également vos courriers indésirables."
             );
-
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
-
         } catch (ExceptionValidationForgotPassword | ExceptionCreationTokenFailed | ExceptionEmailSendingFailed | ExceptionSpam $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
-
         }
         $view = new ForgotPasswordView();
         $view->render();

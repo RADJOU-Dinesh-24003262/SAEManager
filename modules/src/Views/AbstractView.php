@@ -1,24 +1,64 @@
 <?php
+
 namespace Views;
 
-abstract class AbstractView 
+/**
+
+ * The abstract class which will will be used to create all of the views.
+
+ *
+
+ * It contains all the required methods and attributes to be used in the implemented views.
+
+ *
+
+ * @package     src
+
+ *
+
+ * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ */
+abstract class AbstractView
 {
+    /**
+     * Stores the data used in the implemented page. The var line contains the type stored in this variable.
+     * @var array
+     */
     protected array $data = [];
 
+    /**
+
+     * Initializes the $data attribute with the array of data given when called.
+
+     *
+
+     * @param array $data The array of data to be instantiated
+
+     * @return void Creates the instance of the class.
+
+     */
     public function __construct(array $data = [])
     {
         $this->data = $data;
     }
 
+    /** Renders a template HTML with predefined string to modify with the strings given by the templateKeys method
+     *
+     * This method retrieves an HTML template to modify with variables
+     * and renders it with given parametters.
+     *
+     * @return array An associative array with keys for error and success messages.
+     */
     protected function renderBody(): void
     {
         $template = file_get_contents($this->templatePath());
-        
+
         // Replacement of template keys with actual values
         foreach ($this->templateKeys() as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }
-        
+
         echo $template;
     }
 
@@ -34,10 +74,9 @@ abstract class AbstractView
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
      *
-     * @return string[] An associative array with keys for error and success messages.
+     * @return array An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
-
     /** Renders the complete HTML page including header, body, and footer.
      *
      * This method orchestrates the rendering of the entire HTML page by calling
@@ -64,19 +103,31 @@ abstract class AbstractView
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>' . $this->getPageTitle() . '</title>
             <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
-            <link rel="stylesheet" href="styles/'.$this->getNameCss().'">
+
+            <link rel="stylesheet" href="styles/' . $this->getNameCss() . '">
             <link rel="stylesheet" href="styles/header.css">
             ' . $this->getAdditionalHeaders() . '
         </head>
         <body>
         <header class="global-header">
-            <h1 class="saeManager">SAEManager</h1>
-                <img src="/image/logoamu.png" alt="Logo AMU Header">
+
+
+            <p class="saeManager">SAEManager</p>
+            <div class="amuimg" >
+            <img src="/image/logoamu.png" alt="Logo AMU Header" >
+</div>
+            
+             <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <nav class="navBar">
             <a href="/" class="nav-link">Accueil</a>
             <a href="/login" class="nav-link">Connexion</a>
             <a href="/register" class="nav-link">Inscription</a>
     </nav>
+
 </header>
 
         ';
@@ -127,10 +178,20 @@ abstract class AbstractView
                 </div>
             </div>
         </footer>
+        <script src="scripts/burgermenu.js"></script>
     </body>
 </html>';
     }
 
+    /**
+
+     * Returns the name of the project 'SAEManager' or be used in some cases like displaying it by some isolated texts.
+
+     *
+
+     * @return string the name of the project 'SAEManager'.
+
+     */
     protected function getPageTitle(): string
     {
         return 'SAEManager';

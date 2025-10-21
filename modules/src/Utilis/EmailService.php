@@ -1,31 +1,66 @@
 <?php
+
 namespace Utilis;
 
 use Exception;
 use includes\exception\ExceptionEmailSendingFailed;
 
+/**
+ * Class EmailService
+
+ * @package     src
+
+ * @subpackage  Utilis
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class regroup function to manage the email service.
+ */
 class EmailService
 {
+    /**
+     * The email to send mails from.
+     * @var string
+     */
     private static string $fromEmail = 'noreply@saemanager.alwaysdata.net';
+    /**
+     * The sender of the mails.
+     * @var string
+     */
     private static string $fromName = 'SAEManager';
 
     /**
-     * Send password reset email
+     * Returns the success of sending a mail to the user, in order to reset their password.
+     *
+     * This method creates a mail with a built reset password link (self::getResetLink) using the token and email
+     * given in parametters.
+     *
+     * @param $toEmail The email of the user whom want their password reset.
+     * @param $token the token created for the password reset.
+     *
+     * @return boolean
      */
     public static function sendPasswordResetEmail(string $toEmail, string $token): void
     {
         $resetLink = self::getResetLink($token);
-        
+
         $subject = 'Réinitialisation de votre mot de passe - SAEManager';
-        
+
         $htmlMessage = self::getHtmlTemplate($resetLink);
         $textMessage = self::getTextTemplate($resetLink);
-        
+
         self::sendEmail($toEmail, $subject, $htmlMessage, $textMessage);
     }
 
     /**
-     * Builds the password reset link
+     * Returns the reset password link.
+     *
+     * This method builds a password reset link based on the server parametters
+     * and the token given in parametters and returns it.
+     *
+     * @param $token the token created for the password reset to create to link with.
+     *
+     * @return string
      */
     private static function getResetLink(string $token): string
     {
@@ -35,7 +70,9 @@ class EmailService
     }
 
     /**
-     * Template HTML of the email
+     * Returns the HTML template file.
+     *
+     * @return string
      */
     private static function getHtmlTemplate(string $resetLink): string
     {
@@ -100,7 +137,9 @@ class EmailService
     }
 
     /**
-     * Template in plain text of the email
+     * Returns the string email template file.
+     *
+     * @return string
      */
     private static function getTextTemplate(string $resetLink): string
     {
@@ -125,36 +164,47 @@ Ceci est un email automatique, merci de ne pas y répondre.
     }
 
     /**
-     * Sends a email (generic method)
+     * Returns the success of sending a mail to the user
+     *
+     * This method tries to send an email to the user using all the parametters
+     * given and filling the templates with variables, fixing chartsets and other content types.
+     *
+     * @param string $to the email to send to.
+     * @param string $subject the subject of the mail.
+     * @param string $htmlMessage the html message.
+     * @param string $textMessage the plain text message.
+     *
+     * @return string
      */
-    private static function sendEmail( string $to, string $subject, string $htmlMessage, string $textMessage ): void {
+    private static function sendEmail(string $to, string $subject, string $htmlMessage, string $textMessage): void
+    {
         // Headers for multipart email (HTML + text)
         $boundary = md5(uniqid('boundary_', true));
-        
+
         $headers = [
             'From' => self::$fromName . ' <' . self::$fromEmail . '>',
             'Reply-To' => self::$fromEmail,
             'MIME-Version' => '1.0',
             'Content-Type' => 'multipart/alternative; boundary="' . $boundary . '"'
         ];
-        
+
         $message = "--{$boundary}\r\n";
         $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
         $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
         $message .= $textMessage . "\r\n\r\n";
-        
+
         $message .= "--{$boundary}\r\n";
         $message .= "Content-Type: text/html; charset=UTF-8\r\n";
         $message .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
         $message .= $htmlMessage . "\r\n\r\n";
-        
+
         $message .= "--{$boundary}--";
-        
+
         $headerString = '';
         foreach ($headers as $key => $value) {
             $headerString .= "{$key}: {$value}\r\n";
         }
-        
+
         // Send the email
         if (mail($to, $subject, $message, $headerString)) {
             error_log("Email envoyé avec succès à: {$to}");
@@ -162,6 +212,5 @@ Ceci est un email automatique, merci de ne pas y répondre.
             error_log("Échec d'envoi d'email à: {$to}");
             throw new ExceptionEmailSendingFailed();
         }
-
     }
 }
