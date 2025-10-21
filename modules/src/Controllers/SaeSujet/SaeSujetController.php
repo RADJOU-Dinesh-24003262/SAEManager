@@ -1,16 +1,5 @@
 <?php
 
-/**
- * Controller for the form of the subject of the SAE.
- * Handles requests to display the form.
- * @package Controllers\SaeSujet
- * @version 1.0
- * @author Dargentolle François
- * @see SaeSujetView
- * @link /sae-sujet
- * @category Controller
- */
-
 namespace Controllers\SaeSujet;
 
 use Controllers\ControllerInterface;
@@ -18,19 +7,25 @@ use Views\SaeSujet\SaeSujetView;
 use Views\ToDoList\ToDoListView;
 
 /**
- * Class SaeSujetController
- * Handles the control logic for the form of the subject of the SAE.
+ * Controller for the form of the subject of the SAE.
+ * Handles requests to display the form.
  * @package Controllers\SaeSujet
  * @version 1.0
- * @author Dargentolle François
+ * @author Benhafessa Alexandre 
+ * @author Dargentolle Francois
+ * @author Edelstein William
+ * @author Griguer Nathan
+ * @author Radjou Dinesh
  * @see SaeSujetView
+ * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License v3.0
  * @link /sae-sujet
- * @category Class
+ * @category Controller
  */
 class SaeSujetController implements ControllerInterface
 {
     /**
      * @method void control() Controls the rendering of the form of subject view.
+     * @return void
      */
     public function control(): void
     {
@@ -41,7 +36,9 @@ class SaeSujetController implements ControllerInterface
     /**
      *  @method static bool support(string $chemin, string $method)
      *  Determines if this controller supports the given path and method.
-     *  @return bool true if the path and method are supported, false otherwise
+     *  @param string $path The requested path
+     *  @param string $method The HTTP method
+     *  @return boolean true if the path and method are supported, false otherwise
      */
     public static function support(string $path, string $method): bool
     {
