@@ -22,7 +22,7 @@ class ValidationServiceRegister extends FormValidator
      * The list of the variables required for the registration process of a user.
      * @var array
      */
-    protected $required = ['amuId', 'firstName', 'lastName', 'user_type', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
+    protected $required = ['amu_id', 'first_name', 'last_name', 'user_type', 'email', 'password', 'passwordverif', 'phone', 'terms'];
 
     /**
      *
@@ -46,7 +46,7 @@ class ValidationServiceRegister extends FormValidator
 
         if (!$this->isValidEmail($data['email'])) {
             $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
-        } elseif (!$this->isOwnAmuEmail($data['email'], $data['lastName'], $data['firstName'])) {
+        } elseif (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
             $errors[] = new ExceptionValidationRegister("email", "string", "Utilisez votre adresse e-mail universitaire.");
         }
 
@@ -60,20 +60,6 @@ class ValidationServiceRegister extends FormValidator
 
         if (!$this->isValidPhone($data['phone'])) {
             $errors[] = new ExceptionValidationRegister("phone", "int", "Numéro de téléphone invalide.");
-        }
-
-
-        if (!$this->isValidDate($data['dateOfBirth'])) {
-            $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Date de naissance invalide.");
-        } else {
-            $age = (new \DateTime())->diff(new \DateTime($data['dateOfBirth']))->y;
-            if ($age < 16) {
-                $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Vous devez avoir au moins 16 ans.");
-            }
-        }
-
-        if (!$this->isValidGender($data['gender'])) {
-            $errors[] = new ExceptionValidationRegister("gender", "string", "Veuillez sélectionner un genre valide.");
         }
 
         // Specific validation for students

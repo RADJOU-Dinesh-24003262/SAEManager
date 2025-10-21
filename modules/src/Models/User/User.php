@@ -361,7 +361,7 @@ class User
                     $this->user_type = "student";
                 }
                 else{
-                    $this->user_type = "professor"
+                    $this->user_type = "professor";
                 }
             }
             else{
@@ -581,12 +581,12 @@ class User
         return $this->user_type === 'professor';
     }
     /**
-     * Returns true if the user is a companie.
+     * Returns true if the user is a client.
      *
-     * @return boolean is the user a companie?
+     * @return boolean is the user a client?
      */
     public function isCompany(): bool
     {
-        return $this->user_type === 'companies';
+        return $this->user_type === 'client';
     }
 }
