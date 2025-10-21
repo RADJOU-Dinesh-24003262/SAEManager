@@ -21,9 +21,7 @@ use Utilis\SessionService;
  * @package Controllers\Dashboard
  * @author Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
  * @license MIT https://opensource.org/licenses/MIT
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/docs/dashboard-controller
- * @throws ExceptionDashboard If the data if empty.
- *
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
 class DashboardController implements ControllerInterface
 {
@@ -35,6 +33,9 @@ class DashboardController implements ControllerInterface
      * - Redirects to the login page with an error message if not;
      * - Retrieves the user object from the session;
      * - Passes the user data to the DashboardView and renders it.
+     *
+     * @throws ExceptionDashboard If user data is not found or invalid.
+     *
      * @return void
      * @throws ExceptionDashboard If the data if empty.
      */
