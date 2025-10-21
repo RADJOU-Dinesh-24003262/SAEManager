@@ -38,7 +38,7 @@ coverage: ## Génère le rapport de couverture
 
 phpcs: ## Vérifie le code style (PSR-12)
 	@echo "${YELLOW}Vérification du code style...${NC}"
-	./vendor/bin/phpcs --standard=PSR12 --colors modules/src/
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --standard=PSR12 --colors modules/src/
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
@@ -50,8 +50,8 @@ phpdoc: ## Vérifie la documentation
 
 fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
-	./vendor/bin/phpcbf --standard=PSR12 modules/src/
-	./vendor/bin/phpcbf --standard=PSR12 tests/
+	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 modules/src/
+	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 tests/
 	@echo "${GREEN}✓ Code formaté${NC}"
 
 quality: ## Lance toutes les vérifications de qualité
