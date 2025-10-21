@@ -30,15 +30,15 @@ class EmailService
     private static string $fromName = 'SAEManager';
 
     /**
-     * Returns the success of sending a mail to the user, in order to reset their password.
+     * Send a mail to the user, in order to reset their password.
      *
      * This method creates a mail with a built reset password link (self::getResetLink) using the token and email
      * given in parametters.
      *
-     * @param $toEmail The email of the user whom want their password reset.
-     * @param $token the token created for the password reset.
+     * @param string $toEmail The email of the user whom want their password reset.
+     * @param string $token the token created for the password reset.
      *
-     * @return boolean
+     * @return void
      */
     public static function sendPasswordResetEmail(string $toEmail, string $token): void
     {
@@ -164,7 +164,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
     }
 
     /**
-     * Returns the success of sending a mail to the user
+     * Throws an error if sending the mail fail
      *
      * This method tries to send an email to the user using all the parametters
      * given and filling the templates with variables, fixing chartsets and other content types.
@@ -174,7 +174,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
      * @param string $htmlMessage the html message.
      * @param string $textMessage the plain text message.
      *
-     * @return string
+     * @return void
      */
     private static function sendEmail(string $to, string $subject, string $htmlMessage, string $textMessage): void
     {

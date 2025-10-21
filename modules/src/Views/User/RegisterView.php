@@ -68,7 +68,7 @@ class RegisterView extends AbstractView
     public const FIELD_PASSWORD_CONFIRM = 'pwdverif';
     /**
      * The phone number of the user. used to secure the site, to contact them and identify an account.
-     * @var int
+     * @var string
      */
     public const FIELD_PHONE = 'tel';
     /**
@@ -103,7 +103,7 @@ class RegisterView extends AbstractView
     public const FIELD_TP = 'tp';
     /**
      * The variable that gives weather the user has accepted the terms and conditions.
-     * @var boolean
+     * @var string
      */
     public const FIELD_TERMS = 'terms';
 
