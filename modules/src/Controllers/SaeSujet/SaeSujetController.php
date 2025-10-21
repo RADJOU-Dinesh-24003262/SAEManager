@@ -41,8 +41,6 @@ class SaeSujetController implements ControllerInterface
      */
     public static function support(string $path, string $method): bool
     {
-
-
-        return $path === "/sae-sujet" && $method === "GET";
+        return $path === "/new-sae" && $method === "GET";
     }
 }
