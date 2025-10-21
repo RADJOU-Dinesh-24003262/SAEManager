@@ -17,14 +17,16 @@ use Utilis\Validator\LoginValidator;
 
 /**
  * Class User
-
- * @package     src
-
- * @subpackage  Controllers\User
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class controls the login process (post).
+ * @category Controllers
+ * @package Controllers\User
+ * @author Benhafessa Alexandre <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author Dargentolle François <francois.dargentolle@etu.univ-amu.fr>
+ * @author Edelstein William <william.edelstein@etu.univ-amu.fr>
+ * @author Griguer Nathan <nathan.griguer@etu.univ-amu.fr>
+ * @author Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT https://opensource.org/licenses/MIT
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/docs/login-post
  */
 class LoginPost implements ControllerInterface
 {
@@ -73,11 +75,12 @@ class LoginPost implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     *
+     * @param   string $path   The URL path of the request (e.g., "/dashboard").
+     * @param   string $method The HTTP method used (e.g., "GET", "POST").
      * @return boolean Is the method post?
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/login" && $method === "POST";
+        return $path === "/login" && $method === "POST";
     }
 }

@@ -17,7 +17,13 @@ use Utilis\SessionService;
  * If the user is not authenticated (i.e., no user ID exists in the session),
  * they are redirected to the login page with a flash error message.
  *
+ * @category Controllers
  * @package Controllers\Dashboard
+ * @author Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT https://opensource.org/licenses/MIT
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/docs/dashboard-controller
+ * @throws ExceptionDashboard If the data if empty.
+ *
  */
 class DashboardController implements ControllerInterface
 {
@@ -29,19 +35,19 @@ class DashboardController implements ControllerInterface
      * - Redirects to the login page with an error message if not;
      * - Retrieves the user object from the session;
      * - Passes the user data to the DashboardView and renders it.
-     *
      * @return void
+     * @throws ExceptionDashboard If the data if empty.
      */
     public function control(): void
     {
         if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource']);
+            SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource.']);
             header('Location: /login');
             exit();
         }
 
         try {
-            // Retrieve the user object stored in the session
+            // Retrieve the user object stored in the session.
             $user = unserialize(SessionService::get('USER'));
 
             $data['user'] = $user;
@@ -50,7 +56,7 @@ class DashboardController implements ControllerInterface
                 throw new ExceptionDashboard('Utilisateur inconnu');
             }
 
-            // Create and render the dashboard view
+            // Create and render the dashboard view.
             $view = new DashboardView($data);
             $view->render();
         } catch (ExceptionDashboard $e) {
@@ -66,10 +72,10 @@ class DashboardController implements ControllerInterface
      * This static method checks whether the controller supports
      * a given route path and HTTP method.
      *
-     * @param string $path   The URL path of the request (e.g., "/dashboard")
-     * @param string $method The HTTP method used (e.g., "GET", "POST")
+     * @param   string $path   The URL path of the request (e.g., "/dashboard").
+     * @param   string $method The HTTP method used (e.g., "GET", "POST").
      *
-     * @return bool Returns true if the path is "/dashboard" and the method is "GET"; otherwise, false.
+     * @return boolean Returns true if the path is "/dashboard" and the method is "GET"; otherwise, false.
      */
     public static function support(string $path, string $method): bool
     {
