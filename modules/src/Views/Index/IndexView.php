@@ -8,7 +8,7 @@ use Controllers\Index\IndexControllerPost;
 
 /**
  * Class IndexView
- 
+
  * @package     src
 
  * @subpackage  Index
@@ -36,13 +36,13 @@ class IndexView extends AbstractView
 
      */
     public function __construct()
-{
-    $data = [
+    {
+        $data = [
         'errors' => SessionService::getFlash('errors', []),
         'success' => SessionService::getFlash('success', '')
-    ];
-    parent::__construct($data);
-}
+        ];
+        parent::__construct($data);
+    }
 
     /**
      * Returns the path to the HTML template file.
@@ -75,7 +75,7 @@ class IndexView extends AbstractView
     /**
 
      * Returns the HTML to display and error message for the user.
-     
+
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
@@ -102,7 +102,7 @@ class IndexView extends AbstractView
     /**
 
      * Returns the HTML to display and success message for the user.
-     
+
      * If $success contains a success message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
@@ -174,5 +174,4 @@ class IndexView extends AbstractView
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />' ;
     }
-
 }

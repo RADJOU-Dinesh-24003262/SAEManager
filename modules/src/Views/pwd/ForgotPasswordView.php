@@ -8,13 +8,13 @@ use Views\AbstractView;
 /**
  * Class ForgotPasswordView
  *
- * 
+ *
  * @package     src
 
  * @subpackage  pwd
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- * 
+ *
  * This class represents the view for the "forgot password" page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the forgot password page, including handling error and success messages.
@@ -84,7 +84,7 @@ class ForgotPasswordView extends AbstractView
     /**
 
      * Returns the HTML to display and error message for the user.
-     
+
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
@@ -111,7 +111,7 @@ class ForgotPasswordView extends AbstractView
     /**
 
      * Returns the HTML to display and success message for the user.
-     
+
      * If $success contains a success message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 
@@ -181,5 +181,4 @@ class ForgotPasswordView extends AbstractView
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />';
     }
-
 }

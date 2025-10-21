@@ -6,7 +6,7 @@ use includes\exception\ExceptionValidationResetPassword;
 
 /**
  * Class ResetPasswordValidator
- 
+
  * @package     src
 
  * @subpackage  Utilis\Validator
@@ -24,14 +24,14 @@ class ResetPasswordValidator extends FormValidator
     protected $required = ['pwdnew', 'pwdverif'];
 
     /**
-     * 
-     * 
+     *
+     *
      * This method validates the values given in $data to reset the password of a user with.
      *
-     * @param array $data array, in adequation to the required value fields. 
-     * 
+     * @param array $data array, in adequation to the required value fields.
+     *
      * @return void
-     * 
+     *
      * @throws ExceptionValidationResetPassword all the errors that might have been found
      */
     public function validate(array $data): void

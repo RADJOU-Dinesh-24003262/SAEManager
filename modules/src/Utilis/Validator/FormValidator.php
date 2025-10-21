@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationEmpty;
@@ -6,13 +7,13 @@ use includes\exception\ExceptionValidationEmptys;
 
 /**
  * Class FormValidator
- *  
+ *
  * @package     src
 
  * @subpackage  Utilis\Validator
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- * 
+ *
  * Abstract class for form validation.
  * Provides methods to escape and validate form data.
  */
@@ -58,9 +59,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the userType field
-     * 
+     *
      * @param string $userType the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidUserType(string $userType): bool
@@ -70,9 +71,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the email field
-     * 
+     *
      * @param string $email the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidEmail(string $email): bool
@@ -83,23 +84,24 @@ abstract class FormValidator
     /**
      * Returns the validity of the amUemail with the first and last name
      * as a amU email should be firstname.lastname[numberIfDuplicated]@(etu\.)?univ-amu\.fr$/
-     * 
+     *
      * @param string $email the value to validate
      * @param string $lname the last name of the user
      * @param string $fmame the first name of the user
-     * 
+     *
      * @return boolean
      */
-    protected function isOwnAmuEmail($email, $lname, $fname) {
+    protected function isOwnAmuEmail($email, $lname, $fname)
+    {
         $pattern = '/^' . strtolower(preg_quote($fname, '/')) . '\.' . strtolower(preg_quote($lname, '/')) . '(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/';
         return preg_match($pattern, $email) && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
     }
 
     /**
      * Returns the validity of the password field
-     * 
+     *
      * @param string $password the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidPassword(string $password): bool
@@ -109,9 +111,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the phone field
-     * 
+     *
      * @param string $phone the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidPhone(string $phone): bool
@@ -121,9 +123,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the date field
-     * 
+     *
      * @param string $date the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidDate(string $date): bool
@@ -134,9 +136,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the year field
-     * 
+     *
      * @param string $year the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidYear(string $year): bool
@@ -146,9 +148,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the parcours field
-     * 
+     *
      * @param string $parcours the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidParcours(string $parcours): bool
@@ -158,9 +160,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the parcours field
-     * 
+     *
      * @param string $parcours the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidTD(string $td): bool
@@ -170,9 +172,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the tp field
-     * 
+     *
      * @param string $tp the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidTP(string $tp): bool
@@ -182,9 +184,9 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the gender field
-     * 
+     *
      * @param string $gender the value to validate
-     * 
+     *
      * @return boolean
      */
     protected function isValidGender(string $gender): bool

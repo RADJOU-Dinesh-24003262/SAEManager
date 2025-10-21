@@ -19,7 +19,7 @@ namespace Views;
  * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  */
-abstract class AbstractView 
+abstract class AbstractView
 {
     /**
      * Stores the data used in the implemented page. The var line contains the type stored in this variable.

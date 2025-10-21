@@ -1,11 +1,12 @@
 <?php
+
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class LoginValidator
- 
+
  * @package     src
 
  * @subpackage  Utilis\Validator
@@ -23,20 +24,20 @@ class LoginValidator extends FormValidator
     protected $required = ['email', 'password'];
 
     /**
-     * 
-     * 
+     *
+     *
      * This this method validated the values given in $data to log a user with.
      *
-     * @param array $data array, in adequation to the required value fields. 
-     * 
+     * @param array $data array, in adequation to the required value fields.
+     *
      * @return void
-     * 
+     *
      * @throws ExceptionValidationLogin all the errors that might have been found
      */
     public function validate(array $data): void
     {
         if (!$this->isValidEmail($data['email'])) {
-            throw new ExceptionValidationLogin( "L'adresse email n'est pas valide.");
+            throw new ExceptionValidationLogin("L'adresse email n'est pas valide.");
         }
     }
 }
