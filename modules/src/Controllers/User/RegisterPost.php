@@ -40,7 +40,7 @@ class RegisterPost implements ControllerInterface
      *
      * @return void
      *
-     * @throws ExceptionValidationRegisters|ExceptionValidationEmptys|\PDOException|\Exception If validation fails,database errors occur, or user saving fails.
+     * @throws \Exception For any other unexpected errors during the registration process.
      */
     public function control(): void
     {
