@@ -11,7 +11,7 @@ use Views\ToDoList\ToDoListView;
  * Handles requests to display the form.
  * @package Controllers\SaeSujet
  * @version 1.0
- * @author Benhafessa Alexandre 
+ * @author Benhafessa Alexandre
  * @author Dargentolle Francois
  * @author Edelstein William
  * @author Griguer Nathan
