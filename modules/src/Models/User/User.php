@@ -533,7 +533,7 @@ class User
     /**
      * Returns true if the user is a client.
      *
-     * @return boolean is the user a companie?
+     * @return boolean is the user a client?
      */
     public function isClient(): bool
     {
