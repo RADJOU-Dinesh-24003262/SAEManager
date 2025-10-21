@@ -27,6 +27,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
     {
         // Test d'intégration : la méthode statique fonctionne sans instance
         $result = SaeSujetController::support('/new-sae', 'GET');
+        $this->assertTrue($result);
     }
 
     #[Test]
@@ -35,11 +36,12 @@ class SaeSujetControllerIntegrationTest extends TestCase
         // Test d'intégration : la méthode control s'exécute complètement
         $controller = new SaeSujetController();
 
-        // Si cette méthode échoue, cela indique un problème d'intégration
-        // avec les vues ou autres dépendances
-        $this->expectNotToPerformAssertions();
-
+        // Capture l'output pour éviter les warnings
+        ob_start();
         $controller->control();
+        $output = ob_get_clean();
+    
+        $this->expectNotToPerformAssertions();
     }
 
     #[Test]

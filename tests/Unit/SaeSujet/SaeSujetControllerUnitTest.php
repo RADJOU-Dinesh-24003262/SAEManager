@@ -65,10 +65,11 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function controlMethodReturnsVoid(): void
     {
-        $reflection = new \ReflectionClass(SaeSujetController::class);
-        $method = $reflection->getMethod('action');
+        $reflection = new \ReflectionMethod($this->controller, 'control'); 
+    $returnType = $reflection->getReturnType();
 
-        $this->assertEquals('void', $method->getName());
+    $this->assertNotNull($returnType);
+    $this->assertEquals('void', $returnType->getName());
     }
 
     #[Test]
@@ -101,20 +102,25 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function supportMethodHasCorrectParameters(): void
     {
-        $reflection = new \ReflectionClass(SaeSujetController::class);
-        $method = $reflection->getMethod('support');
-
-        $this->assertEquals('support', $method->getName());
-        $this->assertEquals('SaeSujetController', $method->getDeclaringClass()->getName());
+        $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
+        $parameters = $reflection->getParameters();
+        
+        $this->assertCount(2, $parameters);
+        $this->assertEquals('path', $parameters[0]->getName());
+        $this->assertEquals('method', $parameters[1]->getName());
+        // Ne teste pas le type de la classe, teste le type des paramètres
+        $this->assertEquals('string', $parameters[0]->getType()->getName());
+        $this->assertEquals('string', $parameters[1]->getType()->getName());
     }
 
     #[Test]
     public function supportMethodReturnsBoolean(): void
     {
-        $reflection = new \ReflectionClass(SaeSujetController::class);
-        $method = $reflection->getMethod('support');
-
-        $this->assertEquals('true', $method->getName());
+        $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
+        $returnType = $reflection->getReturnType();
+        
+        $this->assertNotNull($returnType);
+        $this->assertEquals('bool', $returnType->getName()); // 'bool' pas 'true'
     }
 
     /**
