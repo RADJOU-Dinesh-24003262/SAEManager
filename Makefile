@@ -86,6 +86,7 @@ fix-staged: ## Corrige les fichiers stagés en fonction du code style (PSR-12)
 		for FILE in $$FILES; do \
 			echo "➡ Correction: $$FILE"; \
 			vendor/bin/php-cs-fixer fix --using-cache=no "$$FILE"; \
+			vendor/bin/phpcbf --standard=PSR12 --standard=phpcs-phpdoc.xml --colors modules/src; \
 			git add "$$FILE"; \
 		done; \
 		echo "✅ Tous les fichiers ont été corrigés et re-stagés."; \
