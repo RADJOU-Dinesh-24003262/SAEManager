@@ -74,7 +74,7 @@ class User
     private string $city = '';
     /**
      * The year of study of the user
-     * @var string
+     * @var int
      */
     private ?int $year = null;
     /**
