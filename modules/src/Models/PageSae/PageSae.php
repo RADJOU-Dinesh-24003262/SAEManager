@@ -9,7 +9,7 @@ use PDOException;
  * Represents a SAE page with its associated data and provides methods to interact with the database.
  * @package Models\PageSae
  * @author Dargentolle François
- * @version 1.1 (next to come shortly)
+ * @version 1.2 (next to come shortly)
  * @see database
  * @category Model
  */
@@ -72,11 +72,11 @@ class PageSae {
      * @method static fetchByAmuid(string $amuid) Fetches a PageSae instance from the database by the AMUID of the user.
      * @param string $amuid The AMUID of the user to fetch.
      */
-    public static function fetchByAmuid(string $amuid): ?self {
+    public static function fetchBySaeTitle(string $title): ?self {
         try {
             $db = database::getInstance();
-            $stmt = $db->prepare("SELECT title, content, managerName, creationDate, groups, finaldate FROM sae WHERE amuid = :amuid");
-            $stmt->bindParam(':amuid', $amuid, PDO::PARAM_STR);
+            $stmt = $db->prepare("SELECT title, content, managerName, creationDate, groups, finaldate FROM sae WHERE title = :title");
+            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->execute();
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
