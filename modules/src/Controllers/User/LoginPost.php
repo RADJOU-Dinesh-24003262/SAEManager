@@ -14,8 +14,24 @@ use Views\Index\IndexView;
 use Views\User\LoginView;
 use Utilis\Validator\LoginValidator;
 
+/**
+ * Class User
+
+ * @package     src
+
+ * @subpackage  Controllers\User
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class controls the login process (post).
+ */
 class LoginPost implements ControllerInterface
 {
+    /**
+     * Principal manager of the controller
+     *
+     * @return void
+     */
     public function control(): void
     {
 
@@ -52,6 +68,11 @@ class LoginPost implements ControllerInterface
         $view->render();
     }
 
+    /**
+     * Check if this controller can handle the request
+     *
+     * @return boolean Is the method post?
+     */
     public static function support(string $chemin, string $method): bool
     {
         return $chemin === "/login" && $method === "POST";
