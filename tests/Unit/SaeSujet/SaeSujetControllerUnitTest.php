@@ -68,7 +68,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $reflection = new \ReflectionClass(SaeSujetController::class);
         $method = $reflection->getMethod('action');
 
-        $this->assertNotNull(method_exists($method, '__invoke'));
         $this->assertEquals('void', $method->getName());
     }
 
@@ -105,7 +104,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $reflection = new \ReflectionClass(SaeSujetController::class);
         $method = $reflection->getMethod('support');
 
-        $this->assertNotNull(method_exists($method, '__invoke'));
         $this->assertEquals('support', $method->getName());
         $this->assertEquals('SaeSujetController', $method->getDeclaringClass()->getName());
     }
@@ -116,7 +114,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $reflection = new \ReflectionClass(SaeSujetController::class);
         $method = $reflection->getMethod('support');
 
-        $this->assertNotNull(method_exists($method, '__invoke'));
         $this->assertEquals('true', $method->getName());
     }
 
