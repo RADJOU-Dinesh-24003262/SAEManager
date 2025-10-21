@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Test\Unit\Controller\SaeSujet;
@@ -26,8 +27,8 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->controller = new SaeSujetController();
     }
 
-    /** 
-     * TESTS D'INSTANCIATION ET D'INTERFACE 
+    /**
+     * TESTS D'INSTANCIATION ET D'INTERFACE
      */
 
     #[Test]
@@ -57,8 +58,8 @@ class SaeSujetControllerUnitTest extends TestCase
         );
     }
 
-    /** 
-     * TESTS UNITAIRES DE LA MÉTHODE control() 
+    /**
+     * TESTS UNITAIRES DE LA MÉTHODE control()
      */
 
     #[Test]
@@ -67,7 +68,7 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod($this->controller, 'control');
         $returnType = $reflection->getReturnType();
-        
+
         $this->assertNotNull($returnType);
         $this->assertEquals('void', $returnType->getName());
     }
@@ -86,12 +87,12 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod($this->controller, 'control');
         $parameters = $reflection->getParameters();
-        
+
         $this->assertCount(0, $parameters);
     }
 
-    /** 
-     * TESTS UNITAIRES DE LA MÉTHODE support() - CARACTÉRISTIQUES 
+    /**
+     * TESTS UNITAIRES DE LA MÉTHODE support() - CARACTÉRISTIQUES
      */
 
     #[Test]
@@ -108,7 +109,7 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
         $parameters = $reflection->getParameters();
-        
+
         $this->assertCount(2, $parameters);
         $this->assertEquals('path', $parameters[0]->getName());
         $this->assertEquals('method', $parameters[1]->getName());
@@ -122,13 +123,13 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
         $returnType = $reflection->getReturnType();
-        
+
         $this->assertNotNull($returnType);
         $this->assertEquals('bool', $returnType->getName());
     }
 
-    /** 
-     * DATA PROVIDERS POUR LES TESTS UNITAIRES support() 
+    /**
+     * DATA PROVIDERS POUR LES TESTS UNITAIRES support()
      */
 
     public static function validSupportProvider(): array
@@ -174,8 +175,8 @@ class SaeSujetControllerUnitTest extends TestCase
         ];
     }
 
-    /** 
-     * TESTS UNITAIRES support() AVEC DATA PROVIDERS 
+    /**
+     * TESTS UNITAIRES support() AVEC DATA PROVIDERS
      */
 
     #[Test]
@@ -214,8 +215,8 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    /** 
-     * TESTS UNITAIRES support() - CAS SPÉCIFIQUES 
+    /**
+     * TESTS UNITAIRES support() - CAS SPÉCIFIQUES
      */
 
     #[Test]
@@ -236,8 +237,8 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->assertFalse(SaeSujetController::support('/new-sae/extra', 'GET'));
     }
 
-    /** 
-     * TESTS UNITAIRES DE ROBUSTESSE 
+    /**
+     * TESTS UNITAIRES DE ROBUSTESSE
      */
 
     #[Test]
@@ -260,7 +261,7 @@ class SaeSujetControllerUnitTest extends TestCase
     public function controllerFollowsNamingConventions(): void
     {
         $reflection = new \ReflectionClass($this->controller);
-        
+
         $this->assertStringEndsWith('Controller', $reflection->getShortName());
         $this->assertTrue($reflection->hasMethod('control'));
         $this->assertTrue($reflection->hasMethod('support'));
@@ -271,7 +272,7 @@ class SaeSujetControllerUnitTest extends TestCase
     {
         $controller1 = new SaeSujetController();
         $controller2 = new SaeSujetController();
-        
+
         $this->assertNotSame($controller1, $controller2);
         $this->assertInstanceOf(SaeSujetController::class, $controller1);
         $this->assertInstanceOf(SaeSujetController::class, $controller2);
