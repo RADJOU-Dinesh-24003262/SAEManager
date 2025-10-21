@@ -171,9 +171,6 @@ class TokenService
     }
 
     /**
-     * Cleans up all expired tokens (to be run periodically)
-     */
-    /**
      *
      *
      * This method deletes all the expired tokkens depending on their expiry time.
