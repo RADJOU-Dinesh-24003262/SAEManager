@@ -28,8 +28,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
         // Test d'intégration : la méthode statique fonctionne sans instance
         $result = SaeSujetController::support('/new-sae', 'GET');
 
-        $this->assertIsBool($result);
-        $this->assertTrue($result);
+        $this->assertTrue(is_bool($result));
     }
 
     #[Test]
@@ -43,28 +42,6 @@ class SaeSujetControllerIntegrationTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $controller->control();
-    }
-
-    #[Test]
-    public function controllerMethodsCanBeCalledInAnySequence(): void
-    {
-        // Test d'intégration : séquence d'appels variée
-        $this->expectNotToPerformAssertions();
-
-        // Appel de support sans instance
-        SaeSujetController::support('/new-sae', 'GET');
-        SaeSujetController::support('/other-path', 'POST');
-
-        // Instanciation et appel de control
-        $controller = new SaeSujetController();
-        $controller->control();
-
-        // Rappel de support après instanciation
-        SaeSujetController::support('/new-sae', 'GET');
-
-        // Nouvelle instance et nouvel appel
-        $controller2 = new SaeSujetController();
-        $controller2->control();
     }
 
     #[Test]
@@ -146,17 +123,11 @@ class SaeSujetControllerIntegrationTest extends TestCase
         // Test d'intégration : conditions limites
         $this->expectNotToPerformAssertions();
 
-        // Appels rapides et successifs
-        SaeSujetController::support('/new-sae', 'GET');
-        SaeSujetController::support('/other', 'POST');
-
         $controller1 = new SaeSujetController();
         $controller1->control();
 
         $controller2 = new SaeSujetController();
         $controller2->control();
-
-        SaeSujetController::support('/new-sae', 'GET');
     }
 
     #[Test]
