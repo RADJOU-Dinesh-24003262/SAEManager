@@ -11,15 +11,22 @@ use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class User
-
- * @package     src
-
+ *
+ * This class contains functions to create and manage users,
+ * and handles communication with the database layer.
+ *
+ * @category    Models
+ * @package     Src
  * @subpackage  Models\User
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class regroup function to create users and make relation with the database
+ * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
+ *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
+ *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license     MIT https://opensource.org/licenses/MIT
+ * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
+
 class User
 {
     /**
@@ -73,8 +80,9 @@ class User
      */
     private string $city = '';
     /**
-     * The year of study of the user
-     * @var int
+     * The year of study of the user.
+     *
+     * @var integer|null
      */
     private ?int $year = null;
     /**
@@ -99,13 +107,13 @@ class User
      * This method constructs a user object with the data array given in parametters.
      * The integrity of the array should have been checked earlier in the user creation process.
      *
-     * @param array $data The data to make a user with
+     * @param array $data The data to make a user with.
      */
     private function __construct(array $data = [])
     {
         foreach ($data as $key => $value) {
             if ($key === 'password') {
-                continue; // Skip password, use setPassword method instead
+                continue; // Skip password, use setPassword method instead.
             }
             $this->$key = $value;
         }
@@ -117,7 +125,7 @@ class User
      * This method creates a user object with the data array given in parametters.
      * If no password are set, the new object password field is filled with the inputed registration password.
      *
-     * @param array $data The data to make a user with
+     * @param array $data The data to make a user with.
      *
      * @return self the new object.
      */
@@ -134,7 +142,7 @@ class User
      * This method creates a user object with the data array which should be login credentials.
      * uses the conection to the database.
      *
-     * @param array $data The data to make a user with
+     * @param array $data The data to make a user with.
      *
      * @return self the new object.
      */
@@ -151,7 +159,7 @@ class User
      * Sets the password_hash field to the current user.
      * To be used for security
      *
-     * @param string $password The password to hash
+     * @param string $password The password to hash.
      *
      * @return void
      */
@@ -259,10 +267,11 @@ class User
      * Attempts to log a user using the credentials given in
      * parametters.
      *
-     * @param string $email
-     * @param string $password
+     * @param string $email    The user's email address.
+     * @param string $password The user's password.
      *
      * @return void
+     * @throws ExceptionValidationLogin If the user cannot be found or the database connection fails.
      */
     public function login(string $email, string $password): void
     {
@@ -277,7 +286,7 @@ class User
 
         $user_id = $parts[0];
         $passwordHash = $parts[1];
-        $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false
+        $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false.
 
         if (!($success === true && password_verify($password, $passwordHash))) {
             throw new ExceptionValidationLogin();
@@ -293,7 +302,7 @@ class User
      *
      * If no user is found or a database error occurs, an ExceptionFetchDataBD is thrown.
      *
-     * @param string $email  The email address of the user to fetch.
+     * @param string $email The email address of the user to fetch.
      *
      * @return void
      *
@@ -342,7 +351,7 @@ class User
      * Attempts to find a user in the user relation in the database based on
      * their email. If a user is found, returns true. False otherwise.
      *
-     * @param string $email
+     * @param string $email The email to check for existence.
      *
      * @return boolean
      */
@@ -366,6 +375,8 @@ class User
      * @param string $email       The email of the user to update the password of.
      * @param string $newPassword The new password to be updated.
      *
+     * @throws ExceptionPasswordUpdateFailed If the update fails or user not found.
+     *
      * @return void
      */
     public static function updatePasswordByEmail(string $email, string $newPassword): void
@@ -383,7 +394,7 @@ class User
         }
     }
 
-    // Getters
+    // Getters.
 
     /**
      * Returns the amUID of the user.
@@ -478,7 +489,7 @@ class User
     /**
      * Returns the year of study of the user.
      *
-     * @return int the year of study of the user.
+     * @return integer|null The year of study of the user.
      */
     public function getYear(): ?int
     {
