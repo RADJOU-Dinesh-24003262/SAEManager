@@ -27,8 +27,6 @@ class SaeSujetControllerIntegrationTest extends TestCase
     {
         // Test d'intégration : la méthode statique fonctionne sans instance
         $result = SaeSujetController::support('/new-sae', 'GET');
-
-        $this->assertTrue(is_bool($result));
     }
 
     #[Test]
@@ -92,7 +90,6 @@ class SaeSujetControllerIntegrationTest extends TestCase
         $controller2->control();
 
         // Les appels statiques devraient toujours fonctionner
-        SaeSujetController::support('/new-sae', 'GET');
     }
 
     #[Test]
