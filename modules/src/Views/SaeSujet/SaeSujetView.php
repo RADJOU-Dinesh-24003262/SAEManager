@@ -1,4 +1,5 @@
 <?php
+
 namespace Views\SaeSujet;
 
 use Views\AbstractView;
@@ -63,5 +64,4 @@ class SaeSujetView extends AbstractView
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />' ;
     }
-
 }
