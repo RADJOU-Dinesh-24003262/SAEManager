@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis\Validator;
 
 use includes\exception\ExceptionValidationForgotPassword;
@@ -7,15 +8,17 @@ use includes\exception\ExceptionSpam;
 /**
  * Class ForgotPasswordValidator
  *
+ * @package     src
+
+ * @subpackage  Utilis\Validator
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ *
  * Validates input data for the forgot password form.
  *
  * This validator ensures:
  * - The "email" field is present and valid.
  * - Password reset requests are not sent too frequently (spam protection).
- *
- * @package Utilis\Validator
- * @version 1.0
- * @author Dinesh
  */
 class ForgotPasswordValidator extends FormValidator
 {
@@ -45,7 +48,7 @@ class ForgotPasswordValidator extends FormValidator
         $errors = [];
         if (!$this->isValidEmail($data['email'])) {
             throw new ExceptionValidationForgotPassword('email', 'string', "L'adresse email n'est pas valide.");
-        }if(($_SESSION['last_forgot_password_request'] ?? 0) > (time() - 120)) {
+        }if (($_SESSION['last_forgot_password_request'] ?? 0) > (time() - 120)) {
             throw new ExceptionSpam("Veuillez attendre au moins 2 minutes avant de refaire une demande.");
         }
     }

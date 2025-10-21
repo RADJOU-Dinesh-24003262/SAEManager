@@ -1,4 +1,5 @@
 <?php
+
 namespace Utilis;
 
 use includes\database;
@@ -6,10 +7,26 @@ use includes\exception\ExceptionCreationTokenFailed;
 use includes\exception\ExceptionInvalidToken;
 use includes\exception\ExceptionSpam;
 
+/**
+ * Class TokenService
+
+ * @package     src
+
+ * @subpackage  Utilis
+
+ * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+
+ * This class regroups the functions to manage the reset password tokens.
+ * It can generate, update, delete and check the validity of the tokkens.
+ * Need emails to work.
+ */
 class TokenService
 {
     /**
-     * Generate a secure random token
+     * Returns a 64 hexadecimal long random secure string
+     *
+     * This method creates a 64 character secure random hexadecimal string and returns it
+     * @return string
      */
     public static function generate(): string
     {
@@ -36,30 +53,29 @@ class TokenService
     {
         try {
             $db = database::getInstance();
-            
+
             // Clean up old tokens for this email
             self::cleanupOldTokens($email);
             self::cleanupExpiredTokens();
-            
+
             // Generate new token
             $token = self::generate();
             $createdAt = date('Y-m-d H:i:s');
             $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-            
+
             $stmt = $db->prepare("
                 INSERT INTO password_resets (user_email, token, created_at, expires_at, used)
                 VALUES (:email, :token, :created_at, :expires_at, FALSE)
             ");
-            
+
             $stmt->execute([
                 'email' => $email,
                 'token' => $token,
                 'created_at' => $createdAt,
                 'expires_at' => $expiresAt
             ]);
-            
+
             return $token ? $token : throw new ExceptionCreationTokenFailed();
-            
         } catch (\PDOException $e) {
             error_log("Erreur création token: " . $e->getMessage());
             if (strpos($e->getMessage(), 'TOO_MANY_RESET_REQUESTS') !== false) {
@@ -72,7 +88,16 @@ class TokenService
     }
 
     /**
-     * Verify if a token is valid (exists, not expired, not used)
+     * Returns the infos about the token given in parameters, false if it fails to or is invalid.
+     *
+     * This method looks for the token given in parameters and if it exist and is valid, returns it.
+     * Exeption relative to the invalidity or non-existence are thrown depending on it's state.
+     *
+     * @param $token the token to validate.
+     *
+     * @return string the token of the user, if valid
+     *
+     * @throws ExceptionInvalidToken if the tokken expired, doesn't exist or is used, throws an exeption.
      */
     public static function validateToken(string $token): array
     {
@@ -83,30 +108,29 @@ class TokenService
             }
 
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 SELECT user_email, expires_at, used 
                 FROM password_resets 
                 WHERE token = :token
             ");
-            
+
             $stmt->execute(['token' => $token]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-            
+
             if (!$result) {
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation est invalide ou a expiré. Veuillez faire une nouvelle demande.");
             }
-            
+
             if ($result['used']) {
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation a déjà été utilisé.");
             }
-            
+
             if (strtotime($result['expires_at']) < time()) {
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation a expiré.");
             }
-            
+
             return $result;
-            
         } catch (\PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
             throw new ExceptionInvalidToken("Erreur lors de la validation du lien. Veuillez réessayer plus tard.");
@@ -114,21 +138,27 @@ class TokenService
     }
 
     /**
-     * Marks a token as used
+     * Returns a boolean depending on the success of marking used the tokken
+     *
+     * This method tries to change the used column of the tokken in the database. It it secceed, true is returned, false otherwise.
+     *
+     * @param $token the token to mark used.
+     *
+     * @return boolean the success of marking the tokken used
+     *
      */
     public static function markTokenAsUsed(string $token): bool
     {
         try {
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 UPDATE password_resets 
                 SET used = TRUE 
                 WHERE token = :token
             ");
-            
+
             return $stmt->execute(['token' => $token]);
-            
         } catch (\PDOException $e) {
             error_log("Erreur marquage token: " . $e->getMessage());
             return false;
@@ -136,21 +166,27 @@ class TokenService
     }
 
     /**
-     * Cleans up old tokens for a given email
+     *
+     *
+     * This method deletes, for an email given in parametters, all the expired tokkens depending on their expiry time.
+     *
+     * @param $email the email to check the tokkens of.
+     *
+     * @return void
+     *
      */
     private static function cleanupOldTokens(string $email): void
     {
         try {
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 DELETE FROM password_resets 
                 WHERE user_email = :email 
                 AND (expires_at < NOW() OR used = TRUE)
             ");
-            
+
             $stmt->execute(['email' => $email]);
-            
         } catch (\PDOException $e) {
             error_log("Erreur nettoyage tokens: " . $e->getMessage());
         }
@@ -159,18 +195,25 @@ class TokenService
     /**
      * Cleans up all expired tokens (to be run periodically)
      */
+    /**
+     *
+     *
+     * This method deletes all the expired tokkens depending on their expiry time.
+     *
+     * @return void
+     *
+     */
     public static function cleanupExpiredTokens(): void
     {
         try {
             $db = database::getInstance();
-            
+
             $stmt = $db->prepare("
                 DELETE FROM password_resets 
                 WHERE expires_at < NOW() OR used = TRUE
             ");
-            
+
             $stmt->execute();
-            
         } catch (\PDOException $e) {
             error_log("Erreur nettoyage global: " . $e->getMessage());
         }

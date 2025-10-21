@@ -1,5 +1,7 @@
 <?php
+
 namespace Controllers\ToDoList;
+
 /**
  * Controller for the To-Do List page.
  * Handles requests to display the to-do list.
@@ -9,10 +11,12 @@ namespace Controllers\ToDoList;
  * @see ToDoListView
  * @link /to-do-list
  * @category Controller
- *  
+ *
  */
+
 use Controllers\ControllerInterface;
 use Views\ToDoList\ToDoListView;
+
 /**
  * Class ToDoListController
  * Handles the control logic for the To-Do List page.
@@ -26,7 +30,7 @@ use Views\ToDoList\ToDoListView;
  */
 class ToDoListController implements ControllerInterface
 {
-    /** 
+    /**
      * @method void control() Controls the rendering of the To-Do List view.
      * @var ToDoListView $view used to initialize the view for to-do list
      */
@@ -36,7 +40,7 @@ class ToDoListController implements ControllerInterface
         $view->render();
     }
 
-    /** 
+    /**
      *  @method static bool support(string $chemin, string $method) Determines if this controller supports the given path and method.
      *  @var String $path add the path to consult the page
      *  @var String $method add the kind of method to consult the page
@@ -44,7 +48,7 @@ class ToDoListController implements ControllerInterface
      */
     public static function support(string $path, string $method): bool
     {
-        
+
         return $path === "/to-do-list" && $method === "GET";
     }
 }
