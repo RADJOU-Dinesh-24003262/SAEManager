@@ -1,23 +1,24 @@
 <?php
+
 namespace Views\User;
 
 use Views\AbstractView;
 use Models\User\User;
 
 /**
- 
+
  * Class RegisterSuccessView
- 
+
  * @package     src
- 
- * @subpackage  User 
- 
+
+ * @subpackage  User
+
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- 
+
  * This class represents the view for the registration success page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration success page, including displaying user information.
- 
+
  */
 class RegisterSuccessView extends AbstractView
 {
@@ -43,7 +44,7 @@ class RegisterSuccessView extends AbstractView
      * Takes the user in parametter and stores it into the user variable of this class.
 
      *
-     
+
      * @param User $user the user that just logged in.
 
      * @return void Creates the instance of the class.
@@ -65,7 +66,7 @@ class RegisterSuccessView extends AbstractView
         return self::TEMPLATE_HTML;
     }
 
-    /** 
+    /**
      * Returns an associative array of keys and values to be used in the HTML template.
      *
      * This method retrieves the first and last name of the user, their email, user type and academic infos
@@ -82,7 +83,7 @@ class RegisterSuccessView extends AbstractView
             'ACADEMIC_INFO' => $this->getAcademicInfo()
         ];
     }
-    /** 
+    /**
      * Returns the french user type label
      *
      * This method is used to turn the english user labels into the french user labels the user will see
@@ -104,7 +105,7 @@ class RegisterSuccessView extends AbstractView
         }
     }
 
-    /** 
+    /**
      * Returns a div make into the method to be displayed to the user, only if the user is a student, Returns an empty string otherwise.
      *
      * This method makes an html div with the academic year, major, sub group and sub-sub group. If the user isn't a student
@@ -121,7 +122,7 @@ class RegisterSuccessView extends AbstractView
         $info = '<div class="academic-info">';
         $info .= '<h4>Informations académiques</h4>';
         $info .= '<p><strong>Année :</strong> BUT ' . $this->user->getYear() . '</p>';
-        
+
         if ($this->user->getParcours()) {
             $info .= '<p><strong>Parcours :</strong> ' . $this->user->getParcours() . '</p>';
         }
@@ -146,7 +147,7 @@ class RegisterSuccessView extends AbstractView
     {
         return 'Inscription réussie - SAEManager';
     }
-    
+
     /** Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file

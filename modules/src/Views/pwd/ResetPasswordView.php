@@ -1,12 +1,13 @@
 <?php
 
 namespace Views\pwd;
+
 use Utilis\SessionService;
 use Views\AbstractView;
 
 /**
  * Class ResetPasswordView
- 
+
  * @package     src
 
  * @subpackage  pwd
@@ -19,7 +20,6 @@ use Views\AbstractView;
  */
 class ResetPasswordView extends AbstractView
 {
-
     /**
      * The path of the HTML code to display for this view.
      * @var string
@@ -32,14 +32,15 @@ class ResetPasswordView extends AbstractView
      * Also fills the $data variable with: token => $token, email => $email, variables given in parametters.
 
      *
-     
+
      * @param string $token The token the user is assigned to reset their password.
-     * @param string $email The email the user filled the reset password field with. 
+     * @param string $email The email the user filled the reset password field with.
 
      * @return void Creates the instance of the class.
 
      */
-    public function __construct(string $token, string $email){
+    public function __construct(string $token, string $email)
+    {
         $data = [
             'errors' => SessionService::getFlash('errors', []),
             'token' => $token,
@@ -80,7 +81,7 @@ class ResetPasswordView extends AbstractView
      * for security.
      *
      * Ex: jean.dupont@etu.univ-amu.fr → j***n.d***t@etu.univ-amu.fr
-     * 
+     *
      * @return string the hidden version of the email.
      */
     private function maskEmail(string $email): string
@@ -95,8 +96,8 @@ class ResetPasswordView extends AbstractView
 
         // Mask the local part
         if (strlen($localPart) > 4) {
-            $masked = substr($localPart, 0, 1) . 
-                      str_repeat('*', strlen($localPart) - 2) . 
+            $masked = substr($localPart, 0, 1) .
+                      str_repeat('*', strlen($localPart) - 2) .
                       substr($localPart, -1);
         } else {
             $masked = substr($localPart, 0, 1) . str_repeat('*', strlen($localPart) - 1);
@@ -108,7 +109,7 @@ class ResetPasswordView extends AbstractView
     /**
 
      * Returns the HTML to display and error message for the user.
-     
+
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 

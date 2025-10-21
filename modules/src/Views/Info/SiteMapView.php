@@ -1,4 +1,4 @@
-<?php   
+<?php
 
 namespace Views\Info;
 
@@ -31,7 +31,7 @@ class SiteMapView extends AbstractView
      *
      * @return string
      */
-    protected function templatePath(): string 
+    protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
@@ -42,7 +42,7 @@ class SiteMapView extends AbstractView
      *
      * @return array An empty array
      */
-    protected function templateKeys(): array 
+    protected function templateKeys(): array
     {
         return [];
     }
@@ -101,4 +101,3 @@ class SiteMapView extends AbstractView
                 <meta property="og:type" content="website" />' ;
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\User;
 
 use Controllers\ControllerInterface;
@@ -12,7 +13,7 @@ use includes\exception\ExceptionValidationRegisters;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\User
@@ -25,21 +26,21 @@ class RegisterPost implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
     public function control(): void
     {
         // Validate the data
-        $validator = new ValidationServiceRegister();        
-        
+        $validator = new ValidationServiceRegister();
+
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
             // Create the user
             $user = User::createFromRegistrationData($data);
-            
+
             // Save the user
             if ($user->save()) {
                 error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
@@ -52,15 +53,12 @@ class RegisterPost implements ControllerInterface
                 error_log("Erreur sauvegarde utilisateur: " . $user->getEmail());
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
-            
-        
-        }catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
+        } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
@@ -73,7 +71,7 @@ class RegisterPost implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method post?
      */
     public static function support(string $chemin, string $method): bool

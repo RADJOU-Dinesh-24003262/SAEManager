@@ -1,4 +1,4 @@
-<?php   
+<?php
 
 namespace Views\Info;
 
@@ -30,7 +30,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return string
      */
-    protected function templatePath(): string 
+    protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
@@ -41,7 +41,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return array An empty array
      */
-    protected function templateKeys(): array 
+    protected function templateKeys(): array
     {
         return [];
     }
@@ -100,4 +100,3 @@ class LegalNoticeView extends AbstractView
                 <meta property="og:type" content="website" />' ;
     }
 }
-

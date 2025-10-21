@@ -1,12 +1,15 @@
 <?php
-namespace Controllers\PageSae;;
+
+namespace Controllers\PageSae;
+
+;
 
 use Controllers\ControllerInterface;
 use Views\PageSAE\PageSaeView;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\PageSae
@@ -19,7 +22,7 @@ class PageSaeController implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
     public function control(): void
@@ -30,7 +33,7 @@ class PageSaeController implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method get?
      */
     public static function support(string $chemin, string $method): bool
