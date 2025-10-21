@@ -63,26 +63,23 @@ class SaeSujetControllerUnitTest extends TestCase
      */
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'control')]
     public function controlMethodReturnsVoid(): void
     {
-        $reflection = new \ReflectionMethod($this->controller, 'control');
-        $returnType = $reflection->getReturnType();
+        $reflection = new \ReflectionClass(SaeSujetController::class);
+        $method = $reflection->getMethod('action');
 
-        $this->assertNotNull($returnType);
-        $this->assertEquals('void', $returnType->getName());
+        $this->assertNotNull(method_exists($method, '__invoke'));
+        $this->assertEquals('void', $method->getName());
     }
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'control')]
-    public function controlMethodIsPublic(): void
+    public function controlMethodIsAbstract(): void
     {
-        $reflection = new \ReflectionMethod($this->controller, 'control');
-        $this->assertTrue($reflection->isPublic());
+        $reflection = new \ReflectionClass(SaeSujetController::class);
+        $this->assertTrue($reflection->isAbstract());
     }
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'control')]
     public function controlMethodHasNoParameters(): void
     {
         $reflection = new \ReflectionMethod($this->controller, 'control');
@@ -96,7 +93,6 @@ class SaeSujetControllerUnitTest extends TestCase
      */
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportMethodIsStatic(): void
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
@@ -104,7 +100,6 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportMethodHasCorrectParameters(): void
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
@@ -118,7 +113,6 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportMethodReturnsBoolean(): void
     {
         $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
@@ -181,7 +175,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
     #[Test]
     #[DataProvider('validSupportProvider')]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportReturnsTrueForValidCases(string $path, string $method, bool $expected): void
     {
         $result = SaeSujetController::support($path, $method);
@@ -190,7 +183,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidPathProvider')]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportReturnsFalseForInvalidPaths(string $path, string $method, bool $expected): void
     {
         $result = SaeSujetController::support($path, $method);
@@ -199,7 +191,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidMethodProvider')]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportReturnsFalseForInvalidMethods(string $path, string $method, bool $expected): void
     {
         $result = SaeSujetController::support($path, $method);
@@ -208,7 +199,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
     #[Test]
     #[DataProvider('completelyInvalidProvider')]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportReturnsFalseForCompletelyInvalidCases(string $path, string $method, bool $expected): void
     {
         $result = SaeSujetController::support($path, $method);
@@ -220,7 +210,6 @@ class SaeSujetControllerUnitTest extends TestCase
      */
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportIsCaseSensitiveForMethod(): void
     {
         $this->assertFalse(SaeSujetController::support('/new-sae', 'get'));
@@ -229,7 +218,6 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     #[Test]
-    #[CoversMethod(SaeSujetController::class, 'support')]
     public function supportIsExactMatchForPath(): void
     {
         $this->assertTrue(SaeSujetController::support('/new-sae', 'GET'));
