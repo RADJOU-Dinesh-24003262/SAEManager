@@ -98,7 +98,7 @@ class RegisterSuccessView extends AbstractView
                 return 'Étudiant';
             case 'professor':
                 return 'Responsable SAE';
-            case 'companies':
+            case 'client':
                 return 'Partenaire entreprise';
             default:
                 return 'Utilisateur';
