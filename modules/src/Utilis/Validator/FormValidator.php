@@ -66,7 +66,7 @@ abstract class FormValidator
      */
     protected function isValidUserType(string $userType): bool
     {
-        return in_array($userType, ['student', 'professor', 'companies']);
+        return in_array($userType, ['student', 'professor', 'client']);
     }
 
     /**

@@ -22,7 +22,7 @@ class ValidationServiceRegister extends FormValidator
      * The list of the variables required for the registration process of a user.
      * @var array
      */
-    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
+    protected $required = ['amuId', 'firstName', 'lastName', 'user_type', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
 
     /**
      *
@@ -40,8 +40,8 @@ class ValidationServiceRegister extends FormValidator
         $errors = [];
 
         // Specific validations
-        if (!$this->isValidUserType($data['userType'])) {
-            $errors[] = new ExceptionValidationRegister("userType", "string", "Type d'utilisateur invalide.");
+        if (!$this->isValidUserType($data['user_type'])) {
+            $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
 
         if (!$this->isValidEmail($data['email'])) {
@@ -77,7 +77,7 @@ class ValidationServiceRegister extends FormValidator
         }
 
         // Specific validation for students
-        if (($data['userType'] ?? '') === 'student') {
+        if (($data['user_type'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
         }
