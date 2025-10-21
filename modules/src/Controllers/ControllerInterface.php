@@ -20,12 +20,12 @@ interface ControllerInterface
      *
      * @return void
      */
-    function control(): void;
+    public function control(): void;
 
     /**
      * Check if this controller can handle the request
      *
      * @return boolean Is the method supported?
      */
-    static function support(string $chemin, string $method): bool;
+    public static function support(string $chemin, string $method): bool;
 }

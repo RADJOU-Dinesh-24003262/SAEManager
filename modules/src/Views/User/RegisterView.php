@@ -51,7 +51,8 @@ class RegisterView extends AbstractView
      */
     public const FIELD_USER_TYPE = 'user_type';
     /**
-     * The email of the user. Will be used to contact them, to identify them, to help recover password and some more usages.
+     * The email of the user. Will be used to contact them,
+     * to identify them, to help recover password and some more usages.
      * @var string
      */
     public const FIELD_EMAIL = 'email';
@@ -184,9 +185,8 @@ class RegisterView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Inscription - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Inscription - SAEManager' or
+     * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Inscription - SAEManager'.
 

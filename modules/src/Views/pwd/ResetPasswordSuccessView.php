@@ -48,9 +48,8 @@ class ResetPasswordSuccessView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Mot de passe réinitialisé - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Mot de passe réinitialisé - SAEManager' or
+     * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Mot de passe réinitialisé - SAEManager'.
 

@@ -39,7 +39,8 @@ class UserRepository
     /**
      * Returns the existance of the given email
      *
-     * Looks for the email given in parametters in the database, return true if the email exists. False if it is not found
+     * Looks for the email given in parametters in the database,
+     * return true if the email exists. False if it is not found
      * or if an error occurs.
      *
      * @param database $db The database to instanciate
