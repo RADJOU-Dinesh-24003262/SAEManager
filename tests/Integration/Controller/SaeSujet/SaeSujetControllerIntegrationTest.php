@@ -127,11 +127,9 @@ class SaeSujetControllerIntegrationTest extends TestCase
         $isSupported = SaeSujetController::support('/new-sae', 'GET');
         $this->assertTrue($isSupported);
 
-        if ($isSupported) {
-            $controller = new SaeSujetController();
-            $this->expectNotToPerformAssertions();
-            $controller->control();
-        }
+        $controller = new SaeSujetController();
+        $this->expectNotToPerformAssertions();
+        $controller->control();
 
         // Scénario 2: Vérification d'un chemin non supporté
         $isNotSupported = SaeSujetController::support('/invalid-path', 'GET');
