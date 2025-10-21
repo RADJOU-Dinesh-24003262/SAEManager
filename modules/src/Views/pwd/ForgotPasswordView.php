@@ -131,9 +131,8 @@ class ForgotPasswordView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Password Forgot - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Password Forgot - SAEManager' or
+     * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Password Forgot - SAEManager'.
 

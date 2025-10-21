@@ -2,18 +2,6 @@
 
 namespace Controllers\ToDoList;
 
-/**
- * Controller for the To-Do List page.
- * Handles requests to display the to-do list.
- * @package Controllers\ToDoList
- * @version 1.0
- * @author Dargentolle François
- * @see ToDoListView
- * @link /to-do-list
- * @category Controller
- *
- */
-
 use Controllers\ControllerInterface;
 use Views\ToDoList\ToDoListView;
 
@@ -24,8 +12,8 @@ use Views\ToDoList\ToDoListView;
  * @version 1.0
  * @author Dargentolle François
  * @see ToDoListView
- * @link /to-do-list
- * @category Class
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/
+ * @category Controller
  * @implements ControllerInterface
  */
 class ToDoListController implements ControllerInterface
@@ -41,7 +29,8 @@ class ToDoListController implements ControllerInterface
     }
 
     /**
-     *  @method static bool support(string $chemin, string $method) Determines if this controller supports the given path and method.
+     *  @method static bool support(string $chemin, string $method)
+     *  Determines if this controller supports the given path and method.
      *  @var String $path add the path to consult the page
      *  @var String $method add the kind of method to consult the page
      *  @return bool true if the path and method are supported, false otherwise

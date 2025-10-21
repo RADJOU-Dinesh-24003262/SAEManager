@@ -151,7 +151,8 @@ class SessionService
     /**
      *
      *
-     * This methods destroys the user session and recreated a new one with a new id (keeping it's stored key value pairs).
+     * This methods destroys the user session and
+     * recreated a new one with a new id (keeping it's stored key value pairs).
      *
      * @return void
      */

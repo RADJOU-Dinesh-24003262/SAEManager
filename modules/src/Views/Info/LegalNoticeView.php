@@ -48,9 +48,8 @@ class LegalNoticeView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Mentions Légales - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Mentions Légales - SAEManager' or
+     * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Mentions Légales - SAEManager'.
 

@@ -49,9 +49,8 @@ class SiteMapView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Plan du Site - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Plan du Site - SAEManager' or
+     * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Plan du Site - SAEManager'.
 

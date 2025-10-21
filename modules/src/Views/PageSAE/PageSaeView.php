@@ -50,9 +50,8 @@ class PageSaeView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Page SAE - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Page SAE - SAEManager'
+     * or be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Page SAE - SAEManager'.
 

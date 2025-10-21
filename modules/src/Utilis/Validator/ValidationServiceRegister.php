@@ -22,7 +22,8 @@ class ValidationServiceRegister extends FormValidator
      * The list of the variables required for the registration process of a user.
      * @var array
      */
-    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password', 'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
+    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password',
+                        'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
 
     /**
      *
@@ -47,15 +48,27 @@ class ValidationServiceRegister extends FormValidator
         if (!$this->isValidEmail($data['email'])) {
             $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
         } elseif (!$this->isOwnAmuEmail($data['email'], $data['lastName'], $data['firstName'])) {
-            $errors[] = new ExceptionValidationRegister("email", "string", "Utilisez votre adresse e-mail universitaire.");
+            $errors[] = new ExceptionValidationRegister(
+                "email",
+                "string",
+                "Utilisez votre adresse e-mail universitaire."
+            );
         }
 
         if (!$this->isValidPassword($data['password'])) {
-            $errors[] = new ExceptionValidationRegister("password", "string", "Mot de passe trop court (min 8 caractères).");
+            $errors[] = new ExceptionValidationRegister(
+                "password",
+                "string",
+                "Mot de passe trop court (min 8 caractères)."
+            );
         }
 
         if ($data['password'] !== ($data['passwordverif'] ?? '')) {
-            $errors[] = new ExceptionValidationRegister("passwordverif", "string", "Les mots de passe ne correspondent pas.");
+            $errors[] = new ExceptionValidationRegister(
+                "passwordverif",
+                "string",
+                "Les mots de passe ne correspondent pas."
+            );
         }
 
         if (!$this->isValidPhone($data['phone'])) {
@@ -68,7 +81,11 @@ class ValidationServiceRegister extends FormValidator
         } else {
             $age = (new \DateTime())->diff(new \DateTime($data['dateOfBirth']))->y;
             if ($age < 16) {
-                $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Vous devez avoir au moins 16 ans.");
+                $errors[] = new ExceptionValidationRegister(
+                    "dateOfBirth",
+                    "string",
+                    "Vous devez avoir au moins 16 ans."
+                );
             }
         }
 
@@ -117,7 +134,11 @@ class ValidationServiceRegister extends FormValidator
                 $errors[] = new ExceptionValidationRegister('td', 'string', "TD4 uniquement disponible en BUT 1.");
             }
         } elseif (!empty($data['parcours'])) {
-            $errors[] = new ExceptionValidationRegister('parcours', 'string', "Le parcours n'est pas applicable pour cette année.");
+            $errors[] = new ExceptionValidationRegister(
+                'parcours',
+                'string',
+                "Le parcours n'est pas applicable pour cette année."
+            );
         }
 
         if (empty($data['td'])) {

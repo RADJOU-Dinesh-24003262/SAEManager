@@ -90,7 +90,10 @@ class ForgotPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationForgotPassword | ExceptionCreationTokenFailed | ExceptionEmailSendingFailed | ExceptionSpam $e) {
+        } catch (
+            ExceptionValidationForgotPassword | ExceptionCreationTokenFailed |
+                                    ExceptionEmailSendingFailed | ExceptionSpam $e
+        ) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
         $view = new ForgotPasswordView();
