@@ -85,7 +85,7 @@ class LoginPost implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @param string $path   The requested URI path.
      * @param string $method The HTTP method used in the request.
      *
