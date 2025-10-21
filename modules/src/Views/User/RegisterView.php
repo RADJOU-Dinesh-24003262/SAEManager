@@ -1,4 +1,5 @@
 <?php
+
 namespace Views\User;
 
 use DateTime;
@@ -6,21 +7,21 @@ use Views\AbstractView;
 use Utilis\SessionService;
 
 /**
- 
+
  * Class RegisterView
 
  * @package     src
- 
- * @subpackage  User 
+
+ * @subpackage  User
 
  * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- 
+
  * This class represents the view for the registration page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration page, including handling error messages.
- 
+
  */
-class RegisterView extends AbstractView 
+class RegisterView extends AbstractView
 {
     // Constant for form field names
 
@@ -106,7 +107,7 @@ class RegisterView extends AbstractView
     public const FIELD_TERMS = 'terms';
 
     /**
-     * The path of the html template with the form 
+     * The path of the html template with the form
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/register.html';
@@ -133,12 +134,12 @@ class RegisterView extends AbstractView
      *
      * @return string
      */
-    protected function templatePath(): string 
+    protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
 
-    /** 
+    /**
      * Returns an associative array of keys and values to be used in the HTML template.
      *
      * This method retrieves error messages and success messages from the session
@@ -146,24 +147,24 @@ class RegisterView extends AbstractView
      *
      * @return array An associative array with keys for error and success messages.
      */
-    protected function templateKeys(): array 
+    protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
-        
+
         return [
             // Error messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            
+
             // Max birth date for 16 years old
             'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years'))
         ];
     }
 
-    /** 
+    /**
      * Renders an error message given in parrameters.
      *
      * This method orchestrates the rendering of the error messages of the page.
-     * 
+     *
      * @return string The html to be displayed.
      */
     private function renderErrorMessages(array $errors): string
@@ -171,13 +172,13 @@ class RegisterView extends AbstractView
         if (empty($errors)) {
             return '';
         }
-        
+
         $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
             $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></section>';
-        
+
         return $html;
     }
 

@@ -1,11 +1,12 @@
 <?php
+
 namespace Models\User;
 
 use includes\database;
 
 /**
  * Class UserRepository
- 
+
  * @package     src
 
  * @subpackage  Models\User
@@ -24,25 +25,25 @@ class UserRepository
 
     /**
      * Creates an instance of the class
-     * 
+     *
      * This method constructs a user repository object, affecting the database given in parametters
      * to the db variable.
-     * 
+     *
      * @param database $db The database to instanciate
      */
     public function __construct(database $db)
     {
         $this->db = $db;
     }
-    
+
     /**
      * Returns the existance of the given email
-     * 
+     *
      * Looks for the email given in parametters in the database, return true if the email exists. False if it is not found
      * or if an error occurs.
-     * 
+     *
      * @param database $db The database to instanciate
-     * 
+     *
      * @return boolean
      */
     public function existsByEmail(string $email): bool
@@ -56,15 +57,15 @@ class UserRepository
             return false;
         }
     }
-    
+
     /**
      * Returns the success of th insertion of a user in the database
-     * 
+     *
      * Tries to insert a new user in the database with the user given in parametters.
      * Return true if it succeed, false otherwise.
-     * 
+     *
      * @param User $user The user object to insert
-     * 
+     *
      * @return boolean
      */
     public function save(User $user): bool
@@ -78,7 +79,7 @@ class UserRepository
                         :email, :password, :phone, :dob, :city,
                         :year, :parcours, :td, :tp)
             ");
-            
+
             return $stmt->execute([
                 'amu_id' => $user->getAmuId(),
                 'first_name' => $user->getFirstName(),

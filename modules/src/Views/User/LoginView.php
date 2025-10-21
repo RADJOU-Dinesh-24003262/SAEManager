@@ -76,7 +76,7 @@ class LoginView extends AbstractView
     /**
 
      * Returns the HTML to display and error message for the user.
-     
+
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
 

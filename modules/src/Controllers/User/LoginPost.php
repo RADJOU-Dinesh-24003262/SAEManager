@@ -17,7 +17,7 @@ use Utilis\Validator\LoginValidator;
 
 /**
  * Class User
- 
+
  * @package     src
 
  * @subpackage  Controllers\User
@@ -30,7 +30,7 @@ class LoginPost implements ControllerInterface
 {
     /**
      * Principal manager of the controller
-     * 
+     *
      * @return void
      */
     public function control(): void
@@ -73,7 +73,7 @@ class LoginPost implements ControllerInterface
 
     /**
      * Check if this controller can handle the request
-     * 
+     *
      * @return boolean Is the method post?
      */
     public static function support(string $chemin, string $method): bool
