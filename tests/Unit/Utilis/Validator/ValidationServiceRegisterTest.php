@@ -30,6 +30,8 @@ class ValidationServiceRegisterTest extends TestCase
      */
     public function testValidatesCorrectStudentData(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $data = [
             'amuId' => 'test123',
             'firstName' => 'Jean',
@@ -51,8 +53,6 @@ class ValidationServiceRegisterTest extends TestCase
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
-
-        $this->assertTrue(true); // No exception = success
     }
 
     /**
@@ -206,14 +206,14 @@ class ValidationServiceRegisterTest extends TestCase
      */
     public function testProfessorDoesNotNeedStudentFields(): void
     {
+        $this->expectNotToPerformAssertions();
+
         $data = $this->getValidBaseData();
         $data['userType'] = 'professor';
         // No student fields
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
-
-        $this->assertTrue(true); // No exception = success
     }
 
     /**
