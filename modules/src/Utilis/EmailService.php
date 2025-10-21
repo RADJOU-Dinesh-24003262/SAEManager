@@ -7,24 +7,35 @@ use includes\exception\ExceptionEmailSendingFailed;
 
 /**
  * Class EmailService
-
- * @package     src
-
- * @subpackage  Utilis
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class regroup function to manage the email service.
+
+ * @category Service
+
+ * @package Src
+
+ * @subpackage Utilis
+
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class EmailService
 {
     /**
      * The email to send mails from.
+     *
      * @var string
      */
     private static string $fromEmail = 'noreply@saemanager.alwaysdata.net';
     /**
      * The sender of the mails.
+     *
      * @var string
      */
     private static string $fromName = 'SAEManager';
@@ -36,7 +47,7 @@ class EmailService
      * given in parametters.
      *
      * @param string $toEmail The email of the user whom want their password reset.
-     * @param string $token the token created for the password reset.
+     * @param string $token   the token created for the password reset.
      *
      * @return void
      */
@@ -169,8 +180,8 @@ Ceci est un email automatique, merci de ne pas y répondre.
      * This method tries to send an email to the user using all the parametters
      * given and filling the templates with variables, fixing chartsets and other content types.
      *
-     * @param string $to the email to send to.
-     * @param string $subject the subject of the mail.
+     * @param string $to          the email to send to.
+     * @param string $subject     the subject of the mail.
      * @param string $htmlMessage the html message.
      * @param string $textMessage the plain text message.
      *
@@ -178,7 +189,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
      */
     private static function sendEmail(string $to, string $subject, string $htmlMessage, string $textMessage): void
     {
-        // Headers for multipart email (HTML + text)
+        // Headers for multipart email (HTML + text).
         $boundary = md5(uniqid('boundary_', true));
 
         $headers = [
@@ -205,7 +216,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
             $headerString .= "{$key}: {$value}\r\n";
         }
 
-        // Send the email
+        // Send the email.
         if (mail($to, $subject, $message, $headerString)) {
             error_log("Email envoyé avec succès à: {$to}");
         } else {

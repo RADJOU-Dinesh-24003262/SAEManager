@@ -8,11 +8,11 @@ use Views\Info\SiteMapView;
 /**
  * Class User
 
- * @package     src
+ * @package src
 
- * @subpackage  Controllers\Info
+ * @subpackage Controllers\Info
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class controls the site map page.
  */

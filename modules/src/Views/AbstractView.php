@@ -9,35 +9,33 @@ use Utilis\SessionService;
  *
  * It contains all the required methods and attributes to be used in the implemented views.
  *
- * @package     src
+ * @package src
  *
- * @author     Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
  */
 abstract class AbstractView
 {
     /**
      * Stores the data used in the implemented page. The var line contains the type stored in this variable.
+     *
      * @var array
      */
     protected array $data = [];
 
     /**
-
      * Initializes the $data attribute with the array of data given when called.
-
      *
-
      * @param array $data The array of data to be instantiated
 
      * @return void Creates the instance of the class.
-
      */
     public function __construct(array $data = [])
     {
         $this->data = $data;
     }
 
-    /** Renders an HTML template by replacing predefined placeholders with actual values.
+    /**
+     * Renders an HTML template by replacing predefined placeholders with actual values.
      *
      * This method retrieves an HTML template and replaces placeholders with values
      * returned by the templateKeys() method.
@@ -67,7 +65,8 @@ abstract class AbstractView
      */
     abstract protected function templatePath(): string;
 
-    /** Returns an associative array of keys and values to be used in the HTML template.
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
      *
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
@@ -76,7 +75,8 @@ abstract class AbstractView
      */
     abstract protected function templateKeys(): array;
 
-    /** Renders the complete HTML page including header, body, and footer.
+    /**
+     * Renders the complete HTML page including header, body, and footer.
      *
      * This method orchestrates the rendering of the entire HTML page by calling
      * the methods to render the header, body, and footer in sequence.
@@ -88,7 +88,8 @@ abstract class AbstractView
         $this->renderFooter();
     }
 
-    /** Renders the HTML header section of the page.
+    /**
+     * Renders the HTML header section of the page.
      *
      * This method outputs the HTML for the header section, including meta tags,
      * title, CSS links, and navigation bar.
@@ -147,7 +148,8 @@ abstract class AbstractView
     }
 
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -156,7 +158,8 @@ abstract class AbstractView
      */
     abstract protected function getNameCss(): string;
 
-    /** Renders the HTML footer section of the page.
+    /**
+     * Renders the HTML footer section of the page.
      *
      * This method outputs the HTML for the footer section, including contact information
      * and social media links.
@@ -201,18 +204,17 @@ abstract class AbstractView
     }
 
     /**
-
      * Returns the name of the project 'SAEManager' or be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'SAEManager'.
-
      */
     protected function getPageTitle(): string
     {
         return 'SAEManager';
     }
 
-    /** Returns additional HTML headers for any view class page which will extend this class.
+    /**
+     * Returns additional HTML headers for any view class page which will extend this class.
      *
      * @return string The additional HTML headers.
      */
@@ -221,7 +223,8 @@ abstract class AbstractView
         return '';
     }
 
-    /** Returns additional scripts to be included before closing a body tag.
+    /**
+     * Returns additional scripts to be included before closing a body tag.
      *
      * @return string The additional scripts.
      */

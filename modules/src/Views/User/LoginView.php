@@ -6,26 +6,21 @@ use Views\AbstractView;
 use Utilis\SessionService;
 
 /**
-
  * The view to display the login page. It extends the AbstractView abstract class.
 
- *
-
  * It implements the methods of the AbstractView extended class and behaves as a login page
-
  *
+ * @package src
 
- * @package     src
+ * @subpackage User
 
- * @subpackage  User
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
  */
 class LoginView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/loginview.html';
@@ -39,7 +34,8 @@ class LoginView extends AbstractView
     {
         return self::TEMPLATE_HTML;
     }
-    /** Returns an associative array of keys and values to be used in the HTML template.
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
      *
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
@@ -56,14 +52,10 @@ class LoginView extends AbstractView
         ];
     }
     /**
-
      * The constructor of the class, will use the constructor of the parent class AbstractView.
      * Also fills the $data variable with potential error messages.
-
      *
-
      * @return void Creates the instance of the class.
-
      */
     public function __construct()
     {
@@ -74,16 +66,12 @@ class LoginView extends AbstractView
     }
 
     /**
-
      * Returns the HTML to display and error message for the user.
 
      * If $error contains an error message, the method prepares a display for it and returns it.
      * Otherwise the method returns an empty string
-
      *
-
      * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
-
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -100,7 +88,8 @@ class LoginView extends AbstractView
         return $html;
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -111,7 +100,8 @@ class LoginView extends AbstractView
     {
         return 'style.css';
     }
-    /** Returns additional HTML headers for the Login page.
+    /**
+     * Returns additional HTML headers for the Login page.
      *
      * @return string The additional HTML headers.
      */

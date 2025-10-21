@@ -8,12 +8,13 @@ use Views\ToDoList\ToDoListView;
 /**
  * Class ToDoListController
  * Handles the control logic for the To-Do List page.
- * @package Controllers\ToDoList
- * @version 1.0
- * @author Dargentolle François
- * @see ToDoListView
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/
- * @category Controller
+ *
+ * @category   Controller
+ * @package    Src
+ * @subpackage Controllers\ToDoList
+ * @author     Dargentolle François
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/
+ * @see        ToDoListView
  */
 class ToDoListController implements ControllerInterface
 {
@@ -30,9 +31,9 @@ class ToDoListController implements ControllerInterface
     }
 
     /**
-     *  @method static bool support(string $chemin, string $method)
+     * @method static bool support(string $chemin, string $method)
      *  Determines if this controller supports the given path and method.
-     *  @return bool true if the path and method are supported, false otherwise
+     * @return boolean true if the path and method are supported, false otherwise
      */
     public static function support(string $path, string $method): bool
     {

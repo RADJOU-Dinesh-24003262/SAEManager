@@ -18,10 +18,10 @@ use Utilis\SessionService;
  * they are redirected to the login page with a flash error message.
  *
  * @category Controllers
- * @package Controllers\Dashboard
- * @author Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
- * @license MIT https://opensource.org/licenses/MIT
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/
+ * @package  Controllers\Dashboard
+ * @author   Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
 class DashboardController implements ControllerInterface
 {
@@ -73,8 +73,8 @@ class DashboardController implements ControllerInterface
      * This static method checks whether the controller supports
      * a given route path and HTTP method.
      *
-     * @param   string $path   The URL path of the request (e.g., "/dashboard").
-     * @param   string $method The HTTP method used (e.g., "GET", "POST").
+     * @param string $path   The URL path of the request (e.g., "/dashboard").
+     * @param string $method The HTTP method used (e.g., "GET", "POST").
      *
      * @return boolean Returns true if the path is "/dashboard" and the method is "GET"; otherwise, false.
      */

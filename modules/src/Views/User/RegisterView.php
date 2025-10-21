@@ -7,19 +7,17 @@ use Views\AbstractView;
 use Utilis\SessionService;
 
 /**
-
  * Class RegisterView
 
- * @package     src
+ * @package src
 
- * @subpackage  User
+ * @subpackage User
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class represents the view for the registration page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration page, including handling error messages.
-
  */
 class RegisterView extends AbstractView
 {
@@ -27,100 +25,113 @@ class RegisterView extends AbstractView
 
     /**
      * The identification String of the user. Will be used as a primary key to recognize the user.
+     *
      * @var string
      */
     public const FIELD_ID = 'id';
     /**
      * The first name of the user. Used for the user interface.
+     *
      * @var string
      */
     public const FIELD_FNAME = 'fname';
     /**
      * The last name of the user. Used for the user interface
+     *
      * @var string
      */
     public const FIELD_LNAME = 'lname';
     /**
      * The gender of the user. Used for the user interface
+     *
      * @var string
      */
     public const FIELD_GENDER = 'gender';
     /**
      * The user type. It might be either a student, an SAE administrator or a client (subject maker of the SAEs)
+     *
      * @var string
      */
     public const FIELD_USER_TYPE = 'user_type';
     /**
      * The email of the user. Will be used to contact them,
      * to identify them, to help recover password and some more usages.
+     *
      * @var string
      */
     public const FIELD_EMAIL = 'email';
     /**
      * The password of the user. Used to allow them to login, and secure their accounts.
+     *
      * @var string
      */
     public const FIELD_PASSWORD = 'pwd';
     /**
      * Field to make sure the user typed his password right, they have to type it twice.
+     *
      * @var string
      */
     public const FIELD_PASSWORD_CONFIRM = 'pwdverif';
     /**
      * The phone number of the user. used to secure the site, to contact them and identify an account.
+     *
      * @var string
      */
     public const FIELD_PHONE = 'tel';
     /**
      * The date of birth of a user. Used to identify them.
+     *
      * @var string
      */
     public const FIELD_DOB = 'dob';
     /**
      * The city of studying of the user. Used to locate and search users efficiently.
+     *
      * @var string
      */
     public const FIELD_CITY = 'city';
     /**
      * The study year of the undergraduate. Used to locate and search and sort users efficiently.
+     *
      * @var string
      */
     public const FIELD_YEAR = 'year';
     /**
      * The major of the student. Used to locate search and sort users efficiently.
+     *
      * @var string
      */
     public const FIELD_PARCOURS = 'parcours';
     /**
      * The field to give the sub-group in the promotion of the user (if their is any).
+     *
      * @var string
      */
     public const FIELD_TD = 'td';
     /**
      * The field to give the sub-sub-group in the promotion of the user (if their is any).
+     *
      * @var string
      */
     public const FIELD_TP = 'tp';
     /**
      * The variable that gives weather the user has accepted the terms and conditions.
+     *
      * @var string
      */
     public const FIELD_TERMS = 'terms';
 
     /**
      * The path of the html template with the form
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/register.html';
 
     /**
-
      * The constructor of the class, will use the constructor of the parent class AbstractView
-
      *
-
      * @return void Creates the instance of the class.
-
      */
     public function __construct()
     {
@@ -184,19 +195,18 @@ class RegisterView extends AbstractView
     }
 
     /**
-
      * Returns the name of the page 'Inscription - SAEManager' or
      * be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Inscription - SAEManager'.
-
      */
     protected function getPageTitle(): string
     {
         return 'Inscription - SAEManager';
     }
 
-    /** Returns additional scripts to be included before closing a body tag.
+    /**
+     * Returns additional scripts to be included before closing a body tag.
      *
      * @return string The additional scripts.
      */
@@ -205,7 +215,8 @@ class RegisterView extends AbstractView
         return '<script src="/scripts/register.js"></script>';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -216,7 +227,8 @@ class RegisterView extends AbstractView
     {
         return 'register.css';
     }
-    /** Returns additional HTML headers for the Register page.
+    /**
+     * Returns additional HTML headers for the Register page.
      *
      * @return string The additional HTML headers.
      */

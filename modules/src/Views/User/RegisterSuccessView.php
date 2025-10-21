@@ -6,49 +6,46 @@ use Views\AbstractView;
 use Models\User\User;
 
 /**
-
  * Class RegisterSuccessView
 
- * @package     src
+ * @package src
 
- * @subpackage  User
+ * @subpackage User
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
 
  * This class represents the view for the registration success page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration success page, including displaying user information.
-
  */
 class RegisterSuccessView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/register-success.html';
     /**
      * The path of the CSS code for the HTML code to display for this view
+     *
      * @var string
      */
     private const CSS_REGISTER_SUCCESS = 'register-success.css';
     /**
      * The variable that stores the data of the user that just logged in
+     *
      * @var User
      */
     private User $user;
 
     /**
-
      * The constructor of the class, will use the constructor of the parent class AbstractView.
      * Takes the user in parametter and stores it into the user variable of this class.
-
      *
-
      * @param User $user the user that just logged in.
 
      * @return void Creates the instance of the class.
-
      */
     public function __construct(User $user)
     {
@@ -136,21 +133,18 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-
      * Returns the name of the page 'Inscription réussie - SAEManager' or be used in some cases
      * like displaying it by some isolated texts.
-
      *
-
      * @return string the name of the project 'Inscription réussie - SAEManager'.
-
      */
     protected function getPageTitle(): string
     {
         return 'Inscription réussie - SAEManager';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -161,7 +155,8 @@ class RegisterSuccessView extends AbstractView
     {
         return self::CSS_REGISTER_SUCCESS;
     }
-    /** Returns additional HTML headers for the Register Success page.
+    /**
+     * Returns additional HTML headers for the Register Success page.
      *
      * @return string The additional HTML headers.
      */
