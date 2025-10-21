@@ -43,7 +43,7 @@ class UserRepository
      * return true if the email exists. False if it is not found
      * or if an error occurs.
      *
-     * @param database $db The database to instanciate
+     * @param string $email The demail to verify in the database
      *
      * @return boolean
      */

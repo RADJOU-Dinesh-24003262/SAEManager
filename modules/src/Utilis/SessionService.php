@@ -34,8 +34,8 @@ class SessionService
      *
      * This method creates a key value pair with the key and value given in parametters in the session.
      *
-     * @param $key the key to set the value of.
-     * @param $value the value that will be set.
+     * @param string $key the key to set the value of.
+     * @param mixed $value the value that will be set.
      *
      * @return void
      */
@@ -50,8 +50,8 @@ class SessionService
      *
      * This method returns the assiociated value to the key given in parametters in the user session.
      *
-     * @param $key the key to get the message of.
-     * @param $default used for genericity
+     * @param string $key the key to get the message of.
+     * @param mixed $default used for genericity
      *
      * @return mixed
      */
@@ -77,8 +77,6 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This method unsets in the user session the key given in parametters.
      *
      * @return void
@@ -90,9 +88,10 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This method created a flash message with the key and value given in parametters. It is set into the user session.
+     *
+     * @param string $key     The key of the flash message to retrieve.
+     * @param mixed  $value The default value to return if the key is not found.
      *
      * @return void
      */
@@ -103,12 +102,10 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This method gets the flash message with the key given in parametter, unsets and returns it.
      *
-     * @param $key the key to get the flash message of.
-     * @param $default used for genericity.
+     * @param string $key     The key of the flash message to retrieve.
+     * @param mixed  $default The default value to return if the key is not found.
      *
      * @return mixed
      */
@@ -121,8 +118,6 @@ class SessionService
     }
 
     /**
-     *
-     *
      * This method returns true if the session flash message key given in parametters is set. False otherwise.
      *
      * @param $key the key to get the flash message of.

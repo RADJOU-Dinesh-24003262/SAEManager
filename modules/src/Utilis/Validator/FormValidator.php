@@ -87,11 +87,11 @@ abstract class FormValidator
      *
      * @param string $email the value to validate
      * @param string $lname the last name of the user
-     * @param string $fmame the first name of the user
+     * @param string $fname the first name of the user
      *
      * @return boolean
      */
-    protected function isOwnAmuEmail($email, $lname, $fname)
+    protected function isOwnAmuEmail($email, $lname, $fname): bool
     {
         $escapedFname = strtolower(preg_quote($fname, '/'));
         $escapedLname = strtolower(preg_quote($lname, '/'));
@@ -124,7 +124,7 @@ abstract class FormValidator
      */
     protected function isValidPhone(string $phone): bool
     {
-        return preg_match('/^0[467][0-9]{8}$/', $phone);
+        return (bool) preg_match('/^0[467][0-9]{8}$/', $phone);
     }
 
     /**
@@ -165,9 +165,9 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the parcours field
+     * Returns the validity of the td field
      *
-     * @param string $parcours the value to validate
+     * @param string $td the value to validate
      *
      * @return boolean
      */
