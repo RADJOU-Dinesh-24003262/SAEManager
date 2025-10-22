@@ -24,26 +24,6 @@
             aria-describedby="id-hint">
         <small id="id-hint">3 à 30 caractères (lettres, chiffres, points, tirets, underscores)</small>
 
-        <fieldset>
-            <legend>
-                Civilité
-                <abbr title="requis">*</abbr>
-            </legend>
-
-            <div class="radio-group">
-                <input type="radio" id="gender-male" name="gender" value="male" required aria-required="true">
-                <label for="gender-male">Homme</label>
-            </div>
-            <div class="radio-group">
-                <input type="radio" id="gender-female" name="gender" value="female" required aria-required="true">
-                <label for="gender-female">Femme</label>
-            </div>
-            <div class="radio-group">
-                <input type="radio" id="gender-other" name="gender" value="other" required aria-required="true">
-                <label for="gender-other">Autre</label>
-            </div>
-        </fieldset>
-
 
         <label for="fname">
             Prénom
@@ -116,33 +96,6 @@
             aria-required="true"
             aria-describedby="tel-hint">
         <small id="tel-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
-
-        <label for="dob">
-            Date de naissance
-            <abbr title="requis" >*</abbr>
-        </label>
-        <input 
-            required 
-            type="date" 
-            id="dob" 
-            name="dateOfBirth" 
-            min="1940-01-01" 
-            max="{{MAX_BIRTH_DATE}}" 
-            autocomplete="bday"
-            aria-required="true">
-
-        <label for="city">
-            Ville
-            <abbr title="requis" >*</abbr>
-        </label>
-        <input 
-            required 
-            type="text" 
-            id="city" 
-            name="city" 
-            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\- ]+" 
-            autocomplete="address-level2"
-            aria-required="true">  
     </fieldset>
 
     <fieldset>
