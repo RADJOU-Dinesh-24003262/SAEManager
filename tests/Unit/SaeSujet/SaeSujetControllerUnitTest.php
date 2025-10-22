@@ -13,10 +13,21 @@ use Controllers\SaeSujet\SaeSujetController;
 
 /**
  * Tests unitaires pour SaeSujetController
- * @package Test\Unit\Controller\SaeSujet
- * @version 1.0
+ *
+ * @category Test
+ * 
+ * @package tests
+ * 
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * 
+ * @license MIT License https://opensource.org/licenses/MIT
+ * 
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(\Controllers\SaeSujet\SaeSujetController::class)]
 #[CoversClass(SaeSujetController::class)]
 class SaeSujetControllerUnitTest extends TestCase
 {
@@ -30,7 +41,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS D'INSTANCIATION ET D'INTERFACE
      */
-
     #[Test]
     public function controllerImplementsControllerInterface(): void
     {
@@ -61,7 +71,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS UNITAIRES DE LA MÉTHODE control()
      */
-
     #[Test]
     public function controlMethodReturnsVoid(): void
     {
@@ -87,7 +96,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS UNITAIRES DE LA MÉTHODE support() - CARACTÉRISTIQUES
      */
-
     #[Test]
     public function supportMethodIsStatic(): void
     {
@@ -131,7 +139,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * DATA PROVIDERS POUR LES TESTS UNITAIRES support()
      */
-
     public static function validSupportProvider(): array
     {
         return [
@@ -178,7 +185,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS UNITAIRES support() AVEC DATA PROVIDERS
      */
-
     #[Test]
     #[DataProvider('validSupportProvider')]
     public function supportReturnsTrueForValidCases(string $path, string $method, bool $expected): void
@@ -214,7 +220,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS UNITAIRES support() - CAS SPÉCIFIQUES
      */
-
     #[Test]
     public function supportIsCaseSensitiveForMethod(): void
     {
@@ -234,7 +239,6 @@ class SaeSujetControllerUnitTest extends TestCase
     /**
      * TESTS UNITAIRES DE ROBUSTESSE
      */
-
     #[Test]
     public function supportHandlesVariousInputFormats(): void
     {
