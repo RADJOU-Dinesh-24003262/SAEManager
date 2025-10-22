@@ -23,7 +23,7 @@ yearSelect.addEventListener('change', () => {
 });
 
 // Disable fields for teachers and partners
-const userTypeSelect = document.getElementById('user_type');
+const userTypeSelect = document.getElementById('userType');
 const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
 
