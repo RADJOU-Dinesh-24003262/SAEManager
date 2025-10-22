@@ -41,11 +41,6 @@ class RegisterView extends AbstractView
      */
     public const FIELD_LNAME = 'lname';
     /**
-     * The gender of the user. Used for the user interface
-     * @var string
-     */
-    public const FIELD_GENDER = 'gender';
-    /**
      * The user type. It might be either a student, an SAE administrator or a client (subject maker of the SAEs)
      * @var string
      */
@@ -70,16 +65,6 @@ class RegisterView extends AbstractView
      * @var int
      */
     public const FIELD_PHONE = 'tel';
-    /**
-     * The date of birth of a user. Used to identify them.
-     * @var string
-     */
-    public const FIELD_DOB = 'dob';
-    /**
-     * The city of studying of the user. Used to locate and search users efficiently.
-     * @var string
-     */
-    public const FIELD_CITY = 'city';
     /**
      * The study year of the undergraduate. Used to locate and search and sort users efficiently.
      * @var string
@@ -153,10 +138,7 @@ class RegisterView extends AbstractView
 
         return [
             // Error messages
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-
-            // Max birth date for 16 years old
-            'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years'))
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
         ];
     }
 
