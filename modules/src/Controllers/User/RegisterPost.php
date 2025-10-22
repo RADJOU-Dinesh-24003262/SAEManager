@@ -41,10 +41,10 @@ class RegisterPost implements ControllerInterface
             // Create the user
             $user = User::createFromRegistrationData($data);
 
-            // Save the user
+            // Save the user HAS TEMPORARILY BEEN CHANGED, OLD CODE IN COMMENT
+            /*
             if ($user->save()) {
                 error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
-                SessionService::set('user_id', $user->getEmail());
                 $view = new RegisterSuccessView($user);
                 $view->render();
 
@@ -53,6 +53,13 @@ class RegisterPost implements ControllerInterface
                 error_log("Erreur sauvegarde utilisateur: " . $user->getEmail());
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
+                */
+            $user->save();
+            error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
+            $view = new RegisterSuccessView($user);
+            $view->render();
+
+
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
