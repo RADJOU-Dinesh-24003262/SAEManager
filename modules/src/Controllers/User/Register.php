@@ -7,7 +7,6 @@ use Utilis\SessionService;
 use Views\User\RegisterView;
 
 /**
- * Class User
  * This class controls the register process (get).
 
  * @category Controller

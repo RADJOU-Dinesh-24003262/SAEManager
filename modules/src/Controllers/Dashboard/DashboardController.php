@@ -18,8 +18,14 @@ use Utilis\SessionService;
  * they are redirected to the login page with a flash error message.
  *
  * @category Controllers
- * @package  Controllers\Dashboard
- * @author   Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @package  Src
+ * @subpackage Controllers\Dashboard
+ *
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
