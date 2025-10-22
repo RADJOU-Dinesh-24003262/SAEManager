@@ -52,6 +52,7 @@ fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
 	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 modules/src/
 	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 tests/
+	./vendor/bin/php-cs-fixer fix modules/src
 	@echo "${GREEN}✓ Code formaté${NC}"
 
 quality: ## Lance toutes les vérifications de qualité

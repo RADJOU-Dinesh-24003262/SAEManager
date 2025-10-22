@@ -7,15 +7,25 @@ use includes\exception\ExceptionValidationEmptys;
 
 /**
  * Class FormValidator
- *
- * @package src
+ * Abstract class for form validation.
+ * Provides methods to escape and validate form data.
+
+ * @category Utilis
+
+ * @package Src
 
  * @subpackage Utilis\Validator
 
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- *
- * Abstract class for form validation.
- * Provides methods to escape and validate form data.
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+
  */
 abstract class FormValidator
 {
@@ -30,9 +40,9 @@ abstract class FormValidator
     /**
      * Escapes form data (HTML special chars).
      *
-     * @param  array $data of form
-     * @return array Data with escaped fields
-     * @throws ExceptionValidationEmptys if a required field is empty
+     * @param  array $data Data of form to espace.
+     * @return array Data with escaped fields.
+     * @throws ExceptionValidationEmptys If a required field is empty.
      */
     public function escape(array $data): array
     {
@@ -55,15 +65,16 @@ abstract class FormValidator
     /**
      * Validates form data. To be implemented in child classes.
      *
-     * @param  array $data
-     * @throws \Exception
+     * @param  array $data The field to validate.
+     * @return void
+     * @throws \Exception If the data don't meet the requirement.
      */
     abstract public function validate(array $data): void;
 
     /**
      * Returns the validity of the userType field
      *
-     * @param string $userType the value to validate
+     * @param string $userType The value to validate.
      *
      * @return boolean
      */
@@ -75,7 +86,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the email field
      *
-     * @param string $email the value to validate
+     * @param string $email The value to validate.
      *
      * @return boolean
      */
@@ -88,13 +99,13 @@ abstract class FormValidator
      * Returns the validity of the amUemail with the first and last name
      * as a amU email should be firstname.lastname[numberIfDuplicated]@(etu\.)?univ-amu\.fr$/
      *
-     * @param string $email the value to validate
-     * @param string $lname the last name of the user
-     * @param string $fname the first name of the user
+     * @param string $email The value to validate.
+     * @param string $lname The last name of the user.
+     * @param string $fname The first name of the user.
      *
      * @return boolean
      */
-    protected function isOwnAmuEmail($email, $lname, $fname): bool
+    protected function isOwnAmuEmail(string $email, string $lname, string $fname): bool
     {
         $escapedFname = strtolower(preg_quote($fname, '/'));
         $escapedLname = strtolower(preg_quote($lname, '/'));
@@ -109,7 +120,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the password field
      *
-     * @param string $password the value to validate
+     * @param string $password The value to validate.
      *
      * @return boolean
      */
@@ -121,7 +132,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the phone field
      *
-     * @param string $phone the value to validate
+     * @param string $phone The value to validate.
      *
      * @return boolean
      */
@@ -133,7 +144,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the date field
      *
-     * @param string $date the value to validate
+     * @param string $date The value to validate.
      *
      * @return boolean
      */
@@ -146,7 +157,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the year field
      *
-     * @param string $year the value to validate
+     * @param string $year The value to validate.
      *
      * @return boolean
      */
@@ -156,9 +167,9 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the parcours field
+     * Returns the validity of the parcours field.
      *
-     * @param string $parcours the value to validate
+     * @param string $parcours The value to validate.
      *
      * @return boolean
      */
@@ -170,7 +181,7 @@ abstract class FormValidator
     /**
      * Returns the validity of the td field
      *
-     * @param string $td the value to validate
+     * @param string $td The value to validate.
      *
      * @return boolean
      */
@@ -180,9 +191,9 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the tp field
+     * Returns the validity of the tp field.
      *
-     * @param string $tp the value to validate
+     * @param string $tp The value to validate.
      *
      * @return boolean
      */
@@ -192,9 +203,9 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the gender field
+     * Returns the validity of the gender field.
      *
-     * @param string $gender the value to validate
+     * @param string $gender The value to validate.
      *
      * @return boolean
      */

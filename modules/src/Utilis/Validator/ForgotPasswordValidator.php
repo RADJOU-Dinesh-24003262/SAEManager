@@ -12,6 +12,8 @@ use includes\exception\ExceptionSpam;
  * - The "email" field is present and valid.
  * - Password reset requests are not sent too frequently (spam protection).
 
+ * @category Utilis
+
  * @package Src
 
  * @subpackage Utilis\Validator
@@ -22,6 +24,9 @@ use includes\exception\ExceptionSpam;
  * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
 
  */
 class ForgotPasswordValidator extends FormValidator

@@ -47,7 +47,7 @@ class EmailService
      * given in parametters.
      *
      * @param string $toEmail The email of the user whom want their password reset.
-     * @param string $token   the token created for the password reset.
+     * @param string $token   The token created for the password reset.
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class EmailService
      * This method builds a password reset link based on the server parametters
      * and the token given in parametters and returns it.
      *
-     * @param $token the token created for the password reset to create to link with.
+     * @param string $token The token created for the password reset to create to link with.
      *
      * @return string
      */
@@ -81,9 +81,12 @@ class EmailService
     }
 
     /**
-     * Returns the HTML template file.
+     * Returns the HTML content for the password reset email template.
      *
-     * @return string
+     * This template includes a reset link that the user can click to reset their password.
+     *
+     * @param string $resetLink The URL the user will visit to reset their password.
+     * @return string The HTML content of the password reset email.
      */
     private static function getHtmlTemplate(string $resetLink): string
     {
@@ -148,9 +151,12 @@ class EmailService
     }
 
     /**
-     * Returns the string email template file.
+     * Returns the plain text content for the password reset email template.
      *
-     * @return string
+     * This template includes a reset link that the user can use to reset their password.
+     *
+     * @param string $resetLink The URL the user will visit to reset their password.
+     * @return string The plain text content of the password reset email.
      */
     private static function getTextTemplate(string $resetLink): string
     {
@@ -180,12 +186,13 @@ Ceci est un email automatique, merci de ne pas y répondre.
      * This method tries to send an email to the user using all the parametters
      * given and filling the templates with variables, fixing chartsets and other content types.
      *
-     * @param string $to          the email to send to.
-     * @param string $subject     the subject of the mail.
-     * @param string $htmlMessage the html message.
-     * @param string $textMessage the plain text message.
+     * @param string $to          The email to send to.
+     * @param string $subject     The subject of the mail.
+     * @param string $htmlMessage The html message.
+     * @param string $textMessage The plain text message.
      *
      * @return void
+     * @throws ExceptionEmailSendingFailed If the email can't be send.
      */
     private static function sendEmail(string $to, string $subject, string $htmlMessage, string $textMessage): void
     {
