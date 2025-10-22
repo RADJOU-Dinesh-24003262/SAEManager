@@ -16,7 +16,7 @@ use Controllers\SaeSujet\SaeSujetController;
  *
  * @category Test
  * 
- * @package tests
+ * @package Tests
  * 
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -78,9 +78,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        // REMPLACER :
-        // $this->assertEquals('void', $returnType->getName());
-        // PAR :
+        // REMPLACER : $this->assertEquals('void', $returnType->getName()); PAR :
         $this->assertEquals('void', (string)$returnType);
     }
 
