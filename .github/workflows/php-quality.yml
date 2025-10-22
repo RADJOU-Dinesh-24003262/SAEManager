@@ -9,110 +9,140 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Needed for git diff
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed for git diff
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3'
-        extensions: mbstring, pdo, pdo_pgsql, dom, xml
-        coverage: xdebug
-        tools: composer, phpcs, phpstan, phpunit
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, pdo, pdo_pgsql, dom, xml
+          coverage: xdebug
+          tools: composer, phpcs, phpstan, phpunit
 
-    # Cache Composer dependencies
-    - name: Cache Composer dependencies
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-composer-
+      # Cache Composer dependencies
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-    - name: Validate composer.json
-      run: composer validate --strict
+      - name: Validate composer.json
+        run: composer validate --strict
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
 
-    - name: Get list of changed PHP files
-      id: changed_files
-      run: |
-        if [ "${{ github.event_name }}" == "pull_request" ]; then
-          BASE_REF="${{ github.base_ref }}"
-        else
-          BASE_REF="HEAD^"
-        fi
-        
-        git fetch origin $BASE_REF || true
-        FILES=$(git diff --name-only --diff-filter=ACMR origin/$BASE_REF...HEAD | grep '\.php$' || echo "")
-        
-        if [ -z "$FILES" ]; then
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-          echo "No PHP files changed"
-        else
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
-          echo "$FILES" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          echo "Modified PHP files:"
-          echo "$FILES"
-        fi
+      - name: Get list of changed PHP files
+        id: changed_files
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BASE_REF="${{ github.base_ref }}"
+          else
+            BASE_REF="HEAD^"
+          fi
+          
+          git fetch origin $BASE_REF || true
+          FILES=$(git diff --name-only --diff-filter=ACMR origin/$BASE_REF...HEAD | grep '\.php$' || echo "")
+          
+          if [ -z "$FILES" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No PHP files changed"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+            echo "$FILES" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "Modified PHP files:"
+            echo "$FILES"
+          fi
 
-    # Code Style Check - only if PHP files changed
-    - name: Check PHP Code Style (PSR-12)
-      if: steps.changed_files.outputs.has_changes == 'true'
-      run: |
-        echo "${{ steps.changed_files.outputs.changed_files }}" | \
-        xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*,*/tests/*
+      # Code Style Check - only if PHP files changed
+      - name: Check PHP Code Style (PSR-12)
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          echo "${{ steps.changed_files.outputs.changed_files }}" | \
+          xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*,*/tests/*
 
-    # Static Analysis - only if PHP files changed
-    - name: Run PHPStan Static Analysis
-      if: steps.changed_files.outputs.has_changes == 'true'
-      run: |
-        echo "${{ steps.changed_files.outputs.changed_files }}" | \
-        xargs -r phpstan analyse --level=7 --no-progress --error-format=github --memory-limit=512M
+      # Static Analysis - only if PHP files changed
+      - name: Run PHPStan Static Analysis
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          echo "${{ steps.changed_files.outputs.changed_files }}" | \
+          xargs -r phpstan analyse --level=7 --no-progress --error-format=github --memory-limit=512M
 
-    # Documentation Check - only if PHP files changed
-    - name: Check PHPDoc Documentation
-      if: steps.changed_files.outputs.has_changes == 'true'
-      run: |
-        echo "${{ steps.changed_files.outputs.changed_files }}" | \
-        xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
+      # Documentation Check - only if PHP files changed
+      - name: Check PHPDoc Documentation
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          echo "${{ steps.changed_files.outputs.changed_files }}" | \
+          xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
 
-    # Unit Tests
-    - name: Run PHPUnit Tests
-      run: |
-        phpunit --configuration phpunit.xml \
-        --coverage-text \
-        --coverage-clover=coverage.xml \
-        --testdox
+      # Unit Tests
+      - name: Run PHPUnit Tests
+        run: |
+          phpunit --configuration phpunit.xml \
+          --coverage-text \
+          --coverage-clover=coverage.xml \
+          --testdox
 
-    # Test Coverage Check
-    - name: Check Test Coverage
-      run: |
-        php tests/coverage-checker.php coverage.xml 10
+      # Test Coverage Check
+      - name: Check Test Coverage
+        run: |
+          php tests/coverage-checker.php coverage.xml 10
 
-    # Security Check
-    - name: Security Audit
-      run: composer audit --no-dev
-      continue-on-error: true  # Don't fail build on advisories
+      # Security Check
+      - name: Security Audit
+        run: composer audit --no-dev
+        continue-on-error: true  # Don't fail build on advisories
 
-    # Upload Coverage
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ./coverage.xml
-        fail_ci_if_error: false
-        verbose: true
+      # Upload Coverage
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+          verbose: true
 
-    # Summary
-    - name: Quality Summary
-      if: always()
-      run: |
-        echo "## Quality Check Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ All quality checks completed" >> $GITHUB_STEP_SUMMARY
+      # Generate PHPDoc Documentation
+      - name: Install phpDocumentor
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          wget https://phpdoc.org/phpDocumentor.phar
+          chmod +x phpDocumentor.phar
+          php phpDocumentor.phar --version
+
+      - name: Generate PHPDoc Documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          php phpDocumentor.phar run \
+            --directory=src \
+            --target=docs/api \
+            --title="Project API Documentation" \
+            --ignore="vendor/,tests/,_assets/" \
+            --template=default \
+            --force
+
+      - name: Upload PHPDoc as Artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: phpdoc-documentation
+          path: docs/api/
+          retention-days: 30
+
+      # Summary
+      - name: Quality Summary
+        if: always()
+        run: |
+          echo "## Quality Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All quality checks completed" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "push" ]; then
+            echo "📚 PHPDoc documentation generated and uploaded" >> $GITHUB_STEP_SUMMARY
+          fi
