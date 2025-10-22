@@ -16,17 +16,23 @@ use includes\exception\ExceptionValidationEmptys;
 use includes\exception\ExceptionSpam;
 
 /**
- * Class ForgotPasswordPostController
- *
  * Handles the POST request to the "/forgot-password" route.
  * Validates form input, checks if a user exists, generates a reset token,
  * sends the reset email, and renders the view with appropriate feedback.
  *
- * @package src
-
+ * @category Controllers
+ * @package Src
  * @subpackage Controllers\pwd
 
- * @author  Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ForgotPasswordPostController implements ControllerInterface
 {

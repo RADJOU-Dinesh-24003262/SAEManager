@@ -6,15 +6,18 @@ use includes\database;
 
 /**
  * Class UserRepository
-
- * @package src
-
+ * @category Models
+ * @package Src
  * @subpackage Models\User
-
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class regroup function to manage the users in the database
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT License https://opensource.org/licenses/MIT
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
+
 class UserRepository
 {
     /**
@@ -25,12 +28,12 @@ class UserRepository
     private database $db;
 
     /**
-     * Creates an instance of the class
+     * Creates an instance of the class.
      *
      * This method constructs a user repository object, affecting the database given in parametters
      * to the db variable.
      *
-     * @param database $db The database to instanciate
+     * @param database $db The database to instanciate.
      */
     public function __construct(database $db)
     {
@@ -44,7 +47,7 @@ class UserRepository
      * return true if the email exists. False if it is not found
      * or if an error occurs.
      *
-     * @param string $email The demail to verify in the database
+     * @param string $email The demail to verify in the database.
      *
      * @return boolean
      */
@@ -66,7 +69,7 @@ class UserRepository
      * Tries to insert a new user in the database with the user given in parametters.
      * Return true if it succeed, false otherwise.
      *
-     * @param User $user The user object to insert
+     * @param User $user The user object to insert.
      *
      * @return boolean
      */
