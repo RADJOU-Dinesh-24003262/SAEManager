@@ -38,7 +38,7 @@ $controllers = [
     new ResetPasswordPostController(),
     new PageSaeController(),
     new ToDoListController(),
-    new SaeSujetController()
+    new SaeSujetController(),
     new DashboardController()
 ];
 
