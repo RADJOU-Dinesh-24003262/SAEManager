@@ -1,0 +1,56 @@
+<form action="/sae-sujet" method="post" autocomplete="off">
+    <fieldset>
+        <legend>Créer votre sujet</legend>
+
+        <label for="name">
+            Nom de votre SAE
+            <abbr title="requis">*</abbr>
+        </label>
+        <input
+        required
+        type="text"
+        id="name"
+        name="nameSae"
+        minlength="3"
+        maxlength="30"
+        placeholder="Votre nom ici"
+        aria-required="true"
+        aria-describedby="id-hint">
+        <small id="id-hint">3 à 30 caractères (lettres, chiffres, points, tirets, underscores)</small>
+
+        <div class="text-name">
+            <label for="description">Description</label>
+            <textarea type="text" id="description" name="decrip_sujet" rows="auto" cols="auto" placeholder="Votre description ici"></textarea>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <label>Choisir les compétences :</label>
+        <div class="checkbox">
+            <input type="checkbox" id="competence1" name="competence[1]">
+            <label for="competence1">Compétence 1</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="competence2" name="competence[2]">
+            <label for="competence2">Compétence 2</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="competence3" name="competence[3]">
+            <label for="competence3">Compétence 3</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="competence4" name="competence[4]">
+            <label for="competence4">Compétence 4</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="competence5" name="competence[5]">
+            <label for="competence5">Compétence 5</label>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="competence6" name="competence[6]">
+            <label for="competence6">Compétence 6</label>
+        </div>
+    </fieldset>
+
+    <button type="submit">Enregistrer</button>
+</form>
