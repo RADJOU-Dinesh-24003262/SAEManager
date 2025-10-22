@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Needed for git diff
 
@@ -21,11 +21,11 @@ jobs:
           php-version: '8.3'
           extensions: mbstring, pdo, pdo_pgsql, dom, xml
           coverage: xdebug
-          tools: composer, phpcs, phpstan, phpunit, phpdoc
+          tools: composer, phpcs, phpstan, phpunit
 
       # Cache Composer dependencies
       - name: Cache Composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -37,9 +37,6 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Install PHPDocumentor
-        run: composer require --dev phpdocumentor/phpdocumentor --no-interaction
 
       - name: Get list of changed PHP files
         id: changed_files
@@ -86,19 +83,6 @@ jobs:
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
 
-      # Generate PHPDoc Documentation - only if PHP files changed
-      - name: Generate PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
-        run: |
-          mkdir -p docs/api
-          vendor/bin/phpdoc run \
-            --directory=src \
-            --target=docs/api \
-            --ignore="vendor/*,tests/*" \
-            --title="Project API Documentation" \
-            --template=clean
-        continue-on-error: true
-
       # Unit Tests
       - name: Run PHPUnit Tests
         run: |
@@ -117,22 +101,29 @@ jobs:
         run: composer audit --no-dev
         continue-on-error: true  # Don't fail build on advisories
 
+      # Generate API Documentation
+      - name: Generate PHPDocumentor Documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          composer run-script phpdoc
+
+      # Upload Documentation as Artifact (v3)
+      - name: Upload API Documentation
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-documentation
+          path: docs/api/
+          retention-days: 30
+          if-no-files-found: error
+
       # Upload Coverage
       - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
           fail_ci_if_error: false
           verbose: true
-
-      # Upload PHPDoc Documentation as artifact
-      - name: Upload PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: phpdoc-documentation
-          path: docs/api
-          retention-days: 30
 
       # Summary
       - name: Quality Summary
@@ -141,4 +132,6 @@ jobs:
           echo "## Quality Check Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ All quality checks completed" >> $GITHUB_STEP_SUMMARY
-          echo "📚 PHPDoc documentation generated and uploaded as artifact" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "📚 API Documentation generated and uploaded" >> $GITHUB_STEP_SUMMARY
+          fi
