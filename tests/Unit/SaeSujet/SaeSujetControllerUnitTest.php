@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Controller\SaeSujet;
+namespace Tests\Unit\SaeSujet;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -13,10 +13,10 @@ use Controllers\SaeSujet\SaeSujetController;
 
 /**
  * Tests unitaires pour SaeSujetController
- * @covers \Controllers\SaeSujet\SaeSujetController
  * @package Test\Unit\Controller\SaeSujet
  * @version 1.0
  */
+#[CoversClass(\Controllers\SaeSujet\SaeSujetController::class)]
 #[CoversClass(SaeSujetController::class)]
 class SaeSujetControllerUnitTest extends TestCase
 {
@@ -119,13 +119,13 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        
+
         // ALTERNATIVE COMPATIBLE :
         if (method_exists($returnType, 'getName')) {
             $this->assertEquals('bool', $returnType->getName());
         } else {
             $this->assertEquals('bool', (string)$returnType);
-    }
+        }
     }
 
     /**
