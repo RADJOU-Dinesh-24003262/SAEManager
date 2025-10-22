@@ -29,7 +29,7 @@ use Views\PageSAE\PageSaeView;
 class PageSaeController implements ControllerInterface
 {
     /**
-     * Principal manager of the controller
+     * Principal manager of the controller.
      *
      * @return void
      */
