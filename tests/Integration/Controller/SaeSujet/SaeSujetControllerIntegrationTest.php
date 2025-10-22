@@ -25,8 +25,6 @@ use Controllers\SaeSujet\SaeSujetController;
  * @license MIT License https://opensource.org/licenses/MIT
  * 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
- * 
- * @covers  \Controllers\SaeSujet\SaeSujetController
  */
 #[CoversClass(SaeSujetController::class)]
 class SaeSujetControllerIntegrationTest extends TestCase
@@ -37,7 +35,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
     #[Test]
     public function supportMethodWorksWithoutControllerInstance(): void
     {
-        // Test d'intégration : la méthode statique fonctionne sans instance
+        // Test d'intégration : la méthode statique fonctionne sans instance.
         $result = SaeSujetController::support('/new-sae', 'GET');
         $this->assertTrue($result);
     }

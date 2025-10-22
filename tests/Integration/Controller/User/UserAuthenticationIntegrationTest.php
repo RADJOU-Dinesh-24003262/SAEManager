@@ -16,7 +16,7 @@ use Models\User\User;
  *
  * @category Test
  * 
- * @package tests
+ * @package Tests
  * 
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -64,20 +64,20 @@ class UserAuthenticationIntegrationTest extends TestCase
      */
     public function testSessionRegenerationAfterLogin(): void
     {
-        // Start session and get initial ID
+        // Start session and get initial ID.
         SessionService::start();
         $initialSessionId = session_id();
 
-        // Simulate successful login (would need database mock)
+        // Simulate successful login (would need database mock).
         SessionService::set('user_id', 'test@univ-amu.fr');
         SessionService::regenerateId();
 
         $newSessionId = session_id();
 
-        // Session ID should have changed
+        // Session ID should have changed.
         $this->assertNotEquals($initialSessionId, $newSessionId);
 
-        // But user data should persist
+        // But user data should persist.
         $this->assertEquals('test@univ-amu.fr', SessionService::get('user_id'));
     }
 
@@ -92,8 +92,8 @@ class UserAuthenticationIntegrationTest extends TestCase
 
         $errors = SessionService::getFlash('errors');
 
-        // The flash system should not execute the script
-        // When rendered in view, htmlspecialchars should protect
+        // The flash system should not execute the script.
+        // When rendered in view, htmlspecialchars should protect.
         $this->assertIsArray($errors);
         $this->assertContains($maliciousInput, $errors);
     }
@@ -107,14 +107,14 @@ class UserAuthenticationIntegrationTest extends TestCase
     {
         SessionService::start();
 
-        // Set session created time to 31 minutes ago
+        // Set session created time to 31 minutes ago.
         $_SESSION['_session_created'] = time() - 1860;
 
-        // Restart session (should trigger timeout check)
+        // Restart session (should trigger timeout check).
         SessionService::destroy();
         SessionService::start();
 
-        // Session should have been destroyed and recreated
+        // Session should have been destroyed and recreated.
         $this->assertFalse(isset($_SESSION['user_id']));
     }
 
@@ -130,7 +130,7 @@ class UserAuthenticationIntegrationTest extends TestCase
 
         $firstSessionId = session_id();
 
-        // Simulate login from another device (regenerate ID)
+        // Simulate login from another device (regenerate ID).
         SessionService::regenerateId();
 
         $secondSessionId = session_id();
