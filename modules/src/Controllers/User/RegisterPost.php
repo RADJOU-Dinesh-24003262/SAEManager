@@ -12,15 +12,26 @@ use Views\User\RegisterSuccessView;
 use includes\exception\ExceptionValidationRegisters;
 
 /**
- * Class User
+ * Class RegisterPost
 
- * @package     src
+ * This class controls the register process (post).
+
+ * @category    Controller
+
+ * @package     Src
 
  * @subpackage  Controllers\User
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
+ *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
+ *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * This class controls the register process (post).
+ * @license     MIT License https://opensource.org/licenses/MIT
+
+ * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
+
  */
 class RegisterPost implements ControllerInterface
 {
@@ -28,17 +39,19 @@ class RegisterPost implements ControllerInterface
      * Principal manager of the controller
      *
      * @return void
+     *
+     * @throws \Exception For any other unexpected errors during the registration process.
      */
     public function control(): void
     {
-        // Validate the data
+        // Validate the data.
         $validator = new ValidationServiceRegister();
 
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
-            // Create the user
+            // Create the user.
             $user = User::createFromRegistrationData($data);
 
             // Save the user HAS TEMPORARILY BEEN CHANGED, OLD CODE IN COMMENT
@@ -77,12 +90,15 @@ class RegisterPost implements ControllerInterface
     }
 
     /**
-     * Check if this controller can handle the request
+     * Determines whether this controller supports the given request.
      *
-     * @return boolean Is the method post?
+     * @param string $path   The requested URI path.
+     * @param string $method The HTTP method used in the request.
+     *
+     * @return boolean True if the path is "/register" and the method is POST.
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/register" && $method === "POST";
+        return $path === "/register" && $method === "POST";
     }
 }

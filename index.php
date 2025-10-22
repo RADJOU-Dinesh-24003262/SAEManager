@@ -3,6 +3,7 @@
 session_start();
 include "_assets/includes/Autoloader.php";
 
+use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
 use Controllers\User\Register;
@@ -18,6 +19,7 @@ use Controllers\PageSae\PageSaeController;
 use Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
+use Controllers\SaeSujet\SaeSujetController;
 
 // List of available controllers.
 $controllers = [
@@ -35,7 +37,9 @@ $controllers = [
     new ResetPasswordController(),
     new ResetPasswordPostController(),
     new PageSaeController(),
-    new ToDoListController()
+    new ToDoListController(),
+    new SaeSujetController(),
+    new DashboardController()
 ];
 
 // Automatic routing.

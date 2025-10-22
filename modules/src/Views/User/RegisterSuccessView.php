@@ -92,7 +92,6 @@ class RegisterSuccessView extends AbstractView
      */
     private function getUserTypeLabel(): string
     {
-        error_log("User type: " . $this->user->getUserType(), 0, 'php_errors.log');
         switch ($this->user->getUserType()) {
             case 'student':
                 return 'Étudiant';
@@ -106,9 +105,11 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-     * Returns a div make into the method to be displayed to the user, only if the user is a student, Returns an empty string otherwise.
+     * Returns a div make into the method to be displayed to the user, only if the user is a student,
+     * Returns an empty string otherwise.
      *
-     * This method makes an html div with the academic year, major, sub group and sub-sub group. If the user isn't a student
+     * This method makes an html div with the academic year, major, sub group and sub-sub group.
+     * If the user isn't a student
      * this method returns an empty string.
      *
      * @return string The HTML div ready to be displayed.
@@ -136,7 +137,8 @@ class RegisterSuccessView extends AbstractView
 
     /**
 
-     * Returns the name of the page 'Inscription réussie - SAEManager' or be used in some cases like displaying it by some isolated texts.
+     * Returns the name of the page 'Inscription réussie - SAEManager' or be used in some cases
+     * like displaying it by some isolated texts.
 
      *
 

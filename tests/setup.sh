@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Automatic setup script for quality tools
-# Usage: bash setup-quality.sh  
+# Usage: bash setup.sh  
 
 set -e
 
@@ -38,6 +38,7 @@ if ! command -v composer &> /dev/null; then
     exit 1
 fi
 echo -e "${GREEN}✓ Composer détecté${NC}\n"
+
 sudo apt update
 sudo apt install php8.4-xml
 
