@@ -108,7 +108,7 @@ class User
     private function __construct(array $data = [])
     {
         foreach ($data as $key => $value) {
-            if ($key === 'password') {
+            if ($key === 'password' || $key === 'passwordverif' || $key === 'terms') {
                 continue; // Skip password, use setPassword method instead
             }
             $this->$key = $value;
@@ -166,14 +166,12 @@ class User
     }
 
     /**
-     * Returns the success of fetching a user in the database
      *
      * Tries to fetch a user in the database depending on it's user type.
-     * Returns the success of this action.
      *
-     * @return boolean
+     * @return void
      */
-    public function save(): bool
+    public function save(): void
     {
         $connection = database::getInstance();
 
@@ -202,7 +200,9 @@ class User
             ]);
 
             $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
-            $stmt->execute();
+            $stmt->execute([
+                'email' => $this->email
+            ]);
             $temp_id = '';
             $temp_id = $stmt->fetchColumn(0);
 
@@ -297,9 +297,6 @@ class User
                 'organisation' => $this->organisation
             ]);
         }
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['success'] === true;
     }
 
     /**
@@ -320,7 +317,7 @@ class User
             'email'=>$email
         ]);
         $hashed_password = $stmt->fetchColumn(1);
-        if(!($hashed_password === true && password_verify($password, $hashed_password))){
+        if(!($hashed_password == true && password_verify($password, $hashed_password))){
             throw new ExceptionValidationLogin();
         }
     }
