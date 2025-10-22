@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Needed for git diff
 
@@ -25,7 +25,7 @@ jobs:
 
       # Cache Composer dependencies
       - name: Cache Composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -119,7 +119,7 @@ jobs:
 
       # Upload Coverage
       - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
           fail_ci_if_error: false
@@ -128,7 +128,7 @@ jobs:
       # Upload PHPDoc Documentation as artifact
       - name: Upload PHPDoc Documentation
         if: steps.changed_files.outputs.has_changes == 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: phpdoc-documentation
           path: docs/api
