@@ -11,21 +11,22 @@ use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class User
- *
  * This class contains functions to create and manage users,
  * and handles communication with the database layer.
  *
  * @category   Models
  * @package    Src
  * @subpackage Models\User
- * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license    MIT https://opensource.org/licenses/MIT
- * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- */
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+*/
 
 class User
 {

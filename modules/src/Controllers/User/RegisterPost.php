@@ -12,8 +12,6 @@ use Views\User\RegisterSuccessView;
 use includes\exception\ExceptionValidationRegisters;
 
 /**
- * Class RegisterPost
-
  * This class controls the register process (post).
 
  * @category Controller

@@ -6,7 +6,6 @@ use Controllers\ControllerInterface;
 use Views\PageSAE\PageSaeView;
 
 /**
- * Class User
  * This class controls the SAE page.
 
  * @category Controller
@@ -29,7 +28,7 @@ use Views\PageSAE\PageSaeView;
 class PageSaeController implements ControllerInterface
 {
     /**
-     * Principal manager of the controller.
+     * Principal manager of the controller
      *
      * @return void
      */
