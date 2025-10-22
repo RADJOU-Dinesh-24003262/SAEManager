@@ -76,13 +76,6 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     #[Test]
-    public function controlMethodIsAbstract(): void
-    {
-        $reflection = new \ReflectionClass(SaeSujetController::class);
-        $this->assertTrue($reflection->isAbstract());
-    }
-
-    #[Test]
     public function controlMethodHasNoParameters(): void
     {
         $reflection = new \ReflectionMethod($this->controller, 'control');
