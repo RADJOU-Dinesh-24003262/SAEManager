@@ -119,13 +119,13 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        
+
         // ALTERNATIVE COMPATIBLE :
         if (method_exists($returnType, 'getName')) {
             $this->assertEquals('bool', $returnType->getName());
         } else {
             $this->assertEquals('bool', (string)$returnType);
-    }
+        }
     }
 
     /**

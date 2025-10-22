@@ -62,7 +62,7 @@ class ResetPasswordPostController implements ControllerInterface
             header("Location: /forgot-password");
             exit();
         } catch (ExceptionValidationEmptys $e) {
-            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);

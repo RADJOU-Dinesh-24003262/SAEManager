@@ -7,14 +7,23 @@ use includes\exception\ExceptionValidationRegisters;
 
 /**
  * Class ValidationServiceRegister
+ * This class regroup function to validate the registration process of a user.
 
- * @package src
+ * @category Utilis
+
+ * @package Src
 
  * @subpackage Utilis\Validator
 
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * This class regroup function to validate the registration process of a user.
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ValidationServiceRegister extends FormValidator
 {
@@ -29,17 +38,17 @@ class ValidationServiceRegister extends FormValidator
     /**
      * This method validates the values given in $data to make a new user with.
      *
-     * @param array $data array, in adequation to the required value fields.
+     * @param array $data Array, in adequation to the required value fields.
      *
      * @return void
      *
-     * @throws ExceptionValidationRegisters all the errors that might have been found
+     * @throws ExceptionValidationRegisters All the errors that might have been found.
      */
     public function validate(array $data): void
     {
         $errors = [];
 
-        // Specific validations
+        // Specific validations.
         if (!$this->isValidUserType($data['userType'])) {
             $errors[] = new ExceptionValidationRegister("userType", "string", "Type d'utilisateur invalide.");
         }
@@ -92,7 +101,7 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("gender", "string", "Veuillez sélectionner un genre valide.");
         }
 
-        // Specific validation for students
+        // Specific validation for students.
         if (($data['userType'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
@@ -106,11 +115,11 @@ class ValidationServiceRegister extends FormValidator
     /**
      * This this method validated the values given in $data to make a new student user with.
      *
-     * @param array $data array, in adequation to the required value fields.
+     * @param array $data Array, in adequation to the required value fields.
      *
-     * @return array array of errors
+     * @return array Array of errors.
      *
-     * @throws ExceptionValidationRegisters all the errors that might have been found
+     * @throws ExceptionValidationRegisters All the errors that might have been found.
      */
     private function validateStudentFields(array $data): array
     {
