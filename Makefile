@@ -53,6 +53,7 @@ fix: ## Corrige automatiquement les erreurs de style
 	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 modules/src/
 	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 tests/
 	./vendor/bin/php-cs-fixer fix modules/src
+	./vendor/bin/php-cs-fixer fix tests/
 	@echo "${GREEN}✓ Code formaté${NC}"
 
 quality: ## Lance toutes les vérifications de qualité
@@ -87,7 +88,7 @@ fix-staged: ## Corrige les fichiers stagés en fonction du code style (PSR-12)
 		for FILE in $$FILES; do \
 			echo "➡ Correction: $$FILE"; \
 			vendor/bin/php-cs-fixer fix --using-cache=no "$$FILE"; \
-			vendor/bin/phpcbf --standard=PSR12 --standard=phpcs-phpdoc.xml --colors modules/src; \
+			vendor/bin/phpcbf --standard=PSR12 --standard=phpcs-phpdoc.xml --colors "$$FILE"; \
 			git add "$$FILE"; \
 		done; \
 		echo "✅ Tous les fichiers ont été corrigés et re-stagés."; \
