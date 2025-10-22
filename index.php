@@ -3,6 +3,7 @@
 session_start();
 include "_assets/includes/Autoloader.php";
 
+use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
 use Controllers\User\Register;
@@ -38,6 +39,7 @@ $controllers = [
     new PageSaeController(),
     new ToDoListController(),
     new SaeSujetController()
+    new DashboardController()
 ];
 
 // Automatic routing.

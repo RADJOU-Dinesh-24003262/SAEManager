@@ -6,6 +6,7 @@ use Controllers\ControllerInterface;
 use includes\exception\ExceptionValidationLogin;
 use includes\exception\ExceptionValidationEmptys;
 use includes\database;
+use includes\exception\ExceptionFetchDataBD;
 use PDO;
 use Models\User\User;
 use Utilis\ValidationServiceRegister;
@@ -17,14 +18,26 @@ use Utilis\Validator\LoginValidator;
 /**
  * Class User
 
- * @package     src
+ * This class controls the login process (post).
+
+ * @category    Controller
+
+ * @package     Src
 
  * @subpackage  Controllers\User
 
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
+ *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
+ *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * This class controls the login process (post).
+ * @license     MIT License https://opensource.org/licenses/MIT
+
+ * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
+
  */
+
 class LoginPost implements ControllerInterface
 {
     /**
@@ -49,9 +62,11 @@ class LoginPost implements ControllerInterface
             error_log("Tentative de connexion - Username: {$data['email']}");
 
             $user = User::createFromLoginData($data);
+            SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
             error_log("Utilisateur connecté: " . $user->getEmail());
+            SessionService::set('USER', serialize($user));
 
             header('Location: /dashboard');
             exit();
@@ -61,7 +76,7 @@ class LoginPost implements ControllerInterface
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationLogin $e) {
+        } catch (ExceptionValidationLogin | ExceptionFetchDataBD $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         }
         $view = new LoginView();
@@ -71,10 +86,13 @@ class LoginPost implements ControllerInterface
     /**
      * Check if this controller can handle the request
      *
-     * @return boolean Is the method post?
+     * @param string $path   The requested URI path.
+     * @param string $method The HTTP method used in the request.
+     *
+     * @return boolean True if the path is "/login" and the method is POST.
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/login" && $method === "POST";
+        return $path === "/login" && $method === "POST";
     }
 }
