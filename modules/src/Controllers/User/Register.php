@@ -7,15 +7,23 @@ use Utilis\SessionService;
 use Views\User\RegisterView;
 
 /**
- * Class User
-
- * @package     src
-
- * @subpackage  Controllers\User
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class controls the register process (get).
+
+ * @category Controller
+
+
+ * @package Src
+
+ * @subpackage Controllers\User
+
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class Register implements ControllerInterface
 {
@@ -39,10 +47,13 @@ class Register implements ControllerInterface
     /**
      * Check if this controller can handle the request
      *
-     * @return boolean Is the method get?
+     * @param string $path   The request URI path.
+     * @param string $method The HTTP request method (e.g., GET, POST).
+     *
+     * @return boolean True if the request is a GET to "/register", false otherwise.
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/register" && $method === "GET";
+        return $path === "/register" && $method === "GET";
     }
 }

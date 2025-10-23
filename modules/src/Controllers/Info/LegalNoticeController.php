@@ -6,15 +6,18 @@ use Controllers\ControllerInterface;
 use Views\Info\LegalNoticeView;
 
 /**
- * Class User
-
- * @package     src
-
- * @subpackage  Controllers\PageSae
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class controls the legal notice page.
+ * @category Controllers
+ * @package Src
+ * @subpackage Controllers\Info
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT License https://opensource.org/licenses/MIT
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
  */
 class LegalNoticeController implements ControllerInterface
 {
@@ -29,13 +32,16 @@ class LegalNoticeController implements ControllerInterface
         $view->render();
     }
 
+
     /**
      * Check if this controller can handle the request
+     * @param string $path   The requested URI path.
+     * @param string $method The HTTP method used in the request.
      *
-     * @return boolean Is the method get?
+     * @return boolean True if the path is "/index" or "/" and the method is GET.
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/legal-notice" && $method === "GET";
+        return $path === "/legal-notice" && $method === "GET";
     }
 }
