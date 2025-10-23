@@ -34,6 +34,23 @@ class ToDoListView extends AbstractView
      */
     private const TEMPLATE_HTML = __DIR__ . '/to-do-list.html';
 
+    // -------------------------------------------------------------------------
+    // Constructor
+    // -------------------------------------------------------------------------
+
+    /**
+     * ToDoListView constructor.
+     *
+     * Initializes the view with any error messages stored in the session.
+     */
+    public function __construct()
+    {
+        $data = [
+            'errors' => SessionService::getFlash('errors', []),
+        ];
+        parent::__construct($data);
+    }
+
     /**
      * Returns the path to the HTML template file.
      *
@@ -54,7 +71,31 @@ class ToDoListView extends AbstractView
      */
     protected function templateKeys(): array
     {
-        return [];
+        $errors = $this->data['errors'];
+
+        return ['ERROR_MESSAGES' => this->renderErrorMessages($errors)];
+    }
+
+    /**
+     * Renders the list of error messages into an HTML block.
+     *
+     * @param array<int, string> $errors The list of error messages.
+     *
+     * @return string The HTML representation of the errors, or an empty string.
+     */
+    private function renderErrorMessages(array $errors): string
+    {
+        if (empty($errors)) {
+            return '';
+        }
+
+        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
+        foreach ($errors as $error) {
+            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
+        }
+        $html .= '</ul></section>';
+
+        return $html;
     }
 
     /**
