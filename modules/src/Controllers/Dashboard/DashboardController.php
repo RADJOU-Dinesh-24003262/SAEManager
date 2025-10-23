@@ -27,7 +27,7 @@ use Utilis\SessionService;
  * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license MIT https://opensource.org/licenses/MIT
- * @link    https://github.com/RADJOU-Dinesh-24003262/SAEManager/
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
 class DashboardController implements ControllerInterface
 {
