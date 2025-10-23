@@ -26,7 +26,6 @@ use includes\exception\ExceptionValidationLogin;
  * @license     MIT https://opensource.org/licenses/MIT
  * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-
 class User
 {
     /**
@@ -105,7 +104,6 @@ class User
      * @var string
      */
     private ?string $organisation = null;
-
     /**
      * Creates an instance of the class
      *
@@ -123,7 +121,6 @@ class User
             $this->$key = $value;
         }
     }
-
     /**
      * Creates an instance of the class
      *
@@ -140,7 +137,6 @@ class User
         $user->setPassword($data['password']);
         return $user;
     }
-
     /**
      * Creates an instance of the class
      *
@@ -158,7 +154,6 @@ class User
         $user->fetchData($data['email']);
         return $user;
     }
-
     /**
      *
      * Sets the password_hash field to the current user.
@@ -170,10 +165,8 @@ class User
      */
     public function setPassword(string $password): void
     {
-
         $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
     }
-
     /**
      *
      * Tries to fetch a user in the database depending on it's user type.
@@ -183,9 +176,7 @@ class User
     public function save(): void
     {
         $connection = database::getInstance();
-
         //Create the user in the user relation in the database
-
             $stmt = $connection->prepare(
             "INSERT INTO users(
                 first_name,
@@ -207,16 +198,13 @@ class User
                 'hashed_password' => $this->hashed_password,
                 'phone' => $this->phone
             ]);
-
             $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
             $stmt->execute([
                 'email' => $this->email
             ]);
             $temp_id = '';
             $temp_id = $stmt->fetchColumn(0);
-
         if ($this->user_type === 'student') {
-
             /* Relics from the past (depreciated)
             SELECT * FROM register_student(
                 :email, 
@@ -232,9 +220,7 @@ class User
                 :td, 
                 :tp
             )*/
-
             //Create the user in the student relation in the database
-
             $stmt = $connection->prepare(
             "INSERT INTO students(
                 student_id,
@@ -256,7 +242,6 @@ class User
                 'td' => $this->td,
                 'tp' => $this->tp
             ]);
-
         } elseif ($this->user_type === 'professor') {
             $stmt = $connection->prepare(/*"
             SELECT * FROM register_teacher(
@@ -307,7 +292,6 @@ class User
             ]);
         }
     }
-
     /**
      *
      * Attempts to log a user using the credentials given in
@@ -327,11 +311,10 @@ class User
             'email'=>$email
         ]);
         $hashed_password = $stmt->fetchColumn(1);
-        if(!($hashed_password == true && password_verify($password, $hashed_password))){
+        if (!($hashed_password == true && password_verify($password, $hashed_password))){
             throw new ExceptionValidationLogin();
         }
     }
-
     /**
      * Fetches user data from the database using their email address.
      *
@@ -359,34 +342,28 @@ class User
                                 WHERE users.email = :email");
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             if (empty($data)){ return false; }
-
             foreach($data as $key => $value){
                 $this->$key = $value;
             }
             
             //fills in a user_type field MIGHT HAVE TO BE CHANGED // SHOULD BE STORED IN THE DATABASE
             if (isset($this->amu_id)){
-                if(isset($this->year)){
+                if (isset($this->year)){
                     $this->user_type = "student";
                 }
-                else{
+                else {
                     $this->user_type = "professor";
                 }
             }
-            else{
+            else {
                 $this->user_type = "client";
             }
-
-
-
         } catch (PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             throw new ExceptionFetchDataBD();
         }
     }
-
     /**
      * Return the success of searching a user by email in the database
      *
@@ -409,7 +386,6 @@ class User
             return false;
         }
     }
-
     /**
      *
      * Attempts to update a user's password based on it's email
@@ -435,9 +411,7 @@ class User
             throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
         }
     }
-
     // Getters.
-
     /**
      * Returns the amUID of the user.
      *
@@ -562,7 +536,7 @@ class User
      */
     public function getTd(): ?string
     {
-        return (string)$this->td;
+        return (string) $this->td;
     }
     /**
      * Returns the sub-sub-group of the user.
@@ -571,7 +545,7 @@ class User
      */
     public function getTp(): ?string
     {
-        return (string)$this->tp;
+        return (string) $this->tp;
     }
 
     /**
