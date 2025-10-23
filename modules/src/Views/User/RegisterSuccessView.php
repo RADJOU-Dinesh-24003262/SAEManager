@@ -111,34 +111,33 @@ class RegisterSuccessView extends AbstractView
     private function getAcademicInfo(): string
     {
         if (!$this->user->isStudent() && $this->user instanceof Student) {
-            return '';
+            /*
+            * @var Student $student
+            */
+            $student = $this->user;
+
+
+            $year    = $student->getYear();
+            $parcours = $student->getParcours() ? $student->getParcours() : null;
+            $td      = $student->getTd();
+            $tp      = $student->getTp();
+
+            $info = '<div class="academic-info">';
+            $info .= '<h4>Informations académiques</h4>';
+            $info .= "<p><strong>Année :</strong> BUT $year</p>";
+
+            if ($parcours !== null) {
+                $info .= "<p><strong>Parcours :</strong> $parcours</p>";
+            }
+
+            $info .= "<p><strong>Groupe TD :</strong> $td</p>";
+            $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
+            $info .= '</div>';
+
+            return $info;
         }
 
-        /*
-         * @var Student $student
-         */
-        $student = $this->user;
-        assert($student instanceof Student);
-
-
-        $year    = $student->getYear();
-        $parcours = $student->getParcours() ? $student->getParcours() : null;
-        $td      = $student->getTd();
-        $tp      = $student->getTp();
-
-        $info = '<div class="academic-info">';
-        $info .= '<h4>Informations académiques</h4>';
-        $info .= "<p><strong>Année :</strong> BUT $year</p>";
-
-        if ($parcours !== null) {
-            $info .= "<p><strong>Parcours :</strong> $parcours</p>";
-        }
-
-        $info .= "<p><strong>Groupe TD :</strong> $td</p>";
-        $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
-        $info .= '</div>';
-
-        return $info;
+        return '';
     }
 
     /**

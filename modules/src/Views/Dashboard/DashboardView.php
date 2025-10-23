@@ -160,8 +160,6 @@ class DashboardView extends AbstractView
         if ($user->isStudent() && $user instanceof Student) {
             /* @var Student $student */
             $student = $user;
-            assert($student instanceof Student);
-
 
             $html .= '<span>Année : ' . $student->getYear() . '</span>';
             $html .= '<span>Groupe : ' . $student->getTd() . '-' . $student->getTp() . '</span>';
