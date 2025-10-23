@@ -102,7 +102,7 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-         if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",

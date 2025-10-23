@@ -118,7 +118,7 @@ class Student extends User
                     $this->$key = $value;
                 }
             }
-        }else{
+        } else {
             throw new ExceptionFetchDataBD();
         }
     }
