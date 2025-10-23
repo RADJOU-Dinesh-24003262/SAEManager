@@ -56,7 +56,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
         $supportMethod = $reflection->getMethod('support');
         $this->assertTrue($supportMethod->isStatic());
 
-        // Check thaht control is public and of instance.
+        // Check that control is public and of instance.
         $controlMethod = $reflection->getMethod('control');
         $this->assertTrue($controlMethod->isPublic());
         $this->assertFalse($controlMethod->isStatic());
