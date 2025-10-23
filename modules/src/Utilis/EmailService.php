@@ -7,38 +7,49 @@ use includes\exception\ExceptionEmailSendingFailed;
 
 /**
  * Class EmailService
-
- * @package     src
-
- * @subpackage  Utilis
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class regroup function to manage the email service.
+
+ * @category Service
+
+ * @package Src
+
+ * @subpackage Utilis
+
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class EmailService
 {
     /**
      * The email to send mails from.
+     *
      * @var string
      */
     private static string $fromEmail = 'noreply@saemanager.alwaysdata.net';
     /**
      * The sender of the mails.
+     *
      * @var string
      */
     private static string $fromName = 'SAEManager';
 
     /**
-     * Returns the success of sending a mail to the user, in order to reset their password.
+     * Send a mail to the user, in order to reset their password.
      *
      * This method creates a mail with a built reset password link (self::getResetLink) using the token and email
      * given in parametters.
      *
-     * @param $toEmail The email of the user whom want their password reset.
-     * @param $token the token created for the password reset.
+     * @param string $toEmail The email of the user whom want their password reset.
+     * @param string $token   The token created for the password reset.
      *
-     * @return boolean
+     * @return void
      */
     public static function sendPasswordResetEmail(string $toEmail, string $token): void
     {
@@ -58,7 +69,7 @@ class EmailService
      * This method builds a password reset link based on the server parametters
      * and the token given in parametters and returns it.
      *
-     * @param $token the token created for the password reset to create to link with.
+     * @param string $token The token created for the password reset to create to link with.
      *
      * @return string
      */
@@ -70,9 +81,12 @@ class EmailService
     }
 
     /**
-     * Returns the HTML template file.
+     * Returns the HTML content for the password reset email template.
      *
-     * @return string
+     * This template includes a reset link that the user can click to reset their password.
+     *
+     * @param string $resetLink The URL the user will visit to reset their password.
+     * @return string The HTML content of the password reset email.
      */
     private static function getHtmlTemplate(string $resetLink): string
     {
@@ -137,9 +151,12 @@ class EmailService
     }
 
     /**
-     * Returns the string email template file.
+     * Returns the plain text content for the password reset email template.
      *
-     * @return string
+     * This template includes a reset link that the user can use to reset their password.
+     *
+     * @param string $resetLink The URL the user will visit to reset their password.
+     * @return string The plain text content of the password reset email.
      */
     private static function getTextTemplate(string $resetLink): string
     {
@@ -164,21 +181,22 @@ Ceci est un email automatique, merci de ne pas y répondre.
     }
 
     /**
-     * Returns the success of sending a mail to the user
+     * Throws an error if sending the mail fail
      *
      * This method tries to send an email to the user using all the parametters
      * given and filling the templates with variables, fixing chartsets and other content types.
      *
-     * @param string $to the email to send to.
-     * @param string $subject the subject of the mail.
-     * @param string $htmlMessage the html message.
-     * @param string $textMessage the plain text message.
+     * @param string $to          The email to send to.
+     * @param string $subject     The subject of the mail.
+     * @param string $htmlMessage The html message.
+     * @param string $textMessage The plain text message.
      *
-     * @return string
+     * @return void
+     * @throws ExceptionEmailSendingFailed If the email can't be send.
      */
     private static function sendEmail(string $to, string $subject, string $htmlMessage, string $textMessage): void
     {
-        // Headers for multipart email (HTML + text)
+        // Headers for multipart email (HTML + text).
         $boundary = md5(uniqid('boundary_', true));
 
         $headers = [
@@ -205,7 +223,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
             $headerString .= "{$key}: {$value}\r\n";
         }
 
-        // Send the email
+        // Send the email.
         if (mail($to, $subject, $message, $headerString)) {
             error_log("Email envoyé avec succès à: {$to}");
         } else {

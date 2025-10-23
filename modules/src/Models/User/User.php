@@ -11,70 +11,82 @@ use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class User
- *
  * This class contains functions to create and manage users,
  * and handles communication with the database layer.
  *
- * @category    Models
- * @package     Src
- * @subpackage  Models\User
- * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license     MIT https://opensource.org/licenses/MIT
- * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
- */
+ * @category   Models
+ * @package    Src
+ * @subpackage Models\User
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+*/
+
 class User
 {
     /**
      * The amU identification string
+     *
      * @var string
      */
     private string $amu_id = '';
     /**
      * The first name of the user
+     *
      * @var string
      */
     private string $first_name = '';
     /**
      * The last name of the user
+     *
      * @var string
      */
     private string $last_name = '';
     /**
      * The gender of the user
+     *
      * @var string
      */
     private string $gender = '';
     /**
      * The type of the user (student / personnel...)
+     *
      * @var string
      */
     private string $user_type = '';
     /**
      * The email of the user
+     *
      * @var string
      */
     private string $email = '';
     /**
      * The passwordHash of the user
+     *
      * @var string
      */
     private string $hashed_password = '';
     /**
      * The phone number of the user
+     *
      * @var string
      */
     private string $phone = '';
     /**
      * The date of birth of the user
+     *
      * @var string
      */
     private string $dateOfBirth = '';
     /**
      * The city of study of the user
+     *
      * @var string
      */
     private string $city = '';
@@ -86,16 +98,19 @@ class User
     private ?int $year = null;
     /**
      * The major of the user
+     *
      * @var string
      */
     private ?string $parcours = null;
     /**
      * The sub-group of the user
+     *
      * @var string
      */
     private ?string $td = null;
     /**
      * The sub-sub-group of the user
+     *
      * @var string
      */
     private ?string $tp = null;
@@ -155,7 +170,6 @@ class User
         return $user;
     }
     /**
-     *
      * Sets the password_hash field to the current user.
      * To be used for security
      *
@@ -208,6 +222,10 @@ class User
         $temp_id = $stmt->fetchColumn(0);
         if ($this->user_type === 'student') {
             /* Relics from the past (depreciated)
+
+        if ($this->userType === 'student') {
+            $stmt = $connection->prepare(
+                "
             SELECT * FROM register_student(
                 :email, 
                 :lastName, 
@@ -277,6 +295,23 @@ class User
         }
         else {
             $stmt = $connection->prepare(/*"
+        "
+            );
+            $stmt->execute(
+                [
+                'email' => $this->email,
+                'lastName' => $this->lastName,
+                'firstName' => $this->firstName,
+                'passwordHash' => $this->passwordHash,
+                'phone' => $this->phone,
+                'dateOfBirth' => $this->dateOfBirth,
+                'city' => $this->city,
+                'amuId' => $this->amuId
+                ]
+            );
+        } else {
+            $stmt = $connection->prepare(
+                "
             SELECT * FROM register_user(
                 :email, 
                 :lastName, 
@@ -303,7 +338,6 @@ class User
         }
     }
     /**
-     *
      * Attempts to log a user using the credentials given in
      * parametters.
      *
@@ -397,7 +431,6 @@ class User
         }
     }
     /**
-     *
      * Attempts to update a user's password based on it's email
      *
      * @param string $email       The email of the user to update the password of.
