@@ -8,12 +8,12 @@
     "ext-pdo": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.0",
+    "phpunit/phpunit": "^11.0",
     "squizlabs/php_codesniffer": "^3.7",
     "phpstan/phpstan": "^1.10",
     "phpmd/phpmd": "^2.13",
     "friendsofphp/php-cs-fixer": "^3.14",
-    "phpdocumentor/phpdocumentor": "^3.0"
+    "phpdocumentor/phpdocumentor": "^3.3"
   },
   "autoload": {
     "psr-4": {
@@ -34,13 +34,20 @@
     "phpcs": "phpcs --standard=PSR12 modules/src/",
     "phpcbf": "phpcbf --standard=PSR12 modules/src/",
     "phpstan": "phpstan analyse modules/src/ --level=7",
-    "phpdoc": "phpdoc --directory=modules/src --target=docs/api --template=clean --title='SAE Manager API Documentation' --ignore=vendor/,tests/ --visibility=public,protected --defaultpackagename=SAEManager",
+    "phpdoc": [
+      "vendor/bin/phpdoc run --directory=modules/src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
+    ],
     "quality": [
       "@phpcs",
       "@phpstan",
       "@test"
     ],
-    "fix": "phpcbf --standard=PSR12 modules/src/",
-    "docs": "@phpdoc"
+    "fix": "phpcbf --standard=PSR12 modules/src/"
+  },
+  "config": {
+    "allow-plugins": {
+      "phpdocumentor/graphviz": true,
+      "phpdocumentor/type-resolver": true
+    }
   }
 }
