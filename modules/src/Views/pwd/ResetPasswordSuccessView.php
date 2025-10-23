@@ -7,20 +7,27 @@ use Views\AbstractView;
 /**
  * Class ResetPasswordSuccessView
  *
- * @package src
-
- * @subpackage pwd
-
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * Represents the view responsible for rendering the "Reset Password Success" page
+ * of the SAEManager application.
  *
- * This class represents the view for the reset password success page of the application.
- * It extends the AbstractView class and provides specific implementations
- * for rendering the reset password success page.
+ * This class extends {@see AbstractView} and provides specific implementations
+ * for rendering the success confirmation page displayed after a password reset.
+ *
+ * @category View
+ * @package  Src
+ * @subpackage Views\pwd
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordSuccessView extends AbstractView
 {
     /**
-     * The path of the HTML code to display for this view.
+     * Path to the HTML template file for the reset password success page.
      *
      * @var string
      */
@@ -29,7 +36,7 @@ class ResetPasswordSuccessView extends AbstractView
     /**
      * Returns the path to the HTML template file.
      *
-     * @return string
+     * @return string The full path to the template file.
      */
     protected function templatePath(): string
     {
@@ -37,11 +44,12 @@ class ResetPasswordSuccessView extends AbstractView
     }
 
     /**
-     * Returns an empty array. Implemented from the parent class.
+     * Returns an associative array of keys and values used in the template.
      *
-     * This method returns an empty array.
+     * In this case, the reset password success page does not require
+     * any dynamic data, so the method returns an empty array.
      *
-     * @return array An empty array
+     * @return array An empty array.
      */
     protected function templateKeys(): array
     {
@@ -49,10 +57,11 @@ class ResetPasswordSuccessView extends AbstractView
     }
 
     /**
-     * Returns the name of the page 'Mot de passe réinitialisé - SAEManager' or
-     * be used in some cases like displaying it by some isolated texts.
-
-     * @return string the name of the project 'Mot de passe réinitialisé - SAEManager'.
+     * Returns the title of the "Reset Password Success" page.
+     *
+     * This title may be used in the HTML `<title>` tag or for accessibility.
+     *
+     * @return string The page title.
      */
     protected function getPageTitle(): string
     {
@@ -60,12 +69,11 @@ class ResetPasswordSuccessView extends AbstractView
     }
 
     /**
-     * Returns the name of the CSS file associated with the view.
+     * Returns the name of the CSS file associated with this view.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
+     * Used by the parent layout to include the correct stylesheet.
      *
-     * @return string The name of the CSS file.
+     * @return string The CSS filename.
      */
     protected function getNameCss(): string
     {
@@ -73,9 +81,12 @@ class ResetPasswordSuccessView extends AbstractView
     }
 
     /**
-     * Returns additional HTML headers for the Login page.
+     * Returns additional JavaScript code for the success page.
      *
-     * @return string The additional HTML headers.
+     * This script displays a countdown timer and redirects the user
+     * to the login page after a few seconds.
+     *
+     * @return string The HTML script tag containing JavaScript code.
      */
     protected function getAdditionalScripts(): string
     {
@@ -97,28 +108,32 @@ class ResetPasswordSuccessView extends AbstractView
             }, 1000);
         </script>';
     }
+
     /**
-     * Returns additional HTML headers for the Reset password success page.
+     * Returns additional HTML meta headers for the "Reset Password Success" page.
      *
-     * @return string The additional HTML headers.
+     * Includes SEO metadata and Open Graph (OG) tags for social media.
+     *
+     * @return string The HTML string containing additional meta headers.
      */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAEManager">
                 <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe, Succès">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />
-                
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />
-                
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />

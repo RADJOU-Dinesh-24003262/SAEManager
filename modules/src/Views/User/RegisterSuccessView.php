@@ -7,45 +7,50 @@ use Models\User\User;
 
 /**
  * Class RegisterSuccessView
+ *
+ * View for the registration success page.
+ * Displays information about the registered user.
+ *
+ * @category View
+ * @package Src
+ * @subpackage Views/User
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * @package src
+ * @license MIT License https://opensource.org/licenses/MIT
 
- * @subpackage User
-
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class represents the view for the registration success page of the application.
- * It extends the AbstractView class and provides specific implementations
- * for rendering the registration success page, including displaying user information.
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterSuccessView extends AbstractView
 {
     /**
-     * The path of the HTML code to display for this view.
+     * Path to the HTML template file.
      *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/register-success.html';
+
     /**
-     * The path of the CSS code for the HTML code to display for this view
+     * Name of the CSS file for this view.
      *
      * @var string
      */
     private const CSS_REGISTER_SUCCESS = 'register-success.css';
+
     /**
-     * The variable that stores the data of the user that just logged in
+     * The user that has just registered.
      *
      * @var User
      */
     private User $user;
 
     /**
-     * The constructor of the class, will use the constructor of the parent class AbstractView.
-     * Takes the user in parametter and stores it into the user variable of this class.
+     * Constructor.
      *
-     * @param User $user the user that just logged in.
-
-     * @return void Creates the instance of the class.
+     * @param User $user The user who just registered.
      */
     public function __construct(User $user)
     {
@@ -54,7 +59,7 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-     * Returns the path to the HTML template file.
+     * Returns the path to the HTML template.
      *
      * @return string
      */
@@ -64,28 +69,24 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-     * Returns an associative array of keys and values to be used in the HTML template.
+     * Returns keys and values to inject in the template.
      *
-     * This method retrieves the first and last name of the user, their email, user type and academic infos
-     * and prepares them for rendering in the template.
-     *
-     * @return array An associative array with keys for error and success messages.
+     * @return array<string, string>
      */
     protected function templateKeys(): array
     {
         return [
-            'USER_FULL_NAME' => $this->user->getFullName(),
-            'USER_EMAIL' => $this->user->getEmail(),
+            'USER_FULL_NAME'  => $this->user->getFullName(),
+            'USER_EMAIL'      => $this->user->getEmail(),
             'USER_TYPE_LABEL' => $this->getUserTypeLabel(),
-            'ACADEMIC_INFO' => $this->getAcademicInfo()
+            'ACADEMIC_INFO'   => $this->getAcademicInfo(),
         ];
     }
+
     /**
-     * Returns the french user type label
+     * Returns the user type label in French.
      *
-     * This method is used to turn the english user labels into the french user labels the user will see
-     *
-     * @return string The french version of the user type label. If it isn't found, returns 'Utilisateur'.
+     * @return string
      */
     private function getUserTypeLabel(): string
     {
@@ -102,14 +103,9 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-     * Returns a div make into the method to be displayed to the user, only if the user is a student,
-     * Returns an empty string otherwise.
+     * Returns academic info as an HTML div or empty string if not a student.
      *
-     * This method makes an html div with the academic year, major, sub group and sub-sub group.
-     * If the user isn't a student
-     * this method returns an empty string.
-     *
-     * @return string The HTML div ready to be displayed.
+     * @return string
      */
     private function getAcademicInfo(): string
     {
@@ -117,26 +113,30 @@ class RegisterSuccessView extends AbstractView
             return '';
         }
 
+        $year    = $this->user->getYear();
+        $parcours = $this->user->getParcours() ? $this->user->getParcours() : null;
+        $td      = $this->user->getTd();
+        $tp      = $this->user->getTp();
+
         $info = '<div class="academic-info">';
         $info .= '<h4>Informations académiques</h4>';
-        $info .= '<p><strong>Année :</strong> BUT ' . $this->user->getYear() . '</p>';
+        $info .= "<p><strong>Année :</strong> BUT $year</p>";
 
-        if ($this->user->getParcours()) {
-            $info .= '<p><strong>Parcours :</strong> ' . $this->user->getParcours() . '</p>';
+        if ($parcours !== null) {
+            $info .= "<p><strong>Parcours :</strong> $parcours</p>";
         }
 
-        $info .= '<p><strong>Groupe TD :</strong> ' . $this->user->getTd() . '</p>';
-        $info .= '<p><strong>Groupe TP :</strong> ' . $this->user->getTp() . '</p>';
+        $info .= "<p><strong>Groupe TD :</strong> $td</p>";
+        $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
         $info .= '</div>';
 
         return $info;
     }
 
     /**
-     * Returns the name of the page 'Inscription réussie - SAEManager' or be used in some cases
-     * like displaying it by some isolated texts.
+     * Returns the page title.
      *
-     * @return string the name of the project 'Inscription réussie - SAEManager'.
+     * @return string
      */
     protected function getPageTitle(): string
     {
@@ -144,21 +144,19 @@ class RegisterSuccessView extends AbstractView
     }
 
     /**
-     * Returns the name of the CSS file associated with the view.
+     * Returns the CSS filename.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
-     *
-     * @return string The name of the CSS file.
+     * @return string
      */
     protected function getNameCss(): string
     {
         return self::CSS_REGISTER_SUCCESS;
     }
+
     /**
-     * Returns additional HTML headers for the Register Success page.
+     * Returns additional HTML headers for the page.
      *
-     * @return string The additional HTML headers.
+     * @return string
      */
     protected function getAdditionalHeaders(): string
     {

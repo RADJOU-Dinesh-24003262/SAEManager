@@ -5,17 +5,21 @@ namespace Views\Info;
 use Views\AbstractView;
 
 /**
- * Class LegalNoticeView
- *
- * @package src
-
- * @subpackage Info
-
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class represents the view for the legal notice page of the application.
+ * Class SiteMapView
+ * This class represents the view for the Site map page of the application.
  * It extends the AbstractView class and provides specific implementations
- * for rendering the legal notice page.
+ * for rendering the site map page.
+ *
+ * @category View
+ * @package  Src
+ * @subpackage Views\Info
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class SiteMapView extends AbstractView
 {

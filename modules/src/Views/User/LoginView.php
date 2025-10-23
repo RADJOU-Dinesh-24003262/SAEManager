@@ -6,56 +6,35 @@ use Views\AbstractView;
 use Utilis\SessionService;
 
 /**
- * The view to display the login page. It extends the AbstractView abstract class.
-
- * It implements the methods of the AbstractView extended class and behaves as a login page
+ * Class LoginView
  *
- * @package src
+ * Represents the login page view.
+ * Extends the AbstractView abstract class and implements required methods
+ * to display the login form and possible error messages.
+ *
+ * @category View
+ * @package  Src
+ * @subpackage Views\User
+ *
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * @subpackage User
+ * @license MIT License https://opensource.org/licenses/MIT
 
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class LoginView extends AbstractView
 {
-    /**
-     * The path of the HTML code to display for this view.
-     *
-     * @var string
-     */
+    /** @var string Path to the HTML template */
     private const TEMPLATE_HTML = __DIR__ . '/loginview.html';
 
     /**
-     * Returns the path to the HTML template file.
+     * LoginView constructor.
      *
-     * @return string
-     */
-    protected function templatePath(): string
-    {
-        return self::TEMPLATE_HTML;
-    }
-    /**
-     * Returns an associative array of keys and values to be used in the HTML template.
-     *
-     * This method retrieves error messages and success messages from the session
-     * and prepares them for rendering in the template.
-     *
-     * @return array An associative array with keys for error and success messages.
-     */
-    protected function templateKeys(): array
-    {
-        $errors = $this->data['errors'];
-
-        return [
-            // Error messages
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
-        ];
-    }
-    /**
-     * The constructor of the class, will use the constructor of the parent class AbstractView.
-     * Also fills the $data variable with potential error messages.
-     *
-     * @return void Creates the instance of the class.
+     * Retrieves flash error messages from session and passes them to parent.
      */
     public function __construct()
     {
@@ -66,12 +45,39 @@ class LoginView extends AbstractView
     }
 
     /**
-     * Returns the HTML to display and error message for the user.
-
-     * If $error contains an error message, the method prepares a display for it and returns it.
-     * Otherwise the method returns an empty string
+     * Returns the path to the HTML template file.
      *
-     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
+     * @return string Template file path.
+     */
+    protected function templatePath(): string
+    {
+        return self::TEMPLATE_HTML;
+    }
+
+    /**
+     * Returns the template keys to be used in the view.
+     *
+     * Includes the rendered error messages if any.
+     *
+     * @return array<string, string> Template keys and their values.
+     */
+    protected function templateKeys(): array
+    {
+        $errors = $this->data['errors'] ?? [];
+
+        return [
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+        ];
+    }
+
+    /**
+     * Renders error messages as an HTML list.
+     *
+     * Applies htmlspecialchars to prevent XSS.
+     *
+     * @param array<int, string> $errors List of error messages.
+     *
+     * @return string HTML string of formatted error messages or empty string.
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -81,7 +87,7 @@ class LoginView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
+            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
         }
         $html .= '</ul></div>';
 
@@ -89,21 +95,19 @@ class LoginView extends AbstractView
     }
 
     /**
-     * Returns the name of the CSS file associated with the view.
+     * Returns the name of the CSS file to include for this view.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
-     *
-     * @return string The name of the CSS file.
+     * @return string CSS filename.
      */
     protected function getNameCss(): string
     {
         return 'style.css';
     }
+
     /**
-     * Returns additional HTML headers for the Login page.
+     * Returns additional meta headers for the login page.
      *
-     * @return string The additional HTML headers.
+     * @return string Additional HTML meta tags.
      */
     protected function getAdditionalHeaders(): string
     {
@@ -115,17 +119,7 @@ class LoginView extends AbstractView
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />
-                
-                <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
-                <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
-                <meta property="og:type" content="website" />
-                
-                <meta property="og:title" content="Notre site" />
-                <meta property="og:url" content="http://www.instagram.com/" />
-                <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
-                <meta property="og:type" content="website" />';
+                <meta property="og:url" content="http://www.instagram.com/" />';
     }
 }
