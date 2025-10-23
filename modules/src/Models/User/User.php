@@ -227,7 +227,14 @@ abstract class User
             }
 
             foreach ($data as $key => $value) {
-                if (property_exists($this, $key)) {
+                if($key === 'user_type'){
+                    $this->user_type= match ((string) $data['user_type']) {
+                        '0' => 'student',
+                        '1' => 'professor',
+                        '2' => 'client',
+                        default => 'client'
+                    };
+                }elseif (property_exists($this, $key)) {
                     $this->$key = $value;
                 }
             }
