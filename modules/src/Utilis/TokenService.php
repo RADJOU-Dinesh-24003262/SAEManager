@@ -14,12 +14,12 @@ use includes\exception\ExceptionSpam;
  * It can generate, update, delete, and check the validity of tokens.
  * Requires email integration to function properly.
  *
- * @category    Utilis
- * @package     Src
- * @subpackage  Utilis
- * @author      Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
- * @license     MIT https://opensource.org/licenses/MIT
- * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @category   Utilis
+ * @package    Src
+ * @subpackage Utilis
+ * @author     Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class TokenService
 {
@@ -62,17 +62,21 @@ class TokenService
             $createdAt = date('Y-m-d H:i:s');
             $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
 
-            $stmt = $db->prepare("
+            $stmt = $db->prepare(
+                "
                 INSERT INTO password_resets (user_email, token, created_at, expires_at, used)
                 VALUES (:email, :token, :created_at, :expires_at, FALSE)
-            ");
+            "
+            );
 
-            $stmt->execute([
+            $stmt->execute(
+                [
                 'email' => $email,
                 'token' => $token,
                 'created_at' => $createdAt,
                 'expires_at' => $expiresAt
-            ]);
+                ]
+            );
 
             return $token ? $token : throw new ExceptionCreationTokenFailed();
         } catch (\PDOException $e) {
@@ -109,11 +113,13 @@ class TokenService
 
             $db = database::getInstance();
 
-            $stmt = $db->prepare("
+            $stmt = $db->prepare(
+                "
                 SELECT user_email, expires_at, used 
                 FROM password_resets 
                 WHERE token = :token
-            ");
+            "
+            );
 
             $stmt->execute(['token' => $token]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -152,11 +158,13 @@ class TokenService
         try {
             $db = database::getInstance();
 
-            $stmt = $db->prepare("
+            $stmt = $db->prepare(
+                "
                 UPDATE password_resets 
                 SET used = TRUE 
                 WHERE token = :token
-            ");
+            "
+            );
 
             return $stmt->execute(['token' => $token]);
         } catch (\PDOException $e) {
@@ -175,10 +183,12 @@ class TokenService
         try {
             $db = database::getInstance();
 
-            $stmt = $db->prepare("
+            $stmt = $db->prepare(
+                "
                 DELETE FROM password_resets 
                 WHERE expires_at < NOW() OR used = TRUE
-            ");
+            "
+            );
 
             $stmt->execute();
         } catch (\PDOException $e) {

@@ -7,82 +7,95 @@ use Views\AbstractView;
 
 /**
  * Class ResetPasswordView
-
- * @package     src
-
- * @subpackage  pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class represents the view for the "reset password" page of the application.
- * It extends the AbstractView class and provides specific implementations
- * for rendering the reset password page, including handling error messages.
+ *
+ * Represents the view responsible for displaying and rendering
+ * the password reset page in the SAEManager application.
+ *
+ * This class extends {@see AbstractView} and defines methods to display
+ * password reset content, including error messages, the reset token,
+ * and masked user email.
+ *
+ * @category View
+ * @package  Src
+ * @subpackage Views\pwd
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordView extends AbstractView
 {
     /**
-     * The path of the HTML code to display for this view.
+     * Path to the HTML template file used for rendering the reset password page.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/reset-password.html';
 
     /**
-
-     * The constructor of the class, will use the constructor of the parent class AbstractView.
-     * Also fills the $data variable with: token => $token, email => $email, variables given in parametters.
-
+     * ResetPasswordView constructor.
      *
-
-     * @param string $token The token the user is assigned to reset their password.
-     * @param string $email The email the user filled the reset password field with.
-
-     * @return void Creates the instance of the class.
-
+     * Initializes the view by retrieving flash errors from the session
+     * and storing the provided token and email in the data array.
+     *
+     * @param string $token The password reset token assigned to the user.
+     * @param string $email The email address associated with the password reset request.
+     *
+     * @return void
      */
     public function __construct(string $token, string $email)
     {
         $data = [
             'errors' => SessionService::getFlash('errors', []),
-            'token' => $token,
-            'email' => $email
+            'token'  => $token,
+            'email'  => $email,
         ];
+
         parent::__construct($data);
     }
 
     /**
      * Returns the path to the HTML template file.
      *
-     * @return string
+     * @return string The full path to the template file.
      */
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
 
-    /** Returns an associative array of keys and values to be used in the HTML template.
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
      *
-     * This method retrieves error messages, the token and the email of the user
-     * and prepares them for rendering in the template.
+     * This method prepares data for rendering in the template, including
+     * error messages, the reset token, and the masked user email.
      *
-     * @return array An associative array
+     * @return array An associative array containing template keys and values.
      */
     protected function templateKeys(): array
     {
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($this->data['errors']),
-            'TOKEN' => htmlspecialchars($this->data['token']),
-            'EMAIL_DISPLAY' => htmlspecialchars($this->maskEmail($this->data['email']))
+            'TOKEN'          => htmlspecialchars($this->data['token']),
+            'EMAIL_DISPLAY'  => htmlspecialchars($this->maskEmail($this->data['email'])),
         ];
     }
 
-    /** Returns a masked version of the email
+    /**
+     * Returns a masked version of the given email address for security purposes.
      *
-     * This method replaces all but the first, last and arount dots characters with '*'
-     * for security.
+     * This method replaces all but the first and last character of the local part
+     * with asterisks, leaving the domain unchanged.
      *
-     * Ex: jean.dupont@etu.univ-amu.fr → j***n.d***t@etu.univ-amu.fr
+     * Example:
+     * jean.dupont@etu.univ-amu.fr → j***n.d***t@etu.univ-amu.fr
      *
-     * @return string the hidden version of the email.
+     * @param string $email The email address to be masked.
+     *
+     * @return string The masked version of the email address.
      */
     private function maskEmail(string $email): string
     {
@@ -94,29 +107,27 @@ class ResetPasswordView extends AbstractView
         $localPart = $parts[0];
         $domain = $parts[1];
 
-        // Mask the local part
+        // Mask the local part.
         if (strlen($localPart) > 4) {
-            $masked = substr($localPart, 0, 1) .
-                      str_repeat('*', strlen($localPart) - 2) .
-                      substr($localPart, -1);
+            $masked = substr($localPart, 0, 1)
+                . str_repeat('*', strlen($localPart) - 2)
+                . substr($localPart, -1);
         } else {
-            $masked = substr($localPart, 0, 1) . str_repeat('*', strlen($localPart) - 1);
+            $masked = substr($localPart, 0, 1)
+                . str_repeat('*', strlen($localPart) - 1);
         }
 
         return $masked . '@' . $domain;
     }
 
     /**
-
-     * Returns the HTML to display and error message for the user.
-
-     * If $error contains an error message, the method prepares a display for it and returns it.
-     * Otherwise the method returns an empty string
-
+     * Renders HTML markup for displaying error messages to the user.
      *
-
-     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
-
+     * If no errors are present, an empty string is returned.
+     *
+     * @param array $errors The list of error messages to display.
+     *
+     * @return string The HTML markup for error messages, or an empty string if none exist.
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -134,42 +145,42 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-
-     * Returns the name of the page 'Password Renew - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
+     * Returns the title of the reset password page.
      *
-
-     * @return string the name of the project 'Password Renew - SAEManager'.
-
+     * @return string The page title.
      */
     protected function getPageTitle(): string
     {
         return 'Password Renew - SAEManager';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file used by the reset password page.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
-     *
-     * @return string The name of the CSS file.
+     * @return string The CSS filename.
      */
     protected function getNameCss(): string
     {
         return 'pwd-renew.css';
     }
 
-    /** Returns additional HTML headers for the Login page.
+    /**
+     * Returns additional JavaScript scripts required for the reset password page.
      *
-     * @return string The additional HTML headers.
+     * @return string The HTML script tags for additional JavaScript resources.
      */
     protected function getAdditionalScripts(): string
     {
         return '<script src="scripts/reset-password.js"></script>';
     }
-    /** Returns additional HTML headers for the Reset Password page.
+
+    /**
+     * Returns additional HTML headers for the reset password page.
      *
-     * @return string The additional HTML headers.
+     * These include meta tags for SEO, authorship, and Open Graph (OG) integration
+     * for Facebook, LinkedIn, and Instagram.
+     *
+     * @return string The HTML string containing additional meta headers.
      */
     protected function getAdditionalHeaders(): string
     {

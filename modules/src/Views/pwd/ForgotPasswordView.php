@@ -8,66 +8,75 @@ use Views\AbstractView;
 /**
  * Class ForgotPasswordView
  *
+ * Represents the view responsible for displaying and rendering
+ * the "Forgot Password" page of the SAEManager application.
  *
- * @package     src
-
- * @subpackage  pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
+ * This class extends {@see AbstractView} and defines methods to handle
+ * error and success messages, as well as configuring the page template,
+ * title, CSS, and metadata for SEO and social media integration.
  *
- * This class represents the view for the "forgot password" page of the application.
- * It extends the AbstractView class and provides specific implementations
- * for rendering the forgot password page, including handling error and success messages.
+ * @category View
+ * @package  Src
+ * @subpackage Views\pwd
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ForgotPasswordView extends AbstractView
 {
-    //Constant for of the form
     /**
-     * The field for the user to enter their email.
+     * Field name for the user's email address in the forgot password form.
+     *
      * @var string
      */
     public const FIELD_EMAIL = 'email';
 
     /**
-     * The path of the HTML code to display for this view.
+     * Path to the HTML template file used for rendering the forgot password page.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/forgot-password.html';
 
     /**
-
-     * The constructor of the class, will use the constructor of the parent class AbstractView.
-     * Also fills the $data variable with success and errors data.
-
-     * @return void Creates the instance of the class.
-
+     * ForgotPasswordView constructor.
+     *
+     * Initializes the view by retrieving flash messages (errors and success)
+     * from the session service and passing them to the parent constructor.
+     *
+     * @return void
      */
     public function __construct()
     {
         $data = [
-            'errors' => SessionService::getFlash('errors', []),
-            'success' => SessionService::getFlash('success', '')
-
+            'errors'  => SessionService::getFlash('errors', []),
+            'success' => SessionService::getFlash('success', ''),
         ];
+
         parent::__construct($data);
     }
 
     /**
      * Returns the path to the HTML template file.
      *
-     * @return string
+     * @return string The full path to the template file.
      */
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
 
-    /** Returns an associative array of keys and values to be used in the HTML template.
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
      *
-     * This method retrieves error messages and success messages from the session
-     * and prepares them for rendering in the template.
+     * This method prepares dynamic content by rendering the HTML
+     * for error and success messages retrieved from the session.
      *
-     * @return array An associative array with keys for error and success messages.
+     * @return array An associative array with template keys for messages.
      */
     protected function templateKeys(): array
     {
@@ -75,23 +84,19 @@ class ForgotPasswordView extends AbstractView
         $success = $this->data['success'];
 
         return [
-            // Error and success messages
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            'ERROR_MESSAGES'  => $this->renderErrorMessages($errors),
             'SUCCESS_MESSAGE' => $this->renderSuccessMessage($success),
         ];
     }
 
     /**
-
-     * Returns the HTML to display and error message for the user.
-
-     * If $error contains an error message, the method prepares a display for it and returns it.
-     * Otherwise the method returns an empty string
-
+     * Renders HTML markup for displaying error messages to the user.
      *
-
-     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
-
+     * If no errors are present, an empty string is returned.
+     *
+     * @param array $errors The list of error messages to display.
+     *
+     * @return string The HTML markup for error messages, or an empty string if none exist.
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -101,7 +106,7 @@ class ForgotPasswordView extends AbstractView
 
         $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
+            $html .= '<li>' . htmlspecialchars($error) . '</li>';
         }
         $html .= '</ul></section>';
 
@@ -109,16 +114,13 @@ class ForgotPasswordView extends AbstractView
     }
 
     /**
-
-     * Returns the HTML to display and success message for the user.
-
-     * If $success contains a success message, the method prepares a display for it and returns it.
-     * Otherwise the method returns an empty string
-
+     * Renders HTML markup for displaying a success message to the user.
      *
-
-     * @return string the HTML string to be displayed, or an empty string if nothing is to be displayed
-
+     * If the provided success message is empty, an empty string is returned.
+     *
+     * @param string $success The success message to display.
+     *
+     * @return string The HTML markup for the success message, or an empty string if none exist.
      */
     private function renderSuccessMessage(string $success): string
     {
@@ -130,51 +132,51 @@ class ForgotPasswordView extends AbstractView
     }
 
     /**
-
-     * Returns the name of the page 'Password Forgot - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
+     * Returns the title of the "Forgot Password" page.
      *
-
-     * @return string the name of the project 'Password Forgot - SAEManager'.
-
+     * @return string The page title.
      */
     protected function getPageTitle(): string
     {
         return 'Password Forgot - SAEManager';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file used by the forgot password page.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
-     *
-     * @return string The name of the CSS file.
+     * @return string The CSS filename.
      */
     protected function getNameCss(): string
     {
         return 'forgot-password.css';
     }
-    /** Returns additional HTML headers for the forgot password page.
+
+    /**
+     * Returns additional HTML headers for the forgot password page.
      *
-     * @return string The additional HTML headers.
+     * These include meta tags for SEO, authorship, and Open Graph (OG) integration
+     * for Facebook, LinkedIn, and Instagram.
+     *
+     * @return string The HTML string containing additional meta headers.
      */
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
                 <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />
-                
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
                 <meta property="og:site_name" content="SAEManager" />
                 <meta property="og:type" content="website" />
-                
+
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />

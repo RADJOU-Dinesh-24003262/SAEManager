@@ -7,17 +7,21 @@ use Views\SaeSujet\SaeSujetView;
 use Views\ToDoList\ToDoListView;
 
 /**
- * @category Controller
- * @package Controllers\SaeSujet
- * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license https://opensource.org/licenses/GPL-3.0 GNU General Public License v3.0
- * @link /sae-sujet
  * Controller for the form of the subject of the SAE.
- * Handles requests to display the form.
+ *  Handles requests to display the form.
+ *
+ * @category Controllers
+ * @package Src
+ * @subpackage Controllers/SaeSujet
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class SaeSujetController implements ControllerInterface
 {

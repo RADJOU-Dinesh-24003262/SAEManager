@@ -16,27 +16,23 @@ use includes\exception\ExceptionValidationEmptys;
 use includes\exception\ExceptionSpam;
 
 /**
- * Class ForgotPasswordPostController
- *
  * Handles the POST request to the "/forgot-password" route.
  * Validates form input, checks if a user exists, generates a reset token,
  * sends the reset email, and renders the view with appropriate feedback.
  *
- * @package Controllers\pwd
- * @version 1.0
- * @author Dinesh
- */
+ * @category Controllers
+ * @package Src
+ * @subpackage Controllers\pwd
 
-/**
- * Class User
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * @package     src
+ * @license MIT License https://opensource.org/licenses/MIT
 
- * @subpackage  Controllers\pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class controls the forgot password process (post).
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ForgotPasswordPostController implements ControllerInterface
 {
@@ -52,14 +48,12 @@ class ForgotPasswordPostController implements ControllerInterface
      * - Catches and handles validation exceptions with appropriate error messages.
      * - Renders the ForgotPasswordView.
      *
-     * @return void
-     * @author Dinesh
-     * @version 1.0
+     * @return  void
      */
     public function control(): void
     {
         try {
-            // Validate the form data and avoid feature spam
+            // Validate the form data and avoid feature spam.
             $validator = new ForgotPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
@@ -67,20 +61,20 @@ class ForgotPasswordPostController implements ControllerInterface
 
             error_log("Demande réinitialisation pour: {$email}");
 
-            // Verify if the user exists
+            // Verify if the user exists.
             $userExists = User::existsByEmail($email);
             if ($userExists) {
                 error_log("Utilisateur trouvé pour: {$email}");
 
-                // Create the password reset token
+                // Create the password reset token.
                 $token = TokenService::createPasswordResetToken($email);
 
-                // Send the email
+                // Send the email.
                 EmailService::sendPasswordResetEmail($email, $token);
             }
             $_SESSION['last_forgot_password_request'] = time();
 
-            // Generic message to avoid revealing if the email exists
+            // Generic message to avoid revealing if the email exists.
             SessionService::setFlash(
                 'success',
                 "Si cette adresse email est enregistrée dans notre système, " .
@@ -88,9 +82,12 @@ class ForgotPasswordPostController implements ControllerInterface
                 "Vérifiez également vos courriers indésirables."
             );
         } catch (ExceptionValidationEmptys $e) {
-            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationForgotPassword | ExceptionCreationTokenFailed | ExceptionEmailSendingFailed | ExceptionSpam $e) {
+        } catch (
+            ExceptionValidationForgotPassword | ExceptionCreationTokenFailed |
+                                    ExceptionEmailSendingFailed | ExceptionSpam $e
+        ) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
         $view = new ForgotPasswordView();
@@ -100,11 +97,10 @@ class ForgotPasswordPostController implements ControllerInterface
     /**
      * Determines whether this controller supports a given route and method.
      *
-     * @param string $path The route path (e.g., "/forgot-password").
-     * @param string $method The HTTP method (e.g., "POST").
-     * @return bool True if the controller should handle the request, false otherwise.
+     * @param  string $path   The route path (e.g., "/forgot-password").
+     * @param  string $method The HTTP method (e.g., "POST").
+     * @return boolean True if the controller should handle the request, false otherwise.
      */
-
     public static function support(string $path, string $method): bool
     {
         return $path === "/forgot-password" && $method === "POST";

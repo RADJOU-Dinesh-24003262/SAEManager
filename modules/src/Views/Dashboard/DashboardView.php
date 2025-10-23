@@ -9,39 +9,54 @@ use Views\AbstractView;
 /**
  * Class DashboardView
  *
- * Responsible for rendering the dashboard page for users,
- * including SAE navigation and user-specific information.
+ * Represents the view for the user dashboard page of SAEManager.
+ * This page displays personalized information about the connected user
+ * (name, email, role, SAE list, etc.) and provides navigation elements
+ * specific to their role (student, professor, or client).
  *
- * @package Views\Dashboard
+ * @category View
+ * @package  Src
+ * @subpackage Views\Dashboard
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class DashboardView extends AbstractView
 {
     /**
      * Path to the HTML template file for the dashboard.
+     *
+     * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/dashboard.html';
 
     /**
      * DashboardView constructor.
      *
-     * Initializes the view with session flash messages and user data.
+     * Initializes the dashboard with user-specific data and flash messages.
      *
-     * @param array $data - Initial data for the view (expects 'user' key)
+     * @param array $data Data passed to the view. Must include a 'user' key.
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
         $user = $data['user'];
         $data = [
-            'errors' => SessionService::getFlash('errors', []),
-            'user' => $user
+            'errors'  => SessionService::getFlash('errors', []),
+            'success' => SessionService::getFlash('success', ''),
+            'user'    => $user
         ];
+
         parent::__construct($data);
     }
 
     /**
-     * Returns the path to the dashboard template.
+     * Returns the path to the dashboard HTML template file.
      *
-     * @return string
+     * @return string The template path.
      */
     protected function templatePath(): string
     {
@@ -49,34 +64,35 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Returns the list of template keys and their corresponding rendered values.
+     * Returns the list of keys and rendered values used in the HTML template.
      *
-     * @return array
+     * @return array The list of template keys and values.
      */
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'] ?? [];
-        $user = $this->data['user'];
-        $saes = $this->data['saes'] ?? [];
+        $user   = $this->data['user'];
+        $saes   = $this->data['saes'] ?? [];
 
         return [
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
-            'USER_NAME' => $user->getFullName(),
-            'USER_EMAIL' => $user->getEmail(),
-            'USER_TYPE_CLASS' => $this-> getUserTypeLabel($user),
-            'USER_TYPE_LABEL' => $this->getUserTypeLabel($user),
-            'USER_META_INFO' => $this->renderUserMetaInfo($user),
-            'SAE_NAVIGATION' => $this->renderSAENavigation($user),
-            'SAE_CONTENT' => $this->renderSAEContent($user, $saes)
+            'ERROR_MESSAGES'   => $this->renderErrorMessages($errors),
+            'SUCCESS_MESSAGE'  => $this->renderSuccessMessage(),
+            'USER_NAME'        => $user->getFullName(),
+            'USER_EMAIL'       => $user->getEmail(),
+            'USER_TYPE_CLASS'  => $this->getUserTypeLabel($user),
+            'USER_TYPE_LABEL'  => ucfirst($this->getUserTypeLabel($user)),
+            'USER_META_INFO'   => $this->renderUserMetaInfo($user),
+            'SAE_NAVIGATION'   => $this->renderSAENavigation($user),
+            'SAE_CONTENT'      => $this->renderSAEContent($user, $saes)
         ];
     }
 
     /**
-     * Renders error messages into HTML format.
+     * Renders error messages in HTML format.
      *
-     * @param array $errors
-     * @return string
+     * @param array $errors List of error messages.
+     *
+     * @return string The rendered HTML or an empty string.
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -94,9 +110,9 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Renders a success message if available.
+     * Renders a success message in HTML format if available.
      *
-     * @return string
+     * @return string The rendered HTML or an empty string.
      */
     private function renderSuccessMessage(): string
     {
@@ -111,13 +127,14 @@ class DashboardView extends AbstractView
     /**
      * Returns a user-friendly label based on the user's role.
      *
-     * @param User $user
-     * @return string
+     * @param User $user The user instance.
+     *
+     * @return string The role label.
      */
     private function getUserTypeLabel(User $user): string
     {
         if ($user->isStudent()) {
-            return 'etudiant';
+            return 'étudiant';
         }
         if ($user->isProfessor()) {
             return 'professeur';
@@ -129,10 +146,11 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Renders additional user information based on user type.
+     * Renders additional user information depending on the user type.
      *
-     * @param User $user
-     * @return string
+     * @param User $user The user instance.
+     *
+     * @return string The HTML containing user metadata.
      */
     private function renderUserMetaInfo(User $user): string
     {
@@ -145,20 +163,20 @@ class DashboardView extends AbstractView
                 $html .= '<span>Parcours : ' . $user->getParcours() . '</span>';
             }
         } elseif ($user->isProfessor()) {
-            $html .= '<span>AMU ID : ' . 'TODO' . '</span>';
             $html .= '<span>Département : Informatique</span>';
         } elseif ($user->isClient()) {
-            $html .= '<span>Entreprise : ' . 'TODO' . '</span>';
+            $html .= '<span>Entreprise : À définir</span>';
         }
 
         return $html;
     }
 
     /**
-     * Renders the SAE navigation links and buttons depending on the user's role.
+     * Renders the SAE navigation depending on the user's role.
      *
-     * @param User $user
-     * @return string
+     * @param User $user The user instance.
+     *
+     * @return string The HTML for SAE navigation.
      */
     private function renderSAENavigation(User $user): string
     {
@@ -166,7 +184,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>SAE</h3>';
 
         if ($user->isProfessor()) {
-            $html .= '<button class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</button>';
+            $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
             $html .= '<a href="/sae">Toutes les SAE</a>';
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
@@ -181,11 +199,12 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Renders the SAE content section with SAE cards or an empty state.
+     * Renders the SAE content section with cards or an empty message.
      *
-     * @param User $user
-     * @param array $saes
-     * @return string
+     * @param User  $user The user instance.
+     * @param array $saes List of SAE data arrays.
+     *
+     * @return string The rendered HTML content.
      */
     private function renderSAEContent(User $user, array $saes): string
     {
@@ -194,25 +213,25 @@ class DashboardView extends AbstractView
         }
 
         $html = '<div class="sae-grid">';
-
         foreach ($saes as $sae) {
             $html .= $this->renderSAECard($user, $sae);
         }
-
         $html .= '</div>';
+
         return $html;
     }
 
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User $user
-     * @param array $sae
-     * @return string
+     * @param User  $user The user instance.
+     * @param array $sae  The SAE data array.
+     *
+     * @return string The rendered HTML SAE card.
      */
     private function renderSAECard(User $user, array $sae): string
     {
-        $html = '<article class="sae-card">';
+        $html  = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
         $html .= '<div class="sae-icon" aria-hidden="true">' . $sae['code'] . '</div>';
         $html .= '</div>';
@@ -220,49 +239,43 @@ class DashboardView extends AbstractView
         $html .= '<h3>' . $sae['title'] . '</h3>';
         $html .= '<p><strong>Compétences :</strong> ' . $sae['competences'] . '</p>';
 
-        if (isset($sae['teacher'])) {
+        if (!empty($sae['teacher'])) {
             $html .= '<p><strong>Enseignant :</strong> ' . $sae['teacher'] . '</p>';
         }
 
         $html .= '<div class="sae-actions">';
-        $html .= '<a href="/sae/view/' . $sae['id'] . '" class="btn btn-primary">Voir détails</a>';
-
-        $html .= '</div>';
-        $html .= '</article>';
+        $html .= '<a href="/sae/view/' . intval($sae['id']) . '" class="btn btn-primary">Voir détails</a>';
+        $html .= '</div></div></article>';
 
         return $html;
     }
 
     /**
-     * Renders a message when there are no SAEs to display.
+     * Displays a message when no SAE is available.
      *
-     * @param User $user
-     * @return string
+     * @param User $user The user instance.
+     *
+     * @return string The rendered HTML empty state.
      */
     private function renderEmptyState(User $user): string
     {
         $message = 'Aucune SAE disponible pour le moment.';
-        $action = '';
+        $action  = '';
 
         if ($user->isProfessor()) {
             $message = 'Vous n\'avez pas encore créé de SAE.';
-            $action = '<a href="/sae/create" class="btn btn-primary">Créer votre première SAE</a>';
+            $action  = '<a href="/sae/create" class="btn btn-primary">Créer votre première SAE</a>';
         } elseif ($user->isStudent()) {
             $message = 'Vous n\'êtes inscrit à aucune SAE actuellement.';
         }
 
-        $html = '<div class="empty-state">';
-        $html .= '<h3>' . $message . '</h3>';
-        $html .= '<p>' . $action . '</p>';
-        $html .= '</div>';
-
-        return $html;
+        return '<div class="empty-state"><h3>' . $message . '</h3><p>' . $action . '</p></div>';
     }
 
     /**
      * Returns the page title for the dashboard.
      *
-     * @return string
+     * @return string The title of the dashboard page.
      */
     protected function getPageTitle(): string
     {
@@ -270,9 +283,9 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Returns the name of the CSS file for the dashboard page.
+     * Returns the name of the CSS file associated with this view.
      *
-     * @return string
+     * @return string The CSS filename.
      */
     protected function getNameCss(): string
     {
@@ -280,12 +293,14 @@ class DashboardView extends AbstractView
     }
 
     /**
-     * Returns any additional HTML headers needed.
+     * Returns additional HTML headers for the dashboard.
      *
-     * @return string
+     * @return string The meta and OG headers.
      */
     protected function getAdditionalHeaders(): string
     {
-        return '';
+        return '<meta name="description" content="Tableau de bord utilisateur de SAEManager">
+                <meta name="keywords" content="SAEManager, Dashboard, SAE, utilisateur">
+                <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
     }
 }
