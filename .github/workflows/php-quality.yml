@@ -84,6 +84,11 @@ jobs:
           xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
         continue-on-error: true
 
+      # Create PHPDoc Documentation Folder
+      - name: Ensure docs directory exists
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: mkdir -p docs/api
+
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
         if: steps.changed_files.outputs.has_changes == 'true'
@@ -118,10 +123,6 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-      # Create PHPDoc Documentation Folder
-      - name: Ensure docs directory exists
-        if: steps.changed_files.outputs.has_changes == 'true'
-        run: mkdir -p docs/api
 
 
       # Upload PHPDoc Documentation as artifact
