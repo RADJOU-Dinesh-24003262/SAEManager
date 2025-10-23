@@ -12,10 +12,10 @@ use Views\Index\IndexView;
  * Handles user logout (GET request).
  *
  * @category Controller
- * @package Controllers\User
- * @author Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
- * @license MIT https://opensource.org/licenses/MIT
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager/
+ * @package  Controllers\User
+ * @author   Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
 class Logout implements ControllerInterface
 {
@@ -47,8 +47,8 @@ class Logout implements ControllerInterface
     /**
      * Check if this controller should handle the current request
      *
-     * @param string $path   The request path.
-     * @param string $method The HTTP request method.
+     * @param  string $path   The request path.
+     * @param  string $method The HTTP request method.
      * @return boolean True if path is /logout and method is GET.
      */
     public static function support(string $path, string $method): bool

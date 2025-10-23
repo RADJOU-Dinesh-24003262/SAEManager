@@ -11,73 +11,73 @@ use includes\exception\ExceptionValidationLogin;
 
 /**
  * Class User
- *
  * This class contains functions to create and manage users,
  * and handles communication with the database layer.
  *
- * @category    Models
- * @package     Src
- * @subpackage  Models\User
- * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license     MIT https://opensource.org/licenses/MIT
- * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
- */
+ * @category   Models
+ * @package    Src
+ * @subpackage Models\User
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+*/
+
 class User
 {
     /**
      * The amU identification string
+     *
      * @var string
      */
     private string $amu_id = '';
     /**
      * The first name of the user
+     *
      * @var string
      */
     private string $first_name = '';
     /**
      * The last name of the user
+     *
      * @var string
      */
     private string $last_name = '';
     /**
      * The gender of the user
+     *
      * @var string
      */
     private string $gender = '';
     /**
      * The type of the user (student / personnel...)
+     *
      * @var string
      */
     private string $user_type = '';
     /**
      * The email of the user
+     *
      * @var string
      */
     private string $email = '';
     /**
      * The passwordHash of the user
+     *
      * @var string
      */
     private string $hashed_password = '';
     /**
      * The phone number of the user
+     *
      * @var string
      */
     private string $phone = '';
-    /**
-     * The date of birth of the user
-     * @var string
-     */
-    private string $dateOfBirth = '';
-    /**
-     * The city of study of the user
-     * @var string
-     */
-    private string $city = '';
     /**
      * The year of study of the user.
      *
@@ -86,16 +86,19 @@ class User
     private ?int $year = null;
     /**
      * The major of the user
+     *
      * @var string
      */
     private ?string $parcours = null;
     /**
      * The sub-group of the user
+     *
      * @var string
      */
     private ?string $td = null;
     /**
      * The sub-sub-group of the user
+     *
      * @var string
      */
     private ?string $tp = null;
@@ -116,7 +119,7 @@ class User
     {
         foreach ($data as $key => $value) {
             if ($key === 'password' || $key === 'passwordverif' || $key === 'terms') {
-                continue; // Skip password, use setPassword method instead
+                continue; // Skip password, use setPassword method instead.
             }
             $this->$key = $value;
         }
@@ -155,7 +158,6 @@ class User
         return $user;
     }
     /**
-     *
      * Sets the password_hash field to the current user.
      * To be used for security
      *
@@ -176,8 +178,8 @@ class User
     public function save(): void
     {
         $connection = database::getInstance();
-        //Create the user in the user relation in the database
-            $stmt = $connection->prepare(
+        // Create the user in the user relation in the database.
+        $stmt = $connection->prepare(
             "INSERT INTO users(
                 first_name,
                 last_name,
@@ -190,39 +192,40 @@ class User
                 :email,
                 :phone,
                 :hashed_password)
-            ");
-            $stmt->execute([
-                'email' => $this->email,
-                'last_name' => $this->last_name,
-                'first_name' => $this->first_name,
-                'hashed_password' => $this->hashed_password,
-                'phone' => $this->phone
-            ]);
-            $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
-            $stmt->execute([
-                'email' => $this->email
-            ]);
-            $temp_id = '';
-            $temp_id = $stmt->fetchColumn(0);
+            "
+        );
+        $stmt->execute([
+            'email' => $this->email,
+            'last_name' => $this->last_name,
+            'first_name' => $this->first_name,
+            'hashed_password' => $this->hashed_password,
+            'phone' => $this->phone
+        ]);
+        $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
+        $stmt->execute([
+            'email' => $this->email
+        ]);
+        $temp_id = '';
+        $temp_id = $stmt->fetchColumn(0);
         if ($this->user_type === 'student') {
             /* Relics from the past (depreciated)
             SELECT * FROM register_student(
-                :email, 
-                :lastName, 
-                :first_name, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
-                :city, 
-                :amuId, 
-                :parcours, 
-                :year, 
-                :td, 
+                :city,
+                :amuId,
+                :parcours,
+                :year,
+                :td,
                 :tp
             )*/
-            //Create the user in the student relation in the database
+            // Create the user in the student relation in the database.
             $stmt = $connection->prepare(
-            "INSERT INTO students(
+                "INSERT INTO students(
                 student_id,
                 amu_id,
                 year,
@@ -234,7 +237,8 @@ class User
                 :year,
                 :td,
                 :tp)
-            ");
+            "
+            );
             $stmt->execute([
                 'student_id' => $temp_id,
                 'amu_id' => $this->amu_id,
@@ -245,17 +249,17 @@ class User
         } elseif ($this->user_type === 'professor') {
             $stmt = $connection->prepare(/*"
             SELECT * FROM register_teacher(
-                :email, 
-                :lastName, 
-                :first_name, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
-                :city, 
+                :city,
                 :amuId
             )
             "*/
-            "INSERT INTO professors(
+                "INSERT INTO professors(
                 professor_id,
                 amu_id)
                 VALUES(
@@ -270,22 +274,23 @@ class User
         } else {
             $stmt = $connection->prepare(/*"
             SELECT * FROM register_user(
-                :email, 
-                :lastName, 
-                :first_name, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
                 :city
             )
             "*/
-            "INSERT INTO clients(
+                "INSERT INTO clients(
                 client_id,
                 organisation)
                 VALUES(
                 :client_id,
                 :organisation)
-            ");
+            "
+            );
             $stmt->execute([
                 'client_id' => $temp_id,
                 'organisation' => $this->organisation
@@ -293,7 +298,6 @@ class User
         }
     }
     /**
-     *
      * Attempts to log a user using the credentials given in
      * parametters.
      *
@@ -308,10 +312,10 @@ class User
         $connection = database::getInstance();
         $stmt = $connection->prepare("SELECT email, hashed_password FROM users WHERE email = :email");
         $stmt->execute([
-            'email'=>$email
+            'email' => $email
         ]);
-        $hashed_password = $stmt->fetchColumn(1);
-        if (!($hashed_password == true && password_verify($password, $hashed_password))){
+        $hashed_password = (string) $stmt->fetchColumn(1);
+        if (!($hashed_password == true && password_verify($password, $hashed_password))) {
             throw new ExceptionValidationLogin();
         }
     }
@@ -330,7 +334,7 @@ class User
      *
      * @throws ExceptionFetchDataBD  If the user cannot be found or a database error occurs.
      */
-    public function fetchData(string $email): bool
+    public function fetchData(string $email): void
     {
         try {
             $db = database::getInstance();
@@ -342,21 +346,21 @@ class User
                                 WHERE users.email = :email");
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (empty($data)){ return false; }
-            foreach($data as $key => $value){
+            if (empty($data)) {
+                throw new ExceptionFetchDataBD();
+            }
+            foreach ($data as $key => $value) {
                 $this->$key = $value;
             }
-            
-            //fills in a user_type field MIGHT HAVE TO BE CHANGED // SHOULD BE STORED IN THE DATABASE
-            if (isset($this->amu_id)){
-                if (isset($this->year)){
+
+            // Fills in a user_type field.
+            if (isset($this->amu_id)) {
+                if (isset($this->year)) {
                     $this->user_type = "student";
-                }
-                else {
+                } else {
                     $this->user_type = "professor";
                 }
-            }
-            else {
+            } else {
                 $this->user_type = "client";
             }
         } catch (PDOException $e) {
@@ -387,7 +391,6 @@ class User
         }
     }
     /**
-     *
      * Attempts to update a user's password based on it's email
      *
      * @param string $email       The email of the user to update the password of.
@@ -449,15 +452,6 @@ class User
         return $this->first_name . ' ' . $this->last_name;
     }
     /**
-     * Returns the gender of the user.
-     *
-     * @return string the gender of the user.
-     */
-    public function getGender(): string
-    {
-        return $this->gender;
-    }
-    /**
      * Returns the user type of the user.
      *
      * @return string the user type of the user.
@@ -492,24 +486,6 @@ class User
     public function getPhone(): string
     {
         return $this->phone;
-    }
-    /**
-     * Returns the date of birth of the user.
-     *
-     * @return string the date of birth of the user.
-     */
-    public function getDateOfBirth(): string
-    {
-        return $this->dateOfBirth;
-    }
-    /**
-     * Returns the city of study of the user.
-     *
-     * @return string the city of study of the user.
-     */
-    public function getCity(): string
-    {
-        return $this->city;
     }
     /**
      * Returns the year of study of the user.

@@ -12,26 +12,23 @@ use Views\User\RegisterSuccessView;
 use includes\exception\ExceptionValidationRegisters;
 
 /**
- * Class RegisterPost
-
  * This class controls the register process (post).
 
- * @category    Controller
+ * @category Controller
 
- * @package     Src
+ * @package Src
 
- * @subpackage  Controllers\User
+ * @subpackage Controllers\User
 
- * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ *          François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
+ *          William Edelstein <william.edelstein@etu.univ-amu.fr>,
+ *          Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ *          Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * @license     MIT License https://opensource.org/licenses/MIT
+ * @license MIT License https://opensource.org/licenses/MIT
 
- * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
-
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterPost implements ControllerInterface
 {
@@ -54,7 +51,7 @@ class RegisterPost implements ControllerInterface
             // Create the user.
             $user = User::createFromRegistrationData($data);
 
-            // Save the user HAS TEMPORARILY BEEN CHANGED, OLD CODE IN COMMENT
+            // Save the user HAS TEMPORARILY BEEN CHANGED, OLD CODE IN COMMENT.
             /*
             if ($user->save()) {
                 error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
@@ -71,8 +68,6 @@ class RegisterPost implements ControllerInterface
             error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
             $view = new RegisterSuccessView($user);
             $view->render();
-
-
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {

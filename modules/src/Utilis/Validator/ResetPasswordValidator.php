@@ -6,33 +6,40 @@ use includes\exception\ExceptionValidationResetPassword;
 
 /**
  * Class ResetPasswordValidator
-
- * @package     src
-
- * @subpackage  Utilis\Validator
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class regroup function to validate the reset process of a password.
+
+ * @category Utilis
+
+ * @package Src
+
+ * @subpackage Utilis\Validator
+
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordValidator extends FormValidator
 {
     /**
      * The list of the variables required for the password reset of a user.
+     *
      * @var array
      */
     protected $required = ['pwdnew', 'pwdverif'];
 
     /**
-     *
-     *
      * This method validates the values given in $data to reset the password of a user with.
      *
-     * @param array $data array, in adequation to the required value fields.
+     * @param array $data Array, in adequation to the required value fields.
      *
      * @return void
      *
-     * @throws ExceptionValidationResetPassword all the errors that might have been found
+     * @throws ExceptionValidationResetPassword All the errors that might have been found.
      */
     public function validate(array $data): void
     {
