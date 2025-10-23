@@ -32,8 +32,8 @@ class ValidationServiceRegister extends FormValidator
      *
      * @var array
      */
-    protected $required = ['amuId', 'firstName', 'lastName', 'userType', 'email', 'password',
-                        'passwordverif', 'phone', 'dateOfBirth', 'city', 'gender', 'terms'];
+    protected $required = ['amu_id', 'first_name', 'last_name', 'user_type',
+    'email', 'password', 'passwordverif', 'phone', 'terms'];
 
     /**
      * This method validates the values given in $data to make a new user with.
@@ -49,13 +49,13 @@ class ValidationServiceRegister extends FormValidator
         $errors = [];
 
         // Specific validations.
-        if (!$this->isValidUserType($data['userType'])) {
-            $errors[] = new ExceptionValidationRegister("userType", "string", "Type d'utilisateur invalide.");
+        if (!$this->isValidUserType($data['user_type'])) {
+            $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
 
         if (!$this->isValidEmail($data['email'])) {
             $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
-        } elseif (!$this->isOwnAmuEmail($data['email'], $data['lastName'], $data['firstName'])) {
+        } elseif (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
@@ -84,25 +84,8 @@ class ValidationServiceRegister extends FormValidator
         }
 
 
-        if (!$this->isValidDate($data['dateOfBirth'])) {
-            $errors[] = new ExceptionValidationRegister("dateOfBirth", "string", "Date de naissance invalide.");
-        } else {
-            $age = (new \DateTime())->diff(new \DateTime($data['dateOfBirth']))->y;
-            if ($age < 16) {
-                $errors[] = new ExceptionValidationRegister(
-                    "dateOfBirth",
-                    "string",
-                    "Vous devez avoir au moins 16 ans."
-                );
-            }
-        }
-
-        if (!$this->isValidGender($data['gender'])) {
-            $errors[] = new ExceptionValidationRegister("gender", "string", "Veuillez sélectionner un genre valide.");
-        }
-
         // Specific validation for students.
-        if (($data['userType'] ?? '') === 'student') {
+        if (($data['user_type'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
         }

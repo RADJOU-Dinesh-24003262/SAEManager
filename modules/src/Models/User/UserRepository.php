@@ -79,7 +79,7 @@ class UserRepository
             $stmt = $this->db->prepare(
                 "
                 INSERT INTO users (amu_id, first_name, last_name, user_type, 
-                                   email, password, phone, date_of_birth, city, 
+                                   email, password, phone, 
                                    year, parcours, td, tp)
                 VALUES (:amu_id, :first_name, :last_name, :user_type,
                         :email, :password, :phone, :dob, :city,
@@ -96,8 +96,6 @@ class UserRepository
                 'email' => $user->getEmail(),
                 'password' => $user->getPasswordHash(),
                 'phone' => $user->getPhone(),
-                'dob' => $user->getDateOfBirth(),
-                'city' => $user->getCity(),
                 'year' => $user->getYear(),
                 'parcours' => $user->getParcours(),
                 'td' => $user->getTd(),

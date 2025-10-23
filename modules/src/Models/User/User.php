@@ -35,19 +35,19 @@ class User
      *
      * @var string
      */
-    private string $amuId = '';
+    private string $amu_id = '';
     /**
      * The first name of the user
      *
      * @var string
      */
-    private string $firstName = '';
+    private string $first_name = '';
     /**
      * The last name of the user
      *
      * @var string
      */
-    private string $lastName = '';
+    private string $last_name = '';
     /**
      * The gender of the user
      *
@@ -59,7 +59,7 @@ class User
      *
      * @var string
      */
-    private string $userType = '';
+    private string $user_type = '';
     /**
      * The email of the user
      *
@@ -71,25 +71,13 @@ class User
      *
      * @var string
      */
-    private string $passwordHash = '';
+    private string $hashed_password = '';
     /**
      * The phone number of the user
      *
      * @var string
      */
     private string $phone = '';
-    /**
-     * The date of birth of the user
-     *
-     * @var string
-     */
-    private string $dateOfBirth = '';
-    /**
-     * The city of study of the user
-     *
-     * @var string
-     */
-    private string $city = '';
     /**
      * The year of study of the user.
      *
@@ -114,7 +102,11 @@ class User
      * @var string
      */
     private ?string $tp = null;
-
+    /**
+     * The organisation of the client if the user is one.
+     * @var string
+     */
+    private ?string $organisation = null;
     /**
      * Creates an instance of the class
      *
@@ -126,13 +118,12 @@ class User
     private function __construct(array $data = [])
     {
         foreach ($data as $key => $value) {
-            if ($key === 'password') {
+            if ($key === 'password' || $key === 'passwordverif' || $key === 'terms') {
                 continue; // Skip password, use setPassword method instead.
             }
             $this->$key = $value;
         }
     }
-
     /**
      * Creates an instance of the class
      *
@@ -149,7 +140,6 @@ class User
         $user->setPassword($data['password']);
         return $user;
     }
-
     /**
      * Creates an instance of the class
      *
@@ -164,10 +154,9 @@ class User
     {
         $user = new self($data);
         $user->login($user->email, $data['password']);
-        $user->fetchDataFromDatabase($data['email']);
+        $user->fetchData($data['email']);
         return $user;
     }
-
     /**
      * Sets the password_hash field to the current user.
      * To be used for security
@@ -178,115 +167,136 @@ class User
      */
     public function setPassword(string $password): void
     {
-
-        $this->passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
     }
-
     /**
-     * Returns the success of fetching a user in the database
      *
      * Tries to fetch a user in the database depending on it's user type.
-     * Returns the success of this action.
      *
-     * @return boolean
+     * @return void
      */
-    public function save(): bool
+    public function save(): void
     {
         $connection = database::getInstance();
-
-        if ($this->userType === 'student') {
-            $stmt = $connection->prepare(
-                "
+        // Create the user in the user relation in the database.
+        $stmt = $connection->prepare(
+            "INSERT INTO users(
+                first_name,
+                last_name,
+                email,
+                phone,
+                hashed_password)
+                VALUES(
+                :first_name,
+                :last_name,
+                :email,
+                :phone,
+                :hashed_password)
+            "
+        );
+        $stmt->execute([
+            'email' => $this->email,
+            'last_name' => $this->last_name,
+            'first_name' => $this->first_name,
+            'hashed_password' => $this->hashed_password,
+            'phone' => $this->phone
+        ]);
+        $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
+        $stmt->execute([
+            'email' => $this->email
+        ]);
+        $temp_id = '';
+        $temp_id = $stmt->fetchColumn(0);
+        if ($this->user_type === 'student') {
+            /* Relics from the past (depreciated)
             SELECT * FROM register_student(
-                :email, 
-                :lastName, 
-                :firstName, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
-                :city, 
-                :amuId, 
-                :parcours, 
-                :year, 
-                :td, 
+                :city,
+                :amuId,
+                :parcours,
+                :year,
+                :td,
                 :tp
-            )
-        "
+            )*/
+            // Create the user in the student relation in the database.
+            $stmt = $connection->prepare(
+                "INSERT INTO students(
+                student_id,
+                amu_id,
+                year,
+                td,
+                tp)
+                VALUES(
+                :student_id,
+                :amu_id,
+                :year,
+                :td,
+                :tp)
+            "
             );
-            $stmt->execute(
-                [
-                'email' => $this->email,
-                'lastName' => $this->lastName,
-                'firstName' => $this->firstName,
-                'passwordHash' => $this->passwordHash,
-                'phone' => $this->phone,
-                'dateOfBirth' => $this->dateOfBirth,
-                'city' => $this->city,
-                'amuId' => $this->amuId,
-                'parcours' => $this->parcours,
+            $stmt->execute([
+                'student_id' => $temp_id,
+                'amu_id' => $this->amu_id,
                 'year' => $this->year,
                 'td' => $this->td,
                 'tp' => $this->tp
-                ]
-            );
-        } elseif ($this->userType === 'professor') {
-            $stmt = $connection->prepare(
-                "
+            ]);
+        } elseif ($this->user_type === 'professor') {
+            $stmt = $connection->prepare(/*"
             SELECT * FROM register_teacher(
-                :email, 
-                :lastName, 
-                :firstName, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
-                :city, 
+                :city,
                 :amuId
             )
-        "
+            "*/
+                "INSERT INTO professors(
+                professor_id,
+                amu_id)
+                VALUES(
+                :professor_id,
+                :amu_id)
+            "
             );
-            $stmt->execute(
-                [
-                'email' => $this->email,
-                'lastName' => $this->lastName,
-                'firstName' => $this->firstName,
-                'passwordHash' => $this->passwordHash,
-                'phone' => $this->phone,
-                'dateOfBirth' => $this->dateOfBirth,
-                'city' => $this->city,
-                'amuId' => $this->amuId
-                ]
-            );
+            $stmt->execute([
+                'professor_id' => $temp_id,
+                'amu_id' => $this->amu_id
+            ]);
         } else {
-            $stmt = $connection->prepare(
-                "
+            $stmt = $connection->prepare(/*"
             SELECT * FROM register_user(
-                :email, 
-                :lastName, 
-                :firstName, 
-                :passwordHash, 
-                :phone, 
+                :email,
+                :lastName,
+                :first_name,
+                :passwordHash,
+                :phone,
                 :dateOfBirth,
                 :city
             )
-        "
+            "*/
+                "INSERT INTO clients(
+                client_id,
+                organisation)
+                VALUES(
+                :client_id,
+                :organisation)
+            "
             );
-            $stmt->execute(
-                [
-                'email' => $this->email,
-                'lastName' => $this->lastName,
-                'firstName' => $this->firstName,
-                'passwordHash' => $this->passwordHash,
-                'phone' => $this->phone,
-                'dateOfBirth' => $this->dateOfBirth,
-                'city' => $this->city
-                ]
-            );
+            $stmt->execute([
+                'client_id' => $temp_id,
+                'organisation' => $this->organisation
+            ]);
         }
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['success'] === true;
     }
-
     /**
      * Attempts to log a user using the credentials given in
      * parametters.
@@ -299,24 +309,16 @@ class User
      */
     public function login(string $email, string $password): void
     {
-
         $connection = database::getInstance();
-        $stmt = $connection->prepare("SELECT connection(?)");
-        $stmt->execute([$email]);
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        $composite = trim($row['connection'], '()');
-        $parts = explode(',', $composite);
-
-        $user_id = $parts[0];
-        $passwordHash = $parts[1];
-        $success = ($parts[2] === 't'); // PostgreSQL boolean: 't' = true, 'f' = false.
-
-        if (!($success === true && password_verify($password, $passwordHash))) {
+        $stmt = $connection->prepare("SELECT email, hashed_password FROM users WHERE email = :email");
+        $stmt->execute([
+            'email' => $email
+        ]);
+        $hashed_password = (string) $stmt->fetchColumn(1);
+        if (!($hashed_password == true && password_verify($password, $hashed_password))) {
             throw new ExceptionValidationLogin();
         }
     }
-
     /**
      * Fetches user data from the database using their email address.
      *
@@ -332,43 +334,40 @@ class User
      *
      * @throws ExceptionFetchDataBD  If the user cannot be found or a database error occurs.
      */
-    public function fetchDataFromDatabase(string $email): void
+    public function fetchData(string $email): void
     {
         try {
             $db = database::getInstance();
-            $stmt = $db->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt = $db->prepare("
+                                SELECT * FROM users
+                                JOIN students ON users.user_id = students.student_id
+                                JOIN professors ON users.user_id = professors.professor_id
+                                JOIN clients ON users.user_id = clients.client_id
+                                WHERE users.email = :email");
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (empty($data)) {
+                throw new ExceptionFetchDataBD();
+            }
+            foreach ($data as $key => $value) {
+                $this->$key = $value;
+            }
 
-            if ($data) {
-                $this->amuId = $data['amuid'] ?? $data['amuid2'] ?? '';
-                $this->firstName = $data['first_name'];
-                $this->lastName = $data['last_name'];
-                $this->userType = $data['amuid'] ? 'student' : ($data['amuid2'] ? 'professor' : 'client');
-                $this->email = $data['email'];
-                $this->passwordHash = $data['password'];
-                $this->phone = $data['phone'];
-                $this->dateOfBirth = $data['dateofbirth'];
-                $this->city = $data['city'];
-                if ($this->isStudent()) {
-                    $stmt = $db->prepare("SELECT * FROM student WHERE amuid = :amuid");
-                    $stmt->execute(['amuid' => $this->amuId]);
-                    $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    $this->year = (int)$data['year'];
-                    $this->parcours = $this->year !== 1 ? $data['specialisation'] : null;
-                    $this->td = $data['td'];
-                    $this->tp = $data['tp'];
+            // Fills in a user_type field.
+            if (isset($this->amu_id)) {
+                if (isset($this->year)) {
+                    $this->user_type = "student";
+                } else {
+                    $this->user_type = "professor";
                 }
             } else {
-                throw new ExceptionFetchDataBD();
+                $this->user_type = "client";
             }
         } catch (PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             throw new ExceptionFetchDataBD();
         }
     }
-
     /**
      * Return the success of searching a user by email in the database
      *
@@ -391,7 +390,6 @@ class User
             return false;
         }
     }
-
     /**
      * Attempts to update a user's password based on it's email
      *
@@ -406,9 +404,9 @@ class User
     {
         try {
             $db = database::getInstance();
-            $passwordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $db->prepare("UPDATE users SET password = :password_hash WHERE email = :email");
-            if ($stmt->execute(['password_hash' => $passwordHash, 'email' => $email]) && $stmt->rowCount() === 0) {
+            if ($stmt->execute(['password_hash' => $hashed_password, 'email' => $email]) && $stmt->rowCount() === 0) {
                 throw new ExceptionPasswordUpdateFailed("Aucun utilisateur trouvé avec cet email.");
             }
         } catch (\PDOException $e) {
@@ -416,9 +414,7 @@ class User
             throw new ExceptionPasswordUpdateFailed("Erreur lors de la mise à jour du mot de passe.");
         }
     }
-
     // Getters.
-
     /**
      * Returns the amUID of the user.
      *
@@ -426,7 +422,7 @@ class User
      */
     public function getAmuId(): string
     {
-        return $this->amuId;
+        return $this->amu_id;
     }
     /**
      * Returns the first name of the user.
@@ -435,7 +431,7 @@ class User
      */
     public function getFirstName(): string
     {
-        return $this->firstName;
+        return $this->first_name;
     }
     /**
      * Returns the last name of the user.
@@ -444,16 +440,16 @@ class User
      */
     public function getLastName(): string
     {
-        return $this->lastName;
+        return $this->last_name;
     }
     /**
-     * Returns the full name of the user. As [firstName]+[lastName]
+     * Returns the full name of the user. As [first_name]+[lastName]
      *
      * @return string the full name of the user.
      */
     public function getFullName(): string
     {
-        return $this->lastName . ' ' . $this->firstName;
+        return $this->first_name . ' ' . $this->last_name;
     }
     /**
      * Returns the user type of the user.
@@ -462,7 +458,7 @@ class User
      */
     public function getUserType(): string
     {
-        return $this->userType;
+        return $this->user_type;
     }
     /**
      * Returns the email of the user.
@@ -480,7 +476,7 @@ class User
      */
     public function getPasswordHash(): string
     {
-        return $this->passwordHash;
+        return $this->hashed_password;
     }
     /**
      * Returns the phone number of the user.
@@ -490,24 +486,6 @@ class User
     public function getPhone(): string
     {
         return $this->phone;
-    }
-    /**
-     * Returns the date of birth of the user.
-     *
-     * @return string the date of birth of the user.
-     */
-    public function getDateOfBirth(): string
-    {
-        return $this->dateOfBirth;
-    }
-    /**
-     * Returns the city of study of the user.
-     *
-     * @return string the city of study of the user.
-     */
-    public function getCity(): string
-    {
-        return $this->city;
     }
     /**
      * Returns the year of study of the user.
@@ -534,7 +512,7 @@ class User
      */
     public function getTd(): ?string
     {
-        return (string)$this->td;
+        return (string) $this->td;
     }
     /**
      * Returns the sub-sub-group of the user.
@@ -543,7 +521,7 @@ class User
      */
     public function getTp(): ?string
     {
-        return (string)$this->tp;
+        return (string) $this->tp;
     }
 
     /**
@@ -553,7 +531,7 @@ class User
      */
     public function isStudent(): bool
     {
-        return $this->userType === 'student';
+        return $this->user_type === 'student';
     }
     /**
      * Returns true if the user is a professor.
@@ -562,7 +540,7 @@ class User
      */
     public function isProfessor(): bool
     {
-        return $this->userType === 'professor';
+        return $this->user_type === 'professor';
     }
     /**
      * Returns true if the user is a client.
@@ -571,6 +549,6 @@ class User
      */
     public function isClient(): bool
     {
-        return $this->userType === 'client';
+        return $this->user_type === 'client';
     }
 }

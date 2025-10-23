@@ -33,17 +33,14 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $data = [
-            'amuId' => 'test123',
-            'firstName' => 'Jean',
-            'lastName' => 'Dupont',
-            'userType' => 'student',
+            'amu_id' => 'test123',
+            'first_name' => 'Jean',
+            'last_name' => 'Dupont',
+            'user_type' => 'student',
             'email' => 'jean.dupont@etu.univ-amu.fr',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
-            'dateOfBirth' => '2000-01-01',
-            'city' => 'Marseille',
-            'gender' => 'male',
             'terms' => 'on',
             'year' => '2',
             'parcours' => 'A',
@@ -137,20 +134,6 @@ class ValidationServiceRegisterTest extends TestCase
     }
 
     /**
-     * Test age validation (minimum 16 years)
-     */
-    public function testRejectsTooYoungUsers(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidBaseData();
-        $data['dateOfBirth'] = date('Y-m-d', strtotime('-10 years'));
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    /**
      * Test student specific validations
      */
     public function testRequiresStudentFieldsForStudents(): void
@@ -158,7 +141,7 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidBaseData();
-        $data['userType'] = 'student';
+        $data['user_type'] = 'student';
         unset($data['year']); // Missing required field
 
         $escaped = $this->validator->escape($data);
@@ -173,7 +156,7 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidBaseData();
-        $data['userType'] = 'student';
+        $data['user_type'] = 'student';
         $data['year'] = '2';
         $data['parcours'] = 'A';
         $data['td'] = 'TD4';
@@ -191,7 +174,7 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidBaseData();
-        $data['userType'] = 'student';
+        $data['user_type'] = 'student';
         $data['year'] = '2';
         $data['td'] = 'TD1';
         $data['tp'] = 'TPA';
@@ -209,7 +192,7 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $data = $this->getValidBaseData();
-        $data['userType'] = 'professor';
+        $data['user_type'] = 'professor';
         // No student fields
 
         $escaped = $this->validator->escape($data);
@@ -222,17 +205,14 @@ class ValidationServiceRegisterTest extends TestCase
     private function getValidBaseData(): array
     {
         return [
-            'amuId' => 'test123',
-            'firstName' => 'Jean',
-            'lastName' => 'Dupont',
-            'userType' => 'professor',
+            'amu_id' => 'test123',
+            'first_name' => 'Jean',
+            'last_name' => 'Dupont',
+            'user_type' => 'professor',
             'email' => 'jean.dupont@univ-amu.fr',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
-            'dateOfBirth' => '2000-01-01',
-            'city' => 'Marseille',
-            'gender' => 'male',
             'terms' => 'on'
         ];
     }
