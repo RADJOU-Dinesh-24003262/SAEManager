@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Controllers\SaeSujet\SaeSujetController;
 
 /**
- * Tests unitaires pour SaeSujetController
+ * Unit Test for the controller SaeSujetController
  *
  * @category Test
  * 
@@ -39,7 +39,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS D'INSTANCIATION ET D'INTERFACE
+     * INSTANTATION AND INTERFACE TESTS
      */
     #[Test]
     public function controllerImplementsControllerInterface(): void
@@ -69,7 +69,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES DE LA MÉTHODE control()
+     * UNIT TESTS FOR THE METHOD control()
      */
     #[Test]
     public function controlMethodReturnsVoid(): void
@@ -78,7 +78,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        // REMPLACER : $this->assertEquals('void', $returnType->getName()); PAR :
+        // REPLACE : $this->assertEquals('void', $returnType->getName()); BY :
         $this->assertEquals('void', (string)$returnType);
     }
 
@@ -91,9 +91,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->assertCount(0, $parameters);
     }
 
-    /**
-     * TESTS UNITAIRES DE LA MÉTHODE support() - CARACTÉRISTIQUES
-     */
     #[Test]
     public function supportMethodIsStatic(): void
     {
@@ -110,10 +107,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->assertCount(2, $parameters);
         $this->assertEquals('path', $parameters[0]->getName());
         $this->assertEquals('method', $parameters[1]->getName());
-        // REMPLACER :
-        // $this->assertEquals('string', $parameters[0]->getType()->getName());
-        // $this->assertEquals('string', $parameters[1]->getType()->getName());
-        // PAR :
         $this->assertEquals('string', (string)$parameters[0]->getType());
         $this->assertEquals('string', (string)$parameters[1]->getType());
     }
@@ -126,7 +119,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
         $this->assertNotNull($returnType);
 
-        // ALTERNATIVE COMPATIBLE :
         if (method_exists($returnType, 'getName')) {
             $this->assertEquals('bool', $returnType->getName());
         } else {
@@ -135,7 +127,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * DATA PROVIDERS POUR LES TESTS UNITAIRES support()
+     * DATA PROVIDERS FOR THE UNIT TESTS OF support()
      */
     public static function validSupportProvider(): array
     {
@@ -181,7 +173,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES support() AVEC DATA PROVIDERS
+     * UNIT TESTS FOR support() WITH DATA PROVIDERS
      */
     #[Test]
     #[DataProvider('validSupportProvider')]
@@ -216,7 +208,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES support() - CAS SPÉCIFIQUES
+     * UNIT TESTS FOR support() - SPECIFIC CASES
      */
     #[Test]
     public function supportIsCaseSensitiveForMethod(): void
@@ -235,7 +227,7 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES DE ROBUSTESSE
+     * UNIT TESTS OF ROBUSTNESS
      */
     #[Test]
     public function supportHandlesVariousInputFormats(): void
