@@ -44,6 +44,11 @@ phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
 	./vendor/bin/phpstan analyse . --level=7
 
+
+generate-phpdoc: ## Génère la documentation
+	@echo "${YELLOW}Génération de la documentation...${NC}"
+	./vendor/bin/phpdoc --directory=modules/src --target=docs/api --template=clean --title='SAE Manager API Documentation' --ignore=vendor/,tests/ --visibility=public,protected --defaultpackagename=SAEManager
+
 phpdoc: ## Vérifie la documentation
 	@echo "${YELLOW}Vérification de la documentation...${NC}"
 	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors modules/src/
