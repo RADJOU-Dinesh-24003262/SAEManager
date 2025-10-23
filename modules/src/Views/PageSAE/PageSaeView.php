@@ -7,21 +7,30 @@ use Utilis\SessionService;
 
 /**
  * Class PageSaeView
-
- * @package     src
-
- * @subpackage  PageSAE
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
  * This class represents the view for the page of the application where we will see the SAE .
- * It extends the AbstractView class and provides specific implementations
- * for rendering the SAE page.
+ * It extends the AbstractView class and provides specific implementations for rendering the SAE page.
+
+ * @category View
+
+ * @package Src
+
+ * @subpackage Views/PageSAE
+
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class PageSaeView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
+     *
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/pageSae.html';
@@ -37,7 +46,8 @@ class PageSaeView extends AbstractView
         return self::TEMPLATE_HTML;
     }
 
-    /** Returns an empty array. Implemented from the parent class.
+    /**
+     * Returns an empty array. Implemented from the parent class.
      *
      * This method returns an empty array.
      *
@@ -49,20 +59,18 @@ class PageSaeView extends AbstractView
     }
 
     /**
-
-     * Returns the name of the page 'Page SAE - SAEManager' or be used in some cases like displaying it by some isolated texts.
-
-     *
+     * Returns the name of the page 'Page SAE - SAEManager'
+     * or be used in some cases like displaying it by some isolated texts.
 
      * @return string the name of the project 'Page SAE - SAEManager'.
-
      */
     protected function getPageTitle(): string
     {
         return 'Page SAE - SAEManager';
     }
 
-    /** Returns the name of the CSS file associated with the view.
+    /**
+     * Returns the name of the CSS file associated with the view.
      *
      * This method should be implemented by subclasses to specify the CSS file
      * that should be included in the HTML header for styling the page.
@@ -73,7 +81,8 @@ class PageSaeView extends AbstractView
     {
         return 'page-sae.css';
     }
-    /** Returns additional HTML headers for the Sae page.
+    /**
+     * Returns additional HTML headers for the Sae page.
      *
      * @return string The additional HTML headers.
      */

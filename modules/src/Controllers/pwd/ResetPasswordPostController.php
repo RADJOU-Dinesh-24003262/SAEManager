@@ -15,15 +15,16 @@ use includes\exception\ExceptionInvalidToken;
 use includes\exception\ExceptionPasswordUpdateFailed;
 
 /**
- * Class User
-
- * @package     src
-
- * @subpackage  Controllers\pwd
-
- * @author      Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
- * This class controls the reset password process (post).
+ * @category Controller
+ * @package Src
+ * @subpackage Controllers\pwd
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license MIT License https://opensource.org/licenses/MIT
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordPostController implements ControllerInterface
 {
@@ -35,25 +36,25 @@ class ResetPasswordPostController implements ControllerInterface
     public function control(): void
     {
         try {
-            // Verify the token
+            // Verify the token.
             $token = $_GET['token'] ?? '';
 
             $tokenData = TokenService::validateToken($token);
 
 
-            // 2. Validate the data
+            // 2. Validate the data.
             $validator = new ResetPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            // 3. Update the password
+            // 3. Update the password.
             User::updatePasswordByEmail($tokenData['user_email'], $password);
 
-            // Mark the token as used
+            // Mark the token as used.
             TokenService::markTokenAsUsed($token);
 
-            // 5. Render the success page
+            // 5. Render the success page.
             (new ResetPasswordSuccessView())->render();
             error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
             return;
@@ -62,7 +63,7 @@ class ResetPasswordPostController implements ControllerInterface
             header("Location: /forgot-password");
             exit();
         } catch (ExceptionValidationEmptys $e) {
-            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
@@ -70,18 +71,25 @@ class ResetPasswordPostController implements ControllerInterface
         $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['user_email'] ?? null);
     }
 
+    /**
+     * Allow to render ResetPasswordView with a specific token and email from the form
+     * @param string      $token The request path.
+     * @param string|null $email The HTTP request method.
+     * @return void
+     */
     private function renderFormWithToken(string $token, ?string $email): void
     {
-        (new ResetPasswordView($token, $email))->render();
+        (new ResetPasswordView($token, $email ? $email : ''))->render();
     }
 
     /**
      * Check if this controller can handle the request
-     *
+     * @param string $path   The request path.
+     * @param string $method The HTTP request method.
      * @return boolean Is the method post?
      */
-    public static function support(string $chemin, string $method): bool
+    public static function support(string $path, string $method): bool
     {
-        return $chemin === "/reset-password" && $method === "POST";
+        return $path === "/reset-password" && $method === "POST";
     }
 }
