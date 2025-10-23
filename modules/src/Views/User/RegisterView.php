@@ -40,11 +40,10 @@ class RegisterView extends AbstractView
 
     /** @var string The last name of the user. */
     public const FIELD_LNAME = 'lname';
-
-    /** @var string The gender of the user. */
-    public const FIELD_GENDER = 'gender';
-
-    /** @var string The user type (student, professor, or client). */
+    /**
+     * The user type. It might be either a student, an SAE administrator or a client (subject maker of the SAEs)
+     * @var string
+     */
     public const FIELD_USER_TYPE = 'user_type';
 
     /** @var string The email of the user. */
@@ -58,14 +57,10 @@ class RegisterView extends AbstractView
 
     /** @var string The phone number of the user. */
     public const FIELD_PHONE = 'tel';
-
-    /** @var string The date of birth of the user. */
-    public const FIELD_DOB = 'dob';
-
-    /** @var string The city of study of the user. */
-    public const FIELD_CITY = 'city';
-
-    /** @var string The study year of the student. */
+    /**
+     * The study year of the undergraduate. Used to locate and search and sort users efficiently.
+     * @var string
+     */
     public const FIELD_YEAR = 'year';
 
     /** @var string The student's major or specialization. */
@@ -124,8 +119,8 @@ class RegisterView extends AbstractView
         $errors = $this->data['errors'];
 
         return [
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years')),
+            // Error messages.
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
         ];
     }
 
