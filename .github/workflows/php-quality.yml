@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ main, develop ]
 
+# Ajouter les permissions nécessaires
+permissions:
+  contents: write  # Nécessaire pour pousser vers gh-pages
+  pages: write
+  id-token: write
+
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -123,7 +129,14 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-
+      # Deploy PHPDoc to GitHub Pages - uniquement sur push vers main
+      - name: Deploy PHPDoc to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/api
+          publish_branch: gh-pages
+          force_orphan: true
 
       # Upload PHPDoc Documentation as artifact
       - name: Upload PHPDoc Documentation
@@ -134,16 +147,6 @@ jobs:
           path: docs/api
           retention-days: 30
         continue-on-error: true
-
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          publish_branch: gh-pages
-          force_orphan: true
-
 
       # Summary
       - name: Quality Summary
@@ -159,9 +162,5 @@ jobs:
           if [ "${{ steps.changed_files.outputs.has_changes }}" == "true" ]; then
             echo "- ✅ PHPDoc Documentation Generated" >> $GITHUB_STEP_SUMMARY
           fi
-          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "- 🚀 Documentation Deployed to GitHub Pages" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📚 **Documentation**: PHPDoc artifacts available for download" >> $GITHUB_STEP_SUMMARY
