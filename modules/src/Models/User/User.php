@@ -25,7 +25,7 @@ use includes\exception\ExceptionValidationLogin;
 
  * @license MIT License https://opensource.org/licenses/MIT
 
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @link  https://github.com/RADJOU-Dinesh-24003262/SAEManager
 */
 
 class User
