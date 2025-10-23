@@ -5,8 +5,6 @@
     <file>modules/src</file>
     
     <exclude-pattern>*/vendor/*</exclude-pattern>
-    <exclude-pattern>*/Views/*</exclude-pattern>
-    <exclude-pattern>*/_assets/*</exclude-pattern>
     
     <!-- Require documentation for all classes -->
     <rule ref="PEAR.Commenting.ClassComment"/>

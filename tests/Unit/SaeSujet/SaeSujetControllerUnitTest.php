@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Controller\SaeSujet;
+namespace Tests\Unit\SaeSujet;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversMethod;
@@ -12,10 +12,21 @@ use PHPUnit\Framework\TestCase;
 use Controllers\SaeSujet\SaeSujetController;
 
 /**
- * Tests unitaires pour SaeSujetController
- * @covers \Controllers\SaeSujet\SaeSujetController
- * @package Test\Unit\Controller\SaeSujet
- * @version 1.0
+ * Unit Test for the controller SaeSujetController
+ *
+ * @category Test
+ *
+ * @package Tests
+ *
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ *
+ * @license MIT License https://opensource.org/licenses/MIT
+ *
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 #[CoversClass(SaeSujetController::class)]
 class SaeSujetControllerUnitTest extends TestCase
@@ -28,9 +39,8 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS D'INSTANCIATION ET D'INTERFACE
+     * INSTANTATION AND INTERFACE TESTS
      */
-
     #[Test]
     public function controllerImplementsControllerInterface(): void
     {
@@ -59,9 +69,8 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES DE LA MÉTHODE control()
+     * UNIT TESTS FOR THE METHOD control()
      */
-
     #[Test]
     public function controlMethodReturnsVoid(): void
     {
@@ -69,9 +78,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        // REMPLACER :
-        // $this->assertEquals('void', $returnType->getName());
-        // PAR :
+        // REPLACE : $this->assertEquals('void', $returnType->getName()); BY :
         $this->assertEquals('void', (string)$returnType);
     }
 
@@ -83,10 +90,6 @@ class SaeSujetControllerUnitTest extends TestCase
 
         $this->assertCount(0, $parameters);
     }
-
-    /**
-     * TESTS UNITAIRES DE LA MÉTHODE support() - CARACTÉRISTIQUES
-     */
 
     #[Test]
     public function supportMethodIsStatic(): void
@@ -104,10 +107,6 @@ class SaeSujetControllerUnitTest extends TestCase
         $this->assertCount(2, $parameters);
         $this->assertEquals('path', $parameters[0]->getName());
         $this->assertEquals('method', $parameters[1]->getName());
-        // REMPLACER :
-        // $this->assertEquals('string', $parameters[0]->getType()->getName());
-        // $this->assertEquals('string', $parameters[1]->getType()->getName());
-        // PAR :
         $this->assertEquals('string', (string)$parameters[0]->getType());
         $this->assertEquals('string', (string)$parameters[1]->getType());
     }
@@ -119,19 +118,17 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        
-        // ALTERNATIVE COMPATIBLE :
+
         if (method_exists($returnType, 'getName')) {
             $this->assertEquals('bool', $returnType->getName());
         } else {
             $this->assertEquals('bool', (string)$returnType);
-    }
+        }
     }
 
     /**
-     * DATA PROVIDERS POUR LES TESTS UNITAIRES support()
+     * DATA PROVIDERS FOR THE UNIT TESTS OF support()
      */
-
     public static function validSupportProvider(): array
     {
         return [
@@ -176,9 +173,8 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES support() AVEC DATA PROVIDERS
+     * UNIT TESTS FOR support() WITH DATA PROVIDERS
      */
-
     #[Test]
     #[DataProvider('validSupportProvider')]
     public function supportReturnsTrueForValidCases(string $path, string $method, bool $expected): void
@@ -212,9 +208,8 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES support() - CAS SPÉCIFIQUES
+     * UNIT TESTS FOR support() - SPECIFIC CASES
      */
-
     #[Test]
     public function supportIsCaseSensitiveForMethod(): void
     {
@@ -232,9 +227,8 @@ class SaeSujetControllerUnitTest extends TestCase
     }
 
     /**
-     * TESTS UNITAIRES DE ROBUSTESSE
+     * UNIT TESTS OF ROBUSTNESS
      */
-
     #[Test]
     public function supportHandlesVariousInputFormats(): void
     {

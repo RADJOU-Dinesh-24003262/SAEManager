@@ -16,27 +16,24 @@ use Views\User\LoginView;
 use Utilis\Validator\LoginValidator;
 
 /**
- * Class User
-
  * This class controls the login process (post).
 
- * @category    Controller
+ * @category Controller
 
- * @package     Src
+ * @package Src
 
- * @subpackage  Controllers\User
+ * @subpackage Controllers\User
 
- * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *              François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *              William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *              Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *              Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
- * @license     MIT License https://opensource.org/licenses/MIT
+ * @license MIT License https://opensource.org/licenses/MIT
 
- * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
-
- */
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+*/
 
 class LoginPost implements ControllerInterface
 {
