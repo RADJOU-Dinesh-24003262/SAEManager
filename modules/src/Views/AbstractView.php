@@ -9,10 +9,20 @@ use Utilis\SessionService;
  *
  * It contains all the required methods and attributes to be used in the implemented views.
  *
- * @package src
+ * @category View
+
+ * @package Src
  *
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
- */
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ **/
 abstract class AbstractView
 {
     /**
@@ -25,9 +35,9 @@ abstract class AbstractView
     /**
      * Initializes the $data attribute with the array of data given when called.
      *
-     * @param array $data The array of data to be instantiated
+     * @param array $data The array of data to be instantiated.
 
-     * @return void Creates the instance of the class.
+     * @return void Creates The instance of the class.
      */
     public function __construct(array $data = [])
     {
@@ -41,6 +51,7 @@ abstract class AbstractView
      * returned by the templateKeys() method.
      *
      * @return void
+     * @throws \Exception If the themplate not found.
      */
     protected function renderBody(): void
     {
@@ -50,7 +61,7 @@ abstract class AbstractView
             throw new \Exception("Une eurreur est survenu lors la chargement de la page");
         }
 
-        // Replacement of template keys with actual values
+        // Replacement of template keys with actual values.
         foreach ($this->templateKeys() as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }
@@ -80,6 +91,7 @@ abstract class AbstractView
      *
      * This method orchestrates the rendering of the entire HTML page by calling
      * the methods to render the header, body, and footer in sequence.
+     * @return void
      */
     public function render(): void
     {
@@ -93,6 +105,7 @@ abstract class AbstractView
      *
      * This method outputs the HTML for the header section, including meta tags,
      * title, CSS links, and navigation bar.
+     * @return void
      */
     protected function renderHeader(): void
     {
@@ -163,6 +176,7 @@ abstract class AbstractView
      *
      * This method outputs the HTML for the footer section, including contact information
      * and social media links.
+     * @return void
      */
     protected function renderFooter(): void
     {
@@ -214,7 +228,7 @@ abstract class AbstractView
     }
 
     /**
-     * Returns additional HTML headers for any view class page which will extend this class.
+     * Returns additional HTML headers associated with the view.
      *
      * @return string The additional HTML headers.
      */

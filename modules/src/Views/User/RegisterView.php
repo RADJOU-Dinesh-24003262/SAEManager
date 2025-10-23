@@ -8,130 +8,89 @@ use Utilis\SessionService;
 
 /**
  * Class RegisterView
-
- * @package src
-
- * @subpackage User
-
- * @author Benhafessa Alexandre, Dargentolle Francois, Edelstein William, Griguer Nathan, Radjou Dinesh
-
+ *
  * This class represents the view for the registration page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration page, including handling error messages.
+ *
+ * @category View
+ * @package  Src
+ * @subpackage Views\User
+ *
+ * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ *
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterView extends AbstractView
 {
-    // Constant for form field names
+    // -------------------------------------------------------------------------
+    // Constants
+    // -------------------------------------------------------------------------
 
-    /**
-     * The identification String of the user. Will be used as a primary key to recognize the user.
-     *
-     * @var string
-     */
+    /** @var string The identification String of the user. */
     public const FIELD_ID = 'id';
-    /**
-     * The first name of the user. Used for the user interface.
-     *
-     * @var string
-     */
+
+    /** @var string The first name of the user. */
     public const FIELD_FNAME = 'fname';
-    /**
-     * The last name of the user. Used for the user interface
-     *
-     * @var string
-     */
+
+    /** @var string The last name of the user. */
     public const FIELD_LNAME = 'lname';
-    /**
-     * The gender of the user. Used for the user interface
-     *
-     * @var string
-     */
+
+    /** @var string The gender of the user. */
     public const FIELD_GENDER = 'gender';
-    /**
-     * The user type. It might be either a student, an SAE administrator or a client (subject maker of the SAEs)
-     *
-     * @var string
-     */
+
+    /** @var string The user type (student, professor, or client). */
     public const FIELD_USER_TYPE = 'user_type';
-    /**
-     * The email of the user. Will be used to contact them,
-     * to identify them, to help recover password and some more usages.
-     *
-     * @var string
-     */
+
+    /** @var string The email of the user. */
     public const FIELD_EMAIL = 'email';
-    /**
-     * The password of the user. Used to allow them to login, and secure their accounts.
-     *
-     * @var string
-     */
+
+    /** @var string The password of the user. */
     public const FIELD_PASSWORD = 'pwd';
-    /**
-     * Field to make sure the user typed his password right, they have to type it twice.
-     *
-     * @var string
-     */
+
+    /** @var string The password confirmation field. */
     public const FIELD_PASSWORD_CONFIRM = 'pwdverif';
-    /**
-     * The phone number of the user. used to secure the site, to contact them and identify an account.
-     *
-     * @var string
-     */
+
+    /** @var string The phone number of the user. */
     public const FIELD_PHONE = 'tel';
-    /**
-     * The date of birth of a user. Used to identify them.
-     *
-     * @var string
-     */
+
+    /** @var string The date of birth of the user. */
     public const FIELD_DOB = 'dob';
-    /**
-     * The city of studying of the user. Used to locate and search users efficiently.
-     *
-     * @var string
-     */
+
+    /** @var string The city of study of the user. */
     public const FIELD_CITY = 'city';
-    /**
-     * The study year of the undergraduate. Used to locate and search and sort users efficiently.
-     *
-     * @var string
-     */
+
+    /** @var string The study year of the student. */
     public const FIELD_YEAR = 'year';
-    /**
-     * The major of the student. Used to locate search and sort users efficiently.
-     *
-     * @var string
-     */
+
+    /** @var string The student's major or specialization. */
     public const FIELD_PARCOURS = 'parcours';
-    /**
-     * The field to give the sub-group in the promotion of the user (if their is any).
-     *
-     * @var string
-     */
+
+    /** @var string The TD (tutorial group) of the user. */
     public const FIELD_TD = 'td';
-    /**
-     * The field to give the sub-sub-group in the promotion of the user (if their is any).
-     *
-     * @var string
-     */
+
+    /** @var string The TP (lab group) of the user. */
     public const FIELD_TP = 'tp';
-    /**
-     * The variable that gives weather the user has accepted the terms and conditions.
-     *
-     * @var string
-     */
+
+    /** @var string Whether the user accepted the terms and conditions. */
     public const FIELD_TERMS = 'terms';
 
-    /**
-     * The path of the html template with the form
-     *
-     * @var string
-     */
+    /** @var string The path to the HTML template file. */
     private const TEMPLATE_HTML = __DIR__ . '/register.html';
 
+    // -------------------------------------------------------------------------
+    // Constructor
+    // -------------------------------------------------------------------------
+
     /**
-     * The constructor of the class, will use the constructor of the parent class AbstractView
+     * RegisterView constructor.
      *
-     * @return void Creates the instance of the class.
+     * Initializes the view with any error messages stored in the session.
      */
     public function __construct()
     {
@@ -141,10 +100,14 @@ class RegisterView extends AbstractView
         parent::__construct($data);
     }
 
+    // -------------------------------------------------------------------------
+    // Template Rendering
+    // -------------------------------------------------------------------------
+
     /**
      * Returns the path to the HTML template file.
      *
-     * @return string
+     * @return string The full path to the HTML template.
      */
     protected function templatePath(): string
     {
@@ -154,30 +117,24 @@ class RegisterView extends AbstractView
     /**
      * Returns an associative array of keys and values to be used in the HTML template.
      *
-     * This method retrieves error messages and success messages from the session
-     * and prepares them for rendering in the template.
-     *
-     * @return array An associative array with keys for error and success messages.
+     * @return array<string, string> The keys and corresponding rendered values.
      */
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
 
         return [
-            // Error messages
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-
-            // Max birth date for 16 years old
-            'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years'))
+            'MAX_BIRTH_DATE' => date('Y-m-d', strtotime('-16 years')),
         ];
     }
 
     /**
-     * Renders an error message given in parrameters.
+     * Renders the list of error messages into an HTML block.
      *
-     * This method orchestrates the rendering of the error messages of the page.
+     * @param array<int, string> $errors The list of error messages.
      *
-     * @return string The html to be displayed.
+     * @return string The HTML representation of the errors, or an empty string.
      */
     private function renderErrorMessages(array $errors): string
     {
@@ -187,18 +144,21 @@ class RegisterView extends AbstractView
 
         $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
+            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
         }
         $html .= '</ul></section>';
 
         return $html;
     }
 
-    /**
-     * Returns the name of the page 'Inscription - SAEManager' or
-     * be used in some cases like displaying it by some isolated texts.
+    // -------------------------------------------------------------------------
+    // Metadata and Assets
+    // -------------------------------------------------------------------------
 
-     * @return string the name of the project 'Inscription - SAEManager'.
+    /**
+     * Returns the title of the registration page.
+     *
+     * @return string The page title.
      */
     protected function getPageTitle(): string
     {
@@ -206,9 +166,9 @@ class RegisterView extends AbstractView
     }
 
     /**
-     * Returns additional scripts to be included before closing a body tag.
+     * Returns additional scripts to be included before the closing body tag.
      *
-     * @return string The additional scripts.
+     * @return string The HTML script tags.
      */
     protected function getAdditionalScripts(): string
     {
@@ -216,21 +176,19 @@ class RegisterView extends AbstractView
     }
 
     /**
-     * Returns the name of the CSS file associated with the view.
+     * Returns the name of the CSS file associated with this view.
      *
-     * This method should be implemented by subclasses to specify the CSS file
-     * that should be included in the HTML header for styling the page.
-     *
-     * @return string The name of the CSS file.
+     * @return string The CSS filename.
      */
     protected function getNameCss(): string
     {
         return 'register.css';
     }
+
     /**
      * Returns additional HTML headers for the Register page.
      *
-     * @return string The additional HTML headers.
+     * @return string The HTML meta tags.
      */
     protected function getAdditionalHeaders(): string
     {
