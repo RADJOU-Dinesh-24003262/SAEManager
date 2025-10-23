@@ -118,6 +118,12 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
+      # Create PHPDoc Documentation Folder
+      - name: Ensure docs directory exists
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: mkdir -p docs/api
+
+
       # Upload PHPDoc Documentation as artifact
       - name: Upload PHPDoc Documentation
         if: steps.changed_files.outputs.has_changes == 'true'
