@@ -79,7 +79,7 @@ class ResetPasswordPostController implements ControllerInterface
      */
     private function renderFormWithToken(string $token, ?string $email): void
     {
-        (new ResetPasswordView($token, $email))->render();
+        (new ResetPasswordView($token, $email ? $email : ''))->render();
     }
 
     /**

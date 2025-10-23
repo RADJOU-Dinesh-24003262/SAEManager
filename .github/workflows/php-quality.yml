@@ -74,7 +74,7 @@ jobs:
         if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
-          xargs -r phpstan analyse --level=7 --no-progress --error-format=github --memory-limit=512M
+          xargs -r phpstan analyse --level=8 --no-progress --error-format=github --memory-limit=512M
 
       # Documentation Check - only if PHP files changed
       - name: Check PHPDoc Documentation
