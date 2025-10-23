@@ -55,12 +55,6 @@ class ValidationServiceRegister extends FormValidator
 
         if (!$this->isValidEmail($data['email'])) {
             $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
-        } elseif (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
-            $errors[] = new ExceptionValidationRegister(
-                "email",
-                "string",
-                "Utilisez votre adresse e-mail universitaire."
-            );
         }
 
         if (!$this->isValidPassword($data['password'])) {
@@ -107,6 +101,14 @@ class ValidationServiceRegister extends FormValidator
     private function validateStudentFields(array $data): array
     {
         $errors = [];
+
+         if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+            $errors[] = new ExceptionValidationRegister(
+                "email",
+                "string",
+                "Utilisez votre adresse e-mail universitaire."
+            );
+        }
 
         if (empty($data['year'])) {
             $errors[] = new ExceptionValidationRegister('year', 'string', "L'année est requise pour les étudiants.");

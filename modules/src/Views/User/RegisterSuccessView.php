@@ -2,6 +2,7 @@
 
 namespace Views\User;
 
+use Models\User\Student;
 use Views\AbstractView;
 use Models\User\User;
 
@@ -109,14 +110,21 @@ class RegisterSuccessView extends AbstractView
      */
     private function getAcademicInfo(): string
     {
-        if (!$this->user->isStudent()) {
+        if (!$this->user->isStudent() && $this->user instanceof Student) {
             return '';
         }
 
-        $year    = $this->user->getYear();
-        $parcours = $this->user->getParcours() ? $this->user->getParcours() : null;
-        $td      = $this->user->getTd();
-        $tp      = $this->user->getTp();
+        /*
+         * @var Student $student
+         */
+        $student = $this->user;
+        assert($student instanceof Student);
+
+
+        $year    = $student->getYear();
+        $parcours = $student->getParcours() ? $student->getParcours() : null;
+        $td      = $student->getTd();
+        $tp      = $student->getTp();
 
         $info = '<div class="academic-info">';
         $info .= '<h4>Informations académiques</h4>';

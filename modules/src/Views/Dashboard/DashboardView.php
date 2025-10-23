@@ -5,6 +5,7 @@ namespace Views\Dashboard;
 use Models\User\User;
 use Utilis\SessionService;
 use Views\AbstractView;
+use Models\User\Student;
 
 /**
  * Class DashboardView
@@ -156,11 +157,16 @@ class DashboardView extends AbstractView
     {
         $html = '';
 
-        if ($user->isStudent()) {
-            $html .= '<span>Année : ' . $user->getYear() . '</span>';
-            $html .= '<span>Groupe : ' . $user->getTd() . '-' . $user->getTp() . '</span>';
-            if ($user->getParcours()) {
-                $html .= '<span>Parcours : ' . $user->getParcours() . '</span>';
+        if ($user->isStudent() && $user instanceof Student) {
+            /* @var Student $student */
+            $student = $user;
+            assert($student instanceof Student);
+
+
+            $html .= '<span>Année : ' . $student->getYear() . '</span>';
+            $html .= '<span>Groupe : ' . $student->getTd() . '-' . $student->getTp() . '</span>';
+            if ($student->getParcours()) {
+                $html .= '<span>Parcours : ' . $student->getParcours() . '</span>';
             }
         } elseif ($user->isProfessor()) {
             $html .= '<span>Département : Informatique</span>';
