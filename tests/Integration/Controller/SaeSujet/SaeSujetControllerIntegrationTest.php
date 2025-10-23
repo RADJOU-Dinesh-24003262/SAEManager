@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Controllers\SaeSujet\SaeSujetController;
 
 /**
- * Tests d'intégration pour SaeSujetController
+ * Integration tests for SaeSujetController
  *
  * @category Test
  * 
@@ -30,12 +30,12 @@ use Controllers\SaeSujet\SaeSujetController;
 class SaeSujetControllerIntegrationTest extends TestCase
 {
     /**
-     * TESTS D'INTÉGRATION - COMPORTEMENT GLOBAL.
+     * INTEGRATION TESTS - GLOBAL BEHAVIOR
      */
     #[Test]
     public function supportMethodWorksWithoutControllerInstance(): void
     {
-        // Test d'intégration : la méthode statique fonctionne sans instance.
+        // INTEGRATION TEST : the static method works without instance.
         $result = SaeSujetController::support('/new-sae', 'GET');
         $this->assertTrue($result);
     }
@@ -43,20 +43,20 @@ class SaeSujetControllerIntegrationTest extends TestCase
     #[Test]
     public function integrationTestWithReflection(): void
     {
-        // Test d'intégration utilisant la réflexion pour vérifier l'état interne.
+        // Integration test use reflection to check intern state.
         $controller = new SaeSujetController();
 
         $reflection = new \ReflectionClass($controller);
 
-        // Vérifie que la classe a les méthodes attendues.
+        // Check that the class has the right method.
         $this->assertTrue($reflection->hasMethod('control'));
         $this->assertTrue($reflection->hasMethod('support'));
 
-        // Vérifie que support est bien statique.
+        // Check that support is static.
         $supportMethod = $reflection->getMethod('support');
         $this->assertTrue($supportMethod->isStatic());
 
-        // Vérifie que control est bien public et d'instance.
+        // Check thaht control is public and of instance.
         $controlMethod = $reflection->getMethod('control');
         $this->assertTrue($controlMethod->isPublic());
         $this->assertFalse($controlMethod->isStatic());
