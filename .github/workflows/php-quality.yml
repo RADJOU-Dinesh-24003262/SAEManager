@@ -135,6 +135,17 @@ jobs:
           retention-days: 30
         continue-on-error: true
 
+      # Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
+          force_orphan: true
+
+
       # Summary
       - name: Quality Summary
         if: always()
@@ -149,5 +160,9 @@ jobs:
           if [ "${{ steps.changed_files.outputs.has_changes }}" == "true" ]; then
             echo "- ✅ PHPDoc Documentation Generated" >> $GITHUB_STEP_SUMMARY
           fi
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            echo "- 🚀 Documentation Deployed to GitHub Pages" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "📚 **Documentation**: PHPDoc artifacts available for download" >> $GITHUB_STEP_SUMMARY
