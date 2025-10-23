@@ -88,7 +88,6 @@ class RegisterPost implements ControllerInterface
         $view = new RegisterView();
         $view->render();
     }
-
     /**
      * Determines whether this controller supports the given request.
      *

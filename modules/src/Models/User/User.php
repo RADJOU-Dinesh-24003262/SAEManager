@@ -177,33 +177,35 @@ class User
     {
         $connection = database::getInstance();
         //Create the user in the user relation in the database
-            $stmt = $connection->prepare(
-            "INSERT INTO users(
-                first_name,
-                last_name,
-                email,
-                phone,
-                hashed_password)
-                VALUES(
-                :first_name,
-                :last_name,
-                :email,
-                :phone,
-                :hashed_password)
-            ");
-            $stmt->execute([
+        $stmt = $connection->prepare(
+        "INSERT INTO users(
+            first_name,
+            last_name,
+            email,
+            phone,
+            hashed_password)
+            VALUES(
+            :first_name,
+            :last_name,
+            :email,
+            :phone,
+            :hashed_password)
+        ");
+        $stmt->execute([
                 'email' => $this->email,
                 'last_name' => $this->last_name,
                 'first_name' => $this->first_name,
                 'hashed_password' => $this->hashed_password,
                 'phone' => $this->phone
-            ]);
-            $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
-            $stmt->execute([
+        ]);
+        $stmt = $connection->prepare("SELECT user_id FROM users WHERE email=:email");
+        $stmt->execute(
+            [
                 'email' => $this->email
-            ]);
-            $temp_id = '';
-            $temp_id = $stmt->fetchColumn(0);
+            ]
+        );
+        $temp_id = '';
+        $temp_id = $stmt->fetchColumn(0);
         if ($this->user_type === 'student') {
             /* Relics from the past (depreciated)
             SELECT * FROM register_student(
@@ -235,14 +237,17 @@ class User
                 :td,
                 :tp)
             ");
-            $stmt->execute([
-                'student_id' => $temp_id,
-                'amu_id' => $this->amu_id,
-                'year' => $this->year,
-                'td' => $this->td,
-                'tp' => $this->tp
-            ]);
-        } elseif ($this->user_type === 'professor') {
+            $stmt->execute(
+                [
+                    'student_id' => $temp_id,
+                    'amu_id' => $this->amu_id,
+                    'year' => $this->year,
+                    'td' => $this->td,
+                    'tp' => $this->tp
+                ]
+            );
+        }
+        elseif ($this->user_type === 'professor') {
             $stmt = $connection->prepare(/*"
             SELECT * FROM register_teacher(
                 :email, 
@@ -263,11 +268,14 @@ class User
                 :amu_id)
             "
             );
-            $stmt->execute([
-                'professor_id' => $temp_id,
-                'amu_id' => $this->amu_id
-            ]);
-        } else {
+            $stmt->execute(
+                [
+                    'professor_id' => $temp_id,
+                    'amu_id' => $this->amu_id
+                ]
+            );
+        }
+        else {
             $stmt = $connection->prepare(/*"
             SELECT * FROM register_user(
                 :email, 
@@ -286,10 +294,12 @@ class User
                 :client_id,
                 :organisation)
             ");
-            $stmt->execute([
-                'client_id' => $temp_id,
-                'organisation' => $this->organisation
-            ]);
+            $stmt->execute(
+                [
+                    'client_id' => $temp_id,
+                    'organisation' => $this->organisation
+                ]
+            );
         }
     }
     /**
