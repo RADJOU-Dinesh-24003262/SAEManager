@@ -87,21 +87,24 @@ class UserRepository
             "
             );
 
-            return $stmt->execute(
-                [
-                'amu_id' => $user->getAmuId(),
+            /*
+            Return statement for prepared execution.
+            return $stmt->execute([
+                'amu_id'     => $user->getAmuId(),
                 'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'user_type' => $user->getUserType(),
-                'email' => $user->getEmail(),
-                'password' => $user->getPasswordHash(),
-                'phone' => $user->getPhone(),
-                'year' => $user->getYear(),
-                'parcours' => $user->getParcours(),
-                'td' => $user->getTd(),
-                'tp' => $user->getTp()
-                ]
-            );
+                'last_name'  => $user->getLastName(),
+                'user_type'  => $user->getUserType(),
+                'email'      => $user->getEmail(),
+                'password'   => $user->getPasswordHash(),
+                'phone'      => $user->getPhone(),
+                'year'       => $user->getYear(),
+                'parcours'   => $user->getParcours(),
+                'td'         => $user->getTd(),
+                'tp'         => $user->getTp(),
+            ]);
+            */
+
+            return false;
         } catch (\PDOException $e) {
             error_log("Erreur sauvegarde utilisateur: " . $e->getMessage());
             return false;
