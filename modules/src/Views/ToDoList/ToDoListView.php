@@ -73,7 +73,7 @@ class ToDoListView extends AbstractView
     {
         $errors = $this->data['errors'];
 
-        return ['ERROR_MESSAGES' => this->renderErrorMessages($errors)];
+        return ['ERROR_MESSAGES' => $this->renderErrorMessages($errors)];
     }
 
     /**
