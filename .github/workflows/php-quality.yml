@@ -2,9 +2,9 @@ name: PHP Quality Checks and Push Documentation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ dev, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ dev, develop ]
 
 # Add permissions for gh-pages
 permissions:
@@ -118,19 +118,19 @@ jobs:
 
       # Create PHPDoc Documentation Folder
       - name: Ensure docs directory exists
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         run: mkdir -p docs/api
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
 
-      # Deploy PHPDoc to GitHub Pages - only when push on main
+      # Deploy PHPDoc to GitHub Pages - only when push on dev
       - name: Deploy PHPDoc to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
