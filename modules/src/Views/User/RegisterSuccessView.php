@@ -2,6 +2,7 @@
 
 namespace Views\User;
 
+use Models\User\Student;
 use Views\AbstractView;
 use Models\User\User;
 
@@ -109,28 +110,34 @@ class RegisterSuccessView extends AbstractView
      */
     private function getAcademicInfo(): string
     {
-        if (!$this->user->isStudent()) {
-            return '';
+        if (!$this->user->isStudent() && $this->user instanceof Student) {
+            /*
+            * @var Student $student
+            */
+            $student = $this->user;
+
+
+            $year    = $student->getYear();
+            $parcours = $student->getParcours() ? $student->getParcours() : null;
+            $td      = $student->getTd();
+            $tp      = $student->getTp();
+
+            $info = '<div class="academic-info">';
+            $info .= '<h4>Informations académiques</h4>';
+            $info .= "<p><strong>Année :</strong> BUT $year</p>";
+
+            if ($parcours !== null) {
+                $info .= "<p><strong>Parcours :</strong> $parcours</p>";
+            }
+
+            $info .= "<p><strong>Groupe TD :</strong> $td</p>";
+            $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
+            $info .= '</div>';
+
+            return $info;
         }
 
-        $year    = $this->user->getYear();
-        $parcours = $this->user->getParcours() ? $this->user->getParcours() : null;
-        $td      = $this->user->getTd();
-        $tp      = $this->user->getTp();
-
-        $info = '<div class="academic-info">';
-        $info .= '<h4>Informations académiques</h4>';
-        $info .= "<p><strong>Année :</strong> BUT $year</p>";
-
-        if ($parcours !== null) {
-            $info .= "<p><strong>Parcours :</strong> $parcours</p>";
-        }
-
-        $info .= "<p><strong>Groupe TD :</strong> $td</p>";
-        $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
-        $info .= '</div>';
-
-        return $info;
+        return '';
     }
 
     /**

@@ -77,6 +77,7 @@ class ValidationServiceRegisterTest extends TestCase
 
         $data = $this->getValidBaseData();
         $data['email'] = $email;
+        $data['user_type'] = 'student';
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
