@@ -7,16 +7,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
 use Utilis\SessionService;
 use Utilis\Validator\FormValidator;
-use Views\AbstractView;
-use Views\User\LoginView;
 
 /**
  * Integration test for the LoginPost controller.
  */
 #[CoversClass(LoginPost::class)]
 #[CoversClass(SessionService::class)]
-#[CoversClass(AbstractView::class)]
-#[CoversClass(LoginView::class)]
 #[CoversClass(FormValidator::class)]
 class LoginControllerTest extends TestCase
 {
