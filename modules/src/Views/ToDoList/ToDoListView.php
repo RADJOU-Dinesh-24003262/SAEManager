@@ -27,6 +27,17 @@ use Utilis\SessionService;
  */
 class ToDoListView extends AbstractView
 {
+    /** @var integer The identification of the todolist. */
+    public const FIELD_TODO_ID = 'todo_id';
+
+    /** @var string The description of the task */
+    public const FIELD_TODODESC =  'tododesc';
+
+    /** @var integer The identification of the group of SAE. */
+    public const FIELD_SAE_GROUP_ID = 'sae_group_id';
+
+    /** @var integer The identification of the subject of the SAE */
+    public const FIELD_SAE_SUBJECT_ID = 'sae_subject_id';
     /**
      * Path to the HTML template file for the To-Do List view.
      *

@@ -20,6 +20,7 @@ use Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
 use Controllers\SaeSujet\SaeSujetController;
+use Controllers\ToDoList\ToDoListPost;
 
 // List of available controllers.
 $controllers = [
@@ -39,7 +40,8 @@ $controllers = [
     new PageSaeController(),
     new ToDoListController(),
     new SaeSujetController(),
-    new DashboardController()
+    new DashboardController(),
+    new ToDoListPost()
 ];
 
 // Automatic routing.
