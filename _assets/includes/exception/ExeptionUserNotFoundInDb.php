@@ -1,7 +1,7 @@
 <?php
 namespace includes\exception;
 
-class ExeptionuserNotFoundInBd extends \Exception
+class ExeptionUserNotFoundInDb extends \Exception
 {
     public function __construct(string $userEmail = "", int $code = 0)
     {
