@@ -119,12 +119,12 @@ jobs:
 
       # Create PHPDoc Documentation Folder
       - name: Ensure docs directory exists
-        if: steps.changed_files.outputs.has_changes == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
         run: mkdir -p docs/api
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
