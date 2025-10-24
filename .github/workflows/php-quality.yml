@@ -1,4 +1,4 @@
-name: PHP Quality Checks
+name: PHP Quality Checks and Push Documentation
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
   pull_request:
     branches: [ main, develop ]
 
-# Ajouter les permissions nécessaires
+# Add permissions for gh-pages
 permissions:
-  contents: write  # Nécessaire pour pousser vers gh-pages
+  contents: write
   pages: write
   id-token: write
 
@@ -82,26 +82,6 @@ jobs:
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpstan analyse --level=8 --no-progress --error-format=github --memory-limit=512M
 
-      # Documentation Check - only if PHP files changed
-      - name: Check PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
-        run: |
-          echo "${{ steps.changed_files.outputs.changed_files }}" | \
-          xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
-        continue-on-error: true
-
-      # Create PHPDoc Documentation Folder
-      - name: Ensure docs directory exists
-        if: steps.changed_files.outputs.has_changes == 'true'
-        run: mkdir -p docs/api
-
-      # Generate PHPDoc Documentation via composer - only if PHP files changed
-      - name: Generate PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
-        run: |
-          composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
-        continue-on-error: true
-
       # Unit Tests
       - name: Run PHPUnit Tests
         run: |
@@ -129,7 +109,27 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-      # Deploy PHPDoc to GitHub Pages - uniquement sur push vers main
+      # Documentation Check - only if PHP files changed
+      - name: Check PHPDoc Documentation
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          echo "${{ steps.changed_files.outputs.changed_files }}" | \
+          xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
+        continue-on-error: true
+
+      # Create PHPDoc Documentation Folder
+      - name: Ensure docs directory exists
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: mkdir -p docs/api
+
+      # Generate PHPDoc Documentation via composer - only if PHP files changed
+      - name: Generate PHPDoc Documentation
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
+        continue-on-error: true
+
+      # Deploy PHPDoc to GitHub Pages - only when push on main
       - name: Deploy PHPDoc to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.changed_files.outputs.has_changes == 'true'
         uses: peaceiris/actions-gh-pages@v4
@@ -138,16 +138,6 @@ jobs:
           publish_dir: ./docs/api
           publish_branch: gh-pages
           force_orphan: true
-
-      # Upload PHPDoc Documentation as artifact
-      - name: Upload PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: phpdoc-documentation
-          path: docs/api
-          retention-days: 30
-        continue-on-error: true
 
       # Summary
       - name: Quality Summary
@@ -160,8 +150,5 @@ jobs:
           echo "- ✅ Static Analysis (PHPStan)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Unit Tests" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Security Audit" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.changed_files.outputs.has_changes }}" == "true" ]; then
-            echo "- ✅ PHPDoc Documentation Generated" >> $GITHUB_STEP_SUMMARY
-          fi
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📚 **Documentation**: PHPDoc artifacts available for download" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Documentation Check (PHPDoc)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ PHPDoc Documentation Generated" >> $GITHUB_STEP_SUMMARY
