@@ -70,7 +70,7 @@ class RegisterPost implements ControllerInterface
             SessionService::setFlash('errors', $errors);
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
-            SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
+            SessionService::setFlash('errors', ['general' => 'Une erreur est survenu, réessayez plus tard']);
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
