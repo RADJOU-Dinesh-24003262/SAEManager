@@ -79,7 +79,7 @@ class UserRepository
             $stmt = $this->db->prepare(
                 "
                 INSERT INTO users (amu_id, first_name, last_name, user_type, 
-                                   email, password, phone, date_of_birth, city, 
+                                   email, password, phone, 
                                    year, parcours, td, tp)
                 VALUES (:amu_id, :first_name, :last_name, :user_type,
                         :email, :password, :phone, :dob, :city,
@@ -87,23 +87,24 @@ class UserRepository
             "
             );
 
-            return $stmt->execute(
-                [
-                'amu_id' => $user->getAmuId(),
+            /*
+            Return statement for prepared execution.
+            return $stmt->execute([
+                'amu_id'     => $user->getAmuId(),
                 'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'user_type' => $user->getUserType(),
-                'email' => $user->getEmail(),
-                'password' => $user->getPasswordHash(),
-                'phone' => $user->getPhone(),
-                'dob' => $user->getDateOfBirth(),
-                'city' => $user->getCity(),
-                'year' => $user->getYear(),
-                'parcours' => $user->getParcours(),
-                'td' => $user->getTd(),
-                'tp' => $user->getTp()
-                ]
-            );
+                'last_name'  => $user->getLastName(),
+                'user_type'  => $user->getUserType(),
+                'email'      => $user->getEmail(),
+                'password'   => $user->getPasswordHash(),
+                'phone'      => $user->getPhone(),
+                'year'       => $user->getYear(),
+                'parcours'   => $user->getParcours(),
+                'td'         => $user->getTd(),
+                'tp'         => $user->getTp(),
+            ]);
+            */
+
+            return false;
         } catch (\PDOException $e) {
             error_log("Erreur sauvegarde utilisateur: " . $e->getMessage());
             return false;

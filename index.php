@@ -19,6 +19,7 @@ use Controllers\PageSae\PageSaeController;
 use Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
+use Controllers\SaeSujet\SaeSujetController;
 
 // List of available controllers.
 $controllers = [
@@ -37,6 +38,7 @@ $controllers = [
     new ResetPasswordPostController(),
     new PageSaeController(),
     new ToDoListController(),
+    new SaeSujetController(),
     new DashboardController()
 ];
 

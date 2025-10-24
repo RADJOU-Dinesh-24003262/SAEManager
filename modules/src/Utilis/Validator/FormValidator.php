@@ -80,7 +80,7 @@ abstract class FormValidator
      */
     protected function isValidUserType(string $userType): bool
     {
-        return in_array($userType, ['student', 'professor', 'companies']);
+        return in_array($userType, ['student', 'professor', 'client']);
     }
 
     /**
@@ -200,17 +200,5 @@ abstract class FormValidator
     protected function isValidTP(string $tp): bool
     {
         return in_array($tp, ['TPA', 'TPB']);
-    }
-
-    /**
-     * Returns the validity of the gender field.
-     *
-     * @param string $gender The value to validate.
-     *
-     * @return boolean
-     */
-    protected function isValidGender(string $gender): bool
-    {
-        return in_array($gender, ['male', 'female']);
     }
 }
