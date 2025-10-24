@@ -25,6 +25,9 @@
         <include>
             <directory>modules/src/</directory>
         </include>
+        <exclude>
+            <directory>modules/src/Views</directory>
+        </exclude>
     </source>
     <coverage>
         <report>
