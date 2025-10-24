@@ -8,6 +8,7 @@ use includes\exception\ExceptionPasswordUpdateFailed;
 use includes\exception\ExceptionValidationLogin;
 use PDO;
 use PDOException;
+use includes\SAE;
 
 /**
  * Abstract base class for all user types.
@@ -247,12 +248,21 @@ abstract class User
     }
 
     /**
+     * Abstract method to fetch the SAE infos from the Database
+     * @param PDO $connection   The database connection
+     * @param int $userId       The user's id
+     *
+     * @return void
+     */
+    abstract protected function fetchSAEData(PDO $connection, int $userId): Array;
+
+    /**
      * Abstract method to fetch type-specific data.
      *
      * @param PDO    $db    The database connection.
      * @param string $email The user's email.
      *
-     * @return void
+     * @return Array
      */
     abstract protected function fetchSpecificData(PDO $db, string $email): void;
 

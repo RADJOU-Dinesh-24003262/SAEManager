@@ -100,6 +100,17 @@ class Student extends User
      * @return void
      * @throws ExceptionFetchDataBD If the data can't be fetch.
      */
+
+    protected function fetchSAEData(PDO $connection, int $userId): Array
+    {
+        $stmt = $connection->prepare('SELECT subject_name FROM SAE_subjects 
+                                            JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id 
+                                            JOIN students ON SAE_groups.SAE_group_id = students.student_id 
+                                            WHERE students.student_id = :student_id');
+        $stmt->execute(['student_id' => $userId]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -122,6 +133,7 @@ class Student extends User
             throw new ExceptionFetchDataBD();
         }
     }
+
 
     // -----------------
     // Getters

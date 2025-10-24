@@ -59,6 +59,17 @@ class Professor extends User
         ]);
     }
 
+    protected function fetchSAEData(PDO $connection, int $userId): Array
+    {
+        $stmt = $connection->prepare('SELECT subject_name FROM SAE_subjects 
+                                            JOIN sae_professor_groups on SAE_subjects.sae_subject_id = sae_professor_groups.sae_subject_id 
+                                            JOIN professors ON sae_professor_groups.professor_id = professors.professor_id 
+                                            WHERE professors.professor_id = :professor_id');
+        $stmt->execute(['professor_id' => $userId]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
     /**
      * Fetches professor-specific data from the database.
      *
