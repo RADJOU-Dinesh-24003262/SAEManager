@@ -111,7 +111,6 @@ jobs:
 
       # Documentation Check - only if PHP files changed
       - name: Check PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpcs --standard=phpcs-phpdoc.xml --ignore=*/vendor/*,*/tests/*
