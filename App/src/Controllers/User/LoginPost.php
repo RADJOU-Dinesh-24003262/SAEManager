@@ -6,7 +6,7 @@ use core\ControllerInterface;
 use includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use includes\database;
-use includes\exception\ExceptionFetchDataBD;
+use includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 use Models\User\User;
 use Validator\ValidationServiceRegister;
