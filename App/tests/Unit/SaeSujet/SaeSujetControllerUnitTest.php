@@ -42,24 +42,12 @@ class SaeSujetControllerUnitTest extends TestCase
      * INSTANTATION AND INTERFACE TESTS
      */
     #[Test]
-    public function controllerImplementsControllerInterface(): void
-    {
-        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller);
-    }
-
-    #[Test]
     public function controllerHasCorrectNamespace(): void
     {
         $this->assertStringContainsString(
             'Controllers\SaeSujet',
             get_class($this->controller)
         );
-    }
-
-    #[Test]
-    public function controllerCanBeInstantiatedWithoutErrors(): void
-    {
-        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller);
     }
 
     /**
@@ -256,7 +244,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $controller2 = new SaeSujetController();
 
         $this->assertNotSame($controller1, $controller2);
-        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(\core\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\core\ControllerInterface::class, $controller2);
     }
 }
