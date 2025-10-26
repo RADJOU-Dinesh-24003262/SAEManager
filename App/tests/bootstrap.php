@@ -14,7 +14,7 @@ ini_set('display_errors', '1');
 define('APP_ENV', 'testing');
 
 // Load Composer autoloader
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../_assets/includes/Autoloader.php';
 
 // Start session for tests
