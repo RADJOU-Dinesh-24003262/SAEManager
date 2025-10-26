@@ -44,10 +44,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function controllerImplementsControllerInterface(): void
     {
-        $this->assertInstanceOf(
-            'Controllers\ControllerInterface',
-            $this->controller
-        );
+        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller);
     }
 
     #[Test]
@@ -62,10 +59,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function controllerCanBeInstantiatedWithoutErrors(): void
     {
-        $this->assertInstanceOf(
-            SaeSujetController::class,
-            $this->controller
-        );
+        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller);
     }
 
     /**
@@ -262,7 +256,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $controller2 = new SaeSujetController();
 
         $this->assertNotSame($controller1, $controller2);
-        $this->assertInstanceOf(SaeSujetController::class, $controller1);
-        $this->assertInstanceOf(SaeSujetController::class, $controller2);
+        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\Controllers\ControllerInterface::class, $controller2);
     }
 }

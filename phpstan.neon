@@ -1,7 +1,7 @@
 parameters:
   level: 8
   paths:
-    - modules/
+    - src\
     - _assets
   
   excludePaths:
