@@ -20,6 +20,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 #[CoversClass(ExceptionValidationEmpty::class)]
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(AbstractView::class)]
+#[RunInSeparateProcess]
 class LoginControllerTest extends TestCase
 {
     /**
@@ -73,7 +74,6 @@ class LoginControllerTest extends TestCase
     /**
      * Test that a user already logged in is redirected appropriately.
      */
-    #[RunInSeparateProcess]
     public function testRedirectsIfAlreadyLoggedIn(): void
     {
         // Simulate a logged-in user
