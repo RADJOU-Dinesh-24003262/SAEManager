@@ -14,19 +14,19 @@
          failOnWarning="true">
     <testsuites>
         <testsuite name="Unit Tests">
-            <directory>tests/Unit</directory>
+            <directory>App/tests/Unit</directory>
         </testsuite>
         <testsuite name="Integration Tests">
-            <directory>tests/Integration</directory>
+            <directory>App/tests/Integration</directory>
         </testsuite>
     </testsuites>
 
     <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
         <include>
-            <directory>modules/src/</directory>
+            <directory>App/src/</directory>
         </include>
         <exclude>
-            <directory>modules/src/Views</directory>
+            <directory>App/src/Views</directory>
         </exclude>
     </source>
     <coverage>
