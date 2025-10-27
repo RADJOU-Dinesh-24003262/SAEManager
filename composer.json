@@ -17,15 +17,17 @@
   },
   "autoload": {
     "psr-4": {
-      "Controllers\\": "src/Controllers/",
-      "Models\\": "src/Models/",
-      "Views\\": "src/Views/",
-      "Utilis\\": "core/Utilis/"
+      "Controllers\\": "App/src/Controllers/",
+      "Models\\": "App/src/Models/",
+      "Views\\": "App/src/Views/",
+      "Utilis\\": "core/Utilis/",
+      "core\\": "core/",
+      "App\\": "App/src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "App/tests/"
     }
   },
   "scripts": {
