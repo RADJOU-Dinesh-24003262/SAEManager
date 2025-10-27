@@ -15,11 +15,11 @@ use Core\includes\exception\ExceptionEmailSendingFailed;
 
  * @subpackage Utilis
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -85,7 +85,7 @@ class EmailService
      *
      * This template includes a reset link that the user can click to reset their password.
      *
-     * @param string $resetLink The URL the user will visit to reset their password.
+     * @param  string $resetLink The URL the user will visit to reset their password.
      * @return string The HTML content of the password reset email.
      */
     private static function getHtmlTemplate(string $resetLink): string
@@ -155,7 +155,7 @@ class EmailService
      *
      * This template includes a reset link that the user can use to reset their password.
      *
-     * @param string $resetLink The URL the user will visit to reset their password.
+     * @param  string $resetLink The URL the user will visit to reset their password.
      * @return string The plain text content of the password reset email.
      */
     private static function getTextTemplate(string $resetLink): string

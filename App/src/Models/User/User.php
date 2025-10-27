@@ -12,16 +12,16 @@ use PDOException;
 /**
  * Abstract base class for all user types.
  *
- * @category  Models
- * @package   Src
+ * @category   Models
+ * @package    Src
  * @subpackage Models\User
- * @author    Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author    François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author    William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author    Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author    Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license   MIT License https://opensource.org/licenses/MIT
- * @link      https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 abstract class User
 {
@@ -172,7 +172,8 @@ abstract class User
              VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
         );
 
-        $stmt->execute([
+        $stmt->execute(
+            [
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
@@ -184,7 +185,8 @@ abstract class User
                 'client'    => '2',
                 default     => null, // If there something that is unusual.
             },
-        ]);
+            ]
+        );
 
         $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
         $stmt->execute(['email' => $this->email]);
@@ -297,10 +299,12 @@ abstract class User
                 'UPDATE users SET hashed_password = :password_hash WHERE email = :email'
             );
 
-            $stmt->execute([
+            $stmt->execute(
+                [
                 'password_hash' => $hashed_password,
                 'email' => $email,
-            ]);
+                ]
+            );
 
             if ($stmt->rowCount() === 0) {
                 throw new ExceptionPasswordUpdateFailed('Aucun utilisateur trouvé avec cet email.');

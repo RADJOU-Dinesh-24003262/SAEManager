@@ -20,7 +20,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 
  * @subpackage Controllers\User
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
  *          François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
  *          William Edelstein <william.edelstein@etu.univ-amu.fr>,
  *          Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,

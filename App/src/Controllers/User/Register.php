@@ -10,8 +10,7 @@ use Views\User\RegisterView;
  * This class controls the register process (get).
 
  * @category Controller
-
-
+ *
  * @package Src
 
  * @subpackage Controllers\User

@@ -8,16 +8,16 @@ use PDO;
 /**
  * Represents a student user in the system.
  *
- * @category  Models
- * @package   Src
+ * @category   Models
+ * @package    Src
  * @subpackage Models\User
- * @author    Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author    François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author    William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author    Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author    Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license   MIT License https://opensource.org/licenses/MIT
- * @link      https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class Student extends User
 {
@@ -82,13 +82,15 @@ class Student extends User
              VALUES (:student_id, :amu_id, :year, :td, :tp)'
         );
 
-        $stmt->execute([
+        $stmt->execute(
+            [
             'student_id' => $userId,
             'amu_id' => $this->amu_id,
             'year' => $this->year,
             'td' => $this->td,
             'tp' => $this->tp,
-        ]);
+            ]
+        );
     }
 
     /**
