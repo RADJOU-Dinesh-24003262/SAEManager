@@ -18,11 +18,13 @@
   "autoload": {
     "psr-4": {
       "core\\": "core/",
+      "Utilis\\": "core/Utilis/",
       "Controllers\\": "App/src/Controllers/",
       "Models\\": "App/src/Models/",
       "Views\\": "App/src/Views/",
       "Validator\\": "App/src/Validator/",
-      "App\\": "App/src/"
+      "App\\": "App/src/",
+      "public\\": "public/"
     }
   },
   "autoload-dev": {
