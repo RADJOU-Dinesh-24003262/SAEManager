@@ -36,7 +36,6 @@ class TokenServiceTest extends TestCase
      * GENERATION TESTS
      * ========================================
      */
-
     #[Test]
     public function generateCreatesHexadecimalToken(): void
     {
@@ -113,7 +112,6 @@ class TokenServiceTest extends TestCase
      * SPECIFIC SECURITY TESTS
      * ========================================
      */
-
     #[Test]
     public function tokenCannotBeGuessed(): void
     {
@@ -164,7 +162,6 @@ class TokenServiceTest extends TestCase
      * PERFORMANCE TESTS
      * ========================================
      */
-
     #[Test]
     public function generateIsPerformant(): void
     {

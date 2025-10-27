@@ -3,40 +3,48 @@
 namespace Core\includes\exception\ExceptionValidation;
 
 /**
- * Class ExceptionValidationResetPassword
+ * ExceptionValidationResetPassword
  *
  * Custom exception thrown during password reset validation failures.
  *
- * This exception is used when specific validation rules fail during a password
- * reset process. It provides contextual information about the field that failed,
- * the type of validation error, and optional additional information for debugging
- * or user feedback.
- *
- * @package includes\exception
+ * @category   Exception
+ * @package    Core
+ * @subpackage Includes\Exception\ExceptionValidation
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ExceptionValidationResetPassword extends \Exception
 {
     /**
-     * @var string The name of the field that failed validation.
+     * @var string The name of the field that failed validation
      */
     private string $field;
 
     /**
-     * @var string The type of validation error.
+     * @var string The type of validation error
      */
     private string $type;
 
     /**
-     * @var string Optional. Additional information about the validation error.
+     * @var string Optional additional information about the validation error
      */
     private string $additionalInfo;
 
     /**
-     * ExceptionValidationResetPassword constructor.
+     * Constructor for ExceptionValidationResetPassword.
      *
-     * @param string $field The field name that failed validation.
-     * @param string $type The type of validation failure.
-     * @param string $additionalInfo Optional. Additional error context or message.
+     * Initializes the exception with information about the failed field,
+     * the type of validation failure, and optional additional information.
+     *
+     * @param  string $field          The field name that failed validation.
+     * @param  string $type           The type of validation failure.
+     * @param  string $additionalInfo Optional additional error context.
+     * @return void
      */
     public function __construct(string $field, string $type, string $additionalInfo = '')
     {
@@ -44,7 +52,6 @@ class ExceptionValidationResetPassword extends \Exception
         $this->type = $type;
         $this->additionalInfo = $additionalInfo;
 
-        // Pass additionalInfo as the exception message (if provided)
         parent::__construct($additionalInfo);
     }
 

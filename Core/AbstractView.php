@@ -13,11 +13,11 @@ use Core\Utilis\SessionService;
 
  * @package Src
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -91,6 +91,7 @@ abstract class AbstractView
      *
      * This method orchestrates the rendering of the entire HTML page by calling
      * the methods to render the header, body, and footer in sequence.
+     *
      * @return void
      */
     public function render(): void
@@ -105,6 +106,7 @@ abstract class AbstractView
      *
      * This method outputs the HTML for the header section, including meta tags,
      * title, CSS links, and navigation bar.
+     *
      * @return void
      */
     protected function renderHeader(): void
@@ -176,6 +178,7 @@ abstract class AbstractView
      *
      * This method outputs the HTML for the footer section, including contact information
      * and social media links.
+     *
      * @return void
      */
     protected function renderFooter(): void

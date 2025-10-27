@@ -10,16 +10,17 @@ use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 
 /**
  * This class controls the reset password process (get).
- * @category Controllers
- * @package Src
+ *
+ * @category   Controllers
+ * @package    Src
  * @subpackage Controllers\pwd
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license MIT License https://opensource.org/licenses/MIT
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordController implements ControllerInterface
 {
@@ -45,8 +46,11 @@ class ResetPasswordController implements ControllerInterface
             exit();
         } catch (\PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
-            SessionService::setFlash('errors', ['Erreur lors de la validation du lien: 
-            veuillez réessayer plus tard.']);
+            SessionService::setFlash(
+                'errors',
+                ['Erreur lors de la validation du lien: 
+            veuillez réessayer plus tard.']
+            );
             header('Location: /');
         }
     }

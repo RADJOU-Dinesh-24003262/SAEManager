@@ -3,25 +3,31 @@
 namespace Core\includes\exception\ExceptionToken;
 
 /**
- * Class ExceptionCreationTokenFailed
+ * ExceptionCreationTokenFailed
  *
  * Custom exception thrown when a token creation process fails.
  *
- * This exception should be used to indicate an error occurred during
- * the generation of a token, such as a failure in a cryptographic function,
- * a system error, or an unexpected condition in the token creation logic.
- *
- * @package includes\exception
+ * @category   Exception
+ * @package    Core
+ * @subpackage Includes\Exception\ExceptionToken
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ExceptionCreationTokenFailed extends \Exception
 {
     /**
-     * ExceptionCreationTokenFailed constructor.
+     * Constructor for the ExceptionCreationTokenFailed class.
      *
      * Initializes the exception with a default or custom message.
      *
-     * @param string $message Optional. A custom error message.
-     * Defaults to "Erreur lors de la création du token. Veuillez réessayer plus tard."
+     * @param  string $message Optional custom error message.
+     *                         Defaults to "Erreur lors de la création du token. Veuillez réessayer plus tard.".
+     * @return void
      */
     public function __construct(string $message = "Erreur lors de la création du token. Veuillez réessayer plus tard.")
     {

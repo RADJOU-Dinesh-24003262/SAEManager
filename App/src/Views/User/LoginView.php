@@ -12,15 +12,15 @@ use Core\Utilis\SessionService;
  * Extends the AbstractView abstract class and implements required methods
  * to display the login form and possible error messages.
  *
- * @category View
- * @package  Src
+ * @category   View
+ * @package    Src
  * @subpackage Views\User
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -28,7 +28,9 @@ use Core\Utilis\SessionService;
  */
 class LoginView extends AbstractView
 {
-    /** @var string Path to the HTML template */
+    /**
+     * @var string Path to the HTML template
+     */
     private const TEMPLATE_HTML = __DIR__ . '/loginview.html';
 
     /**

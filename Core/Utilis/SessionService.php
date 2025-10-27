@@ -12,11 +12,11 @@ namespace Core\Utilis;
 
  * @subpackage Utilis
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -84,7 +84,7 @@ class SessionService
     /**
      * This method unsets in the user session the key given in parametters.
      *
-     * @param string $key The session key to remove.
+     * @param  string $key The session key to remove.
      * @return void
      */
     public static function remove(string $key): void

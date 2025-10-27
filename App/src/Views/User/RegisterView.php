@@ -13,18 +13,18 @@ use Core\Utilis\SessionService;
  * It extends the AbstractView class and provides specific implementations
  * for rendering the registration page, including handling error messages.
  *
- * @category View
- * @package  Src
+ * @category   View
+ * @package    Src
  * @subpackage Views\User
  *
- * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
- * @license  MIT License https://opensource.org/licenses/MIT
- * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @license MIT License https://opensource.org/licenses/MIT
+ * @link    https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterView extends AbstractView
 {
@@ -32,50 +32,76 @@ class RegisterView extends AbstractView
     // Constants
     // -------------------------------------------------------------------------
 
-    /** @var string The identification String of the user. */
+    /**
+     * @var string The identification String of the user.
+     */
     public const FIELD_ID = 'id';
 
-    /** @var string The first name of the user. */
+    /**
+     * @var string The first name of the user.
+     */
     public const FIELD_FNAME = 'fname';
 
-    /** @var string The last name of the user. */
+    /**
+     * @var string The last name of the user.
+     */
     public const FIELD_LNAME = 'lname';
     /**
      * The user type. It might be either a student, an SAE administrator or a client (subject maker of the SAEs)
+     *
      * @var string
      */
     public const FIELD_USER_TYPE = 'user_type';
 
-    /** @var string The email of the user. */
+    /**
+     * @var string The email of the user.
+     */
     public const FIELD_EMAIL = 'email';
 
-    /** @var string The password of the user. */
+    /**
+     * @var string The password of the user.
+     */
     public const FIELD_PASSWORD = 'pwd';
 
-    /** @var string The password confirmation field. */
+    /**
+     * @var string The password confirmation field.
+     */
     public const FIELD_PASSWORD_CONFIRM = 'pwdverif';
 
-    /** @var string The phone number of the user. */
+    /**
+     * @var string The phone number of the user.
+     */
     public const FIELD_PHONE = 'tel';
     /**
      * The study year of the undergraduate. Used to locate and search and sort users efficiently.
+     *
      * @var string
      */
     public const FIELD_YEAR = 'year';
 
-    /** @var string The student's major or specialization. */
+    /**
+     * @var string The student's major or specialization.
+     */
     public const FIELD_PARCOURS = 'parcours';
 
-    /** @var string The TD (tutorial group) of the user. */
+    /**
+     * @var string The TD (tutorial group) of the user.
+     */
     public const FIELD_TD = 'td';
 
-    /** @var string The TP (lab group) of the user. */
+    /**
+     * @var string The TP (lab group) of the user.
+     */
     public const FIELD_TP = 'tp';
 
-    /** @var string Whether the user accepted the terms and conditions. */
+    /**
+     * @var string Whether the user accepted the terms and conditions.
+     */
     public const FIELD_TERMS = 'terms';
 
-    /** @var string The path to the HTML template file. */
+    /**
+     * @var string The path to the HTML template file.
+     */
     private const TEMPLATE_HTML = __DIR__ . '/register.html';
 
     // -------------------------------------------------------------------------

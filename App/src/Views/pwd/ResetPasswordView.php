@@ -15,16 +15,16 @@ use Core\AbstractView;
  * password reset content, including error messages, the reset token,
  * and masked user email.
  *
- * @category View
- * @package  Src
+ * @category   View
+ * @package    Src
  * @subpackage Views\pwd
- * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license  MIT License https://opensource.org/licenses/MIT
- * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ResetPasswordView extends AbstractView
 {

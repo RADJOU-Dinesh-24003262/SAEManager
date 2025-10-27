@@ -20,15 +20,15 @@ use Core\includes\exception\ExceptionSpam;
  * Validates form input, checks if a user exists, generates a reset token,
  * sends the reset email, and renders the view with appropriate feedback.
  *
- * @category Controllers
- * @package Src
+ * @category   Controllers
+ * @package    Src
  * @subpackage Controllers\pwd
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -48,7 +48,7 @@ class ForgotPasswordPostController implements ControllerInterface
      * - Catches and handles validation exceptions with appropriate error messages.
      * - Renders the ForgotPasswordView.
      *
-     * @return  void
+     * @return void
      */
     public function control(): void
     {
