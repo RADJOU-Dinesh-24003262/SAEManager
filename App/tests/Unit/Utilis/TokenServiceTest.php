@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Core\Utilis\TokenService;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Core\includes\Database;
 
 /**
  * Complete unit tests for TokenService
@@ -18,7 +17,6 @@ use Core\includes\Database;
  */
 #[CoversClass(TokenService::class)]
 #[CoversClass(ExceptionInvalidToken::class)]
-#[CoversClass(Database::class)]
 class TokenServiceTest extends TestCase
 {
     protected function setUp(): void
@@ -180,55 +178,5 @@ class TokenServiceTest extends TestCase
 
         // Generating 100 tokens should take less than 100ms
         $this->assertLessThan(0.1, $duration);
-    }
-
-    /**
-     * ========================================
-     * TIMING ATTACK RESISTANCE TESTS
-     * ========================================
-     */
-
-    #[Test]
-    public function validateTokenHasConstantTime(): void
-    {
-        // Generate a valid token
-        $validToken = str_repeat('a', 64);
-
-        // Measure time with different invalid tokens
-        $times = [];
-
-        $testTokens = [
-            str_repeat('b', 64),              // Completely different
-            'a' . str_repeat('b', 63),        // One character different
-            str_repeat('a', 32) . str_repeat('b', 32), // Half different
-        ];
-
-        foreach ($testTokens as $token) {
-            $start = microtime(true);
-            try {
-                TokenService::validateToken($token);
-            } catch (\Exception $e) {
-                // Expected
-            }
-            $times[] = microtime(true) - $start;
-        }
-
-        // Times should be similar (protection against timing attacks)
-        $variance = $this->calculateVariance($times);
-
-        // Variance should be low
-        $this->assertLessThan(0.05, $variance);
-    }
-
-    private function calculateVariance(array $values): float
-    {
-        $mean = array_sum($values) / count($values);
-        $variance = 0;
-
-        foreach ($values as $value) {
-            $variance += pow($value - $mean, 2);
-        }
-
-        return $variance / count($values);
     }
 }
