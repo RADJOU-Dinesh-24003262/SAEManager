@@ -3,8 +3,8 @@
 namespace Views\Dashboard;
 
 use Models\User\User;
-use core\Utilis\SessionService;
-use core\AbstractView;
+use Core\Utilis\SessionService;
+use Core\AbstractView;
 use Models\User\Student;
 
 /**

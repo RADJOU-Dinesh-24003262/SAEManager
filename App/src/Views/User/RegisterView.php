@@ -3,8 +3,8 @@
 namespace Views\User;
 
 use DateTime;
-use core\AbstractView;
-use core\Utilis\SessionService;
+use Core\AbstractView;
+use Core\Utilis\SessionService;
 
 /**
  * Class RegisterView

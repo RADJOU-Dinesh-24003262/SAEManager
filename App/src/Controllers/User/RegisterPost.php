@@ -2,14 +2,14 @@
 
 namespace Controllers\User;
 
-use core\ControllerInterface;
-use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\ControllerInterface;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Models\User\User;
 use Validator\ValidationServiceRegister;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 use Views\User\RegisterView;
 use Views\User\RegisterSuccessView;
-use includes\exception\ExceptionValidation\ExceptionValidationRegisters;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 
 /**
  * This class controls the register process (post).

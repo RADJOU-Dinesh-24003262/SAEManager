@@ -2,18 +2,18 @@
 
 namespace Controllers\pwd;
 
-use core\ControllerInterface;
-use includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use includes\exception\ExceptionEmailSendingFailed;
+use Core\ControllerInterface;
 use Models\User\User;
-use core\Utilis\TokenService;
-use core\Utilis\EmailService;
-use core\Utilis\SessionService;
+use Core\Utilis\TokenService;
+use Core\Utilis\EmailService;
+use Core\Utilis\SessionService;
 use Validator\ForgotPasswordValidator;
 use Views\pwd\ForgotPasswordView;
-use includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use includes\exception\ExceptionSpam;
+use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionSpam;
 
 /**
  * Handles the POST request to the "/forgot-password" route.

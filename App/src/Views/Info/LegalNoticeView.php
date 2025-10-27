@@ -2,7 +2,7 @@
 
 namespace Views\Info;
 
-use core\AbstractView;
+use Core\AbstractView;
 
 /**
  * Class LegalNoticeView

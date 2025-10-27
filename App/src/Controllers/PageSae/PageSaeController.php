@@ -2,7 +2,7 @@
 
 namespace Controllers\PageSae;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Views\PageSAE\PageSaeView;
 
 /**

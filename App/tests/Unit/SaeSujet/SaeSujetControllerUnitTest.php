@@ -244,7 +244,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $controller2 = new SaeSujetController();
 
         $this->assertNotSame($controller1, $controller2);
-        $this->assertInstanceOf(\core\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\core\ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller2);
     }
 }

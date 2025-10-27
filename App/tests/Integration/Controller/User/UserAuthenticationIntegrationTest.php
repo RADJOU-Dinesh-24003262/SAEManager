@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 use Models\User\User;
 
 /**
@@ -59,9 +59,8 @@ class UserAuthenticationIntegrationTest extends TestCase
 
     /**
      * Test session regeneration after successful login
-     *
-     * @runInSeparateProcess
      */
+    #[RunInSeparateProcess]
     public function testSessionRegenerationAfterLogin(): void
     {
         // Start session and get initial ID.
@@ -100,9 +99,8 @@ class UserAuthenticationIntegrationTest extends TestCase
 
     /**
      * Test session timeout enforcement
-     *
-     * @runInSeparateProcess
      */
+    #[RunInSeparateProcess]
     public function testSessionTimeoutEnforcement(): void
     {
         SessionService::start();
@@ -120,9 +118,8 @@ class UserAuthenticationIntegrationTest extends TestCase
 
     /**
      * Test concurrent session handling
-     *
-     * @runInSeparateProcess
      */
+    #[RunInSeparateProcess]
     public function testConcurrentSessionHandling(): void
     {
         SessionService::start();

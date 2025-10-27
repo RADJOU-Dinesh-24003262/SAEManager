@@ -2,7 +2,7 @@
 
 namespace Controllers\SaeSujet;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Views\SaeSujet\SaeSujetView;
 use Views\ToDoList\ToDoListView;
 

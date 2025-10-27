@@ -2,10 +2,10 @@
 
 namespace Models\User;
 
-use includes\database;
-use includes\exception\ExceptionBD\ExceptionFetchDataBD;
-use includes\exception\ExceptionPasswordUpdateFailed;
-use includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\includes\Database;
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionPasswordUpdateFailed;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use PDO;
 use PDOException;
 
@@ -120,7 +120,7 @@ abstract class User
      */
     public static function createFromLoginData(array $data): User
     {
-        $connection = database::getInstance();
+        $connection = Database::getInstance();
         $stmt = $connection->prepare(
             'SELECT email, hashed_password, user_type FROM users WHERE email = :email'
         );
@@ -165,7 +165,7 @@ abstract class User
      */
     public function save(): void
     {
-        $connection = database::getInstance();
+        $connection = Database::getInstance();
 
         $stmt = $connection->prepare(
             'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
@@ -216,7 +216,7 @@ abstract class User
     public function fetchData(string $email): void
     {
         try {
-            $db = database::getInstance();
+            $db = Database::getInstance();
 
             $stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
             $stmt->execute(['email' => $email]);
@@ -266,7 +266,7 @@ abstract class User
     public static function existsByEmail(string $email): bool
     {
         try {
-            $db = database::getInstance();
+            $db = Database::getInstance();
             $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
             $stmt->execute(['email' => $email]);
 
@@ -290,7 +290,7 @@ abstract class User
     public static function updatePasswordByEmail(string $email, string $newPassword): void
     {
         try {
-            $db = database::getInstance();
+            $db = Database::getInstance();
             $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
 
             $stmt = $db->prepare(

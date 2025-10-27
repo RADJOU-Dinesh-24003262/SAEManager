@@ -6,8 +6,10 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Validator\ValidationServiceRegister;
-use includes\exception\ExceptionValidation\ExceptionValidationRegisters;
-use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 
 /**
  * Unit tests for ValidationServiceRegister
@@ -15,6 +17,10 @@ use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
  * @package Tests\Unit\Utilis\Validator
  */
 #[CoversClass(ValidationServiceRegister::class)]
+#[CoversClass(ExceptionValidationRegisters::class)]
+#[CoversClass(ExceptionValidationRegister::class)]
+#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(ExceptionValidationEmpty::class)]
 class ValidationServiceRegisterTest extends TestCase
 {
     private ValidationServiceRegister $validator;

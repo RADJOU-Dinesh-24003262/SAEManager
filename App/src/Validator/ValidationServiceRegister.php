@@ -2,8 +2,8 @@
 
 namespace Validator;
 
-use includes\exception\ExceptionValidation\ExceptionValidationRegister;
-use includes\exception\ExceptionValidation\ExceptionValidationRegisters;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 
 /**
  * Class ValidationServiceRegister

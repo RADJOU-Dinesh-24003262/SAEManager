@@ -2,8 +2,8 @@
 
 namespace Views\ToDoList;
 
-use core\AbstractView;
-use core\Utilis\SessionService;
+use Core\AbstractView;
+use Core\Utilis\SessionService;
 
 /**
  * Class ToDoListView

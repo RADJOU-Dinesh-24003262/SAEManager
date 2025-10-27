@@ -2,17 +2,17 @@
 
 namespace Controllers\pwd;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Models\User\User;
-use core\Utilis\TokenService;
-use core\Utilis\SessionService;
+use Core\Utilis\TokenService;
+use Core\Utilis\SessionService;
 use Validator\ResetPasswordValidator;
 use Views\pwd\ResetPasswordView;
 use Views\pwd\ResetPasswordSuccessView;
-use includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
-use includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use includes\exception\ExceptionToken\ExceptionInvalidToken;
-use includes\exception\ExceptionPasswordUpdateFailed;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
+use Core\includes\exception\ExceptionPasswordUpdateFailed;
 
 /**
  * @category Controller

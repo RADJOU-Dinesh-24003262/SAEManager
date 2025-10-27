@@ -2,7 +2,7 @@
 
 namespace Controllers\Info;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Views\Info\SiteMapView;
 
 /**

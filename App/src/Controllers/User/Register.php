@@ -2,8 +2,8 @@
 
 namespace Controllers\User;
 
-use core\ControllerInterface;
-use core\Utilis\SessionService;
+use Core\ControllerInterface;
+use Core\Utilis\SessionService;
 use Views\User\RegisterView;
 
 /**

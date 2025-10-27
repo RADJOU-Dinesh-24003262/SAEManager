@@ -2,7 +2,7 @@
 
 namespace Controllers\pwd;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Views\pwd\ForgotPasswordView;
 
 /**

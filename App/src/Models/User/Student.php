@@ -2,7 +2,7 @@
 
 namespace Models\User;
 
-use includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 
 /**
