@@ -36,4 +36,10 @@
             <text outputFile="php://stdout" showUncoveredFiles="true"/>
         </report>
     </coverage>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory>core</directory>
+            <directory>App/src</directory>
+        </include>
+    </coverage>
 </phpunit>
