@@ -15,7 +15,20 @@ define('APP_ENV', 'testing');
 
 // Load Composer autoloader
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/../../_assets/includes/Autoloader.php';
+
+// Load Special AUtoloader for the tests
+spl_autoload_register(function ($class) {
+    $file = 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
+    str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+    $coreFile = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+
+    if (file_exists($file)) {
+        require $file;
+    } elseif (file_exists($coreFile)) {
+        require $coreFile;
+    }
+});
+
 
 // Start session for tests
 if (session_status() === PHP_SESSION_NONE) {

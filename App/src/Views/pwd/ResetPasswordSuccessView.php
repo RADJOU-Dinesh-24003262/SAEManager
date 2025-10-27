@@ -2,7 +2,7 @@
 
 namespace Views\pwd;
 
-use core\AbstractView;
+use Core\AbstractView;
 
 /**
  * Class ResetPasswordSuccessView

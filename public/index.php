@@ -1,7 +1,8 @@
 <?php
 
 session_start();
-include "_assets/includes/Autoloader.php";
+include "../Core/includes/Autoloader.php";
+\Core\includes\Autoloader::register();
 
 use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
@@ -16,7 +17,7 @@ use Controllers\pwd\ForgotPasswordPostController;
 use Controllers\pwd\ResetPasswordController;
 use Controllers\pwd\ResetPasswordPostController;
 use Controllers\PageSae\PageSaeController;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
 use Controllers\SaeSujet\SaeSujetController;

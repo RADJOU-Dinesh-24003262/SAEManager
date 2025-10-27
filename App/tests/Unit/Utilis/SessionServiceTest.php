@@ -4,7 +4,7 @@ namespace tests\Unit\Utilis;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 
 /**
  * Unit tests for SessionService class.

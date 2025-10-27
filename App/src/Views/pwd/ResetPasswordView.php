@@ -2,8 +2,8 @@
 
 namespace Views\pwd;
 
-use core\Utilis\SessionService;
-use core\AbstractView;
+use Core\Utilis\SessionService;
+use Core\AbstractView;
 
 /**
  * Class ResetPasswordView

@@ -2,8 +2,8 @@
 
 namespace Validator;
 
-use includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use includes\exception\ExceptionSpam;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\includes\exception\ExceptionSpam;
 
 /**
  * Class ForgotPasswordValidator

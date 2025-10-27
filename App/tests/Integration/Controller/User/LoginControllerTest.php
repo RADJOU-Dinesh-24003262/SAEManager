@@ -5,8 +5,11 @@ namespace tests\Integration\Controller\User;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 use Validator\FormValidator;
+use Core\AbstractView;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 
 /**
  * Integration test for the LoginPost controller.
@@ -14,6 +17,9 @@ use Validator\FormValidator;
 #[CoversClass(LoginPost::class)]
 #[CoversClass(SessionService::class)]
 #[CoversClass(FormValidator::class)]
+#[CoversClass(ExceptionValidationEmpty::class)]
+#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(AbstractView::class)]
 class LoginControllerTest extends TestCase
 {
     /**
@@ -66,9 +72,8 @@ class LoginControllerTest extends TestCase
 
     /**
      * Test that a user already logged in is redirected appropriately.
-     *
-     * @runInSeparateProcess
      */
+    #[RunInSeparateProcess]
     public function testRedirectsIfAlreadyLoggedIn(): void
     {
         // Simulate a logged-in user

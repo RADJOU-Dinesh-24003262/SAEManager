@@ -2,7 +2,7 @@
 
 namespace Controllers\ToDoList;
 
-use core\ControllerInterface;
+use Core\ControllerInterface;
 use Views\ToDoList\ToDoListView;
 
 /**

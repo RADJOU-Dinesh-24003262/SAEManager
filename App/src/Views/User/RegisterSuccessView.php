@@ -3,7 +3,7 @@
 namespace Views\User;
 
 use Models\User\Student;
-use core\AbstractView;
+use Core\AbstractView;
 use Models\User\User;
 
 /**

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="App/tests/bootstrap.php"
-         cacheDirectory=".phpunit.cache"
-         executionOrder="depends,defects"
-         requireCoverageMetadata="true"
-         beStrictAboutCoverageMetadata="true"
-         beStrictAboutOutputDuringTests="true"
-         displayDetailsOnPhpunitDeprecations="true"
-         failOnPhpunitDeprecation="true"
-         colors="true"
-         failOnRisky="false"
-         failOnWarning="true">
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.5/phpunit.xsd"
+    bootstrap="App/tests/bootstrap.php"
+    cacheDirectory=".phpunit.cache"
+    executionOrder="depends,defects"
+    requireCoverageMetadata="true"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="true"
+    displayDetailsOnPhpunitDeprecations="true"
+    failOnPhpunitDeprecation="true"
+    colors="true"
+    failOnRisky="false"
+    failOnWarning="true"
+>
+
+    <!-- Définition des suites de tests -->
     <testsuites>
         <testsuite name="Unit Tests">
             <directory>App/tests/Unit</directory>
@@ -21,14 +25,18 @@
         </testsuite>
     </testsuites>
 
-    <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
+    <!-- Fichiers sources pour la couverture -->
+    <source>
         <include>
-            <directory>App/src/</directory>
+            <directory>App/src</directory>
+            <directory>Core</directory>
         </include>
         <exclude>
             <directory>App/src/Views</directory>
         </exclude>
     </source>
+
+    <!-- Configuration de la couverture -->
     <coverage>
         <report>
             <clover outputFile="coverage.xml"/>
@@ -36,10 +44,5 @@
             <text outputFile="php://stdout" showUncoveredFiles="true"/>
         </report>
     </coverage>
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory>core</directory>
-            <directory>App/src</directory>
-        </include>
-    </coverage>
+
 </phpunit>

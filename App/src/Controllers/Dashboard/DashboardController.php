@@ -2,11 +2,11 @@
 
 namespace Controllers\Dashboard;
 
-use core\ControllerInterface;
-use includes\exception\ExceptionDashboard;
+use Core\ControllerInterface;
+use Core\includes\exception\ExceptionDashboard;
 use Views\Dashboard\DashboardView;
 use Models\User\User;
-use core\Utilis\SessionService;
+use Core\Utilis\SessionService;
 
 /**
  * Controller responsible for handling the dashboard page.

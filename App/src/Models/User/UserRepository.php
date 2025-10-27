@@ -2,7 +2,7 @@
 
 namespace Models\User;
 
-use includes\database;
+use Core\includes\Database;
 
 /**
  * Class UserRepository
@@ -23,9 +23,9 @@ class UserRepository
     /**
      * Connection to the database, storred in this database object
      *
-     * @var database
+     * @var Database
      */
-    private database $db;
+    private Database $db;
 
     /**
      * Creates an instance of the class.
@@ -33,9 +33,9 @@ class UserRepository
      * This method constructs a user repository object, affecting the database given in parametters
      * to the db variable.
      *
-     * @param database $db The database to instanciate.
+     * @param Database $db The database to instanciate.
      */
-    public function __construct(database $db)
+    public function __construct(Database $db)
     {
         $this->db = $db;
     }
