@@ -2,7 +2,8 @@
 <ruleset name="PHPDoc Requirements">
     <description>Vérifie la documentation PHPDoc</description>
     
-    <file>modules/src</file>
+    <file>App/src/</file>
+    <file>Core/</file>
     
     <exclude-pattern>*/vendor/*</exclude-pattern>
     

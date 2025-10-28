@@ -38,7 +38,7 @@ coverage: ## Génère le rapport de couverture
 
 phpcs: ## Vérifie le code style (PSR-12)
 	@echo "${YELLOW}Vérification du code style...${NC}"
-	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --standard=PSR12 --colors modules/src/
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --standard=PSR12 --colors App/src/ Core/
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
@@ -47,18 +47,19 @@ phpstan: ## Lance l'analyse statique
 
 generate-phpdoc: ## Génère la documentation
 	@echo "${YELLOW}Génération de la documentation...${NC}"
-	./vendor/bin/phpdoc --directory=modules/src --target=docs/api --template=clean --title='SAE Manager API Documentation' --ignore=vendor/,tests/ --visibility=public,protected --defaultpackagename=SAEManager
+	./vendor/bin/phpdoc --directory=App/src/,Core/ --target=docs/api --template=clean --title='SAE Manager API Documentation' --ignore=vendor/,App/tests/ --visibility=public,protected --defaultpackagename=SAEManager
 
 phpdoc: ## Vérifie la documentation
 	@echo "${YELLOW}Vérification de la documentation...${NC}"
-	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors modules/src/
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors App/src/
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors Core/
 
 fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
-	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 modules/src/
-	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 tests/
-	./vendor/bin/php-cs-fixer fix modules/src
-	./vendor/bin/php-cs-fixer fix tests/
+	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 App/
+	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 Core/
+	./vendor/bin/php-cs-fixer fix App/
+	./vendor/bin/php-cs-fixer fix Core/
 	@echo "${GREEN}✓ Code formaté${NC}"
 
 quality: ## Lance toutes les vérifications de qualité

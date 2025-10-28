@@ -17,32 +17,36 @@
   },
   "autoload": {
     "psr-4": {
-      "Controllers\\": "modules/src/Controllers/",
-      "Models\\": "modules/src/Models/",
-      "Views\\": "modules/src/Views/",
-      "Utilis\\": "modules/src/Utilis/"
+      "core\\": "Core/",
+      "Utilis\\": "Core/Utilis/",
+      "Controllers\\": "App/src/Controllers/",
+      "Models\\": "App/src/Models/",
+      "Views\\": "App/src/Views/",
+      "Validator\\": "App/src/Validator/",
+      "App\\": "App/src/",
+      "public\\": "public/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "App/tests/"
     }
   },
   "scripts": {
     "test": "phpunit",
     "test-coverage": "phpunit --coverage-html coverage",
-    "phpcs": "phpcs --standard=PSR12 modules/src/",
-    "phpcbf": "phpcbf --standard=PSR12 modules/src/",
-    "phpstan": "phpstan analyse modules/src/ --level=7",
+    "phpcs": "phpcs --standard=PSR12 src/",
+    "phpcbf": "phpcbf --standard=PSR12 src/",
+    "phpstan": "phpstan analyse src/ --level=7",
     "phpdoc": [
-      "vendor/bin/phpdoc run --directory=modules/src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
+      "vendor/bin/phpdoc run --directory=src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
     ],
     "quality": [
       "@phpcs",
       "@phpstan",
       "@test"
     ],
-    "fix": "phpcbf --standard=PSR12 modules/src/"
+    "fix": "phpcbf --standard=PSR12 src/"
   },
   "config": {
     "allow-plugins": {
