@@ -45,12 +45,11 @@ class Database extends PDO
 
         // Build DSN string.
         $dsn = sprintf(
-            '%s:host=%s%s;dbname=%s;charset=%s',
+            '%s:host=%s%s;dbname=%s',
             $settings['database']['driver'] ?? 'mysql',
             $settings['database']['host'] ?? 'localhost',
             !empty($settings['database']['port']) ? ';port=' . $settings['database']['port'] : '',
-            $settings['database']['schema'] ?? '',
-            $settings['database']['charset'] ?? 'utf8mb4'
+            $settings['database']['schema'] ?? ''
         );
         // Call parent constructor.
         try {
