@@ -125,6 +125,17 @@ class Student extends User
         }
     }
 
+    protected function fetchSAEData(PDO $connection, int $userId): Array
+    {
+        $stmt = $connection->prepare('SELECT * FROM SAE_subjects 
+                                            JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id 
+                                            JOIN students ON SAE_groups.SAE_group_id = students.student_id 
+                                            WHERE students.student_id = :student_id');
+        $stmt->execute(['student_id' => $userId]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
     // -----------------
     // Getters
     // -----------------

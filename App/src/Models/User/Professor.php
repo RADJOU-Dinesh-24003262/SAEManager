@@ -90,6 +90,57 @@ class Professor extends User
         }
     }
 
+     protected function fetchSAEData(PDO $connection, int $userId): Array
+    {
+        $stmt = $connection->prepare('SELECT * FROM SAE_subjects 
+                                            JOIN sae_professor_groups on SAE_subjects.sae_subject_id = sae_professor_groups.sae_subject_id 
+                                            JOIN professors ON sae_professor_groups.professor_id = professors.professor_id 
+                                            WHERE professors.professor_id = :professor_id');
+        $stmt->execute(['professor_id' => $userId]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    protected function createSAE(PDO $connection, int $clientid, string $name, string $begindate, string $enddate, int $userId):void {
+         $stmt = $connection->prepare(
+            'INSERT INTO sae_subjects(responsible_prof_id, client_id, subject_name, begin_date, end_date)
+            VALUES
+            (:responsible_prof_id, :client_id, :subject_name, STR_TO_DATE(:begin_date, "%M %d %Y"), STR_TO_DATE(:end_date, "%M %d %Y"));'
+        );
+        $stmt->execute(
+            [
+                'responsible_prof_id' => $userId,
+                'client_id' => $clientid,
+                'subject_name' => $name,
+                'begin_date' => $begindate,
+                'end_date' => $enddate
+            ]
+            );
+    }
+
+    protected function updateSAE(PDO $connection, \SAE $sae, Array $data):void {
+        $saedata = $sae->getDataArray();
+        for($i=0;$i<count($data);$i++){
+            if($data[$i] == Null){
+                $data[$i] = $saedata[$i];
+            }
+        }
+        $stmt = $connection->prepare('UPDATE sae_subjects 
+                                    SET sae_subject_id = sae_subject_id, responsible_prof_id = :responsible_prof_id, client_id = :client_id,
+                                        subject_name = :subject_name, begin_date = :begin_date, end_date = :end_date
+                                    WHERE sae_subject_id = :sae_subject_id;');
+        $stmt->execute(
+            [
+                'sae_subject_id' => $sae->getSaeSubjectId(),
+                'responsible_prof_id' => $data['responsible_prof_id'],
+                'client_id' => $data['client_id'],
+                'subject_name' => $data['subject_name'],
+                'begin_date' => $data['begin_date'],
+                'end_date' => $data['end_date']
+            ]
+            );
+        }
+
     // -----------------
     // Getters
     // -----------------
@@ -99,7 +150,7 @@ class Professor extends User
      *
      * @return string
      */
-    public function getAmuId(): string
+    protected function getAmuId(): string
     {
         return $this->amu_id;
     }
