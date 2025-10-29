@@ -315,6 +315,15 @@ abstract class User
         }
     }
 
+    /**
+     * Abstract method to fetch the SAE infos from the Database
+     * @param PDO $connection   The database connection
+     * @param int $userId       The user's id
+     *
+     * @return void
+     */
+    abstract protected function fetchSAEData(PDO $connection, int $userId): Array;
+
     // -----------------
     // Getters
     // -----------------
