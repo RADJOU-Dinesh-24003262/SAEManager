@@ -138,6 +138,25 @@ jobs:
           publish_branch: gh-pages
           force_orphan: true
 
+      # Update UML in asset/UML
+      - name : Update UML diagram
+        run: |
+          composer require --dev smeghead/php-class-diagram
+          sudo apt-get install -y default-jre graphviz
+          wget https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+          vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+          java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
+          echo "UML diagram generated successfully"
+
+      - name: Commit UML changes
+        if: steps.changed_files.outputs.has_changes == 'true' && github.event_name == 'push'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add assets/UML/
+          git diff --staged --quiet || git commit -m "chore: update UML diagrams [skip ci]"
+          git push || echo "No changes to commit"
+
       # Summary
       - name: Quality Summary
         if: always()
