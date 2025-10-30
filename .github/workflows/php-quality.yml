@@ -1,11 +1,5 @@
 name: PHP Quality Checks and Push Documentation
 
-on:
-  push:
-    branches: [ dev, develop ]
-  pull_request:
-    branches: [ dev, develop ]
-
 # Add permissions for gh-pages
 permissions:
   contents: write
