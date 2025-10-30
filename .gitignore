@@ -7,3 +7,5 @@ _assets/includes/my_settings.ini
 .phpunit*
 coverage/
 coverage.xml
+
+composer.lock

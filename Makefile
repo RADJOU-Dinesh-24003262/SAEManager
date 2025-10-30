@@ -54,6 +54,12 @@ phpdoc: ## Vérifie la documentation
 	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors App/src/
 	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors Core/
 
+generate-uml: ## Génère les diagrammes de classes
+	@echo "${YELLOW}Génération des diagrammes de classes...${NC}"
+	./vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+	java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
+
+
 fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
 	./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml --standard=PSR12 App/
