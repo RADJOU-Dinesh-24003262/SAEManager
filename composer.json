@@ -13,7 +13,9 @@
     "phpstan/phpstan": "^1.10",
     "phpmd/phpmd": "^2.13",
     "friendsofphp/php-cs-fixer": "^3.14",
-    "phpdocumentor/phpdocumentor": "^3.3"
+    "phpdocumentor/phpdocumentor": "^3.3",
+    "smeghead/php-class-diagram": "^1.6",
+    "jawira/plantuml": "^1.2025"
   },
   "autoload": {
     "psr-4": {
