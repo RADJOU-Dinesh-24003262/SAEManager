@@ -2,7 +2,6 @@ name: PHP Quality Checks, Documentation and UML Generation
 
 on:
   push:
-    branches: [ dev, develop ]
   pull_request:
     branches: [ dev, develop ]
 
