@@ -1,7 +1,8 @@
-name: PHP Quality Checks and Push Documentation
+name: PHP Quality Checks, Documentation and UML Generation
 
 on:
   push:
+    branches: [ dev, develop ]
   pull_request:
     branches: [ dev, develop ]
 
@@ -117,16 +118,19 @@ jobs:
 
       # Create PHPDoc Documentation Folder
       - name: Ensure docs directory exists
+        if: github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         run: mkdir -p docs/api
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
+        if: github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
 
       # Deploy PHPDoc to GitHub Pages - only when push on dev
       - name: Deploy PHPDoc to GitHub Pages
+        if: github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -136,6 +140,7 @@ jobs:
 
       # Update UML in asset/UML
       - name : Update UML diagram
+        if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           composer require --dev smeghead/php-class-diagram
           sudo apt-get install -y default-jre graphviz
@@ -145,12 +150,13 @@ jobs:
           echo "UML diagram generated successfully"
 
       - name: Commit UML changes
+        if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add asset/UML/
           git diff --staged --quiet || git commit -m "chore: update UML diagrams [skip ci]"
-          git push || echo "No changes to commit"
+          git push
 
       # Summary
       - name: Quality Summary
