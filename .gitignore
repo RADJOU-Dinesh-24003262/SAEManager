@@ -1,10 +1,8 @@
+.phpdoc*
 *.idea
 _assets/includes/my_settings.ini
-
-*.ini
+*.lock
 /vendor
-
 .phpunit*
 coverage/
 coverage.xml
-composer.lock
