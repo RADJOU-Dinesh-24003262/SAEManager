@@ -26,8 +26,13 @@ class DeleteUserController implements ControllerInterface
             $email = $user->getEmail();
             User::deleteByEmail($email);
             $view = new DeleteUserView($data);
+
+            // Clear session.
+            session_unset();     // Unset all session variables.
+            session_destroy();   // Destroy the session.
+
             $view->render();
-            header('Location /logout');
+
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage());
         }
