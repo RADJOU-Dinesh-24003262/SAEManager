@@ -35,13 +35,15 @@ class Logout implements ControllerInterface
 
         SessionService::setFlash('success', 'Vous avez été bien déconnecté de votre session');
 
+        // Clear session.
+        session_unset();     // Unset all session variables.
+        session_destroy();   // Destroy the session.
+
         // Render logout view.
         $view = new IndexView();
         $view->render();
 
-        // Clear session.
-        session_unset();     // Unset all session variables.
-        session_destroy();   // Destroy the session.
+
     }
 
     /**
