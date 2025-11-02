@@ -26,6 +26,7 @@ yearSelect.addEventListener('change', () => {
 const userTypeSelect = document.getElementById('userType');
 const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
+const amuId = document.getElementById('id').parentElement;
 
 function toggleStudentFields() {
     const isStudent = userTypeSelect.value === 'student';
@@ -43,6 +44,30 @@ function toggleStudentFields() {
         tpSelect.value = '';
     }
 }
+
+
+function toggleAmuFields(){
+    const isAmu = (userTypeSelect.value === 'student' || userTypeSelect.value === 'professor');
+    const amuIdLabel = document.querySelector('label[for="id"]');
+    const amuIdInput = document.getElementById('id');
+    const amuIdHint = document.getElementById('id-hint');
+
+    if (isAmu) {
+        amuIdLabel.style.display = 'block';
+        amuIdInput.style.display = 'block';
+        amuIdHint.style.display = 'block';
+        amuIdInput.required = true;
+    } else {
+        amuIdLabel.style.display = 'none';
+        amuIdInput.style.display = 'none';
+        amuIdHint.style.display = 'none';
+        amuIdInput.required = false;
+        amuIdInput.value = '';
+    }
+
+}
+
+
 const pwd = document.getElementById('password');
 const pwdverif = document.getElementById('passwordverif');
 
@@ -62,3 +87,4 @@ toggleStudentFields();
 
 // Apply on each status change
 userTypeSelect.addEventListener('change', toggleStudentFields);
+userTypeSelect.addEventListener('change', toggleAmuFields);

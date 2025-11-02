@@ -46,7 +46,7 @@ abstract class FormValidator
     {
         $errors = [];
         foreach ($this->required as $field) {
-            if (empty($data[$field])) {
+            if (empty($data[$field]) && $data[$field] !== $data['amu_id']) {
                 $errors[] = new ExceptionValidationEmpty($field);
             } else {
                 $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
