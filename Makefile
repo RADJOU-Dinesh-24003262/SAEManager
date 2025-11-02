@@ -56,7 +56,9 @@ phpdoc: ## Vérifie la documentation
 
 generate-uml: ## Génère les diagrammes de classes
 	@echo "${YELLOW}Génération des diagrammes de classes...${NC}"
-	./vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+	./vendor/bin/php-class-diagram --exclude='Validator' \
+	--svg-topurl='https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src' \
+	App/src  > asset/UML/class-diagram.puml
 	java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
 
 
