@@ -56,3 +56,9 @@ Le client souhaite un développement itératif. On priorise un **MVP (Minimum Vi
 - Identifiants de connexion (site/base de données).  
 - Liste des sources utilisées (y compris les IA).  
 - Présentation orale (démonstration du projet).  
+
+
+
+## Diagramme UML
+
+[Diagramme de classe du projet](hyper-media.html)

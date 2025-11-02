@@ -144,7 +144,9 @@ jobs:
           composer require --dev smeghead/php-class-diagram
           sudo apt-get install -y default-jre graphviz
           wget https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
-          vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+          ./vendor/bin/php-class-diagram --exclude='Validator' \
+          --svg-topurl='https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src' \
+          App/src  > asset/UML/class-diagram.puml
           java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
           echo "UML diagram generated successfully"
 
@@ -154,7 +156,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add asset/UML/
-          git diff --staged --quiet || git commit -m "chore: update UML diagrams [skip ci]"
+          git diff --staged --quiet || git commit -m "chore: update UML diagrams"
           git push
 
       # Summary
