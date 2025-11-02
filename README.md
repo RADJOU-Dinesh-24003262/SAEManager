@@ -62,3 +62,50 @@ Le client souhaite un développement itératif. On priorise un **MVP (Minimum Vi
 ## Diagramme UML
 
 [Diagramme de classe du projet](hyper-media.html)
+
+
+## Tableau des cas d'utilisations
+
+| | Client  | Student | Teacher | New customer |
+|-|-|-|-|-|
+| Accès aux SAE | ✅ | ✅ | ✅ | ❌ |
+| Contacter les membres | ✅ | ✅ | ✅ | ❌ |
+| Suivre Progression | ✅ | ✅ | ✅  | ❌ |
+| Attribuer SAE | ❌ | ❌ | ✅ | ❌ |
+| Créer SAE |  ❌ | ❌ | ✅ | ❌ |
+| Authentification | ❌ | ❌ | ❌ | ✅ |
+
+## Diagramme de cas
+``` mermaid
+flowchart LR
+  rW["👤 Web Customer"]:::role
+  rR["👤 Registered Customer"]:::role
+  rN["👤 New Customer"]:::role
+  rM["👤 << service >> Mail Server"]:::role
+
+  subgraph S["SAEManager"]
+    ucVS([View SAE])
+    ucCM([Contact Members of the group])
+    ucFP([Follow Progress of the group])
+    ucAS([Attribute Students to SAE])
+    ucCS([Create SAE])
+    ucA([Authentification])
+    ucSM([Send Mail to Students])
+    ucCM -. include .-> ucSM
+    ucAS -. inlude .-> ucSM
+
+  end
+  
+
+  rW --- rR
+  rW --- rN
+  rR --- ucVS
+  rR --- ucCM
+  rR --- ucFP
+  rR --- ucAS
+  rR --- ucCS
+
+  rN --- ucA
+
+  ucSM --- rM
+``` 
