@@ -6,6 +6,7 @@ use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use hoge\fuga\product\Exception;
 use PDO;
 use PDOException;
 
@@ -312,6 +313,24 @@ abstract class User
         } catch (PDOException $e) {
             error_log('Erreur mise à jour mot de passe : ' . $e->getMessage());
             throw new ExceptionPasswordUpdateFailed('Erreur lors de la mise à jour du mot de passe.');
+        }
+    }
+
+
+    public static function deleteByEmail(string $email): void
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
+
+            $stmt->execute(['email' => $email]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new Exception('Aucun utilisateur trouvé avec cet email.');
+            }
+        } catch (PDOException $e) {
+            error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
+            throw new Exception('Erreur lors de la suppression du compte utilisateur.');
         }
     }
 
