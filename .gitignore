@@ -7,3 +7,4 @@ _assets/includes/my_settings.ini
 .phpunit*
 coverage/
 coverage.xml
+.php-cs-fixer.cache

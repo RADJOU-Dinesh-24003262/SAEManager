@@ -1,6 +1,7 @@
 <?php
 
 // phpcs:disable
+// App/tests/bootstrap.php
 
 /**
  * PHPUnit Bootstrap File
@@ -11,12 +12,14 @@ error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 // Define application environment
+putenv('APP_ENV=testing');
 define('APP_ENV', 'testing');
+
 
 // Load Composer autoloader
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Load Special AUtoloader for the tests
+// Load Special Autoloader for the tests
 spl_autoload_register(function ($class) {
     $file = 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
     str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
