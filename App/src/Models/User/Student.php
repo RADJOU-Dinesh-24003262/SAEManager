@@ -59,14 +59,14 @@ class Student extends User
     /**
      * The SAE group ID of the student.
      *
-     * @var int
+     * @var integer
      */
     protected int $sae_group_id;
 
     /**
      * The student ID.
      *
-     * @var int
+     * @var integer
      */
 
     protected int $student_id;
@@ -144,8 +144,8 @@ class Student extends User
     /**
      * Fetches the SAE subjects and group data for the student.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The student's user ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The student's user ID.
      *
      * @return array An array of SAE data (subject and group information).
      */
@@ -165,14 +165,14 @@ class Student extends User
      *
      * @param PDO $connection The database connection.
      *
-     * @return array An array of ToDo list items.
+     * @return array An array of Todo items.
      */
-    protected function getToDoList(PDO $connection): array // Modifié le type de retour de void à Array
+    protected function getToDoList(PDO $connection): array
     {
         $stmt = $connection->prepare('SELECT * FROM sae_todolists
-                                            WHERE sae_group_id = :sae_group_id'); // Correction de la clause WHERE
+                                            WHERE sae_group_id = :sae_group_id');
         $stmt->execute(['sae_group_id' => $this->sae_group_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Ajout du retour des données
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -197,9 +197,9 @@ class Student extends User
     /**
      * Updates the status (checked/unchecked) of a specific ToDo item.
      *
-     * @param PDO  $connection The database connection.
-     * @param int  $todoId     The ID of the ToDo item to update.
-     * @param bool $checked    The new checked status (true for checked, false for unchecked).
+     * @param PDO     $connection The database connection.
+     * @param integer $todoId     The ID of the ToDo item to update.
+     * @param boolean $checked    The new checked status (true for checked, false for unchecked).
      *
      * @return void
      */
