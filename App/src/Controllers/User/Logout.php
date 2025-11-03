@@ -28,16 +28,19 @@ class Logout implements ControllerInterface
     {
         // Redirect to login page if user is not logged in.
         if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Veuillez vous connecter d\'abord']);
-            header('Location: /login');
+            header('Location: /');
             exit();
         }
 
         SessionService::setFlash('success', 'Vous avez été bien déconnecté de votre session');
 
+        // Unset User session
+        SessionService::remove('user_id');
+
         // Render logout view.
         $view = new IndexView();
         $view->render();
+
 
         // Clear session.
         session_unset();     // Unset all session variables.

@@ -115,6 +115,12 @@ abstract class FormValidator
             && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
     }
 
+
+    protected function isValidAmuId(string $amu_id): bool
+    {
+        return (bool) preg_match('/^[a-zA-ZÀ-ÿ\-\'][0-9]{8,}$/', $amu_id);
+    }
+
     /**
      * Returns the validity of the password field
      *
