@@ -23,6 +23,7 @@ use Controllers\User\Logout;
 use Controllers\SaeSujet\SaeSujetController;
 use Controllers\Profile\ProfileController;
 use Controllers\Profile\DeleteUserController;
+use Controllers\ToDoList\ToDoListPost;
 
 // List of available controllers.
 $controllers = [
@@ -44,6 +45,7 @@ $controllers = [
     new DashboardController(),
     new ProfileController(),
     new DeleteUserController()
+    new ToDoListPost()
 ];
 
 // Automatic routing.

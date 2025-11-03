@@ -309,6 +309,9 @@
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
+  Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
+  Controllers_ToDoList_ToDoListPost ..> Validator_ToDoListValidator
+  Controllers_ToDoList_ToDoListPost ..> Views_ToDoList_ToDoListView
   Controllers_User_Login ..> Views_User_LoginView
   Controllers_User_LoginPost ..> Models_User_User
   Controllers_User_LoginPost ..> Views_User_LoginView
@@ -324,6 +327,8 @@
   Controllers_pwd_ResetPasswordPostController ..> Models_User_User
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Models_SAE_SAE ..> Models_SAE_SAE
+  Models_User_Professor ..> Models_SAE_SAE
   Models_User_User ..> Models_User_Client
   Models_User_User ..> Models_User_Professor
   Models_User_User ..> Models_User_Student

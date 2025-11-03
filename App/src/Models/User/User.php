@@ -333,6 +333,15 @@ abstract class User
             throw new Exception('Erreur lors de la suppression du compte utilisateur.');
         }
     }
+    /**
+     * Abstract method to fetch the SAE infos from the Database.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The user's id.
+     *
+     * @return array
+     */
+    abstract protected function fetchSAEData(PDO $connection, int $userId): array;
+
 
     // -----------------
     // Getters
