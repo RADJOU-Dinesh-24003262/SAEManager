@@ -1,0 +1,160 @@
+/* --- Principal Band --- */
+.presentation_SAE {
+    display: flex;
+    align-items: center;
+    background-color: #3b003b; /* Dark Purple */
+    height: 150px;
+    position: relative;
+    color: white;
+    overflow: hidden;
+}
+
+/* --- White Circle --- */
+.num_resource {
+    background-color: white;
+    color: black;
+    font-weight: 700;
+    font-size: 2em;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    bottom: -90px; /*half of the circle */
+    left: 50px;
+}
+
+/* --- Title next to the circle --- */
+.presentation_SAE h1:nth-of-type(2) {
+    color: white;
+    margin-left: 260px;
+    font-weight: 700;
+    font-size: 1.5em;
+}
+
+/* --- Main container --- */
+.main_functionnality {
+  display: flex;
+  flex-direction: row; /* côte à côte */
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 100px;
+  gap: 60px;
+  padding: 0 50px;
+}
+
+/* --- Menu (Left Sidebar) --- */
+.menu_functionnality {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+    width: 250px;
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-shrink: 0; /* Prevents the menu from shrinking */
+}
+
+.menu_functionnality li {
+    margin-bottom: 15px;
+}
+
+.menu_functionnality h2 {
+    font-size: 1.4em;
+    color: #3b003b;
+    border-bottom: 2px solid #3b003b;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.menu_functionnality a {
+    margin: 10px 0;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu_functionnality h3:hover {
+    color: #3b003b;
+}
+
+#to-do-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* --- To-Do List Section --- */
+#to-do-list li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #3b003b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+#to-do-list li.completed {
+    border-left-color: #28a745;
+    background-color: #e8f5e8;
+}
+
+#to-do-list li:hover {
+    background-color: #f1f1f1;
+}
+
+.task-description {
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+#to-do-list button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#to-do-list button:hover {
+    background-color: #0056b3;
+}
+
+#to-do-list button.delete-btn {
+    background-color: #dc3545;
+}
+
+#to-do-list button.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.add-task-form {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.add-task-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    width: 300px;
+    margin-right: 10px;
+}
+
+.add-task-form button {
+    padding: 10px 20px;
+}

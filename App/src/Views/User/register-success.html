@@ -1,0 +1,25 @@
+<main class="success-page">
+    <h2>Inscription réussie ! ✓ </h2>
+    
+    <section class="user-info">
+        <h3>Bienvenue {{USER_FULL_NAME}} !</h3>
+        <p><strong>Email :</strong> {{USER_EMAIL}}</p>
+        <p><strong>Statut :</strong> {{USER_TYPE_LABEL}}</p>
+        
+        {{ACADEMIC_INFO}}
+    </section>
+
+    <section class="next-steps">
+        <h4>Prochaines étapes :</h4>
+        <ol>
+            <li>Vérifiez votre adresse email pour activer votre compte</li>
+            <li>Connectez-vous avec vos identifiants</li>
+            <li>Explorez les fonctionnalités SAEManager</li>
+        </ol>
+    </section>
+
+    <section class="action-buttons">
+        <a href="/login" class="btn btn-primary">Se connecter</a>
+        <a href="/" class="btn btn-secondary">Accueil</a>
+    </section>
+</main>

@@ -1,8 +1,8 @@
 parameters:
   level: 8
   paths:
-    - modules/
-    - _assets
+    - App/src/
+    - Core/
   
   excludePaths:
     - */vendor/*
