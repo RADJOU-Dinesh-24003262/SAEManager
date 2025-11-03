@@ -49,14 +49,14 @@ class ResetPasswordPostController implements ControllerInterface
             $password = $data['pwdnew'] ?? '';
 
             // 3. Update the password.
-            User::updatePasswordByEmail($tokenData['user_email'], $password);
+            User::updatePasswordByEmail($tokenData['email'], $password);
 
             // Mark the token as used.
             TokenService::markTokenAsUsed($token);
 
             // 5. Render the success page.
             (new ResetPasswordSuccessView())->render();
-            error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData['user_email']);
+            error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData['email']);
             return;
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
@@ -68,7 +68,7 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
-        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['user_email'] ?? null);
+        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email'] ?? null);
     }
 
     /**

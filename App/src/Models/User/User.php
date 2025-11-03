@@ -5,6 +5,7 @@ namespace Models\User;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionBD\ExceptionuserNotFoundInBd;
+use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use PDO;
@@ -288,7 +289,7 @@ abstract class User
      *
      * @return void
      *
-     * @throws ExceptionDeleteUserFailed If the password update fails.
+     * @throws ExceptionPasswordUpdateFailed If the password update fails.
      */
     public static function updatePasswordByEmail(string $email, string $newPassword): void
     {
@@ -308,10 +309,11 @@ abstract class User
             );
 
             if ($stmt->rowCount() === 0) {
-                throw new ExceptionDeleteUserFailed('Aucun utilisateur trouvé avec cet email.');
+                throw new ExceptionPasswordUpdateFailed('Aucun utilisateur trouvé avec cet email.');
             }
         } catch (PDOException $e) {
             error_log('Erreur mise à jour mot de passe : ' . $e->getMessage());
+            throw new ExceptionPasswordUpdateFailed('Erreur lors de la mise à jour du mot de passe.');
         }
     }
 

@@ -6,7 +6,6 @@ use Core;
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
-use Views\Dashboard\DashboardView;
 use Core\includes\exception;
 use Views\Profile\ProfileView;
 
