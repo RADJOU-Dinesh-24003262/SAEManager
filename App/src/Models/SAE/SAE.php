@@ -1,5 +1,7 @@
 <?php
 
+namespace Models\SAE;
+
 /**
  * Represents a SAE (Situations d'Apprentissage et d'Évaluation) subject in the system.
  *
@@ -15,8 +17,8 @@
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 
-class SAE {
-
+class SAE
+{
     /**
      * The unique identifier for the SAE subject.
      * @var int
@@ -59,7 +61,8 @@ class SAE {
      * @param array $data An array containing the SAE data, typically fetched from the database:
      * [sae_subject_id, responsible_prof_id, client_id, subject_name, begin_date, end_date]
      */
-    function __construct(Array $data) {
+    public function __construct(array $data)
+    {
         $this->sae_subject_id = $data[0];
         $this->responsible_prof_id = $data[1];
         $this->client_id = $data[2];
@@ -75,7 +78,8 @@ class SAE {
      *
      * @return array An array of SAE objects.
      */
-    public function createSAEsFromArray(Array $saes):Array{
+    public function createSAEsFromArray(array $saes): array
+    {
         $result = [];
         foreach ($saes as $sae) {
             $result[] = new SAE($sae);
@@ -88,7 +92,8 @@ class SAE {
      *
      * @return array The SAE properties in the order: [id, prof_id, client_id, name, begin_date, end_date].
      */
-    public function getDataArray():Array{
+    public function getDataArray(): array
+    {
         return[
             $this->sae_subject_id,
             $this->responsible_prof_id,
@@ -235,5 +240,4 @@ class SAE {
     {
         $this->end_date = $end_date;
     }
-
 }
