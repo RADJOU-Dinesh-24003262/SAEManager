@@ -93,8 +93,8 @@ class Client extends User
     /**
      * Fetches the SAE subjects proposed by this client.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The client's user ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The client's user ID.
      *
      * @return array An array of SAE subjects data.
      */
