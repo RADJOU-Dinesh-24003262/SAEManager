@@ -17,6 +17,7 @@ use PDO;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @extends User
  */
 class Client extends User
 {
@@ -55,8 +56,8 @@ class Client extends User
 
         $stmt->execute(
             [
-            'client_id' => $userId,
-            'organisation' => $this->organisation,
+                'client_id' => $userId,
+                'organisation' => $this->organisation,
             ]
         );
     }
@@ -90,9 +91,17 @@ class Client extends User
         }
     }
 
+    /**
+     * Fetches the SAE subjects proposed by this client.
+     *
+     * @param PDO $connection The database connection.
+     * @param int $userId     The client's user ID.
+     *
+     * @return array An array of SAE subjects data.
+     */
     protected function fetchSAEData(PDO $connection, int $userId): Array
     {
-        $stmt = $connection->prepare('SELECT * FROM SAE_subjects 
+        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
                                             WHERE client_id = :client_id');
         $stmt->execute(['client_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
