@@ -4,9 +4,9 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
-use Core\includes\exception\ExceptionPasswordUpdateFailed;
+use Core\includes\exception\ExceptionBD\ExceptionuserNotFoundInBd;
+use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use hoge\fuga\product\Exception;
 use PDO;
 use PDOException;
 
@@ -288,7 +288,7 @@ abstract class User
      *
      * @return void
      *
-     * @throws ExceptionPasswordUpdateFailed If the password update fails.
+     * @throws ExceptionDeleteUserFailed If the password update fails.
      */
     public static function updatePasswordByEmail(string $email, string $newPassword): void
     {
@@ -308,11 +308,10 @@ abstract class User
             );
 
             if ($stmt->rowCount() === 0) {
-                throw new ExceptionPasswordUpdateFailed('Aucun utilisateur trouvé avec cet email.');
+                throw new ExceptionDeleteUserFailed('Aucun utilisateur trouvé avec cet email.');
             }
         } catch (PDOException $e) {
             error_log('Erreur mise à jour mot de passe : ' . $e->getMessage());
-            throw new ExceptionPasswordUpdateFailed('Erreur lors de la mise à jour du mot de passe.');
         }
     }
 
@@ -326,11 +325,11 @@ abstract class User
             $stmt->execute(['email' => $email]);
 
             if ($stmt->rowCount() === 0) {
-                throw new Exception('Aucun utilisateur trouvé avec cet email.');
+                throw new ExceptionDeleteUserFailed();
             }
         } catch (PDOException $e) {
             error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new Exception('Erreur lors de la suppression du compte utilisateur.');
+            throw new ExceptionuserNotFoundInBd();
         }
     }
     /**

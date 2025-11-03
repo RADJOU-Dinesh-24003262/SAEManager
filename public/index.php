@@ -44,7 +44,7 @@ $controllers = [
     new SaeSujetController(),
     new DashboardController(),
     new ProfileController(),
-    new DeleteUserController()
+    new DeleteUserController(),
     new ToDoListPost()
 ];
 
