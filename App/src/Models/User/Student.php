@@ -18,7 +18,6 @@ use PDO;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- * @extends User
  */
 class Student extends User
 {
@@ -150,7 +149,7 @@ class Student extends User
      *
      * @return array An array of SAE data (subject and group information).
      */
-    protected function fetchSAEData(PDO $connection, int $userId): Array
+    protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare('SELECT * FROM SAE_subjects
                                             JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
@@ -168,7 +167,7 @@ class Student extends User
      *
      * @return array An array of ToDo list items.
      */
-    protected function getToDoList(PDO $connection): Array // Modifié le type de retour de void à Array
+    protected function getToDoList(PDO $connection): array // Modifié le type de retour de void à Array
     {
         $stmt = $connection->prepare('SELECT * FROM sae_todolists
                                             WHERE sae_group_id = :sae_group_id'); // Correction de la clause WHERE

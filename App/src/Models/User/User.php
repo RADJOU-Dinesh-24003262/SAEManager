@@ -322,7 +322,7 @@ abstract class User
      *
      * @return void
      */
-    abstract protected function fetchSAEData(PDO $connection, int $userId): Array;
+    abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
     // -----------------
     // Getters

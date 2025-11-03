@@ -3,6 +3,7 @@
 namespace Models\User;
 
 use PDO;
+use Models\SAE\SAE;
 
 /**
  * Représente un utilisateur de type professeur dans le système.
@@ -114,11 +115,13 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function fetchSAEData(PDO $connection, int $userId): Array
+    protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare('SELECT * FROM SAE_subjects
-                                            JOIN sae_professor_groups on SAE_subjects.sae_subject_id = sae_professor_groups.sae_subject_id
-                                            JOIN professors ON sae_professor_groups.professor_id = professors.professor_id
+                                            JOIN sae_professor_groups on
+                                                SAE_subjects.sae_subject_id = sae_professor_groups.sae_subject_id
+                                            JOIN professors on
+                                                sae_professor_groups.professor_id = professors.professor_id
                                             WHERE professors.professor_id = :professor_id');
         $stmt->execute(['professor_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -141,11 +144,19 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function createSAE(PDO $connection, int $clientid, string $name, string $begindate, string $enddate, int $userId): void {
+    protected function createSAE(
+        PDO $connection,
+        int $clientid,
+        string $name,
+        string $begindate,
+        string $enddate,
+        int $userId
+    ): void {
         $stmt = $connection->prepare(
-            'INSERT INTO sae_subjects(responsible_prof_id, client_id, subject_name, begin_date, end_date)
-            VALUES
-            (:responsible_prof_id, :client_id, :subject_name, STR_TO_DATE(:begin_date, "%M %d %Y"), STR_TO_DATE(:end_date, "%M %d %Y"));'
+            'INSERT INTO sae_subjects
+                (responsible_prof_id, client_id, subject_name, begin_date, end_date) VALUES
+            (:responsible_prof_id, :client_id, :subject_name, STR_TO_DATE(:begin_date, "%M %d %Y"),
+            STR_TO_DATE(:end_date, "%M %d %Y"));'
         );
         $stmt->execute(
             [
@@ -173,15 +184,17 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function updateSAE(PDO $connection, \SAE $sae, array $data): void {
+    protected function updateSAE(PDO $connection, SAE $sae, array $data): void
+    {
         $saedata = $sae->getDataArray();
-        for($i=0;$i<count($data);$i++){
-            if($data[$i] == Null){
+        for ($i = 0; $i < count($data); $i++) {
+            if ($data[$i] == null) {
                 $data[$i] = $saedata[$i];
             }
         }
         $stmt = $connection->prepare('UPDATE sae_subjects
-                                    SET sae_subject_id = sae_subject_id, responsible_prof_id = :responsible_prof_id, client_id = :client_id,
+                                    SET sae_subject_id = sae_subject_id,
+                                        responsible_prof_id = :responsible_prof_id, client_id = :client_id,
                                         subject_name = :subject_name, begin_date = :begin_date, end_date = :end_date
                                     WHERE sae_subject_id = :sae_subject_id;');
         $stmt->execute(
@@ -209,7 +222,8 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution des requêtes.
      */
-    protected function createGroup(PDO $connection, int $saeID): int {
+    protected function createGroup(PDO $connection, int $saeID): int
+    {
         $stmt = $connection->prepare('INSERT INTO SAE_groups(sae_subject_id)
                                     VALUES (:sae_subject_id);');
         $stmt->execute(
@@ -240,7 +254,8 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function assignedSAE(PDO $connection, int $groupId, int $student): void {
+    protected function assignedSAE(PDO $connection, int $groupId, int $student): void
+    {
         $stmt = $connection->prepare('UPDATE students
                                     SET sae_group_id = :sae_group_id
                                     WHERE student_id = :student_id;');
@@ -265,7 +280,8 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function removeProfFromSae(PDO $connection, int $saeID, int $profID): void {
+    protected function removeProfFromSae(PDO $connection, int $saeID, int $profID): void
+    {
         $stmt = $connection->prepare('DELETE FROM sae_professor_groups
                                     WHERE sae_subject_id = :sae_subject_id
                                     AND professor_id = :professor_id;');
@@ -288,7 +304,8 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function addProfToSae(PDO $connection, int $saeID, int $profID): void {
+    protected function addProfToSae(PDO $connection, int $saeID, int $profID): void
+    {
         $stmt = $connection->prepare('INSERT INTO sae_professor_groups(sae_subject_id, professor_id)
                                     VALUES (:sae_subject_id, :professor_id);');
         $stmt->execute(
@@ -310,14 +327,15 @@ class Professor extends User
      *
      * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
      */
-    protected function unassignedSAE(PDO $connection, \SAE $sae, int $student): void {
+    protected function unassignedSAE(PDO $connection, SAE $sae, int $student): void
+    {
         $stmt = $connection->prepare('UPDATE students
                                     SET sae_group_id = :sae_subject_id
                                     WHERE student_id = :student_id;');
         $stmt->execute(
             [
                 'sae_group_id' => $sae->getSaeSubjectId(),
-                'student_id' => Null
+                'student_id' => null
             ]
         );
     }
