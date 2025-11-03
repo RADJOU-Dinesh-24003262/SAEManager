@@ -12,8 +12,9 @@ use PDOException;
  * Handles the connection between the application and the database using PDO.
  * Implements the Singleton pattern to ensure a single instance of the database connection.
  *
- * Provides support for dynamic test databases in testing mode with full schema initialization
- * and example seed data.
+ * Provides support for dynamic test databases:
+ * - SQLite in-memory for local testing
+ * - PostgreSQL for CI/CD environments
  *
  * @category Database_Connection
  * @package  Core\includes
@@ -41,7 +42,7 @@ class Database extends PDO
      * Database constructor.
      *
      * Reads database configuration from an INI file and initializes the PDO connection.
-     * In testing mode, a dynamic test database is created automatically.
+     * In testing mode, uses SQLite in-memory by default or PostgreSQL if configured.
      *
      * @param string $file Path to the configuration INI file.
      * @throws Exception If the configuration file cannot be read or connection fails.
@@ -50,7 +51,13 @@ class Database extends PDO
     {
         // --- Test mode ---
         if (getenv('APP_ENV') === 'testing') {
-            $this->createDynamicTestDatabase();
+            // Check if PostgreSQL is available (CI environment).
+            if ($this->isPostgreSQLAvailable()) {
+                $this->createDynamicTestDatabase();
+            } else {
+                // Use SQLite for local testing.
+                $this->createSQLiteTestDatabase();
+            }
             return;
         }
 
@@ -100,6 +107,48 @@ class Database extends PDO
     }
 
     /**
+     * Check if PostgreSQL is available and accepting connections.
+     *
+     * @return boolean True if PostgreSQL is available, false otherwise.
+     */
+    private function isPostgreSQLAvailable(): bool
+    {
+        $rootUser = getenv('DB_USER') ?: 'postgres';
+        $rootPass = getenv('DB_PASS') ?: 'postgres';
+        $rootHost = getenv('DB_HOST') ?: 'localhost';
+        $rootPort = getenv('DB_PORT') ?: 5432;
+
+        try {
+            $rootDsn = "pgsql:host=$rootHost;port=$rootPort;dbname=postgres";
+            $pdo = new PDO($rootDsn, $rootUser, $rootPass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Creates an SQLite in-memory database for local testing.
+     *
+     * @return void
+     * @throws Exception If the database creation or schema initialization fails.
+     */
+    private function createSQLiteTestDatabase(): void
+    {
+        try {
+            // Use in-memory SQLite database.
+            parent::__construct('sqlite::memory:');
+            $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // Initialize the database schema for SQLite.
+            $this->initializeSQLiteSchema();
+        } catch (PDOException $e) {
+            throw new Exception('SQLite test database creation failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Dynamically creates a PostgreSQL test database with full schema and seed data.
      *
      * @return void
@@ -128,20 +177,112 @@ class Database extends PDO
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             // Initialize the database schema dynamically.
-            $this->initializeSchema();
+            $this->initializePostgreSQLSchema();
         } catch (PDOException $e) {
             throw new Exception('Dynamic test database creation failed: ' . $e->getMessage());
         }
     }
 
     /**
-     * Initializes the database schema dynamically (no external SQL file required)
-     * and inserts example seed data.
+     * Initializes the SQLite database schema (adapted from PostgreSQL schema).
      *
      * @return void
      * @throws PDOException If schema creation fails.
      */
-    private function initializeSchema(): void
+    private function initializeSQLiteSchema(): void
+    {
+        $schemaSql = <<<SQL
+        CREATE TABLE users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            phone TEXT NOT NULL,
+            hashed_password TEXT NOT NULL,
+            user_type TEXT NOT NULL CHECK(user_type IN ('0', '1', '2'))
+        );
+
+        CREATE TABLE clients (
+            client_id INTEGER PRIMARY KEY,
+            organisation TEXT NOT NULL,
+            FOREIGN KEY (client_id) REFERENCES users(user_id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE professors (
+            professor_id INTEGER PRIMARY KEY,
+            amu_id TEXT NOT NULL,
+            FOREIGN KEY (professor_id) REFERENCES users(user_id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE sae_subjects (
+            sae_subject_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            responsible_prof_id INTEGER NOT NULL REFERENCES professors(professor_id) ON DELETE CASCADE,
+            client_id INTEGER NOT NULL REFERENCES clients(client_id) ON DELETE CASCADE,
+            subject_name TEXT NOT NULL,
+            begin_date DATE NOT NULL,
+            end_date DATE NOT NULL
+        );
+
+        CREATE TABLE sae_groups (
+            sae_group_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE
+        );
+
+        CREATE TABLE students (
+            student_id INTEGER PRIMARY KEY REFERENCES users(user_id) ON DELETE CASCADE,
+            amu_id TEXT NOT NULL,
+            major TEXT,
+            course TEXT,
+            year INTEGER NOT NULL,
+            td TEXT NOT NULL,
+            tp TEXT NOT NULL,
+            sae_group_id INTEGER REFERENCES sae_groups(sae_group_id)
+        );
+
+        CREATE TABLE competences (
+            competence_name TEXT NOT NULL,
+            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
+            PRIMARY KEY (competence_name, sae_subject_id)
+        );
+
+        CREATE TABLE sae_professor_groups (
+            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
+            professor_id INTEGER NOT NULL REFERENCES professors(professor_id) ON DELETE CASCADE,
+            PRIMARY KEY (sae_subject_id, professor_id)
+        );
+
+        CREATE TABLE sae_todolists (
+            todoid INTEGER PRIMARY KEY AUTOINCREMENT,
+            sae_group_id INTEGER REFERENCES sae_groups(sae_group_id),
+            tododesc TEXT
+        );
+
+        CREATE TABLE password_resets (
+            email TEXT NOT NULL REFERENCES users(email),
+            token TEXT PRIMARY KEY,
+            created_at TEXT NOT NULL,
+            expires_at TEXT NOT NULL,
+            used INTEGER NOT NULL
+        );
+
+        -- Example seed data
+        INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
+        VALUES ('azerty', 'azerty', 'azerty.azerty@etu.univ-amu.fr', '0689879878', 'fake_hash', '0');
+
+        INSERT INTO students (student_id, amu_id, major, course, year, td, tp)
+        VALUES (1, 'azerty', NULL, NULL, 1, 'TD1', 'TPA');
+        SQL;
+
+        $this->exec($schemaSql);
+    }
+
+    /**
+     * Initializes the PostgreSQL database schema dynamically.
+     *
+     * @return void
+     * @throws PDOException If schema creation fails.
+     */
+    private function initializePostgreSQLSchema(): void
     {
         $schemaSql = <<<SQL
         CREATE TYPE user_types AS ENUM ('0', '1', '2');
@@ -219,7 +360,7 @@ class Database extends PDO
             used BOOLEAN NOT NULL
         );
 
-        -- Example seed data.
+        -- Example seed data
         INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
         VALUES ('azerty', 'azerty', 'azerty.azerty@etu.univ-amu.fr', '0689879878', 'fake_hash', '0');
 

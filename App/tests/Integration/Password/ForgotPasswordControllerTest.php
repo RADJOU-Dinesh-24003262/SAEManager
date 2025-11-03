@@ -18,7 +18,6 @@ use Exception;
 use Models\User\User;
 use Validator\ForgotPasswordValidator;
 
-
 /**
  * Integration tests for Forgot Password functionality
  */
@@ -120,9 +119,9 @@ class ForgotPasswordControllerTest extends TestCase
         $_SERVER['REQUEST_METHOD'] = 'POST';
         SessionService::remove('last_forgot_password_request');
 
+        ob_start();
         $controller = new ForgotPasswordPostController();
 
-        ob_start();
         try {
             $controller->control();
         } catch (\Exception $e) {
@@ -132,8 +131,8 @@ class ForgotPasswordControllerTest extends TestCase
 
         // Should either have success or error message on the html page.
         $this->assertTrue(
-            str_contains('vous recevrez un lien de réinitialisation dans quelques minutes.', $content ?: '') ||
-            str_contains('Une erreur est survenue lors de l\'envoi de l\'email. Veuillez réessayer plus tard.', $content ?: '')
+            str_contains($content ?: '', 'vous recevrez un lien de réinitialisation dans quelques minutes.') ||
+            str_contains($content ?: '', 'Une erreur est survenue lors de l\'envoi de l\'email. Veuillez réessayer plus tard.')
         );
     }
 
@@ -144,9 +143,9 @@ class ForgotPasswordControllerTest extends TestCase
         $_SESSION['last_forgot_password_request'] = time();
         $_POST = ['email' => 'jean.dupont@etu.univ-amu.fr'];
 
-        $controller = new ForgotPasswordPostController();
-
         ob_start();
+
+        $controller = new ForgotPasswordPostController();
         $controller->control();
         $content = ob_get_clean() ?: ' ';
 
