@@ -21,19 +21,19 @@ class SAE
 {
     /**
      * The unique identifier for the SAE subject.
-     * @var int
+     * @var integer
      */
     private int $sae_subject_id;
 
     /**
      * The user ID of the responsible professor.
-     * @var int
+     * @var integer
      */
     private int $responsible_prof_id;
 
     /**
      * The user ID of the client associated with the SAE.
-     * @var int
+     * @var integer
      */
     private int $client_id;
 
@@ -58,8 +58,7 @@ class SAE
     /**
      * Constructs a new SAE object.
      *
-     * @param array $data An array containing the SAE data, typically fetched from the database:
-     * [sae_subject_id, responsible_prof_id, client_id, subject_name, begin_date, end_date]
+     * @param array $data An array containing the SAE data, typically fetched from the database.
      */
     public function __construct(array $data)
     {
@@ -112,7 +111,7 @@ class SAE
     /**
      * Gets the unique identifier for the SAE subject.
      *
-     * @return int
+     * @return integer
      */
     public function getSaeSubjectId(): int
     {
@@ -122,7 +121,7 @@ class SAE
     /**
      * Sets the unique identifier for the SAE subject.
      *
-     * @param int $sae_subject_id The SAE subject ID.
+     * @param integer $sae_subject_id The SAE subject ID.
      *
      * @return void
      */
@@ -134,7 +133,7 @@ class SAE
     /**
      * Gets the user ID of the responsible professor.
      *
-     * @return int
+     * @return integer
      */
     public function getResponsibleProfId(): int
     {
@@ -144,7 +143,7 @@ class SAE
     /**
      * Sets the user ID of the responsible professor.
      *
-     * @param int $responsible_prof_id The responsible professor's user ID.
+     * @param integer $responsible_prof_id The responsible professor's user ID.
      *
      * @return void
      */
@@ -156,7 +155,7 @@ class SAE
     /**
      * Gets the user ID of the client associated with the SAE.
      *
-     * @return int
+     * @return integer
      */
     public function getClientId(): int
     {
@@ -166,7 +165,7 @@ class SAE
     /**
      * Sets the user ID of the client associated with the SAE.
      *
-     * @param int $client_id The client's user ID.
+     * @param integer $client_id The client's user ID.
      *
      * @return void
      */
