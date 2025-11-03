@@ -92,7 +92,7 @@ flowchart LR
     ucA([Authentification])
     ucSM([Send Mail to Students])
     ucCM -. include .-> ucSM
-    ucAS -. inlude .-> ucSM
+    ucAS -. include .-> ucSM
 
   end
   
