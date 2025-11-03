@@ -178,6 +178,31 @@
     }
   }
   package Models as Models {
+    package SAE as Models.SAE {
+      class "SAE\n<b>Represents a SAE (Situations d'Apprentissage et d'Évaluation) subject in the system.</b>" as Models_SAE_SAE {
+        -sae_subject_id : integer
+        -responsible_prof_id : integer
+        -client_id : integer
+        -subject_name : string
+        -begin_date : string
+        -end_date : string
+        +__construct(data)
+        +createSAEsFromArray(saes)
+        +getDataArray()
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+        +getResponsibleProfId()
+        +setResponsibleProfId(responsible_prof_id)
+        +getClientId()
+        +setClientId(client_id)
+        +getSubjectName()
+        +setSubjectName(subject_name)
+        +getBeginDate()
+        +setBeginDate(begin_date)
+        +getEndDate()
+        +setEndDate(end_date)
+      }
+    }
     package User as Models.User {
       class "UserRepository\n<b>Class UserRepository</b>" as Models_User_UserRepository {
         -db : Database
@@ -190,13 +215,22 @@
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
-        +getAmuId()
+        #fetchSAEData(connection, userId)
+        #createSAE(connection, clientid, name, begindate, enddate, userId)
+        #updateSAE(connection, sae, data)
+        #createGroup(connection, saeID)
+        #assignedSAE(connection, groupId, student)
+        #removeProfFromSae(connection, saeID, profID)
+        #addProfToSae(connection, saeID, profID)
+        #unassignedSAE(connection, sae, student)
+        #getAmuId()
       }
       class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client {
         #organisation : string
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
+        #fetchSAEData(connection, userId)
         +getOrganisation()
       }
       class "Student\n<b>Represents a student user in the system.</b>" as Models_User_Student {
@@ -205,9 +239,15 @@
         #major : string|null
         #td : string
         #tp : string
+        #sae_group_id : integer
+        #student_id : integer
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
+        #fetchSAEData(connection, userId)
+        #getToDoList(connection)
+        #createToDoIt(connection, desc)
+        #checkToDoIt(connection, todoId, checked)
         +getAmuId()
         +getYear()
         +getParcours()
@@ -231,6 +271,7 @@
         {abstract} #fetchSpecificData(db, email)
         {static} +existsByEmail(email)
         {static} +updatePasswordByEmail(email, newPassword)
+        {abstract} #fetchSAEData(connection, userId)
         +getFirstName()
         +getLastName()
         +getFullName()
@@ -381,6 +422,8 @@
   Controllers_pwd_ResetPasswordPostController ..> Validator_ResetPasswordValidator
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Models_SAE_SAE ..> Models_SAE_SAE
+  Models_User_Professor ..> Models_SAE_SAE
   Models_User_User ..> Models_User_Client
   Models_User_User ..> Models_User_Professor
   Models_User_User ..> Models_User_Student
