@@ -141,6 +141,30 @@ class Professor extends User
             );
         }
 
+    protected function assignedSAE(PDO $connection, \SAE $sae, int $student):void{
+        $stmt = $connection->prepare('UPDATE students 
+                                    SET sae_group_id = :sae_subject_id
+                                    WHERE student_id = :student_id;');
+        $stmt->execute(
+            [
+                'sae_group_id' => $sae->getSaeSubjectId(),
+                'student_id' => $student
+            ]
+            );
+    }
+
+    protected function unassignedSAE(PDO $connection, \SAE $sae, int $student):void{
+        $stmt = $connection->prepare('UPDATE students 
+                                    SET sae_group_id = :sae_subject_id
+                                    WHERE student_id = :student_id;');
+        $stmt->execute(
+            [
+                'sae_group_id' => $sae->getSaeSubjectId(),
+                'student_id' => Null
+            ]
+        );
+    }
+
     // -----------------
     // Getters
     // -----------------

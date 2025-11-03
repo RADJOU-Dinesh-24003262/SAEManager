@@ -57,6 +57,22 @@ class Student extends User
     protected string $tp = '';
 
     /**
+     * The SAE group ID of the student.
+     *
+     * @var int
+     */
+    protected int $sae_group_id;
+
+    /**
+     * The student ID.
+     *
+     * @var int
+     */
+
+    protected int $student_id;
+
+
+    /**
      * Initializes a new student.
      *
      * @param array $data The student data.
@@ -134,6 +150,13 @@ class Student extends User
         $stmt->execute(['student_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
+    }
+
+    protected function getToDoList(PDO $connection): void
+    {
+        $stmt = $connection->prepare('SELECT * FROM sae_todolists
+                                            WHERE students.sae_group_id = :sae_group_id');
+        $stmt->execute(['sae_group_id' => $this->sae_group_id]);
     }
 
     // -----------------

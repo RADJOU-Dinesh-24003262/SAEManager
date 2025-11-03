@@ -52,8 +52,6 @@ class SAE {
         ];
     }
 
-    
-
 
     // ---------------------
     // Getters and Setters
