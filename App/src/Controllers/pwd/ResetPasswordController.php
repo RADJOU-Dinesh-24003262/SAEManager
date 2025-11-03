@@ -38,7 +38,7 @@ class ResetPasswordController implements ControllerInterface
             $tokenData = TokenService::validateToken($token);
 
             // Token is valid, render the reset password view.
-            $view = new ResetPasswordView($token, $tokenData['user_email']);
+            $view = new ResetPasswordView($token, $tokenData['email']);
             $view->render();
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', ['Erreur lors de la validation du lien: ' . $e->getMessage()]);

@@ -4,7 +4,9 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionBD\ExceptionuserNotFoundInBd;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
+use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use PDO;
 use PDOException;
@@ -315,6 +317,23 @@ abstract class User
         }
     }
 
+
+    public static function deleteByEmail(string $email): void
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
+
+            $stmt->execute(['email' => $email]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new ExceptionDeleteUserFailed();
+            }
+        } catch (PDOException $e) {
+            error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
+            throw new ExceptionuserNotFoundInBd();
+        }
+    }
     /**
      * Abstract method to fetch the SAE infos from the Database.
      * @param PDO     $connection The database connection.

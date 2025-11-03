@@ -51,19 +51,6 @@ class RegisterPost implements ControllerInterface
             // Create the user.
             $user = User::createFromRegistrationData($data);
 
-            // Save the user HAS TEMPORARILY BEEN CHANGED, OLD CODE IN COMMENT.
-            /*
-            if ($user->save()) {
-                error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
-                $view = new RegisterSuccessView($user);
-                $view->render();
-
-                return;
-            } else {
-                error_log("Erreur sauvegarde utilisateur: " . $user->getEmail());
-                throw new \Exception("Erreur lors de la sauvegarde");
-            }
-                */
             $user->save();
             error_log("Nouvel utilisateur enregistré: " . $user->getEmail());
             $view = new RegisterSuccessView($user);
@@ -74,14 +61,19 @@ class RegisterPost implements ControllerInterface
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
+            $view = new RegisterView();
+            $view->render();
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
-            SessionService::setFlash('errors', ['general' => 'Une erreur est survenu, réessayez plus tard']);
+            SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
+            $view = new RegisterView();
+            $view->render();
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
+            $view = new RegisterView();
+            $view->render();
         }
-        $view = new RegisterView();
-        $view->render();
+
     }
     /**
      * Determines whether this controller supports the given request.

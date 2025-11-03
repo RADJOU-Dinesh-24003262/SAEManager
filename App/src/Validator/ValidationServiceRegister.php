@@ -32,7 +32,7 @@ class ValidationServiceRegister extends FormValidator
      *
      * @var array
      */
-    protected $required = ['amu_id', 'first_name', 'last_name', 'user_type',
+    protected $required = ['first_name', 'last_name', 'user_type',
     'email', 'password', 'passwordverif', 'phone', 'terms'];
 
     /**
@@ -78,7 +78,7 @@ class ValidationServiceRegister extends FormValidator
         }
 
 
-        // Specific validation for students.
+        // Specific validation for user_type
         if (($data['user_type'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
@@ -108,6 +108,15 @@ class ValidationServiceRegister extends FormValidator
                 "string",
                 "Utilisez votre adresse e-mail universitaire."
             );
+        }
+
+        $errors = [];
+        if (!$this->isValidAmuId($data['amu_id'])) {
+            $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
+        }
+
+        if (empty($data['amu_id'])) {
+            $errors[] = new ExceptionValidationRegister('amu_id', 'string', "Identifiant Amu requis.");
         }
 
         if (empty($data['year'])) {
