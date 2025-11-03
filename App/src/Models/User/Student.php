@@ -57,6 +57,22 @@ class Student extends User
     protected string $tp = '';
 
     /**
+     * The SAE group ID of the student.
+     *
+     * @var integer
+     */
+    protected int $sae_group_id;
+
+    /**
+     * The student ID.
+     *
+     * @var integer
+     */
+
+    protected int $student_id;
+
+
+    /**
      * Initializes a new student.
      *
      * @param array $data The student data.
@@ -84,11 +100,11 @@ class Student extends User
 
         $stmt->execute(
             [
-            'student_id' => $userId,
-            'amu_id' => $this->amu_id,
-            'year' => $this->year,
-            'td' => $this->td,
-            'tp' => $this->tp,
+                'student_id' => $userId,
+                'amu_id' => $this->amu_id,
+                'year' => $this->year,
+                'td' => $this->td,
+                'tp' => $this->tp,
             ]
         );
     }
@@ -123,6 +139,82 @@ class Student extends User
         } else {
             throw new ExceptionFetchDataBD();
         }
+    }
+
+    /**
+     * Fetches the SAE subjects and group data for the student.
+     *
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The student's user ID.
+     *
+     * @return array An array of SAE data (subject and group information).
+     */
+    protected function fetchSAEData(PDO $connection, int $userId): array
+    {
+        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
+                                            JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
+                                            JOIN students ON SAE_groups.SAE_group_id = students.sae_group_id
+                                            WHERE students.student_id = :student_id');
+        $stmt->execute(['student_id' => $userId]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    /**
+     * Retrieves the ToDo list associated with the student's SAE group.
+     *
+     * @param PDO $connection The database connection.
+     *
+     * @return array An array of Todo items.
+     */
+    protected function getToDoList(PDO $connection): array
+    {
+        $stmt = $connection->prepare('SELECT * FROM sae_todolists
+                                            WHERE sae_group_id = :sae_group_id');
+        $stmt->execute(['sae_group_id' => $this->sae_group_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Creates a new ToDo item for the student's SAE group.
+     *
+     * @param PDO    $connection The database connection.
+     * @param string $desc       The description of the ToDo item.
+     *
+     * @return void
+     */
+    protected function createToDoIt(PDO $connection, string $desc): void
+    {
+        $stmt = $connection->prepare('INSERT INTO sae_todolists (sae_group_id, tododesc, checked)
+                                            VALUES (:sae_group_id, :description, false)');
+        $stmt->execute(
+            [
+                'sae_group_id' => $this->sae_group_id, 'description' => $desc
+            ]
+        );
+    }
+
+    /**
+     * Updates the status (checked/unchecked) of a specific ToDo item.
+     *
+     * @param PDO     $connection The database connection.
+     * @param integer $todoId     The ID of the ToDo item to update.
+     * @param boolean $checked    The new checked status (true for checked, false for unchecked).
+     *
+     * @return void
+     */
+    protected function checkToDoIt(PDO $connection, int $todoId, bool $checked): void
+    {
+        $stmt = $connection->prepare('UPDATE sae_todolists
+                                            SET checked = :checked
+                                            WHERE todo_id = :todo_id AND sae_group_id = :sae_group_id');
+        $stmt->execute(
+            [
+                'checked' => $checked,
+                'todo_id' => $todoId,
+                'sae_group_id' => $this->sae_group_id
+            ]
+        );
     }
 
     // -----------------
