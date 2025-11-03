@@ -29,7 +29,7 @@ class ToDoListValidator extends FormValidator
     protected $required = ['tododesc'];
     public function validate(array $data): void
     {
-        if (!$this->is_string($data['tododesc'])) {
+        if (gettype($data['tododesc']) !== 'string') {
             throw new ExceptionValidation('To do list needs to be a string');
         }
     }

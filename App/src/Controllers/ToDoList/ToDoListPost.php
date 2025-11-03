@@ -3,12 +3,13 @@
 namespace Controllers\ToDoList;
 
 use App\Models\ToDoList\ToDoList;
-use Controllers\ControllerInterface;
-use includes\exception\ExceptionValidation;
-use includes\exception\ExceptionValidationEmpty;
-use includes\exception\ExceptionValidationEmptys;
-use Utilis\SessionService;
-use Utilis\Validator\ToDoListValidator;
+use Core\AbstractView;
+use Core\ControllerInterface;
+use Core\includes\exception\ExceptionValidation\ExceptionValidation;
+//use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Utilis\SessionService;
+use Validator\ToDoListValidator;
 use Views\ToDoList\ToDoListView;
 
 /**
@@ -54,7 +55,7 @@ class ToDoListPost implements ControllerInterface
             // Save the ToDoList
             if ($todolist->save()) {
                 error_log("Nouvel tâche enregistré : " . $todolist->getToDoId());
-                $view = new ToDoListView($todolist);
+                $view = new ToDoListView();
                 $view->render();
 
                 return;

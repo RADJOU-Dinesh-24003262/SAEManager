@@ -1,6 +1,6 @@
 <?php
 
-namespace includes\exception;
+namespace Core\includes\exception\ExceptionValidation;
 
 class ExceptionValidation extends \Exception
 {

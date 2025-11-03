@@ -1,9 +1,9 @@
 <?php
 
-namespace Models\ToDoList;
+namespace App\Models\ToDoList;
 
-use includes\database;
-use includes\exception\ExceptionFetchDataBD;
+use Core\includes\Database;
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 use PDOException;
 
@@ -53,7 +53,7 @@ class ToDoList
     /**
      * Creates an instance of the class
      *
-     * This method constructs a user object with the data array given in parametters.
+     * This method constructs a user object with the data array given in parameters.
      * @param array $data The data to make a todolist with.
      */
     private function __construct(array $data = [])
@@ -66,7 +66,7 @@ class ToDoList
     /**
      * Creates an instance of the class.
      *
-     * This method creates a user object with the data array given in parametters.
+     * This method creates a user object with the data array given in parameters.
      * Use the connection of the database.
      *
      * @param array $data The data to make a todolist with.
@@ -110,7 +110,7 @@ class ToDoList
     /**
      * @return integer|null the id of the subject of the SAE.
      */
-    public function getSaeSubjectId(): int
+    public function getSaeSubjectId(): int|null
     {
         return $this->sae_subject_id;
     }
