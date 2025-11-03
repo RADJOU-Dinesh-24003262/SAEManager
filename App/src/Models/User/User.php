@@ -324,6 +324,7 @@ abstract class User
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
+
     // -----------------
     // Getters
     // -----------------
