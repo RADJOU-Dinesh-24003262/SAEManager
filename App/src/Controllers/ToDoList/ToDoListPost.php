@@ -5,8 +5,7 @@ namespace Controllers\ToDoList;
 use App\Models\ToDoList\ToDoList;
 use Core\AbstractView;
 use Core\ControllerInterface;
-use Core\includes\exception\ExceptionValidation\ExceptionValidation;
-//use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;
 use Validator\ToDoListValidator;
@@ -63,7 +62,7 @@ class ToDoListPost implements ControllerInterface
                 error_log("Erreur tâche enregistré : " . $todolist->getToDoId());
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
-        } catch (ExceptionValidation | ExceptionValidationEmpty $e) {
+        } catch (ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();

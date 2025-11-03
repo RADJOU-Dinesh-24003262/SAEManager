@@ -2,17 +2,15 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidation;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 
 /**
  * Class LoginValidator
  * This class regroup function to validate the login process of a user.
 
- * @category Utilis
+ * @category Validator
 
  * @package Src
-
- * @subpackage Utilis\Validator
 
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -29,8 +27,8 @@ class ToDoListValidator extends FormValidator
     protected $required = ['tododesc'];
     public function validate(array $data): void
     {
-        if (gettype($data['tododesc']) !== 'string') {
-            throw new ExceptionValidation('To do list needs to be a string');
+        if ($data['tododesc'] === '') {
+            throw new ExceptionValidationEmpty("is empty");
         }
     }
 }
