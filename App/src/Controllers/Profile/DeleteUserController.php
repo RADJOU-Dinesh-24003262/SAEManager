@@ -14,7 +14,8 @@ class DeleteUserController implements ControllerInterface
 
         //Temporary Solution
         if (!(SessionService::has('user_id'))) {
-            header('Location: /');
+            http_response_code(404);
+            echo "Page non trouvée";
             exit();
         }
 
