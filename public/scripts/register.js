@@ -57,12 +57,14 @@ function toggleAmuFields(){
         amuIdInput.style.display = 'block';
         amuIdHint.style.display = 'block';
         amuIdInput.required = true;
+        amuIdInput.disabled = false;
     } else {
         amuIdLabel.style.display = 'none';
         amuIdInput.style.display = 'none';
         amuIdHint.style.display = 'none';
         amuIdInput.required = false;
         amuIdInput.value = '';
+        amuIdInput.disabled = true;
     }
 
 }
