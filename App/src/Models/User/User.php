@@ -315,23 +315,6 @@ abstract class User
         }
     }
 
-    public static function deleteByEmail(string $email): void
-    {
-        try {
-            $db = Database::getInstance();
-            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
-
-            $stmt->execute(['email' => $email]);
-
-            if ($stmt->rowCount() === 0) {
-                throw new Exception('Aucun utilisateur trouvé avec cet email.');
-            }
-        } catch (PDOException $e) {
-            error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new Exception('Erreur lors de la suppression du compte utilisateur.');
-        }
-    }
-
     // -----------------
     // Getters
     // -----------------
