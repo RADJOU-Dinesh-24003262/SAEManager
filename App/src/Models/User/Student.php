@@ -159,6 +159,31 @@ class Student extends User
         $stmt->execute(['sae_group_id' => $this->sae_group_id]);
     }
 
+    protected function createToDoIt(PDO $connection, string $desc): void
+    {
+        $stmt = $connection->prepare('INSERT INTO sae_todolists (sae_group_id, tododesc, checked)
+                                            VALUES (:sae_group_id, :description, false)');
+        $stmt->execute(
+            [
+                'sae_group_id' => $this->sae_group_id, 'description' => $desc
+            ]
+        );
+    }
+
+    protected function checkToDoIt(PDO $connection, int $todoId, bool $checked): void
+    {
+        $stmt = $connection->prepare('UPDATE sae_todolists
+                                            SET checked = :checked
+                                            WHERE todo_id = :todo_id AND sae_group_id = :sae_group_id');
+        $stmt->execute(
+            [
+                'checked' => $checked,
+                'todo_id' => $todoId,
+                'sae_group_id' => $this->sae_group_id
+            ]
+        );
+    }
+
     // -----------------
     // Getters
     // -----------------
