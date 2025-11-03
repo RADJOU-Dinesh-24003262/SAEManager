@@ -61,7 +61,7 @@ Le client souhaite un développement itératif. On priorise un **MVP (Minimum Vi
 
 ## Diagramme UML
 
-[Diagramme de classe du projet](hyper-media.html)
+[Diagramme de classe du projet](interactive-uml.html)
 
 
 ## Tableau des cas d'utilisations
