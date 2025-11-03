@@ -1,0 +1,22 @@
+{{ERROR_MESSAGES}}
+<div class="mainContainer">
+    <h1 class="title">SAEManager ‑ Authentification</h1>
+    <form method="post" action="/login" class="titlediv">
+        <h2 class="subtitle">Email : </h2>
+        <input type="text" name="email" class="textinput" placeholder="Entrez votre email" required>
+
+        <h2 class="subtitle">Mot de passe : </h2>
+        <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
+
+        <div class="button-container">
+            <button type="submit" class="button">Se connecter</button>
+        </div>
+    </form>
+
+    <h3 class="plainText">
+        Vous n'avez pas de compte? <a href="/register">Inscrivez vous</a> <br>
+        Mot de passe oublié? <a href="/forgot-password">cliquez ici</a>
+    </h3>
+
+    <img class="logo" src="image/logoamu.png" alt="Logo AMU">
+</div>

@@ -1,0 +1,279 @@
+/* Variables et reset de base */
+:root {
+    --color-primary: #1e40af;
+    --color-primary-dark: #1e3a8a;
+    --color-primary-light: #3b82f6;
+    --color-primary-lighter: #dbeafe;
+    --color-primary-pale: #eff6ff;
+    --color-text: #1f2937;
+    --color-text-light: #6b7280;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f9fafb;
+    --color-border: #e5e7eb;
+    --color-border-dark: #d1d5db;
+    --color-success: #059669;
+    --color-error: #dc2626;
+    --color-warning: #d97706;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --font-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 2rem;
+    --radius: 0.5rem;
+    --radius-lg: 0.75rem;
+    --focus-width: 3px;
+    --transition: 150ms ease-in-out;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+body {
+    font-family: var(--font-base);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-text);
+    background: var(--color-bg);
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Structure du formulaire */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Fieldset et légende */
+fieldset {
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    margin: 0;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+fieldset:focus-within {
+    border-color: var(--color-primary-light);
+    background: var(--color-primary-pale);
+}
+
+legend {
+    font-weight: 600;
+    font-size: var(--text-xl);
+    color: var(--color-primary);
+    padding: 0 var(--space-sm);
+}
+
+/* Labels et champs de texte */
+label {
+    font-weight: 500;
+    font-size: var(--text-base);
+    color: var(--color-text);
+    display: block;
+    margin-bottom: var(--space-xs);
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: var(--text-base);
+    line-height: 1.5;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color var(--transition), background-color var(--transition);
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    outline: var(--focus-width) solid var(--color-primary);
+    outline-offset: 0;
+    border-color: var(--color-primary);
+    background: var(--color-primary-pale);
+}
+
+input[type="text"]:invalid:not(:placeholder-shown):not(:focus) {
+    border-color: var(--color-error);
+}
+
+input[type="text"]:valid:not(:placeholder-shown):not(:focus) {
+    border-color: var(--color-success);
+}
+
+/* Textarea spécifique */
+.text-name {
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+    font-family: inherit;
+}
+
+/* Checkboxes */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius);
+    transition: background-color var(--transition);
+    cursor: pointer;
+}
+
+.checkbox:hover {
+    background: var(--color-bg-alt);
+}
+
+.checkbox input[type="checkbox"] {
+    width: 1.25rem;
+    height: 1.25rem;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.checkbox input[type="checkbox"]:focus {
+    outline: var(--focus-width) solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.checkbox label {
+    margin: 0;
+    cursor: pointer;
+    font-weight: 400;
+    flex: 1;
+}
+
+/* Bouton submit */
+button[type="submit"] {
+    background: var(--color-primary);
+    color: var(--color-bg);
+    border: none;
+    padding: var(--space-md) var(--space-xl);
+    font-size: var(--text-lg);
+    font-weight: 600;
+    font-family: inherit;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background-color var(--transition);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button[type="submit"]:hover {
+    background: var(--color-primary-dark);
+}
+
+button[type="submit"]:focus {
+    outline: var(--focus-width) solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+button[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+/* Textes d'aide */
+small {
+    display: block;
+    color: var(--color-text-light);
+    font-size: var(--text-sm);
+    margin-top: var(--space-xs);
+    line-height: 1.4;
+}
+
+abbr {
+    color: var(--color-error);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Accessibilité */
+:focus-visible {
+    outline: var(--focus-width) solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, ::after, ::before {
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+    }
+}
+
+/* Responsive */
+@media (max-width: 48rem) {
+    :root {
+        --text-2xl: 1.75rem;
+        --text-xl: 1.25rem;
+        --space-2xl: 2rem;
+    }
+
+    fieldset {
+        padding: var(--space-lg);
+    }
+}
+
+@media (max-width: 30rem) {
+    fieldset {
+        padding: var(--space-md);
+    }
+
+    input[type="text"],
+    textarea {
+        font-size: 1rem;
+    }
+
+    button[type="submit"] {
+        font-size: var(--text-base);
+        padding: var(--space-sm) var(--space-lg);
+    }
+}
+
+/* Mode sombre */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-primary: #3b82f6;
+        --color-primary-dark: #60a5fa;
+        --color-primary-light: #93c5fd;
+        --color-primary-lighter: #1e3a8a;
+        --color-primary-pale: #1e293b;
+        --color-text: #f3f4f6;
+        --color-text-light: #9ca3af;
+        --color-bg: #0f172a;
+        --color-bg-alt: #1e293b;
+        --color-border: #334155;
+        --color-border-dark: #475569;
+        --color-success: #10b981;
+        --color-error: #ef4444;
+    }
+}

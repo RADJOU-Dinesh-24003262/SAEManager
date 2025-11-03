@@ -13,36 +13,42 @@
     "phpstan/phpstan": "^1.10",
     "phpmd/phpmd": "^2.13",
     "friendsofphp/php-cs-fixer": "^3.14",
-    "phpdocumentor/phpdocumentor": "^3.3"
+    "phpdocumentor/phpdocumentor": "^3.3",
+    "smeghead/php-class-diagram": "^1.6",
+    "jawira/plantuml": "^1.2025"
   },
   "autoload": {
     "psr-4": {
-      "Controllers\\": "modules/src/Controllers/",
-      "Models\\": "modules/src/Models/",
-      "Views\\": "modules/src/Views/",
-      "Utilis\\": "modules/src/Utilis/"
+      "core\\": "Core/",
+      "Utilis\\": "Core/Utilis/",
+      "Controllers\\": "App/src/Controllers/",
+      "Models\\": "App/src/Models/",
+      "Views\\": "App/src/Views/",
+      "Validator\\": "App/src/Validator/",
+      "App\\": "App/src/",
+      "public\\": "public/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "tests/"
+      "Tests\\": "App/tests/"
     }
   },
   "scripts": {
     "test": "phpunit",
     "test-coverage": "phpunit --coverage-html coverage",
-    "phpcs": "phpcs --standard=PSR12 modules/src/",
-    "phpcbf": "phpcbf --standard=PSR12 modules/src/",
-    "phpstan": "phpstan analyse modules/src/ --level=7",
+    "phpcs": "phpcs --standard=PSR12 App/src/",
+    "phpcbf": "phpcbf --standard=PSR12 App/src/",
+    "phpstan": "phpstan analyse App/src/ --level=8",
     "phpdoc": [
-      "vendor/bin/phpdoc run --directory=modules/src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
+      "vendor/bin/phpdoc run --directory=App/src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
     ],
     "quality": [
       "@phpcs",
       "@phpstan",
       "@test"
     ],
-    "fix": "phpcbf --standard=PSR12 modules/src/"
+    "fix": "phpcbf --standard=PSR12 App/src/"
   },
   "config": {
     "allow-plugins": {
