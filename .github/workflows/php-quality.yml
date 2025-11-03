@@ -1,4 +1,4 @@
-name: PHP Quality Checks and Push Documentation
+name: PHP Quality Checks, Documentation and UML Generation
 
 on:
   push:
@@ -48,13 +48,11 @@ jobs:
         id: changed_files
         run: |
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            BASE_REF="${{ github.base_ref }}"
+            git fetch origin ${{ github.base_ref }}
+            FILES=$(git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }}...HEAD | grep '\.php$' || echo "")
           else
-            BASE_REF="HEAD^"
+            FILES=$(git diff --name-only --diff-filter=ACMR HEAD^...HEAD | grep '\.php$' || echo "")
           fi
-          
-          git fetch origin $BASE_REF || true
-          FILES=$(git diff --name-only --diff-filter=ACMR origin/$BASE_REF...HEAD | grep '\.php$' || echo "")
           
           if [ -z "$FILES" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
@@ -75,12 +73,12 @@ jobs:
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*,*/tests/*
 
-      # Static Analysis - only if PHP files changed
+      #Static Analysis - only if PHP files changed
       - name: Run PHPStan Static Analysis
         if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
-          xargs -r phpstan analyse --level=8 --no-progress --error-format=github --memory-limit=512M
+          vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
 
       # Unit Tests
       - name: Run PHPUnit Tests
@@ -93,7 +91,7 @@ jobs:
       # Test Coverage Check
       - name: Check Test Coverage
         run: |
-          php tests/coverage-checker.php coverage.xml 10
+          php App/tests/coverage-checker.php coverage.xml 10
         continue-on-error: true
 
       # Security Check
@@ -118,25 +116,45 @@ jobs:
 
       # Create PHPDoc Documentation Folder
       - name: Ensure docs directory exists
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
+        if: steps.changed_files.outputs.has_changes == 'true'
         run: mkdir -p docs/api
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
+        if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
 
       # Deploy PHPDoc to GitHub Pages - only when push on dev
       - name: Deploy PHPDoc to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/dev' && steps.changed_files.outputs.has_changes == 'true'
+        if: steps.changed_files.outputs.has_changes == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/api
           publish_branch: gh-pages
           force_orphan: true
+
+      # Update UML in asset/UML
+      - name : Update UML diagram
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          composer require --dev smeghead/php-class-diagram
+          sudo apt-get install -y default-jre graphviz
+          wget https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+          vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+          java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
+          echo "UML diagram generated successfully"
+
+      - name: Commit UML changes
+        if: steps.changed_files.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add asset/UML/
+          git diff --staged --quiet || git commit -m "chore: update UML diagrams [skip ci]"
+          git push
 
       # Summary
       - name: Quality Summary
