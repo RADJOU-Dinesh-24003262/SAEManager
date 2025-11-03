@@ -116,7 +116,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $sae_group_id
+     * @param integer $sae_group_id The id of the group of SAE.
      * @return void
      */
     public function setSaeGroupId(int $sae_group_id): void
@@ -125,7 +125,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $sae_subject_id
+     * @param integer $sae_subject_id The subject of the group of SAE.
      * @return void
      */
     public function setSaeSubjectId(int $sae_subject_id): void
@@ -134,7 +134,7 @@ class ToDoList
     }
 
     /**
-     * @param string $tododesc
+     * @param string $tododesc The description of the todolist.
      * @return void
      */
     public function setTododesc(string $tododesc): void
@@ -143,7 +143,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $todo_id
+     * @param integer $todo_id The id of the todoList.
      * @return void
      */
     public function setTodoId(int $todo_id): void

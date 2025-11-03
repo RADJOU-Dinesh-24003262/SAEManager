@@ -20,10 +20,10 @@ use Views\ToDoList\ToDoListView;
 
  * @subpackage Controllers\ToDoList
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>,
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
@@ -41,17 +41,17 @@ class ToDoListPost implements ControllerInterface
      */
     public function control(): void
     {
-        // Validate the data
+        // Validate the data.
         $validator = new ToDoListValidator();
 
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
-            // Create the ToDoList
+            // Create the ToDoList.
             $todolist = ToDoList::create($data);
 
-            // Save the ToDoList
+            // Save the ToDoList.
             if ($todolist->save()) {
                 error_log("Nouvel tâche enregistré : " . $todolist->getToDoId());
                 $view = new ToDoListView();

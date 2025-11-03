@@ -24,7 +24,15 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
  */
 class ToDoListValidator extends FormValidator
 {
+    /** @var string[] $required Represent the description of the todolist.  */
     protected $required = ['tododesc'];
+
+    /**
+     * This method validates the values given in $data to validate the todolist with their description.
+     * @param array $data Represent the data in the database.
+     * @return void
+     * @throws ExceptionValidationEmpty All the errors that might have been found.
+     */
     public function validate(array $data): void
     {
         if ($data['tododesc'] === '') {
