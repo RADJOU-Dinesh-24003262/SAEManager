@@ -12,7 +12,7 @@ use Views\pwd\ResetPasswordSuccessView;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionDeleteUserFailed;
+use Core\includes\exception\ExceptionPasswordUpdateFailed;
 
 /**
  * @category   Controller
@@ -65,7 +65,7 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationResetPassword | ExceptionDeleteUserFailed $e) {
+        } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
         $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['user_email'] ?? null);
