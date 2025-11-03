@@ -128,8 +128,10 @@
     }
     package ToDoList as Views.ToDoList {
       class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView {
+        +__construct()
         #templatePath()
         #templateKeys()
+        -renderErrorMessages(errors)
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -138,6 +140,10 @@
     }
   }
   package Validator as Validator {
+    class "ToDoListValidator\n<b>Class LoginValidator</b>" as Validator_ToDoListValidator {
+      #required : string[]
+      +validate(data)
+    }
     class "ForgotPasswordValidator\n<b>Class ForgotPasswordValidator</b>" as Validator_ForgotPasswordValidator {
       #required : array<string>
       +validate(data)
@@ -237,6 +243,27 @@
         +isClient()
       }
     }
+    package ToDoList as Models.ToDoList {
+      class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList {
+        -sae_group_id : integer
+        -sae_subject_id : ?integer
+        -todo_id : integer
+        -tododesc : string
+        -__construct(data)
+        {static} +create(data)
+        +getTodoId()
+        +getTodoDesc()
+        +getSaeGroupId()
+        +getSaeSubjectId()
+        +setSaeGroupId(sae_group_id)
+        +setSaeSubjectId(sae_subject_id)
+        +setTododesc(tododesc)
+        +setTodoId(todo_id)
+        +save()
+        +fetchDataFromDatabase(sae_group_id)
+        {static} +existBySaeGroupId(sae_group_id)
+      }
+    }
   }
   package Controllers as Controllers {
     package Index as Controllers.Index {
@@ -319,6 +346,10 @@
         +control()
         {static} +support(path, method)
       }
+      class "ToDoListPost\n<b>This class controls the todolist process (post).</b>" as Controllers_ToDoList_ToDoListPost {
+        +control()
+        {static} +support(path, method)
+      }
     }
   }
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
@@ -328,6 +359,9 @@
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
+  Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
+  Controllers_ToDoList_ToDoListPost ..> Validator_ToDoListValidator
+  Controllers_ToDoList_ToDoListPost ..> Views_ToDoList_ToDoListView
   Controllers_User_Login ..> Views_User_LoginView
   Controllers_User_LoginPost ..> Models_User_User
   Controllers_User_LoginPost ..> Validator_LoginValidator
@@ -358,6 +392,7 @@
   Validator_FormValidator <|-- Validator_ForgotPasswordValidator
   Validator_FormValidator <|-- Validator_LoginValidator
   Validator_FormValidator <|-- Validator_ResetPasswordValidator
+  Validator_FormValidator <|-- Validator_ToDoListValidator
   Validator_FormValidator <|-- Validator_ValidationServiceRegister
   Views_Dashboard_DashboardView ..> Models_User_Student
   Views_Dashboard_DashboardView ..> Models_User_User
