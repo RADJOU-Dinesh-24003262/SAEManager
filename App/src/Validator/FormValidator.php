@@ -46,12 +46,6 @@ abstract class FormValidator
     {
         $errors = [];
         foreach ($this->required as $field) {
-            if ($field === 'amu_id' && isset($data[$field]) && $data['user_type'] === 'client') {
-                if (isset($data[$field]) && !empty($data[$field])) {
-                    $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
-                }
-                continue;
-            }
             if (empty($data[$field])) {
                 $errors[] = new ExceptionValidationEmpty($field);
             } else {
@@ -119,6 +113,12 @@ abstract class FormValidator
 
         return preg_match($ownEmailPattern, $email)
             && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
+    }
+
+
+    protected function isValidAmuId(string $amu_id): bool
+    {
+        return (bool) preg_match('/^[a-zA-ZÀ-ÿ\-\'][0-9]{8,}$/', $amu_id);
     }
 
     /**
