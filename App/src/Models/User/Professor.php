@@ -6,10 +6,10 @@ use PDO;
 use Models\SAE\SAE;
 
 /**
- * Représente un utilisateur de type professeur dans le système.
+ * Represents a professor user in the system.
  *
- * Fournit les opérations spécifiques aux professeurs (sauvegarde, récupération
- * de données spécifiques, gestion des SAE et des groupes).
+ * Provides operations specific to professors (saving, fetching
+ * specific data, managing SAEs and groups).
  *
  * @category Models
  * @package  Src
@@ -25,19 +25,19 @@ use Models\SAE\SAE;
 class Professor extends User
 {
     /**
-     * Identifiant AMU du professeur.
+     * AMU identifier of the professor.
      *
      * @var string
      */
     protected string $amu_id = '';
 
     /**
-     * Initialise un nouveau professeur.
+     * Initializes a new professor.
      *
-     * Définit le type d'utilisateur et délègue l'initialisation au constructeur
-     * parent (User).
+     * Sets the user type and delegates initialization to the parent
+     * constructor (User).
      *
-     * @param array $data Données initiales facultatives du professeur.
+     * @param array $data Optional initial data for the professor.
      */
     public function __construct(array $data = [])
     {
@@ -46,16 +46,16 @@ class Professor extends User
     }
 
     /**
-     * Sauvegarde les données spécifiques au professeur dans la base de données.
+     * Saves the professor's specific data to the database.
      *
-     * Insère une ligne dans la table `professors`.
+     * Inserts a row into the `professors` table.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $userId     Identifiant de l'utilisateur dans la table `users`.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $userId     User ID from the `users` table.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
@@ -73,16 +73,16 @@ class Professor extends User
     }
 
     /**
-     * Récupère les données spécifiques au professeur depuis la base de données.
+     * Fetches the professor's specific data from the database.
      *
-     * Remplit les propriétés de l'objet correspondant aux colonnes récupérées.
+     * Fills the object's properties corresponding to the retrieved columns.
      *
-     * @param PDO    $db    Objet PDO représentant la connexion à la base.
-     * @param string $email Adresse e-mail de l'utilisateur liée au professeur.
+     * @param PDO    $db    PDO object representing the database connection.
+     * @param string $email The user's email address linked to the professor.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function fetchSpecificData(PDO $db, string $email): void
     {
@@ -106,14 +106,14 @@ class Professor extends User
     }
 
     /**
-     * Récupère les SAE associés au professeur.
+     * Retrieves the SAEs associated with the professor.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $userId     Identifiant du professeur (professor_id).
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $userId     The professor's ID (professor_id).
      *
-     * @return array Tableau associatif contenant les enregistrements des SAE.
+     * @return array Associative array containing the SAE records.
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
@@ -129,20 +129,20 @@ class Professor extends User
     }
 
     /**
-     * Crée un nouvel enregistrement SAE (subject) lié au professeur.
+     * Creates a new SAE (subject) record linked to the professor.
      *
-     * Les dates sont converties avec STR_TO_DATE selon le format attendu.
+     * Dates are converted using STR_TO_DATE according to the expected format.
      *
-     * @param PDO    $connection Objet PDO représentant la connexion à la base.
-     * @param int    $clientid   Identifiant du client lié à la SAE.
-     * @param string $name       Nom de la SAE.
-     * @param string $begindate  Date de début (format attendu: ex. "March 01 2024").
-     * @param string $enddate    Date de fin (format attendu: ex. "June 30 2024").
-     * @param int    $userId     Identifiant du professeur responsable.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $clientid   ID of the client linked to the SAE.
+     * @param string  $name       Name of the SAE.
+     * @param string  $begindate  Start date (expected format: e.g., "March 01 2024").
+     * @param string  $enddate    End date (expected format: e.g., "June 30 2024").
+     * @param integer $userId     ID of the responsible professor.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function createSAE(
         PDO $connection,
@@ -170,19 +170,20 @@ class Professor extends User
     }
 
     /**
-     * Met à jour une SAE existante avec les données fournies.
+     * Updates an existing SAE with the provided data.
      *
-     * Si une valeur du tableau \$data est NULL, la valeur courante du SAE est conservée.
+     * If a value in the \$data array is NULL, the current value of the SAE is kept.
      *
-     * @param PDO   $connection Objet PDO représentant la connexion à la base.
-     * @param \SAE  $sae        Instance de SAE représentant l'enregistrement courant.
-     * @param array $data       Tableau associatif des champs à mettre à jour.
-     *                          Clés attendues : 'responsible_prof_id', 'client_id',
-     *                          'subject_name', 'begin_date', 'end_date'.
+     * @param PDO             $connection PDO object representing the database connection.
+     * @param \Models\SAE\SAE $sae        SAE instance representing the current record.
+     * @param array           $data       Associative array of fields to update.
+     *                                    Expected keys: 'responsible_prof_id',
+     *                                    'client_id', 'subject_name',
+     *                                    'begin_date', 'end_date'.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function updateSAE(PDO $connection, SAE $sae, array $data): void
     {
@@ -210,17 +211,17 @@ class Professor extends User
     }
 
     /**
-     * Crée un groupe SAE pour un sujet donné et retourne son identifiant.
+     * Creates an SAE group for a given subject and returns its ID.
      *
-     * Insère d'abord un enregistrement dans `SAE_groups`, puis sélectionne un
-     * groupe non attribué aux étudiants pour le même SAE.
+     * First inserts a record into `SAE_groups`, then selects an
+     * unassigned group for students for the same SAE.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $saeID      Identifiant du sujet SAE.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $saeID      SAE subject ID.
      *
-     * @return int Identifiant du groupe créé (sae_group_id).
+     * @return integer The ID of the created group (sae_group_id).
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution des requêtes.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function createGroup(PDO $connection, int $saeID): int
     {
@@ -244,15 +245,15 @@ class Professor extends User
     }
 
     /**
-     * Assigne un étudiant à un groupe SAE.
+     * Assigns a student to an SAE group.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $groupId    Identifiant du groupe SAE.
-     * @param int $student    Identifiant de l'étudiant (student_id).
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $groupId    SAE group ID.
+     * @param integer $student    Student ID (student_id).
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function assignedSAE(PDO $connection, int $groupId, int $student): void
     {
@@ -268,17 +269,17 @@ class Professor extends User
     }
 
     /**
-     * Retire l'association d'un professeur à une SAE.
+     * Removes a professor's association with an SAE.
      *
-     * Supprime la ligne correspondante dans `sae_professor_groups`.
+     * Deletes the corresponding row in `sae_professor_groups`.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $saeID      Identifiant du sujet SAE.
-     * @param int $profID     Identifiant du professeur.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $saeID      SAE subject ID.
+     * @param integer $profID     Professor ID.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function removeProfFromSae(PDO $connection, int $saeID, int $profID): void
     {
@@ -294,15 +295,15 @@ class Professor extends User
     }
 
     /**
-     * Ajoute l'association d'un professeur à une SAE.
+     * Adds a professor's association with an SAE.
      *
-     * @param PDO $connection Objet PDO représentant la connexion à la base.
-     * @param int $saeID      Identifiant du sujet SAE.
-     * @param int $profID     Identifiant du professeur.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $saeID      SAE subject ID.
+     * @param integer $profID     Professor ID.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function addProfToSae(PDO $connection, int $saeID, int $profID): void
     {
@@ -317,15 +318,15 @@ class Professor extends User
     }
 
     /**
-     * Désaffecte un étudiant d'une SAE (retire l'étudiant du groupe).
+     * Unassigns a student from an SAE (removes the student from the group).
      *
-     * @param PDO  $connection Objet PDO représentant la connexion à la base.
-     * @param \SAE $sae        Instance de SAE utilisée pour récupérer l'id.
-     * @param int  $student    Identifiant de l'étudiant à désaffecter.
+     * @param PDO             $connection PDO object representing the database connection.
+     * @param \Models\SAE\SAE $sae        SAE instance used to retrieve the id.
+     * @param integer         $student    ID of the student to unassign.
      *
      * @return void
      *
-     * @throws \PDOException En cas d'erreur lors de l'exécution de la requête.
+     * @throws \PDOException If an error occurs during query execution.
      */
     protected function unassignedSAE(PDO $connection, SAE $sae, int $student): void
     {
@@ -345,9 +346,9 @@ class Professor extends User
     // -----------------
 
     /**
-     * Retourne l'identifiant AMU du professeur.
+     * Returns the professor's AMU identifier.
      *
-     * @return string Identifiant AMU.
+     * @return string AMU identifier.
      */
     protected function getAmuId(): string
     {
