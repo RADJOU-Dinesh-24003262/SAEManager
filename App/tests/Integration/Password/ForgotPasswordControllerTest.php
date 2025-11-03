@@ -107,7 +107,7 @@ class ForgotPasswordControllerTest extends TestCase
 
         ob_start();
         $controller->control();
-        $content = ob_get_clean();
+        $content = ob_get_clean() ?: ' ';
 
         // Should have this error on the html page.
         $this->assertStringContainsString('L&#039;adresse email n&#039;est pas valide.', $content);
@@ -148,7 +148,7 @@ class ForgotPasswordControllerTest extends TestCase
 
         ob_start();
         $controller->control();
-        $content = ob_get_clean();
+        $content = ob_get_clean() ?: ' ';
 
         // Should set spam error message on the html page.
         $this->assertStringContainsString('Veuillez attendre au moins 2 minutes avant de refaire une demande.', $content);
