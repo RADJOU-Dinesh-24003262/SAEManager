@@ -20,11 +20,11 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 
  * @subpackage Controllers\User
 
- * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>,
- *          François Dargentolle <francois.dargentolle@etu.univ-amu.fr>,
- *          William Edelstein <william.edelstein@etu.univ-amu.fr>,
- *          Nathan Griguer <nathan.griguer@etu.univ-amu.fr>,
- *          Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -76,7 +76,7 @@ class RegisterPost implements ControllerInterface
             SessionService::setFlash('errors', $errors);
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
-            SessionService::setFlash('errors', ['general' => 'Une eurreur est survenu, réessayez plus tard']);
+            SessionService::setFlash('errors', ['general' => 'Une erreur est survenu, réessayez plus tard']);
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }

@@ -42,7 +42,7 @@ phpcs: ## Vérifie le code style (PSR-12)
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
-	./vendor/bin/phpstan analyse . --level=8
+	./vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
 
 
 generate-phpdoc: ## Génère la documentation
@@ -53,6 +53,12 @@ phpdoc: ## Vérifie la documentation
 	@echo "${YELLOW}Vérification de la documentation...${NC}"
 	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors App/src/
 	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --colors Core/
+
+generate-uml: ## Génère les diagrammes de classes
+	@echo "${YELLOW}Génération des diagrammes de classes...${NC}"
+	./vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+	java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
+
 
 fix: ## Corrige automatiquement les erreurs de style
 	@echo "${YELLOW}Correction automatique...${NC}"
