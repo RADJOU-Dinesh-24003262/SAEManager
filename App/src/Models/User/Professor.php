@@ -140,17 +140,58 @@ class Professor extends User
             ]
             );
         }
-
-    protected function assignedSAE(PDO $connection, \SAE $sae, int $student):void{
+    protected function createGroup (PDO $connection, int $saeID):int {
+        $stmt = $connection->prepare('INSERT INTO SAE_groups(sae_subject_id)
+                                    VALUES (:sae_subject_id);');
+        $stmt->execute(
+            [
+                'sae_subject_id' => $saeID
+            ]
+        );
+        $stmt = $connection->prepare('SELECT sae_group_id FROM SAE_groups
+                                    WHERE sae_group_id NOT IN (SELECT sae_group_id FROM students)
+                                    AND sae_subject_id = :sae_subject_id
+                                    LIMIT 1;');
+        $stmt->execute(
+            [
+                'sae_subject_id' => $saeID
+            ]
+        );
+        return (int)$stmt->fetchColumn(0);
+    }
+    protected function assignedSAE(PDO $connection, int $groupId, int $student):void{
         $stmt = $connection->prepare('UPDATE students 
-                                    SET sae_group_id = :sae_subject_id
+                                    SET sae_group_id = :sae_group_id
                                     WHERE student_id = :student_id;');
         $stmt->execute(
             [
-                'sae_group_id' => $sae->getSaeSubjectId(),
+                'sae_group_id' => $groupId,
                 'student_id' => $student
             ]
             );
+    }
+
+    protected function removeProfFromSae(PDO $connection, int $saeID, int $profID):void{
+        $stmt = $connection->prepare('DELETE FROM sae_professor_groups 
+                                    WHERE sae_subject_id = :sae_subject_id
+                                    AND professor_id = :professor_id;');
+        $stmt->execute(
+            [
+                'sae_subject_id' => $saeID,
+                'professor_id' => $profID
+            ]
+        );
+    }
+
+    protected function addProfToSae(PDO $connection, int $saeID, int $profID):void{
+        $stmt = $connection->prepare('INSERT INTO sae_professor_groups(sae_subject_id, professor_id)
+                                    VALUES (:sae_subject_id, :professor_id);');
+        $stmt->execute(
+            [
+                'sae_subject_id' => $saeID,
+                'professor_id' => $profID
+            ]
+        );
     }
 
     protected function unassignedSAE(PDO $connection, \SAE $sae, int $student):void{
