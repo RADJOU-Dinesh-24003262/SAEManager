@@ -4,7 +4,6 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
-use Core\includes\exception\ExceptionBD\ExceptionUserNotFoundInBd;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
