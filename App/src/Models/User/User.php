@@ -4,7 +4,7 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
-use Core\includes\exception\ExceptionBD\ExceptionuserNotFoundInBd;
+use Core\includes\exception\ExceptionBD\ExceptionUserNotFoundInBd;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -331,7 +331,7 @@ abstract class User
             }
         } catch (PDOException $e) {
             error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new ExceptionuserNotFoundInBd();
+            throw new ExceptionUserNotFoundInBd();
         }
     }
     /**
