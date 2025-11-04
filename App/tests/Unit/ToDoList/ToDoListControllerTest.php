@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\ToDoList;
+namespace tests\Unit\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
