@@ -18,7 +18,7 @@ namespace Core\includes\exception\ExceptionBD;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionUserNotFoundInBd extends \Exception
+class ExceptionUserNotFoundInDb extends \Exception
 {
     /**
      * Constructor for the ExceptionUserNotFoundInBd class.
