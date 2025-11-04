@@ -347,8 +347,13 @@ abstract class User
      *
      * @return array
      */
-    abstract protected function fetchSAEData(PDO $connection, int $userId): array;
+    abstract protected function fetchSAEData(PDO $connection, string $email): array;
 
+    public function getSaes(): array
+    {
+        $connection = Database::getInstance();
+        return $this->fetchSAEData($connection, $this->email);
+    }
 
     // -----------------
     // Getters
