@@ -144,17 +144,22 @@ class Student extends User
     /**
      * Fetches the SAE subjects and group data for the student.
      *
-     * @param PDO     $connection The database connection.
-     * @param integer $userId     The student's user ID.
+     * @param PDO    $connection The database connection.
+     * @param string $email      The student's email.
      *
      * @return array An array of SAE data (subject and group information).
      */
     protected function fetchSAEData(PDO $connection, string $email): array
     {
-        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
+        $stmt = $connection->prepare(
+            'SELECT * FROM SAE_subjects
                                             JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
                                             JOIN students ON SAE_groups.SAE_group_id = students.sae_group_id
-                                            WHERE students.student_id = (SELECT user_id FROM users WHERE email = :email)');
+                                            WHERE students.student_id = (
+                                                                            SELECT user_id 
+                                                                            FROM users 
+                                                                            WHERE email = :email)'
+        );
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -169,8 +174,10 @@ class Student extends User
      */
     protected function getToDoList(PDO $connection): array
     {
-        $stmt = $connection->prepare('SELECT * FROM sae_todolists
-                                            WHERE sae_group_id = :sae_group_id');
+        $stmt = $connection->prepare(
+            'SELECT * FROM sae_todolists
+                                            WHERE sae_group_id = :sae_group_id'
+        );
         $stmt->execute(['sae_group_id' => $this->sae_group_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -185,8 +192,10 @@ class Student extends User
      */
     protected function createToDoIt(PDO $connection, string $desc): void
     {
-        $stmt = $connection->prepare('INSERT INTO sae_todolists (sae_group_id, tododesc, checked)
-                                            VALUES (:sae_group_id, :description, false)');
+        $stmt = $connection->prepare(
+            'INSERT INTO sae_todolists (sae_group_id, tododesc, checked)
+                                            VALUES (:sae_group_id, :description, false)'
+        );
         $stmt->execute(
             [
                 'sae_group_id' => $this->sae_group_id, 'description' => $desc
@@ -205,9 +214,11 @@ class Student extends User
      */
     protected function checkToDoIt(PDO $connection, int $todoId, bool $checked): void
     {
-        $stmt = $connection->prepare('UPDATE sae_todolists
+        $stmt = $connection->prepare(
+            'UPDATE sae_todolists
                                             SET checked = :checked
-                                            WHERE todo_id = :todo_id AND sae_group_id = :sae_group_id');
+                                            WHERE todo_id = :todo_id AND sae_group_id = :sae_group_id'
+        );
         $stmt->execute(
             [
                 'checked' => $checked,
