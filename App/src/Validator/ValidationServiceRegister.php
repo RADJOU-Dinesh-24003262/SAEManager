@@ -79,9 +79,13 @@ class ValidationServiceRegister extends FormValidator
 
 
         // Specific validation for user_type.
-        if (($data['user_type'] ?? '') === 'student') {
+        if ($data['user_type'] === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
+        } elseif ($data['user_type'] === 'professor') {
+            // Add professor specific validations here if needed.
+            $professorErrors = $this->validateProfessorFields($data);
+            $errors = array_merge($errors, $professorErrors);
         }
 
         if (!empty($errors)) {
@@ -151,6 +155,42 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister('tp', 'string', "Groupe TP requis pour les étudiants.");
         } elseif (!$this->isValidTP($data['tp'])) {
             $errors[] = new ExceptionValidationRegister('tp', 'string', "Groupe TP invalide.");
+        }
+
+        return $errors;
+    }
+
+    /**
+     * This this method validated the values given in $data to make a new professor user with.
+    *
+    * @param array $data Array, in adequation to the required value fields.
+    *
+    * @return array Array of errors.
+    *
+    * @throws ExceptionValidationRegisters All the errors that might have been found.
+    */
+    private function validateProfessorFields(array $data): array
+    {
+        $errors = [];
+
+        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+            $errors[] = new ExceptionValidationRegister(
+                "email",
+                "string",
+                "Utilisez votre adresse e-mail universitaire."
+            );
+        }
+
+        if (!$this->isValidAmuId($data['amu_id'])) {
+            $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
+        }
+
+        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+            $errors[] = new ExceptionValidationRegister(
+                "email",
+                "string",
+                "Utilisez votre adresse e-mail universitaire."
+            );
         }
 
         return $errors;

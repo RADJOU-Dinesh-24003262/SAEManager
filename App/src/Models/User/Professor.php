@@ -350,7 +350,7 @@ class Professor extends User
      *
      * @return string AMU identifier.
      */
-    protected function getAmuId(): string
+    public function getAmuId(): string
     {
         return $this->amu_id;
     }
