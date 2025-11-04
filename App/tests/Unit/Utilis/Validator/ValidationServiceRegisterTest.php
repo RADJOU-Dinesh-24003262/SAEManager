@@ -47,11 +47,11 @@ class ValidationServiceRegisterTest extends TestCase
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
-            'terms' => 'on',
             'year' => '2',
             'parcours' => 'A',
             'td' => 'TD1',
-            'tp' => 'TPA'
+            'tp' => 'TPA',
+            'terms' => 'on'
         ];
 
         $escaped = $this->validator->escape($data);
