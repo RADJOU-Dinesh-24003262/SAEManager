@@ -116,6 +116,17 @@ abstract class FormValidator
     }
 
     /**
+     * Check if Amuid is valid with specific regex.
+     *
+     * @param string $amu_id Specific id of a student or a teacher.
+     * @return boolean
+     */
+    protected function isValidAmuId(string $amu_id): bool
+    {
+        return (bool) preg_match('/^[a-zA-ZÀ-ÿ\-\'][0-9]{8,}$/', $amu_id);
+    }
+
+    /**
      * Returns the validity of the password field
      *
      * @param string $password The value to validate.

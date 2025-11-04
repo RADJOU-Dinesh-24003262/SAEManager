@@ -5,6 +5,7 @@ namespace Models\User;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
+use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use PDO;
 use PDOException;
@@ -314,6 +315,40 @@ abstract class User
             throw new ExceptionPasswordUpdateFailed('Erreur lors de la mise à jour du mot de passe.');
         }
     }
+
+    /**
+     * Delete a User depending of his email
+     *
+     * @param string $email The user's email.
+     * @return void
+     * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
+     */
+    public static function deleteByEmail(string $email): void
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
+
+            $stmt->execute(['email' => $email]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new ExceptionDeleteUserFailed();
+            }
+        } catch (PDOException $e) {
+            error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
+            throw new ExceptionDeleteUserFailed();
+        }
+    }
+
+    /**
+     * Abstract method to fetch the SAE infos from the Database.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The user's id.
+     *
+     * @return array
+     */
+    abstract protected function fetchSAEData(PDO $connection, int $userId): array;
+
 
     // -----------------
     // Getters
