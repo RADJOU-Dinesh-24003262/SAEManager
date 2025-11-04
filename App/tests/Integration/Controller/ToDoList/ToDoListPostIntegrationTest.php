@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Integration\Controller\ToDoList;
+namespace test\Integration\Controller\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
