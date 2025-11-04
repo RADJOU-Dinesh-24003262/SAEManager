@@ -403,7 +403,7 @@ class Database extends PDO
     /**
      * Can inject a custom Database instance (for testing purposes).
      *
-     * @param Database $instance
+     * @param Database $instance The custom Database instance to set.
      * @return void
      */
     public static function setInstance(Database $instance): void

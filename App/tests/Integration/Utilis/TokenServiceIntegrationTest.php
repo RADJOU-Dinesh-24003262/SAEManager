@@ -40,7 +40,7 @@ class TokenServiceIntegrationTest extends TestCase
     public function generatedTokenCanBeValidated(): void
     {
         $token = TokenService::generate();
-        
+
         $this->assertIsString($token);
         $this->assertEquals(64, strlen($token));
         $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/i', $token);
@@ -51,13 +51,13 @@ class TokenServiceIntegrationTest extends TestCase
     {
         $tokens = [];
         $count = 1000;
-        
+
         for ($i = 0; $i < $count; $i++) {
             $tokens[] = TokenService::generate();
         }
-        
+
         $uniqueTokens = array_unique($tokens);
-        
+
         $this->assertCount($count, $uniqueTokens, 'All generated tokens must be unique');
     }
 
@@ -69,13 +69,14 @@ class TokenServiceIntegrationTest extends TestCase
     public function tokensHaveHighEntropy(): void
     {
         $token = TokenService::generate();
-        
+
         // Convert to binary for analysis
         $binary = hex2bin($token);
-        
+
         // Count unique bytes
+        /** @var string $binary */
         $uniqueBytes = count(array_unique(str_split($binary)));
-        
+
         // At least 20 different bytes out of 32 (good entropy)
         $this->assertGreaterThan(20, $uniqueBytes);
     }
@@ -85,7 +86,7 @@ class TokenServiceIntegrationTest extends TestCase
     {
         $token1 = TokenService::generate();
         $token2 = TokenService::generate();
-        
+
         // Compute Hamming distance
         $diff = 0;
         for ($i = 0; $i < strlen($token1); $i++) {
@@ -93,7 +94,7 @@ class TokenServiceIntegrationTest extends TestCase
                 $diff++;
             }
         }
-        
+
         // At least 50% of characters must differ
         $this->assertGreaterThan(32, $diff);
     }
@@ -106,7 +107,7 @@ class TokenServiceIntegrationTest extends TestCase
     public function validTokenFormatIsAccepted(): void
     {
         $token = TokenService::generate();
-        
+
         // A valid token should not throw an exception during format validation
         $this->assertIsString($token);
         $this->assertEquals(64, strlen($token));
@@ -148,9 +149,9 @@ class TokenServiceIntegrationTest extends TestCase
             str_repeat('b', 64),
             str_repeat('0', 64),
         ];
-        
+
         $timings = [];
-        
+
         // Measure validation time
         foreach ($invalidTokens as $token) {
             $start = microtime(true);
@@ -161,11 +162,11 @@ class TokenServiceIntegrationTest extends TestCase
             }
             $timings[] = microtime(true) - $start;
         }
-        
+
         // Times should be similar (constant-time)
         $maxTiming = max($timings);
         $minTiming = min($timings);
-        
+
         // Variance should not exceed 100% (timing-attack resistant)
         $variance = ($maxTiming - $minTiming) / $minTiming;
         $this->assertLessThan(1.2, $variance);
@@ -201,21 +202,21 @@ class TokenServiceIntegrationTest extends TestCase
     {
         $tokens = [];
         $charCount = array_fill_keys(str_split('0123456789abcdef'), 0);
-        
+
         for ($i = 0; $i < 100; $i++) {
             $token = strtolower(TokenService::generate());
             $tokens[] = $token;
-            
+
             // Count each character
             foreach (str_split($token) as $char) {
                 $charCount[$char]++;
             }
         }
-        
+
         // Calculate distribution
         $total = array_sum($charCount);
         $expected = $total / 16; // 16 possible hex characters
-        
+
         foreach ($charCount as $char => $count) {
             // Each character should appear about 1/16th of the time (±30%)
             $this->assertGreaterThan($expected * 0.7, $count, "Character '$char' underrepresented");
@@ -231,13 +232,13 @@ class TokenServiceIntegrationTest extends TestCase
     public function tokenGenerationIsEfficient(): void
     {
         $start = microtime(true);
-        
+
         for ($i = 0; $i < 1000; $i++) {
             TokenService::generate();
         }
-        
+
         $duration = microtime(true) - $start;
-        
+
         // 1000 generations in under 100ms
         $this->assertLessThan(0.1, $duration);
     }
@@ -246,9 +247,9 @@ class TokenServiceIntegrationTest extends TestCase
     public function tokenValidationIsEfficient(): void
     {
         $token = TokenService::generate();
-        
+
         $start = microtime(true);
-        
+
         for ($i = 0; $i < 1000; $i++) {
             try {
                 TokenService::validateToken($token);
@@ -256,9 +257,9 @@ class TokenServiceIntegrationTest extends TestCase
                 // Expected for invalid tokens
             }
         }
-        
+
         $duration = microtime(true) - $start;
-        
+
         // 1000 validations in under 5ms
         $this->assertLessThan(0.5, $duration);
     }
@@ -272,11 +273,11 @@ class TokenServiceIntegrationTest extends TestCase
     {
         // Simulate concurrent generations
         $tokens = [];
-        
+
         for ($i = 0; $i < 100; $i++) {
             $tokens[] = TokenService::generate();
         }
-        
+
         // All must be unique
         $this->assertCount(100, array_unique($tokens));
     }
@@ -285,18 +286,18 @@ class TokenServiceIntegrationTest extends TestCase
     public function tokenServiceHandlesMemoryEfficiently(): void
     {
         $memoryBefore = memory_get_usage();
-        
+
         $tokens = [];
         for ($i = 0; $i < 1000; $i++) {
             $tokens[] = TokenService::generate();
         }
-        
+
         $memoryAfter = memory_get_usage();
         $memoryUsed = $memoryAfter - $memoryBefore;
-        
+
         // Less than 1MB for 1000 tokens
         $this->assertLessThan(1024 * 1024, $memoryUsed);
-        
+
         unset($tokens);
     }
 
@@ -308,14 +309,14 @@ class TokenServiceIntegrationTest extends TestCase
     public function tokenGenerationWorksAfterManyIterations(): void
     {
         $lastToken = null;
-        
+
         for ($i = 0; $i < 10000; $i++) {
             $token = TokenService::generate();
-            
+
             $this->assertNotEquals($lastToken, $token);
             $lastToken = $token;
         }
-        
+
         // The last token should still be valid
         $this->assertEquals(64, strlen($lastToken));
         $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/i', $lastToken);
@@ -351,12 +352,12 @@ class TokenServiceIntegrationTest extends TestCase
         for ($i = 0; $i < 100; $i++) {
             $tokens[] = TokenService::generate();
         }
-        
+
         foreach ($tokens as $token) {
             // All must have the same format
             $this->assertEquals(64, strlen($token));
             $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/i', $token);
-            
+
             // All should be consistently lowercase OR uppercase (not mixed)
             $lower = strtolower($token);
             $upper = strtoupper($token);

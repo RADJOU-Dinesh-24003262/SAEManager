@@ -175,7 +175,7 @@ class UserWorkflowIntegrationTest extends TestCase
 
         foreach ($userTypes as $userType) {
             $user = User::createFromRegistrationData($userType['data']);
-            
+
             $this->assertInstanceOf($userType['class'], $user);
             $this->assertEquals($userType['type'], $user->getUserType());
             $this->assertTrue(password_verify('Pass123', $user->getPasswordHash()));
@@ -236,7 +236,7 @@ class UserWorkflowIntegrationTest extends TestCase
     public function passwordNeverExposedInPlainText(): void
     {
         $plainPassword = 'VerySecretPassword123';
-        
+
         $registrationData = [
             'user_type' => 'student',
             'first_name' => 'Security',
@@ -255,13 +255,13 @@ class UserWorkflowIntegrationTest extends TestCase
         // Le mot de passe ne devrait jamais être stocké en clair
         $hash = $student->getPasswordHash();
         $this->assertNotEquals($plainPassword, $hash);
-        
+
         // Sérialiser l'objet
         $serialized = serialize($student);
-        
+
         // Le mot de passe en clair ne devrait pas apparaître dans la sérialisation
         $this->assertStringNotContainsString($plainPassword, $serialized);
-        
+
         // Mais le hash devrait pouvoir vérifier le mot de passe
         $this->assertTrue(password_verify($plainPassword, $hash));
     }
@@ -292,7 +292,7 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertEquals('Müller', $student->getLastName());
         $this->assertStringContainsString('ç', $student->getFirstName());
         $this->assertStringContainsString('ü', $student->getLastName());
-        
+
         // Le mot de passe Unicode devrait être hashé correctement
         $this->assertTrue(password_verify('Pàsswørd123€', $student->getPasswordHash()));
     }

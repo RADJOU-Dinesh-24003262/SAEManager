@@ -37,18 +37,18 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailTemplateContainsValidTokenLink(): void
     {
         $token = TokenService::generate();
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $token);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         $this->assertStringContainsString($token, $html);
         $this->assertStringContainsString('https://', $html);
         $this->assertStringContainsString('/reset-password', $html);
@@ -58,19 +58,19 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailContainsBothHtmlAndTextVersions(): void
     {
         $token = TokenService::generate();
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $token);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $textMethod = $reflection->getMethod('getTextTemplate');
         $textMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
         $text = $textMethod->invoke(null, $link);
 
@@ -91,15 +91,15 @@ class EmailServiceIntegrationTest extends TestCase
     public function htmlAndTextTemplatesContainSameInformation(): void
     {
         $link = 'https://test.com/reset?token=test123';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $textMethod = $reflection->getMethod('getTextTemplate');
         $textMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
         $text = $textMethod->invoke(null, $link);
 
@@ -109,7 +109,7 @@ class EmailServiceIntegrationTest extends TestCase
             'SAEManager',
             'une seule fois',
         ];
-        
+
         foreach ($keyInfo as $info) {
             $this->assertStringContainsString($info, $html);
             $this->assertStringContainsString($info, $text);
@@ -120,11 +120,11 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailTemplatesAreConsistentAcrossMultipleGenerations(): void
     {
         $link = 'https://test.com/reset?token=abc123';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html1 = $htmlMethod->invoke(null, $link);
         $html2 = $htmlMethod->invoke(null, $link);
 
@@ -140,18 +140,18 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailDoesNotLeakSensitiveInformation(): void
     {
         $token = TokenService::generate();
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $token);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         // Check that no sensitive keywords are present
         $this->assertStringNotContainsString('user_id ', strtolower($html));
         // Does not contain email addresses or passwords
@@ -163,15 +163,15 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailLinksUseSecureProtocol(): void
     {
         $_SERVER['HTTPS'] = 'on';
-        
+
         $token = TokenService::generate();
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $token);
-        
+
         $this->assertStringStartsWith('https://', $link);
     }
 
@@ -183,13 +183,13 @@ class EmailServiceIntegrationTest extends TestCase
     public function htmlTemplateIsValidHtml(): void
     {
         $link = 'https://test.com/reset';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         // Checks the basic HTML structure
         $this->assertStringContainsString('<!DOCTYPE html>', $html);
         $this->assertStringContainsString('<html', $html);
@@ -210,18 +210,18 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailTemplateHandlesSpecialCharactersInUrl(): void
     {
         $specialToken = 'token_with_special!@#$%';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $specialToken);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         $this->assertStringContainsString($specialToken, $html);
     }
 
@@ -233,17 +233,17 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailGenerationIsPerformant(): void
     {
         $link = 'https://test.com/reset?token=test123';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $start = microtime(true);
-        
+
         for ($i = 0; $i < 50; $i++) {
             $htmlMethod->invoke(null, $link);
         }
-        
+
         $duration = microtime(true) - $start;
 
         // 50 generations should take less than 50ms
@@ -258,13 +258,13 @@ class EmailServiceIntegrationTest extends TestCase
     public function htmlTemplateHasAccessibleElements(): void
     {
         $link = 'https://test.com/reset';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         // Check accessibility elements
         $this->assertStringContainsString('lang=', $html);
         $this->assertStringContainsString('charset', $html);
@@ -274,13 +274,13 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailButtonHasProperLinkStructure(): void
     {
         $link = 'https://test.com/reset?token=abc123';
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         // Checks that the button link is properly formed
         $this->assertMatchesRegularExpression('/<a[^>]+href=\'[^\']*' . preg_quote($link, '/') . '[^\']*\'/', $html);
     }
@@ -293,18 +293,18 @@ class EmailServiceIntegrationTest extends TestCase
     public function emailHandlesVeryLongTokens(): void
     {
         $longToken = str_repeat('a', 200);
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         $link = $getLinkMethod->invoke(null, $longToken);
-        
+
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
-        
+
         $html = $htmlMethod->invoke(null, $link);
-        
+
         $this->assertStringContainsString($longToken, $html);
         // Check that the HTML contains word-break for long links
         $this->assertStringContainsString('word-break', $html);
@@ -319,16 +319,16 @@ class EmailServiceIntegrationTest extends TestCase
             'sub.domain.test.com',
             'test-site.fr'
         ];
-        
+
         $reflection = new \ReflectionClass(EmailService::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
-        
+
         foreach ($domains as $domain) {
             $_SERVER['HTTP_HOST'] = $domain;
-            
+
             $link = $getLinkMethod->invoke(null, 'token123');
-            
+
             $this->assertStringContainsString($domain, $link);
         }
     }

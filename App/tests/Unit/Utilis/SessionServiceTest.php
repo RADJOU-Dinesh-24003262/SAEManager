@@ -42,7 +42,7 @@ class SessionServiceTest extends TestCase
     public function canSetAndGetSimpleValue(): void
     {
         SessionService::set('key', 'value');
-        
+
         $this->assertEquals('value', SessionService::get('key'));
     }
 
@@ -51,7 +51,7 @@ class SessionServiceTest extends TestCase
     {
         $data = ['name' => 'John', 'age' => 30];
         SessionService::set('user', $data);
-        
+
         $this->assertEquals($data, SessionService::get('user'));
     }
 
@@ -60,9 +60,9 @@ class SessionServiceTest extends TestCase
     {
         $obj = new \stdClass();
         $obj->name = 'Test';
-        
+
         SessionService::set('object', $obj);
-        
+
         $retrieved = SessionService::get('object');
         $this->assertInstanceOf(\stdClass::class, $retrieved);
         $this->assertEquals('Test', $retrieved->name);
@@ -72,7 +72,7 @@ class SessionServiceTest extends TestCase
     public function getNonExistentKeyReturnsDefault(): void
     {
         $result = SessionService::get('nonexistent', 'default');
-        
+
         $this->assertEquals('default', $result);
     }
 
@@ -80,7 +80,7 @@ class SessionServiceTest extends TestCase
     public function getNonExistentKeyReturnsNullByDefault(): void
     {
         $result = SessionService::get('nonexistent');
-        
+
         $this->assertNull($result);
     }
 
@@ -92,7 +92,7 @@ class SessionServiceTest extends TestCase
     public function hasReturnsTrueForExistingKey(): void
     {
         SessionService::set('existing', 'value');
-        
+
         $this->assertTrue(SessionService::has('existing'));
     }
 
@@ -106,7 +106,7 @@ class SessionServiceTest extends TestCase
     public function hasReturnsTrueForEmptyString(): void
     {
         SessionService::set('empty', '');
-        
+
         $this->assertTrue(SessionService::has('empty'));
     }
 
@@ -114,7 +114,7 @@ class SessionServiceTest extends TestCase
     public function hasReturnsTrueForZero(): void
     {
         SessionService::set('zero', 0);
-        
+
         $this->assertTrue(SessionService::has('zero'));
     }
 
@@ -122,7 +122,7 @@ class SessionServiceTest extends TestCase
     public function hasReturnsTrueForFalse(): void
     {
         SessionService::set('false', false);
-        
+
         $this->assertTrue(SessionService::has('false'));
     }
 
@@ -135,7 +135,7 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('to_remove', 'value');
         SessionService::remove('to_remove');
-        
+
         $this->assertFalse(SessionService::has('to_remove'));
     }
 
@@ -143,7 +143,7 @@ class SessionServiceTest extends TestCase
     public function removeNonExistentKeyDoesNotError(): void
     {
         $this->expectNotToPerformAssertions();
-        
+
         SessionService::remove('nonexistent');
     }
 
@@ -152,9 +152,9 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('keep', 'value1');
         SessionService::set('remove', 'value2');
-        
+
         SessionService::remove('remove');
-        
+
         $this->assertTrue(SessionService::has('keep'));
         $this->assertEquals('value1', SessionService::get('keep'));
     }
@@ -167,10 +167,10 @@ class SessionServiceTest extends TestCase
     public function flashMessageIsReadOnce(): void
     {
         SessionService::setFlash('message', 'Hello');
-        
+
         $first = SessionService::getFlash('message');
         $second = SessionService::getFlash('message');
-        
+
         $this->assertEquals('Hello', $first);
         $this->assertNull($second);
     }
@@ -179,7 +179,7 @@ class SessionServiceTest extends TestCase
     public function flashMessageWithDefault(): void
     {
         $result = SessionService::getFlash('nonexistent', 'default');
-        
+
         $this->assertEquals('default', $result);
     }
 
@@ -188,7 +188,7 @@ class SessionServiceTest extends TestCase
     {
         SessionService::setFlash('msg1', 'Hello');
         SessionService::setFlash('msg2', 'World');
-        
+
         $this->assertEquals('Hello', SessionService::getFlash('msg1'));
         $this->assertEquals('World', SessionService::getFlash('msg2'));
     }
@@ -197,7 +197,7 @@ class SessionServiceTest extends TestCase
     public function hasFlashReturnsTrueForExistingFlash(): void
     {
         SessionService::setFlash('flash', 'value');
-        
+
         $this->assertTrue(SessionService::hasFlash('flash'));
     }
 
@@ -212,7 +212,7 @@ class SessionServiceTest extends TestCase
     {
         SessionService::setFlash('flash', 'value');
         SessionService::getFlash('flash'); // Consume the flash
-        
+
         $this->assertFalse(SessionService::hasFlash('flash'));
     }
 
@@ -221,7 +221,7 @@ class SessionServiceTest extends TestCase
     {
         $errors = ['error1', 'error2'];
         SessionService::setFlash('errors', $errors);
-        
+
         $retrieved = SessionService::getFlash('errors');
         $this->assertEquals($errors, $retrieved);
     }
@@ -236,7 +236,7 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('test', $value);
         $retrieved = SessionService::get('test');
-        
+
         $this->assertEquals($value, $retrieved);
     }
 
@@ -263,9 +263,9 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('user1', 'data1');
         SessionService::set('user2', 'data2');
-        
+
         SessionService::remove('user1');
-        
+
         $this->assertFalse(SessionService::has('user1'));
         $this->assertTrue(SessionService::has('user2'));
         $this->assertEquals('data2', SessionService::get('user2'));
@@ -276,7 +276,7 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('key', 'old');
         SessionService::set('key', 'new');
-        
+
         $this->assertEquals('new', SessionService::get('key'));
     }
 
@@ -285,12 +285,12 @@ class SessionServiceTest extends TestCase
     {
         SessionService::set('regular', 'value');
         SessionService::setFlash('flash', 'flash_value');
-        
+
         $this->assertTrue(SessionService::has('regular'));
         $this->assertTrue(SessionService::hasFlash('flash'));
-        
+
         SessionService::getFlash('flash'); // Consume flash
-        
+
         $this->assertTrue(SessionService::has('regular'));
         $this->assertFalse(SessionService::hasFlash('flash'));
     }
@@ -303,7 +303,7 @@ class SessionServiceTest extends TestCase
     public function canStoreEmptyString(): void
     {
         SessionService::set('empty', '');
-        
+
         $this->assertTrue(SessionService::has('empty'));
         $this->assertEquals('', SessionService::get('empty'));
     }
@@ -312,7 +312,7 @@ class SessionServiceTest extends TestCase
     public function canStoreZero(): void
     {
         SessionService::set('zero', 0);
-        
+
         $this->assertTrue(SessionService::has('zero'));
         $this->assertEquals(0, SessionService::get('zero'));
     }
@@ -321,7 +321,7 @@ class SessionServiceTest extends TestCase
     public function canStoreFalse(): void
     {
         SessionService::set('false', false);
-        
+
         $this->assertTrue(SessionService::has('false'));
         $this->assertFalse(SessionService::get('false'));
     }
@@ -331,7 +331,7 @@ class SessionServiceTest extends TestCase
     {
         $largeArray = array_fill(0, 1000, 'value');
         SessionService::set('large', $largeArray);
-        
+
         $retrieved = SessionService::get('large');
         $this->assertCount(1000, $retrieved);
     }
@@ -346,10 +346,10 @@ class SessionServiceTest extends TestCase
                 ]
             ]
         ];
-        
+
         SessionService::set('nested', $nested);
         $retrieved = SessionService::get('nested');
-        
+
         $this->assertEquals('deep value', $retrieved['level1']['level2']['level3']);
     }
 
@@ -361,15 +361,15 @@ class SessionServiceTest extends TestCase
     public function multipleOperationsAreEfficient(): void
     {
         $start = microtime(true);
-        
+
         for ($i = 0; $i < 100; $i++) {
             SessionService::set("key$i", "value$i");
             SessionService::get("key$i");
             SessionService::has("key$i");
         }
-        
+
         $duration = microtime(true) - $start;
-        
+
         // 300 operations should take less than 100ms
         $this->assertLessThan(0.1, $duration);
     }
@@ -379,7 +379,7 @@ class SessionServiceTest extends TestCase
     {
         $service1 = SessionService::class;
         $service2 = SessionService::class;
-        
+
         $this->assertEquals($service1, $service2);
     }
 }
