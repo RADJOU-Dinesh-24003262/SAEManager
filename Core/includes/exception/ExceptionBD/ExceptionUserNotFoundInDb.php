@@ -3,7 +3,7 @@
 namespace Core\includes\exception\ExceptionBD;
 
 /**
- * ExceptionuserNotFoundInBd
+ * ExceptionUserNotFoundInBd
  *
  * Custom exception thrown when a user with a specific email is not found in the database.
  *
@@ -18,10 +18,10 @@ namespace Core\includes\exception\ExceptionBD;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionuserNotFoundInBd extends \Exception
+class ExceptionUserNotFoundInBd extends \Exception
 {
     /**
-     * Constructor for the ExceptionuserNotFoundInBd class.
+     * Constructor for the ExceptionUserNotFoundInBd class.
      *
      * Initializes the exception with a message indicating that a user was not found.
      *
