@@ -14,11 +14,6 @@ install: ## Installe les dépendances
 	composer install
 	@echo "${GREEN}✓ Dépendances installées${NC}"
 
-hooks: ## Installe les Git hooks
-	@echo "${YELLOW}Installation des hooks Git...${NC}"
-	chmod +x .git/hooks/pre-commit
-	@echo "${GREEN}✓ Hooks installés${NC}"
-
 test: ## Lance les tests unitaires
 	@echo "${YELLOW}Exécution des tests...${NC}"
 	./vendor/bin/phpunit --testdox
