@@ -78,7 +78,7 @@ class ValidationServiceRegister extends FormValidator
         }
 
 
-        // Specific validation for user_type
+        // Specific validation for user_type.
         if (($data['user_type'] ?? '') === 'student') {
             $studentErrors = $this->validateStudentFields($data);
             $errors = array_merge($errors, $studentErrors);
