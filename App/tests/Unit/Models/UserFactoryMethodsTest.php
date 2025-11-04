@@ -176,7 +176,7 @@ class UserFactoryMethodsTest extends TestCase
     public function existsByEmailReturnsBooleanValue(): void
     {
         $result = User::existsByEmail('test@univ-amu.fr');
-        
+
         $this->assertIsBool($result);
     }
 
@@ -184,7 +184,7 @@ class UserFactoryMethodsTest extends TestCase
     public function existsByEmailHandlesEmptyEmail(): void
     {
         $result = User::existsByEmail('');
-        
+
         $this->assertIsBool($result);
         // In General, should return false for empty email
         $this->assertFalse($result);
@@ -195,7 +195,7 @@ class UserFactoryMethodsTest extends TestCase
     public function existsByEmailHandlesDifferentEmailFormats(string $email): void
     {
         $result = User::existsByEmail($email);
-        
+
         $this->assertIsBool($result);
     }
 
@@ -252,7 +252,7 @@ class UserFactoryMethodsTest extends TestCase
     public function setPasswordHandlesDifferentPasswordFormats(string $password): void
     {
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        
+
         $student->setPassword($password);
         $hash = $student->getPasswordHash();
 

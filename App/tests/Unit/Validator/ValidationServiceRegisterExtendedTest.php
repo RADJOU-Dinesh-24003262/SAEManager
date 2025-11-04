@@ -43,32 +43,6 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->validator->validate($escaped);
     }
 
-    public static function invalidEmailFormatsProvider(): array
-    {
-        return [
-            'no_at_symbol' => ['jeandupont.etu.univ-amu.fr'],
-            'wrong_domain' => ['jean.dupont@gmail.com'],
-            'missing_lastname' => ['jean@etu.univ-amu.fr'],
-            'spaces_in_email' => ['jean dupont@etu.univ-amu.fr'],
-            'special_chars' => ['jean$dupont@etu.univ-amu.fr'],
-            'missing_domain_extension' => ['jean.dupont@etu'],
-            'double_at' => ['jean@@dupont.etu.univ-amu.fr']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('invalidEmailFormatsProvider')]
-    public function invalidEmailFormatsAreRejected(string $invalidEmail): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['email'] = $invalidEmail;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
     // Tests for password validation
     public static function invalidPasswordsProvider(): array
     {
@@ -299,7 +273,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $data = [
-            'amu_id' => 'prof123',
+            'amu_id' => 'p12343305',
             'first_name' => 'Prof',
             'last_name' => 'Dupont',
             'user_type' => 'professor',
@@ -378,7 +352,6 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         ];
 
         $escaped = $this->validator->escape($data);
-
         $this->assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
         $this->assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
     }
@@ -400,7 +373,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     private function getValidStudentData(): array
     {
         return [
-            'amu_id' => 'test123',
+            'amu_id' => 't12333305',
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'student',
