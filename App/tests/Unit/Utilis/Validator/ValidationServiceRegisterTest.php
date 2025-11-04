@@ -39,7 +39,7 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $data = [
-            'amu_id' => 'test123',
+            'amu_id' => 'a12345678',
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'student',
