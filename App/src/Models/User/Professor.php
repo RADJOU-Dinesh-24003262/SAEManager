@@ -115,15 +115,25 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
-    protected function fetchSAEData(PDO $connection, int $userId): array
+    protected function fetchSAEData(PDO $connection, string $email): array
     {
-        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
-                                            JOIN sae_professor_groups on
-                                                SAE_subjects.sae_subject_id = sae_professor_groups.sae_subject_id
-                                            JOIN professors on
-                                                sae_professor_groups.professor_id = professors.professor_id
-                                            WHERE professors.professor_id = :professor_id');
-        $stmt->execute(['professor_id' => $userId]);
+        $stmt = $connection->prepare('  SELECT * FROM SAE_subjects sae, professors
+                                        WHERE (
+                                                -- if the professor is responsible for the SAE
+                                                sae.responsible_prof_id = professors.professor_id
+
+                                                -- or if the professor is assigned to the SAE
+                                                OR sae.sae_subject_id IN (
+                                                    SELECT spg.sae_subject_id
+                                                    FROM sae_professor_groups spg
+                                                    WHERE spg.professor_id = professors.professor_id
+                                                )
+                                            )
+                                        AND professors.professor_id = (
+                                            SELECT user_id
+                                            FROM users
+                                            WHERE email = :email);');
+        $stmt->execute(['email' => $email]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
@@ -350,7 +360,7 @@ class Professor extends User
      *
      * @return string AMU identifier.
      */
-    protected function getAmuId(): string
+    public function getAmuId(): string
     {
         return $this->amu_id;
     }

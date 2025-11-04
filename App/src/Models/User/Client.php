@@ -98,11 +98,11 @@ class Client extends User
      *
      * @return array An array of SAE subjects data.
      */
-    protected function fetchSAEData(PDO $connection, int $userId): array
+    protected function fetchSAEData(PDO $connection, string $email): array
     {
         $stmt = $connection->prepare('SELECT * FROM SAE_subjects
-                                            WHERE client_id = :client_id');
-        $stmt->execute(['client_id' => $userId]);
+                                            WHERE client_id = (SELECT user_id FROM users WHERE email = :email)');
+        $stmt->execute(['email' => $email]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }

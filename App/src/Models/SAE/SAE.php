@@ -60,14 +60,13 @@ class SAE
      *
      * @param array $data An array containing the SAE data, typically fetched from the database.
      */
-    public function __construct(array $data)
+    protected function __construct(array $data = [])
     {
-        $this->sae_subject_id = $data[0];
-        $this->responsible_prof_id = $data[1];
-        $this->client_id = $data[2];
-        $this->subject_name = $data[3];
-        $this->begin_date = $data[4];
-        $this->end_date = $data[5];
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
 
     /**
@@ -77,7 +76,7 @@ class SAE
      *
      * @return array An array of SAE objects.
      */
-    public function createSAEsFromArray(array $saes): array
+    public static function createSAEsFromArray(array $saes): array
     {
         $result = [];
         foreach ($saes as $sae) {
@@ -238,5 +237,11 @@ class SAE
     public function setEndDate(string $end_date): void
     {
         $this->end_date = $end_date;
+    }
+
+    public function getCompetences(): array
+    {
+        // Placeholder for actual implementation
+        return [];
     }
 }
