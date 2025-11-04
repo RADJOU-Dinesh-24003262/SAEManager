@@ -126,8 +126,9 @@ class ForgotPasswordControllerTest extends TestCase
             $controller->control();
         } catch (\Exception $e) {
             // May throw due to database/email issues
+        }finally{
+            $content = ob_get_clean();
         }
-        $content = ob_get_clean();
 
         // Should either have success or error message on the html page.
         $this->assertTrue(
