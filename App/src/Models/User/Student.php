@@ -61,7 +61,7 @@ class Student extends User
      *
      * @var integer
      */
-    protected int $sae_group_id;
+    protected ?int $sae_group_id = null;
 
     /**
      * The student ID.
