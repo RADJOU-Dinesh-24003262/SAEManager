@@ -106,6 +106,8 @@ class Database extends PDO
         return self::$instance;
     }
 
+
+
     /**
      * Check if PostgreSQL is available and accepting connections.
      *
@@ -396,5 +398,16 @@ class Database extends PDO
         }
 
         self::$testDbName = null;
+    }
+
+    /**
+     * Can inject a custom Database instance (for testing purposes).
+     *
+     * @param Database $instance
+     * @return void
+     */
+    public static function setInstance(Database $instance): void
+    {
+        self::$instance = $instance;
     }
 }
