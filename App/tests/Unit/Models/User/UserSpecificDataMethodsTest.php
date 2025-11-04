@@ -11,6 +11,7 @@ use Models\User\Client;
 use Models\User\User;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use PDO;
 
 /**
  * Tests for the methods fetchSpecificData and saveSpecificData
@@ -64,6 +65,8 @@ class UserSpecificDataMethodsTest extends TestCase
             'tp' => 'TPB',
             'major' => 'A'
         ];
+ 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
 
         // Expect the execute method to be called once with this parameter
         $this->mockStmt->expects($this->once())
@@ -75,6 +78,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn($studentRow);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         // Expect the prepare method to be called with a query containing 'FROM students'
         $this->mockPdo->expects($this->once())
@@ -107,6 +112,8 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $this->expectException(ExceptionFetchDataBD::class);
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         // Expect execute to be called once
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -116,6 +123,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn(false);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         // Expect prepare to be called
         $this->mockPdo->expects($this->once())
@@ -140,6 +149,8 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedQuery = null;
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         // Expect execute to be called once
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -156,10 +167,12 @@ class UserSpecificDataMethodsTest extends TestCase
                 'tp' => 'TPA'
             ]);
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+
         // Capture the prepared SQL query
         $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willReturnCallback(function($query) use (&$capturedQuery) {
+            ->willReturnCallback(function ($query) use (&$capturedQuery) {
                 $capturedQuery = $query;
                 return $this->mockStmt;
             });
@@ -196,6 +209,8 @@ class UserSpecificDataMethodsTest extends TestCase
             'amu_id' => 'martin456'
         ];
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         // Expect execute to be called with the email
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -206,6 +221,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn($professorRow);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         // Expect prepare to include 'FROM professors'
         $this->mockPdo->expects($this->once())
@@ -231,6 +248,8 @@ class UserSpecificDataMethodsTest extends TestCase
     #[Test]
     public function professorFetchSpecificDataHandlesEmptyResult(): void
     {
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         // Mock execute to succeed
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -240,6 +259,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn(false);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -256,7 +277,7 @@ class UserSpecificDataMethodsTest extends TestCase
 
         // Should not throw any exception for Professor
         $method->invoke($professor, $this->mockPdo, 'nonexistent@test.fr');
-        
+
         $this->assertTrue(true);
     }
 
@@ -272,6 +293,8 @@ class UserSpecificDataMethodsTest extends TestCase
             'organisation' => 'Tech Corp'
         ];
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         // Expect execute called with email
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -281,6 +304,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn($clientRow);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -311,12 +336,16 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function($params) use (&$capturedParams) {
+            ->willReturnCallback(function ($params) use (&$capturedParams) {
                 $capturedParams = $params;
                 return true;
             });
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -352,13 +381,17 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedQuery = null;
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         $this->mockStmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+
         $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willReturnCallback(function($query) use (&$capturedQuery) {
+            ->willReturnCallback(function ($query) use (&$capturedQuery) {
                 $capturedQuery = $query;
                 return $this->mockStmt;
             });
@@ -398,12 +431,16 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function($params) use (&$capturedParams) {
+            ->willReturnCallback(function ($params) use (&$capturedParams) {
                 $capturedParams = $params;
                 return true;
             });
+        
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -437,12 +474,16 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function($params) use (&$capturedParams) {
+            ->willReturnCallback(function ($params) use (&$capturedParams) {
                 $capturedParams = $params;
                 return true;
             });
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -482,10 +523,14 @@ class UserSpecificDataMethodsTest extends TestCase
             'major' => 'B'
         ];
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        
         // Test save
         $this->mockStmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -518,6 +563,8 @@ class UserSpecificDataMethodsTest extends TestCase
     public function saveSpecificDataHandlesDatabaseException(): void
     {
         $this->expectException(\PDOException::class);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -552,6 +599,8 @@ class UserSpecificDataMethodsTest extends TestCase
             'invalid_field' => 'should_be_ignored'
         ];
 
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+
         $this->mockStmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
@@ -559,6 +608,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn($studentRow);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -587,6 +638,7 @@ class UserSpecificDataMethodsTest extends TestCase
     #[Test]
     public function fetchSpecificDataPreservesDataTypes(): void
     {
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
         $studentRow = [
             'student_id' => 1,
             'amu_id' => 'test123',
@@ -603,6 +655,8 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->mockStmt->expects($this->once())
             ->method('fetch')
             ->willReturn($studentRow);
+
+        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
