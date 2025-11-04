@@ -229,8 +229,8 @@ class DashboardView extends AbstractView
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User  $user The user instance.
-     * @param SAE $sae  The SAE data array.
+     * @param User $user The user instance.
+     * @param SAE  $sae  The SAE data array.
      *
      * @return string The rendered HTML SAE card.
      */

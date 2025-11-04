@@ -118,7 +118,7 @@ abstract class FormValidator
     /**
      * Check if Amuid is valid with specific regex.
      *
-     * @param string $amu_id Specific id of a student or a teacher.
+     * @param  string $amu_id Specific id of a student or a teacher.
      * @return boolean
      */
     protected function isValidAmuId(string $amu_id): bool

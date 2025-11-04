@@ -11,16 +11,16 @@ use Models\SAE\SAE;
  * Provides operations specific to professors (saving, fetching
  * specific data, managing SAEs and groups).
  *
- * @category Models
- * @package  Src
+ * @category   Models
+ * @package    Src
  * @subpackage Models\User
- * @author   Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author   François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author   William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author   Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license  MIT License https://opensource.org/licenses/MIT
- * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class Professor extends User
 {
@@ -108,8 +108,8 @@ class Professor extends User
     /**
      * Retrieves the SAEs associated with the professor.
      *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $userId     The professor's ID (professor_id).
+     * @param PDO    $connection PDO object representing the database connection.
+     * @param string $email      The professor's email.
      *
      * @return array Associative array containing the SAE records.
      *
@@ -117,7 +117,8 @@ class Professor extends User
      */
     protected function fetchSAEData(PDO $connection, string $email): array
     {
-        $stmt = $connection->prepare('  SELECT * FROM SAE_subjects sae, professors
+        $stmt = $connection->prepare(
+            '  SELECT * FROM SAE_subjects sae, professors
                                         WHERE (
                                                 -- if the professor is responsible for the SAE
                                                 sae.responsible_prof_id = professors.professor_id
@@ -132,7 +133,8 @@ class Professor extends User
                                         AND professors.professor_id = (
                                             SELECT user_id
                                             FROM users
-                                            WHERE email = :email);');
+                                            WHERE email = :email);'
+        );
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
@@ -203,11 +205,13 @@ class Professor extends User
                 $data[$i] = $saedata[$i];
             }
         }
-        $stmt = $connection->prepare('UPDATE sae_subjects
+        $stmt = $connection->prepare(
+            'UPDATE sae_subjects
                                     SET sae_subject_id = sae_subject_id,
                                         responsible_prof_id = :responsible_prof_id, client_id = :client_id,
                                         subject_name = :subject_name, begin_date = :begin_date, end_date = :end_date
-                                    WHERE sae_subject_id = :sae_subject_id;');
+                                    WHERE sae_subject_id = :sae_subject_id;'
+        );
         $stmt->execute(
             [
                 'sae_subject_id' => $sae->getSaeSubjectId(),
@@ -235,17 +239,21 @@ class Professor extends User
      */
     protected function createGroup(PDO $connection, int $saeID): int
     {
-        $stmt = $connection->prepare('INSERT INTO SAE_groups(sae_subject_id)
-                                    VALUES (:sae_subject_id);');
+        $stmt = $connection->prepare(
+            'INSERT INTO SAE_groups(sae_subject_id)
+                                    VALUES (:sae_subject_id);'
+        );
         $stmt->execute(
             [
                 'sae_subject_id' => $saeID
             ]
         );
-        $stmt = $connection->prepare('SELECT sae_group_id FROM SAE_groups
+        $stmt = $connection->prepare(
+            'SELECT sae_group_id FROM SAE_groups
                                     WHERE sae_group_id NOT IN (SELECT sae_group_id FROM students)
                                     AND sae_subject_id = :sae_subject_id
-                                    LIMIT 1;');
+                                    LIMIT 1;'
+        );
         $stmt->execute(
             [
                 'sae_subject_id' => $saeID
@@ -267,9 +275,11 @@ class Professor extends User
      */
     protected function assignedSAE(PDO $connection, int $groupId, int $student): void
     {
-        $stmt = $connection->prepare('UPDATE students
+        $stmt = $connection->prepare(
+            'UPDATE students
                                     SET sae_group_id = :sae_group_id
-                                    WHERE student_id = :student_id;');
+                                    WHERE student_id = :student_id;'
+        );
         $stmt->execute(
             [
                 'sae_group_id' => $groupId,
@@ -293,9 +303,11 @@ class Professor extends User
      */
     protected function removeProfFromSae(PDO $connection, int $saeID, int $profID): void
     {
-        $stmt = $connection->prepare('DELETE FROM sae_professor_groups
+        $stmt = $connection->prepare(
+            'DELETE FROM sae_professor_groups
                                     WHERE sae_subject_id = :sae_subject_id
-                                    AND professor_id = :professor_id;');
+                                    AND professor_id = :professor_id;'
+        );
         $stmt->execute(
             [
                 'sae_subject_id' => $saeID,
@@ -317,8 +329,10 @@ class Professor extends User
      */
     protected function addProfToSae(PDO $connection, int $saeID, int $profID): void
     {
-        $stmt = $connection->prepare('INSERT INTO sae_professor_groups(sae_subject_id, professor_id)
-                                    VALUES (:sae_subject_id, :professor_id);');
+        $stmt = $connection->prepare(
+            'INSERT INTO sae_professor_groups(sae_subject_id, professor_id)
+                                    VALUES (:sae_subject_id, :professor_id);'
+        );
         $stmt->execute(
             [
                 'sae_subject_id' => $saeID,
@@ -340,9 +354,11 @@ class Professor extends User
      */
     protected function unassignedSAE(PDO $connection, SAE $sae, int $student): void
     {
-        $stmt = $connection->prepare('UPDATE students
+        $stmt = $connection->prepare(
+            'UPDATE students
                                     SET sae_group_id = :sae_subject_id
-                                    WHERE student_id = :student_id;');
+                                    WHERE student_id = :student_id;'
+        );
         $stmt->execute(
             [
                 'sae_group_id' => $sae->getSaeSubjectId(),

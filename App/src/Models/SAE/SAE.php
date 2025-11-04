@@ -21,36 +21,42 @@ class SAE
 {
     /**
      * The unique identifier for the SAE subject.
+     *
      * @var integer
      */
     private int $sae_subject_id;
 
     /**
      * The user ID of the responsible professor.
+     *
      * @var integer
      */
     private int $responsible_prof_id;
 
     /**
      * The user ID of the client associated with the SAE.
+     *
      * @var integer
      */
     private int $client_id;
 
     /**
      * The name or title of the SAE subject.
+     *
      * @var string
      */
     private string $subject_name;
 
     /**
      * The start date of the SAE.
+     *
      * @var string
      */
     private string $begin_date;
 
     /**
      * The end date of the SAE.
+     *
      * @var string
      */
     private string $end_date;
@@ -239,9 +245,14 @@ class SAE
         $this->end_date = $end_date;
     }
 
-    public function getCompetences(): array
+    /**
+     * Gets the competences associated with the SAE.
+     *
+     * @return string A comma-separated list of competences that the SAE contributes to.
+     */
+    public function getCompetences(): string
     {
-        // Placeholder for actual implementation
-        return [];
+        // Placeholder for actual implementation.
+        return '';
     }
 }

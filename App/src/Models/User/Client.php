@@ -93,15 +93,17 @@ class Client extends User
     /**
      * Fetches the SAE subjects proposed by this client.
      *
-     * @param PDO     $connection The database connection.
-     * @param integer $userId     The client's user ID.
+     * @param PDO    $connection The database connection.
+     * @param string $email      The client's email.
      *
      * @return array An array of SAE subjects data.
      */
     protected function fetchSAEData(PDO $connection, string $email): array
     {
-        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
-                                            WHERE client_id = (SELECT user_id FROM users WHERE email = :email)');
+        $stmt = $connection->prepare(
+            'SELECT * FROM SAE_subjects
+                                            WHERE client_id = (SELECT user_id FROM users WHERE email = :email)'
+        );
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;

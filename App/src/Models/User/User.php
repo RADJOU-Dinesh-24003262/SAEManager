@@ -319,7 +319,7 @@ abstract class User
     /**
      * Delete a User depending of his email
      *
-     * @param string $email The user's email.
+     * @param  string $email The user's email.
      * @return void
      * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
      */
@@ -342,13 +342,19 @@ abstract class User
 
     /**
      * Abstract method to fetch the SAE infos from the Database.
-     * @param PDO     $connection The database connection.
-     * @param integer $userId     The user's id.
+     *
+     * @param PDO    $connection The database connection.
+     * @param string $email      The user's email.
      *
      * @return array
      */
     abstract protected function fetchSAEData(PDO $connection, string $email): array;
 
+    /**
+     * Gets the SAE infos proposed/enrolled by the user.
+     *
+     * @return array An array of @see SAE data.
+     */
     public function getSaes(): array
     {
         $connection = Database::getInstance();
