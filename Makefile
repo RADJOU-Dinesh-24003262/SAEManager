@@ -14,11 +14,6 @@ install: ## Installe les dépendances
 	composer install
 	@echo "${GREEN}✓ Dépendances installées${NC}"
 
-hooks: ## Installe les Git hooks
-	@echo "${YELLOW}Installation des hooks Git...${NC}"
-	chmod +x .git/hooks/pre-commit
-	@echo "${GREEN}✓ Hooks installés${NC}"
-
 test: ## Lance les tests unitaires
 	@echo "${YELLOW}Exécution des tests...${NC}"
 	./vendor/bin/phpunit --testdox
@@ -42,7 +37,7 @@ phpcs: ## Vérifie le code style (PSR-12)
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
-	./vendor/bin/phpstan analyse . --level=8
+	./vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
 
 generate-phpdoc: ## Génère la documentation
 	@echo "${YELLOW}Génération de la documentation...${NC}"
@@ -55,7 +50,9 @@ phpdoc: ## Vérifie la documentation
 
 generate-uml: ## Génère les diagrammes de classes
 	@echo "${YELLOW}Génération des diagrammes de classes...${NC}"
-	./vendor/bin/php-class-diagram App/src/ Core/ > asset/UML/class-diagram.puml
+	./vendor/bin/php-class-diagram --exclude='Validator' \
+	--svg-topurl='https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src' \
+	App/src  > asset/UML/class-diagram.puml
 	java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
 
 

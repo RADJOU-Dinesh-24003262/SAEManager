@@ -1,7 +1,21 @@
 @startuml class-diagram
+  skinparam svgLinkTarget _blank
+  skinparam topurl https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src
   package Views as Views {
+    package Profile as Views.Profile {
+      class "ProfileView\n<b>Class ProfileView</b>" as Views_Profile_ProfileView [[/Views/Profile/ProfileView.php ProfileView Class]] {
+        #templatePath()
+        #templateKeys()
+        #getNameCss()
+      }
+      class "DeleteUserView\n<b>Class DeleteUserView</b>" as Views_Profile_DeleteUserView [[/Views/Profile/DeleteUserView.php DeleteUserView Class]] {
+        +templatePath()
+        +templateKeys()
+        +getNameCss()
+      }
+    }
     package Index as Views.Index {
-      class "IndexView\n<b>Class IndexView</b>" as Views_Index_IndexView {
+      class "IndexView\n<b>Class IndexView</b>" as Views_Index_IndexView [[/Views/Index/IndexView.php IndexView Class]] {
         +__construct()
         #templatePath()
         #templateKeys()
@@ -13,7 +27,7 @@
       }
     }
     package SaeSujet as Views.SaeSujet {
-      class "SaeSujetView\n<b>Class SaeSujetView</b>" as Views_SaeSujet_SaeSujetView {
+      class "SaeSujetView\n<b>Class SaeSujetView</b>" as Views_SaeSujet_SaeSujetView [[/Views/SaeSujet/SaeSujetView.php SaeSujetView Class]] {
         #templatePath()
         #templateKeys()
         #getPageTitle()
@@ -22,7 +36,7 @@
       }
     }
     package User as Views.User {
-      class "RegisterSuccessView\n<b>Class RegisterSuccessView</b>" as Views_User_RegisterSuccessView {
+      class "RegisterSuccessView\n<b>Class RegisterSuccessView</b>" as Views_User_RegisterSuccessView [[/Views/User/RegisterSuccessView.php RegisterSuccessView Class]] {
         -user : User
         +__construct(user)
         #templatePath()
@@ -33,7 +47,7 @@
         #getNameCss()
         #getAdditionalHeaders()
       }
-      class "LoginView\n<b>Class LoginView</b>" as Views_User_LoginView {
+      class "LoginView\n<b>Class LoginView</b>" as Views_User_LoginView [[/Views/User/LoginView.php LoginView Class]] {
         +__construct()
         #templatePath()
         #templateKeys()
@@ -41,7 +55,7 @@
         #getNameCss()
         #getAdditionalHeaders()
       }
-      class "RegisterView\n<b>Class RegisterView</b>" as Views_User_RegisterView {
+      class "RegisterView\n<b>Class RegisterView</b>" as Views_User_RegisterView [[/Views/User/RegisterView.php RegisterView Class]] {
         +__construct()
         #templatePath()
         #templateKeys()
@@ -53,14 +67,14 @@
       }
     }
     package Info as Views.Info {
-      class "SiteMapView\n<b>Class SiteMapView</b>" as Views_Info_SiteMapView {
+      class "SiteMapView\n<b>Class SiteMapView</b>" as Views_Info_SiteMapView [[/Views/Info/SiteMapView.php SiteMapView Class]] {
         #templatePath()
         #templateKeys()
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
       }
-      class "LegalNoticeView\n<b>Class LegalNoticeView</b>" as Views_Info_LegalNoticeView {
+      class "LegalNoticeView\n<b>Class LegalNoticeView</b>" as Views_Info_LegalNoticeView [[/Views/Info/LegalNoticeView.php LegalNoticeView Class]] {
         #templatePath()
         #templateKeys()
         #getPageTitle()
@@ -69,7 +83,7 @@
       }
     }
     package Dashboard as Views.Dashboard {
-      class "DashboardView\n<b>Class DashboardView</b>" as Views_Dashboard_DashboardView {
+      class "DashboardView\n<b>Class DashboardView</b>" as Views_Dashboard_DashboardView [[/Views/Dashboard/DashboardView.php DashboardView Class]] {
         +__construct(data)
         #templatePath()
         #templateKeys()
@@ -87,7 +101,7 @@
       }
     }
     package PageSAE as Views.PageSAE {
-      class "PageSaeView\n<b>Class PageSaeView</b>" as Views_PageSAE_PageSaeView {
+      class "PageSaeView\n<b>Class PageSaeView</b>" as Views_PageSAE_PageSaeView [[/Views/PageSAE/PageSaeView.php PageSaeView Class]] {
         #templatePath()
         #templateKeys()
         #getPageTitle()
@@ -96,7 +110,7 @@
       }
     }
     package pwd as Views.pwd {
-      class "ResetPasswordView\n<b>Class ResetPasswordView</b>" as Views_pwd_ResetPasswordView {
+      class "ResetPasswordView\n<b>Class ResetPasswordView</b>" as Views_pwd_ResetPasswordView [[/Views/pwd/ResetPasswordView.php ResetPasswordView Class]] {
         +__construct(token, email)
         #templatePath()
         #templateKeys()
@@ -107,7 +121,7 @@
         #getAdditionalScripts()
         #getAdditionalHeaders()
       }
-      class "ResetPasswordSuccessView\n<b>Class ResetPasswordSuccessView</b>" as Views_pwd_ResetPasswordSuccessView {
+      class "ResetPasswordSuccessView\n<b>Class ResetPasswordSuccessView</b>" as Views_pwd_ResetPasswordSuccessView [[/Views/pwd/ResetPasswordSuccessView.php ResetPasswordSuccessView Class]] {
         #templatePath()
         #templateKeys()
         #getPageTitle()
@@ -115,7 +129,7 @@
         #getAdditionalScripts()
         #getAdditionalHeaders()
       }
-      class "ForgotPasswordView\n<b>Class ForgotPasswordView</b>" as Views_pwd_ForgotPasswordView {
+      class "ForgotPasswordView\n<b>Class ForgotPasswordView</b>" as Views_pwd_ForgotPasswordView [[/Views/pwd/ForgotPasswordView.php ForgotPasswordView Class]] {
         +__construct()
         #templatePath()
         #templateKeys()
@@ -127,9 +141,11 @@
       }
     }
     package ToDoList as Views.ToDoList {
-      class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView {
+      class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView [[/Views/ToDoList/ToDoListView.php ToDoListView Class]] {
+        +__construct()
         #templatePath()
         #templateKeys()
+        -renderErrorMessages(errors)
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -137,78 +153,84 @@
       }
     }
   }
-  package Validator as Validator {
-    class "ForgotPasswordValidator\n<b>Class ForgotPasswordValidator</b>" as Validator_ForgotPasswordValidator {
-      #required : array<string>
-      +validate(data)
-    }
-    class "ValidationServiceRegister\n<b>Class ValidationServiceRegister</b>" as Validator_ValidationServiceRegister {
-      #required : array
-      +validate(data)
-      -validateStudentFields(data)
-    }
-    class "ResetPasswordValidator\n<b>Class ResetPasswordValidator</b>" as Validator_ResetPasswordValidator {
-      #required : array
-      +validate(data)
-    }
-    class "LoginValidator\n<b>Class LoginValidator</b>" as Validator_LoginValidator {
-      #required : array
-      +validate(data)
-    }
-    class "FormValidator\n<b>Class FormValidator</b>" as Validator_FormValidator {
-      #required : array
-      +escape(data)
-      {abstract} +validate(data)
-      #isValidUserType(userType)
-      #isValidEmail(email)
-      #isOwnAmuEmail(email, lname, fname)
-      #isValidPassword(password)
-      #isValidPhone(phone)
-      #isValidDate(date)
-      #isValidYear(year)
-      #isValidParcours(parcours)
-      #isValidTD(td)
-      #isValidTP(tp)
-    }
-  }
   package Models as Models {
+    package SAE as Models.SAE {
+      class "SAE\n<b>Represents a SAE (Situations d'Apprentissage et d'Évaluation) subject in the system.</b>" as Models_SAE_SAE [[/Models/SAE/SAE.php SAE Class]] {
+        -sae_subject_id : integer
+        -responsible_prof_id : integer
+        -client_id : integer
+        -subject_name : string
+        -begin_date : string
+        -end_date : string
+        +__construct(data)
+        +createSAEsFromArray(saes)
+        +getDataArray()
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+        +getResponsibleProfId()
+        +setResponsibleProfId(responsible_prof_id)
+        +getClientId()
+        +setClientId(client_id)
+        +getSubjectName()
+        +setSubjectName(subject_name)
+        +getBeginDate()
+        +setBeginDate(begin_date)
+        +getEndDate()
+        +setEndDate(end_date)
+      }
+    }
     package User as Models.User {
-      class "UserRepository\n<b>Class UserRepository</b>" as Models_User_UserRepository {
+      class "UserRepository\n<b>Class UserRepository</b>" as Models_User_UserRepository [[/Models/User/UserRepository.php UserRepository Class]] {
         -db : Database
         +__construct(db)
         +existsByEmail(email)
         +save(user)
       }
-      class "Professor\n<b>Represents a professor user in the system.</b>" as Models_User_Professor {
+      class "Professor\n<b>Represents a professor user in the system.</b>" as Models_User_Professor [[/Models/User/Professor.php Professor Class]] {
         #amu_id : string
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
-        +getAmuId()
+        #fetchSAEData(connection, userId)
+        #createSAE(connection, clientid, name, begindate, enddate, userId)
+        #updateSAE(connection, sae, data)
+        #createGroup(connection, saeID)
+        #assignedSAE(connection, groupId, student)
+        #removeProfFromSae(connection, saeID, profID)
+        #addProfToSae(connection, saeID, profID)
+        #unassignedSAE(connection, sae, student)
+        #getAmuId()
       }
-      class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client {
+      class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client [[/Models/User/Client.php Client Class]] {
         #organisation : string
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
+        #fetchSAEData(connection, userId)
         +getOrganisation()
       }
-      class "Student\n<b>Represents a student user in the system.</b>" as Models_User_Student {
+      class "Student\n<b>Represents a student user in the system.</b>" as Models_User_Student [[/Models/User/Student.php Student Class]] {
         #amu_id : string
         #year : integer
         #major : string|null
         #td : string
         #tp : string
+        #sae_group_id : integer
+        #student_id : integer
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
+        #fetchSAEData(connection, userId)
+        #getToDoList(connection)
+        #createToDoIt(connection, desc)
+        #checkToDoIt(connection, todoId, checked)
         +getAmuId()
         +getYear()
         +getParcours()
         +getTd()
         +getTp()
       }
-      class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User {
+      class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User [[/Models/User/User.php User Class]] {
         #first_name : string
         #last_name : string
         #user_type : string
@@ -225,6 +247,8 @@
         {abstract} #fetchSpecificData(db, email)
         {static} +existsByEmail(email)
         {static} +updatePasswordByEmail(email, newPassword)
+        {static} +deleteByEmail(email)
+        {abstract} #fetchSAEData(connection, userId)
         +getFirstName()
         +getLastName()
         +getFullName()
@@ -237,85 +261,120 @@
         +isClient()
       }
     }
+    package ToDoList as Models.ToDoList {
+      class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList [[/Models/ToDoList/ToDoList.php ToDoList Class]] {
+        -sae_group_id : integer
+        -sae_subject_id : ?integer
+        -todo_id : integer
+        -tododesc : string
+        -__construct(data)
+        {static} +create(data)
+        +getTodoId()
+        +getTodoDesc()
+        +getSaeGroupId()
+        +getSaeSubjectId()
+        +setSaeGroupId(sae_group_id)
+        +setSaeSubjectId(sae_subject_id)
+        +setTododesc(tododesc)
+        +setTodoId(todo_id)
+        +save()
+        +fetchDataFromDatabase(sae_group_id)
+        {static} +existBySaeGroupId(sae_group_id)
+      }
+    }
   }
   package Controllers as Controllers {
+    package Profile as Controllers.Profile {
+      class "ProfileController\n<b>Profile Controller</b>" as Controllers_Profile_ProfileController [[/Controllers/Profile/ProfileController.php ProfileController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "DeleteUserController\n<b>DeleteUser Controller</b>" as Controllers_Profile_DeleteUserController [[/Controllers/Profile/DeleteUserController.php DeleteUserController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+    }
     package Index as Controllers.Index {
-      class "IndexController\n<b>This class controls the Index page.</b>" as Controllers_Index_IndexController {
+      class "IndexController\n<b>This class controls the Index page.</b>" as Controllers_Index_IndexController [[/Controllers/Index/IndexController.php IndexController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package PageSae as Controllers.PageSae {
-      class "PageSaeController\n<b>This class controls the SAE page.</b>" as Controllers_PageSae_PageSaeController {
+      class "PageSaeController\n<b>This class controls the SAE page.</b>" as Controllers_PageSae_PageSaeController [[/Controllers/PageSae/PageSaeController.php PageSaeController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package SaeSujet as Controllers.SaeSujet {
-      class "SaeSujetController\n<b>Controller for the form of the subject of the SAE.</b>" as Controllers_SaeSujet_SaeSujetController {
+      class "SaeSujetController\n<b>Controller for the form of the subject of the SAE.</b>" as Controllers_SaeSujet_SaeSujetController [[/Controllers/SaeSujet/SaeSujetController.php SaeSujetController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package User as Controllers.User {
-      class "Logout\n<b>Logout controller.</b>" as Controllers_User_Logout {
+      class "Logout\n<b>Logout controller.</b>" as Controllers_User_Logout [[/Controllers/User/Logout.php Logout Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "Register\n<b>This class controls the register process (get).</b>" as Controllers_User_Register {
+      class "Register\n<b>This class controls the register process (get).</b>" as Controllers_User_Register [[/Controllers/User/Register.php Register Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "LoginPost\n<b>This class controls the login process (post).</b>" as Controllers_User_LoginPost {
+      class "LoginPost\n<b>This class controls the login process (post).</b>" as Controllers_User_LoginPost [[/Controllers/User/LoginPost.php LoginPost Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "Login\n<b>Class Login (GET)</b>" as Controllers_User_Login {
+      class "Login\n<b>Class Login (GET)</b>" as Controllers_User_Login [[/Controllers/User/Login.php Login Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "RegisterPost\n<b>This class controls the register process (post).</b>" as Controllers_User_RegisterPost {
+      class "RegisterPost\n<b>This class controls the register process (post).</b>" as Controllers_User_RegisterPost [[/Controllers/User/RegisterPost.php RegisterPost Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package Info as Controllers.Info {
-      class "SiteMapController\n<b>This class controls the site map page.</b>" as Controllers_Info_SiteMapController {
+      class "SiteMapController\n<b>This class controls the site map page.</b>" as Controllers_Info_SiteMapController [[/Controllers/Info/SiteMapController.php SiteMapController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "LegalNoticeController\n<b>This class controls the legal notice page.</b>" as Controllers_Info_LegalNoticeController {
+      class "LegalNoticeController\n<b>This class controls the legal notice page.</b>" as Controllers_Info_LegalNoticeController [[/Controllers/Info/LegalNoticeController.php LegalNoticeController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package Dashboard as Controllers.Dashboard {
-      class "DashboardController\n<b>Controller responsible for handling the dashboard page.</b>" as Controllers_Dashboard_DashboardController {
+      class "DashboardController\n<b>Controller responsible for handling the dashboard page.</b>" as Controllers_Dashboard_DashboardController [[/Controllers/Dashboard/DashboardController.php DashboardController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package pwd as Controllers.pwd {
-      class "ForgotPasswordPostController\n<b>Handles the POST request to the "/forgot-password" route.</b>" as Controllers_pwd_ForgotPasswordPostController {
+      class "ForgotPasswordPostController\n<b>Handles the POST request to the "/forgot-password" route.</b>" as Controllers_pwd_ForgotPasswordPostController [[/Controllers/pwd/ForgotPasswordPostController.php ForgotPasswordPostController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "ForgotPasswordController\n<b>This class controls the forgot password process (get).</b>" as Controllers_pwd_ForgotPasswordController {
+      class "ForgotPasswordController\n<b>This class controls the forgot password process (get).</b>" as Controllers_pwd_ForgotPasswordController [[/Controllers/pwd/ForgotPasswordController.php ForgotPasswordController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "ResetPasswordPostController" as Controllers_pwd_ResetPasswordPostController {
+      class "ResetPasswordPostController" as Controllers_pwd_ResetPasswordPostController [[/Controllers/pwd/ResetPasswordPostController.php ResetPasswordPostController Class]] {
         +control()
         -renderFormWithToken(token, email)
         {static} +support(path, method)
       }
-      class "ResetPasswordController\n<b>This class controls the reset password process (get).</b>" as Controllers_pwd_ResetPasswordController {
+      class "ResetPasswordController\n<b>This class controls the reset password process (get).</b>" as Controllers_pwd_ResetPasswordController [[/Controllers/pwd/ResetPasswordController.php ResetPasswordController Class]] {
         +control()
         {static} +support(path, method)
       }
     }
     package ToDoList as Controllers.ToDoList {
-      class "ToDoListController\n<b>Handles the control logic for the To-Do List page.</b>" as Controllers_ToDoList_ToDoListController {
+      class "ToDoListController\n<b>Handles the control logic for the To-Do List page.</b>" as Controllers_ToDoList_ToDoListController [[/Controllers/ToDoList/ToDoListController.php ToDoListController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "ToDoListPost\n<b>This class controls the todolist process (post).</b>" as Controllers_ToDoList_ToDoListPost [[/Controllers/ToDoList/ToDoListPost.php ToDoListPost Class]] {
         +control()
         {static} +support(path, method)
       }
@@ -326,27 +385,30 @@
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
+  Controllers_Profile_DeleteUserController ..> Models_User_User
+  Controllers_Profile_DeleteUserController ..> Views_Profile_DeleteUserView
+  Controllers_Profile_ProfileController ..> Views_Profile_ProfileView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
+  Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
+  Controllers_ToDoList_ToDoListPost ..> Views_ToDoList_ToDoListView
   Controllers_User_Login ..> Views_User_LoginView
   Controllers_User_LoginPost ..> Models_User_User
-  Controllers_User_LoginPost ..> Validator_LoginValidator
   Controllers_User_LoginPost ..> Views_User_LoginView
   Controllers_User_Logout ..> Views_Index_IndexView
   Controllers_User_Register ..> Views_User_RegisterView
   Controllers_User_RegisterPost ..> Models_User_User
-  Controllers_User_RegisterPost ..> Validator_ValidationServiceRegister
   Controllers_User_RegisterPost ..> Views_User_RegisterSuccessView
   Controllers_User_RegisterPost ..> Views_User_RegisterView
   Controllers_pwd_ForgotPasswordController ..> Views_pwd_ForgotPasswordView
   Controllers_pwd_ForgotPasswordPostController ..> Models_User_User
-  Controllers_pwd_ForgotPasswordPostController ..> Validator_ForgotPasswordValidator
   Controllers_pwd_ForgotPasswordPostController ..> Views_pwd_ForgotPasswordView
   Controllers_pwd_ResetPasswordController ..> Views_pwd_ResetPasswordView
   Controllers_pwd_ResetPasswordPostController ..> Models_User_User
-  Controllers_pwd_ResetPasswordPostController ..> Validator_ResetPasswordValidator
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Models_SAE_SAE ..> Models_SAE_SAE
+  Models_User_Professor ..> Models_SAE_SAE
   Models_User_User ..> Models_User_Client
   Models_User_User ..> Models_User_Professor
   Models_User_User ..> Models_User_Student
@@ -355,10 +417,6 @@
   Models_User_User <|-- Models_User_Professor
   Models_User_User <|-- Models_User_Student
   Models_User_UserRepository ..> Models_User_User
-  Validator_FormValidator <|-- Validator_ForgotPasswordValidator
-  Validator_FormValidator <|-- Validator_LoginValidator
-  Validator_FormValidator <|-- Validator_ResetPasswordValidator
-  Validator_FormValidator <|-- Validator_ValidationServiceRegister
   Views_Dashboard_DashboardView ..> Models_User_Student
   Views_Dashboard_DashboardView ..> Models_User_User
   Views_User_RegisterSuccessView ..> Models_User_Student

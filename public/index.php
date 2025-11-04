@@ -21,6 +21,9 @@ use Core\Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
 use Controllers\SaeSujet\SaeSujetController;
+use Controllers\Profile\ProfileController;
+use Controllers\Profile\DeleteUserController;
+use Controllers\ToDoList\ToDoListPost;
 
 // List of available controllers.
 $controllers = [
@@ -32,7 +35,6 @@ $controllers = [
     new SiteMapController(),
     new IndexController(),
     new Logout(),
-
     new ForgotPasswordController(),
     new ForgotPasswordPostController(),
     new ResetPasswordController(),
@@ -40,7 +42,10 @@ $controllers = [
     new PageSaeController(),
     new ToDoListController(),
     new SaeSujetController(),
-    new DashboardController()
+    new DashboardController(),
+    new ProfileController(),
+    new DeleteUserController(),
+    new ToDoListPost()
 ];
 
 // Automatic routing.

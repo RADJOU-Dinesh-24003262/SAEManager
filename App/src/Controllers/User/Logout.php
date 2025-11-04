@@ -13,14 +13,18 @@ use Views\Index\IndexView;
  *
  * @category Controller
  * @package  Controllers\User
- * @author   Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
 class Logout implements ControllerInterface
 {
     /**
-     * Main controller logic for logout
+     * Main controller logic for logout.
      *
      * @return void
      */
@@ -28,16 +32,19 @@ class Logout implements ControllerInterface
     {
         // Redirect to login page if user is not logged in.
         if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Veuillez vous connecter d\'abord']);
-            header('Location: /login');
+            header('Location: /');
             exit();
         }
 
         SessionService::setFlash('success', 'Vous avez été bien déconnecté de votre session');
 
+        // Unset User session.
+        SessionService::remove('user_id');
+
         // Render logout view.
         $view = new IndexView();
         $view->render();
+
 
         // Clear session.
         session_unset();     // Unset all session variables.
