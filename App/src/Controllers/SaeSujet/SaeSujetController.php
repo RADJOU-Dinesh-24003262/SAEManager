@@ -37,8 +37,7 @@ class SaeSujetController implements ControllerInterface
         if (!(SessionService::has('user_id') )) {
             header('Location: /');
             exit();
-        }
-        elseif (SessionService::has('user_id')) {
+        } elseif (SessionService::has('user_id')) {
             if (!($user->isProfessor())) {
                 header('Location: /');
                 exit();
