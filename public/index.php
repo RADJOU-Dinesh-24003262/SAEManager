@@ -4,6 +4,7 @@ session_start();
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
+use Controllers\Profile\EditProfileController;
 use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
@@ -24,6 +25,7 @@ use Controllers\SaeSujet\SaeSujetController;
 use Controllers\Profile\ProfileController;
 use Controllers\Profile\DeleteUserController;
 use Controllers\ToDoList\ToDoListPost;
+use Controllers\Profile\EditProfilePost;
 
 // List of available controllers.
 $controllers = [
@@ -45,7 +47,9 @@ $controllers = [
     new DashboardController(),
     new ProfileController(),
     new DeleteUserController(),
-    new ToDoListPost()
+    new ToDoListPost(),
+    new EditProfileController(),
+    new EditProfilePost()
 ];
 
 // Automatic routing.
