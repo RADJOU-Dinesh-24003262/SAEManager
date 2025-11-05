@@ -124,6 +124,32 @@ input[type="text"]:valid:not(:placeholder-shown):not(:focus) {
     border-color: var(--color-success);
 }
 
+input[type="url"],input[type="date"],
+textarea {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: var(--text-base);
+    line-height: 1.5;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color var(--transition), background-color var(--transition);
+}
+
+input[type="url"]:focus, input[type="date"]:focus,
+textarea:focus {
+    outline: var(--focus-width) solid var(--color-primary);
+    outline-offset: 0;
+    border-color: var(--color-primary);
+    background: var(--color-primary-pale);
+}
+
+input[type="url"]:invalid:not(:placeholder-shown):not(:focus), input[type="date"]:invalid:not(:placeholder-shown):not(:focus){
+    border-color: var(--color-error);
+}
+
 /* Textarea spécifique */
 .text-name {
     width: 100%;
