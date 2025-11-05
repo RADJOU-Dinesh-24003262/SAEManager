@@ -65,7 +65,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'tp' => 'TPB',
             'major' => 'A'
         ];
- 
+
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
 
         // Expect the execute method to be called once with this parameter
@@ -439,7 +439,7 @@ class UserSpecificDataMethodsTest extends TestCase
                 $capturedParams = $params;
                 return true;
             });
-        
+
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
@@ -524,7 +524,7 @@ class UserSpecificDataMethodsTest extends TestCase
         ];
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
-        
+
         // Test save
         $this->mockStmt->expects($this->once())
             ->method('execute')
