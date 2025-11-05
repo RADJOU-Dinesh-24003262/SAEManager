@@ -106,7 +106,7 @@ class ToDoList
      */
     public function getSaeGroupId(): int
     {
-        return $this->sae_group_id;
+        return $this->groupId;
     }
 
     /**
@@ -206,7 +206,7 @@ class ToDoList
                 $this->sae_subject_id = $data['sae_subject_id'];
                 $this->todo_id = $data['todo_id'];
                 $this->tododesc = $data['tododesc'];
-                $this->sae_group_id = $data['sae_group_id'];
+                $this->groupId = $data['sae_group_id'];
             } else {
                 throw new ExceptionFetchDataBD();
             }
