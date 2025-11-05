@@ -20,7 +20,6 @@ namespace Core\includes\exception\ExceptionValidation;
  */
 class ExeptionValidationSAECreation extends \Exception
 {
-
     /**
      * @var string Additional information about the SAE creation validation failure
      */
