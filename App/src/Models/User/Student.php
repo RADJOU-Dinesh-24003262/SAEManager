@@ -144,23 +144,20 @@ class Student extends User
     /**
      * Fetches the SAE subjects and group data for the student.
      *
-     * @param PDO    $connection The database connection.
-     * @param string $email      The student's email.
+     * @param PDO $connection The database connection.
+     * @param int $userId     The student's user ID.
      *
      * @return array An array of SAE data (subject and group information).
      */
-    protected function fetchSAEData(PDO $connection, string $email): array
+    protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
             'SELECT * FROM SAE_subjects
                                             JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
                                             JOIN students ON SAE_groups.SAE_group_id = students.sae_group_id
-                                            WHERE students.student_id = (
-                                                                            SELECT user_id 
-                                                                            FROM users 
-                                                                            WHERE email = :email)'
+                                            WHERE students.student_id = :user_id'
         );
-        $stmt->execute(['email' => $email]);
+        $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }

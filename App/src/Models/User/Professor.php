@@ -108,14 +108,14 @@ class Professor extends User
     /**
      * Retrieves the SAEs associated with the professor.
      *
-     * @param PDO    $connection PDO object representing the database connection.
-     * @param string $email      The professor's email.
+     * @param PDO $connection PDO object representing the database connection.
+     * @param int $userId     The professor's user ID.
      *
      * @return array Associative array containing the SAE records.
      *
      * @throws \PDOException If an error occurs during query execution.
      */
-    protected function fetchSAEData(PDO $connection, string $email): array
+    protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
             '  SELECT * FROM SAE_subjects sae, professors
@@ -130,12 +130,9 @@ class Professor extends User
                                                     WHERE spg.professor_id = professors.professor_id
                                                 )
                                             )
-                                        AND professors.professor_id = (
-                                            SELECT user_id
-                                            FROM users
-                                            WHERE email = :email);'
+                                        AND professors.professor_id = :user_id;'
         );
-        $stmt->execute(['email' => $email]);
+        $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
