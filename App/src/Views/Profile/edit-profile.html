@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile - SAEManager</title>
+</head>
+<body>
+<form action="/send-edit-profile" method="post" autocomplete="on">
+    <label>Prenom Actuel : {{FIRSTNAME}} </label>
+    <br>
+    <label for="firstname">
+        Modifier le Prenom
+    </label>
+    <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            maxlength="40">
+
+    <br>
+
+    <label>Prenom Actuel : {{LASTNAME}} </label>
+    <br>
+    <label for="lastname">
+        Modifier le Nom
+    </label>
+    <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            maxlength="40">
+
+    <br>
+
+    <label>Telephone Actuel : {{PHONE}} </label>
+    <br>
+    <label for="phone">
+        Téléphone
+    </label>
+    <input
+            type="text"
+            id="phone"
+            name="phone"
+            pattern="0[467][0-9]{8}"
+            maxlength="10">
+    <br>
+    <button type="submit">Modifier ses données</button>
+
+</form>
+</body>
+</html>
