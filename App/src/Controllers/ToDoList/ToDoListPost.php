@@ -47,6 +47,8 @@ class ToDoListPost implements ControllerInterface
         try {
             $data = $validator->escape($_POST);
             $validator->validate($data);
+            $user = unserialize(SessionService::get('USER'));
+            $data['groupId'] = $user->groupId;
 
             // Create the ToDoList.
             $todolist = ToDoList::create($data);
