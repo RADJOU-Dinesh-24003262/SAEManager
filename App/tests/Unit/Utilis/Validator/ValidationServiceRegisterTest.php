@@ -186,7 +186,6 @@ class ValidationServiceRegisterTest extends TestCase
         $data['td'] = 'TD1';
         $data['tp'] = 'TPA';
         // Missing parcours
-
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -201,7 +200,6 @@ class ValidationServiceRegisterTest extends TestCase
         $data = $this->getValidBaseData();
         $data['user_type'] = 'professor';
         // No student fields
-
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
