@@ -265,7 +265,7 @@
     }
     package ToDoList as Models.ToDoList {
       class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList [[/Models/ToDoList/ToDoList.php ToDoList Class]] {
-        -sae_group_id : integer
+        -groupId : integer
         -sae_subject_id : ?integer
         -todo_id : integer
         -tododesc : string
@@ -275,7 +275,7 @@
         +getTodoDesc()
         +getSaeGroupId()
         +getSaeSubjectId()
-        +setSaeGroupId(sae_group_id)
+        +setSaeGroupId(groupId)
         +setSaeSubjectId(sae_subject_id)
         +setTododesc(tododesc)
         +setTodoId(todo_id)
