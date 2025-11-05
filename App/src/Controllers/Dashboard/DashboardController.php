@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionDashboard;
 use Views\Dashboard\DashboardView;
 use Models\User\User;
 use Core\Utilis\SessionService;
+use Models\SAE\SAE;
 
 /**
  * Controller responsible for handling the dashboard page.
@@ -62,6 +63,8 @@ class DashboardController implements ControllerInterface
             if (!$user) {
                 throw new ExceptionDashboard('Utilisateur inconnu');
             }
+
+            $data['saes'] = SAE::createSAEsFromArray($user->getSaes());
 
             // Create and render the dashboard view.
             $view = new DashboardView($data);
