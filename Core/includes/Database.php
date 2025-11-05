@@ -2,6 +2,7 @@
 
 namespace Core\includes;
 
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Exception;
 use PDO;
 use PDOException;
