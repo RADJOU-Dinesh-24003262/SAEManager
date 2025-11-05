@@ -89,6 +89,10 @@ class ValidationServiceRegisterTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Provides invalid email formats for testing.
+     * @return array<string, array<string>> Array of invalid email test cases.
+     */
     public static function invalidEmailProvider(): array
     {
         return [
@@ -130,6 +134,10 @@ class ValidationServiceRegisterTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Provides invalid phone numbers for testing.
+     * @return array<string, array<string>> Array of invalid phone test cases.
+     */
     public static function invalidPhoneProvider(): array
     {
         return [
@@ -206,6 +214,7 @@ class ValidationServiceRegisterTest extends TestCase
 
     /**
      * Helper to get valid base data
+     * @return array<string, string> Valid base data for tests.
      */
     private function getValidBaseData(): array
     {

@@ -42,11 +42,11 @@ class SiteMapView extends AbstractView
     }
 
     /**
-     * Returns an empty array. Implemented from the parent class.
+     * Returns an associative array.
      *
-     * This method returns an empty array.
+     * This method returns an associative array with template keys to be used in the view.
      *
-     * @return array An empty array
+     * @return array<string, string> An empty array
      */
     protected function templateKeys(): array
     {

@@ -73,14 +73,14 @@ class ResetPasswordView extends AbstractView
      * This method prepares data for rendering in the template, including
      * error messages, the reset token, and the masked user email.
      *
-     * @return array An associative array containing template keys and values.
+     * @return array<string, string> An associative array containing template keys and values.
      */
     protected function templateKeys(): array
     {
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($this->data['errors']),
-            'TOKEN'          => htmlspecialchars($this->data['token']),
-            'EMAIL_DISPLAY'  => htmlspecialchars($this->maskEmail($this->data['email'])),
+            'TOKEN'          => $this->data['token'],
+            'EMAIL_DISPLAY'  => $this->maskEmail($this->data['email']),
         ];
     }
 
@@ -125,7 +125,7 @@ class ResetPasswordView extends AbstractView
      *
      * If no errors are present, an empty string is returned.
      *
-     * @param array $errors The list of error messages to display.
+     * @param array<string> $errors The list of error messages to display.
      *
      * @return string The HTML markup for error messages, or an empty string if none exist.
      */

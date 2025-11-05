@@ -41,7 +41,7 @@ class DashboardView extends AbstractView
      *
      * Initializes the dashboard with user-specific data and flash messages.
      *
-     * @param array $data Data passed to the view. Must include a 'user' key.
+     * @param array<string, mixed> $data Data passed to the view, including 'user' and 'saes'.
      */
     public function __construct(array $data)
     {
@@ -68,7 +68,7 @@ class DashboardView extends AbstractView
     /**
      * Returns the list of keys and rendered values used in the HTML template.
      *
-     * @return array The list of template keys and values.
+     * @return array<string, string> The list of template keys and values.
      */
     protected function templateKeys(): array
     {
@@ -92,7 +92,7 @@ class DashboardView extends AbstractView
     /**
      * Renders error messages in HTML format.
      *
-     * @param array $errors List of error messages.
+     * @param array<string> $errors List of error messages.
      *
      * @return string The rendered HTML or an empty string.
      */
@@ -206,8 +206,8 @@ class DashboardView extends AbstractView
     /**
      * Renders the SAE content section with cards or an empty message.
      *
-     * @param User  $user The user instance.
-     * @param array $saes List of SAE data arrays.
+     * @param User               $user The user instance.
+     * @param array<string, SAE> $saes List of SAE data arrays.
      *
      * @return string The rendered HTML content.
      */

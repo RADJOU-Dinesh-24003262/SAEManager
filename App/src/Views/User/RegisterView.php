@@ -165,7 +165,7 @@ class RegisterView extends AbstractView
 
         $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></section>';
 

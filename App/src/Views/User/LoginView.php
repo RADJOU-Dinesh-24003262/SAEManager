@@ -75,8 +75,6 @@ class LoginView extends AbstractView
     /**
      * Renders error messages as an HTML list.
      *
-     * Applies htmlspecialchars to prevent XSS.
-     *
      * @param array<int, string> $errors List of error messages.
      *
      * @return string HTML string of formatted error messages or empty string.
@@ -89,7 +87,7 @@ class LoginView extends AbstractView
 
         $html = '<div class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></div>';
 

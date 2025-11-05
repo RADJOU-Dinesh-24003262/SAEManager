@@ -59,10 +59,9 @@ class ToDoListView extends AbstractView
     /**
      * Returns an associative array of keys and values used in the HTML template.
      *
-     * This method returns an empty array because the To-Do List page
      * does not require dynamic data to render.
      *
-     * @return array An empty associative array.
+     * @return array<string, string> An associative array.
      */
     protected function templateKeys(): array
     {
@@ -86,7 +85,7 @@ class ToDoListView extends AbstractView
 
         $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
         foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></section>';
 

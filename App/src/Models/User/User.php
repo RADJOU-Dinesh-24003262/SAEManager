@@ -29,7 +29,7 @@ abstract class User
     /**
      * The unique identifier of the user.
      *
-     * @var int
+     * @var integer
      */
     protected int $user_id;
 
@@ -78,7 +78,7 @@ abstract class User
     /**
      * Initializes a new User instance with optional data.
      *
-     * @param array $data Optional data to initialize the user with.
+     * @param array<string, string|integer|null> $data Optional data to initialize the user with.
      */
     protected function __construct(array $data = [])
     {
@@ -96,7 +96,7 @@ abstract class User
     /**
      * Factory method to create the appropriate user type from registration data.
      *
-     * @param array $data The registration data.
+     * @param array<string, string> $data The registration data.
      *
      * @return User The created user instance.
      * @throws \InvalidArgumentException If user is not valid.
@@ -119,7 +119,7 @@ abstract class User
     /**
      * Factory method to create a user from login data.
      *
-     * @param array $data The login credentials.
+     * @param array<string, string> $data The login credentials.
      *
      * @return User The authenticated user instance.
      *
@@ -350,17 +350,17 @@ abstract class User
     /**
      * Abstract method to fetch the SAE infos from the Database.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The user's ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The user's ID.
      *
-     * @return array
+     * @return array<array<string, string>> An array of SAE data.
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
     /**
      * Gets the SAE infos proposed/enrolled by the user.
      *
-     * @return array An array of @see SAE data.
+     * @return array<array<string, string>> An array of @see SAE data.
      */
     public function getSaes(): array
     {

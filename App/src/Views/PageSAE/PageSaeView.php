@@ -47,11 +47,11 @@ class PageSaeView extends AbstractView
     }
 
     /**
-     * Returns an empty array. Implemented from the parent class.
+     * Returns an associative array with template keys to be used in the view.
      *
-     * This method returns an empty array.
+     * This method returns the data for rendering the SAE page.
      *
-     * @return array An empty array
+     * @return array<string, string> An associative array
      */
     protected function templateKeys(): array
     {

@@ -42,7 +42,7 @@ class ForgotPasswordValidator extends FormValidator
      * - Whether the email is syntactically valid.
      * - Whether the user is allowed to make another reset request (2-minute cooldown).
      *
-     * @param array $data The form data to validate.
+     * @param array<string, string> $data The form data to validate.
      *
      * @throws ExceptionValidationForgotPassword If the email field is invalid.
      * @throws ExceptionSpam If a reset request was made less than 2 minutes ago.

@@ -99,7 +99,7 @@ class TokenService
      *
      * @param string $token The token to validate.
      *
-     * @return array The token details if valid.
+     * @return array<string, string> The token details if valid.
      *
      * @throws ExceptionInvalidToken If the token is invalid, expired, or already used.
      */

@@ -75,7 +75,7 @@ class Student extends User
     /**
      * Initializes a new student.
      *
-     * @param array $data The student data.
+     * @param array<string, string|integer|null> $data The student data.
      */
     public function __construct(array $data = [])
     {
@@ -144,10 +144,10 @@ class Student extends User
     /**
      * Fetches the SAE subjects and group data for the student.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The student's user ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The student's user ID.
      *
-     * @return array An array of SAE data (subject and group information).
+     * @return array<array<string, string>> An array of SAE data (subject and group information).
      */
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
@@ -167,7 +167,7 @@ class Student extends User
      *
      * @param PDO $connection The database connection.
      *
-     * @return array An array of Todo items.
+     * @return array<string, string> An array of Todo items.
      */
     protected function getToDoList(PDO $connection): array
     {

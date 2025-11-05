@@ -30,7 +30,7 @@ class Client extends User
     /**
      * Initializes a new client.
      *
-     * @param array $data The client data.
+     * @param array<string, string> $data The client data.
      */
     public function __construct(array $data = [])
     {
@@ -93,10 +93,10 @@ class Client extends User
     /**
      * Fetches the SAE subjects proposed by this client.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The client's user ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The client's user ID.
      *
-     * @return array An array of SAE subjects data.
+     * @return array<array<string>> An array of SAE subjects data.
      */
     protected function fetchSAEData(PDO $connection, int $userId): array
     {

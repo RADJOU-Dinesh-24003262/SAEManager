@@ -38,7 +38,7 @@ class DeleteUserView extends AbstractView
     /**
      * Returns the list of keys and rendered values used in the HTML template.
      *
-     * @return array The list of template keys and values.
+     * @return array<string, string> The list of template keys and values.
      */
     public function templateKeys(): array
     {

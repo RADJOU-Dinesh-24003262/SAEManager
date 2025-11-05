@@ -110,6 +110,7 @@ class SaeSujetControllerUnitTest extends TestCase
 
     /**
      * DATA PROVIDERS FOR THE UNIT TESTS OF support()
+     * @return array<string, array{0: string, 1: string, 2: bool}> Test cases for support() method.
      */
     public static function validSupportProvider(): array
     {
@@ -118,6 +119,10 @@ class SaeSujetControllerUnitTest extends TestCase
         ];
     }
 
+    /**
+     * DATA PROVIDERS FOR THE UNIT TESTS OF support()
+     * @return array<string, array{0: string, 1: string, 2: bool}> Test cases for support() method.
+     */
     public static function invalidPathProvider(): array
     {
         return [
@@ -131,6 +136,10 @@ class SaeSujetControllerUnitTest extends TestCase
         ];
     }
 
+    /**
+     * DATA PROVIDERS FOR THE UNIT TESTS OF support()
+     * @return array<string, array{0: string, 1: string, 2: bool}> Test cases for support() method.
+     */
     public static function invalidMethodProvider(): array
     {
         return [
@@ -144,6 +153,10 @@ class SaeSujetControllerUnitTest extends TestCase
         ];
     }
 
+    /**
+     * DATA PROVIDERS FOR THE UNIT TESTS OF support()
+     * @return array<string, array{0: string, 1: string, 2: bool}> Test cases for support() method.
+     */
     public static function completelyInvalidProvider(): array
     {
         return [

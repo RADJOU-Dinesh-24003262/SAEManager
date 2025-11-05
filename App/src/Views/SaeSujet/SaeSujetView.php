@@ -48,7 +48,7 @@ class SaeSujetView extends AbstractView
     /**
      * Returns an array of keys used in the template for dynamic content replacement.
      *
-     * @return array An associative array of template keys and their corresponding values.
+     * @return array<string, string> An associative array of template keys and their corresponding values.
      */
     protected function templateKeys(): array
     {

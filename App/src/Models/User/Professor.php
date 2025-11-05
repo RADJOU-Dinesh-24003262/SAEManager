@@ -37,7 +37,7 @@ class Professor extends User
      * Sets the user type and delegates initialization to the parent
      * constructor (User).
      *
-     * @param array $data Optional initial data for the professor.
+     * @param array<string, string> $data Optional initial data for the professor.
      */
     public function __construct(array $data = [])
     {
@@ -108,10 +108,10 @@ class Professor extends User
     /**
      * Retrieves the SAEs associated with the professor.
      *
-     * @param PDO $connection PDO object representing the database connection.
-     * @param int $userId     The professor's user ID.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $userId     The professor's user ID.
      *
-     * @return array Associative array containing the SAE records.
+     * @return array<array<string>> Associative array containing the SAE records.
      *
      * @throws \PDOException If an error occurs during query execution.
      */
@@ -183,12 +183,12 @@ class Professor extends User
      *
      * If a value in the \$data array is NULL, the current value of the SAE is kept.
      *
-     * @param PDO             $connection PDO object representing the database connection.
-     * @param \Models\SAE\SAE $sae        SAE instance representing the current record.
-     * @param array           $data       Associative array of fields to update.
-     *                                    Expected keys: 'responsible_prof_id',
-     *                                    'client_id', 'subject_name',
-     *                                    'begin_date', 'end_date'.
+     * @param PDO                  $connection PDO object representing the database connection.
+     * @param \Models\SAE\SAE      $sae        SAE instance representing the current record.
+     * @param array<string, mixed> $data       Associative array of fields to update.
+     *                                         Expected keys: 'responsible_prof_id',
+     *                                         'client_id', 'subject_name',
+     *                                         'begin_date', 'end_date'.
      *
      * @return void
      *
