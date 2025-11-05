@@ -37,17 +37,17 @@ class SAECreateValidator extends FormValidator
     {
         $stmt = $connection->prepare('SELECT * FROM clients WHERE client_id = :id');
         $stmt->execute(['id' => $client]);
-        return (!$stmt->rowCount() > 0);
+        return(!$stmt->rowCount()>0);
     }
 
     private function validateSaeName(PDO $connection, string $name) : bool
     {
-        return (!strlen($name) > 255);
+        return(!strlen($name)>255);
     }
 
     private function validateSaeDesc(PDO $connection, string $desc) : bool
     {
-        return (!strlen($desc) > 255);
+        return(!strlen($desc)>255);
     }
 
 }
