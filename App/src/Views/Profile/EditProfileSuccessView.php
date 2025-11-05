@@ -6,7 +6,6 @@ use Core\AbstractView;
 
 class EditProfileSuccessView extends AbstractView
 {
-
     private const TEMPLATE_HTML = __DIR__ . '/edit-profile-success.html';
 
     /**

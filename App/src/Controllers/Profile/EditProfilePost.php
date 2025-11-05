@@ -21,7 +21,7 @@ class EditProfilePost implements ControllerInterface
     /**
      * @param string $path
      * @param string $method
-     * @return bool
+     * @return boolean
      */
     public static function support(string $path, string $method): bool
     {
