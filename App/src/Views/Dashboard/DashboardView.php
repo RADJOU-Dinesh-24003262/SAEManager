@@ -189,7 +189,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>SAE</h3>';
 
         if ($user->isProfessor()) {
-            $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
+            $html .= '<a class="btn-create" href="/new-sae">+ Créer une nouvelle SAE</a>';
             $html .= '<a href="/sae">Toutes les SAE</a>';
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
