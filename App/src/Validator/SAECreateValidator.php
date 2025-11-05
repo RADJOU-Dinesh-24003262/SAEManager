@@ -33,18 +33,20 @@ class SAECreateValidator extends FormValidator
      */
     protected $required = ['name', 'desc', 'client'];
 
-
-    private function validateClient(PDO $connection, int $client) : bool{
+    private function validateClient(PDO $connection, int $client) : bool
+    {
         $stmt = $connection->prepare('SELECT * FROM clients WHERE client_id = :id');
         $stmt->execute(['id' => $client]);
         return (!$stmt->rowCount() > 0);
     }
 
-    private function validateSaeName(PDO $connection, String $name) : bool{
+    private function validateSaeName(PDO $connection, string $name) : bool
+    {
         return (!strlen($name) > 255);
     }
 
-    private function validateSaeDesc(PDO $connection, String $desc) : bool{
+    private function validateSaeDesc(PDO $connection, string $desc) : bool
+    {
         return (!strlen($desc) > 255);
     }
 
