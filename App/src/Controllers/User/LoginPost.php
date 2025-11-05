@@ -56,7 +56,7 @@ class LoginPost implements ControllerInterface
             $data['email'] = trim($data['email'] ?? '');
             error_log("Tentative de connexion - Username: {$data['email']}");
 
-            $user = User    ::createFromLoginData($data);
+            $user = User::createFromLoginData($data);
             SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
