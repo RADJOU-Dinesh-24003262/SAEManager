@@ -27,6 +27,13 @@ use PDOException;
 abstract class User
 {
     /**
+     * The unique identifier of the user.
+     *
+     * @var int
+     */
+    protected int $user_id;
+
+    /**
      * The first name of the user.
      *
      * @var string
@@ -319,7 +326,7 @@ abstract class User
     /**
      * Delete a User depending of his email
      *
-     * @param string $email The user's email.
+     * @param  string $email The user's email.
      * @return void
      * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
      */
@@ -342,13 +349,24 @@ abstract class User
 
     /**
      * Abstract method to fetch the SAE infos from the Database.
-     * @param PDO     $connection The database connection.
-     * @param integer $userId     The user's id.
+     *
+     * @param PDO $connection The database connection.
+     * @param int $userId     The user's ID.
      *
      * @return array
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
+    /**
+     * Gets the SAE infos proposed/enrolled by the user.
+     *
+     * @return array An array of @see SAE data.
+     */
+    public function getSaes(): array
+    {
+        $connection = Database::getInstance();
+        return $this->fetchSAEData($connection, $this->user_id);
+    }
 
     // -----------------
     // Getters
