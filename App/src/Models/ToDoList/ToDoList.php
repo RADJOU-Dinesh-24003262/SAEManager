@@ -118,12 +118,12 @@ class ToDoList
     }
 
     /**
-     * @param  integer $sae_group_id The id of the group of SAE.
+     * @param  integer $groupId The id of the group of SAE.
      * @return void
      */
-    public function setSaeGroupId(int $sae_group_id): void
+    public function setSaeGroupId(int $groupId): void
     {
-        $this->sae_group_id = $sae_group_id;
+        $this->$groupId = $groupId;
     }
 
     /**
