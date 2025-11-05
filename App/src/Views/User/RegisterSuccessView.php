@@ -92,14 +92,14 @@ class RegisterSuccessView extends AbstractView
     private function getUserTypeLabel(): string
     {
         switch ($this->user->getUserType()) {
-        case 'student':
-            return 'Étudiant';
-        case 'professor':
-            return 'Responsable SAE';
-        case 'client':
-            return 'Partenaire entreprise';
-        default:
-            return 'Utilisateur';
+            case 'student':
+                return 'Étudiant';
+            case 'professor':
+                return 'Responsable SAE';
+            case 'client':
+                return 'Partenaire entreprise';
+            default:
+                return 'Utilisateur';
         }
     }
 
