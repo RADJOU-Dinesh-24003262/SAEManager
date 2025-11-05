@@ -4,7 +4,6 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
-use Core\includes\exception\ExceptionBD\ExceptionuserNotFoundInBd;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -27,6 +26,13 @@ use PDOException;
  */
 abstract class User
 {
+    /**
+     * The unique identifier of the user.
+     *
+     * @var int
+     */
+    protected int $user_id;
+
     /**
      * The first name of the user.
      *
@@ -317,7 +323,13 @@ abstract class User
         }
     }
 
-
+    /**
+     * Delete a User depending of his email
+     *
+     * @param  string $email The user's email.
+     * @return void
+     * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
+     */
     public static function deleteByEmail(string $email): void
     {
         try {
@@ -331,18 +343,30 @@ abstract class User
             }
         } catch (PDOException $e) {
             error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new ExceptionuserNotFoundInBd();
+            throw new ExceptionDeleteUserFailed();
         }
     }
+
     /**
      * Abstract method to fetch the SAE infos from the Database.
-     * @param PDO     $connection The database connection.
-     * @param integer $userId     The user's id.
+     *
+     * @param PDO $connection The database connection.
+     * @param int $userId     The user's ID.
      *
      * @return array
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
+    /**
+     * Gets the SAE infos proposed/enrolled by the user.
+     *
+     * @return array An array of @see SAE data.
+     */
+    public function getSaes(): array
+    {
+        $connection = Database::getInstance();
+        return $this->fetchSAEData($connection, $this->user_id);
+    }
 
     // -----------------
     // Getters
