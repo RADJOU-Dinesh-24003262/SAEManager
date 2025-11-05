@@ -27,6 +27,13 @@ use PDOException;
 abstract class User
 {
     /**
+     * The unique identifier of the user.
+     *
+     * @var int
+     */
+    protected int $user_id;
+
+    /**
      * The first name of the user.
      *
      * @var string
@@ -343,12 +350,12 @@ abstract class User
     /**
      * Abstract method to fetch the SAE infos from the Database.
      *
-     * @param PDO    $connection The database connection.
-     * @param string $email      The user's email.
+     * @param PDO $connection The database connection.
+     * @param int $userId     The user's ID.
      *
      * @return array
      */
-    abstract protected function fetchSAEData(PDO $connection, string $email): array;
+    abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
     /**
      * Gets the SAE infos proposed/enrolled by the user.
@@ -358,7 +365,7 @@ abstract class User
     public function getSaes(): array
     {
         $connection = Database::getInstance();
-        return $this->fetchSAEData($connection, $this->email);
+        return $this->fetchSAEData($connection, $this->user_id);
     }
 
     // -----------------

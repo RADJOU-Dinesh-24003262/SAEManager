@@ -242,7 +242,7 @@ class DashboardView extends AbstractView
         $html .= '</div>';
         $html .= '<div class="sae-body">';
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
-        $html .= '<p><strong>Compétences :</strong> ' . $sae->getCompetences() . '</p>';
+        $html .= '<p><strong>Compétences :</strong> ' . '$sae->getCompetences()' . '</p>';
 
         if (!empty($sae->getResponsibleProfId())) {
             $html .= '<p><strong>Enseignant :</strong> ' . $sae->getResponsibleProfId() . '</p>';

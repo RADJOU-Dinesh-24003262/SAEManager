@@ -244,15 +244,4 @@ class SAE
     {
         $this->end_date = $end_date;
     }
-
-    /**
-     * Gets the competences associated with the SAE.
-     *
-     * @return string A comma-separated list of competences that the SAE contributes to.
-     */
-    public function getCompetences(): string
-    {
-        // Placeholder for actual implementation.
-        return '';
-    }
 }
