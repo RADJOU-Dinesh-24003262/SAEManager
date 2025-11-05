@@ -1,6 +1,6 @@
 <form action="/sae-sujet" method="post" autocomplete="off">
     <fieldset>
-        <legend>Créer votre sujet</legend>
+        <legend>Votre sujet</legend>
 
         <label for="name">
             Nom de votre SAE
@@ -21,6 +21,18 @@
         <div class="text-name">
             <label for="description">Description</label>
             <textarea type="text" id="description" name="decrip_sujet" rows="auto" cols="auto" placeholder="Votre description ici"></textarea>
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <div class="rendu">
+            <label for="end_date">Date de rendu :</label>
+            <input required type="date" id="end_date" name="date_rendu">
+        </div>
+
+        <div class="rendu">
+            <label for="rendu_url">URL du rendu :</label>
+            <input type="url" id="rendu_url" name="rendu" placeholder="Votre URL ici">
         </div>
     </fieldset>
 

@@ -11,16 +11,17 @@ use PDOException;
  * Class ToDoList
  * This class contains functions to create and manage the task in to-do-list,
  * and handles communication with the database layer.
- * @category Models
- * @package Src
+ *
+ * @category    Models
+ * @package     Src
  * @subpackages Models\ToDoList
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
- * @license MIT License https://opensource.org/licenses/MIT
- * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author      François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author      William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author      Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author      Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license     MIT License https://opensource.org/licenses/MIT
+ * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ToDoList
 {
@@ -33,6 +34,7 @@ class ToDoList
     /**
      * This is the id of the subject of sae
      * common for each student in the group of SAE.
+     *
      * @var ?integer $sae_subject_id
      */
     private ?int $sae_subject_id;
@@ -40,12 +42,14 @@ class ToDoList
     /**
      * This is the id of the to-do-list
      * common for each student in the group of SAE.
+     *
      * @var integer $todo_id
      */
     private int $todo_id;
 
     /**
      * This is the content of the to-do-list.
+     *
      * @var string $tododesc
      */
     private string $tododesc;
@@ -54,6 +58,7 @@ class ToDoList
      * Creates an instance of the class
      *
      * This method constructs a user object with the data array given in parameters.
+     *
      * @param array $data The data to make a todolist with.
      */
     private function __construct(array $data = [])
@@ -113,7 +118,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $sae_group_id The id of the group of SAE.
+     * @param  integer $sae_group_id The id of the group of SAE.
      * @return void
      */
     public function setSaeGroupId(int $sae_group_id): void
@@ -122,7 +127,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $sae_subject_id The subject of the group of SAE.
+     * @param  integer $sae_subject_id The subject of the group of SAE.
      * @return void
      */
     public function setSaeSubjectId(int $sae_subject_id): void
@@ -131,7 +136,7 @@ class ToDoList
     }
 
     /**
-     * @param string $tododesc The description of the todolist.
+     * @param  string $tododesc The description of the todolist.
      * @return void
      */
     public function setTododesc(string $tododesc): void
@@ -140,7 +145,7 @@ class ToDoList
     }
 
     /**
-     * @param integer $todo_id The id of the todoList.
+     * @param  integer $todo_id The id of the todoList.
      * @return void
      */
     public function setTodoId(int $todo_id): void

@@ -3,6 +3,7 @@
 namespace Controllers\PageSae;
 
 use Core\ControllerInterface;
+use Core\Utilis\SessionService;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -33,6 +34,12 @@ class PageSaeController implements ControllerInterface
      */
     public function control(): void
     {
+        // Redirect to dashboard if already logged in.
+        if (!SessionService::has('user_id')) {
+            header('Location: /');
+            exit();
+        }
+
         $view = new PageSaeView();
         $view->render();
     }
