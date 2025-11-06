@@ -1,23 +1,21 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers\Settings;
 
-use Core;
 use Core\ControllerInterface;
-use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
-use Core\includes\exception;
-use Views\Profile\ProfileView;
+use Models\User\User;
+use Views\Settings\DeleteUserView;
 
 /**
- * Profile Controller
+ * DeleteUser Controller
  *
- * Handle User Profile (GET request)
+ * Handle User deletion (GET request)
  * @category Controller
  *
  * @package Src
  *
- * @subpackage Controllers\Profile
+ * @subpackage Controllers\Settings
  *
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -28,26 +26,41 @@ use Views\Profile\ProfileView;
  * @license MIT License https://opensource.org/licenses/MIT
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
- */
-class ProfileController implements ControllerInterface
+*/
+class DeleteUserController implements ControllerInterface
 {
     /**
-     *  Main Controller logic for ProfileController.
+     *  Main Controller logic for DeleterUser.
      *
      * @return void
+     * @throws \PDOException If there is a problem with database request.
      */
     public function control(): void
     {
 
         if (!(SessionService::has('user_id'))) {
-            header('Location: /');
+            http_response_code(404);
+            echo "Page non trouvée";
             exit();
         }
 
+
         $user = unserialize(SessionService::get('USER'));
         $data['user'] = $user;
-        $view = new ProfileView($data);
-        $view->render();
+
+        try {
+            $email = $user->getEmail();
+            User::deleteByEmail($email);
+            $view = new DeleteUserView($data);
+
+            // Clear session.
+            session_unset();     // Unset all session variables.
+            session_destroy();   // Destroy the session.
+
+            $view->render();
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage());
+        }
     }
 
     /**
@@ -55,10 +68,10 @@ class ProfileController implements ControllerInterface
      *
      * @param string $path   The request path.
      * @param string $method The HTTP request method.
-     * @return boolean True if path is /profile and the method is GET.
+     * @return boolean True if path is /delete-user and the method is GET.
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/profile' and $method === 'GET';
+        return $path === '/delete-user' && $method === 'GET';
     }
 }

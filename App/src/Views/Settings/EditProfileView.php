@@ -1,6 +1,6 @@
 <?php
 
-namespace Views\Profile;
+namespace Views\Settings;
 
 use Core\AbstractView;
 

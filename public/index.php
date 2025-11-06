@@ -4,7 +4,7 @@ session_start();
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
-use Controllers\Profile\EditProfileController;
+use Controllers\Settings\EditProfileController;
 use Controllers\Dashboard\DashboardController;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
@@ -22,10 +22,10 @@ use Core\Utilis\SessionService;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Logout;
 use Controllers\SaeSujet\SaeSujetController;
-use Controllers\Profile\ProfileController;
-use Controllers\Profile\DeleteUserController;
+use Controllers\Settings\SettingsController;
+use Controllers\Settings\DeleteUserController;
 use Controllers\ToDoList\ToDoListPost;
-use Controllers\Profile\EditProfilePost;
+use Controllers\Settings\EditProfilePost;
 
 // List of available controllers.
 $controllers = [
@@ -45,7 +45,7 @@ $controllers = [
     new ToDoListController(),
     new SaeSujetController(),
     new DashboardController(),
-    new ProfileController(),
+    new SettingsController(),
     new DeleteUserController(),
     new ToDoListPost(),
     new EditProfileController(),

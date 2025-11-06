@@ -341,40 +341,24 @@ abstract class User
     }
 
 
-    public static function modifyLastName(string $last_name, string $email): void
+    public static function modifyField(string $field, string $value,  string $email): void
     {
         {
-            try{
-                $db = Database::getInstance();
-                $stmt = $db->prepare('UPDATE users SET last_name = :last_name WHERE email = :email');
-                $stmt->execute(['last_name' => $last_name, 'email' => $email]);
-                if ($stmt->rowCount() === 0) {
-                    throw new \PDOException();
-                }
-            } catch (PDOException $e) {
-                error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
+        try {
+            $db = Database::getInstance();
+            if ($field === 'phone') {
+                $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
+            }
+            $stmt->execute(['value' => $value, 'email' => $email]);
+            if ($stmt->rowCount() === 0) {
                 throw new \PDOException();
             }
+        } catch (PDOException $e) {
+            error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
+            throw new \PDOException();
+        }
         }
     }
-
-    public static function modifyFirstName(string $first_name, string $email): void
-    {
-        {
-            try{
-                $db = Database::getInstance();
-                $stmt = $db->prepare('UPDATE users SET first_name = :first_name WHERE email = :email');
-                $stmt->execute(['first_name' => $first_name, 'email' => $email]);
-                if ($stmt->rowCount() === 0) {
-                    throw new \PDOException();
-                }
-            } catch (PDOException $e) {
-                error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
-                throw new \PDOException();
-            }
-        }
-    }
-
 
 
     /**
