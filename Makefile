@@ -39,7 +39,6 @@ phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
 	./vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
 
-
 generate-phpdoc: ## Génère la documentation
 	@echo "${YELLOW}Génération de la documentation...${NC}"
 	./vendor/bin/phpdoc --directory=App/src/,Core/ --target=docs/api --template=clean --title='SAE Manager API Documentation' --ignore=vendor/,App/tests/ --visibility=public,protected --defaultpackagename=SAEManager

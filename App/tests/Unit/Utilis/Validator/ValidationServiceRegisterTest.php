@@ -210,7 +210,7 @@ class ValidationServiceRegisterTest extends TestCase
     private function getValidBaseData(): array
     {
         return [
-            'amu_id' => 'test123',
+            'amu_id' => 't12343305',
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'professor',
