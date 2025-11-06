@@ -23,7 +23,6 @@ use Validator\ForgotPasswordValidator;
  */
 #[CoversClass(ForgotPasswordController::class)]
 #[CoversClass(ForgotPasswordPostController::class)]
-#[CoversClass(SessionService::class)]
 #[CoversClass(ForgotPasswordValidator::class)]
 #[CoversClass(AbstractView::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
