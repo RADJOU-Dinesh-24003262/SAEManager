@@ -21,36 +21,42 @@ class SAE
 {
     /**
      * The unique identifier for the SAE subject.
+     *
      * @var integer
      */
     private int $sae_subject_id;
 
     /**
      * The user ID of the responsible professor.
+     *
      * @var integer
      */
     private int $responsible_prof_id;
 
     /**
      * The user ID of the client associated with the SAE.
+     *
      * @var integer
      */
     private int $client_id;
 
     /**
      * The name or title of the SAE subject.
+     *
      * @var string
      */
     private string $subject_name;
 
     /**
      * The start date of the SAE.
+     *
      * @var string
      */
     private string $begin_date;
 
     /**
      * The end date of the SAE.
+     *
      * @var string
      */
     private string $end_date;
@@ -60,14 +66,13 @@ class SAE
      *
      * @param array $data An array containing the SAE data, typically fetched from the database.
      */
-    public function __construct(array $data)
+    protected function __construct(array $data = [])
     {
-        $this->sae_subject_id = $data[0];
-        $this->responsible_prof_id = $data[1];
-        $this->client_id = $data[2];
-        $this->subject_name = $data[3];
-        $this->begin_date = $data[4];
-        $this->end_date = $data[5];
+        foreach ($data as $key => $value) {
+            if (property_exists($this, $key)) {
+                $this->$key = $value;
+            }
+        }
     }
 
     /**
@@ -77,7 +82,7 @@ class SAE
      *
      * @return array An array of SAE objects.
      */
-    public function createSAEsFromArray(array $saes): array
+    public static function createSAEsFromArray(array $saes): array
     {
         $result = [];
         foreach ($saes as $sae) {

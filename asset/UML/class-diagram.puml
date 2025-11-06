@@ -162,8 +162,8 @@
         -subject_name : string
         -begin_date : string
         -end_date : string
-        +__construct(data)
-        +createSAEsFromArray(saes)
+        #__construct(data)
+        {static} +createSAEsFromArray(saes)
         +getDataArray()
         +getSaeSubjectId()
         +setSaeSubjectId(sae_subject_id)
@@ -199,7 +199,7 @@
         #removeProfFromSae(connection, saeID, profID)
         #addProfToSae(connection, saeID, profID)
         #unassignedSAE(connection, sae, student)
-        #getAmuId()
+        +getAmuId()
       }
       class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client [[/Models/User/Client.php Client Class]] {
         #organisation : string
@@ -231,6 +231,7 @@
         +getTp()
       }
       class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User [[/Models/User/User.php User Class]] {
+        #user_id : int
         #first_name : string
         #last_name : string
         #user_type : string
@@ -249,6 +250,7 @@
         {static} +updatePasswordByEmail(email, newPassword)
         {static} +deleteByEmail(email)
         {abstract} #fetchSAEData(connection, userId)
+        +getSaes()
         +getFirstName()
         +getLastName()
         +getFullName()
@@ -263,7 +265,7 @@
     }
     package ToDoList as Models.ToDoList {
       class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList [[/Models/ToDoList/ToDoList.php ToDoList Class]] {
-        -sae_group_id : integer
+        -groupId : integer
         -sae_subject_id : ?integer
         -todo_id : integer
         -tododesc : string
@@ -273,7 +275,7 @@
         +getTodoDesc()
         +getSaeGroupId()
         +getSaeSubjectId()
-        +setSaeGroupId(sae_group_id)
+        +setSaeGroupId(groupId)
         +setSaeSubjectId(sae_subject_id)
         +setTododesc(tododesc)
         +setTodoId(todo_id)
@@ -380,6 +382,7 @@
       }
     }
   }
+  Controllers_Dashboard_DashboardController ..> Models_SAE_SAE
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
@@ -417,6 +420,7 @@
   Models_User_User <|-- Models_User_Professor
   Models_User_User <|-- Models_User_Student
   Models_User_UserRepository ..> Models_User_User
+  Views_Dashboard_DashboardView ..> Models_SAE_SAE
   Views_Dashboard_DashboardView ..> Models_User_Student
   Views_Dashboard_DashboardView ..> Models_User_User
   Views_User_RegisterSuccessView ..> Models_User_Student

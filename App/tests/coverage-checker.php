@@ -2,7 +2,6 @@
 <?php
 
 // tests/coverage-checker.php
-
 if ($argc < 3) {
     echo "Usage: php tests/coverage-checker.php <coverage.xml> <min-coverage>\n";
     exit(1);

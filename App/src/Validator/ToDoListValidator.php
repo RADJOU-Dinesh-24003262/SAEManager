@@ -12,11 +12,11 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 
  * @package Src
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
 
  * @license MIT License https://opensource.org/licenses/MIT
 
@@ -24,12 +24,15 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
  */
 class ToDoListValidator extends FormValidator
 {
-    /** @var string[] $required Represent the description of the todolist.  */
+    /**
+     * @var string[] $required Represent the description of the todolist.
+     */
     protected $required = ['tododesc'];
 
     /**
      * This method validates the values given in $data to validate the todolist with their description.
-     * @param array $data Represent the data in the database.
+     *
+     * @param  array $data Represent the data in the database.
      * @return void
      * @throws ExceptionValidationEmpty All the errors that might have been found.
      */

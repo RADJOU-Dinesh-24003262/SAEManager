@@ -27,7 +27,7 @@ function createAddTaskForm() {
     form.className = 'add-task-form';
     form.innerHTML = `
         <h3>Ajouter une nouvelle tâche</h3>
-        <form id="new-task-form">
+        <form id="new-task-form" method="POST" action="/to-do-list">
             <input type="text" id="task-description" placeholder="Description de la tâche" required>
             <button type="submit">Ajouter la tâche</button>
         </form>
