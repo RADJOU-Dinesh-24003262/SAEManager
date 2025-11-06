@@ -91,6 +91,7 @@ class LoginControllerTest extends TestCase
 
         // Assert that user_id is still set in session
         $this->assertArrayHasKey('user_id', $_SESSION);
+        SessionService::destroy();
     }
 
     /**
