@@ -2,6 +2,7 @@
 
 namespace Controllers\Settings;
 
+use Validator\EditProfileValidator;
 use Core\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
@@ -14,19 +15,21 @@ class EditProfilePost implements ControllerInterface
      */
     public function control(): void
     {
-        $data = $_POST;
-        $user = unserialize(SessionService::get('USER'));
 
-        $data['user'] = $user;
+        $user = unserialize(SessionService::get('USER'));
+        $validator =  new EditProfileValidator();
 
         try {
+            $data = $validator->escape($_POST);
+            $validator->validate($data);
             $email = $user->getEmail();
-            foreach ($user as $field => $value) {
-                if (!($value === '')) {
-                    User::modifyField($field, $value, $email);
-
-                }
+            if (!empty($data['phone'])) {
+                User::modifyField('phone', $data['phone'], $email);
             }
+
+            $user->fetchData($email);
+
+            SessionService::set('USER', serialize($user));
 
             $view = new EditProfileSuccessView($data);
             $view->render();
