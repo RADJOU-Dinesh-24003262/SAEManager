@@ -1,10 +1,10 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers\Settings;
 
 use Core\ControllerInterface;
 use Core\Utilis\SessionService;
-use Views\Profile\EditProfileView;
+use Views\Settings\EditProfileView;
 
 class EditProfileController implements ControllerInterface
 {

@@ -1,18 +1,19 @@
 <?php
 
-namespace Views\Profile;
+namespace Views\Settings;
 
 use Core\AbstractView;
+use Core\Utilis\SessionService;
 
 /**
- * Class DeleteUserView
- * This class represents the view for the deleteuser page of the application.
+ * Class SettingsView
+ * This class represents the view for the profile page of the application.
  * It extends the AbstractView class and provides specific implementations
- * for rendering the deleteuser page.
+ * for rendering the profile page.
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Profile
+ * @subpackage Views\Settings
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -21,31 +22,47 @@ use Core\AbstractView;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class DeleteUserView extends AbstractView
+class SettingsView extends AbstractView
 {
-    private const TEMPLATE_HTML = __DIR__ . '/delete-user-view.html';
-
     /**
      * Path to the HTML template file used for rendering the profile page.
      *
-     * @return string
+     * @var string
      */
-    public function templatePath(): string
+    private const TEMPLATE_HTML = __DIR__ . '/settings.html';
+
+
+    public function __construct(array $data)
+    {
+        parent::__construct($data);
+    }
+
+    /**
+     * Returns the path to the HTML template file.
+     *
+     * @return string The full path to the template file.
+     */
+    protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
     }
+
 
     /**
      * Returns the list of keys and rendered values used in the HTML template.
      *
      * @return array The list of template keys and values.
      */
-    public function templateKeys(): array
+    protected function templateKeys(): array
     {
         $user = $this->data['user'];
 
         return [
-            'EMAIL' => $user->getEmail()
+            'STATUS' => $user->getUserType(),
+            'FIRSTNAME' => $user->getFirstName(),
+            'LASTNAME' => $user->getLastName(),
+            'EMAIL' => $user->getEmail(),
+            'PHONE' => $user->getPhone(),
         ];
     }
 
@@ -54,8 +71,8 @@ class DeleteUserView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    public function getNameCss(): string
+    protected function getNameCss(): string
     {
-        return "";
+        return 'profile.css';
     }
 }
