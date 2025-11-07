@@ -1,4 +1,9 @@
 <form action="/sae-sujet" method="post" autocomplete="off">
+    <!-- Hidden pour l'édition -->
+    <?php if (!empty($sae_subject_id)): ?>
+    <input type="hidden" name="sae_subject_id" value="<?= htmlspecialchars($sae_subject_id, ENT_QUOTES, 'UTF-8') ?>">
+    <?php endif; ?>
+
     <fieldset>
         <legend>Votre sujet</legend>
 
@@ -7,59 +12,60 @@
             <abbr title="requis">*</abbr>
         </label>
         <input
-        required
-        type="text"
-        id="name"
-        name="nameSae"
-        minlength="3"
-        maxlength="30"
-        placeholder="Votre nom ici"
-        aria-required="true"
-        aria-describedby="id-hint">
+                required
+                type="text"
+                id="name"
+                name="nameSae"
+                minlength="3"
+                maxlength="30"
+                placeholder="Votre nom ici"
+                aria-required="true"
+                aria-describedby="id-hint"
+                value="<?= htmlspecialchars($nameSae ?? '', ENT_QUOTES, 'UTF-8') ?>">
         <small id="id-hint">3 à 30 caractères (lettres, chiffres, points, tirets, underscores)</small>
 
         <div class="text-name">
             <label for="description">Description</label>
-            <textarea type="text" id="description" name="decrip_sujet" rows="auto" cols="auto" placeholder="Votre description ici"></textarea>
+            <textarea id="description" name="decrip_sujet" rows="auto" cols="auto" placeholder="Votre description ici"><?= htmlspecialchars($decrip_sujet ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
         </div>
     </fieldset>
 
     <fieldset>
         <div class="rendu">
             <label for="end_date">Date de rendu :</label>
-            <input required type="date" id="end_date" name="date_rendu">
+            <input required type="date" id="end_date" name="date_rendu" value="<?= htmlspecialchars($date_rendu ?? '', ENT_QUOTES, 'UTF-8') ?>">
         </div>
 
         <div class="rendu">
             <label for="rendu_url">URL du rendu :</label>
-            <input type="url" id="rendu_url" name="rendu" placeholder="Votre URL ici">
+            <input type="url" id="rendu_url" name="rendu" placeholder="Votre URL ici" value="<?= htmlspecialchars($rendu ?? '', ENT_QUOTES, 'UTF-8') ?>">
         </div>
     </fieldset>
 
     <fieldset>
         <label>Choisir les compétences :</label>
         <div class="checkbox">
-            <input type="checkbox" id="competence1" name="competence[1]">
+            <input type="checkbox" id="competence1" name="competence[1]"> <?= (!empty($competence) && array_key_exists(1, $competence)) ? 'checked' : '' ?>
             <label for="competence1">Compétence 1</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" id="competence2" name="competence[2]">
+            <input type="checkbox" id="competence2" name="competence[2]"><?= (!empty($competence) && array_key_exists(2, $competence)) ? 'checked' : '' ?>
             <label for="competence2">Compétence 2</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" id="competence3" name="competence[3]">
+            <input type="checkbox" id="competence3" name="competence[3]"> <?= (!empty($competence) && array_key_exists(3, $competence)) ? 'checked' : '' ?>
             <label for="competence3">Compétence 3</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" id="competence4" name="competence[4]">
+            <input type="checkbox" id="competence4" name="competence[4]"> <?= (!empty($competence) && array_key_exists(4, $competence)) ? 'checked' : '' ?>
             <label for="competence4">Compétence 4</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" id="competence5" name="competence[5]">
+            <input type="checkbox" id="competence5" name="competence[5]"> <?= (!empty($competence) && array_key_exists(5, $competence)) ? 'checked' : '' ?>
             <label for="competence5">Compétence 5</label>
         </div>
         <div class="checkbox">
-            <input type="checkbox" id="competence6" name="competence[6]">
+            <input type="checkbox" id="competence6" name="competence[6]"> <?= (!empty($competence) && array_key_exists(6, $competence)) ? 'checked' : '' ?>
             <label for="competence6">Compétence 6</label>
         </div>
     </fieldset>

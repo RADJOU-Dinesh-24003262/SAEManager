@@ -115,15 +115,13 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
-    protected function fetchSAEData(PDO $connection, int $userId): array
+    public function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
             '  SELECT * FROM SAE_subjects sae, professors
                                         WHERE (
-                                                -- if the professor is responsible for the SAE
                                                 sae.responsible_prof_id = professors.professor_id
-
-                                                -- or if the professor is assigned to the SAE
+                                                    
                                                 OR sae.sae_subject_id IN (
                                                     SELECT spg.sae_subject_id
                                                     FROM sae_professor_groups spg
