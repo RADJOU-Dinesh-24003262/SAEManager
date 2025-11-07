@@ -1,7 +1,7 @@
 parameters:
   level: 8
   paths:
-    - App/src/
+    - App/
     - Core/
   
   excludePaths:

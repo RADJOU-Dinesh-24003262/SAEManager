@@ -5,6 +5,7 @@ namespace Controllers\Profile;
 use Core\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use PDOException;
 use Views\Profile\DeleteUserView;
 
 /**
@@ -59,8 +60,8 @@ class DeleteUserController implements ControllerInterface
             session_destroy();   // Destroy the session.
 
             $view->render();
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage());
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
         }
     }
 
