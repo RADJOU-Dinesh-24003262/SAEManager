@@ -34,7 +34,7 @@ class SaeSujetController implements ControllerInterface
     {
         $user = unserialize(SessionService::get('USER'));
 
-        if (!(SessionService::has('user_id') )) {
+        if (!(SessionService::has('user_id'))) {
             header('Location: /');
             exit();
         } elseif (SessionService::has('user_id')) {

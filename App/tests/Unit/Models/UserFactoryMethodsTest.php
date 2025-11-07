@@ -438,7 +438,7 @@ class UserFactoryMethodsTest extends TestCase
      */
     private function getExpectedClassForType(string $userType): string
     {
-        return match($userType) {
+        return match ($userType) {
             'student' => Student::class,
             'professor' => Professor::class,
             'client' => Client::class,
@@ -480,7 +480,7 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function testDeleteByEmail_StudentExists_ShouldDeleteStudent(): void
     {
-        $student=$this->registerUserTest('student');
+        $student = $this->registerUserTest('student');
 
         User::deleteByEmail($student->getEmail());
 
@@ -493,7 +493,7 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function testDeleteByEmail_ClientExists_ShouldDeleteClient(): void
     {
-        $client=$this->registerUserTest('client');
+        $client = $this->registerUserTest('client');
 
         User::deleteByEmail($client->getEmail());
 
@@ -506,7 +506,7 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function testDeleteByEmail_ProfessorExists_ShouldDeleteProfessor(): void
     {
-        $professor=$this->registerUserTest('professor');
+        $professor = $this->registerUserTest('professor');
 
         User::deleteByEmail($professor->getEmail());
 
@@ -540,17 +540,14 @@ class UserFactoryMethodsTest extends TestCase
     }
 
     #[Test]
-    public function testModifyFieldOriginalCodeThrowsErrorOnUnsupportedField(): void
+    public function testModifyFieldThrowsExceptionOnUnsupportedField(): void
     {
-        // Arrange
         $student = $this->registerUserTest('student');
         $email = $student->getEmail();
 
-        // Assert: S'attendre à une Erreur PHP (pas une Exception)
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessageMatches('/call to a member function execute\(\) on null|Undefined variable \$stmt/i');
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Nom de champ non valide');
 
-        // Act: Tenter de modifier un champ non géré par le 'if'
         User::modifyField('last_name', 'NouveauNom', $email);
     }
 }
