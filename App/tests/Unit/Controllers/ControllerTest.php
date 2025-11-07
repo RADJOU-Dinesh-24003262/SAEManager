@@ -45,7 +45,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for IndexController
     // ========================================
-
     #[Test]
     public function indexControllerSupportsCorrectRoute(): void
     {
@@ -73,7 +72,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for LegalNoticeController
     // ========================================
-
     #[Test]
     public function legalNoticeControllerSupportsCorrectRoute(): void
     {
@@ -95,7 +93,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for SiteMapController
     // ========================================
-
     #[Test]
     public function siteMapControllerSupportsCorrectRoute(): void
     {
@@ -108,33 +105,30 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for PageSaeController
     // ========================================
-
     #[Test]
     public function pageSaeControllerSupportsCorrectRoute(): void
     {
         // Check that PageSaeController supports the correct routes
-        $this->assertTrue(PageSaeController::support('/page-sae', 'GET'));
-        $this->assertFalse(PageSaeController::support('/page-sae', 'POST'));
+        $this->assertTrue(PageSaeController::support('/sae/1', 'GET'));
+        $this->assertFalse(PageSaeController::support('/sae/1', 'POST'));
         $this->assertFalse(PageSaeController::support('/sae', 'GET'));
     }
 
     // ========================================
     // Tests for ToDoListController
     // ========================================
-
     #[Test]
     public function toDoListControllerSupportsCorrectRoute(): void
     {
         // Check that ToDoListController supports the correct routes
-        $this->assertTrue(ToDoListController::support('/to-do-list', 'GET'));
-        $this->assertFalse(ToDoListController::support('/to-do-list', 'POST'));
-        $this->assertFalse(ToDoListController::support('/todo', 'GET'));
+        $this->assertTrue(ToDoListController::support('/sae/1/to-do', 'GET'));
+        $this->assertFalse(ToDoListController::support('/sae/1/to-do', 'POST'));
+        $this->assertFalse(ToDoListController::support('/sae/1/todo', 'GET'));
     }
 
     // ========================================
     // Tests for Register
     // ========================================
-
     #[Test]
     public function registerControllerSupportsCorrectRoute(): void
     {
@@ -160,7 +154,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for ForgotPasswordController
     // ========================================
-
     #[Test]
     public function forgotPasswordControllerSupportsCorrectRoute(): void
     {
@@ -173,7 +166,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Tests for ResetPasswordController
     // ========================================
-
     #[Test]
     public function resetPasswordControllerSupportsCorrectRoute(): void
     {
@@ -186,7 +178,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Generic tests for all controllers
     // ========================================
-
     #[Test]
     #[DataProvider('controllerProvider')]
     public function allControllersImplementInterface(string $controllerClass): void
@@ -249,7 +240,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Edge case tests
     // ========================================
-
     #[Test]
     public function controllersRejectEmptyPaths(): void
     {
@@ -293,7 +283,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Security tests
     // ========================================
-
     #[Test]
     public function controllersRejectPathTraversalAttempts(): void
     {
@@ -340,7 +329,6 @@ class ControllerTest extends TestCase
     // ========================================
     // Performance and robustness tests
     // ========================================
-
     #[Test]
     public function supportMethodIsPerformant(): void
     {
