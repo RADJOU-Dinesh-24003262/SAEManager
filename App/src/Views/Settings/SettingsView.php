@@ -4,6 +4,7 @@ namespace Views\Settings;
 
 use Core\AbstractView;
 use Core\Utilis\SessionService;
+use Models\User;
 
 /**
  * Class SettingsView
@@ -32,6 +33,15 @@ class SettingsView extends AbstractView
     private const TEMPLATE_HTML = __DIR__ . '/settings.html';
 
 
+    /**
+     * SettingsView constructor.
+     *
+     * Initializes the view by retrieving flash messages (errors and success)
+     * from the session service and passing them to the parent constructor.
+     *
+     * @param array $data Data User from current session.
+     * @return void
+     */
     public function __construct(array $data)
     {
         parent::__construct($data);
@@ -58,7 +68,7 @@ class SettingsView extends AbstractView
         $user = $this->data['user'];
 
         return [
-            'STATUS' => $user->getUserType(),
+            'STATUS' => $user->getUserTypeLabel(),
             'FIRSTNAME' => $user->getFirstName(),
             'LASTNAME' => $user->getLastName(),
             'EMAIL' => $user->getEmail(),

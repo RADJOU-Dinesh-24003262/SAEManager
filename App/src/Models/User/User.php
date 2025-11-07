@@ -29,7 +29,7 @@ abstract class User
     /**
      * The unique identifier of the user.
      *
-     * @var int
+     * @var integer
      */
     protected int $user_id;
 
@@ -182,17 +182,17 @@ abstract class User
 
         $stmt->execute(
             [
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'hashed_password' => $this->hashed_password,
-            'user_type' => match ($this->user_type) {
-                'student'   => '0',
-                'professor' => '1',
-                'client'    => '2',
-                default     => null, // If there something that is unusual.
-            },
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'hashed_password' => $this->hashed_password,
+                'user_type' => match ($this->user_type) {
+                    'student'   => '0',
+                    'professor' => '1',
+                    'client'    => '2',
+                    default     => null, // If there something that is unusual.
+                },
             ]
         );
 
@@ -309,8 +309,8 @@ abstract class User
 
             $stmt->execute(
                 [
-                'password_hash' => $hashed_password,
-                'email' => $email,
+                    'password_hash' => $hashed_password,
+                    'email' => $email,
                 ]
             );
 
@@ -326,9 +326,11 @@ abstract class User
     /**
      * Delete a User depending of his email
      *
-     * @param  string $email The user's email.
+     * @param string $email The user's email.
+     *
      * @return void
-     * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
+     *
+     * @throws \PDOException If the User is not found during Deletion of his account.
      */
     public static function deleteByEmail(string $email): void
     {
@@ -347,10 +349,38 @@ abstract class User
         }
     }
 
-
-    public static function modifyField(string $field, string $value,  string $email): void
+    /**
+     * Gets the user type label in French.
+     *
+     * @return string The localized user type label.
+     */
+    public function getUserTypeLabel(): string
     {
-        {
+        if ($this->isStudent()) {
+            return 'Etudiant';
+        }
+        if ($this->isProfessor()) {
+            return 'Professeur';
+        }
+        if ($this->isClient()) {
+            return 'Client';
+        }
+        return 'Utilisateur';
+    }
+
+    /**
+     * Modifies a specific field for a user.
+     *
+     * @param string $field The field name to modify.
+     * @param string $value The new value for the field.
+     * @param string $email The user's email.
+     *
+     * @return void
+     *
+     * @throws \PDOException If the modification fails.
+     */
+    public static function modifyField(string $field, string $value, string $email): void
+    {
         try {
             $db = Database::getInstance();
             if ($field === 'phone') {
@@ -364,15 +394,13 @@ abstract class User
             error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
             throw new \PDOException();
         }
-        }
     }
-
 
     /**
      * Abstract method to fetch the SAE infos from the Database.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The user's ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The user's ID.
      *
      * @return array
      */
