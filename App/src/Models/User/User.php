@@ -7,8 +7,10 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Models\SAE\SAE;
 use PDO;
 use PDOException;
+use PhpParser\Node\Stmt;
 
 /**
  * Abstract base class for all user types.
@@ -366,6 +368,29 @@ abstract class User
     {
         $connection = Database::getInstance();
         return SAE::createSAEsFromArray($this->fetchSAEData($connection, $this->user_id));
+    }
+
+    public function hasAcessToSae(int $sae_subject_id): bool
+    {
+        $db = Database::getInstance();
+        $stmt = $db->prepare('SELECT * FROM users 
+                                JOIN professor_groups ON professor_groups.professor_id = users.user_id
+                                JOIN students on students.student_id = users.user_id
+                                JOIN SAE_groups on SAE_groups.sae_group_id = students.sae_group_id
+                                JOIN SAE_subjects ON SAE_subjects.client_id = user.user_id
+                                JOIN SAE_subjects ON SAE_subjecte.responsible_prof_id = users.user_id
+                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
+                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = professor_groups.sae_subject_id
+                                WHERE users.user_id = :user_id
+                                AND sae_subjects.sae_subject_id = :sae_subject_id;');
+        $stmt->execute(
+            [
+                'user_id' => $this->user_id,
+                'sae_subject_id' => $sae_subject_id
+            ]
+        );
+
+        return $stmt->rowCount() > 1 ;
     }
 
     // -----------------
