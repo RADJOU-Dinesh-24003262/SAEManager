@@ -16,7 +16,6 @@
     }
     package Index as Views.Index {
       class "IndexView\n<b>Class IndexView</b>" as Views_Index_IndexView [[/Views/Index/IndexView.php IndexView Class]] {
-        +__construct()
         #templatePath()
         #templateKeys()
         -renderErrorMessages(errors)
@@ -48,7 +47,6 @@
         #getAdditionalHeaders()
       }
       class "LoginView\n<b>Class LoginView</b>" as Views_User_LoginView [[/Views/User/LoginView.php LoginView Class]] {
-        +__construct()
         #templatePath()
         #templateKeys()
         -renderErrorMessages(errors)
@@ -56,7 +54,6 @@
         #getAdditionalHeaders()
       }
       class "RegisterView\n<b>Class RegisterView</b>" as Views_User_RegisterView [[/Views/User/RegisterView.php RegisterView Class]] {
-        +__construct()
         #templatePath()
         #templateKeys()
         -renderErrorMessages(errors)
@@ -130,7 +127,6 @@
         #getAdditionalHeaders()
       }
       class "ForgotPasswordView\n<b>Class ForgotPasswordView</b>" as Views_pwd_ForgotPasswordView [[/Views/pwd/ForgotPasswordView.php ForgotPasswordView Class]] {
-        +__construct()
         #templatePath()
         #templateKeys()
         -renderErrorMessages(errors)
@@ -142,7 +138,6 @@
     }
     package ToDoList as Views.ToDoList {
       class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView [[/Views/ToDoList/ToDoListView.php ToDoListView Class]] {
-        +__construct()
         #templatePath()
         #templateKeys()
         -renderErrorMessages(errors)
@@ -231,7 +226,7 @@
         +getTp()
       }
       class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User [[/Models/User/User.php User Class]] {
-        #user_id : int
+        #user_id : integer
         #first_name : string
         #last_name : string
         #user_type : string
@@ -251,6 +246,7 @@
         {static} +deleteByEmail(email)
         {abstract} #fetchSAEData(connection, userId)
         +getSaes()
+        +hasAcessToSae(sae_subject_id)
         +getFirstName()
         +getLastName()
         +getFullName()
@@ -382,16 +378,18 @@
       }
     }
   }
-  Controllers_Dashboard_DashboardController ..> Models_SAE_SAE
+  Controllers_Dashboard_DashboardController ..> Models_User_User
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
+  Controllers_PageSae_PageSaeController ..> Models_User_User
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
   Controllers_Profile_DeleteUserController ..> Models_User_User
   Controllers_Profile_DeleteUserController ..> Views_Profile_DeleteUserView
   Controllers_Profile_ProfileController ..> Views_Profile_ProfileView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
+  Controllers_ToDoList_ToDoListController ..> Models_User_User
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
   Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
   Controllers_ToDoList_ToDoListPost ..> Views_ToDoList_ToDoListView
@@ -410,8 +408,10 @@
   Controllers_pwd_ResetPasswordPostController ..> Models_User_User
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Models_SAE_SAE "1" ..> "*" Models_SAE_SAE
   Models_SAE_SAE ..> Models_SAE_SAE
   Models_User_Professor ..> Models_SAE_SAE
+  Models_User_User ..> Models_SAE_SAE
   Models_User_User ..> Models_User_Client
   Models_User_User ..> Models_User_Professor
   Models_User_User ..> Models_User_Student
