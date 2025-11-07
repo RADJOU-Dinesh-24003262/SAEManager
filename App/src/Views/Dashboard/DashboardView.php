@@ -308,4 +308,9 @@ class DashboardView extends AbstractView
                 <meta name="keywords" content="SAEManager, Dashboard, SAE, utilisateur">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
     }
+
+    protected function getAdditionalScripts(): string
+    {
+        return '<script src="scripts/sae-link.js" defer></script>';
+    }
 }
