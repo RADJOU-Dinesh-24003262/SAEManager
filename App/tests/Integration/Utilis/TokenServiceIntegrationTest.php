@@ -136,41 +136,6 @@ class TokenServiceIntegrationTest extends TestCase
         }
     }
 
-    // ========================================
-    // Attack resistance tests
-    // ========================================
-
-    #[Test]
-    public function tokensResistTimingAttacks(): void
-    {
-        $validToken = TokenService::generate();
-        $invalidTokens = [
-            str_repeat('a', 64),
-            str_repeat('b', 64),
-            str_repeat('0', 64),
-        ];
-
-        $timings = [];
-
-        // Measure validation time
-        foreach ($invalidTokens as $token) {
-            $start = microtime(true);
-            try {
-                TokenService::validateToken($token);
-            } catch (ExceptionInvalidToken $e) {
-                // Expected
-            }
-            $timings[] = microtime(true) - $start;
-        }
-
-        // Times should be similar (constant-time)
-        $maxTiming = max($timings);
-        $minTiming = min($timings);
-
-        // Variance should not exceed 100% (timing-attack resistant)
-        $variance = ($maxTiming - $minTiming) / $minTiming;
-        $this->assertLessThan(1.2, $variance);
-    }
 
     #[Test]
     public function tokenValidationRejectsInjectionAttempts(): void

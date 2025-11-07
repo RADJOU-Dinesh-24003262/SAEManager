@@ -100,11 +100,13 @@ class Client extends User
      */
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
-        $stmt = $connection->prepare('SELECT * FROM SAE_subjects
-                                            WHERE client_id = :client_id');
-        $stmt->execute(['client_id' => $userId]);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $data;
+        $stmt = $connection->prepare(
+            'SELECT * FROM SAE_subjects
+             WHERE client_id = :user_id;'
+        );
+
+        $stmt->execute(['user_id' => $userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // -----------------

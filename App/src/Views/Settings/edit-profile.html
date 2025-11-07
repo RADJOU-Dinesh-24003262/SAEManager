@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile - SAEManager</title>
+</head>
+<body>
+<form action="/send-edit-profile" method="post" autocomplete="on">
+
+    <label>Telephone Actuel : {{PHONE}} </label>
+    <br>
+    <label for="phone">
+        Modifier le Numéro de téléphone
+    </label>
+    <input
+            required
+            type="text"
+            id="phone"
+            name="phone"
+            pattern="0[467][0-9]{8}"
+            maxlength="10"
+            aria-required="true">
+    <br>
+    <button type="submit">Modifier ses données</button>
+
+</form>
+</body>
+</html>

@@ -1,23 +1,20 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers\Settings;
 
-use Core;
 use Core\ControllerInterface;
-use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
-use Core\includes\exception;
-use Views\Profile\ProfileView;
+use Views\Settings\EditProfileView;
 
 /**
- * Profile Controller
+ * Edit Profile Controller
  *
- * Handle User Profile (GET request)
+ * Handle User Profile Editing (GET request)
  * @category Controller
  *
  * @package Src
  *
- * @subpackage Controllers\Profile
+ * @subpackage Controllers\Settings
  *
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -29,16 +26,15 @@ use Views\Profile\ProfileView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ProfileController implements ControllerInterface
+class EditProfileController implements ControllerInterface
 {
     /**
-     *  Main Controller logic for ProfileController.
+     * Main Controller logic for EditProfileController.
      *
      * @return void
      */
     public function control(): void
     {
-
         if (!(SessionService::has('user_id'))) {
             header('Location: /');
             exit();
@@ -46,7 +42,7 @@ class ProfileController implements ControllerInterface
 
         $user = unserialize(SessionService::get('USER'));
         $data['user'] = $user;
-        $view = new ProfileView($data);
+        $view = new EditProfileView($data);
         $view->render();
     }
 
@@ -55,10 +51,10 @@ class ProfileController implements ControllerInterface
      *
      * @param string $path   The request path.
      * @param string $method The HTTP request method.
-     * @return boolean True if path is /profile and the method is GET.
+     * @return boolean True if path is /edit-profile and the method is GET.
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/profile' and $method === 'GET';
+        return $path === '/edit-profile' && $method === 'GET';
     }
 }
