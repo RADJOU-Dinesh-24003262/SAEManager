@@ -144,8 +144,8 @@ class Student extends User
     /**
      * Fetches the SAE subjects and group data for the student.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The student's user ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The student's user ID.
      *
      * @return array An array of SAE data (subject and group information).
      */
