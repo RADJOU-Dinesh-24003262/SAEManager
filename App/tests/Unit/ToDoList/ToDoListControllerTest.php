@@ -29,7 +29,7 @@ class ToDoListControllerTest extends TestCase
      */
     public function testSupportReturnsTrueForValidPathAndMethod(): void
     {
-        $this->assertTrue(ToDoListController::support('/to-do-list', 'GET'));
+        $this->assertTrue(ToDoListController::support('/sae/1/to-do', 'GET'));
     }
 
     /**

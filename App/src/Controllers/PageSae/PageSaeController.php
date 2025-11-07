@@ -6,6 +6,7 @@ use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
 use Exception;
+use Models\User\User;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -33,6 +34,7 @@ class PageSaeController implements ControllerInterface
      * Principal manager of the controller
      *
      * @return void
+     * @throws Exception If the user variable is not as expected.
      */
     public function control(): void
     {
@@ -48,15 +50,14 @@ class PageSaeController implements ControllerInterface
 
             $data['user'] = $user;
 
-            if (!$user) {
-                throw new Exception('Utilisateur inconnu');
+            if (!$user || !($user instanceof User)) {
+                throw new Exception('Unknown user');
             }
 
             $data['saes'] = $user->getSaes();
             $sae_id = basename($_SERVER['REQUEST_URI']);
 
             foreach ($data['saes'] as $key => $sae) {
-
                 if ($sae->getSaeSubjectId() == $sae_id) {
                     // Create and render the SAE page view.
                     $data['sae'] = $sae;
@@ -66,7 +67,6 @@ class PageSaeController implements ControllerInterface
                 }
             }
             header('Location: /');
-
         } catch (Exception $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
