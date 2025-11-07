@@ -37,7 +37,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Basic Tests set/get
     // ========================================
-
     #[Test]
     public function canSetAndGetSimpleValue(): void
     {
@@ -87,7 +86,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests has()
     // ========================================
-
     #[Test]
     public function hasReturnsTrueForExistingKey(): void
     {
@@ -129,7 +127,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests remove()
     // ========================================
-
     #[Test]
     public function removeDeletesKey(): void
     {
@@ -162,7 +159,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests Flash messages
     // ========================================
-
     #[Test]
     public function flashMessageIsReadOnce(): void
     {
@@ -229,7 +225,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests with various data types
     // ========================================
-
     #[Test]
     #[DataProvider('variousDataTypesProvider')]
     public function canStoreVariousDataTypes(mixed $value): void
@@ -257,7 +252,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Security Tests
     // ========================================
-
     #[Test]
     public function sessionDataIsIsolatedBetweenKeys(): void
     {
@@ -298,7 +292,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests with edge cases
     // ========================================
-
     #[Test]
     public function canStoreEmptyString(): void
     {
@@ -356,7 +349,6 @@ class SessionServiceTest extends TestCase
     // ========================================
     // Tests of performance
     // ========================================
-
     #[Test]
     public function multipleOperationsAreEfficient(): void
     {

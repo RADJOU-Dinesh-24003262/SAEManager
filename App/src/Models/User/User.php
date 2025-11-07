@@ -31,7 +31,7 @@ abstract class User
     /**
      * The unique identifier of the user.
      *
-     * @var int
+     * @var integer
      */
     protected int $user_id;
 
@@ -352,8 +352,8 @@ abstract class User
     /**
      * Abstract method to fetch the SAE infos from the Database.
      *
-     * @param PDO $connection The database connection.
-     * @param int $userId     The user's ID.
+     * @param PDO     $connection The database connection.
+     * @param integer $userId     The user's ID.
      *
      * @return array
      */
@@ -370,6 +370,13 @@ abstract class User
         return SAE::createSAEsFromArray($this->fetchSAEData($connection, $this->user_id));
     }
 
+    /**
+     * Checks if the user has access to a specific SAE.
+     *
+     * @param integer $sae_subject_id The SAE subject ID.
+     *
+     * @return boolean True if the user has access, false otherwise.
+     */
     public function hasAcessToSae(int $sae_subject_id): bool
     {
         $db = Database::getInstance();

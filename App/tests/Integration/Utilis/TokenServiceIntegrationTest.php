@@ -35,7 +35,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Token generation and validation for valid tokens
     // ========================================
-
     #[Test]
     public function generatedTokenCanBeValidated(): void
     {
@@ -64,7 +63,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Cryptographic security tests
     // ========================================
-
     #[Test]
     public function tokensHaveHighEntropy(): void
     {
@@ -102,7 +100,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Token format validation tests
     // ========================================
-
     #[Test]
     public function validTokenFormatIsAccepted(): void
     {
@@ -161,7 +158,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Statistical distribution tests
     // ========================================
-
     #[Test]
     public function tokensHaveUniformDistribution(): void
     {
@@ -192,7 +188,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Performance tests
     // ========================================
-
     #[Test]
     public function tokenGenerationIsEfficient(): void
     {
@@ -232,7 +227,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Robustness tests
     // ========================================
-
     #[Test]
     public function tokenGenerationHandlesConcurrentRequests(): void
     {
@@ -269,7 +263,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Edge case tests
     // ========================================
-
     #[Test]
     public function tokenGenerationWorksAfterManyIterations(): void
     {
@@ -309,7 +302,6 @@ class TokenServiceIntegrationTest extends TestCase
     // ========================================
     // Consistency tests
     // ========================================
-
     #[Test]
     public function tokenFormatIsConsistent(): void
     {

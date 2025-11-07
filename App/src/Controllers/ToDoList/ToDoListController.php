@@ -5,6 +5,7 @@ namespace Controllers\ToDoList;
 use Core\ControllerInterface;
 use Core\Utilis\SessionService;
 use Exception;
+use Models\User\User;
 use Views\ToDoList\ToDoListView;
 
 /**
@@ -30,6 +31,7 @@ class ToDoListController implements ControllerInterface
      * @method void control() Controls the rendering of the To-Do List view.
      *
      * @return void
+     * @throws Exception If the user variable is not as expected.
      */
     public function control(): void
     {
@@ -46,8 +48,8 @@ class ToDoListController implements ControllerInterface
 
             $data['user'] = $user;
 
-            if (!$user) {
-                throw new Exception('Utilisateur inconnu');
+            if (!$user || !($user instanceof User)) {
+                throw new Exception('Unknown user');
             }
 
             $data['saes'] = $user->getSaes();
@@ -56,7 +58,6 @@ class ToDoListController implements ControllerInterface
             $sae_id = $parts[2];
 
             foreach ($data['saes'] as $key => $sae) {
-
                 if ($sae->getSaeSubjectId() == $sae_id) {
                     // Create and render the SAE page view.
                     $data['sae'] = $sae;
@@ -66,15 +67,12 @@ class ToDoListController implements ControllerInterface
                 }
             }
 
-            header('Location: /'); 
-
+            header('Location: /');
         } catch (Exception $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();
         }
-
-
     }
 
     /**

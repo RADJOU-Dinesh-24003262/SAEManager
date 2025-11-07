@@ -53,7 +53,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Student::fetchSpecificData
     // ========================================
-
     #[Test]
     public function studentFetchSpecificDataPopulatesAllFields(): void
     {
@@ -200,7 +199,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Professor::fetchSpecificData
     // ========================================
-
     #[Test]
     public function professorFetchSpecificDataPopulatesAllFields(): void
     {
@@ -284,7 +282,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Client::fetchSpecificData
     // ========================================
-
     #[Test]
     public function clientFetchSpecificDataPopulatesAllFields(): void
     {
@@ -330,7 +327,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Student::saveSpecificData
     // ========================================
-
     #[Test]
     public function studentSaveSpecificDataInsertsCorrectly(): void
     {
@@ -425,7 +421,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Professor::saveSpecificData
     // ========================================
-
     #[Test]
     public function professorSaveSpecificDataInsertsCorrectly(): void
     {
@@ -468,7 +463,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Client::saveSpecificData
     // ========================================
-
     #[Test]
     public function clientSaveSpecificDataInsertsCorrectly(): void
     {
@@ -511,7 +505,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for consistency between save and fetch
     // ========================================
-
     #[Test]
     public function studentDataRemainsConsistentBetweenSaveAndFetch(): void
     {
@@ -558,7 +551,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for error handling
     // ========================================
-
     #[Test]
     public function saveSpecificDataHandlesDatabaseException(): void
     {
@@ -634,7 +626,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for data types
     // ========================================
-
     #[Test]
     public function fetchSpecificDataPreservesDataTypes(): void
     {
