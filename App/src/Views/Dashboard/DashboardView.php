@@ -5,6 +5,7 @@ namespace Views\Dashboard;
 use Models\User\User;
 use Core\Utilis\SessionService;
 use Core\AbstractView;
+use Models\SAE\SAE;
 use Models\User\Student;
 
 /**
@@ -44,11 +45,11 @@ class DashboardView extends AbstractView
      */
     public function __construct(array $data)
     {
-        $user = $data['user'];
         $data = [
             'errors'  => SessionService::getFlash('errors', []),
             'success' => SessionService::getFlash('success', ''),
-            'user'    => $user
+            'user'    => $data['user'],
+            'saes'    => $data['saes']
         ];
 
         parent::__construct($data);
@@ -188,7 +189,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>SAE</h3>';
 
         if ($user->isProfessor()) {
-            $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
+            $html .= '<a class="btn-create" href="/new-sae">+ Créer une nouvelle SAE</a>';
             $html .= '<a href="/sae">Toutes les SAE</a>';
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
@@ -228,27 +229,27 @@ class DashboardView extends AbstractView
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User  $user The user instance.
-     * @param array $sae  The SAE data array.
+     * @param User $user The user instance.
+     * @param SAE  $sae  The SAE data array.
      *
      * @return string The rendered HTML SAE card.
      */
-    private function renderSAECard(User $user, array $sae): string
+    private function renderSAECard(User $user, SAE $sae): string
     {
         $html  = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
-        $html .= '<div class="sae-icon" aria-hidden="true">' . $sae['code'] . '</div>';
+        $html .= '<div class="sae-icon" aria-hidden="true">' . $sae->getSaeSubjectId() . '</div>';
         $html .= '</div>';
         $html .= '<div class="sae-body">';
-        $html .= '<h3>' . $sae['title'] . '</h3>';
-        $html .= '<p><strong>Compétences :</strong> ' . $sae['competences'] . '</p>';
+        $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
+        $html .= '<p><strong>Compétences :</strong> ' . '$sae->getCompetences()' . '</p>';
 
-        if (!empty($sae['teacher'])) {
-            $html .= '<p><strong>Enseignant :</strong> ' . $sae['teacher'] . '</p>';
+        if (!empty($sae->getResponsibleProfId())) {
+            $html .= '<p><strong>Enseignant :</strong> ' . $sae->getResponsibleProfId() . '</p>';
         }
 
         $html .= '<div class="sae-actions">';
-        $html .= '<a href="/sae/view/' . intval($sae['id']) . '" class="btn btn-primary">Voir détails</a>';
+        $html .= '<a href="/sae/view/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
         $html .= '</div></div></article>';
 
         return $html;
