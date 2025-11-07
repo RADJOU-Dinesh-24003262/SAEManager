@@ -32,7 +32,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Tests with TokenService
     // ========================================
-
     #[Test]
     public function emailTemplateContainsValidTokenLink(): void
     {
@@ -86,7 +85,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Tests of template consistency
     // ========================================
-
     #[Test]
     public function htmlAndTextTemplatesContainSameInformation(): void
     {
@@ -135,7 +133,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Security tests
     // ========================================
-
     #[Test]
     public function emailDoesNotLeakSensitiveInformation(): void
     {
@@ -178,7 +175,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Validation and format tests
     // ========================================
-
     #[Test]
     public function htmlTemplateIsValidHtml(): void
     {
@@ -228,7 +224,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Performance tests
     // ========================================
-
     #[Test]
     public function emailGenerationIsPerformant(): void
     {
@@ -253,7 +248,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Accessibility tests
     // ========================================
-
     #[Test]
     public function htmlTemplateHasAccessibleElements(): void
     {
@@ -288,7 +282,6 @@ class EmailServiceIntegrationTest extends TestCase
     // ========================================
     // Robustness tests
     // ========================================
-
     #[Test]
     public function emailHandlesVeryLongTokens(): void
     {

@@ -31,7 +31,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Structure and configuration tests
     // ========================================
-
     #[Test]
     public function emailServiceClassExists(): void
     {
@@ -53,7 +52,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Email template tests
     // ========================================
-
     #[Test]
     public function getHtmlTemplateReturnsValidHtml(): void
     {
@@ -120,7 +118,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Link generation tests
     // ========================================
-
     #[Test]
     public function getResetLinkGeneratesCorrectUrlWithHttps(): void
     {
@@ -176,7 +173,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Parameter validation tests
     // ========================================
-
     #[Test]
     public function htmlTemplateHandlesLongUrls(): void
     {
@@ -208,7 +204,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Security tests
     // ========================================
-
     #[Test]
     public function htmlTemplateEscapesUserInput(): void
     {
@@ -242,7 +237,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Accessibility and format tests
     // ========================================
-
     #[Test]
     public function htmlTemplateHasProperStructure(): void
     {
@@ -289,7 +283,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Robustness tests
     // ========================================
-
     #[Test]
     public function templatesHandleEmptyToken(): void
     {
@@ -331,7 +324,6 @@ class EmailServiceTest extends TestCase
     // ========================================
     // Performance tests
     // ========================================
-
     #[Test]
     public function templateGenerationIsPerformant(): void
     {

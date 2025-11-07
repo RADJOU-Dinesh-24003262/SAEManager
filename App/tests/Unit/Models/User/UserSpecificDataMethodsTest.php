@@ -53,7 +53,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Student::fetchSpecificData
     // ========================================
-
     #[Test]
     public function studentFetchSpecificDataPopulatesAllFields(): void
     {
@@ -65,7 +64,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'tp' => 'TPB',
             'major' => 'A'
         ];
- 
+
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
 
         // Expect the execute method to be called once with this parameter
@@ -200,7 +199,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Professor::fetchSpecificData
     // ========================================
-
     #[Test]
     public function professorFetchSpecificDataPopulatesAllFields(): void
     {
@@ -284,7 +282,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Client::fetchSpecificData
     // ========================================
-
     #[Test]
     public function clientFetchSpecificDataPopulatesAllFields(): void
     {
@@ -330,7 +327,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Student::saveSpecificData
     // ========================================
-
     #[Test]
     public function studentSaveSpecificDataInsertsCorrectly(): void
     {
@@ -425,7 +421,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Professor::saveSpecificData
     // ========================================
-
     #[Test]
     public function professorSaveSpecificDataInsertsCorrectly(): void
     {
@@ -439,7 +434,7 @@ class UserSpecificDataMethodsTest extends TestCase
                 $capturedParams = $params;
                 return true;
             });
-        
+
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
@@ -468,7 +463,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for Client::saveSpecificData
     // ========================================
-
     #[Test]
     public function clientSaveSpecificDataInsertsCorrectly(): void
     {
@@ -511,7 +505,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for consistency between save and fetch
     // ========================================
-
     #[Test]
     public function studentDataRemainsConsistentBetweenSaveAndFetch(): void
     {
@@ -524,7 +517,7 @@ class UserSpecificDataMethodsTest extends TestCase
         ];
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
-        
+
         // Test save
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -558,7 +551,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for error handling
     // ========================================
-
     #[Test]
     public function saveSpecificDataHandlesDatabaseException(): void
     {
@@ -634,7 +626,6 @@ class UserSpecificDataMethodsTest extends TestCase
     // ========================================
     // Tests for data types
     // ========================================
-
     #[Test]
     public function fetchSpecificDataPreservesDataTypes(): void
     {

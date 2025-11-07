@@ -36,7 +36,6 @@ class ValidatorTest extends TestCase
     // ========================================
     // Tests pour LoginValidator
     // ========================================
-
     #[Test]
     public function loginValidatorAcceptsValidEmail(): void
     {
@@ -107,7 +106,6 @@ class ValidatorTest extends TestCase
     // ========================================
     // Tests pour ResetPasswordValidator
     // ========================================
-
     #[Test]
     public function resetPasswordValidatorAcceptsValidPasswords(): void
     {
@@ -194,7 +192,6 @@ class ValidatorTest extends TestCase
     // ========================================
     // Tests pour ForgotPasswordValidator
     // ========================================
-
     #[Test]
     public function forgotPasswordValidatorAcceptsValidEmail(): void
     {
@@ -261,7 +258,6 @@ class ValidatorTest extends TestCase
     // ========================================
     // Tests pour FormValidator (méthodes protégées via classes enfants)
     // ========================================
-
     #[Test]
     #[DataProvider('phoneNumbersProvider')]
     public function phoneValidationWorksCorrectly(string $phone, bool $shouldBeValid): void
@@ -425,7 +421,6 @@ class ValidatorTest extends TestCase
     // ========================================
     // Tests de sécurité et cas limites
     // ========================================
-
     #[Test]
     public function escapeMethodHandlesXSSAttempts(): void
     {

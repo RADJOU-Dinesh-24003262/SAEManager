@@ -104,22 +104,6 @@ class RegisterView extends AbstractView
      */
     private const TEMPLATE_HTML = __DIR__ . '/register.html';
 
-    // -------------------------------------------------------------------------
-    // Constructor
-    // -------------------------------------------------------------------------
-
-    /**
-     * RegisterView constructor.
-     *
-     * Initializes the view with any error messages stored in the session.
-     */
-    public function __construct()
-    {
-        $data = [
-            'errors' => SessionService::getFlash('errors', []),
-        ];
-        parent::__construct($data);
-    }
 
     // -------------------------------------------------------------------------
     // Template Rendering

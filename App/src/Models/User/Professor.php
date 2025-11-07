@@ -108,8 +108,8 @@ class Professor extends User
     /**
      * Retrieves the SAEs associated with the professor.
      *
-     * @param PDO $connection PDO object representing the database connection.
-     * @param int $userId     The professor's user ID.
+     * @param PDO     $connection PDO object representing the database connection.
+     * @param integer $userId     The professor's user ID.
      *
      * @return array Associative array containing the SAE records.
      *
