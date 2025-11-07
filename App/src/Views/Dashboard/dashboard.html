@@ -1,31 +1,59 @@
-<!-- File: `App/src/Views/Dashboard/dashboard.html` (ajouter le conteneur et le script en bas du fichier) -->
 <div class="container">
     <!-- Warning messages -->
     {{ERROR_MESSAGES}}
     {{SUCCESS_MESSAGE}}
 
     <header class="profile-header {{USER_TYPE_CLASS}}">
-        ...
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23D9D9D9'/%3E%3Ccircle cx='100' cy='80' r='30' fill='%23666'/%3E%3Cpath d='M50 150 Q100 120 150 150' fill='%23666'/%3E%3C/svg%3E" 
+                alt="Photo de profil de {{USER_NAME}}" 
+                class="profile-avatar">
+        
+        <div class="profile-info">
+            <p class="user-badge">{{USER_TYPE_LABEL}}</p>
+            <h1>{{USER_NAME}}</h1>
+            <p class="email">{{USER_EMAIL}}</p>
+            
+            <div class="profile-meta">
+                {{USER_META_INFO}}
+            </div>
+        </div>
     </header>
 
     <div class="main-layout">
         <aside class="sidebar">
-            ...
-            <!-- Section SAE (optionnal : depends on the type of user) -->
-            {{SAE_NAVIGATION}}
-            ...
+            <nav aria-label="Navigation principale">
+                <h2 class="visually-hidden">Menu</h2>
+                
+                <!-- Section Profil -->
+                <div class="nav-section">
+                    <h3>Mon Profil</h3>
+                    <a href="/profile/edit">Modifier le profil</a>
+                    <a href="/profile/data">Données personnelles</a>
+                </div>
+                
+                <div class="divider" role="separator"></div>
+                
+                <!-- Section SAE (optionnal : depends on the type of user) -->
+                {{SAE_NAVIGATION}}
+                
+                <div class="divider" role="separator"></div>
+                
+                <!-- Section Parameters -->
+                <div class="nav-section">
+                    <h3>Paramètres</h3>
+                    <a href="/settings/notifications">Notifications</a>
+                    <a href="/settings/preferences">Préférences</a>
+                    <a href="/logout">Déconnexion</a>
+                </div>
+            </nav>
         </aside>
 
         <main class="content-area">
             <h2 class="section-title">
                 Mes SAEs
             </h2>
-
-            <!-- zone dynamique qui sera remplie par JS -->
-            <div id="sae-content">
-                {{SAE_CONTENT}}
-            </div>
+            
+            {{SAE_CONTENT}}
         </main>
     </div>
 </div>
-
