@@ -5,30 +5,37 @@ namespace tests\Unit\Utilis\Validator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Validator\ValidationServiceRegister;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Validator\FormValidator;
+use Validator\Registration\AbstractRegistrationValidator;
+use Validator\Registration\ProfessorRegistrationValidator;
+use Validator\Registration\RegistrationValidatorFactory;
+use Validator\Registration\StudentRegistrationValidator;
 
 /**
- * Unit tests for ValidationServiceRegister
+ * Unit tests for AbstractRegistrationValidator
  *
  * @package Tests\Unit\Utilis\Validator
  */
-#[CoversClass(ValidationServiceRegister::class)]
+#[CoversClass(RegistrationValidatorFactory::class)]
 #[CoversClass(ExceptionValidationRegisters::class)]
 #[CoversClass(ExceptionValidationRegister::class)]
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
-class ValidationServiceRegisterTest extends TestCase
+#[CoversClass(FormValidator::class)]
+#[CoversClass(AbstractRegistrationValidator::class)]
+#[CoversClass(StudentRegistrationValidator::class)]
+#[CoversClass(ProfessorRegistrationValidator::class)]
+class AbstractRegistrationValidatorRegisterTest extends TestCase
 {
-    private ValidationServiceRegister $validator;
+    private AbstractRegistrationValidator $validator;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->validator = new ValidationServiceRegister();
     }
 
     /**
@@ -54,6 +61,7 @@ class ValidationServiceRegisterTest extends TestCase
             'terms' => 'on'
         ];
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -70,6 +78,7 @@ class ValidationServiceRegisterTest extends TestCase
             'firstName' => 'Jean'
         ];
 
+        $this->validator = RegistrationValidatorFactory::create('student');
         $this->validator->escape($data);
     }
 
@@ -85,6 +94,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data['email'] = $email;
         $data['user_type'] = 'student';
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -115,6 +125,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data['password'] = 'Password123';
         $data['passwordverif'] = 'DifferentPass123';
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -130,6 +141,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data = $this->getValidBaseData();
         $data['phone'] = $phone;
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -153,12 +165,13 @@ class ValidationServiceRegisterTest extends TestCase
      */
     public function testRequiresStudentFieldsForStudents(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(ExceptionValidationEmptys::class);
 
         $data = $this->getValidBaseData();
         $data['user_type'] = 'student';
         unset($data['year']); // Missing required field
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -177,6 +190,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data['td'] = 'TD4';
         $data['tp'] = 'TPA';
 
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -193,7 +207,10 @@ class ValidationServiceRegisterTest extends TestCase
         $data['year'] = '2';
         $data['td'] = 'TD1';
         $data['tp'] = 'TPA';
+        unset($data['parcours']);
+
         // Missing parcours
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -207,7 +224,9 @@ class ValidationServiceRegisterTest extends TestCase
 
         $data = $this->getValidBaseData();
         $data['user_type'] = 'professor';
+        
         // No student fields
+        $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
@@ -219,13 +238,17 @@ class ValidationServiceRegisterTest extends TestCase
     private function getValidBaseData(): array
     {
         return [
-            'amu_id' => 'test123',
+            'amu_id' => 't12345678',
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'professor',
             'email' => 'jean.dupont@univ-amu.fr',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
+            'year' => '1',
+            'parcours' => 'A',
+            'td' => 'TD1',
+            'tp' => 'TPA',
             'phone' => '0612345678',
             'terms' => 'on'
         ];

@@ -111,8 +111,7 @@ abstract class FormValidator
         $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
         $genericEmailPattern = '/^[a-zA-ZÀ-ÿ\-\'\.]+@[a-z]+\.[a-z\.]+$/';
 
-        return preg_match($ownEmailPattern, $email)
-            && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
+        return preg_match($ownEmailPattern, $email);
     }
 
     /**
