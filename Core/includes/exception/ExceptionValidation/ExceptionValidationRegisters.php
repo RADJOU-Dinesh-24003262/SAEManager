@@ -35,7 +35,7 @@ class ExceptionValidationRegisters extends \Exception
      */
     public function __construct(array $errors)
     {
-        parent::__construct("Erreurs de validation lors de l'inscription." . $errors[0]->getField());
+        parent::__construct("Erreurs de validation lors de l'inscription.");
         $this->errors = $errors;
     }
 
