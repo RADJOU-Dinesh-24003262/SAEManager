@@ -5,6 +5,9 @@ Core/includes/my_settings.ini
 *.lock
 /vendor
 .phpunit*
-coverage/
-coverage.xml
+*coverage*
+*.xml
 .php-cs-fixer.cache
+*cache*
+*svg
+*yaml

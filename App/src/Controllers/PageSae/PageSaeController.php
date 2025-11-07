@@ -3,7 +3,9 @@
 namespace Controllers\PageSae;
 
 use Core\ControllerInterface;
+use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
+use Exception;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -39,7 +41,7 @@ class PageSaeController implements ControllerInterface
             header('Location: /');
             exit();
         }
-        
+
         try {
             // Retrieve the user object stored in the session.
             $user = unserialize(SessionService::get('USER'));
@@ -47,22 +49,29 @@ class PageSaeController implements ControllerInterface
             $data['user'] = $user;
 
             if (!$user) {
-                throw new ExceptionDashboard('Utilisateur inconnu');
+                throw new Exception('Utilisateur inconnu');
             }
 
             $data['saes'] = $user->getSaes();
+            $sae_id = basename($_SERVER['REQUEST_URI']);
 
-            // Create and render the SAE page view.
-            $view = new PageSaeView();
-            $view->render();
+            foreach ($data['saes'] as $key => $sae) {
 
-        }catch (ExceptionDashboard $e) {
+                if ($sae->getSaeSubjectId() == $sae_id) {
+                    // Create and render the SAE page view.
+                    $data['sae'] = $sae;
+                    $view = new PageSaeView($data);
+                    $view->render();
+                    exit();
+                }
+            }
+            header('Location: /');
+
+        } catch (Exception $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();
         }
-
-
     }
 
     /**

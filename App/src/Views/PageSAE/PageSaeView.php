@@ -55,7 +55,10 @@ class PageSaeView extends AbstractView
      */
     protected function templateKeys(): array
     {
-        return [];
+        return [
+            'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
+            'SAE_NAME' => $this->data['sae']->getSubjectName()
+        ];
     }
 
     /**
@@ -66,7 +69,7 @@ class PageSaeView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'Page SAE - SAEManager';
+        return 'SAE ' . $this->data['sae']->getSaeSubjectId() . ' - SAEManager';
     }
 
     /**

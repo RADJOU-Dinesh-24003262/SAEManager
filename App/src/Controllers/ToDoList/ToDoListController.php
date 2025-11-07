@@ -3,6 +3,8 @@
 namespace Controllers\ToDoList;
 
 use Core\ControllerInterface;
+use Core\Utilis\SessionService;
+use Exception;
 use Views\ToDoList\ToDoListView;
 
 /**
@@ -31,8 +33,48 @@ class ToDoListController implements ControllerInterface
      */
     public function control(): void
     {
-        $view = new ToDoListView();
-        $view->render();
+        // Redirect to dashboard if already logged in.
+        if (!SessionService::has('user_id')) {
+            SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource.']);
+            header('Location: /');
+            exit();
+        }
+
+        try {
+            // Retrieve the user object stored in the session.
+            $user = unserialize(SessionService::get('USER'));
+
+            $data['user'] = $user;
+
+            if (!$user) {
+                throw new Exception('Utilisateur inconnu');
+            }
+
+            $data['saes'] = $user->getSaes();
+
+            $parts = explode('/', $_SERVER['REQUEST_URI']);
+            $sae_id = $parts[2];
+
+            foreach ($data['saes'] as $key => $sae) {
+
+                if ($sae->getSaeSubjectId() == $sae_id) {
+                    // Create and render the SAE page view.
+                    $data['sae'] = $sae;
+                    $view = new ToDoListView($data);
+                    $view->render();
+                    exit();
+                }
+            }
+
+            header('Location: /'); 
+
+        } catch (Exception $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        }
+
+
     }
 
     /**
@@ -45,6 +87,6 @@ class ToDoListController implements ControllerInterface
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === "/to-do-list" && $method === "GET";
+        return preg_match('/^\/sae\/\d*\/to-do$/', $path) && $method === "GET";
     }
 }

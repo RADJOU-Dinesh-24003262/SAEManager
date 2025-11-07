@@ -42,6 +42,8 @@ abstract class AbstractView
     public function __construct(array $data = [])
     {
         $this->data = $data;
+        $this->data['errors'] = SessionService::getFlash('errors', []);
+        $this->data['success'] = SessionService::getFlash('success', '');
     }
 
     /**
