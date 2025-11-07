@@ -360,12 +360,12 @@ abstract class User
     /**
      * Gets the SAE infos proposed/enrolled by the user.
      *
-     * @return array An array of @see SAE data.
+     * @return array<SAE> An array of @see SAE data.
      */
     public function getSaes(): array
     {
         $connection = Database::getInstance();
-        return $this->fetchSAEData($connection, $this->user_id);
+        return SAE::createSAEsFromArray($this->fetchSAEData($connection, $this->user_id));
     }
 
     // -----------------

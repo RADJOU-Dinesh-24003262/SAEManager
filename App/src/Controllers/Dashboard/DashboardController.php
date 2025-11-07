@@ -64,7 +64,7 @@ class DashboardController implements ControllerInterface
                 throw new ExceptionDashboard('Utilisateur inconnu');
             }
 
-            $data['saes'] = SAE::createSAEsFromArray($user->getSaes());
+            $data['saes'] = $user->getSaes();
 
             // Create and render the dashboard view.
             $view = new DashboardView($data);

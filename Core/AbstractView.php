@@ -120,8 +120,8 @@ abstract class AbstractView
         <title>' . $this->getPageTitle() . '</title>
         <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
 
-        <link rel="stylesheet" href="styles/' . $this->getNameCss() . '">
-        <link rel="stylesheet" href="styles/header.css">
+        <link rel="stylesheet" href="/styles/' . $this->getNameCss() . '">
+        <link rel="stylesheet" href="/styles/header.css">
         ' . $this->getAdditionalHeaders() . '
     </head>
     <body>
@@ -185,7 +185,7 @@ abstract class AbstractView
     {
         echo $this->getAdditionalScripts() . '
         <footer>
-        <link rel="stylesheet" href="styles/footer.css">
+        <link rel="stylesheet" href="/styles/footer.css">
             <div class="footer-container">
                 <div class="footer-left">
                     <h1 class="saeManager">SAEManager</h1>
@@ -215,7 +215,7 @@ abstract class AbstractView
                 </div>
             </div>
         </footer>
-        <script src="scripts/burgermenu.js"></script>
+        <script src="/scripts/burgermenu.js"></script>
     </body>
 </html>';
     }

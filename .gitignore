@@ -1,6 +1,6 @@
 .phpdoc*
 *.idea
-_assets/includes/my_settings.ini
+Core/includes/my_settings.ini
 *.ini
 *.lock
 /vendor

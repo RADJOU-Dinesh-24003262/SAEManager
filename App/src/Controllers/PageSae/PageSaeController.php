@@ -39,9 +39,30 @@ class PageSaeController implements ControllerInterface
             header('Location: /');
             exit();
         }
+        
+        try {
+            // Retrieve the user object stored in the session.
+            $user = unserialize(SessionService::get('USER'));
 
-        $view = new PageSaeView();
-        $view->render();
+            $data['user'] = $user;
+
+            if (!$user) {
+                throw new ExceptionDashboard('Utilisateur inconnu');
+            }
+
+            $data['saes'] = $user->getSaes();
+
+            // Create and render the SAE page view.
+            $view = new PageSaeView();
+            $view->render();
+
+        }catch (ExceptionDashboard $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        }
+
+
     }
 
     /**
@@ -54,6 +75,6 @@ class PageSaeController implements ControllerInterface
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/page-sae' && strtoupper($method) === 'GET';
+        return preg_match('/^\/sae\/\d*$/', $path) && strtoupper($method) === 'GET';
     }
 }
