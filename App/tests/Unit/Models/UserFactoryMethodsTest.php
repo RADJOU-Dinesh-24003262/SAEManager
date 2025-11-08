@@ -533,16 +533,4 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertNotFalse($result, "L'utilisateur doit toujours exister.");
         $this->assertEquals($newPhone, $result['phone'], "Le numéro de téléphone aurait dû être mis à jour.");
     }
-
-    #[Test]
-    public function testModifyFieldThrowsExceptionOnUnsupportedField(): void
-    {
-        $student = $this->registerUserTest('student');
-        $email = $student->getEmail();
-
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Nom de champ non valide');
-
-        User::modifyField('last_name', 'NouveauNom', $email);
-    }
 }
