@@ -540,7 +540,7 @@ class UserFactoryMethodsTest extends TestCase
         $student = $this->registerUserTest('student');
         $email = $student->getEmail();
 
-        $this->expectException(\Exception::class);
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Nom de champ non valide');
 
         User::modifyField('last_name', 'NouveauNom', $email);
