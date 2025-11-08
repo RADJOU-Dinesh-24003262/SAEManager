@@ -379,6 +379,7 @@ abstract class User
      * @return void
      *
      * @throws \PDOException If the modification fails.
+     * @throws \InvalidArgumentException If the field is not supported.
      */
     public static function modifyField(string $field, string $value, string $email): void
     {
@@ -388,7 +389,7 @@ abstract class User
                 $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
                 $stmt->execute(['value' => $value, 'email' => $email]);
             } else {
-                throw new \PDOException("Nom de champ non valide");
+                throw new \InvalidArgumentException("Nom de champ non valide");
             }
 
             if ($stmt->rowCount() === 0) {
@@ -396,7 +397,7 @@ abstract class User
             }
         } catch (\PDOException $e) {
             error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
-            throw new \PDOException();
+            throw $e;
         }
     }
 
