@@ -2,18 +2,6 @@
   skinparam svgLinkTarget _blank
   skinparam topurl https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src
   package Views as Views {
-    package Profile as Views.Profile {
-      class "ProfileView\n<b>Class ProfileView</b>" as Views_Profile_ProfileView [[/Views/Profile/ProfileView.php ProfileView Class]] {
-        #templatePath()
-        #templateKeys()
-        #getNameCss()
-      }
-      class "DeleteUserView\n<b>Class DeleteUserView</b>" as Views_Profile_DeleteUserView [[/Views/Profile/DeleteUserView.php DeleteUserView Class]] {
-        +templatePath()
-        +templateKeys()
-        +getNameCss()
-      }
-    }
     package Index as Views.Index {
       class "IndexView\n<b>Class IndexView</b>" as Views_Index_IndexView [[/Views/Index/IndexView.php IndexView Class]] {
         #templatePath()
@@ -32,6 +20,30 @@
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
+      }
+    }
+    package Settings as Views.Settings {
+      class "EditProfileView\n<b>Edit Profile View</b>" as Views_Settings_EditProfileView [[/Views/Settings/EditProfileView.php EditProfileView Class]] {
+        #templatePath()
+        #templateKeys()
+        #getNameCss()
+      }
+      class "EditProfileSuccessView\n<b>Edit Profile Success View</b>" as Views_Settings_EditProfileSuccessView [[/Views/Settings/EditProfileSuccessView.php EditProfileSuccessView Class]] {
+        #templatePath()
+        #templateKeys()
+        #getNameCss()
+      }
+      class "SettingsView\n<b>Class SettingsView</b>" as Views_Settings_SettingsView [[/Views/Settings/SettingsView.php SettingsView Class]] {
+        +__construct(data)
+        #templatePath()
+        #templateKeys()
+        -getUserTypeLabel(user)
+        #getNameCss()
+      }
+      class "DeleteUserView\n<b>Class DeleteUserView</b>" as Views_Settings_DeleteUserView [[/Views/Settings/DeleteUserView.php DeleteUserView Class]] {
+        +templatePath()
+        +templateKeys()
+        +getNameCss()
       }
     }
     package User as Views.User {
@@ -244,6 +256,7 @@
         {static} +existsByEmail(email)
         {static} +updatePasswordByEmail(email, newPassword)
         {static} +deleteByEmail(email)
+        {static} +modifyField(field, value, email)
         {abstract} #fetchSAEData(connection, userId)
         +getSaes()
         +hasAcessToSae(sae_subject_id)
@@ -282,16 +295,6 @@
     }
   }
   package Controllers as Controllers {
-    package Profile as Controllers.Profile {
-      class "ProfileController\n<b>Profile Controller</b>" as Controllers_Profile_ProfileController [[/Controllers/Profile/ProfileController.php ProfileController Class]] {
-        +control()
-        {static} +support(path, method)
-      }
-      class "DeleteUserController\n<b>DeleteUser Controller</b>" as Controllers_Profile_DeleteUserController [[/Controllers/Profile/DeleteUserController.php DeleteUserController Class]] {
-        +control()
-        {static} +support(path, method)
-      }
-    }
     package Index as Controllers.Index {
       class "IndexController\n<b>This class controls the Index page.</b>" as Controllers_Index_IndexController [[/Controllers/Index/IndexController.php IndexController Class]] {
         +control()
@@ -306,6 +309,24 @@
     }
     package SaeSujet as Controllers.SaeSujet {
       class "SaeSujetController\n<b>Controller for the form of the subject of the SAE.</b>" as Controllers_SaeSujet_SaeSujetController [[/Controllers/SaeSujet/SaeSujetController.php SaeSujetController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+    }
+    package Settings as Controllers.Settings {
+      class "EditProfileController\n<b>Edit Profile Controller</b>" as Controllers_Settings_EditProfileController [[/Controllers/Settings/EditProfileController.php EditProfileController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "EditProfilePost\n<b>Edit Profile Post Controller</b>" as Controllers_Settings_EditProfilePost [[/Controllers/Settings/EditProfilePost.php EditProfilePost Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "SettingsController\n<b>Settings Controller</b>" as Controllers_Settings_SettingsController [[/Controllers/Settings/SettingsController.php SettingsController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "DeleteUserController\n<b>DeleteUser Controller</b>" as Controllers_Settings_DeleteUserController [[/Controllers/Settings/DeleteUserController.php DeleteUserController Class]] {
         +control()
         {static} +support(path, method)
       }
@@ -385,10 +406,13 @@
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
   Controllers_PageSae_PageSaeController ..> Models_User_User
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
-  Controllers_Profile_DeleteUserController ..> Models_User_User
-  Controllers_Profile_DeleteUserController ..> Views_Profile_DeleteUserView
-  Controllers_Profile_ProfileController ..> Views_Profile_ProfileView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
+  Controllers_Settings_DeleteUserController ..> Models_User_User
+  Controllers_Settings_DeleteUserController ..> Views_Settings_DeleteUserView
+  Controllers_Settings_EditProfileController ..> Views_Settings_EditProfileView
+  Controllers_Settings_EditProfilePost ..> Models_User_User
+  Controllers_Settings_EditProfilePost ..> Views_Settings_EditProfileSuccessView
+  Controllers_Settings_SettingsController ..> Views_Settings_SettingsView
   Controllers_ToDoList_ToDoListController ..> Models_User_User
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
   Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
@@ -423,6 +447,7 @@
   Views_Dashboard_DashboardView ..> Models_SAE_SAE
   Views_Dashboard_DashboardView ..> Models_User_Student
   Views_Dashboard_DashboardView ..> Models_User_User
+  Views_Settings_SettingsView ..> Models_User_User
   Views_User_RegisterSuccessView ..> Models_User_Student
   Views_User_RegisterSuccessView ..> Models_User_User
 @enduml
