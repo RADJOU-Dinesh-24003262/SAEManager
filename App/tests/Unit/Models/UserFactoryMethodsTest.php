@@ -442,7 +442,7 @@ class UserFactoryMethodsTest extends TestCase
     }
 
     /**
-     * Generic password reset workflow
+     * Helper function to create and register a test user
      */
     private function registerUserTest(string $userType): User
     {
@@ -457,7 +457,7 @@ class UserFactoryMethodsTest extends TestCase
     }
 
 
-    /*
+    /**
      * Tests for deleteByEmail method
      */
     #[Test]
@@ -512,7 +512,7 @@ class UserFactoryMethodsTest extends TestCase
     }
 
 
-    /*
+    /**
      * Tests for modifyField method
      */
 

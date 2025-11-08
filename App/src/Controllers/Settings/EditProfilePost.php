@@ -38,25 +38,20 @@ class EditProfilePost implements ControllerInterface
      */
     public function control(): void
     {
-
         $user = unserialize(SessionService::get('USER'));
-        $validator =  new EditProfileValidator();
+        $validator = new EditProfileValidator();
 
-        try {
-            $data = $validator->escape($_POST);
-            $validator->validate($data);
-            $email = $user->getEmail();
-            User::modifyField('phone', $data['phone'], $email);
+        $data = $validator->escape($_POST);
+        $validator->validate($data);
+        $email = $user->getEmail();
+        User::modifyField('phone', $data['phone'], $email);
 
-            $user->fetchData($email);
+        $user->fetchData($email);
 
-            SessionService::set('USER', serialize($user));
+        SessionService::set('USER', serialize($user));
 
-            $view = new EditProfileSuccessView($data);
-            $view->render();
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage());
-        }
+        $view = new EditProfileSuccessView($data);
+        $view->render();
     }
 
     /**
