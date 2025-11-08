@@ -25,7 +25,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour Student
     // ========================================
-
     #[Test]
     public function studentConstructorInitializesCorrectly(): void
     {
@@ -101,7 +100,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour Professor
     // ========================================
-
     #[Test]
     public function professorConstructorInitializesCorrectly(): void
     {
@@ -135,7 +133,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour Client
     // ========================================
-
     #[Test]
     public function clientConstructorInitializesCorrectly(): void
     {
@@ -167,7 +164,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour User Factory Methods
     // ========================================
-
     #[Test]
     #[DataProvider('userTypesProvider')]
     public function createFromRegistrationDataCreatesCorrectType(string $type, string $expectedClass): void
@@ -241,7 +237,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour les getters
     // ========================================
-
     #[Test]
     public function getAllGettersReturnCorrectValues(): void
     {
@@ -272,7 +267,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests pour existsByEmail (méthode statique)
     // ========================================
-
     #[Test]
     public function existsByEmailReturnsFalseOnDatabaseError(): void
     {
@@ -287,7 +281,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests des cas limites
     // ========================================
-
     #[Test]
     public function studentWithMinimalDataWorks(): void
     {
@@ -342,7 +335,6 @@ class UserModelTest extends TestCase
     // ========================================
     // Tests de sécurité
     // ========================================
-
     #[Test]
     public function passwordIsNotStoredInPlainText(): void
     {

@@ -171,7 +171,6 @@ class UserFactoryMethodsTest extends TestCase
     // ========================================
     // Tests for existsByEmail
     // ========================================
-
     #[Test]
     public function existsByEmailReturnsBooleanValue(): void
     {
@@ -213,7 +212,6 @@ class UserFactoryMethodsTest extends TestCase
     // ========================================
     // Tests for setPassword
     // ========================================
-
     #[Test]
     public function setPasswordHashesCorrectly(): void
     {
@@ -276,7 +274,6 @@ class UserFactoryMethodsTest extends TestCase
     // ========================================
     // Tests for getFullName
     // ========================================
-
     #[Test]
     public function getFullNameReturnsCorrectFormat(): void
     {
@@ -314,7 +311,6 @@ class UserFactoryMethodsTest extends TestCase
     // ========================================
     // Tests for the type checkers
     // ========================================
-
     #[Test]
     public function typeCheckersWorkCorrectlyForStudent(): void
     {
@@ -348,7 +344,6 @@ class UserFactoryMethodsTest extends TestCase
     // ========================================
     // Security related tests
     // ========================================
-
     #[Test]
     public function passwordFieldsAreNotStoredInConstructor(): void
     {

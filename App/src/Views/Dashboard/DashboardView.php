@@ -46,8 +46,6 @@ class DashboardView extends AbstractView
     public function __construct(array $data)
     {
         $data = [
-            'errors'  => SessionService::getFlash('errors', []),
-            'success' => SessionService::getFlash('success', ''),
             'user'    => $data['user'],
             'saes'    => $data['saes']
         ];
@@ -249,7 +247,7 @@ class DashboardView extends AbstractView
         }
 
         $html .= '<div class="sae-actions">';
-        $html .= '<a href="/sae/view/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
+        $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
         $html .= '</div></div></article>';
 
         return $html;
