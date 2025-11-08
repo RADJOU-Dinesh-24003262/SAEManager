@@ -344,29 +344,10 @@ abstract class User
             if ($stmt->rowCount() === 0) {
                 throw new \PDOException();
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
             throw new \PDOException();
         }
-    }
-
-    /**
-     * Gets the user type label in French.
-     *
-     * @return string The localized user type label.
-     */
-    public function getUserTypeLabel(): string
-    {
-        if ($this->isStudent()) {
-            return 'Etudiant';
-        }
-        if ($this->isProfessor()) {
-            return 'Professeur';
-        }
-        if ($this->isClient()) {
-            return 'Client';
-        }
-        return 'Utilisateur';
     }
 
     /**
@@ -379,14 +360,9 @@ abstract class User
      * @return void
      *
      * @throws \PDOException If the modification fails.
-     * @throws \InvalidArgumentException If the field is not supported.
      */
     public static function modifyField(string $field, string $value, string $email): void
     {
-        if ($field !== 'phone') {
-            throw new \InvalidArgumentException("Nom de champ non valide");
-        }
-
         try {
             $db = Database::getInstance();
             $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
