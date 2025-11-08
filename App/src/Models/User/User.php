@@ -184,17 +184,17 @@ abstract class User
 
         $stmt->execute(
             [
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'hashed_password' => $this->hashed_password,
-            'user_type' => match ($this->user_type) {
-                'student'   => '0',
-                'professor' => '1',
-                'client'    => '2',
-                default     => null, // If there something that is unusual.
-            },
+                'first_name' => $this->first_name,
+                'last_name' => $this->last_name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'hashed_password' => $this->hashed_password,
+                'user_type' => match ($this->user_type) {
+                    'student'   => '0',
+                    'professor' => '1',
+                    'client'    => '2',
+                    default     => null, // If there something that is unusual.
+                },
             ]
         );
 
@@ -311,8 +311,8 @@ abstract class User
 
             $stmt->execute(
                 [
-                'password_hash' => $hashed_password,
-                'email' => $email,
+                    'password_hash' => $hashed_password,
+                    'email' => $email,
                 ]
             );
 
@@ -328,9 +328,10 @@ abstract class User
     /**
      * Delete a User depending of his email
      *
-     * @param  string $email The user's email.
+     * @param string $email The user's email.
+     *
      * @return void
-     * @throws ExceptionDeleteUserFailed If the User is not found during Deletion of his account.
+     * @throws \PDOException If the User is not found during Deletion of his account.
      */
     public static function deleteByEmail(string $email): void
     {
@@ -341,11 +342,38 @@ abstract class User
             $stmt->execute(['email' => $email]);
 
             if ($stmt->rowCount() === 0) {
-                throw new ExceptionDeleteUserFailed();
+                throw new \PDOException();
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new ExceptionDeleteUserFailed();
+            throw new \PDOException();
+        }
+    }
+
+    /**
+     * Modifies a specific field for a user.
+     *
+     * @param string $field The field name to modify.
+     * @param string $value The new value for the field.
+     * @param string $email The user's email.
+     *
+     * @return void
+     *
+     * @throws \PDOException If the modification fails.
+     */
+    public static function modifyField(string $field, string $value, string $email): void
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
+            $stmt->execute(['value' => $value, 'email' => $email]);
+
+            if ($stmt->rowCount() === 0) {
+                throw new \PDOException("No rows affected for email: {$email}");
+            }
+        } catch (\PDOException $e) {
+            error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
+            throw $e;
         }
     }
 
