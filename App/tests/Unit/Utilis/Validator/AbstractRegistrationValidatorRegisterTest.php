@@ -224,7 +224,7 @@ class AbstractRegistrationValidatorRegisterTest extends TestCase
 
         $data = $this->getValidBaseData();
         $data['user_type'] = 'professor';
-        
+
         // No student fields
         $this->validator = RegistrationValidatorFactory::create($data['user_type']);
         $escaped = $this->validator->escape($data);

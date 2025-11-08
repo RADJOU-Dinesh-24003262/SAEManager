@@ -77,6 +77,11 @@ class ValidatorTest extends TestCase
         $validator->validate($data);
     }
 
+    /**
+     * Data provider for various invalid email formats.
+     *
+     * @return array<mixed>
+     */
     public static function invalidEmailsProvider(): array
     {
         return [
@@ -165,6 +170,11 @@ class ValidatorTest extends TestCase
         $validator->validate($data);
     }
 
+    /**
+     * Data provider for various valid password formats.
+     *
+     * @return array<mixed>
+     */
     public static function validPasswordsProvider(): array
     {
         return [
@@ -196,6 +206,8 @@ class ValidatorTest extends TestCase
     public function forgotPasswordValidatorAcceptsValidEmail(): void
     {
         $this->expectNotToPerformAssertions();
+
+        SessionService::set('last_forgot_password_request', 0);
 
         $validator = new ForgotPasswordValidator();
         $data = $validator->escape([
@@ -277,6 +289,11 @@ class ValidatorTest extends TestCase
         $this->assertEquals($shouldBeValid, $result);
     }
 
+    /**
+     * Data provider for various phone number formats.
+     *
+     * @return array<mixed>
+     */
     public static function phoneNumbersProvider(): array
     {
         return [
@@ -311,6 +328,11 @@ class ValidatorTest extends TestCase
         $this->assertEquals($shouldBeValid, $result);
     }
 
+    /**
+     * Data provider for various user types.
+     *
+     * @return array<mixed>
+     */
     public static function userTypesProvider(): array
     {
         return [
@@ -343,6 +365,11 @@ class ValidatorTest extends TestCase
         $this->assertEquals($shouldBeValid, $result);
     }
 
+    /**
+     * Data provider for various year formats.
+     *
+     * @return array<mixed>
+     */
     public static function yearProvider(): array
     {
         return [
@@ -375,6 +402,11 @@ class ValidatorTest extends TestCase
         $this->assertEquals($shouldBeValid, $result);
     }
 
+    /**
+     * Data provider for various TD formats.
+     *
+     * @return array<mixed>
+     */
     public static function tdProvider(): array
     {
         return [
@@ -407,6 +439,11 @@ class ValidatorTest extends TestCase
         $this->assertEquals($shouldBeValid, $result);
     }
 
+    /**
+     * Data provider for various TP formats.
+     *
+     * @return array<mixed>
+     */
     public static function tpProvider(): array
     {
         return [

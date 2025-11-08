@@ -93,7 +93,20 @@ abstract class FormValidator
      */
     protected function isValidEmail(string $email): bool
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+        // Trim to remove surrounding whitespace.
+        $email = trim($email);
+
+        // Standard validation via filter_var.
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        // (Further DNS check to ensure domain exists.
+        [$localPart, $domain] = explode('@', $email, 2);
+        if (!checkdnsrr($domain, 'MX') && !checkdnsrr($domain, 'A')) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -114,7 +127,7 @@ abstract class FormValidator
         $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
         $genericEmailPattern = '/^[a-zA-ZÀ-ÿ\-\'\.]+@[a-z]+\.[a-z\.]+$/';
 
-        return preg_match($ownEmailPattern, $email);
+        return preg_match($ownEmailPattern, $email) === 1;
     }
 
     /**

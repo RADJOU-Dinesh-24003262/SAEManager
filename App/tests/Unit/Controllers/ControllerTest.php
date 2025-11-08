@@ -222,6 +222,11 @@ class ControllerTest extends TestCase
         $this->assertEquals('method', $parameters[1]->getName());
     }
 
+    /**
+     * Data provider for controller classes.
+     *
+     * @return array<int, array{0: class-string}>
+     */
     public static function controllerProvider(): array
     {
         // List of controllers to be tested generically

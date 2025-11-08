@@ -30,7 +30,7 @@ class Client extends User
     /**
      * Initializes a new client.
      *
-     * @param array<string, string> $data The client data.
+     * @param array<string, string|int> $data The client data.
      */
     public function __construct(array $data = [])
     {

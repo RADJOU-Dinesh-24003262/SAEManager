@@ -124,6 +124,11 @@ class StudentModelTest extends TestCase
         $this->assertInstanceOf(Student::class, $student);
     }
 
+    /**
+     * Data provider for various valid student data sets.
+     *
+     * @return array<mixed>
+     */
     public static function validStudentDataProvider(): array
     {
         return [
@@ -156,6 +161,11 @@ class StudentModelTest extends TestCase
         ];
     }
 
+    /**
+     * Tests the creation of a student with various valid data.
+     * @param array<mixed> $data
+     * @return void
+    */
     #[Test]
     #[DataProvider('validStudentDataProvider')]
     public function studentCanBeCreatedWithVariousValidData(array $data): void

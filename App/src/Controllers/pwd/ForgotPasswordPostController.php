@@ -57,7 +57,7 @@ class ForgotPasswordPostController implements ControllerInterface
             $validator = new ForgotPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
-            $email = trim($data['email'] ?? '');
+            $email = trim($data['email']);
 
             error_log("Demande réinitialisation pour: {$email}");
 

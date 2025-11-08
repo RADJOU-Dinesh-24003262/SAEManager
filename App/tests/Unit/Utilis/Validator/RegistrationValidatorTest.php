@@ -29,10 +29,13 @@ class RegistrationValidatorTest extends TestCase
 {
     /**
      * Test factory creates correct validator for each user type
+     * @param string       $userType
+     * @param class-string $expectedClass
+     * @return void
      */
     #[DataProvider('userTypeProvider')]
     public function testFactoryCreatesCorrectValidator(
-        string $userType, 
+        string $userType,
         string $expectedClass
     ): void {
         $validator = RegistrationValidatorFactory::create($userType);
@@ -41,6 +44,7 @@ class RegistrationValidatorTest extends TestCase
 
     /**
      * Provides user types and expected validator classes
+     * @return array<mixed>
      */
     public static function userTypeProvider(): array
     {
@@ -194,6 +198,7 @@ class RegistrationValidatorTest extends TestCase
 
     /**
      * Helper method to get base student data
+     * @return array<string, string>
      */
     private function getBaseStudentData(): array
     {

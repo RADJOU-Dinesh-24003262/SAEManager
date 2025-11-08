@@ -43,29 +43,29 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates student-specific fields
      *
-     * @param array<string, string> $data The form data
-     * @return array<ExceptionValidationRegister> Array of validation errors
+     * @param array<string, string> $data The form data.
+     * @return array<ExceptionValidationRegister> Array of validation errors.
      */
     protected function validateSpecificFields(array $data): array
     {
         $errors = [];
 
-        // Validate AMU email format for students
+        // Validate AMU email format for students.
         $errors = array_merge($errors, $this->validateStudentEmail($data));
 
-        // Validate AMU ID
+        // Validate AMU ID.
         $errors = array_merge($errors, $this->validateAmuId($data));
 
-        // Validate academic year
+        // Validate academic year.
         $errors = array_merge($errors, $this->validateYear($data));
 
-        // Validate parcours (for BUT 2 and 3)
+        // Validate parcours (for BUT 2 and 3).
         $errors = array_merge($errors, $this->validateParcours($data));
 
-        // Validate TD group
+        // Validate TD group.
         $errors = array_merge($errors, $this->validateTD($data));
 
-        // Validate TP group
+        // Validate TP group.
         $errors = array_merge($errors, $this->validateTP($data));
 
         return $errors;
@@ -74,7 +74,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates student AMU email
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateStudentEmail(array $data): array
@@ -95,7 +95,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates AMU ID
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateAmuId(array $data): array
@@ -116,7 +116,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates academic year
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateYear(array $data): array
@@ -137,7 +137,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates parcours (major/specialization)
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateParcours(array $data): array
@@ -145,7 +145,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
         $errors = [];
         $year = $data['year'] ?? '';
 
-        // Parcours is required for BUT 2 and 3
+        // Parcours is required for BUT 2 and 3.
         if (in_array($year, ['2', '3'])) {
             if (empty($data['parcours'])) {
                 $errors[] = new ExceptionValidationRegister(
@@ -161,7 +161,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
                 );
             }
         } elseif (!empty($data['parcours'])) {
-            // Parcours should not be provided for BUT 1
+            // Parcours should not be provided for BUT 1.
             $errors[] = new ExceptionValidationRegister(
                 'parcours',
                 'string',
@@ -175,7 +175,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates TD (tutorial group)
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateTD(array $data): array
@@ -195,7 +195,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
                 "Groupe TD invalide."
             );
         } elseif (in_array($data['year'] ?? '', ['2', '3']) && $data['td'] === 'TD4') {
-            // TD4 only available for BUT 1
+            // TD4 only available for BUT 1.
             $errors[] = new ExceptionValidationRegister(
                 'td',
                 'string',
@@ -209,7 +209,7 @@ class StudentRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates TP (lab group)
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister>
      */
     private function validateTP(array $data): array

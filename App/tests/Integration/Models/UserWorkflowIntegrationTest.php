@@ -12,7 +12,7 @@ use Models\User\Client;
 use Core\includes\Database;
 
 /**
- * Tests d'intégration pour les workflows complets User
+ * Integration tests for the complete user workflow:
  */
 #[CoversClass(User::class)]
 #[CoversClass(Student::class)]
@@ -30,7 +30,7 @@ class UserWorkflowIntegrationTest extends TestCase
 
     protected function tearDown(): void
     {
-        // Réinitialise l'instance statique Database
+        // Reset the static Database instance
         $reflection = new \ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
@@ -39,12 +39,12 @@ class UserWorkflowIntegrationTest extends TestCase
     }
 
     // ========================================
-    // Test du workflow complet: Registration → Login
+    // Complete Workflow test : Registration → Login
     // ========================================
     #[Test]
     public function completeRegistrationAndLoginWorkflowForStudent(): void
     {
-        // Étape 1: Création d'un utilisateur via createFromRegistrationData
+        // Step 1: Create a user via createFromRegistrationData
         $registrationData = [
             'user_type' => 'student',
             'first_name' => 'Jean',
@@ -63,16 +63,16 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertInstanceOf(Student::class, $student);
         $this->assertEquals('Jean', $student->getFirstName());
         $this->assertEquals('Dupont', $student->getLastName());
-        // Vérifier que le mot de passe a été hashé
+        // Check that the password has been hashed
         $passwordHash = $student->getPasswordHash();
         $this->assertNotEmpty($passwordHash);
         $this->assertNotEquals('SecurePassword123', $passwordHash);
         $this->assertTrue(password_verify('SecurePassword123', $passwordHash));
 
-        // Étape 2: Sauvegarde réelle
+        // Step 2: Real save to the database
         $student->save();
 
-        // Étape 3: Connexion réelle
+        // Step 3: Real login via createFromLoginData
         $loginData = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
             'password' => 'SecurePassword123'
@@ -86,12 +86,12 @@ class UserWorkflowIntegrationTest extends TestCase
     }
 
     // ========================================
-    // Test du workflow: Registration → Password Reset
+    // Test of workflow: Registration → Password Reset
     // ========================================
     #[Test]
     public function completePasswordResetWorkflow(): void
     {
-        // Étape 1: Créer et sauvegarder un utilisateur
+        // Step 1: Create and save a user
         $student = new Student([
             'first_name' => 'Marie',
             'last_name' => 'Martin',
@@ -105,11 +105,11 @@ class UserWorkflowIntegrationTest extends TestCase
         $student->setPassword('OldPassword123');
         $student->save();
 
-        // Étape 2: Réinitialiser le mot de passe
+        // Step 2: Reset the password
         $newPassword = 'NewSecurePassword456';
         User::updatePasswordByEmail('marie.martin@etu.univ-amu.fr', $newPassword);
 
-        // Étape 3: Vérifier que le nouveau mot de passe fonctionne
+        // Step 3: Check that the new password works
         $loginData = [
             'email' => 'marie.martin@etu.univ-amu.fr',
             'password' => 'NewSecurePassword456'
@@ -120,7 +120,7 @@ class UserWorkflowIntegrationTest extends TestCase
     }
 
     // ========================================
-    // Test du workflow: Multiple user types
+    // Test of workflow: Multiple user types
     // ========================================
     #[Test]
     public function workflowHandlesMultipleUserTypes(): void
@@ -180,12 +180,12 @@ class UserWorkflowIntegrationTest extends TestCase
     }
 
     // ========================================
-    // Test de cohérence des données
+    // Test of data consistency throughout the workflow
     // ========================================
     #[Test]
     public function dataRemainsConsistentThroughoutWorkflow(): void
     {
-        // Données initiales
+        // Initial data
         $originalData = [
             'user_type' => 'student',
             'first_name' => 'Consistency',
@@ -200,12 +200,12 @@ class UserWorkflowIntegrationTest extends TestCase
             'major' => 'B'
         ];
 
-        // Créer l'utilisateur
+        // Create the user
         $student = User::createFromRegistrationData($originalData);
         $this->assertInstanceOf(Student::class, $student);
         /** @var Student $student */
 
-        // Vérifier que les données sont correctes après création
+        // Check that the data is correct after creation
         $this->assertEquals('Consistency', $student->getFirstName());
         $this->assertEquals('Test', $student->getLastName());
         $this->assertEquals('consistency@etu.univ-amu.fr', $student->getEmail());
@@ -216,7 +216,7 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertEquals('TPA', $student->getTp());
         $this->assertEquals('B', $student->getParcours());
 
-        // Vérifier plusieurs fois (les getters ne devraient pas modifier les données)
+        // Check multiple times (getters should not modify data)
         for ($i = 0; $i < 5; $i++) {
             $this->assertEquals('Consistency', $student->getFirstName());
             $this->assertEquals('consistency123', $student->getAmuId());
@@ -225,7 +225,7 @@ class UserWorkflowIntegrationTest extends TestCase
     }
 
     // ========================================
-    // Test de sécurité du workflow
+    // Test of workflow security
     // ========================================
     #[Test]
     public function passwordNeverExposedInPlainText(): void
@@ -247,22 +247,22 @@ class UserWorkflowIntegrationTest extends TestCase
 
         $student = User::createFromRegistrationData($registrationData);
 
-        // Le mot de passe ne devrait jamais être stocké en clair
+        // The password should never be stored in plain text
         $hash = $student->getPasswordHash();
         $this->assertNotEquals($plainPassword, $hash);
 
-        // Sérialiser l'objet
+        // Serialize the object and check that the plain password is not present
         $serialized = serialize($student);
 
-        // Le mot de passe en clair ne devrait pas apparaître dans la sérialisation
+        // The plain password should not appear in the serialization
         $this->assertStringNotContainsString($plainPassword, $serialized);
 
-        // Mais le hash devrait pouvoir vérifier le mot de passe
+        // But the hash should be able to verify the password
         $this->assertTrue(password_verify($plainPassword, $hash));
     }
 
     // ========================================
-    // Test de robustesse
+    // Test of robustness
     // ========================================
     #[Test]
     public function workflowHandlesUnicodeData(): void
@@ -287,7 +287,7 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertStringContainsString('ç', $student->getFirstName());
         $this->assertStringContainsString('ü', $student->getLastName());
 
-        // Le mot de passe Unicode devrait être hashé correctement
+        // The Unicode password should be hashed correctly
         $this->assertTrue(password_verify('Pàsswørd123€', $student->getPasswordHash()));
     }
 }

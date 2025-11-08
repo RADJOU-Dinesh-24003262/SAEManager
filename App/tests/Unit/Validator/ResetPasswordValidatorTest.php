@@ -44,6 +44,11 @@ class ResetPasswordValidatorTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Data provider for various valid password formats.
+     *
+     * @return array<mixed>
+     */
     public static function validPasswordsProvider(): array
     {
         return [
@@ -69,6 +74,11 @@ class ResetPasswordValidatorTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Data provider for various short password formats.
+     *
+     * @return array<mixed>
+     */
     public static function shortPasswordsProvider(): array
     {
         return [
@@ -107,6 +117,11 @@ class ResetPasswordValidatorTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Data provider for various subtly different passwords.
+     *
+     * @return array<mixed>
+     */
     public static function mismatchedPasswordsProvider(): array
     {
         return [

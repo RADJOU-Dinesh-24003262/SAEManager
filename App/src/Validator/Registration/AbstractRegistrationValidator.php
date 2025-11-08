@@ -25,18 +25,18 @@ abstract class AbstractRegistrationValidator extends FormValidator
     /**
      * Validates data for registration
      *
-     * @param array<string, string> $data The form data to validate
+     * @param array<string, string> $data The form data to validate.
      * @return void
-     * @throws ExceptionValidationRegisters If validation fails
+     * @throws ExceptionValidationRegisters If validation fails.
      */
     public function validate(array $data): void
     {
         $errors = [];
 
-        // Validate common fields
+        // Validate common fields.
         $errors = array_merge($errors, $this->validateCommonFields($data));
 
-        // Validate type-specific fields (implemented by child classes)
+        // Validate type-specific fields (implemented by child classes).
         $errors = array_merge($errors, $this->validateSpecificFields($data));
 
         if (!empty($errors)) {
@@ -47,14 +47,14 @@ abstract class AbstractRegistrationValidator extends FormValidator
     /**
      * Validates fields common to all user types
      *
-     * @param array<string, string> $data The form data
-     * @return array<ExceptionValidationRegister> Array of validation errors
+     * @param array<string, string> $data The form data.
+     * @return array<ExceptionValidationRegister> Array of validation errors.
      */
     protected function validateCommonFields(array $data): array
     {
         $errors = [];
 
-        // Validate user type
+        // Validate user type.
         if (!$this->isValidUserType($data['user_type'])) {
             $errors[] = new ExceptionValidationRegister(
                 "user_type",
@@ -63,7 +63,7 @@ abstract class AbstractRegistrationValidator extends FormValidator
             );
         }
 
-        // Validate email format
+        // Validate email format.
         if (!$this->isValidEmail($data['email'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
@@ -72,7 +72,7 @@ abstract class AbstractRegistrationValidator extends FormValidator
             );
         }
 
-        // Validate password strength
+        // Validate password strength.
         if (!$this->isValidPassword($data['password'])) {
             $errors[] = new ExceptionValidationRegister(
                 "password",
@@ -81,7 +81,7 @@ abstract class AbstractRegistrationValidator extends FormValidator
             );
         }
 
-        // Validate password match
+        // Validate password match.
         if ($data['password'] !== ($data['passwordverif'] ?? '')) {
             $errors[] = new ExceptionValidationRegister(
                 "passwordverif",
@@ -90,7 +90,7 @@ abstract class AbstractRegistrationValidator extends FormValidator
             );
         }
 
-        // Validate phone number
+        // Validate phone number.
         if (!$this->isValidPhone($data['phone'])) {
             $errors[] = new ExceptionValidationRegister(
                 "phone",
@@ -106,7 +106,7 @@ abstract class AbstractRegistrationValidator extends FormValidator
      * Validates user-type-specific fields
      * Must be implemented by child classes
      *
-     * @param array<string, string> $data The form data
+     * @param array<string, string> $data The form data.
      * @return array<ExceptionValidationRegister> Array of validation errors
      */
     abstract protected function validateSpecificFields(array $data): array;

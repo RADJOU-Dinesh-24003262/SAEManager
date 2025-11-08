@@ -40,14 +40,14 @@ class ClientRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates client-specific fields
      *
-     * @param array<string, string> $data The form data
-     * @return array<ExceptionValidationRegister> Array of validation errors
+     * @param array<string, string> $data The form data.
+     * @return array<ExceptionValidationRegister> Array of validation errors.
      */
     protected function validateSpecificFields(array $data): array
     {
         $errors = [];
 
-        // Validate organisation
+        // Validate organisation.
         if (empty($data['organisation'])) {
             $errors[] = new ExceptionValidationRegister(
                 'organisation',
@@ -68,12 +68,12 @@ class ClientRegistrationValidator extends AbstractRegistrationValidator
     /**
      * Validates organisation name
      *
-     * @param string $organisation The organisation name
+     * @param string $organisation The organisation name.
      * @return boolean
      */
     private function isValidOrganisation(string $organisation): bool
     {
-        // Organisation should be at least 2 characters and not contain special chars
+        // Organisation should be at least 2 characters and not contain special chars.
         return strlen($organisation) >= 2
             && preg_match('/^[a-zA-ZÀ-ÿ0-9\s\-\'\.]+$/', $organisation) === 1;
     }

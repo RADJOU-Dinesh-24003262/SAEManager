@@ -42,13 +42,13 @@ class RegisterPost implements ControllerInterface
     public function control(): void
     {
         try {
-            // Extract user type to determine which validator to use
+            // Extract user type to determine which validator to use.
             $userType = $_POST['user_type'] ?? '';
 
-            // Create the appropriate validator using the factory
+            // Create the appropriate validator using the factory.
             $validator = RegistrationValidatorFactory::create($userType);
 
-            // Escape and validate the data
+            // Escape and validate the data.
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
@@ -57,11 +57,11 @@ class RegisterPost implements ControllerInterface
 
             $user->save();
             error_log("New User Created: " . $user->getEmail());
-            // Display success view
+            // Display success view.
             $view = new RegisterSuccessView($user);
             $view->render();
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
-            // Handle validation errors
+            // Handle validation errors.
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
@@ -69,17 +69,18 @@ class RegisterPost implements ControllerInterface
             SessionService::setFlash('errors', $errors);
             $this->renderRegisterView();
         } catch (\InvalidArgumentException $e) {
-            // Handle invalid user type
+            // Handle invalid user type.
             error_log("Type d'utilisateur invalide: " . $e->getMessage());
             SessionService::setFlash('errors', [$e->getMessage()]);
             $this->renderRegisterView();
         } catch (\PDOException $e) {
-            // Handle database errors
+            // Handle database errors.
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             SessionService::setFlash('errors', ['Une erreur est survenue, réessayez plus tard']);
             $this->renderRegisterView();
         } catch (\Exception $e) {
-            // Handle any other unexpected errors
+            // Handle any other unexpected errors.
+            error_log("Erreur lors de l'inscription: " . $e->getMessage());
             SessionService::setFlash('errors', ['Erreur lors de l\'inscription: ' . $e->getMessage()]);
             $this->renderRegisterView();
         }

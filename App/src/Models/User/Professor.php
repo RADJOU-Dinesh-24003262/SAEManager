@@ -37,7 +37,7 @@ class Professor extends User
      * Sets the user type and delegates initialization to the parent
      * constructor (User).
      *
-     * @param array<string, string> $data Optional initial data for the professor.
+     * @param array<string, string|int> $data Optional initial data for the professor.
      */
     public function __construct(array $data = [])
     {

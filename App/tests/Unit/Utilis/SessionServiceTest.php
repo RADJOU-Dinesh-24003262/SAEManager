@@ -235,6 +235,11 @@ class SessionServiceTest extends TestCase
         $this->assertEquals($value, $retrieved);
     }
 
+    /**
+     * Data provider for various data types.
+     *
+     * @return array<mixed>
+     */
     public static function variousDataTypesProvider(): array
     {
         return [

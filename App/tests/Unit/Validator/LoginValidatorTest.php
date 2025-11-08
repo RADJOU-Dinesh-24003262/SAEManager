@@ -44,6 +44,11 @@ class LoginValidatorTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Data provider for various valid email formats.
+     *
+     * @return array<mixed>
+     */
     public static function validEmailsProvider(): array
     {
         return [
@@ -69,6 +74,11 @@ class LoginValidatorTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    /**
+     * Data provider for various invalid email formats.
+     *
+     * @return array<mixed>
+     */
     public static function invalidEmailsProvider(): array
     {
         return [

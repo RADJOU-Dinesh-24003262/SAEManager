@@ -195,6 +195,11 @@ class UserModelTest extends TestCase
         $this->assertEquals($type, $user->getUserType());
     }
 
+    /**
+     * Data provider for user types and their corresponding classes.
+     *
+     * @return array<mixed>
+     */
     public static function userTypesProvider(): array
     {
         return [

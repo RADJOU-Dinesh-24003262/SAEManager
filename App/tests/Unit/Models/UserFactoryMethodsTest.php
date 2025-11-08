@@ -142,6 +142,12 @@ class UserFactoryMethodsTest extends TestCase
 
     #[Test]
     #[DataProvider('invalidUserTypesProvider')]
+    /**
+     * Tests the rejection of invalid user types.
+     *
+     * @param string $invalidType
+     * @return void
+     */
     public function createFromRegistrationDataRejectsInvalidTypes(string $invalidType): void
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -156,6 +162,11 @@ class UserFactoryMethodsTest extends TestCase
         ]);
     }
 
+    /**
+     * Data provider for invalid user types.
+     *
+     * @return array<mixed>
+     */
     public static function invalidUserTypesProvider(): array
     {
         return [
@@ -198,6 +209,11 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertIsBool($result);
     }
 
+    /**
+     * Data provider for various email formats.
+     *
+     * @return array<mixed>
+     */
     public static function emailFormatsProvider(): array
     {
         return [
@@ -258,6 +274,11 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertTrue(password_verify($password, $hash));
     }
 
+    /**
+     * Data provider for various password formats.
+     *
+     * @return array<mixed>
+     */
     public static function passwordsProvider(): array
     {
         return [
@@ -297,6 +318,11 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertEquals($expected, $student->getFullName());
     }
 
+    /**
+     * Data provider for various name formats.
+     *
+     * @return array<mixed>
+     */
     public static function nameFormatsProvider(): array
     {
         return [

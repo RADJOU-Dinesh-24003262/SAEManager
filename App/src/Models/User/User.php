@@ -98,7 +98,7 @@ abstract class User
     /**
      * Factory method to create the appropriate user type from registration data.
      *
-     * @param array<string, string> $data The registration data.
+     * @param array<string, string|int> $data The registration data.
      *
      * @return User The created user instance.
      * @throws \InvalidArgumentException If user is not valid.
@@ -158,13 +158,13 @@ abstract class User
     /**
      * Sets the hashed password for the user.
      *
-     * @param string $password The plain text password.
+     * @param string|integer $password The plain text password.
      *
      * @return void
      */
-    public function setPassword(string $password): void
+    public function setPassword(string|int $password): void
     {
-        $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $this->hashed_password = password_hash((string) $password, PASSWORD_DEFAULT);
     }
 
     /**
