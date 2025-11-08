@@ -383,17 +383,17 @@ abstract class User
      */
     public static function modifyField(string $field, string $value, string $email): void
     {
+        if ($field !== 'phone') {
+            throw new \InvalidArgumentException("Nom de champ non valide");
+        }
+
         try {
             $db = Database::getInstance();
-            if ($field === 'phone') {
-                $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
-                $stmt->execute(['value' => $value, 'email' => $email]);
-            } else {
-                throw new \InvalidArgumentException("Nom de champ non valide");
-            }
+            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
+            $stmt->execute(['value' => $value, 'email' => $email]);
 
             if ($stmt->rowCount() === 0) {
-                throw new \PDOException();
+                throw new \PDOException("No rows affected for email: {$email}");
             }
         } catch (\PDOException $e) {
             error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());

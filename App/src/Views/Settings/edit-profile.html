@@ -1,16 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Profile - SAEManager</title>
-</head>
+<html lang="fr">
 <body>
 <form action="/edit-profile" method="post" autocomplete="on">
 
-    <label>Telephone Actuel : {{PHONE}} </label>
-    <br>
+    <p>Téléphone Actuel : <strong>{{PHONE}}</strong></p>
     <label for="phone">
-        Modifier le Numéro de téléphone
+        Modifier le Numéro de téléphone :
     </label>
     <input
             required
@@ -19,7 +14,11 @@
             name="phone"
             pattern="0[467][0-9]{8}"
             maxlength="10"
-            aria-required="true">
+            aria-required="true"
+            aria-describedby="phone-hint">
+    <br>
+    <small id="phone-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
+    <br>
     <br>
     <button type="submit">Modifier ses données</button>
 
