@@ -91,7 +91,7 @@ jobs:
       # Test Coverage Check
       - name: Check Test Coverage
         run: |
-          php App/tests/coverage-checker.php coverage.xml 10
+          php App/tests/coverage-checker.php coverage.xml 39
         continue-on-error: true
 
       # Security Check

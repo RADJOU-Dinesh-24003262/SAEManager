@@ -43,24 +43,6 @@ class ForgotPasswordView extends AbstractView
     private const TEMPLATE_HTML = __DIR__ . '/forgot-password.html';
 
     /**
-     * ForgotPasswordView constructor.
-     *
-     * Initializes the view by retrieving flash messages (errors and success)
-     * from the session service and passing them to the parent constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $data = [
-            'errors'  => SessionService::getFlash('errors', []),
-            'success' => SessionService::getFlash('success', ''),
-        ];
-
-        parent::__construct($data);
-    }
-
-    /**
      * Returns the path to the HTML template file.
      *
      * @return string The full path to the template file.

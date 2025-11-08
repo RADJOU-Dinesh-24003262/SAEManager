@@ -45,12 +45,15 @@ abstract class FormValidator
     public function escape(array $data): array
     {
         $errors = [];
+
         foreach ($this->required as $field) {
             if (empty($data[$field])) {
                 $errors[] = new ExceptionValidationEmpty($field);
-            } else {
-                $data[$field] = htmlspecialchars($data[$field], ENT_QUOTES, 'UTF-8');
             }
+        }
+
+        foreach ($data as $key => $value) {
+            $data[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
         }
 
         if (!empty($errors)) {

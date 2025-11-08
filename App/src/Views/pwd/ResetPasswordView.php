@@ -49,7 +49,6 @@ class ResetPasswordView extends AbstractView
     public function __construct(string $token, string $email)
     {
         $data = [
-            'errors' => SessionService::getFlash('errors', []),
             'token'  => $token,
             'email'  => $email,
         ];

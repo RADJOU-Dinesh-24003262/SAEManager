@@ -27,10 +27,9 @@ class ToDoList
 {
     /**
      * This is the id of the group of sae common for each student in it.
-     *
-     * @var integer $sae_group_id
+     * @var integer $groupId
      */
-    private int $sae_group_id;
+    private int $groupId;
 
     /**
      * This is the id of the subject of sae
@@ -82,10 +81,7 @@ class ToDoList
     public static function create(array $data = []): self
     {
         $todolist = new self($data);
-        $todolist->todo_id = $data['todo_id'];
-        $todolist->tododesc = $data['tododesc'];
-        $todolist->fetchDataFromDatabase($data['sae_subject_id']);
-        $todolist->fetchDataFromDatabase($data['sae_group_id']);
+        $todolist->save();
         return $todolist;
     }
 
@@ -110,7 +106,7 @@ class ToDoList
      */
     public function getSaeGroupId(): int
     {
-        return $this->sae_group_id;
+        return $this->groupId;
     }
 
     /**
@@ -122,12 +118,12 @@ class ToDoList
     }
 
     /**
-     * @param  integer $sae_group_id The id of the group of SAE.
+     * @param  integer $groupId The id of the group of SAE.
      * @return void
      */
-    public function setSaeGroupId(int $sae_group_id): void
+    public function setSaeGroupId(int $groupId): void
     {
-        $this->sae_group_id = $sae_group_id;
+        $this->$groupId = $groupId;
     }
 
     /**
@@ -158,10 +154,10 @@ class ToDoList
     }
 
     /**
-     * Returns the success of fetching a user in the database.
+     * Saves a todolist object into the database
      *
-     * Tries to fetch a user in the database depending on it's user type.
-     * Returns the success of this action.
+     * Tries to save a new todolist object into the database,
+     * Only to be used for its creation. use another function for its update.
      *
      * @return boolean
      */
@@ -169,21 +165,14 @@ class ToDoList
     {
         $connection = database::getInstance();
 
-        $stmt = $connection->prepare(
-            "
-        SELECT * FROM sae_todolists(
-                      :sae_group_id,
-                      :sae_subject_id,
-                      :todo_id,
-                      :tododesc
-        )"
-        );
+
+        $stmt = $connection->prepare('INSERT INTO sae_todolists(sae_group_id, tododesc, checked)
+                                            VALUES (:sae_group_id, :tododesc, :checked)');
         $stmt->execute(
             [
-                'sae_group_id' => $this->sae_group_id,
-                'sae_subject_id' => $this->sae_subject_id,
-                'todo_id' => $this->todo_id,
-                'tododesc' => $this->tododesc
+                'sae_group_id' => $this->groupId,
+                'tododesc' => $this->tododesc,
+                'checked' => false,
             ]
         );
 
@@ -217,7 +206,7 @@ class ToDoList
                 $this->sae_subject_id = $data['sae_subject_id'];
                 $this->todo_id = $data['todo_id'];
                 $this->tododesc = $data['tododesc'];
-                $this->sae_group_id = $data['sae_group_id'];
+                $this->groupId = $data['sae_group_id'];
             } else {
                 throw new ExceptionFetchDataBD();
             }

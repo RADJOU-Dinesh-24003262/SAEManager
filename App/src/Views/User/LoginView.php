@@ -33,18 +33,6 @@ class LoginView extends AbstractView
      */
     private const TEMPLATE_HTML = __DIR__ . '/loginview.html';
 
-    /**
-     * LoginView constructor.
-     *
-     * Retrieves flash error messages from session and passes them to parent.
-     */
-    public function __construct()
-    {
-        $data = [
-            'errors' => SessionService::getFlash('errors', []),
-        ];
-        parent::__construct($data);
-    }
 
     /**
      * Returns the path to the HTML template file.

@@ -38,8 +38,8 @@ class ToDoListValidator extends FormValidator
      */
     public function validate(array $data): void
     {
-        if ($data['tododesc'] === '') {
-            throw new ExceptionValidationEmpty("is empty");
+        if (empty($data['tododesc'])) {
+            throw new ExceptionValidationEmpty();
         }
     }
 }

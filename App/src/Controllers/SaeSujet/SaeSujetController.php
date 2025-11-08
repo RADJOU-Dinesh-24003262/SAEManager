@@ -3,8 +3,9 @@
 namespace Controllers\SaeSujet;
 
 use Core\ControllerInterface;
+use Core\Utilis\SessionService;
 use Views\SaeSujet\SaeSujetView;
-use Views\ToDoList\ToDoListView;
+use Models\User\User;
 
 /**
  * Controller for the form of the subject of the SAE.
@@ -31,6 +32,18 @@ class SaeSujetController implements ControllerInterface
      */
     public function control(): void
     {
+        $user = unserialize(SessionService::get('USER'));
+
+        if (!(SessionService::has('user_id'))) {
+            header('Location: /');
+            exit();
+        } elseif (SessionService::has('user_id')) {
+            if (!($user->isProfessor())) {
+                header('Location: /');
+                exit();
+            }
+        }
+
         $view = new SaeSujetView();
         $view->render();
     }

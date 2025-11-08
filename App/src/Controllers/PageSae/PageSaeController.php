@@ -3,6 +3,10 @@
 namespace Controllers\PageSae;
 
 use Core\ControllerInterface;
+use Core\includes\exception\ExceptionDashboard;
+use Core\Utilis\SessionService;
+use Exception;
+use Models\User\User;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -30,11 +34,44 @@ class PageSaeController implements ControllerInterface
      * Principal manager of the controller
      *
      * @return void
+     * @throws Exception If the user variable is not as expected.
      */
     public function control(): void
     {
-        $view = new PageSaeView();
-        $view->render();
+        // Redirect to dashboard if already logged in.
+        if (!SessionService::has('user_id')) {
+            header('Location: /');
+            exit();
+        }
+
+        try {
+            // Retrieve the user object stored in the session.
+            $user = unserialize(SessionService::get('USER'));
+
+            $data['user'] = $user;
+
+            if (!$user || !($user instanceof User)) {
+                throw new Exception('Unknown user');
+            }
+
+            $data['saes'] = $user->getSaes();
+            $sae_id = basename($_SERVER['REQUEST_URI']);
+
+            foreach ($data['saes'] as $key => $sae) {
+                if ($sae->getSaeSubjectId() == $sae_id) {
+                    // Create and render the SAE page view.
+                    $data['sae'] = $sae;
+                    $view = new PageSaeView($data);
+                    $view->render();
+                    exit();
+                }
+            }
+            header('Location: /');
+        } catch (Exception $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        }
     }
 
     /**
@@ -47,6 +84,6 @@ class PageSaeController implements ControllerInterface
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/page-sae' && strtoupper($method) === 'GET';
+        return preg_match('/^\/sae\/\d*$/', $path) && strtoupper($method) === 'GET';
     }
 }

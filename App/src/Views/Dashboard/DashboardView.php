@@ -46,8 +46,6 @@ class DashboardView extends AbstractView
     public function __construct(array $data)
     {
         $data = [
-            'errors'  => SessionService::getFlash('errors', []),
-            'success' => SessionService::getFlash('success', ''),
             'user'    => $data['user'],
             'saes'    => $data['saes']
         ];
@@ -189,7 +187,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>SAE</h3>';
 
         if ($user->isProfessor()) {
-            $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
+            $html .= '<a class="btn-create" href="/new-sae">+ Créer une nouvelle SAE</a>';
             $html .= '<a href="/sae">Toutes les SAE</a>';
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
@@ -249,7 +247,7 @@ class DashboardView extends AbstractView
         }
 
         $html .= '<div class="sae-actions">';
-        $html .= '<a href="/sae/view/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
+        $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
         $html .= '</div></div></article>';
 
         return $html;
