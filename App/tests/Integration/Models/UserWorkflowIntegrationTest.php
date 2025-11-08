@@ -41,7 +41,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test du workflow complet: Registration → Login
     // ========================================
-
     #[Test]
     public function completeRegistrationAndLoginWorkflowForStudent(): void
     {
@@ -89,7 +88,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test du workflow: Registration → Password Reset
     // ========================================
-
     #[Test]
     public function completePasswordResetWorkflow(): void
     {
@@ -124,7 +122,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test du workflow: Multiple user types
     // ========================================
-
     #[Test]
     public function workflowHandlesMultipleUserTypes(): void
     {
@@ -185,7 +182,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test de cohérence des données
     // ========================================
-
     #[Test]
     public function dataRemainsConsistentThroughoutWorkflow(): void
     {
@@ -231,7 +227,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test de sécurité du workflow
     // ========================================
-
     #[Test]
     public function passwordNeverExposedInPlainText(): void
     {
@@ -269,7 +264,6 @@ class UserWorkflowIntegrationTest extends TestCase
     // ========================================
     // Test de robustesse
     // ========================================
-
     #[Test]
     public function workflowHandlesUnicodeData(): void
     {

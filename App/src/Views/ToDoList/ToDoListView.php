@@ -34,19 +34,6 @@ class ToDoListView extends AbstractView
     // -------------------------------------------------------------------------
 
     /**
-     * ToDoListView constructor.
-     *
-     * Initializes the view with any error messages stored in the session.
-     */
-    public function __construct()
-    {
-        $data = [
-            'errors' => SessionService::getFlash('errors', []),
-        ];
-        parent::__construct($data);
-    }
-
-    /**
      * Returns the path to the HTML template file.
      *
      * @return string The full path to the HTML template.
@@ -68,7 +55,11 @@ class ToDoListView extends AbstractView
     {
         $errors = $this->data['errors'];
 
-        return ['ERROR_MESSAGES' => $this->renderErrorMessages($errors)];
+        return [
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
+            'SAE_NAME' => $this->data['sae']->getSubjectName()
+        ];
     }
 
     /**
@@ -160,6 +151,6 @@ class ToDoListView extends AbstractView
      */
     protected function getAdditionalScripts(): string
     {
-        return '<script src="scripts/to-do-list.js" defer></script>';
+        return '<script src="/scripts/to-do-list.js" defer></script>';
     }
 }
