@@ -46,9 +46,7 @@ class EditProfilePost implements ControllerInterface
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $email = $user->getEmail();
-            if (!empty($data['phone'])) {
-                User::modifyField('phone', $data['phone'], $email);
-            }
+            User::modifyField('phone', $data['phone'], $email);
 
             $user->fetchData($email);
 
@@ -66,10 +64,10 @@ class EditProfilePost implements ControllerInterface
      *
      * @param string $path   The request path.
      * @param string $method The HTTP request method.
-     * @return boolean True if path is /send-edit-profile and the method is POST.
+     * @return boolean True if path is /edit-profile and the method is POST.
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/send-edit-profile' && $method === 'POST';
+        return $path === '/edit-profile' && $method === 'POST';
     }
 }

@@ -46,11 +46,7 @@ class EditProfileSuccessView extends AbstractView
     protected function templateKeys(): array
     {
 
-        return [
-            'FIRSTNAME' => $this->data['firstname'],
-            'LASTNAME' => $this->data['lastname'],
-            'PHONE' => $this->data['phone'],
-        ];
+        return [];
     }
 
     /**

@@ -44,7 +44,7 @@ class EditProfileValidator extends FormValidator
     public function validate(array $data): void
     {
         if (!($this->isValidPhone($data['phone']))) {
-            throw new ExceptionValidationRegister("phone", "int", "Numéro de téléphone invalide.");
+            throw new ExceptionValidationRegister("phone", "string", "Numéro de téléphone invalide.");
         }
     }
 }
