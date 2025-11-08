@@ -34,10 +34,14 @@ class EditProfilePost implements ControllerInterface
      * Main Controller logic for EditProfilePost.
      *
      * @return void
-     * @throws \PDOException Trigger PDOException when BD is not accessable.
+     * @throws \PDOException Trigger PDOException when BD is not accessible.
      */
     public function control(): void
     {
+        if (!SessionService::get('USER')) {
+            header('Location: /login');
+            exit;
+        }
         $user = unserialize(SessionService::get('USER'));
         $validator = new EditProfileValidator();
 

@@ -4,7 +4,7 @@ namespace Views\Settings;
 
 use Core\AbstractView;
 use Core\Utilis\SessionService;
-use Models\User;
+use Models\User\User;
 
 /**
  * Class SettingsView
@@ -68,12 +68,33 @@ class SettingsView extends AbstractView
         $user = $this->data['user'];
 
         return [
-            'STATUS' => $user->getUserTypeLabel(),
+            'STATUS' => ucfirst($this->getUserTypeLabel($user)),
             'FIRSTNAME' => $user->getFirstName(),
             'LASTNAME' => $user->getLastName(),
             'EMAIL' => $user->getEmail(),
             'PHONE' => $user->getPhone(),
         ];
+    }
+
+    /**
+     * Returns a user-friendly label based on the user's role.
+     *
+     * @param User $user The user instance.
+     *
+     * @return string The role label.
+     */
+    private function getUserTypeLabel(User $user): string
+    {
+        if ($user->isStudent()) {
+            return 'étudiant';
+        }
+        if ($user->isProfessor()) {
+            return 'professeur';
+        }
+        if ($user->isClient()) {
+            return 'client';
+        }
+        return 'utilisateur';
     }
 
     /**
