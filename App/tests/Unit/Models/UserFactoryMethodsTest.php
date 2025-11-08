@@ -375,4 +375,162 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertEquals('professor', $professor->getUserType());
         $this->assertEquals('client', $client->getUserType());
     }
+
+    // ===================================
+    // Tests for the deleteByEmail method
+    // ===================================
+
+    #[Test]
+    public function deleteByEmailThrowsExceptionForEmptyEmail(): void
+    {
+        $this->expectException(\PDOException::class);
+
+        User::deleteByEmail('');
+    }
+
+    /**
+     * Helper function to create user data based on type
+     */
+    private function getUserDataForType(string $userType): array
+    {
+        $baseData = [
+            'first_name' => ucfirst($userType) . 'Test',
+            'last_name' => 'User',
+            'phone' => '0612345678',
+            'password' => 'OldPassword123',
+            'user_type' => $userType
+        ];
+
+        switch ($userType) {
+            case 'student':
+                return array_merge($baseData, [
+                    'email' => 'student.test@etu.univ-amu.fr',
+                    'amu_id' => 'a12345678',
+                    'year' => 1,
+                    'td' => 'TD1',
+                    'tp' => 'TPA'
+                ]);
+
+            case 'professor':
+                return array_merge($baseData, [
+                    'email' => 'professor.test@univ-amu.fr',
+                    'amu_id' => 'prof123'
+                ]);
+
+            case 'client':
+                return array_merge($baseData, [
+                    'email' => 'client.test@company.com',
+                    'organisation' => 'Test Company'
+                ]);
+
+            default:
+                throw new \InvalidArgumentException("Unknown user type: $userType");
+        }
+    }
+
+    /**
+     * Helper function to get expected class for user type
+     */
+    private function getExpectedClassForType(string $userType): string
+    {
+        return match ($userType) {
+            'student' => Student::class,
+            'professor' => Professor::class,
+            'client' => Client::class,
+            default => throw new \InvalidArgumentException("Unknown user type: $userType")
+        };
+    }
+
+    /**
+     * Helper function to create and register a test user
+     */
+    private function registerUserTest(string $userType): User
+    {
+        // Étape 1: Créer les données utilisateur
+        $userData = $this->getUserDataForType($userType);
+        $expectedClass = $this->getExpectedClassForType($userType);
+
+        // Étape 2: Créer et sauvegarder l'utilisateur
+        $user = User::createFromRegistrationData($userData);
+        $user->save();
+        return $user;
+    }
+
+
+    /**
+     * Tests for deleteByEmail method
+     */
+    #[Test]
+    public function testDeleteByEmail_UserDoesNotExist_ShouldThrowException(): void
+    {
+        // Arrange
+        $email = 'notfound@example.com';
+
+        // Assert + Act
+        $this->expectException(\PDOException::class);
+
+        User::deleteByEmail($email);
+    }
+
+    #[Test]
+    public function testDeleteByEmail_StudentExists_ShouldDeleteStudent(): void
+    {
+        $student = $this->registerUserTest('student');
+
+        User::deleteByEmail($student->getEmail());
+
+        $this->assertFalse(
+            User::existsByEmail($student->getEmail()),
+            "L'utilisateur devrait avoir été supprimé de la base de données."
+        );
+    }
+
+    #[Test]
+    public function testDeleteByEmail_ClientExists_ShouldDeleteClient(): void
+    {
+        $client = $this->registerUserTest('client');
+
+        User::deleteByEmail($client->getEmail());
+
+        $this->assertFalse(
+            User::existsByEmail($client->getEmail()),
+            "L'utilisateur devrait avoir été supprimé de la base de données."
+        );
+    }
+
+    #[Test]
+    public function testDeleteByEmail_ProfessorExists_ShouldDeleteProfessor(): void
+    {
+        $professor = $this->registerUserTest('professor');
+
+        User::deleteByEmail($professor->getEmail());
+
+        $this->assertFalse(
+            User::existsByEmail($professor->getEmail()),
+            "L'utilisateur devrait avoir été supprimé de la base de données."
+        );
+    }
+
+
+    /**
+     * Tests for modifyField method
+     */
+
+    #[Test]
+    public function testModifyFieldUpdatesPhoneSuccessfully(): void
+    {
+        $student = $this->registerUserTest('student');
+        $email = $student->getEmail();
+        $newPhone = '0699999999';
+
+        User::modifyField('phone', $newPhone, $email);
+
+        $db = Database::getInstance();
+        $stmt = $db->prepare("SELECT phone FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $result = $stmt->fetch();
+
+        $this->assertNotFalse($result, "L'utilisateur doit toujours exister.");
+        $this->assertEquals($newPhone, $result['phone'], "Le numéro de téléphone aurait dû être mis à jour.");
+    }
 }
