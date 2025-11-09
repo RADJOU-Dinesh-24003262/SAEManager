@@ -1,12 +1,12 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers\Settings;
 
 use Core\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
 use PDOException;
-use Views\Profile\DeleteUserView;
+use Views\Settings\DeleteUserView;
 
 /**
  * DeleteUser Controller
@@ -17,7 +17,7 @@ use Views\Profile\DeleteUserView;
  *
  * @package Src
  *
- * @subpackage Controllers\Profile
+ * @subpackage Controllers\Settings
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>

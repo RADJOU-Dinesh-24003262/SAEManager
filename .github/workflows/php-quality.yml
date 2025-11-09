@@ -116,19 +116,19 @@ jobs:
 
       # Create PHPDoc Documentation Folder
       - name: Ensure docs directory exists
-        if: steps.changed_files.outputs.has_changes == 'true'
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         run: mkdir -p docs/api
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
-        if: steps.changed_files.outputs.has_changes == 'true'
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
 
       # Deploy PHPDoc to GitHub Pages - only when push on dev
-      - name: Deploy PHPDoc to GitHub Pages
-        if: steps.changed_files.outputs.has_changes == 'true'
+      - name: Deploy PHPDoc to gh-pages
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

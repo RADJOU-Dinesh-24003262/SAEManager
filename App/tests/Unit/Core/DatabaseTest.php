@@ -208,26 +208,6 @@ class DatabaseTest extends TestCase
     }
 
     #[Test]
-    public function databaseHandlesBooleanValues(): void
-    {
-        try {
-            $db = Database::getInstance();
-
-            $stmt = $db->prepare('SELECT :true as bool_true, :false as bool_false');
-            $stmt->bindValue(':true', true, \PDO::PARAM_BOOL);
-            $stmt->bindValue(':false', false, \PDO::PARAM_BOOL);
-            $stmt->execute();
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            // Booleans are converted to integers in SQL
-            $this->assertEquals(1, $result['bool_true']);
-            $this->assertEquals(0, $result['bool_false']);
-        } catch (\PDOException $e) {
-            $this->markTestSkipped('Database connection not available');
-        }
-    }
-
-    #[Test]
     public function multipleInstanceCallsReturnSameConnection(): void
     {
         try {

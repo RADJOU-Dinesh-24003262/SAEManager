@@ -1,6 +1,6 @@
 <?php
 
-namespace Views\Profile;
+namespace Views\Settings;
 
 use Core\AbstractView;
 
@@ -12,7 +12,7 @@ use Core\AbstractView;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Profile
+ * @subpackage Views\Settings
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>

@@ -1,39 +1,38 @@
 <?php
 
-namespace Controllers\Profile;
+namespace Controllers\Settings;
 
 use Core;
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
 use Core\includes\exception;
-use Views\Profile\ProfileView;
+use Views\Settings\SettingsView;
 
 /**
- * Profile Controller
+ * Settings Controller
  *
- * Handle User Profile (GET request)
- *
+ * Handle User Settings (GET request)
  * @category Controller
  *
  * @package Src
  *
- * @subpackage Controllers\Profile
+ * @subpackage Controllers\Settings
  *
- * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
  * @license MIT License https://opensource.org/licenses/MIT
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ProfileController implements ControllerInterface
+class SettingsController implements ControllerInterface
 {
     /**
-     *  Main Controller logic for ProfileController.
+     *  Main Controller logic for SettingsController.
      *
      * @return void
      */
@@ -47,19 +46,19 @@ class ProfileController implements ControllerInterface
 
         $user = unserialize(SessionService::get('USER'));
         $data['user'] = $user;
-        $view = new ProfileView($data);
+        $view = new SettingsView($data);
         $view->render();
     }
 
     /**
      * Check if the controller should handle the current request
      *
-     * @param  string $path   The request path.
-     * @param  string $method The HTTP request method.
+     * @param string $path   The request path.
+     * @param string $method The HTTP request method.
      * @return boolean True if path is /profile and the method is GET.
      */
     public static function support(string $path, string $method): bool
     {
-        return $path === '/profile' and $method === 'GET';
+        return $path === '/settings' and $method === 'GET';
     }
 }
