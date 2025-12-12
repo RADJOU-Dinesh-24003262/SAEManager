@@ -114,14 +114,12 @@ class ValidationServiceRegister extends FormValidator
             );
         }
 
-        $errors = [];
-        if (!$this->isValidAmuId($data['amu_id'])) {
+        if (empty($data['amu_id'])) {
+            $errors[] = new ExceptionValidationRegister('amu_id', 'string', "Identifiant Amu requis.");
+        } elseif (!$this->isValidAmuId($data['amu_id'])) {
             $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
         }
 
-        if (empty($data['amu_id'])) {
-            $errors[] = new ExceptionValidationRegister('amu_id', 'string', "Identifiant Amu requis.");
-        }
 
         if (empty($data['year'])) {
             $errors[] = new ExceptionValidationRegister('year', 'string', "L'année est requise pour les étudiants.");
@@ -181,7 +179,9 @@ class ValidationServiceRegister extends FormValidator
             );
         }
 
-        if (!$this->isValidAmuId($data['amu_id'])) {
+        if (empty($data['amu_id'])) {
+            $errors[] = new ExceptionValidationRegister('amu_id', 'string', "Identifiant Amu requis.");
+        } elseif (!$this->isValidAmuId($data['amu_id'])) {
             $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
         }
 
