@@ -4,6 +4,7 @@ namespace Views\PageSAE;
 
 use Core\AbstractView;
 use Core\Utilis\SessionService;
+use Models\SAE\SAERepository;
 
 /**
  * Class PageSaeView
@@ -57,8 +58,41 @@ class PageSaeView extends AbstractView
     {
         return [
             'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']->getSubjectName()
+            'SAE_NAME' => $this->data['sae']->getSubjectName(),
+            'SAE_CONTENT' => $this->getDescriptionSae()
         ];
+    }
+
+    /**
+     * Generates the description of the SAE.
+     *
+     * This method constructs an HTML description of the SAE using its attributes.
+     *
+     * @return string The HTML description of the SAE.
+     */
+    protected function getDescriptionSae(): string
+    {
+        $saeRepository = SAERepository::getInstance();
+        $content = '<p>Nom de la SAE : ' . $this->data['sae']->getSubjectName() . '</p>';
+        $content .= '<p>Début de la SAE : ' . $this->data['sae']->getBeginDate() . '</p>';
+        $content .= '<p>Fin de la SAE : ' . $this->data['sae']->getEndDate() . '</p>';
+
+        $profRes = $saeRepository->getResponsibleProfessor($this->data['sae']->getSaeSubjectId());
+        $prof = $saeRepository->getResponsibleProfessor($this->data['sae']->getSaeSubjectId());
+        $client = $saeRepository->getClientInfo($this->data['sae']->getSaeSubjectId());
+
+
+        $content .= '<p> Le Responsable de la ressource est  ' .
+                     $profRes['last_name'] . ' ' . $profRes['first_name'] . '.</p>';
+        $content .= '<p> Votre professeur associé à la ressource est  ' .
+                     $prof['last_name'] . ' ' . $prof['first_name'] . '.</p>';
+        $content .= '<p> Votre client associé à cette SAE est  ' . $client['last_name'] . ' ' . $client['first_name'] . '.</p>';
+
+        $filePath = $this->data['sae']->getFilePath();
+        if (file_exists($filePath)) {
+            $content .= file_get_contents($filePath);
+        }
+        return $content;
     }
 
     /**

@@ -57,55 +57,13 @@ class IndexView extends AbstractView
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
-        $success = $this->data['success'];
 
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SUCCESS_MESSAGE' => $this->renderSuccessMessage($success),
+            'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
         ];
     }
 
-    /**
-     * Renders HTML markup for displaying error messages to the user.
-     *
-     * If the provided array of errors is empty, an empty string is returned.
-     *
-     * @param array $errors The list of error messages to display.
-     *
-     * @return string The HTML markup for error messages, or an empty string if none.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<div class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
-        }
-        $html .= '</ul></div>';
-
-        return $html;
-    }
-
-    /**
-     * Renders HTML markup for displaying a success message to the user.
-     *
-     * If the provided success message is empty, an empty string is returned.
-     *
-     * @param string $success The success message to display.
-     *
-     * @return string The HTML markup for the success message, or an empty string if none.
-     */
-    private function renderSuccessMessage(string $success): string
-    {
-        if (empty($success)) {
-            return '';
-        }
-
-        return '<div class="alert alert-success"><p>' . $success . '</p></div>';
-    }
 
     /**
      * Returns the title of the index page.

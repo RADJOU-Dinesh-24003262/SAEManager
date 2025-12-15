@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionDashboard;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\User\User;
+use PhpParser\Node\Expr\Print_;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -66,8 +67,8 @@ class PageSaeController implements ControllerInterface
                     exit();
                 }
             }
-            header('Location: /');
-        } catch (Exception $e) {
+            throw new ExceptionDashboard('Vous n\'avez pas accès à cette SAE.');
+        } catch (Exception | ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();

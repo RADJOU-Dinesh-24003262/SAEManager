@@ -120,30 +120,6 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-     * Renders HTML markup for displaying error messages to the user.
-     *
-     * If no errors are present, an empty string is returned.
-     *
-     * @param array $errors The list of error messages to display.
-     *
-     * @return string The HTML markup for error messages, or an empty string if none exist.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
-        }
-        $html .= '</ul></section>';
-
-        return $html;
-    }
-
-    /**
      * Returns the title of the reset password page.
      *
      * @return string The page title.

@@ -5,6 +5,7 @@ namespace Views\Dashboard;
 use Models\User\User;
 use Core\Utilis\SessionService;
 use Core\AbstractView;
+use hoge\fuga\product\Super;
 use Models\SAE\SAE;
 use Models\User\Student;
 
@@ -85,43 +86,6 @@ class DashboardView extends AbstractView
             'SAE_NAVIGATION'   => $this->renderSAENavigation($user),
             'SAE_CONTENT'      => $this->renderSAEContent($user, $saes)
         ];
-    }
-
-    /**
-     * Renders error messages in HTML format.
-     *
-     * @param array $errors List of error messages.
-     *
-     * @return string The rendered HTML or an empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<div class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
-        }
-        $html .= '</ul></div>';
-
-        return $html;
-    }
-
-    /**
-     * Renders a success message in HTML format if available.
-     *
-     * @return string The rendered HTML or an empty string.
-     */
-    private function renderSuccessMessage(): string
-    {
-        $success = $this->data['success'] ?? '';
-        if (empty($success)) {
-            return '';
-        }
-
-        return '<div class="alert alert-success">' . $success . '</div>';
     }
 
     /**
