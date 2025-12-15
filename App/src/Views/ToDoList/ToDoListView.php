@@ -63,28 +63,6 @@ class ToDoListView extends AbstractView
     }
 
     /**
-     * Renders the list of error messages into an HTML block.
-     *
-     * @param array<int, string> $errors The list of error messages.
-     *
-     * @return string The HTML representation of the errors, or an empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
-        }
-        $html .= '</ul></section>';
-
-        return $html;
-    }
-
-    /**
      * Returns the title of the To-Do List page.
      *
      * Used in the HTML `<title>` tag and for accessibility.
