@@ -70,7 +70,9 @@ class DatabaseTest extends TestCase
 
             // Simple query that should work on any database
             $stmt = $db->query('SELECT 1 as test');
-            /** @var \PDOStatement $stmt */
+            /**
+            * @var \PDOStatement $stmt
+            */
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             $this->assertEquals(['test' => 1], $result);
@@ -160,11 +162,15 @@ class DatabaseTest extends TestCase
 
             // Execute multiple queries
             $stmt1 = $db->query('SELECT 1 as test1');
-            /** @var \PDOStatement $stmt1 */
+            /**
+ * @var \PDOStatement $stmt1
+*/
             $result1 = $stmt1->fetch(\PDO::FETCH_ASSOC);
 
             $stmt2 = $db->query('SELECT 2 as test2');
-            /** @var \PDOStatement $stmt2 */
+            /**
+ * @var \PDOStatement $stmt2
+*/
             $result2 = $stmt2->fetch(\PDO::FETCH_ASSOC);
 
             $this->assertEquals(['test1' => 1], $result1);

@@ -42,10 +42,12 @@ class ValidatorTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $validator = new LoginValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'test@univ-amu.fr',
             'password' => 'password123'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -56,10 +58,12 @@ class ValidatorTest extends TestCase
         $this->expectException(ExceptionValidationEmptys::class);
 
         $validator = new LoginValidator();
-        $validator->escape([
+        $validator->escape(
+            [
             'email' => '',
             'password' => ''
-        ]);
+            ]
+        );
     }
 
     #[Test]
@@ -69,10 +73,12 @@ class ValidatorTest extends TestCase
         $this->expectException(ExceptionValidationLogin::class);
 
         $validator = new LoginValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => $email,
             'password' => 'password123'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -94,10 +100,12 @@ class ValidatorTest extends TestCase
     public function loginValidatorEscapesHtmlInEmail(): void
     {
         $validator = new LoginValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'test<script>alert("xss")</script>@test.fr',
             'password' => '<b>password</b>'
-        ]);
+            ]
+        );
 
         $this->assertStringNotContainsString('<script>', $data['email']);
         $this->assertStringNotContainsString('<b>', $data['password']);
@@ -112,10 +120,12 @@ class ValidatorTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $validator = new ResetPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'pwdnew' => 'NewPassword123',
             'pwdverif' => 'NewPassword123'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -127,10 +137,12 @@ class ValidatorTest extends TestCase
         $this->expectExceptionMessage('au moins 8 caractères');
 
         $validator = new ResetPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'pwdnew' => 'short',
             'pwdverif' => 'short'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -142,10 +154,12 @@ class ValidatorTest extends TestCase
         $this->expectExceptionMessage('ne correspondent pas');
 
         $validator = new ResetPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'pwdnew' => 'Password123',
             'pwdverif' => 'DifferentPassword123'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -157,10 +171,12 @@ class ValidatorTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $validator = new ResetPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'pwdnew' => $password,
             'pwdverif' => $password
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -183,10 +199,12 @@ class ValidatorTest extends TestCase
         $this->expectException(ExceptionValidationEmptys::class);
 
         $validator = new ResetPasswordValidator();
-        $validator->escape([
+        $validator->escape(
+            [
             'pwdnew' => '',
             'pwdverif' => ''
-        ]);
+            ]
+        );
     }
 
     // ========================================
@@ -198,9 +216,11 @@ class ValidatorTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $validator = new ForgotPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'test@univ-amu.fr'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -211,9 +231,11 @@ class ValidatorTest extends TestCase
         $this->expectException(ExceptionValidationForgotPassword::class);
 
         $validator = new ForgotPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'not-an-email'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
     }
@@ -228,9 +250,11 @@ class ValidatorTest extends TestCase
         $_SESSION['last_forgot_password_request'] = time();
 
         $validator = new ForgotPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'test@univ-amu.fr'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
 
@@ -246,9 +270,11 @@ class ValidatorTest extends TestCase
         $_SESSION['last_forgot_password_request'] = time() - 121;
 
         $validator = new ForgotPasswordValidator();
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => 'test@univ-amu.fr'
-        ]);
+            ]
+        );
 
         $validator->validate($data);
 
@@ -460,10 +486,12 @@ class ValidatorTest extends TestCase
     {
         $validator = new ResetPasswordValidator();
 
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'pwdnew' => 'Pàsswørd123',
             'pwdverif' => 'Pàsswørd123'
-        ]);
+            ]
+        );
 
         // Les caractères unicode doivent être préservés
         $this->assertStringContainsString('à', $data['pwdnew']);
@@ -478,10 +506,12 @@ class ValidatorTest extends TestCase
         $longEmail = str_repeat('a', 500) . '@test.fr';
         $longPassword = str_repeat('b', 1000);
 
-        $data = $validator->escape([
+        $data = $validator->escape(
+            [
             'email' => $longEmail,
             'password' => $longPassword
-        ]);
+            ]
+        );
 
         $this->assertEquals(strlen($longEmail), strlen($data['email']));
         $this->assertEquals(strlen($longPassword), strlen($data['password']));

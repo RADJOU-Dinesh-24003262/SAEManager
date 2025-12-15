@@ -9,17 +9,18 @@ use Validator\FormValidator;
  * Edit Profile Validator
  *
  * Validates user profile edit form data
+ *
  * @category Validator
  *
  * @package Src
  *
  * @subpackage Validator
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
  * @license MIT License https://opensource.org/licenses/MIT
  *
@@ -37,7 +38,7 @@ class EditProfileValidator extends FormValidator
     /**
      * Validate the profile edit form data.
      *
-     * @param array $data The form data to validate.
+     * @param  array $data The form data to validate.
      * @return void
      * @throws ExceptionValidationRegister If validation fails.
      */

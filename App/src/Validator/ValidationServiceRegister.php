@@ -160,13 +160,13 @@ class ValidationServiceRegister extends FormValidator
 
     /**
      * This this method validated the values given in $data to make a new professor user with.
-    *
-    * @param array $data Array, in adequation to the required value fields.
-    *
-    * @return array Array of errors.
-    *
-    * @throws ExceptionValidationRegisters All the errors that might have been found.
-    */
+     *
+     * @param array $data Array, in adequation to the required value fields.
+     *
+     * @return array Array of errors.
+     *
+     * @throws ExceptionValidationRegisters All the errors that might have been found.
+     */
     private function validateProfessorFields(array $data): array
     {
         $errors = [];

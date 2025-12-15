@@ -89,10 +89,12 @@ class UserModelTest extends TestCase
     #[Test]
     public function studentGetFullNameReturnsCorrectFormat(): void
     {
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => 'Jean',
             'last_name' => 'Dupont'
-        ]);
+            ]
+        );
 
         $this->assertEquals('Jean Dupont', $student->getFullName());
     }
@@ -168,7 +170,9 @@ class UserModelTest extends TestCase
     #[DataProvider('userTypesProvider')]
     public function createFromRegistrationDataCreatesCorrectType(string $type, string $expectedClass): void
     {
-        /** @var class-string $expectedClass */
+        /**
+ * @var class-string $expectedClass
+*/
         $data = [
             'user_type' => $type,
             'first_name' => 'Test',
@@ -210,14 +214,16 @@ class UserModelTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Type d'utilisateur invalide");
 
-        User::createFromRegistrationData([
+        User::createFromRegistrationData(
+            [
             'user_type' => 'invalid_type',
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@test.fr',
             'phone' => '0612345678',
             'password' => 'password123'
-        ]);
+            ]
+        );
     }
 
     #[Test]
@@ -284,10 +290,12 @@ class UserModelTest extends TestCase
     #[Test]
     public function studentWithMinimalDataWorks(): void
     {
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => 'A',
             'last_name' => 'B'
-        ]);
+            ]
+        );
 
         $this->assertEquals('A', $student->getFirstName());
         $this->assertEquals('B', $student->getLastName());
@@ -297,11 +305,13 @@ class UserModelTest extends TestCase
     #[Test]
     public function studentWithEmptyParcoursReturnsNull(): void
     {
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => 'Test',
             'last_name' => 'User',
             'major' => null
-        ]);
+            ]
+        );
 
         $this->assertNull($student->getParcours());
     }
@@ -310,11 +320,13 @@ class UserModelTest extends TestCase
     public function professorWithLongAmuIdWorks(): void
     {
         $longId = str_repeat('a', 100);
-        $professor = new Professor([
+        $professor = new Professor(
+            [
             'first_name' => 'Test',
             'last_name' => 'Prof',
             'amu_id' => $longId
-        ]);
+            ]
+        );
 
         $this->assertEquals($longId, $professor->getAmuId());
     }
@@ -323,11 +335,13 @@ class UserModelTest extends TestCase
     public function clientWithSpecialCharactersInOrganisationWorks(): void
     {
         $specialOrg = "L'Entreprise & Co. (2024)";
-        $client = new Client([
+        $client = new Client(
+            [
             'first_name' => 'Test',
             'last_name' => 'Client',
             'organisation' => $specialOrg
-        ]);
+            ]
+        );
 
         $this->assertEquals($specialOrg, $client->getOrganisation());
     }

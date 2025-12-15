@@ -158,23 +158,27 @@ class UserSpecificDataMethodsTest extends TestCase
         // Mock fetch to return a sample student row
         $this->mockStmt->expects($this->once())
             ->method('fetch')
-            ->willReturn([
+            ->willReturn(
+                [
                 'student_id' => 1,
                 'amu_id' => 'test',
                 'year' => 1,
                 'td' => 'TD1',
                 'tp' => 'TPA'
-            ]);
+                ]
+            );
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
         // Capture the prepared SQL query
         $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willReturnCallback(function ($query) use (&$capturedQuery) {
-                $capturedQuery = $query;
-                return $this->mockStmt;
-            });
+            ->willReturnCallback(
+                function ($query) use (&$capturedQuery) {
+                    $capturedQuery = $query;
+                    return $this->mockStmt;
+                }
+            );
 
         // Set the Database instance
         $reflection = new \ReflectionClass(Database::class);
@@ -189,7 +193,9 @@ class UserSpecificDataMethodsTest extends TestCase
         $method->invoke($student, $this->mockPdo, 'test@test.fr');
 
         // Verify that the SQL query contains the necessary elements
-        /** @var string $capturedQuery */
+        /**
+ * @var string $capturedQuery
+*/
         $this->assertStringContainsString('students', $capturedQuery);
         $this->assertStringContainsString('JOIN', $capturedQuery);
         $this->assertStringContainsString('users', $capturedQuery);
@@ -336,10 +342,12 @@ class UserSpecificDataMethodsTest extends TestCase
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function ($params) use (&$capturedParams) {
-                $capturedParams = $params;
-                return true;
-            });
+            ->willReturnCallback(
+                function ($params) use (&$capturedParams) {
+                    $capturedParams = $params;
+                    return true;
+                }
+            );
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
@@ -353,12 +361,14 @@ class UserSpecificDataMethodsTest extends TestCase
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
-        $student = new Student([
+        $student = new Student(
+            [
             'amu_id' => 'test123',
             'year' => 2,
             'td' => 'TD1',
             'tp' => 'TPA'
-        ]);
+            ]
+        );
 
         $method = new \ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
@@ -387,29 +397,35 @@ class UserSpecificDataMethodsTest extends TestCase
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willReturnCallback(function ($query) use (&$capturedQuery) {
-                $capturedQuery = $query;
-                return $this->mockStmt;
-            });
+            ->willReturnCallback(
+                function ($query) use (&$capturedQuery) {
+                    $capturedQuery = $query;
+                    return $this->mockStmt;
+                }
+            );
 
         $reflection = new \ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
-        $student = new Student([
+        $student = new Student(
+            [
             'amu_id' => 'test',
             'year' => 1,
             'td' => 'TD1',
             'tp' => 'TPA'
-        ]);
+            ]
+        );
 
         $method = new \ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 1);
 
         // Checks the structure of the query
-        /** @var string $capturedQuery */
+        /**
+ * @var string $capturedQuery
+*/
         $this->assertStringContainsString('INSERT INTO students', $capturedQuery);
         $this->assertStringContainsString('student_id', $capturedQuery);
         $this->assertStringContainsString('amu_id', $capturedQuery);
@@ -430,10 +446,12 @@ class UserSpecificDataMethodsTest extends TestCase
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function ($params) use (&$capturedParams) {
-                $capturedParams = $params;
-                return true;
-            });
+            ->willReturnCallback(
+                function ($params) use (&$capturedParams) {
+                    $capturedParams = $params;
+                    return true;
+                }
+            );
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
@@ -447,9 +465,11 @@ class UserSpecificDataMethodsTest extends TestCase
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
-        $professor = new Professor([
+        $professor = new Professor(
+            [
             'amu_id' => 'prof456'
-        ]);
+            ]
+        );
 
         $method = new \ReflectionMethod($professor, 'saveSpecificData');
         $method->setAccessible(true);
@@ -472,10 +492,12 @@ class UserSpecificDataMethodsTest extends TestCase
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
-            ->willReturnCallback(function ($params) use (&$capturedParams) {
-                $capturedParams = $params;
-                return true;
-            });
+            ->willReturnCallback(
+                function ($params) use (&$capturedParams) {
+                    $capturedParams = $params;
+                    return true;
+                }
+            );
 
         $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
 
@@ -489,9 +511,11 @@ class UserSpecificDataMethodsTest extends TestCase
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
-        $client = new Client([
+        $client = new Client(
+            [
             'organisation' => 'Innovative Solutions'
-        ]);
+            ]
+        );
 
         $method = new \ReflectionMethod($client, 'saveSpecificData');
         $method->setAccessible(true);
@@ -567,12 +591,14 @@ class UserSpecificDataMethodsTest extends TestCase
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
-        $student = new Student([
+        $student = new Student(
+            [
             'amu_id' => 'test',
             'year' => 1,
             'td' => 'TD1',
             'tp' => 'TPA'
-        ]);
+            ]
+        );
 
         $method = new \ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
