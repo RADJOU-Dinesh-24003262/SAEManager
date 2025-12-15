@@ -78,7 +78,9 @@ class UserWorkflowIntegrationTest extends TestCase
             'password' => 'SecurePassword123'
         ];
         $loggedInStudent = User::createFromLoginData($loginData);
-        /** @var Student $loggedInStudent */
+        /**
+ * @var Student $loggedInStudent
+*/
         $this->assertInstanceOf(Student::class, $loggedInStudent);
         $this->assertEquals('Jean', $loggedInStudent->getFirstName());
         $this->assertEquals('Dupont', $loggedInStudent->getLastName());
@@ -92,7 +94,8 @@ class UserWorkflowIntegrationTest extends TestCase
     public function completePasswordResetWorkflow(): void
     {
         // Étape 1: Créer et sauvegarder un utilisateur
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => 'Marie',
             'last_name' => 'Martin',
             'email' => 'marie.martin@etu.univ-amu.fr',
@@ -101,7 +104,8 @@ class UserWorkflowIntegrationTest extends TestCase
             'year' => 1,
             'td' => 'TD2',
             'tp' => 'TPB'
-        ]);
+            ]
+        );
         $student->setPassword('OldPassword123');
         $student->save();
 
@@ -203,7 +207,9 @@ class UserWorkflowIntegrationTest extends TestCase
         // Créer l'utilisateur
         $student = User::createFromRegistrationData($originalData);
         $this->assertInstanceOf(Student::class, $student);
-        /** @var Student $student */
+        /**
+ * @var Student $student
+*/
 
         // Vérifier que les données sont correctes après création
         $this->assertEquals('Consistency', $student->getFirstName());

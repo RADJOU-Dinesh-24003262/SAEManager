@@ -39,7 +39,7 @@ class SettingsView extends AbstractView
      * Initializes the view by retrieving flash messages (errors and success)
      * from the session service and passing them to the parent constructor.
      *
-     * @param array $data Data User from current session.
+     * @param  array $data Data User from current session.
      * @return void
      */
     public function __construct(array $data)

@@ -192,7 +192,9 @@ class ControllerTest extends TestCase
     public function allControllersHaveRequiredMethods(string $controllerClass): void
     {
         // Check that all controllers have the required 'control' and 'support' methods
-        /** @var class-string $controllerClass */
+        /**
+ * @var class-string $controllerClass
+*/
         $reflection = new \ReflectionClass($controllerClass);
 
         $this->assertTrue($reflection->hasMethod('control'));
@@ -212,7 +214,9 @@ class ControllerTest extends TestCase
     public function supportMethodHasCorrectSignature(string $controllerClass): void
     {
         // Check that the support method has the correct parameters
-        /** @var class-string $controllerClass */
+        /**
+ * @var class-string $controllerClass
+*/
         $reflection = new \ReflectionClass($controllerClass);
         $method = $reflection->getMethod('support');
 

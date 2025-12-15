@@ -27,6 +27,7 @@ class ToDoList
 {
     /**
      * This is the id of the group of sae common for each student in it.
+     *
      * @var integer $groupId
      */
     private int $groupId;
@@ -166,8 +167,10 @@ class ToDoList
         $connection = database::getInstance();
 
 
-        $stmt = $connection->prepare('INSERT INTO sae_todolists(sae_group_id, tododesc, checked)
-                                            VALUES (:sae_group_id, :tododesc, :checked)');
+        $stmt = $connection->prepare(
+            'INSERT INTO sae_todolists(sae_group_id, tododesc, checked)
+                                            VALUES (:sae_group_id, :tododesc, :checked)'
+        );
         $stmt->execute(
             [
                 'sae_group_id' => $this->groupId,

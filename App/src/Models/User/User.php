@@ -408,7 +408,8 @@ abstract class User
     public function hasAcessToSae(int $sae_subject_id): bool
     {
         $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT * FROM users 
+        $stmt = $db->prepare(
+            'SELECT * FROM users 
                                 JOIN professor_groups ON professor_groups.professor_id = users.user_id
                                 JOIN students on students.student_id = users.user_id
                                 JOIN SAE_groups on SAE_groups.sae_group_id = students.sae_group_id
@@ -417,7 +418,8 @@ abstract class User
                                 JOIN SAE_subjects ON SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
                                 JOIN SAE_subjects ON SAE_subjects.sae_subject_id = professor_groups.sae_subject_id
                                 WHERE users.user_id = :user_id
-                                AND sae_subjects.sae_subject_id = :sae_subject_id;');
+                                AND sae_subjects.sae_subject_id = :sae_subject_id;'
+        );
         $stmt->execute(
             [
                 'user_id' => $this->user_id,
