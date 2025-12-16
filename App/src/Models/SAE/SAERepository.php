@@ -31,6 +31,11 @@ class SAERepository
      */
     private PDO $connection;
 
+    /**
+     * Singleton instance of SAERepository.
+     *
+     * @var SAERepository|null
+     */
     private static ?SAERepository $instance = null;
 
     /**
@@ -41,6 +46,11 @@ class SAERepository
         $this->connection = Database::getInstance();
     }
 
+    /**
+     * Gets the singleton instance of SAERepository.
+     *
+     * @return SAERepository
+     */
     public static function getInstance(): SAERepository
     {
         if (self::$instance === null) {
@@ -71,7 +81,7 @@ class SAERepository
                 return null;
             }
 
-            // Fetch associated competences
+            // Fetch associated competences.
             $competences = $this->findCompetencesBySaeId($id);
             $data['competences'] = $competences;
 
@@ -93,9 +103,14 @@ class SAERepository
     {
         try {
             $stmt = $this->connection->query('SELECT * FROM sae_subjects ORDER BY begin_date DESC');
+
+            if (!$stmt) {
+                throw new PDOException('Impossible d\'exécuter la requête pour récupérer les SAEs.');
+            }
+
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // For each SAE, fetch competences
+            // For each SAE, fetch competences.
             foreach ($data as &$sae) {
                 $sae['competences'] = $this->findCompetencesBySaeId($sae['sae_subject_id']);
             }
@@ -224,6 +239,11 @@ class SAERepository
                 WHERE CURRENT_DATE BETWEEN begin_date AND end_date
                 ORDER BY begin_date DESC'
             );
+
+            if (!$stmt) {
+                throw new PDOException('Impossible d\'exécuter la requête pour récupérer les SAEs actives.');
+            }
+
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($data as &$sae) {
@@ -268,9 +288,14 @@ class SAERepository
             ]);
 
             $id = $stmt->fetchColumn();
+            if ($id == false) {
+                throw new PDOException('Failed to retrieve the inserted SAE ID.');
+            }
+
+            $id = intval($id);
             $sae->setSaeSubjectId($id);
 
-            // Insert competences
+            // Insert competences.
             if (!empty($sae->getCompetences())) {
                 $this->saveCompetences($id, $sae->getCompetences());
             }
@@ -296,6 +321,12 @@ class SAERepository
     public function update(SAE $sae): bool
     {
         try {
+            $id = $sae->getSaeSubjectId();
+            if ($id == null) {
+                throw new PDOException('La SAE doit avoir un ID pour être mise à jour.'
+                . 'Veuillez créer la SAE avant de la mettre à jour.');
+            }
+
             $this->connection->beginTransaction();
 
             $stmt = $this->connection->prepare(
@@ -310,7 +341,7 @@ class SAERepository
             );
 
             $result = $stmt->execute([
-                'id' => $sae->getSaeSubjectId(),
+                'id' => $id,
                 'responsible_prof_id' => $sae->getResponsibleProfId(),
                 'client_id' => $sae->getClientId(),
                 'subject_name' => $sae->getSubjectName(),
@@ -319,10 +350,10 @@ class SAERepository
                 'file_path' => $sae->getFilePath()
             ]);
 
-            // Update competences
-            $this->deleteCompetences($sae->getSaeSubjectId());
+            // Update competences.
+            $this->deleteCompetences($id);
             if (!empty($sae->getCompetences())) {
-                $this->saveCompetences($sae->getSaeSubjectId(), $sae->getCompetences());
+                $this->saveCompetences($id, $sae->getCompetences());
             }
 
             $this->connection->commit();
@@ -1268,7 +1299,7 @@ class SAERepository
             return [];
         }
 
-        // Add detailed student information for each group
+        // Add detailed student information for each group.
         foreach ($completeData['groups'] as &$group) {
             $students = $this->getStudentsByGroupId($group['group_id']);
             $group['students_details'] = $students;

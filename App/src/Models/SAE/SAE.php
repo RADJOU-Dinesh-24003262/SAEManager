@@ -206,6 +206,10 @@ class SAE
         $end = new DateTime($this->end_date);
         $interval = $now->diff($end);
 
+        if (!$interval->days) {
+            return 0;
+        }
+
         return $interval->invert ? -$interval->days : $interval->days;
     }
 
@@ -218,6 +222,10 @@ class SAE
     {
         $begin = new DateTime($this->begin_date);
         $end = new DateTime($this->end_date);
+
+        if (!$begin->diff($end)->days) {
+            return 0;
+        }
 
         return $begin->diff($end)->days;
     }
