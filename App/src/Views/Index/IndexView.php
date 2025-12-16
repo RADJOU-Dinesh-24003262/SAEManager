@@ -66,16 +66,6 @@ class IndexView extends AbstractView
 
 
     /**
-     * Returns the title of the index page.
-     *
-     * @return string The page title.
-     */
-    protected function getPageTitle(): string
-    {
-        return 'Index - SAEManager';
-    }
-
-    /**
      * Returns the name of the CSS file used by the index page.
      *
      * @return string The CSS filename.

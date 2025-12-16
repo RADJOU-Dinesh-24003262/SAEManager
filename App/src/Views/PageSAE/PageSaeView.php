@@ -81,12 +81,18 @@ class PageSaeView extends AbstractView
         $prof = $saeRepository->getResponsibleProfessor($this->data['sae']->getSaeSubjectId());
         $client = $saeRepository->getClientInfo($this->data['sae']->getSaeSubjectId());
 
+        $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
+        $profResFirstName = isset($profRes['first_name']) ? $profRes['first_name'] : 'Inconnu';
 
-        $content .= '<p> Le Responsable de la ressource est  ' .
-                     $profRes['last_name'] . ' ' . $profRes['first_name'] . '.</p>';
-        $content .= '<p> Votre professeur associé à la ressource est  ' .
-                     $prof['last_name'] . ' ' . $prof['first_name'] . '.</p>';
-        $content .= '<p> Votre client associé à cette SAE est  ' . $client['last_name'] . ' ' . $client['first_name'] . '.</p>';
+        $profLastName = isset($prof['last_name']) ? $prof['last_name'] : 'Inconnu';
+        $profFirstName = isset($prof['first_name']) ? $prof['first_name'] : 'Inconnu';
+
+        $clientLastName = isset($client['last_name']) ? $client['last_name'] : 'Inconnu';
+        $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
+
+        $content .= '<p> Le Responsable de la ressource est ' . $profResLastName . ' ' . $profResFirstName . '.</p>';
+        $content .= '<p> Votre professeur associé à la ressource est ' . $profLastName . ' ' . $profFirstName . '.</p>';
+        $content .= '<p> Votre client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
         $filePath = $this->data['sae']->getFilePath();
         if (file_exists($filePath)) {

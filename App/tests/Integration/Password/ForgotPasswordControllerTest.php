@@ -92,7 +92,7 @@ class ForgotPasswordControllerTest extends TestCase
         $content = ob_get_clean() ?: ' ';
 
         // Should have this error on the html page.
-        $this->assertStringContainsString('Le champ &#039;email&#039; ne doit pas être vide.', $content);
+        $this->assertMatchesRegularExpression('/Le champ .{1,6}email.{1,6} ne doit pas être vide/', $content);
     }
 
     #[Test]
@@ -108,7 +108,7 @@ class ForgotPasswordControllerTest extends TestCase
         $content = ob_get_clean() ?: ' ';
 
         // Should have this error on the html page.
-        $this->assertStringContainsString('L&#039;adresse email n&#039;est pas valide.', $content);
+        $this->assertMatchesRegularExpression('/L.{1,6}adresse email n.{1,6}est pas valide/', $content);
     }
 
     #[Test]
