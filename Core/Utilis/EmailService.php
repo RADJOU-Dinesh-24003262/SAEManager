@@ -38,7 +38,7 @@ class EmailService
      *
      * @var string
      */
-    private static string $fromName = 'SAEManager';
+    private static string $fromName = 'SAE Manager';
 
     /**
      * Send a mail to the user, in order to reset their password.
@@ -55,7 +55,7 @@ class EmailService
     {
         $resetLink = self::getResetLink($token);
 
-        $subject = 'Réinitialisation de votre mot de passe - SAEManager';
+        $subject = 'Réinitialisation de votre mot de passe - SAE Manager';
 
         $htmlMessage = self::getHtmlTemplate($resetLink);
         $textMessage = self::getTextTemplate($resetLink);
@@ -119,12 +119,12 @@ class EmailService
 <body>
     <div class='container'>
         <div class='header'>
-            <h1>SAEManager</h1>
+            <h1>SAE Manager</h1>
         </div>
         <div class='content'>
             <h2>Réinitialisation de votre mot de passe</h2>
             <p>Bonjour,</p>
-            <p>Vous avez demandé la réinitialisation de votre mot de passe sur SAEManager.</p>
+            <p>Vous avez demandé la réinitialisation de votre mot de passe sur SAE Manager.</p>
             <p>Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
             <p style='text-align: center;'>
                 <a href='{$resetLink}' class='button'>Réinitialiser mon mot de passe</a>
@@ -142,7 +142,7 @@ class EmailService
             </div>
         </div>
         <div class='footer'>
-            <p>© {$year} SAEManager - Aix-Marseille Université</p>
+            <p>© {$year} SAE Manager - Aix-Marseille Université</p>
             <p>Ceci est un email automatique, merci de ne pas y répondre.</p>
         </div>
     </div>
@@ -161,12 +161,11 @@ class EmailService
     private static function getTextTemplate(string $resetLink): string
     {
         return "
-Réinitialisation de votre mot de passe - SAEManager
+Réinitialisation de votre mot de passe - SAE Manager
 
 Bonjour,
 
-Vous avez demandé la réinitialisation de votre mot de passe sur SAEManager.
-
+Vous avez demandé la réinitialisation de votre mot de passe sur SAE Manager.
 Pour créer un nouveau mot de passe, cliquez sur ce lien :
 {$resetLink}
 
@@ -175,7 +174,7 @@ IMPORTANT :
 - Il ne peut être utilisé qu'une seule fois
 - Si vous n'avez pas demandé cette réinitialisation, ignorez cet email
 
-© 2025 SAEManager - Aix-Marseille Université
+© 2025 SAE Manager - Aix-Marseille Université
 Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }

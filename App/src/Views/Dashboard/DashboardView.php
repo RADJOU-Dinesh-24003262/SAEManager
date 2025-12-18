@@ -12,7 +12,7 @@ use Models\User\Student;
 /**
  * Class DashboardView
  *
- * Represents the view for the user dashboard page of SAEManager.
+ * Represents the view for the user dashboard page of SAE Manager.
  * This page displays personalized information about the connected user
  * (name, email, role, SAE list, etc.) and provides navigation elements
  * specific to their role (student, professor, or client).
@@ -246,7 +246,7 @@ class DashboardView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'Dashboard - SAEManager';
+        return 'Dashboard - SAE Manager';
     }
 
     /**
@@ -266,8 +266,8 @@ class DashboardView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Tableau de bord utilisateur de SAEManager">
-                <meta name="keywords" content="SAEManager, Dashboard, SAE, utilisateur">
+        return '<meta name="description" content="Tableau de bord utilisateur de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Dashboard, SAE, utilisateur">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
     }
 }
