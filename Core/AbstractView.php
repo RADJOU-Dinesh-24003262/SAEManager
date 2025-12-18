@@ -228,13 +228,13 @@ abstract class AbstractView
     }
 
     /**
-     * Returns the name of the project 'SAEManager' or be used in some cases like displaying it by some isolated texts.
+     * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
 
-     * @return string the name of the project 'SAEManager'.
+     * @return string the name of the project 'SAE Manager'.
      */
     protected function getPageTitle(): string
     {
-        return 'SAEManager';
+        return 'SAE Manager';
     }
 
     /**

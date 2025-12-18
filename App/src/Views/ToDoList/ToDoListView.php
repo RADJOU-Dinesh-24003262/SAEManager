@@ -8,7 +8,7 @@ use Core\Utilis\SessionService;
 /**
  * Class ToDoListView
  *
- * Represents the view for the "To-Do List" page of the SAEManager application.
+ * Represents the view for the "To-Do List" page of the SAE Manager application.
  * This view is responsible for displaying the to-do list of the students in a specific SAE.
  * It extends {@see AbstractView} and provides specific implementations
  * for rendering the To-Do List page, including the associated CSS file,
@@ -71,7 +71,7 @@ class ToDoListView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'Page SAE - To Do List - SAEManager';
+        return 'Page SAE - To Do List - SAE Manager';
     }
 
     /**
@@ -96,26 +96,26 @@ class ToDoListView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page SAE de SAEManager partie To-Do List">
-                <meta name="keywords" content="SAEManager, SAE, To-Do List">
+        return '<meta name="description" content="Page SAE de SAE Manager partie To-Do List">
+                <meta name="keywords" content="SAE Manager, SAE, To-Do List">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.facebook.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.linkedin.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.instagram.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 

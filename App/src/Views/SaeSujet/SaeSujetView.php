@@ -9,7 +9,7 @@ use Core\Utilis\SessionService;
  * Class SaeSujetView
  *
  * Represents the view responsible for displaying and rendering
- * the SAE subject creation page in the SAEManager application.
+ * the SAE subject creation page in the SAE Manager application.
  *
  * This class extends {@see AbstractView} and defines the template path,
  * template keys, page title, CSS, and additional HTML headers specific
@@ -62,7 +62,7 @@ class SaeSujetView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'Page SAE - Création du sujet de SAE - SAEManager';
+        return 'Page SAE - Création du sujet de SAE - SAE Manager';
     }
 
     /**
@@ -85,26 +85,26 @@ class SaeSujetView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page SAE de SAEManager partie Création du sujet">
-                <meta name="keywords" content="SAEManager, SAE, création sujet">
+        return '<meta name="description" content="Page SAE de SAE Manager partie Création du sujet">
+                <meta name="keywords" content="SAE Manager, SAE, création sujet">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

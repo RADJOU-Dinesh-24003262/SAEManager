@@ -77,13 +77,13 @@ class LoginView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page de connexion de SAEManager">
-                <meta name="keywords" content="SAEManager, Connexion">
+        return '<meta name="description" content="Page de connexion de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Connexion">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:url" content="http://www.instagram.com/" />';

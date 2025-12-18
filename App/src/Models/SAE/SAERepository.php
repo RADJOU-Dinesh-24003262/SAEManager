@@ -98,6 +98,7 @@ class SAERepository
      * @return array<SAE> Array of SAE objects.
      *
      * @throws ExceptionFetchDataBD If a database error occurs.
+     * @throws PDOException If a database error occurs.
      */
     public function findAll(): array
     {
@@ -230,6 +231,7 @@ class SAERepository
      * @return array<SAE> Array of active SAE objects.
      *
      * @throws ExceptionFetchDataBD If a database error occurs.
+     * @throws PDOException If a database error occurs.
      */
     public function findActive(): array
     {

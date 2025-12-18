@@ -10,7 +10,7 @@ use Controllers\Index\IndexControllerPost;
  * Class IndexView
  *
  * Represents the view responsible for displaying and rendering
- * the index page of the SAEManager application.
+ * the index page of the SAE Manager application.
  *
  * This class extends {@see AbstractView} and defines methods to handle
  * the display of error and success messages, as well as the configuration
@@ -85,26 +85,26 @@ class IndexView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page d\'accueil de SAEManager">
-                <meta name="keywords" content="SAEManager, Accueil, Gestion">
+        return '<meta name="description" content="Page d\'accueil de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Accueil, Gestion">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

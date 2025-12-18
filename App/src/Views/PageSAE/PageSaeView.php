@@ -102,14 +102,14 @@ class PageSaeView extends AbstractView
     }
 
     /**
-     * Returns the name of the page 'Page SAE - SAEManager'
+     * Returns the name of the page 'Page SAE - SAE Manager'
      * or be used in some cases like displaying it by some isolated texts.
 
-     * @return string the name of the project 'Page SAE - SAEManager'.
+     * @return string the name of the project 'Page SAE - SAE Manager'.
      */
     protected function getPageTitle(): string
     {
-        return 'SAE ' . $this->data['sae']->getSaeSubjectId() . ' - SAEManager';
+        return 'SAE ' . $this->data['sae']->getSubjectName() . ' - SAE Manager';
     }
 
     /**
@@ -131,26 +131,26 @@ class PageSaeView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page SAE de SAEManager">
-                <meta name="keywords" content="SAEManager, SAE">
+        return '<meta name="description" content="Page SAE de SAE Manager">
+                <meta name="keywords" content="SAE Manager, SAE">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />' ;
     }
 }

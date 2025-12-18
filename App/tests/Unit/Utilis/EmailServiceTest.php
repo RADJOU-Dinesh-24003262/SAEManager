@@ -66,7 +66,7 @@ class EmailServiceTest extends TestCase
         $this->assertStringContainsString('<html', $html);
         $this->assertStringContainsString('</html>', $html);
         $this->assertStringContainsString($resetLink, $html);
-        $this->assertStringContainsString('SAEManager', $html);
+        $this->assertStringContainsString('SAE Manager', $html);
         $this->assertStringContainsString('10 minutes', $html);
     }
 
@@ -83,7 +83,7 @@ class EmailServiceTest extends TestCase
         $this->assertStringNotContainsString('<html>', $text);
         $this->assertStringNotContainsString('<div>', $text);
         $this->assertStringContainsString($resetLink, $text);
-        $this->assertStringContainsString('SAEManager', $text);
+        $this->assertStringContainsString('SAE Manager', $text);
         $this->assertStringContainsString('10 minutes', $text);
     }
 

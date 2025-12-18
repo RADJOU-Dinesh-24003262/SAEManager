@@ -8,7 +8,7 @@ use Core\AbstractView;
  * Class ResetPasswordSuccessView
  *
  * Represents the view responsible for rendering the "Reset Password Success" page
- * of the SAEManager application.
+ * of the SAE Manager application.
  *
  * This class extends {@see AbstractView} and provides specific implementations
  * for rendering the success confirmation page displayed after a password reset.
@@ -65,7 +65,7 @@ class ResetPasswordSuccessView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'Mot de passe réinitialisé - SAEManager';
+        return 'Mot de passe réinitialisé - SAE Manager';
     }
 
     /**
@@ -118,26 +118,26 @@ class ResetPasswordSuccessView extends AbstractView
      */
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAEManager">
-                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe, Succès">
+        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Réinitialisation, Mot de passe, Succès">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }
