@@ -61,7 +61,9 @@ class DashboardController implements ControllerInterface
             $data['user'] = $user;
 
             if (!$user || !($user instanceof User)) {
-                throw new ExceptionDashboard('Unknown user');
+                SessionService::remove('USER');
+                throw new ExceptionDashboard('Utilisateur inconnu ou non authentifié.');
+                exit();
             }
 
             $data['saes'] = $user->getSaes();
@@ -71,7 +73,7 @@ class DashboardController implements ControllerInterface
             $view->render();
         } catch (ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
-            header('Location: /dashboard');
+            header('Location: /');
             exit();
         }
     }

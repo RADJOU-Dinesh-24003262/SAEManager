@@ -9,6 +9,8 @@ use Exception;
 use Models\User\User;
 use PhpParser\Node\Expr\Print_;
 use Views\PageSAE\PageSaeView;
+use App\Models\Utilis\AccessControlService;
+use Models\SAE\SAE;
 
 /**
  * This class controls the SAE page.
@@ -56,19 +58,18 @@ class PageSaeController implements ControllerInterface
                 throw new Exception('Unknown user');
             }
 
-            $data['saes'] = $user->getSaes();
-            $sae_id = basename($_SERVER['REQUEST_URI']);
+            $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
-            foreach ($data['saes'] as $key => $sae) {
-                if ($sae->getSaeSubjectId() == $sae_id) {
-                    // Create and render the SAE page view.
-                    $data['sae'] = $sae;
-                    $view = new PageSaeView($data);
-                    $view->render();
-                    exit();
-                }
+            $sae = SAE::getInstance();
+            $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
+            if ($data['sae'] === null) {
+                throw new Exception("Vous n\'avez pas accès à cette SAE.");
             }
-            throw new ExceptionDashboard('Vous n\'avez pas accès à cette SAE.');
+
+            // Create and render the SAE page view.
+            $view = new PageSaeView($data);
+            $view->render();
+            exit();
         } catch (Exception | ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');

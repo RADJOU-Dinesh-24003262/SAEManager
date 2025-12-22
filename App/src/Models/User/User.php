@@ -11,6 +11,7 @@ use Models\SAE\SAE;
 use PDO;
 use PDOException;
 use PhpParser\Node\Stmt;
+use Models\SAE\SAESubject;
 
 /**
  * Abstract base class for all user types.
@@ -390,12 +391,12 @@ abstract class User
     /**
      * Gets the SAE infos proposed/enrolled by the user.
      *
-     * @return array<SAE> An array of @see SAE data.
+     * @return array<SAESubject> An array of @see SAESubject data.
      */
     public function getSaes(): array
     {
-        $connection = Database::getInstance();
-        return SAE::createSAEsFromArray($this->fetchSAEData($connection, $this->user_id));
+        $sae = SAE::getInstance();
+        return $sae->getUserSAEs($this);
     }
 
     /**
@@ -536,5 +537,15 @@ abstract class User
     public function isClient(): bool
     {
         return $this->user_type === 'client';
+    }
+
+    /**
+     * Gets the user's ID.
+     *
+     * @return integer
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
     }
 }

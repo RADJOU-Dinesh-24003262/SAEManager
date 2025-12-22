@@ -4,7 +4,7 @@ namespace Views\PageSAE;
 
 use Core\AbstractView;
 use Core\Utilis\SessionService;
-use Models\SAE\SAERepository;
+use Models\SAE\SAE;
 
 /**
  * Class PageSaeView
@@ -72,14 +72,13 @@ class PageSaeView extends AbstractView
      */
     protected function getDescriptionSae(): string
     {
-        $saeRepository = SAERepository::getInstance();
-        $content = '<p>Nom de la SAE : ' . $this->data['sae']->getSubjectName() . '</p>';
-        $content .= '<p>Début de la SAE : ' . $this->data['sae']->getBeginDate() . '</p>';
-        $content .= '<p>Fin de la SAE : ' . $this->data['sae']->getEndDate() . '</p>';
+        $content = '<p>Nom de la SAE : ' . $this->data['sae']['subject']->getSubjectName() . '</p>';
+        $content .= '<p>Début de la SAE : ' . $this->data['sae']['subject']->getBeginDate() . '</p>';
+        $content .= '<p>Fin de la SAE : ' . $this->data['sae']['subject']->getEndDate() . '</p>';
 
-        $profRes = $saeRepository->getResponsibleProfessor($this->data['sae']->getSaeSubjectId());
-        $prof = $saeRepository->getResponsibleProfessor($this->data['sae']->getSaeSubjectId());
-        $client = $saeRepository->getClientInfo($this->data['sae']->getSaeSubjectId());
+        $profRes = $this->data['sae']['responsible_professor'];
+        $prof = $this->data['sae']['all_professors'][0];
+        $client = $this->data['sae']['client'] ?: 'Pas de client';
 
         $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
         $profResFirstName = isset($profRes['first_name']) ? $profRes['first_name'] : 'Inconnu';
