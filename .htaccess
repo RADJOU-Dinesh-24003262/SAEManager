@@ -11,6 +11,37 @@
 # # SECURITY - MICRO WAF                                               #
 # ######################################################################
 
+# Force HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# HSTS - Strict Transport Security (en forçant l'HTTPS)
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=86400; includeSubDomains" env=HTTPS
+</IfModule>
+
+# Sécuriser les headers HTTP
+<IfModule mod_headers.c>
+    # Protéger contre le Clickjacking
+    Header always set X-Frame-Options "DENY"
+
+    # Empêcher le MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Limiter les informations envoyées dans les referrers
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Bloquer les ressources cross-origin
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
+    # Sécuriser la Content Security Policy (CSP)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+</IfModule>
+
+# SECURITY - MICRO WAF (Web Application Firewall)
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
