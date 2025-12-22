@@ -51,28 +51,8 @@ $controllers = [
     new EditProfilePost()
 ];
 
-// Security Headers
-header("X-Frame-Options: DENY"); // Clickjacking protection
-header("X-Content-Type-Options: nosniff"); // Prevent MIME type sniffing
-header("Referrer-Policy: strict-origin-when-cross-origin"); // Limit referrer information
-//header("Permissions-Policy: geolocation=(), microphone=(), camera=()"); // Disable unused browser features
-header("Cross-Origin-Resource-Policy: same-origin"); // Restrict cross-origin resource loading
-
-// Content Security Policy
-header(
-  "Content-Security-Policy: " .
-  "default-src 'self'; " .
-  "script-src 'self' https://cdn.jsdelivr.net; " .
-  "style-src 'self' https://cdn.jsdelivr.net; " .
-  "img-src 'self'; " .
-  "font-src 'self'; " .
-  "object-src 'none'; " .
-  "base-uri 'self'; " .
-  "frame-ancestors 'none';"
-);
-
 // start the session with a cookie params
-session_start();
+SessionService::start();
 
 // Automatic routing.
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: "";
