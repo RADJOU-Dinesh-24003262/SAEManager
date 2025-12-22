@@ -54,7 +54,17 @@ $controllers = [
 // Security Headers
 header("X-Frame-Options: DENY"); // Prevent Clickjacking
 header("X-Content-Type-Options: nosniff"); // Prevent MIME-sniffing
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' data:;"); // Mitigate XSS
+header("X-XSS-Protection: 1; mode=block"); // Enable XSS Protection
+
+$header = "Content-Security-Policy: ";
+$header .= "default-src 'self'; ";
+$header .= "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; ";
+$header .= "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; ";
+$header .= "img-src 'self' data:; ";
+$header .= "font-src 'self' data:;";
+
+header($header); // Mitigate XSS
+
 header("Referrer-Policy: strict-origin-when-cross-origin");
 header("Permissions-Policy: geolocation=(), microphone=(), camera=()"); // Disable unused features
 
