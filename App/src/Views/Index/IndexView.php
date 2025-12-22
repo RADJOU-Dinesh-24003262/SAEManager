@@ -52,7 +52,7 @@ class IndexView extends AbstractView
      * This method prepares dynamic content by rendering the HTML
      * for error and success messages retrieved from the session.
      *
-     * @return array An associative array with template keys for messages.
+     * @return array<string, string> An associative array with template keys for messages.
      */
     protected function templateKeys(): array
     {
@@ -70,7 +70,7 @@ class IndexView extends AbstractView
      *
      * If the provided array of errors is empty, an empty string is returned.
      *
-     * @param array $errors The list of error messages to display.
+     * @param array<string> $errors The list of error messages to display.
      *
      * @return string The HTML markup for error messages, or an empty string if none.
      */

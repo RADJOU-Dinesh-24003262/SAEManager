@@ -39,7 +39,7 @@ class SettingsView extends AbstractView
      * Initializes the view by retrieving flash messages (errors and success)
      * from the session service and passing them to the parent constructor.
      *
-     * @param array $data Data User from current session.
+     * @param array<string, mixed> $data Data User from current session.
      * @return void
      */
     public function __construct(array $data)
@@ -61,7 +61,7 @@ class SettingsView extends AbstractView
     /**
      * Returns the list of keys and rendered values used in the HTML template.
      *
-     * @return array The list of template keys and values.
+     * @return array<string, string> The list of template keys and values.
      */
     protected function templateKeys(): array
     {

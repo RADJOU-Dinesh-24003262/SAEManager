@@ -74,11 +74,9 @@ class RegisterPost implements ControllerInterface
             }
             SessionService::setFlash('errors', $errors);
             Logger::log('REGISTER_FAIL', "Échec validation inscription IP: {$_SERVER['REMOTE_ADDR']}", null, 'INFO');
-
         } catch (\PDOException $e) {
             Logger::log('DB_ERROR', "Erreur BDD lors de l'inscription: " . $e->getMessage(), null, 'CRITICAL');
             SessionService::setFlash('errors', ['general' => 'Une erreur est survenue, réessayez plus tard']);
-
         } catch (\Exception $e) {
             Logger::log('REGISTER_ERROR', "Erreur lors de l'inscription: " . $e->getMessage(), null, 'ERROR');
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);

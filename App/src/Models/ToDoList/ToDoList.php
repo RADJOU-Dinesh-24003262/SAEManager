@@ -59,7 +59,7 @@ class ToDoList
      *
      * This method constructs a user object with the data array given in parameters.
      *
-     * @param array $data The data to make a todolist with.
+     * @param array<string, string|integer|null> $data The data to make a todolist with.
      */
     private function __construct(array $data = [])
     {
@@ -74,7 +74,7 @@ class ToDoList
      * This method creates a user object with the data array given in parameters.
      * Use the connection of the database.
      *
-     * @param array $data The data to make a todolist with.
+     * @param array<string, string|integer|null> $data The data to make a todolist with.
      *
      * @return self the new object.
      */
