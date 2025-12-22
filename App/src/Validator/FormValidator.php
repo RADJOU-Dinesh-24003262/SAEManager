@@ -31,15 +31,15 @@ abstract class FormValidator
      * List of required fields for form validation.
      * To be defined in child classes.
      *
-     * @var array
+     * @var array<string>
      */
     protected $required = [];
 
     /**
      * Escapes form data (HTML special chars).
      *
-     * @param  array $data Data of form to espace.
-     * @return array Data with escaped fields.
+     * @param  array<string, mixed> $data Data of form to espace.
+     * @return array<string, mixed> Data with escaped fields.
      * @throws ExceptionValidationEmptys If a required field is empty.
      */
     public function escape(array $data): array
@@ -66,7 +66,7 @@ abstract class FormValidator
     /**
      * Validates form data. To be implemented in child classes.
      *
-     * @param  array $data The field to validate.
+     * @param  array<string, mixed> $data The field to validate.
      * @return void
      * @throws \Exception If the data don't meet the requirement.
      */

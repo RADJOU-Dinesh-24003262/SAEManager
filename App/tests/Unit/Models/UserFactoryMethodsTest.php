@@ -224,7 +224,7 @@ class UserFactoryMethodsTest extends TestCase
         $this->assertNotEmpty($hash);
         $this->assertNotEquals($plainPassword, $hash);
         $this->assertTrue(password_verify($plainPassword, $hash));
-        $this->assertStringStartsWith('$2y$', $hash); // bcrypt format
+        $this->assertStringStartsWith('$argon2id$', $hash); // argon2id format
     }
 
     #[Test]

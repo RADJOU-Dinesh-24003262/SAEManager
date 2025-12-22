@@ -37,7 +37,7 @@ class Professor extends User
      * Sets the user type and delegates initialization to the parent
      * constructor (User).
      *
-     * @param array $data Optional initial data for the professor.
+     * @param array<string, string|integer> $data Optional initial data for the professor.
      */
     public function __construct(array $data = [])
     {
@@ -111,7 +111,7 @@ class Professor extends User
      * @param PDO     $connection PDO object representing the database connection.
      * @param integer $userId     The professor's user ID.
      *
-     * @return array Associative array containing the SAE records.
+     * @return array<int, array<string, mixed>> Associative array containing the SAE records.
      *
      * @throws \PDOException If an error occurs during query execution.
      */
@@ -145,8 +145,8 @@ class Professor extends User
      * @param PDO     $connection PDO object representing the database connection.
      * @param integer $clientid   ID of the client linked to the SAE.
      * @param string  $name       Name of the SAE.
-     * @param string  $begindate  Start date (expected format: e.g., "March 01 2024").
-     * @param string  $enddate    End date (expected format: e.g., "June 30 2024").
+     * @param string  $begindate  Start date (expected format: "March 01 2024").
+     * @param string  $enddate    End date (expected format: "June 30 2024").
      * @param integer $userId     ID of the responsible professor.
      *
      * @return void
@@ -183,12 +183,12 @@ class Professor extends User
      *
      * If a value in the \$data array is NULL, the current value of the SAE is kept.
      *
-     * @param PDO             $connection PDO object representing the database connection.
-     * @param \Models\SAE\SAE $sae        SAE instance representing the current record.
-     * @param array           $data       Associative array of fields to update.
-     *                                    Expected keys: 'responsible_prof_id',
-     *                                    'client_id', 'subject_name',
-     *                                    'begin_date', 'end_date'.
+     * @param PDO                           $connection PDO object representing the database connection.
+     * @param \Models\SAE\SAE               $sae        SAE instance representing the current record.
+     * @param array<string, string|integer> $data       Associative array of fields to update.
+     *                                                  Expected keys: 'responsible_prof_id',
+     *                                                  'client_id', 'subject_name',
+     *                                                  'begin_date', 'end_date'.
      *
      * @return void
      *

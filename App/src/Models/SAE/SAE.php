@@ -64,7 +64,7 @@ class SAE
     /**
      * Constructs a new SAE object.
      *
-     * @param array $data An array containing the SAE data, typically fetched from the database.
+     * @param array<string, string|integer> $data An array containing the SAE data, typically fetched from the database.
      */
     protected function __construct(array $data = [])
     {
@@ -78,7 +78,8 @@ class SAE
     /**
      * Creates an array of SAE objects from an array of raw SAE data arrays.
      *
-     * @param array $saes An array of arrays, where each inner array is raw SAE data.
+     * @param array<int, array<string, string|integer>> $saes An array of arrays,
+     *                                                        where each inner array is raw SAE data.
      *
      * @return array<SAE> An array of SAE objects.
      */
@@ -94,7 +95,8 @@ class SAE
     /**
      * Returns the SAE data as a numerically indexed array.
      *
-     * @return array The SAE properties in the order: [id, prof_id, client_id, name, begin_date, end_date].
+     * @return array<int, string|integer>  The SAE properties in the order:
+     *                                     [id, prof_id, client_id, name, begin_date, end_date].
      */
     public function getDataArray(): array
     {

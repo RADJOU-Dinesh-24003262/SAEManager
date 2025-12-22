@@ -345,7 +345,7 @@ class UserModelTest extends TestCase
         $hash = $student->getPasswordHash();
 
         $this->assertNotEquals($plainPassword, $hash);
-        $this->assertStringStartsWith('$2y$', $hash); // bcrypt format
+        $this->assertStringStartsWith('$argon2id$', $hash); // argon2id format
     }
 
     #[Test]
