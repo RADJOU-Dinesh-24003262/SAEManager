@@ -74,6 +74,10 @@ class SAESubjectRepository
                 'SELECT * FROM sae_subjects ORDER BY begin_date DESC'
             );
 
+            if (!$stmt) {
+                throw new ExceptionFetchDataBD();
+            }
+
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             return array_map(fn($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {

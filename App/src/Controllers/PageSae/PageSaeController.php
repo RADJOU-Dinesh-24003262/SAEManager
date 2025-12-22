@@ -4,6 +4,8 @@ namespace Controllers\PageSae;
 
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
+use Core\includes\exception\SAE\ExceptionSAE;
+use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\User\User;
@@ -63,12 +65,16 @@ class PageSaeController implements ControllerInterface
             $sae = SAE::getInstance();
             $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
             if ($data['sae'] === null) {
-                throw new Exception("Vous n\'avez pas accès à cette SAE.");
+                throw new ExceptionAccessDenied("Vous n\'avez pas accès à cette SAE.");
             }
 
             // Create and render the SAE page view.
             $view = new PageSaeView($data);
             $view->render();
+            exit();
+        } catch (ExceptionSAE $e) {
+            SessionService::setFlash('errors', "Erreur SAE : " . $e->getMessage());
+            header('Location: /dashboard');
             exit();
         } catch (Exception | ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
