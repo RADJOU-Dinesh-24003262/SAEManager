@@ -52,21 +52,24 @@ $controllers = [
 ];
 
 // Security Headers
-header("X-Frame-Options: DENY"); // Prevent Clickjacking
-header("X-Content-Type-Options: nosniff"); // Prevent MIME-sniffing
-header("X-XSS-Protection: 1; mode=block"); // Enable XSS Protection
+header("X-Frame-Options: DENY"); // Clickjacking protection
+header("X-Content-Type-Options: nosniff"); // Prevent MIME type sniffing
+header("Referrer-Policy: strict-origin-when-cross-origin"); // Limit referrer information
+//header("Permissions-Policy: geolocation=(), microphone=(), camera=()"); // Disable unused browser features
+header("Cross-Origin-Resource-Policy: same-origin"); // Restrict cross-origin resource loading
 
-$header = "Content-Security-Policy: ";
-$header .= "default-src 'self'; ";
-$header .= "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; ";
-$header .= "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; ";
-$header .= "img-src 'self' data:; ";
-$header .= "font-src 'self' data:;";
-
-header($header); // Mitigate XSS
-
-header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Permissions-Policy: geolocation=(), microphone=(), camera=()"); // Disable unused features
+// Content Security Policy
+header(
+  "Content-Security-Policy: " .
+  "default-src 'self'; " .
+  "script-src 'self' https://cdn.jsdelivr.net; " .
+  "style-src 'self' https://cdn.jsdelivr.net; " .
+  "img-src 'self'; " .
+  "font-src 'self'; " .
+  "object-src 'none'; " .
+  "base-uri 'self'; " .
+  "frame-ancestors 'none';"
+);
 
 // start the session with a cookie params
 session_start();
