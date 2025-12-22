@@ -7,6 +7,7 @@ use Core\Utilis\SessionService;
 use Exception;
 use Models\User\User;
 use Views\ToDoList\ToDoListView;
+use Models\SAE\SAE;
 
 /**
  * Handles the control logic for the To-Do List page.
@@ -55,19 +56,18 @@ class ToDoListController implements ControllerInterface
             $data['saes'] = $user->getSaes();
 
             $parts = explode('/', $_SERVER['REQUEST_URI']);
-            $sae_id = $parts[2];
+            $sae_id = intval($parts[2]);
 
-            foreach ($data['saes'] as $key => $sae) {
-                if ($sae->getSaeSubjectId() == $sae_id) {
-                    // Create and render the SAE page view.
-                    $data['sae'] = $sae;
-                    $view = new ToDoListView($data);
-                    $view->render();
-                    exit();
-                }
+            $sae = SAE::getInstance();
+            $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
+            if ($data['sae'] === null) {
+                throw new Exception("Vous n\'avez pas accès à cette SAE.");
             }
 
-            header('Location: /');
+            // Create and render the SAE page view.
+            $view = new ToDoListView($data);
+            $view->render();
+            exit();
         } catch (Exception $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');

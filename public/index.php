@@ -65,6 +65,7 @@ foreach ($controllers as $controller) {
             error_log("Erreur inattendue: " . $e->getMessage());
             http_response_code(500);
             header("Location: /");
+            SessionService::remove('USER');
             exit();
         }
     }

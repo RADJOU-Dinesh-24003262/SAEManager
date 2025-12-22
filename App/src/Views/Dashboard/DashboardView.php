@@ -6,7 +6,7 @@ use Models\User\User;
 use Core\Utilis\SessionService;
 use Core\AbstractView;
 use hoge\fuga\product\Super;
-use Models\SAE\SAE;
+use Models\SAE\SAESubject;
 use Models\User\Student;
 
 /**
@@ -168,8 +168,8 @@ class DashboardView extends AbstractView
     /**
      * Renders the SAE content section with cards or an empty message.
      *
-     * @param User  $user The user instance.
-     * @param array $saes List of SAE data arrays.
+     * @param User              $user The user instance.
+     * @param array<SAESubject> $saes List of SAE data arrays.
      *
      * @return string The rendered HTML content.
      */
@@ -191,12 +191,12 @@ class DashboardView extends AbstractView
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User $user The user instance.
-     * @param SAE  $sae  The SAE data array.
+     * @param User       $user The user instance.
+     * @param SAESubject $sae  The SAE data array.
      *
      * @return string The rendered HTML SAE card.
      */
-    private function renderSAECard(User $user, SAE $sae): string
+    private function renderSAECard(User $user, SAESubject $sae): string
     {
         $html  = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
