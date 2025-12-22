@@ -39,7 +39,7 @@ class Register implements ControllerInterface
             exit();
         }
 
-        $view = new RegisterView();
+        $view = new RegisterView(['csrf_token' => SessionService::generateCsrfToken()]);
         $view->render();
     }
 

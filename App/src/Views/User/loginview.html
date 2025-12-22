@@ -2,6 +2,7 @@
 <div class="mainContainer">
     <h1 class="title">SAEManager ‑ Authentification</h1>
     <form method="post" action="/login" class="titlediv">
+        <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
         <h2 class="subtitle">Email : </h2>
         <input type="text" name="email" class="textinput" placeholder="Entrez votre email" required>
 

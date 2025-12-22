@@ -6,10 +6,9 @@ parameters:
   
   excludePaths:
     - */vendor/*
+    - */tests/*
   
   ignoreErrors:
     - '#Call to an undefined method PDO::#'
-    - identifier: missingType.iterableValue
-    - identifier: missingType.generics
   
   reportUnmatchedIgnoredErrors: false

@@ -41,7 +41,7 @@ class Login implements ControllerInterface
             exit();
         }
 
-        $view = new LoginView();
+        $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);
         $view->render();
     }
 

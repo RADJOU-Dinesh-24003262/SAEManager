@@ -32,7 +32,7 @@ class ToDoListValidator extends FormValidator
     /**
      * This method validates the values given in $data to validate the todolist with their description.
      *
-     * @param  array $data Represent the data in the database.
+     * @param  array<string, mixed> $data Represent the data in the database.
      * @return void
      * @throws ExceptionValidationEmpty All the errors that might have been found.
      */
