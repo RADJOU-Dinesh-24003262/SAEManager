@@ -5,6 +5,9 @@ namespace Models\SAE;
 use Models\User\User;
 use Models\Utilis\AccessControlService;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\includes\exception\SAE\ExceptionResourceNotFound;
+use Core\includes\exception\SAE\ExceptionInvalidData;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
 use Models\SAE\Repository\CompetenceRepository;
@@ -221,7 +224,7 @@ class SAE
         $subject = new SAESubject($data);
         $errors = $subject->validate();
         if (!empty($errors)) {
-            throw new \Exception(implode(', ', $errors));
+            throw new ExceptionInvalidData(implode(', ', $errors));
         }
 
         $subject = $this->subjectRepo->create($subject);
@@ -248,12 +251,12 @@ class SAE
     public function updateSAE(User $user, int $saeId, array $data): bool
     {
         if (!$this->accessControl->canManageSAE($user, $saeId)) {
-            throw new \Exception("Vous n'avez pas la permission de modifier cette SAE");
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de modifier cette SAE");
         }
 
         $subject = $this->subjectRepo->findById($saeId);
         if (!$subject) {
-            throw new \Exception("SAE non trouvée");
+            throw new ExceptionResourceNotFound("SAE non trouvée");
         }
 
         // Update subject fields
@@ -266,7 +269,7 @@ class SAE
 
         $errors = $subject->validate();
         if (!empty($errors)) {
-            throw new \Exception(implode(', ', $errors));
+            throw new ExceptionInvalidData(implode(', ', $errors));
         }
 
         $success = $this->subjectRepo->update($subject);
@@ -290,7 +293,7 @@ class SAE
     public function createGroup(User $user, int $saeId): SAEGroup
     {
         if (!$this->accessControl->canManageSAE($user, $saeId)) {
-            throw new \Exception("Vous n'avez pas la permission de créer un groupe");
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
         }
 
         return $this->groupRepo->create($saeId);
@@ -309,11 +312,11 @@ class SAE
     {
         $group = $this->groupRepo->findById($groupId);
         if (!$group) {
-            throw new \Exception("Groupe non trouvé");
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
         }
 
         if (!$this->accessControl->canManageSAE($professor, $group->getSaeSubjectId())) {
-            throw new \Exception("Vous n'avez pas la permission d'assigner des étudiants");
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission d'assigner des étudiants");
         }
 
         return $this->groupRepo->assignStudent($studentId, $groupId);
@@ -331,7 +334,7 @@ class SAE
     public function assignProfessorToSAE(User $responsibleProf, int $saeId, int $professorId): bool
     {
         if (!$this->accessControl->isResponsibleProfessor($responsibleProf, $saeId)) {
-            throw new \Exception("Seul le responsable peut assigner des professeurs");
+            throw new ExceptionAccessDenied("Seul le responsable peut assigner des professeurs");
         }
 
         return $this->professorGroupRepo->assignProfessor($saeId, $professorId);
@@ -360,7 +363,7 @@ class SAE
     public function deleteSAE(User $user, int $saeId): bool
     {
         if (!$this->accessControl->isResponsibleProfessor($user, $saeId)) {
-            throw new \Exception("Seul le responsable peut supprimer la SAE");
+            throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
         }
 
         return $this->subjectRepo->delete($saeId);
