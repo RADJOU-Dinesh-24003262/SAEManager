@@ -36,6 +36,8 @@ class SessionService
             // Security configuration for sessions.
             ini_set('session.use_only_cookies', 1); // Force cookies only (no ID in URL).
             ini_set('session.use_strict_mode', 1);  // Prevent Session Fixation.
+            ini_set('session.cookie_secure', 1);
+            ini_set('session.cookie_httponly', 1);
 
             $cookieParams = session_get_cookie_params();
             session_set_cookie_params([
