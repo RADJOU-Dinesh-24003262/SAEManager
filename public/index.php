@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
@@ -51,6 +50,16 @@ $controllers = [
     new EditProfileController(),
     new EditProfilePost()
 ];
+
+// Security Headers
+header("X-Frame-Options: DENY"); // Prevent Clickjacking
+header("X-Content-Type-Options: nosniff"); // Prevent MIME-sniffing
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' data:;"); // Mitigate XSS
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()"); // Disable unused features
+
+// start the session with a cookie params
+session_start();
 
 // Automatic routing.
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: "";

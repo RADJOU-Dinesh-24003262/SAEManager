@@ -8,6 +8,33 @@
 #     https://httpd.apache.org/docs/current/howto/htaccess.html
 
 # ######################################################################
+# # SECURITY - MICRO WAF                                               #
+# ######################################################################
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Block suspicious User Agents (Scanners/Bots)
+    RewriteCond %{HTTP_USER_AGENT} (havij|libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (%0A|%0D|%27|%3C|%3E|%00) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 2. Block Query String SQL Injection (Union, Select, etc.)
+    RewriteCond %{QUERY_STRING} (union|select|insert|update|delete|drop|alter|create|truncate|rename|exec|declare) [NC,OR]
+    RewriteCond %{QUERY_STRING} (base64_encode|localhost|127\.0\.0\.1|loopback) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 3. Block XSS in Query String (<script>, alert(), etc.)
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} (javascript:|vbscript:|expression:|eval\(|alert\() [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 4. Block access to sensitive files
+    RewriteRule (^\.|/\.) - [F,L]
+    RewriteRule (^|/)(composer\.json|composer\.lock|package\.json|package-lock\.json|phinx\.yml|\.env|\.git) - [F,L]
+</IfModule>
+
+# ######################################################################
 # # CROSS-ORIGIN                                                       #
 # ######################################################################
 

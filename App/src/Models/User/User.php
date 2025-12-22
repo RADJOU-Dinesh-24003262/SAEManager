@@ -164,7 +164,7 @@ abstract class User
      */
     public function setPassword(string $password): void
     {
-        $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $this->hashed_password = password_hash($password, PASSWORD_ARGON2ID);
     }
 
     /**
@@ -303,7 +303,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
+            $hashed_password = password_hash($newPassword, PASSWORD_ARGON2ID);
 
             $stmt = $db->prepare(
                 'UPDATE users SET hashed_password = :password_hash WHERE email = :email'
@@ -534,5 +534,15 @@ abstract class User
     public function isClient(): bool
     {
         return $this->user_type === 'client';
+    }
+
+    /**
+     * Gets the user's ID.
+     *
+     * @return integer
+     */
+    public function getUserId(): int
+    {
+        return $this->user_id;
     }
 }
