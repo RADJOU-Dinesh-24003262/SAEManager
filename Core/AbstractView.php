@@ -28,14 +28,14 @@ abstract class AbstractView
     /**
      * Stores the data used in the implemented page. The var line contains the type stored in this variable.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected array $data = [];
 
     /**
      * Initializes the $data attribute with the array of data given when called.
      *
-     * @param array $data The array of data to be instantiated.
+     * @param array<string, mixed> $data The array of data to be instantiated.
 
      * @return void Creates The instance of the class.
      */
@@ -84,7 +84,7 @@ abstract class AbstractView
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
      *
-     * @return array An associative array with keys for error and success messages.
+     * @return array<string, mixed> An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
 
@@ -191,7 +191,7 @@ abstract class AbstractView
             <div class="footer-container">
                 <div class="footer-left">
                     <h1 class="saeManager">SAEManager</h1>
-                    <img src="/image/logo-footer.png" alt="AMU Logo" class="footer-logo-amu">
+                    <img src="/image/logoamu.png" alt="Logo AMU Header" class="footer-logo-amu">
                 </div>
 
                 <div class="footer-middle">

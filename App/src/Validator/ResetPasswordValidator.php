@@ -28,14 +28,14 @@ class ResetPasswordValidator extends FormValidator
     /**
      * The list of the variables required for the password reset of a user.
      *
-     * @var array
+     * @var array<string>
      */
     protected $required = ['pwdnew', 'pwdverif'];
 
     /**
      * This method validates the values given in $data to reset the password of a user with.
      *
-     * @param array $data Array, in adequation to the required value fields.
+     * @param array<string, mixed> $data Array, in adequation to the required value fields.
      *
      * @return void
      *
