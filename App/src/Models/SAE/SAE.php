@@ -106,7 +106,52 @@ class SAE
      *
      * @param integer $saeId The SAE subject ID
      * @param User    $user  The requesting user
-     * @return array|null Complete SAE data or null if no access
+     * @return array{
+     *   subject: \Models\SAE\SAESubject,
+     *   groups: array<int, array{
+     *     group: \Models\SAE\SAEGroup,
+     *     students: array<int, array{
+     *       student_id: string,
+     *       amu_id: string,
+     *       year: string,
+     *       major: string,
+     *       td: string,
+     *       tp: string,
+     *       first_name: string,
+     *       last_name: string,
+     *       email: string,
+     *       phone: string|null
+     *     }>
+     *   }>,
+     *   competences: array<int, \Models\SAE\Competence>,
+     *   responsible_professor: array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     amu_id: string
+     *   }|null,
+     *   all_professors: array<int, array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     amu_id: string,
+     *     is_responsible: int
+     *   }>,
+     *   client: array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     organisation: string
+     *   }|null,
+     *   can_modify: bool,
+     *   is_responsible: bool
+     * }|null Complete SAE data or null if no access
      * @throws ExceptionFetchDataBD
      */
     public function getCompleteSAEData(int $saeId, User $user): ?array
@@ -151,7 +196,21 @@ class SAE
      *
      * @param integer $saeId The SAE subject ID
      * @param User    $user  The requesting user
-     * @return array Array of groups with details
+     * @return array<int, array{
+     *   group: \Models\SAE\SAEGroup,
+     *   students: array<int, array{
+     *     student_id: string,
+     *     amu_id: string,
+     *     year: string,
+     *     major: string,
+     *     td: string,
+     *     tp: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null
+     *   }>
+     * }> Array of groups with member's details
      */
     private function getAccessibleGroups(int $saeId, User $user): array
     {
@@ -187,10 +246,12 @@ class SAE
             $userGroupId = $this->getUserGroupId($user, $saeId);
             if ($userGroupId) {
                 $group = $this->groupRepo->findById($userGroupId);
-                return [[
-                    'group' => $group,
-                    'students' => $this->groupRepo->getGroupStudents($userGroupId),
-                ]];
+                if ($group) {
+                    return [[
+                        'group' => $group,
+                        'students' => $this->groupRepo->getGroupStudents($userGroupId),
+                    ]];
+                }
             }
         }
 
@@ -212,8 +273,8 @@ class SAE
     /**
      * Creates a new SAE with competences
      *
-     * @param User  $creator The professor creating the SAE
-     * @param array $data    SAE data
+     * @param User                 $creator The professor creating the SAE
+     * @param array<string, mixed> $data    SAE data
      * @return SAESubject The created SAE
      * @throws \Exception If user doesn't have permission or data is invalid
      */
@@ -246,9 +307,9 @@ class SAE
     /**
      * Updates a SAE
      *
-     * @param User    $user  The user updating the SAE
-     * @param integer $saeId The SAE ID
-     * @param array   $data  Updated data
+     * @param User                 $user  The user updating the SAE
+     * @param integer              $saeId The SAE ID
+     * @param array<string, mixed> $data  Updated data
      * @return boolean Success status
      * @throws \Exception If user doesn't have permission
      */
@@ -345,15 +406,36 @@ class SAE
     }
 
     /**
-     * Gets contact information of group members
+     * Gets contact information of group members grouped by SAE group.
+     * Each key in the returned array is a SAE group ID.
      *
      * @param User    $user  The requesting user
      * @param integer $saeId The SAE subject ID
-     * @return array Array of contact information
+     *
+     * @return array<string, array<int, array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     user_type: string,
+     *     sae_group_id: string,
+     *     td: string,
+     *     tp: string
+     * }>>
      */
     public function getGroupContacts(User $user, int $saeId): array
     {
-        return $this->accessControl->getAccessibleGroupMembers($user, $saeId);
+        $members = $this->accessControl->getAccessibleGroupMembers($user, $saeId);
+
+        $grouped = [];
+
+        foreach ($members as $member) {
+            $groupId = $member['sae_group_id'];
+            $grouped[$groupId][] = $member;
+        }
+
+        return $grouped;
     }
 
     /**

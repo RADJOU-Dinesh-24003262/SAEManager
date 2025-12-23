@@ -98,7 +98,7 @@ class ValidationServiceRegister extends FormValidator
      *
      * @param array<string, mixed> $data Array, in adequation to the required value fields.
      *
-     * @return array<mixed> Array of errors.
+     * @return array<ExceptionValidationRegister> Array of errors.
      *
      * @throws ExceptionValidationRegisters All the errors that might have been found.
      */

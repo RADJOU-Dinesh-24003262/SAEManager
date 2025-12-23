@@ -122,7 +122,18 @@ class SAEGroupRepository
      * Gets all students in a group
      *
      * @param integer $groupId The group ID
-     * @return array Array of student data
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null
+     * }> Array of student data
      */
     public function getGroupStudents(int $groupId): array
     {

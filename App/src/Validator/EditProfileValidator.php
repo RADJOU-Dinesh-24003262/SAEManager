@@ -38,7 +38,7 @@ class EditProfileValidator extends FormValidator
     /**
      * Validate the profile edit form data.
      *
-     * @param array<string, string|integer> $data The form data to validate.
+     * @param array<string, string> $data The form data to validate.
      * @return void
      * @throws ExceptionValidationRegister If validation fails.
      */

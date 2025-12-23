@@ -49,7 +49,7 @@ class ToDoListView extends AbstractView
      * This method returns an empty array because the To-Do List page
      * does not require dynamic data to render.
      *
-     * @return array<string, mixed> An empty associative array.
+     * @return array<string, string|integer> An empty associative array.
      */
     protected function templateKeys(): array
     {

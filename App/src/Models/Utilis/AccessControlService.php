@@ -146,7 +146,17 @@ class AccessControlService
      *
      * @param User    $user  The user requesting access
      * @param integer $saeId The SAE subject ID
-     * @return array Array of user data with contact info
+     * @return array<int, array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   user_type: string,
+     *   sae_group_id: string,
+     *   td: string,
+     *   tp: string
+     * }> Array of user data with contact info
      */
     public function getAccessibleGroupMembers(User $user, int $saeId): array
     {
@@ -172,7 +182,17 @@ class AccessControlService
      * Gets all members of a SAE (for responsible professor)
      *
      * @param integer $saeId The SAE subject ID
-     * @return array
+     * @return array<int, array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   user_type: string,
+     *   sae_group_id: string,
+     *   td: string,
+     *   tp: string
+     * }> The array containing the contact info of each member
      */
     private function getAllSAEMembers(int $saeId): array
     {
@@ -194,7 +214,17 @@ class AccessControlService
      *
      * @param User    $professor The professor
      * @param integer $saeId     The SAE subject ID
-     * @return array
+     * @return array<int, array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   user_type: string,
+     *   sae_group_id: string,
+     *   td: string,
+     *   tp: string
+     * }> The array containing the contact info of each member
      */
     private function getAssignedGroupMembers(User $professor, int $saeId): array
     {
@@ -218,7 +248,17 @@ class AccessControlService
      *
      * @param User    $user  The user (student or client)
      * @param integer $saeId The SAE subject ID
-     * @return array
+     * @return array<int, array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   user_type: string,
+     *   sae_group_id: string,
+     *   td: string,
+     *   tp: string
+     * }> The array containing the contact info of each member
      */
     private function getOwnGroupMembers(User $user, int $saeId): array
     {

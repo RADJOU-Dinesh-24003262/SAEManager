@@ -129,9 +129,9 @@ class CompetenceRepository
     /**
      * Updates competences for a SAE (replaces all existing)
      *
-     * @param integer $saeId           The SAE subject ID
-     * @param array   $competenceNames Array of competence names
-     * @return boolean
+     * @param integer       $saeId           The SAE subject ID
+     * @param array<string> $competenceNames Array of competence names
+     * @return boolean  If update was successful
      */
     public function updateSaeCompetences(int $saeId, array $competenceNames): bool
     {

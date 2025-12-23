@@ -270,7 +270,14 @@ class SAESubjectRepository
      * Gets responsible professor info
      *
      * @param integer $saeId The SAE subject ID
-     * @return array|null
+     * @return array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   amu_id: string
+     * }|null
      */
     public function getResponsibleProfessor(int $saeId): ?array
     {
@@ -297,7 +304,15 @@ class SAESubjectRepository
      * Gets all professors info for a SAE
      *
      * @param integer $saeId The SAE subject ID
-     * @return array
+     * @return array<int, array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   amu_id: string,
+     *   is_responsible: int
+     * }>
      */
     public function getAllProfessorsInfo(int $saeId): array
     {
@@ -318,6 +333,11 @@ class SAESubjectRepository
                 ORDER BY is_responsible DESC, u.last_name, u.first_name'
             );
             $stmt->execute(['sae_id' => $saeId]);
+
+            if (!$stmt) {
+                throw new PDOException('Statement preparation failed');
+            }
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('Erreur récupération infos professeurs : ' . $e->getMessage());
@@ -329,7 +349,14 @@ class SAESubjectRepository
      * Gets client info for a SAE
      *
      * @param integer $saeId The SAE subject ID
-     * @return array|null
+     * @return array{
+     *   user_id: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null,
+     *   organisation: string
+     * }|null
      */
     public function getClientInfo(int $saeId): ?array
     {
