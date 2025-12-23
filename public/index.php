@@ -1,6 +1,5 @@
 <?php
 
-session_start();
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
@@ -51,6 +50,9 @@ $controllers = [
     new EditProfileController(),
     new EditProfilePost()
 ];
+
+// start the session with a cookie params
+SessionService::start();
 
 // Automatic routing.
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: "";

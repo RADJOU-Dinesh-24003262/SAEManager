@@ -6,6 +6,7 @@ use Core\ControllerInterface;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Utilis\Logger;
 use PDO;
 use Models\User\User;
 use Core\Utilis\SessionService;
@@ -48,19 +49,28 @@ class LoginPost implements ControllerInterface
             return;
         }
 
+        // CSRF Protection.
+        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            Logger::log('CSRF_FAIL', 'Tentative de connexion avec token invalide.', null, 'WARNING');
+            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
+            $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);
+            $view->render();
+            exit();
+        }
+
         try {
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
             $data['email'] = trim($data['email'] ?? '');
-            error_log("Tentative de connexion - Username: {$data['email']}");
+            Logger::log('LOGIN_ATTEMPT', "Tentative de connexion pour : {$data['email']}");
 
             $user = User::createFromLoginData($data);
             SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
-            error_log("Utilisateur connecté: " . $user->getEmail());
+            Logger::log('LOGIN_SUCCESS', "Connexion réussie pour : " . $user->getEmail(), $user->getUserId());
             SessionService::set('USER', serialize($user));
 
             header('Location: /dashboard');
@@ -71,11 +81,13 @@ class LoginPost implements ControllerInterface
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-        } catch (ExceptionValidationLogin | ExceptionFetchDataBD $e) {
+        } catch (ExceptionValidationLogin $e) {
+            Logger::log('LOGIN_FAIL', "Échec authentification pour : {$data['email']}", null, 'WARNING');
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
+        } catch (ExceptionFetchDataBD $e) {
+            Logger::log('DB_ERROR', "Erreur BDD lors du login : " . $e->getMessage(), null, 'CRITICAL');
+            SessionService::setFlash('errors', ['general' => 'Erreur technique.']);
         }
-        $view = new LoginView();
-        $view->render();
     }
 
     /**

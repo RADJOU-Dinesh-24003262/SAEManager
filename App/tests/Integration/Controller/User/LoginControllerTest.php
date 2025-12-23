@@ -99,7 +99,9 @@ class LoginControllerTest extends TestCase
      */
     public function testSetsErrorFlashOnEmptyCredentials(): void
     {
+        SessionService::start();
         $_POST = [
+            'csrf_token' => SessionService::generateCsrfToken(),
             'email' => '',
             'password' => ''
         ];

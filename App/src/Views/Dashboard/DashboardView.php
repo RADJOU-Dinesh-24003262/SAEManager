@@ -42,7 +42,7 @@ class DashboardView extends AbstractView
      *
      * Initializes the dashboard with user-specific data and flash messages.
      *
-     * @param array $data Data passed to the view. Must include a 'user' key.
+     * @param array<string, mixed> $data Data passed to the view. Must include a 'user' key.
      */
     public function __construct(array $data)
     {
@@ -67,7 +67,7 @@ class DashboardView extends AbstractView
     /**
      * Returns the list of keys and rendered values used in the HTML template.
      *
-     * @return array The list of template keys and values.
+     * @return array<string, string> The list of template keys and values.
      */
     protected function templateKeys(): array
     {

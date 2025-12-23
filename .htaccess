@@ -8,6 +8,64 @@
 #     https://httpd.apache.org/docs/current/howto/htaccess.html
 
 # ######################################################################
+# # SECURITY - MICRO WAF                                               #
+# ######################################################################
+
+# Force HTTPS
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# HSTS - Strict Transport Security (en forçant l'HTTPS)
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=86400; includeSubDomains" env=HTTPS
+</IfModule>
+
+# Sécuriser les headers HTTP
+<IfModule mod_headers.c>
+    # Protéger contre le Clickjacking
+    Header always set X-Frame-Options "DENY"
+
+    # Empêcher le MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Limiter les informations envoyées dans les referrers
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Bloquer les ressources cross-origin
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
+    # Sécuriser la Content Security Policy (CSP)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net; img-src 'self'; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+</IfModule>
+
+# SECURITY - MICRO WAF (Web Application Firewall)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1. Block suspicious User Agents (Scanners/Bots)
+    RewriteCond %{HTTP_USER_AGENT} (havij|libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (%0A|%0D|%27|%3C|%3E|%00) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 2. Block Query String SQL Injection (Union, Select, etc.)
+    RewriteCond %{QUERY_STRING} (union|select|insert|update|delete|drop|alter|create|truncate|rename|exec|declare) [NC,OR]
+    RewriteCond %{QUERY_STRING} (base64_encode|localhost|127\.0\.0\.1|loopback) [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 3. Block XSS in Query String (<script>, alert(), etc.)
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} (javascript:|vbscript:|expression:|eval\(|alert\() [NC]
+    RewriteRule ^(.*)$ - [F,L]
+
+    # 4. Block access to sensitive files
+    RewriteRule (^\.|/\.) - [F,L]
+    RewriteRule (^|/)(composer\.json|composer\.lock|package\.json|package-lock\.json|phinx\.yml|\.env|\.git) - [F,L]
+</IfModule>
+
+# ######################################################################
 # # CROSS-ORIGIN                                                       #
 # ######################################################################
 

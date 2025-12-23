@@ -49,7 +49,7 @@ class ResetPasswordSuccessView extends AbstractView
      * In this case, the reset password success page does not require
      * any dynamic data, so the method returns an empty array.
      *
-     * @return array An empty array.
+     * @return array<empty> An empty array.
      */
     protected function templateKeys(): array
     {

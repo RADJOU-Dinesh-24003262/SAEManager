@@ -2,6 +2,7 @@
 {{ERROR_MESSAGES}}
 
 <form action="/register" method="post" autocomplete="on">
+    <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
     
     <fieldset>
         <legend>Informations personnelles</legend>

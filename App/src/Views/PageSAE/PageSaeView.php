@@ -52,7 +52,7 @@ class PageSaeView extends AbstractView
      *
      * This method returns an empty array.
      *
-     * @return array An empty array
+     * @return array<string, string> An empty array
      */
     protected function templateKeys(): array
     {

@@ -28,14 +28,14 @@ class LoginValidator extends FormValidator
     /**
      * The list of the variables required for the loggin of a user.
      *
-     * @var array
+     * @var array<string>
      */
     protected $required = ['email', 'password'];
 
     /**
      * This this method validated the values given in $data to log a user with.
      *
-     * @param array $data Array, in adequation to the required value fields.
+     * @param array<string, mixed> $data Array, in adequation to the required value fields.
      *
      * @return void
      *

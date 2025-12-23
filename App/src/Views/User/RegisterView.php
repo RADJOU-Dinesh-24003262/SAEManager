@@ -127,10 +127,12 @@ class RegisterView extends AbstractView
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
+        $csrfToken = $this->data['csrf_token'] ?? '';
 
         return [
             // Error messages.
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors)
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            'CSRF_TOKEN'     => $csrfToken
         ];
     }
 

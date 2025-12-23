@@ -31,14 +31,14 @@ class EditProfileValidator extends FormValidator
     /**
      * Required fields for profile edit form
      *
-     * @var array
+     * @var array<string>
      */
     protected $required = ['phone'];
 
     /**
      * Validate the profile edit form data.
      *
-     * @param  array $data The form data to validate.
+     * @param array<string, string|integer> $data The form data to validate.
      * @return void
      * @throws ExceptionValidationRegister If validation fails.
      */

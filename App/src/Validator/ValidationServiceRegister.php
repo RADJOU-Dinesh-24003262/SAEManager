@@ -30,7 +30,7 @@ class ValidationServiceRegister extends FormValidator
     /**
      * The list of the variables required for the registration process of a user.
      *
-     * @var array
+     * @var array<string>
      */
     protected $required = ['first_name', 'last_name', 'user_type',
     'email', 'password', 'passwordverif', 'phone', 'terms'];
@@ -38,7 +38,7 @@ class ValidationServiceRegister extends FormValidator
     /**
      * This method validates the values given in $data to make a new user with.
      *
-     * @param array $data Array, in adequation to the required value fields.
+     * @param array<string, mixed> $data Array, in adequation to the required value fields.
      *
      * @return void
      *
@@ -96,9 +96,9 @@ class ValidationServiceRegister extends FormValidator
     /**
      * This this method validated the values given in $data to make a new student user with.
      *
-     * @param array $data Array, in adequation to the required value fields.
+     * @param array<string, mixed> $data Array, in adequation to the required value fields.
      *
-     * @return array Array of errors.
+     * @return array<mixed> Array of errors.
      *
      * @throws ExceptionValidationRegisters All the errors that might have been found.
      */
@@ -160,13 +160,13 @@ class ValidationServiceRegister extends FormValidator
 
     /**
      * This this method validated the values given in $data to make a new professor user with.
-     *
-     * @param array $data Array, in adequation to the required value fields.
-     *
-     * @return array Array of errors.
-     *
-     * @throws ExceptionValidationRegisters All the errors that might have been found.
-     */
+    *
+    * @param array<string, mixed> $data Array, in adequation to the required value fields.
+    *
+    * @return array<mixed> Array of errors.
+    *
+    * @throws ExceptionValidationRegisters All the errors that might have been found.
+    */
     private function validateProfessorFields(array $data): array
     {
         $errors = [];
