@@ -42,7 +42,7 @@ class EditProfileSuccessView extends AbstractView
     /**
      * Get the template keys for data replacement.
      *
-     * @return array Associative array of template keys and their values.
+     * @return array<empty> Associative array of template keys and their values.
      */
     protected function templateKeys(): array
     {

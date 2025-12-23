@@ -81,7 +81,7 @@ abstract class User
     /**
      * Initializes a new User instance with optional data.
      *
-     * @param array $data Optional data to initialize the user with.
+     * @param array<string, mixed> $data Optional data to initialize the user with.
      */
     protected function __construct(array $data = [])
     {
@@ -99,7 +99,7 @@ abstract class User
     /**
      * Factory method to create the appropriate user type from registration data.
      *
-     * @param array $data The registration data.
+     * @param array<string, mixed> $data The registration data.
      *
      * @return User The created user instance.
      * @throws \InvalidArgumentException If user is not valid.
@@ -122,7 +122,7 @@ abstract class User
     /**
      * Factory method to create a user from login data.
      *
-     * @param array $data The login credentials.
+     * @param array<string, mixed> $data The login credentials.
      *
      * @return User The authenticated user instance.
      *
@@ -165,7 +165,7 @@ abstract class User
      */
     public function setPassword(string $password): void
     {
-        $this->hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $this->hashed_password = password_hash($password, PASSWORD_ARGON2ID);
     }
 
     /**
@@ -273,6 +273,7 @@ abstract class User
      * Checks if a user exists by email.
      *
      * @param string $email The email to check.
+     * @throws PDOException If the database query fails.
      *
      * @return boolean True if the user exists, false otherwise.
      */
@@ -281,6 +282,11 @@ abstract class User
         try {
             $db = Database::getInstance();
             $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
+
+            if (!$stmt) {
+                throw new PDOException('Impossible de récuperer vos données.');
+            }
+
             $stmt->execute(['email' => $email]);
 
             return $stmt->fetchColumn() > 0;
@@ -304,7 +310,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $hashed_password = password_hash($newPassword, PASSWORD_DEFAULT);
+            $hashed_password = password_hash($newPassword, PASSWORD_ARGON2ID);
 
             $stmt = $db->prepare(
                 'UPDATE users SET hashed_password = :password_hash WHERE email = :email'
@@ -384,7 +390,7 @@ abstract class User
      * @param PDO     $connection The database connection.
      * @param integer $userId     The user's ID.
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 

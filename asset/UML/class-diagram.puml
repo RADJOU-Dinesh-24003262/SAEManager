@@ -270,6 +270,7 @@
         +isStudent()
         +isProfessor()
         +isClient()
+        +getUserId()
       }
     }
     package ToDoList as Models.ToDoList {

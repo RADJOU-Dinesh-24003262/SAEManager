@@ -72,7 +72,7 @@ class ResetPasswordView extends AbstractView
      * This method prepares data for rendering in the template, including
      * error messages, the reset token, and the masked user email.
      *
-     * @return array An associative array containing template keys and values.
+     * @return array<string, string> An associative array containing template keys and values.
      */
     protected function templateKeys(): array
     {

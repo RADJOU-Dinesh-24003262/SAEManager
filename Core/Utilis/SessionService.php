@@ -26,12 +26,29 @@ class SessionService
 {
     /**
      * This method starts a session if none exists.
+     * It enforces strong security settings for session cookies.
      *
      * @return void
      */
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
+            // Security configuration for sessions.
+            ini_set('session.use_only_cookies', 1); // Force cookies only (no ID in URL).
+            ini_set('session.use_strict_mode', 1);  // Prevent Session Fixation.
+            ini_set('session.cookie_secure', 1);
+            ini_set('session.cookie_httponly', 1);
+
+            $cookieParams = session_get_cookie_params();
+            session_set_cookie_params([
+                'lifetime' => $cookieParams['lifetime'],
+                'path'     => $cookieParams['path'],
+                'domain'   => $cookieParams['domain'],
+                'secure'   => true, // Send only over HTTPS.
+                'httponly' => true, // Prevent JavaScript access (Anti-XSS).
+                'samesite' => 'Strict' // Prevent CSRF.
+            ]);
+
             session_start();
         }
     }
@@ -157,5 +174,34 @@ class SessionService
     {
         self::start();
         session_regenerate_id(true);
+    }
+
+    /**
+     * Generates a CSRF token and stores it in the session.
+     *
+     * @return string The generated CSRF token.
+     */
+    public static function generateCsrfToken(): string
+    {
+        self::start();
+        if (empty($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_token'];
+    }
+
+    /**
+     * Verifies the CSRF token.
+     *
+     * @param string $token The token to verify.
+     * @return boolean True if the token is valid, false otherwise.
+     */
+    public static function verifyCsrfToken(string $token): bool
+    {
+        self::start();
+        if (empty($_SESSION['csrf_token']) || empty($token)) {
+            return false;
+        }
+        return hash_equals($_SESSION['csrf_token'], $token);
     }
 }
