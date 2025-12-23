@@ -22,7 +22,7 @@ class Competence
     /**
      * Constructor
      *
-     * @param array $data Initial data
+     * @param array<string, mixed> $data Initial data
      */
     public function __construct(array $data = [])
     {
@@ -32,7 +32,7 @@ class Competence
     /**
      * Hydrates the object with data
      *
-     * @param array $data Data to hydrate with
+     * @param array<string, mixed> $data Data to hydrate with
      * @return void
      */
     private function hydrate(array $data): void
@@ -47,7 +47,7 @@ class Competence
     /**
      * Validates the competence data
      *
-     * @return array Array of validation errors (empty if valid)
+     * @return array<int, string> Array of validation errors (empty if valid)
      */
     public function validate(): array
     {
@@ -71,7 +71,7 @@ class Competence
     /**
      * Converts to array
      *
-     * @return array
+     * @return array<string, integer|string>
      */
     public function toArray(): array
     {

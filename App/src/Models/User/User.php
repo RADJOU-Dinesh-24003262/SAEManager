@@ -390,7 +390,15 @@ abstract class User
      * @param PDO     $connection The database connection.
      * @param integer $userId     The user's ID.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null
+     * }>
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 

@@ -61,6 +61,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -74,6 +75,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return array<string, string> An associative array containing template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [
@@ -124,6 +126,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Password Renew - SAE Manager';
@@ -134,6 +137,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'pwd-renew.css';
@@ -144,6 +148,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The HTML script tags for additional JavaScript resources.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="scripts/reset-password.js"></script>';

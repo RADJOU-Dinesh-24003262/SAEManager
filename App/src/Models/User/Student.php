@@ -147,7 +147,21 @@ class Student extends User
      * @param PDO     $connection The database connection.
      * @param integer $userId     The student's user ID.
      *
-     * @return array<int, array<string, mixed>> An array of SAE data (subject and group information).
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null,
+     *   sae_group_id: int,
+     *   student_id: int,
+     *   amu_id: string,
+     *   year: int,
+     *   td: string,
+     *   tp: string
+     * }> An array of SAE data (subject and group information).
      */
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
@@ -167,7 +181,12 @@ class Student extends User
      *
      * @param PDO $connection The database connection.
      *
-     * @return array<int, array<string, mixed>> An array of Todo items.
+     * @return array<int, array{
+     *   todo_id: int,
+     *   sae_group_id: int,
+     *   tododesc: string,
+     *   checked: bool
+     * }> An array of Todo items.
      */
     protected function getToDoList(PDO $connection): array
     {

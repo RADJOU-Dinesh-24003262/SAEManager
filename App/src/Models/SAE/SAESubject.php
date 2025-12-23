@@ -29,7 +29,7 @@ class SAESubject
     /**
      * Constructor
      *
-     * @param array $data Initial data
+     * @param array<string, mixed> $data Initial data
      */
     public function __construct(array $data = [])
     {
@@ -39,7 +39,7 @@ class SAESubject
     /**
      * Hydrates the object with data
      *
-     * @param array $data Data to hydrate with
+     * @param array<string, mixed> $data Data to hydrate with
      * @return void
      */
     private function hydrate(array $data): void
@@ -54,7 +54,7 @@ class SAESubject
     /**
      * Validates the SAE subject data
      *
-     * @return array Array of validation errors (empty if valid)
+     * @return array<int, string> Array of validation errors (empty if valid)
      */
     public function validate(): array
     {
@@ -125,7 +125,7 @@ class SAESubject
     /**
      * Converts to array
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function toArray(): array
     {

@@ -68,7 +68,7 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
-        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email'] ?? null);
+        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email']);
     }
 
     /**
