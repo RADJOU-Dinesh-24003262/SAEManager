@@ -2,8 +2,8 @@
 
 namespace Models\SAE;
 
+use Core\BaseModel;
 use DateTime;
-use Models\BaseModel;
 
 /**
  * Represents a SAE Subject (project) in the system.
@@ -13,19 +13,19 @@ use Models\BaseModel;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class SAESubject extends BaseModel
 {
-    private ?int $sae_subject_id = null;
-    private int $responsible_prof_id;
-    private int $client_id;
-    private string $subject_name;
-    private string $begin_date;
-    private string $end_date;
-    private ?string $file_path = null;
+    protected ?int $sae_subject_id = null;
+    protected int $responsible_prof_id;
+    protected int $client_id;
+    protected string $subject_name;
+    protected string $begin_date;
+    protected string $end_date;
+    protected ?string $file_path = null;
 
     /**
      * Constructor

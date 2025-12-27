@@ -4,13 +4,14 @@ namespace Models\User;
 
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
+use Core\includes\Database;
 
 /**
  * Represents a student user in the system.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\User
+ * @subpackage Models/User
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -59,7 +60,7 @@ class Student extends User
     /**
      * The SAE group ID of the student.
      *
-     * @var integer
+     * @var integer|null
      */
     protected ?int $sae_group_id = null;
 
@@ -68,7 +69,6 @@ class Student extends User
      *
      * @var integer
      */
-
     protected int $student_id;
 
 
@@ -176,72 +176,79 @@ class Student extends User
         return $data;
     }
 
+
     /**
-     * Retrieves the ToDo list associated with the student's SAE group.
-     *
-     * @param PDO $connection The database connection.
-     *
-     * @return array<int, array{
-     *   todo_id: int,
-     *   sae_group_id: int,
-     *   tododesc: string,
-     *   checked: bool
-     * }> An array of Todo items.
+     * A student can access an SAE if they are part of a group for that SAE.
      */
-    protected function getToDoList(PDO $connection): array
+    public function canAccessSAE(int $saeId): bool
     {
-        $stmt = $connection->prepare(
-            'SELECT * FROM sae_todolists
-                                            WHERE sae_group_id = :sae_group_id'
-        );
-        $stmt->execute(['sae_group_id' => $this->sae_group_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT COUNT(*) FROM students st
+                 JOIN sae_groups sg ON st.sae_group_id = sg.sae_group_id
+                 WHERE st.student_id = :student_id AND sg.sae_subject_id = :sae_id'
+            );
+            $stmt->execute(['student_id' => $this->user_id, 'sae_id' => $saeId]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log('Erreur canAccessSAE (Student) : ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Creates a new ToDo item for the student's SAE group.
-     *
-     * @param PDO    $connection The database connection.
-     * @param string $desc       The description of the ToDo item.
-     *
-     * @return void
+     * A student can modify a to-do if it belongs to their group.
      */
-    protected function createToDoIt(PDO $connection, string $desc): void
+    public function canModifyTodo(int $todoId): bool
     {
-        $stmt = $connection->prepare(
-            'INSERT INTO sae_todolists (sae_group_id, tododesc, checked)
-                                            VALUES (:sae_group_id, :description, false)'
-        );
-        $stmt->execute(
-            [
-                'sae_group_id' => $this->sae_group_id, 'description' => $desc
-            ]
-        );
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT COUNT(*) FROM sae_todolists todo
+                 JOIN students st ON todo.sae_group_id = st.sae_group_id
+                 WHERE todo.todoid = :todo_id AND st.student_id = :student_id'
+            );
+            $stmt->execute(['todo_id' => $todoId, 'student_id' => $this->user_id]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log('Erreur canModifyTodo (Student) : ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Updates the status (checked/unchecked) of a specific ToDo item.
-     *
-     * @param PDO     $connection The database connection.
-     * @param integer $todoId     The ID of the ToDo item to update.
-     * @param boolean $checked    The new checked status (true for checked, false for unchecked).
-     *
-     * @return void
+     * A student can only see the members of THEIR own group.
      */
-    protected function checkToDoIt(PDO $connection, int $todoId, bool $checked): void
+    public function getAccessibleGroupMembers(int $saeId): array
     {
-        $stmt = $connection->prepare(
-            'UPDATE sae_todolists
-                                            SET checked = :checked
-                                            WHERE todo_id = :todo_id AND sae_group_id = :sae_group_id'
-        );
-        $stmt->execute(
-            [
-                'checked' => $checked,
-                'todo_id' => $todoId,
-                'sae_group_id' => $this->sae_group_id
-            ]
-        );
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT u.user_id, u.first_name, u.last_name, u.email, u.phone,
+                        st.sae_group_id, st.td, st.tp
+                 FROM students st_self
+                 JOIN students st ON st.sae_group_id = st_self.sae_group_id
+                 JOIN users u ON st.student_id = u.user_id
+                 JOIN sae_groups sg ON st.sae_group_id = sg.sae_group_id
+                 WHERE st_self.student_id = :user_id AND sg.sae_subject_id = :sae_id
+                 ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['user_id' => $this->user_id, 'sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('Erreur getAccessibleGroupMembers (Student) : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * @param integer|null $saeId
+     * @return boolean
+     */
+    public function canManageSAE(?int $saeId = null): bool
+    {
+        return false;
     }
 
     // -----------------
@@ -296,5 +303,14 @@ class Student extends User
     public function getTp(): string
     {
         return $this->tp;
+    }
+
+    /**
+     * Get the student id in the database of the student
+     * @return integer
+     */
+    public function getStudentId(): int
+    {
+        return $this->student_id;
     }
 }

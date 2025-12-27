@@ -14,7 +14,7 @@ use Core\Utilis\SessionService;
 
  * @package Src
 
- * @subpackage Controllers\User
+ * @subpackage Controllers/User
 
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>

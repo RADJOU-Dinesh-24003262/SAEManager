@@ -9,9 +9,7 @@ use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\User\User;
-use PhpParser\Node\Expr\Print_;
 use Views\PageSAE\PageSaeView;
-use App\Models\Utilis\AccessControlService;
 use Models\SAE\SAE;
 
 /**
@@ -21,7 +19,7 @@ use Models\SAE\SAE;
 
  * @package Src
 
- * @subpackage Controllers\PageSae
+ * @subpackage Controllers/PageSae
 
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -44,9 +42,10 @@ class PageSaeController implements ControllerInterface
      */
     public function control(): void
     {
-        // Redirect to dashboard if already logged in.
+        // Redirect to dashboard if not logged in.
         if (!SessionService::has('user_id')) {
-            header('Location: /');
+            SessionService::setFlash('errors', ['Authentification requise.']);
+            header('Location: /login');
             exit();
         }
 
@@ -62,6 +61,12 @@ class PageSaeController implements ControllerInterface
 
             $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
+            if (!$user->canAccessSAE($sae_id)) {
+                SessionService::setFlash('errors', ['Accès refusé à cette SAE.']);
+                header('Location: /dashboard');
+                exit();
+            }
+
             $sae = SAE::getInstance();
             $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
             if ($data['sae'] === null) {
@@ -76,7 +81,7 @@ class PageSaeController implements ControllerInterface
             SessionService::setFlash('errors', "Erreur SAE : " . $e->getMessage());
             header('Location: /dashboard');
             exit();
-        } catch (Exception | ExceptionDashboard $e) {
+        } catch (ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();

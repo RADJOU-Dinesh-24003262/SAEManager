@@ -57,8 +57,8 @@ class PageSaeView extends AbstractView
     protected function templateKeys(): array
     {
         return [
-            'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']->getSubjectName(),
+            'SAE_NUM' => $this->data['sae']['subject']->getSaeSubjectId(),
+            'SAE_NAME' => $this->data['sae']['subject']->getSubjectName(),
             'SAE_CONTENT' => $this->getDescriptionSae()
         ];
     }
@@ -93,7 +93,7 @@ class PageSaeView extends AbstractView
         $content .= '<p> Votre professeur associé à la ressource est ' . $profLastName . ' ' . $profFirstName . '.</p>';
         $content .= '<p> Votre client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
-        $filePath = $this->data['sae']->getFilePath();
+        $filePath = $this->data['sae']['subject']->getFilePath();
         if (file_exists($filePath)) {
             $content .= file_get_contents($filePath);
         }
@@ -108,7 +108,7 @@ class PageSaeView extends AbstractView
      */
     protected function getPageTitle(): string
     {
-        return 'SAE ' . $this->data['sae']->getSubjectName() . ' - SAE Manager';
+        return 'SAE ' . $this->data['sae']['subject']->getSubjectName() . ' - SAE Manager';
     }
 
     /**

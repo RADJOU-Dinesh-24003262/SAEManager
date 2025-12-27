@@ -9,7 +9,7 @@ namespace Core\includes\exception\ExceptionToken;
  *
  * @category   Exception
  * @package    Core
- * @subpackage Includes\Exception\ExceptionToken
+ * @subpackage Includes/Exception/ExceptionToken
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>

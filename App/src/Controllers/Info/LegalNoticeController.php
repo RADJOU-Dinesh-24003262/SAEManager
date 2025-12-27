@@ -10,7 +10,7 @@ use Views\Info\LegalNoticeView;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers\Info
+ * @subpackage Controllers/Info
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>

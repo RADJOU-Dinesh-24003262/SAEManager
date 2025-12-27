@@ -2,7 +2,7 @@
 
 namespace Models\SAE;
 
-use Models\BaseModel;
+use Core\BaseModel;
 
 /**
  * Represents the association between a Professor and a SAE.
@@ -11,14 +11,14 @@ use Models\BaseModel;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class SAEProfessorGroup extends BaseModel
 {
-    private int $sae_subject_id;
-    private int $professor_id;
+    protected int $sae_subject_id;
+    protected int $professor_id;
 
     /**
      * Constructor

@@ -11,14 +11,14 @@ use PDOException;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class SAEProfessorGroupRepository
 {
-    private PDO $connection;
-    private static ?SAEProfessorGroupRepository $instance = null;
+    protected PDO $connection;
+    protected static ?SAEProfessorGroupRepository $instance = null;
 
     private function __construct()
     {

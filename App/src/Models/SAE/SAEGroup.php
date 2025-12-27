@@ -2,7 +2,7 @@
 
 namespace Models\SAE;
 
-use Models\BaseModel;
+use Core\BaseModel;
 
 /**
  * Represents a SAE Group in the system.
@@ -11,14 +11,14 @@ use Models\BaseModel;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class SAEGroup extends BaseModel
 {
-    private ?int $sae_group_id = null;
-    private int $sae_subject_id;
+    protected ?int $sae_group_id = null;
+    protected int $sae_subject_id;
 
     /**
      * Constructor

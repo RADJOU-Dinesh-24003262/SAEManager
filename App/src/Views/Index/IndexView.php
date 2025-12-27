@@ -18,7 +18,7 @@ use Controllers\Index\IndexControllerPost;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Index
+ * @subpackage Views/Index
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>

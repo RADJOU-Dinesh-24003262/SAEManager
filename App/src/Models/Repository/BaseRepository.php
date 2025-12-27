@@ -14,7 +14,7 @@ use PDOException;
  *
  * @package Src
  *
- * @subpackage Models\Repository
+ * @subpackage Models/Repository
  *
  * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
@@ -33,9 +33,9 @@ abstract class BaseRepository implements RepositoryInterface
      */
     protected PDO $connection;
 
-    /** 
+    /**
      * The table name associated with the repository
-     * @var string 
+     * @var string
      */
     protected string $table;
 

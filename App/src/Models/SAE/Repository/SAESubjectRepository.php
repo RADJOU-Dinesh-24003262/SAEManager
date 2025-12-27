@@ -2,12 +2,12 @@
 
 namespace Models\SAE\Repository;
 
-use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
 use Models\Repository\BaseRepository;
+use PDepend\Util\Log;
 
 /**
  * Repository for SAESubject operations.
@@ -17,15 +17,15 @@ use Models\Repository\BaseRepository;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
- * @author     SAE Manager Team
+ * @subpackage Models/SAE
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  *
  * @extends BaseRepository<SAESubject>
  */
 class SAESubjectRepository extends BaseRepository
 {
-    private static ?SAESubjectRepository $instance = null;
+    protected static ?SAESubjectRepository $instance = null;
 
     protected string $table = 'sae_subjects';
     protected string $entityClass = SAESubject::class;
@@ -96,7 +96,6 @@ class SAESubjectRepository extends BaseRepository
             );
             $stmt->execute(['prof_id' => $professorId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
             return array_map(fn($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs du professeur : ' . $e->getMessage());

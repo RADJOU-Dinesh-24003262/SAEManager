@@ -14,7 +14,7 @@ use PDOException;
  *
  * @category    Models
  * @package     Src
- * @subpackages Models\ToDoList
+ * @subpackages Models/ToDoList
  * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author      François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author      William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -30,7 +30,7 @@ class ToDoList
      *
      * @var integer $groupId
      */
-    private int $groupId;
+    protected int $groupId;
 
     /**
      * This is the id of the subject of sae
@@ -38,7 +38,7 @@ class ToDoList
      *
      * @var ?integer $sae_subject_id
      */
-    private ?int $sae_subject_id;
+    protected ?int $sae_subject_id;
 
     /**
      * This is the id of the to-do-list
@@ -46,14 +46,14 @@ class ToDoList
      *
      * @var integer $todo_id
      */
-    private int $todo_id;
+    protected int $todo_id;
 
     /**
      * This is the content of the to-do-list.
      *
      * @var string $tododesc
      */
-    private string $tododesc;
+    protected string $tododesc;
 
     /**
      * Creates an instance of the class

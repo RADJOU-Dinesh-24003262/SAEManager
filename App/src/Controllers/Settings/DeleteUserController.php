@@ -16,7 +16,7 @@ use Views\Settings\DeleteUserView;
  *
  * @package Src
  *
- * @subpackage Controllers\Settings
+ * @subpackage Controllers/Settings
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>

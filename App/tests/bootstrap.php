@@ -7,6 +7,8 @@
  * PHPUnit Bootstrap File
  */
 
+use Core\Utilis\SessionService;
+
 // Set error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
@@ -35,7 +37,7 @@ spl_autoload_register(function ($class) {
 
 // Start session for tests
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    SessionService::start();
 }
 
 // Database configuration for tests (you can use SQLite for faster tests)
