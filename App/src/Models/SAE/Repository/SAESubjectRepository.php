@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
+use Models\Repository\BaseRepository;
 
 /**
  * Repository for SAESubject operations.
@@ -19,15 +20,19 @@ use Models\SAE\SAESubject;
  * @subpackage Models\SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
+ *
+ * @extends BaseRepository<SAESubject>
  */
-class SAESubjectRepository
+class SAESubjectRepository extends BaseRepository
 {
-    private PDO $connection;
     private static ?SAESubjectRepository $instance = null;
+
+    protected string $table = 'sae_subjects';
+    protected string $entityClass = SAESubject::class;
 
     private function __construct()
     {
-        $this->connection = Database::getInstance();
+        parent::__construct();
     }
 
     public static function getInstance(): SAESubjectRepository
@@ -38,33 +43,15 @@ class SAESubjectRepository
         return self::$instance;
     }
 
-    /**
-     * Finds a SAE subject by ID
-     *
-     * @param integer $id The SAE subject ID
-     * @return SAESubject|null
-     * @throws ExceptionFetchDataBD
-     */
-    public function findById(int $id): ?SAESubject
+    protected function getPrimaryKey(): string
     {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_subjects WHERE sae_subject_id = :id'
-            );
-            $stmt->execute(['id' => $id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $data ? new SAESubject($data) : null;
-        } catch (PDOException $e) {
-            error_log('Erreur récupération SAE : ' . $e->getMessage());
-            throw new ExceptionFetchDataBD();
-        }
+        return 'sae_subject_id';
     }
 
     /**
      * Finds all SAE subjects
      *
-     * @return array<SAESubject>
+     * @return array<SAESubject> The list of all SAE subjects in the database
      * @throws ExceptionFetchDataBD
      */
     public function findAll(): array
@@ -90,7 +77,7 @@ class SAESubjectRepository
      * Finds SAE subjects by professor ID
      *
      * @param integer $professorId The professor's user ID
-     * @return array<SAESubject>
+     * @return array<SAESubject> The list of SAE subjects associated with the professor
      * @throws ExceptionFetchDataBD
      */
     public function findByProfessorId(int $professorId): array
@@ -121,7 +108,7 @@ class SAESubjectRepository
      * Finds SAE subjects by student ID
      *
      * @param integer $studentId The student's user ID
-     * @return array<SAESubject>
+     * @return array<SAESubject> The list of SAE subjects associated with the student
      * @throws ExceptionFetchDataBD
      */
     public function findByStudentId(int $studentId): array
@@ -149,7 +136,7 @@ class SAESubjectRepository
      * Finds SAE subjects by client ID
      *
      * @param integer $clientId The client's user ID
-     * @return array<SAESubject>
+     * @return array<SAESubject> The list of SAE subjects associated with the client
      * @throws ExceptionFetchDataBD
      */
     public function findByClientId(int $clientId): array
@@ -177,7 +164,7 @@ class SAESubjectRepository
      * @return SAESubject The created SAE with ID
      * @throws PDOException
      */
-    public function create(SAESubject $subject): SAESubject
+    public function create($subject)
     {
         try {
             $this->connection->beginTransaction();
@@ -217,7 +204,7 @@ class SAESubjectRepository
      * @return boolean
      * @throws PDOException
      */
-    public function update(SAESubject $subject): bool
+    public function update($subject): bool
     {
         try {
             $stmt = $this->connection->prepare(
@@ -242,26 +229,6 @@ class SAESubjectRepository
             ]);
         } catch (PDOException $e) {
             error_log('Erreur mise à jour SAE : ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    /**
-     * Deletes a SAE subject
-     *
-     * @param integer $id The SAE subject ID
-     * @return boolean
-     * @throws PDOException
-     */
-    public function delete(int $id): bool
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'DELETE FROM sae_subjects WHERE sae_subject_id = :id'
-            );
-            return $stmt->execute(['id' => $id]);
-        } catch (PDOException $e) {
-            error_log('Erreur suppression SAE : ' . $e->getMessage());
             throw $e;
         }
     }

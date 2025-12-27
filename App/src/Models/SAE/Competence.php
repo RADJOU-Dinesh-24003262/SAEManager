@@ -2,6 +2,8 @@
 
 namespace Models\SAE;
 
+use Models\BaseModel;
+
 /**
  * Represents a Competence associated with a SAE.
  *
@@ -14,7 +16,7 @@ namespace Models\SAE;
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
-class Competence
+class Competence extends BaseModel
 {
     private string $competence_name;
     private int $sae_subject_id;
@@ -27,21 +29,6 @@ class Competence
     public function __construct(array $data = [])
     {
         $this->hydrate($data);
-    }
-
-    /**
-     * Hydrates the object with data
-     *
-     * @param array<string, mixed> $data Data to hydrate with
-     * @return void
-     */
-    private function hydrate(array $data): void
-    {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
     }
 
     /**

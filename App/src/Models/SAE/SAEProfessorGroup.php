@@ -2,6 +2,8 @@
 
 namespace Models\SAE;
 
+use Models\BaseModel;
+
 /**
  * Represents the association between a Professor and a SAE.
  *
@@ -13,7 +15,7 @@ namespace Models\SAE;
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
-class SAEProfessorGroup
+class SAEProfessorGroup extends BaseModel
 {
     private int $sae_subject_id;
     private int $professor_id;
@@ -26,21 +28,6 @@ class SAEProfessorGroup
     public function __construct(array $data = [])
     {
         $this->hydrate($data);
-    }
-
-    /**
-     * Hydrates the object with data
-     *
-     * @param array<string, mixed> $data Data to hydrate with
-     * @return void
-     */
-    private function hydrate(array $data): void
-    {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
     }
 
     /**

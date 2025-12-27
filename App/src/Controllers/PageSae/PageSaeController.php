@@ -40,7 +40,7 @@ class PageSaeController implements ControllerInterface
      *
      * @return void
      * @throws Exception If the user variable is not as expected.
-     * @throws ExceptionDashboard If the user does not have access to the requested SAE.
+     * @throws ExceptionSAE If there is an error related to SAE operations.
      */
     public function control(): void
     {
