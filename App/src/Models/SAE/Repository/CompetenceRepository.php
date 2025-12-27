@@ -14,14 +14,14 @@ use PDOException;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class CompetenceRepository
 {
-    private PDO $connection;
-    private static ?CompetenceRepository $instance = null;
+    protected PDO $connection;
+    protected static ?CompetenceRepository $instance = null;
 
     private function __construct()
     {

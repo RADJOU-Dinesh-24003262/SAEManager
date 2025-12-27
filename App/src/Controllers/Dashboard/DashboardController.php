@@ -5,6 +5,7 @@ namespace Controllers\Dashboard;
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
 use Core\includes\exception\SAE\ExceptionSAE;
+use Core\Utilis\Logger;
 use Views\Dashboard\DashboardView;
 use Models\User\User;
 use Core\Utilis\SessionService;
@@ -21,7 +22,7 @@ use Models\SAE\SAE;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers\Dashboard
+ * @subpackage Controllers/Dashboard
  *
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>

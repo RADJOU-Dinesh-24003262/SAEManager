@@ -3,7 +3,6 @@
 namespace Models\SAE;
 
 use Models\User\User;
-use Models\Utilis\AccessControlService;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\includes\exception\SAE\ExceptionResourceNotFound;
@@ -12,6 +11,7 @@ use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
 use Models\SAE\Repository\CompetenceRepository;
 use Models\SAE\Repository\SAEProfessorGroupRepository;
+use Models\User\Professor;
 
 /**
  * Facade for SAE operations.
@@ -29,7 +29,7 @@ use Models\SAE\Repository\SAEProfessorGroupRepository;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -39,18 +39,17 @@ use Models\SAE\Repository\SAEProfessorGroupRepository;
  */
 class SAE
 {
-    private SAESubjectRepository $subjectRepo;
-    private SAEGroupRepository $groupRepo;
-    private CompetenceRepository $competenceRepo;
-    private SAEProfessorGroupRepository $professorGroupRepo;
-    private AccessControlService $accessControl;
+    protected SAESubjectRepository $subjectRepo;
+    protected SAEGroupRepository $groupRepo;
+    protected CompetenceRepository $competenceRepo;
+    protected SAEProfessorGroupRepository $professorGroupRepo;
 
     /**
      * Singleton instance
      *
      * @var SAE|null
      */
-    private static ?SAE $instance = null;
+    protected static ?SAE $instance = null;
 
     /**
      * Constructor
@@ -61,7 +60,6 @@ class SAE
         $this->groupRepo = SAEGroupRepository::getInstance();
         $this->competenceRepo = CompetenceRepository::getInstance();
         $this->professorGroupRepo = SAEProfessorGroupRepository::getInstance();
-        $this->accessControl = new AccessControlService();
     }
 
     /**
@@ -156,10 +154,6 @@ class SAE
      */
     public function getCompleteSAEData(int $saeId, User $user): ?array
     {
-        // Check access
-        if (!$this->accessControl->canAccessSAE($user, $saeId)) {
-            return null;
-        }
 
         $subject = $this->subjectRepo->findById($saeId);
         if (!$subject) {
@@ -185,9 +179,7 @@ class SAE
             'competences' => $competences,
             'responsible_professor' => $responsibleProf,
             'all_professors' => $allProfs,
-            'client' => $client,
-            'can_modify' => $this->accessControl->canManageSAE($user, $saeId),
-            'is_responsible' => $this->accessControl->isResponsibleProfessor($user, $saeId),
+            'client' => $client
         ];
     }
 
@@ -217,7 +209,7 @@ class SAE
         $allGroups = $this->groupRepo->findBySaeId($saeId);
 
         // If responsible professor, return all groups
-        if ($this->accessControl->isResponsibleProfessor($user, $saeId)) {
+        if ($user instanceof Professor && $user->isResponsibleProfessor($saeId)) {
             return array_map(function ($group) {
                 return [
                     'group' => $group,
@@ -281,7 +273,7 @@ class SAE
     public function createSAE(User $creator, array $data): SAESubject
     {
         // Check permission
-        if (!$this->accessControl->canManageSAE($creator)) {
+        if (!$creator->canManageSAE()) {
             throw new \Exception("Vous n'avez pas la permission de créer une SAE");
         }
 
@@ -315,7 +307,7 @@ class SAE
      */
     public function updateSAE(User $user, int $saeId, array $data): bool
     {
-        if (!$this->accessControl->canManageSAE($user, $saeId)) {
+        if (!$user->canManageSAE($saeId)) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de modifier cette SAE");
         }
 
@@ -357,7 +349,7 @@ class SAE
      */
     public function createGroup(User $user, int $saeId): SAEGroup
     {
-        if (!$this->accessControl->canManageSAE($user, $saeId)) {
+        if (!$user->canManageSAE($saeId)) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
         }
 
@@ -380,7 +372,7 @@ class SAE
             throw new ExceptionResourceNotFound("Groupe non trouvé");
         }
 
-        if (!$this->accessControl->canManageSAE($professor, $group->getSaeSubjectId())) {
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission d'assigner des étudiants");
         }
 
@@ -398,11 +390,11 @@ class SAE
      */
     public function assignProfessorToSAE(User $responsibleProf, int $saeId, int $professorId): bool
     {
-        if (!$this->accessControl->isResponsibleProfessor($responsibleProf, $saeId)) {
+        if ($responsibleProf instanceof Professor && $responsibleProf->isResponsibleProfessor($saeId)) {
+            return $this->professorGroupRepo->assignProfessor($saeId, $professorId);
+        } else {
             throw new ExceptionAccessDenied("Seul le responsable peut assigner des professeurs");
         }
-
-        return $this->professorGroupRepo->assignProfessor($saeId, $professorId);
     }
 
     /**
@@ -426,7 +418,7 @@ class SAE
      */
     public function getGroupContacts(User $user, int $saeId): array
     {
-        $members = $this->accessControl->getAccessibleGroupMembers($user, $saeId);
+        $members = $user->getAccessibleGroupMembers($saeId);
 
         $grouped = [];
 
@@ -448,10 +440,9 @@ class SAE
      */
     public function deleteSAE(User $user, int $saeId): bool
     {
-        if (!$this->accessControl->isResponsibleProfessor($user, $saeId)) {
-            throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
+        if ($user instanceof Professor && $user->isResponsibleProfessor($saeId)) {
+            return $this->subjectRepo->delete($saeId);
         }
-
-        return $this->subjectRepo->delete($saeId);
+        throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
     }
 }

@@ -12,7 +12,7 @@ namespace Core\includes\exception;
  *
  * @category   Exception
  * @package    Core
- * @subpackage Includes\Exception
+ * @subpackage Includes/Exception
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>

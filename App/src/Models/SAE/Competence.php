@@ -2,7 +2,7 @@
 
 namespace Models\SAE;
 
-use Models\BaseModel;
+use Core\BaseModel;
 
 /**
  * Represents a Competence associated with a SAE.
@@ -12,14 +12,14 @@ use Models\BaseModel;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class Competence extends BaseModel
 {
-    private string $competence_name;
-    private int $sae_subject_id;
+    protected string $competence_name;
+    protected int $sae_subject_id;
 
     /**
      * Constructor

@@ -18,7 +18,7 @@ use Models\SAE\SAESubject;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\User
+ * @subpackage Models/User
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -402,10 +402,11 @@ abstract class User
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
-    /**
+     /**
      * Gets the SAE infos proposed/enrolled by the user.
      *
      * @return array<SAESubject> An array of @see SAESubject data.
+     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase
      */
     public function getSaes(): array
     {
@@ -413,37 +414,51 @@ abstract class User
         return $sae->getUserSAEs($this);
     }
 
-    /**
-     * Checks if the user has access to a specific SAE.
-     *
-     * @param integer $sae_subject_id The SAE subject ID.
-     *
-     * @return boolean True if the user has access, false otherwise.
-     */
-    public function hasAcessToSae(int $sae_subject_id): bool
-    {
-        $db = Database::getInstance();
-        $stmt = $db->prepare(
-            'SELECT * FROM users 
-                                JOIN professor_groups ON professor_groups.professor_id = users.user_id
-                                JOIN students on students.student_id = users.user_id
-                                JOIN SAE_groups on SAE_groups.sae_group_id = students.sae_group_id
-                                JOIN SAE_subjects ON SAE_subjects.client_id = user.user_id
-                                JOIN SAE_subjects ON SAE_subjecte.responsible_prof_id = users.user_id
-                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
-                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = professor_groups.sae_subject_id
-                                WHERE users.user_id = :user_id
-                                AND sae_subjects.sae_subject_id = :sae_subject_id;'
-        );
-        $stmt->execute(
-            [
-                'user_id' => $this->user_id,
-                'sae_subject_id' => $sae_subject_id
-            ]
-        );
 
-        return $stmt->rowCount() > 1 ;
+    /**
+     * Can this user access a specific SAE?
+     *
+     * @param integer $saeId SAE ID
+     * @return boolean
+     */
+    abstract public function canAccessSAE(int $saeId): bool;
+
+    /**
+     * Can this user MANAGE (edit/create) an SAE?
+     *
+     * @param integer|null $saeId SAE ID (null = creation)
+     * @return boolean
+     */
+    abstract public function canManageSAE(?int $saeId = null): bool;
+
+    /**
+     * Can this user view a group's to-do list?
+     *
+     * @param integer $groupId Group ID
+     * @return boolean
+     */
+    public function canViewTodoList(int $groupId): bool
+    {
+        // If the user can access the group's SAE, they can view its to-do list
+        $saeId = $this->getSaeIdFromGroup($groupId);
+        return $saeId ? $this->canAccessSAE($saeId) : false;
     }
+
+    /**
+     * Can this user MODIFY a to-do list item?
+     *
+     * @param integer $todoId To-do item ID
+     * @return boolean
+     */
+    abstract public function canModifyTodo(int $todoId): bool;
+
+    /**
+     * Retrieves the group members accessible by this user.
+     *
+     * @param integer $saeId SAE ID
+     * @return array List of members with their information
+     */
+    abstract public function getAccessibleGroupMembers(int $saeId): array;
 
     // -----------------
     // Getters

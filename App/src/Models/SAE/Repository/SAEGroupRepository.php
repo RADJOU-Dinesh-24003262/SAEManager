@@ -12,14 +12,14 @@ use Models\SAE\SAEGroup;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
 class SAEGroupRepository
 {
-    private PDO $connection;
-    private static ?SAEGroupRepository $instance = null;
+    protected PDO $connection;
+    protected static ?SAEGroupRepository $instance = null;
 
     private function __construct()
     {
