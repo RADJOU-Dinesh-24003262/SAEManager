@@ -177,33 +177,41 @@ abstract class User
     public function save(): void
     {
         $connection = Database::getInstance();
+        $connection->beginTransaction();
 
-        $stmt = $connection->prepare(
-            'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
-             VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
-        );
+        try {
+            $stmt = $connection->prepare(
+                'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
+                 VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
+            );
 
-        $stmt->execute(
-            [
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'hashed_password' => $this->hashed_password,
-                'user_type' => match ($this->user_type) {
-                    'student'   => '0',
-                    'professor' => '1',
-                    'client'    => '2',
-                    default     => null, // If there something that is unusual.
-                },
-            ]
-        );
+            $stmt->execute(
+                [
+                    'first_name' => $this->first_name,
+                    'last_name' => $this->last_name,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'hashed_password' => $this->hashed_password,
+                    'user_type' => match ($this->user_type) {
+                        'student'   => '0',
+                        'professor' => '1',
+                        'client'    => '2',
+                        default     => null, // If there something that is unusual.
+                    },
+                ]
+            );
 
-        $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
-        $stmt->execute(['email' => $this->email]);
-        $userId = (int) $stmt->fetchColumn(0);
+            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
+            $stmt->execute(['email' => $this->email]);
+            $userId = (int) $stmt->fetchColumn(0);
 
-        $this->saveSpecificData($connection, $userId);
+            $this->saveSpecificData($connection, $userId);
+            $connection->commit();
+        } catch (PDOException $e) {
+            $connection->rollBack();
+            error_log('Erreur lors de la sauvegarde de l\'utilisateur : ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**
