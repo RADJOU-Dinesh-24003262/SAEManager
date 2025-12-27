@@ -3,6 +3,7 @@
 namespace Models\SAE;
 
 use DateTime;
+use Models\BaseModel;
 
 /**
  * Represents a SAE Subject (project) in the system.
@@ -16,7 +17,7 @@ use DateTime;
  * @author     SAE Manager Team
  * @license    MIT License https://opensource.org/licenses/MIT
  */
-class SAESubject
+class SAESubject extends BaseModel
 {
     private ?int $sae_subject_id = null;
     private int $responsible_prof_id;
@@ -34,21 +35,6 @@ class SAESubject
     public function __construct(array $data = [])
     {
         $this->hydrate($data);
-    }
-
-    /**
-     * Hydrates the object with data
-     *
-     * @param array<string, mixed> $data Data to hydrate with
-     * @return void
-     */
-    private function hydrate(array $data): void
-    {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
     }
 
     /**
