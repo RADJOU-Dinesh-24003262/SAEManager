@@ -33,6 +33,7 @@ class Login implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         // Redirect to dashboard if already logged in.
@@ -53,6 +54,7 @@ class Login implements ControllerInterface
      *
      * @return boolean True if the request is a GET to "/login", false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "GET";

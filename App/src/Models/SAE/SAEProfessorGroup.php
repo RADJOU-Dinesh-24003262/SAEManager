@@ -45,6 +45,7 @@ class SAEProfessorGroup extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
+    #[\Override]
     public function validate(): array
     {
         $errors = [];
@@ -65,6 +66,7 @@ class SAEProfessorGroup extends BaseModel
      *
      * @return array<string, int>
      */
+    #[\Override]
     public function toArray(): array
     {
         return [

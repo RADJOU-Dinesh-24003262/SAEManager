@@ -26,6 +26,7 @@ class SiteMapController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $view = new SiteMapView();
@@ -39,6 +40,7 @@ class SiteMapController implements ControllerInterface
      * @param  string $method The HTTP method used in the request.
      * @return boolean True if the path is "/site-map" and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/site-map" && $method === "GET";

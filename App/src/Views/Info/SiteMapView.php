@@ -36,6 +36,7 @@ class SiteMapView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -46,8 +47,9 @@ class SiteMapView extends AbstractView
      *
      * This method returns an empty array.
      *
-     * @return array<empty> An empty array
+     * @return array<string, mixed> An empty array
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [];
@@ -59,6 +61,7 @@ class SiteMapView extends AbstractView
 
      * @return string the name of the project 'Plan du Site - SAE Manager'.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Plan du Site - SAE Manager';
@@ -72,6 +75,7 @@ class SiteMapView extends AbstractView
      *
      * @return string The name of the CSS file.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'plan-site.css';
@@ -81,6 +85,7 @@ class SiteMapView extends AbstractView
      *
      * @return string The additional HTML headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Plan du Site de SAE Manager">

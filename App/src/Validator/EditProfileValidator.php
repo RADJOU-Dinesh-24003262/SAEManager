@@ -38,10 +38,11 @@ class EditProfileValidator extends FormValidator
     /**
      * Validate the profile edit form data.
      *
-     * @param array<string, string> $data The form data to validate.
+     * @param array<string, mixed> $data The form data to validate.
      * @return void
      * @throws ExceptionValidationRegister If validation fails.
      */
+    #[\Override]
     public function validate(array $data): void
     {
         if (!isset($data['phone'])) {

@@ -34,6 +34,7 @@ class EditProfileController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         if (!(SessionService::has('user_id'))) {
@@ -54,6 +55,7 @@ class EditProfileController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /edit-profile and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/edit-profile' && $method === 'GET';

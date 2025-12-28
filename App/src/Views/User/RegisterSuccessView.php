@@ -64,6 +64,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -74,6 +75,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return array<string, string>
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [
@@ -145,6 +147,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Inscription réussie - SAE Manager';
@@ -155,6 +158,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return self::CSS_REGISTER_SUCCESS;
@@ -165,6 +169,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de succès d\'inscription de SAE Manager">

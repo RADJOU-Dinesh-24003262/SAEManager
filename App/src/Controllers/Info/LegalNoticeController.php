@@ -26,6 +26,7 @@ class LegalNoticeController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $view = new LegalNoticeView();
@@ -41,6 +42,7 @@ class LegalNoticeController implements ControllerInterface
      *
      * @return boolean True if the path is "/index" or "/" and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/legal-notice" && $method === "GET";

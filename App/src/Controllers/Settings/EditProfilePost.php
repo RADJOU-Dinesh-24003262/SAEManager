@@ -37,6 +37,7 @@ class EditProfilePost implements ControllerInterface
      * @return void
      * @throws \PDOException Trigger PDOException when BD is not accessible.
      */
+    #[\Override]
     public function control(): void
     {
         if (!SessionService::get('USER')) {
@@ -66,6 +67,7 @@ class EditProfilePost implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /edit-profile and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/edit-profile' && $method === 'POST';

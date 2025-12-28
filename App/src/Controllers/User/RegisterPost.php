@@ -40,6 +40,7 @@ class RegisterPost implements ControllerInterface
      *
      * @throws \Exception For any other unexpected errors during the registration process.
      */
+    #[\Override]
     public function control(): void
     {
         // CSRF Check.
@@ -92,6 +93,7 @@ class RegisterPost implements ControllerInterface
      *
      * @return boolean True if the path is "/register" and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/register" && $method === "POST";

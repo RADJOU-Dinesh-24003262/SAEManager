@@ -28,6 +28,7 @@ class ForgotPasswordController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $view = new ForgotPasswordView();
@@ -41,6 +42,7 @@ class ForgotPasswordController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean Is the method get?
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/forgot-password" && $method === "GET";

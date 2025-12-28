@@ -46,6 +46,7 @@ class Competence extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
+    #[\Override]
     public function validate(): array
     {
         $errors = [];
@@ -70,6 +71,7 @@ class Competence extends BaseModel
      *
      * @return array<string, integer|string>
      */
+    #[\Override]
     public function toArray(): array
     {
         return [

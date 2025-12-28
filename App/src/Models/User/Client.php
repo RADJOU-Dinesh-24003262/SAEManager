@@ -47,6 +47,7 @@ class Client extends User
      *
      * @return void
      */
+    #[\Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -70,6 +71,7 @@ class Client extends User
      *
      * @return void
      */
+    #[\Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -107,6 +109,7 @@ class Client extends User
      *   file_path: string|null
      * }> An array of SAE subjects data.
      */
+    #[\Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -124,6 +127,7 @@ class Client extends User
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
+    #[\Override]
     public function canAccessSAE(int $saeId): bool
     {
         try {
@@ -155,6 +159,7 @@ class Client extends User
      *   tp: int
      * }> The list of accessible group members.
      */
+    #[\Override]
     public function getAccessibleGroupMembers(int $saeId): array
     {
         try {
@@ -183,6 +188,7 @@ class Client extends User
      * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
      * @return boolean Always false for client.
      */
+    #[\Override]
     public function canManageSAE(?int $saeId = null): bool
     {
         return false;
@@ -194,6 +200,7 @@ class Client extends User
      * @param integer $todoId The to-do item ID.
      * @return boolean Always false for client.
      */
+    #[\Override]
     public function canModifyTodo(int $todoId): bool
     {
         return false;

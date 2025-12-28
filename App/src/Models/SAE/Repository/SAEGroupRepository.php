@@ -68,6 +68,7 @@ class SAEGroupRepository extends BaseRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getPrimaryKey(): string
     {
         return 'sae_group_id';
@@ -103,6 +104,7 @@ class SAEGroupRepository extends BaseRepository
      * @return SAEGroup The created group.
      * @throws PDOException If creation fails.
      */
+    #[\Override]
     public function create($entity)
     {
         try {
@@ -128,6 +130,7 @@ class SAEGroupRepository extends BaseRepository
      * @param SAEGroup $entity The group to update.
      * @return boolean True on success.
      */
+    #[\Override]
     public function update($entity): bool
     {
         try {
