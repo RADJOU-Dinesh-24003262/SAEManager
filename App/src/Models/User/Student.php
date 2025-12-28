@@ -179,6 +179,9 @@ class Student extends User
 
     /**
      * A student can access an SAE if they are part of a group for that SAE.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return boolean True if accessible, false otherwise.
      */
     public function canAccessSAE(int $saeId): bool
     {
@@ -199,6 +202,9 @@ class Student extends User
 
     /**
      * A student can modify a to-do if it belongs to their group.
+     *
+     * @param integer $todoId The to-do ID.
+     * @return boolean True if modifiable, false otherwise.
      */
     public function canModifyTodo(int $todoId): bool
     {
@@ -219,6 +225,18 @@ class Student extends User
 
     /**
      * A student can only see the members of THEIR own group.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
     public function getAccessibleGroupMembers(int $saeId): array
     {
@@ -243,8 +261,10 @@ class Student extends User
     }
 
     /**
-     * @param integer|null $saeId
-     * @return boolean
+     * Checks if the student can manage the SAE.
+     *
+     * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
+     * @return boolean Always false for student.
      */
     public function canManageSAE(?int $saeId = null): bool
     {

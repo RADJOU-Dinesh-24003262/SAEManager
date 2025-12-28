@@ -119,7 +119,10 @@ class Client extends User
     }
 
     /**
-     * a client can access the SAEs for which they are the client.
+     * A client can access the SAEs for which they are the client.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return boolean True if accessible, false otherwise.
      */
     public function canAccessSAE(int $saeId): bool
     {
@@ -139,6 +142,18 @@ class Client extends User
 
     /**
      * a client can see all students working on THEIR SAEs.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
     public function getAccessibleGroupMembers(int $saeId): array
     {
@@ -163,8 +178,10 @@ class Client extends User
     }
 
     /**
-     * @param integer|null $saeId
-     * @return boolean
+     * Checks if the client can manage the SAE.
+     *
+     * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
+     * @return boolean Always false for client.
      */
     public function canManageSAE(?int $saeId = null): bool
     {
@@ -172,8 +189,10 @@ class Client extends User
     }
 
     /**
-     * @param integer $todoId
-     * @return boolean
+     * Checks if the client can modify a to-do list item.
+     *
+     * @param integer $todoId The to-do item ID.
+     * @return boolean Always false for client.
      */
     public function canModifyTodo(int $todoId): bool
     {

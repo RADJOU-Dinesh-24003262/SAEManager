@@ -5,6 +5,7 @@ namespace Models\SAE\Repository;
 use Core\includes\Database;
 use PDO;
 use PDOException;
+use Models\SAE\SAEProfessorGroup;
 
 /**
  * Repository for SAEProfessorGroup operations.
@@ -12,19 +13,51 @@ use PDOException;
  * @category   Models
  * @package    Src
  * @subpackage Models/SAE
- * @author     SAE Manager Team
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class SAEProfessorGroupRepository
 {
+    /**
+     * The PDO connection instance
+     * @var PDO
+     */
     protected PDO $connection;
+
+    /**
+     * The singleton instance.
+     * @var SAEProfessorGroupRepository|null
+     */
     protected static ?SAEProfessorGroupRepository $instance = null;
 
-    private function __construct()
+    /**
+     * The table name.
+     *
+     * @var string
+     */
+    protected string $table = 'sae_professor_groups';
+
+    /**
+     * The entity class name.
+     *
+     * @var class-string<SAEProfessorGroup>
+     */
+    protected string $entityClass = SAEProfessorGroup::class;
+
+    /**
+     * Constructor.
+     */
+    protected function __construct()
     {
         $this->connection = Database::getInstance();
     }
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @return SAEProfessorGroupRepository
+     */
     public static function getInstance(): SAEProfessorGroupRepository
     {
         if (self::$instance === null) {
@@ -34,10 +67,10 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Assigns a professor to a SAE
+     * Assigns a professor to a SAE.
      *
-     * @param integer $saeId       The SAE subject ID
-     * @param integer $professorId The professor ID
+     * @param integer $saeId       The SAE subject ID.
+     * @param integer $professorId The professor ID.
      * @return boolean
      */
     public function assignProfessor(int $saeId, int $professorId): bool
@@ -56,10 +89,10 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Removes a professor from a SAE
+     * Removes a professor from a SAE.
      *
-     * @param integer $saeId       The SAE subject ID
-     * @param integer $professorId The professor ID
+     * @param integer $saeId       The SAE subject ID.
+     * @param integer $professorId The professor ID.
      * @return boolean
      */
     public function removeProfessor(int $saeId, int $professorId): bool
@@ -77,10 +110,10 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Gets all professors assigned to a SAE
+     * Gets all professors assigned to a SAE.
      *
-     * @param integer $saeId The SAE subject ID
-     * @return array<int> Array of professor IDs
+     * @param integer $saeId The SAE subject ID.
+     * @return array<int> Array of professor IDs.
      */
     public function getAssignedProfessors(int $saeId): array
     {
@@ -97,10 +130,10 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Gets all SAEs assigned to a professor
+     * Gets all SAEs assigned to a professor.
      *
-     * @param integer $professorId The professor ID
-     * @return array<int> Array of SAE subject IDs
+     * @param integer $professorId The professor ID.
+     * @return array<int> Array of SAE subject IDs.
      */
     public function getProfessorSAEs(int $professorId): array
     {
@@ -117,11 +150,11 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Gets group IDs assigned to a professor for a specific SAE
+     * Gets group IDs assigned to a professor for a specific SAE.
      *
-     * @param integer $professorId The professor ID
-     * @param integer $saeId       The SAE subject ID
-     * @return array<int> Array of group IDs
+     * @param integer $professorId The professor ID.
+     * @param integer $saeId       The SAE subject ID.
+     * @return array<int> Array of group IDs.
      */
     public function getProfessorGroups(int $professorId, int $saeId): array
     {
@@ -141,10 +174,10 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Checks if a professor is assigned to a SAE
+     * Checks if a professor is assigned to a SAE.
      *
-     * @param integer $saeId       The SAE subject ID
-     * @param integer $professorId The professor ID
+     * @param integer $saeId       The SAE subject ID.
+     * @param integer $professorId The professor ID.
      * @return boolean
      */
     public function isProfessorAssigned(int $saeId, int $professorId): bool
@@ -163,9 +196,9 @@ class SAEProfessorGroupRepository
     }
 
     /**
-     * Removes all professor assignments for a SAE
+     * Removes all professor assignments for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return boolean
      */
     public function removeAllProfessors(int $saeId): bool

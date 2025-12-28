@@ -13,18 +13,28 @@ use Core\BaseModel;
  * @category   Models
  * @package    Src
  * @subpackage Models/SAE
- * @author     SAE Manager Team
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class Competence extends BaseModel
 {
+    /**
+     * The name of the competence.
+     * @var string
+     */
     protected string $competence_name;
+
+    /**
+     * The SAE subject ID.
+     * @var integer
+     */
     protected int $sae_subject_id;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param array<string, mixed> $data Initial data
+     * @param array<string, mixed> $data Initial data.
      */
     public function __construct(array $data = [])
     {
@@ -32,9 +42,9 @@ class Competence extends BaseModel
     }
 
     /**
-     * Validates the competence data
+     * Validates the competence data.
      *
-     * @return array<int, string> Array of validation errors (empty if valid)
+     * @return array<int, string> Array of validation errors (empty if valid).
      */
     public function validate(): array
     {
@@ -56,7 +66,7 @@ class Competence extends BaseModel
     }
 
     /**
-     * Converts to array
+     * Converts to array.
      *
      * @return array<string, integer|string>
      */
@@ -68,22 +78,43 @@ class Competence extends BaseModel
         ];
     }
 
-    // Getters and Setters
+    /**
+     * Gets the competence name.
+     *
+     * @return string
+     */
     public function getCompetenceName(): string
     {
         return $this->competence_name;
     }
 
+    /**
+     * Sets the competence name.
+     *
+     * @param string $competence_name The competence name.
+     * @return void
+     */
     public function setCompetenceName(string $competence_name): void
     {
         $this->competence_name = $competence_name;
     }
 
+    /**
+     * Gets the SAE subject ID.
+     *
+     * @return integer
+     */
     public function getSaeSubjectId(): int
     {
         return $this->sae_subject_id;
     }
 
+    /**
+     * Sets the SAE subject ID.
+     *
+     * @param integer $sae_subject_id The SAE subject ID.
+     * @return void
+     */
     public function setSaeSubjectId(int $sae_subject_id): void
     {
         $this->sae_subject_id = $sae_subject_id;

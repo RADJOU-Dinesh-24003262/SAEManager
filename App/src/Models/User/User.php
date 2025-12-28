@@ -173,6 +173,7 @@ abstract class User
      * Template method - calls saveSpecificData() for type-specific logic.
      *
      * @return void
+     * @throws PDOException If the user cannot be saved.
      */
     public function save(): void
     {
@@ -414,7 +415,7 @@ abstract class User
      * Gets the SAE infos proposed/enrolled by the user.
      *
      * @return array<SAESubject> An array of @see SAESubject data.
-     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase
+     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
      */
     public function getSaes(): array
     {
@@ -426,7 +427,7 @@ abstract class User
     /**
      * Can this user access a specific SAE?
      *
-     * @param integer $saeId SAE ID
+     * @param integer $saeId SAE ID.
      * @return boolean
      */
     abstract public function canAccessSAE(int $saeId): bool;
@@ -434,20 +435,40 @@ abstract class User
     /**
      * Can this user MANAGE (edit/create) an SAE?
      *
-     * @param integer|null $saeId SAE ID (null = creation)
+     * @param integer|null $saeId SAE ID (null = creation).
      * @return boolean
      */
     abstract public function canManageSAE(?int $saeId = null): bool;
 
     /**
+     * Retrieves the SAE ID associated with a group.
+     *
+     * @param integer $groupId The group ID.
+     * @return integer|null The SAE ID or null if not found.
+     */
+    protected function getSaeIdFromGroup(int $groupId): ?int
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('SELECT sae_subject_id FROM sae_groups WHERE sae_group_id = :group_id');
+            $stmt->execute(['group_id' => $groupId]);
+            $result = $stmt->fetchColumn();
+            return $result !== false ? (int) $result : null;
+        } catch (\PDOException $e) {
+            error_log('Error getting SAE ID from group: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Can this user view a group's to-do list?
      *
-     * @param integer $groupId Group ID
+     * @param integer $groupId Group ID.
      * @return boolean
      */
     public function canViewTodoList(int $groupId): bool
     {
-        // If the user can access the group's SAE, they can view its to-do list
+        // If the user can access the group's SAE, they can view its to-do list.
         $saeId = $this->getSaeIdFromGroup($groupId);
         return $saeId ? $this->canAccessSAE($saeId) : false;
     }
@@ -455,7 +476,7 @@ abstract class User
     /**
      * Can this user MODIFY a to-do list item?
      *
-     * @param integer $todoId To-do item ID
+     * @param integer $todoId To-do item ID.
      * @return boolean
      */
     abstract public function canModifyTodo(int $todoId): bool;
@@ -463,8 +484,17 @@ abstract class User
     /**
      * Retrieves the group members accessible by this user.
      *
-     * @param integer $saeId SAE ID
-     * @return array List of members with their information
+     * @param integer $saeId SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> List of members with their information
      */
     abstract public function getAccessibleGroupMembers(int $saeId): array;
 

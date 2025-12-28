@@ -12,18 +12,28 @@ use Core\BaseModel;
  * @category   Models
  * @package    Src
  * @subpackage Models/SAE
- * @author     SAE Manager Team
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class SAEGroup extends BaseModel
 {
+    /**
+     * The SAE group ID.
+     * @var integer|null
+     */
     protected ?int $sae_group_id = null;
+
+    /**
+     * The SAE subject ID.
+     * @var integer
+     */
     protected int $sae_subject_id;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param array<string, mixed> $data Initial data
+     * @param array<string, mixed> $data Initial data.
      */
     public function __construct(array $data = [])
     {
@@ -31,9 +41,9 @@ class SAEGroup extends BaseModel
     }
 
     /**
-     * Validates the group data
+     * Validates the group data.
      *
-     * @return array<int, string> Array of validation errors (empty if valid)
+     * @return array<int, string> Array of validation errors (empty if valid).
      */
     public function validate(): array
     {
@@ -47,7 +57,7 @@ class SAEGroup extends BaseModel
     }
 
     /**
-     * Converts to array
+     * Converts to array.
      *
      * @return array<string, integer|null>
      */
@@ -59,22 +69,43 @@ class SAEGroup extends BaseModel
         ];
     }
 
-    // Getters and Setters
+    /**
+     * Gets the SAE group ID.
+     *
+     * @return integer|null
+     */
     public function getSaeGroupId(): ?int
     {
         return $this->sae_group_id;
     }
 
+    /**
+     * Sets the SAE group ID.
+     *
+     * @param integer $sae_group_id The SAE group ID.
+     * @return void
+     */
     public function setSaeGroupId(int $sae_group_id): void
     {
         $this->sae_group_id = $sae_group_id;
     }
 
+    /**
+     * Gets the SAE subject ID.
+     *
+     * @return integer
+     */
     public function getSaeSubjectId(): int
     {
         return $this->sae_subject_id;
     }
 
+    /**
+     * Sets the SAE subject ID.
+     *
+     * @param integer $sae_subject_id The SAE subject ID.
+     * @return void
+     */
     public function setSaeSubjectId(int $sae_subject_id): void
     {
         $this->sae_subject_id = $sae_subject_id;

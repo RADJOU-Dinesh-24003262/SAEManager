@@ -38,11 +38,11 @@ class PageSaeController implements ControllerInterface
      *
      * @return void
      * @throws Exception If the user variable is not as expected.
-     * @throws ExceptionSAE If there is an error related to SAE operations.
+     * @throws ExceptionAccessDenied If access is denied.
      */
     public function control(): void
     {
-        // Redirect to dashboard if not logged in.
+        // Redirect to /login if not logged in.
         if (!SessionService::has('user_id')) {
             SessionService::setFlash('errors', ['Authentification requise.']);
             header('Location: /login');
@@ -62,20 +62,19 @@ class PageSaeController implements ControllerInterface
             $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
             if (!$user->canAccessSAE($sae_id)) {
-                SessionService::setFlash('errors', ['Accès refusé à cette SAE.']);
-                header('Location: /dashboard');
-                exit();
+                throw new ExceptionAccessDenied("Vous n'avez pas la permission d'accéder à cette SAE.");
             }
 
             $sae = SAE::getInstance();
             $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
-            if ($data['sae'] === null) {
-                throw new ExceptionAccessDenied("Vous n\'avez pas accès à cette SAE.");
-            }
 
             // Create and render the SAE page view.
             $view = new PageSaeView($data);
             $view->render();
+            exit();
+        } catch (ExceptionAccessDenied $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
             exit();
         } catch (ExceptionSAE $e) {
             SessionService::setFlash('errors', "Erreur SAE : " . $e->getMessage());
