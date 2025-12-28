@@ -2,16 +2,17 @@
 
 namespace Views\PageSAE;
 
-use Core\AbstractView;
+use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
+use Parsedown;
 
 use function Parsica\Parsica\append;
 
 /**
  * Class PageSaeView
  * This class represents the view for the page of the application where we will see the SAE .
- * It extends the AbstractView class and provides specific implementations for rendering the SAE page.
+ * It extends the BaseSaeView class and provides specific implementations for rendering the SAE page.
 
  * @category View
 
@@ -29,7 +30,7 @@ use function Parsica\Parsica\append;
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class PageSaeView extends AbstractView
+class PageSaeView extends BaseSaeView
 {
     /**
      * The path of the HTML code to display for this view.
@@ -58,11 +59,128 @@ class PageSaeView extends AbstractView
      */
     protected function templateKeys(): array
     {
-        return [
-            'SAE_NUM' => $this->data['sae']['subject']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']['subject']->getSubjectName(),
-            'SAE_CONTENT' => $this->getDescriptionSae()
-        ];
+        return array_merge(
+            $this->getCommonSaeTemplateKeys(),
+            [
+                'SAE_CONTENT' => $this->getDescriptionSae(),
+                'SAE_CONTACTS' => $this->getContactsSae()
+            ]
+        );
+    }
+
+    /**
+     * Generates the contacts section.
+     *
+     * @return string The HTML for the contacts.
+     */
+    protected function getContactsSae(): string
+    {
+        $user = $this->data['user'];
+        $saeData = $this->data['sae'];
+        $content = '';
+
+        // 1. Responsible Professor
+        if (!empty($saeData['responsible_professor'])) {
+            $prof = $saeData['responsible_professor'];
+            $name = htmlspecialchars($prof['first_name'] . ' ' . $prof['last_name']);
+            $email = htmlspecialchars($prof['email']);
+            $content .= '<div class="contact-section"><h5>🎓 Responsable de la SAE</h5>';
+            $content .= '<p>' . $name . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
+        }
+
+        // 2. Client (if user is not the client)
+        if (!$user->isClient() && !empty($saeData['client'])) {
+            $client = $saeData['client'];
+            $name = htmlspecialchars($client['first_name'] . ' ' . $client['last_name']);
+            $email = htmlspecialchars($client['email']);
+            $org = !empty($client['organisation']) ? ' (' . htmlspecialchars($client['organisation']) . ')' : '';
+            $content .= '<div class="contact-section"><h5>🏢 Client</h5>';
+            $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
+        }
+
+                // 3. Groups (Students)
+
+                if ($user->isStudent()) {
+
+                    // Students see their own group members
+
+                    if (!empty($saeData['groups'])) {
+
+                        // Assuming only one group is returned for the student due to logic in SAE model
+
+                        foreach ($saeData['groups'] as $groupData) {
+
+                            $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
+
+                            $content .= '<div class="contact-section"><h5>👥 ' . $groupName . '</h5><ul>';
+
+                            foreach ($groupData['students'] as $student) {
+
+                                // Don't show the current user in the list? Optional. Showing everyone is fine.
+
+                                $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
+
+                                $sEmail = htmlspecialchars($student['email']);
+
+                                $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
+
+                            }
+
+                            $content .= '</ul></div>';
+
+                        }
+
+                    }
+
+                } elseif ($user->isClient()) {
+
+                    // Clients see all groups
+
+                    if (!empty($saeData['groups'])) {
+
+                        $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
+
+                        foreach ($saeData['groups'] as $groupData) {
+
+                            $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
+
+                            $content .= '<h6>' . $groupName . '</h6><ul>';
+
+                            if (empty($groupData['students'])) {
+
+                                $content .= '<li>Aucun étudiant.</li>';
+
+                            } else {
+
+                                foreach ($groupData['students'] as $student) {
+
+                                    $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
+
+                                    $sEmail = htmlspecialchars($student['email']);
+
+                                    $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
+
+                                }
+
+                            }
+
+                            $content .= '</ul>';
+
+                        }
+
+                        $content .= '</div>';
+
+                    } else {
+
+                         $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+
+                    }
+
+                } elseif ($user->isProfessor()) {
+            $content .= '<p><em>La gestion détaillée des contacts étudiants se fait via le menu "Gérer les groupes".</em></p>';
+        }
+
+        return $content;
     }
 
     /**
@@ -107,8 +225,15 @@ class PageSaeView extends AbstractView
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
-        if (file_exists($filePath)) {
-            $content .= file_get_contents($filePath);
+
+        if ($filePath) {
+            $fullPath = __DIR__ . (str_starts_with($filePath, '/') ? '' : '/') . $filePath;
+            if (file_exists($fullPath)) {
+                $parsedown = new Parsedown();
+                $content .= '<div class="sae-subject-file">';
+                $content .= $parsedown->text(file_get_contents($fullPath));
+                $content .= '</div>';
+            }
         }
         return $content;
     }

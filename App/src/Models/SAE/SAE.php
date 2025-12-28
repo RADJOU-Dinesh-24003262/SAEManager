@@ -256,7 +256,7 @@ class SAE
         }
 
         // If student or client, return only their group.
-        if ($user->isStudent()) {
+        if ($user->isStudent() || $user->isClient()) {
             $userGroupId = $this->getUserGroupId($user, $saeId);
             if ($userGroupId) {
                 $group = $this->groupRepo->findById($userGroupId);

@@ -2,7 +2,7 @@
 
 namespace Views\ToDoList;
 
-use Core\AbstractView;
+use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 
 /**
@@ -10,7 +10,7 @@ use Core\Utilis\SessionService;
  *
  * Represents the view for the "To-Do List" page of the SAE Manager application.
  * This view is responsible for displaying the to-do list of the students in a specific SAE.
- * It extends {@see AbstractView} and provides specific implementations
+ * It extends {@see BaseSaeView} and provides specific implementations
  * for rendering the To-Do List page, including the associated CSS file,
  * template path, and metadata headers.
  *
@@ -25,7 +25,7 @@ use Core\Utilis\SessionService;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoListView extends AbstractView
+class ToDoListView extends BaseSaeView
 {
     private const TEMPLATE_HTML = __DIR__ . '/to-do-list.html';
 
@@ -55,11 +55,12 @@ class ToDoListView extends AbstractView
     {
         $errors = $this->data['errors'];
 
-        return [
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']->getSubjectName()
-        ];
+        return array_merge(
+            $this->getCommonSaeTemplateKeys(),
+            [
+                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            ]
+        );
     }
 
     /**

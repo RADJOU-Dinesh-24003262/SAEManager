@@ -122,6 +122,7 @@ class SAESubjectRepository extends BaseRepository
                        FROM sae_professor_groups spg 
                        WHERE spg.professor_id = :prof_id
                    )
+                   OR client_id = :prof_id 
                 ORDER BY s.begin_date DESC'
             );
             $stmt->execute(['prof_id' => $professorId]);
