@@ -22,7 +22,7 @@ abstract class BaseSaeView extends AbstractView
     /**
      * Returns the common template keys for SAE pages.
      *
-     * @return array<string, string|int> The common template keys.
+     * @return array<string, string> The common template keys.
      */
     protected function getCommonSaeTemplateKeys(): array
     {
@@ -60,7 +60,7 @@ abstract class BaseSaeView extends AbstractView
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">📧 Contacts</a></li>';
         }
 
-        // Common link for everyone or fallback
+        // Common link for everyone or fallback.
         $menu .= '<li><a href="/sae/' . $saeId . '">🏠 Menu Principal</a></li>';
 
         return $menu;
