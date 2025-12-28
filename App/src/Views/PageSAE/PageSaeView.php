@@ -6,6 +6,8 @@ use Core\AbstractView;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
 
+use function Parsica\Parsica\append;
+
 /**
  * Class PageSaeView
  * This class represents the view for the page of the application where we will see the SAE .
@@ -77,21 +79,32 @@ class PageSaeView extends AbstractView
         $content .= '<p>Fin de la SAE : ' . $this->data['sae']['subject']->getEndDate() . '</p>';
 
         $profRes = $this->data['sae']['responsible_professor'];
-        $prof = $this->data['sae']['all_professors'][0];
+        $profs = $this->data['sae']['all_professors'];
         $client = $this->data['sae']['client'] ?: 'Pas de client';
 
         $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
         $profResFirstName = isset($profRes['first_name']) ? $profRes['first_name'] : 'Inconnu';
 
-        $profLastName = isset($prof['last_name']) ? $prof['last_name'] : 'Inconnu';
-        $profFirstName = isset($prof['first_name']) ? $prof['first_name'] : 'Inconnu';
+        $profLastName = [];
+        $profFirstName = [];
+        foreach ($profs as $prof) {
+            $profLastName[] = isset($prof['last_name']) ? $prof['last_name'] : 'Inconnu';
+            $profFirstName[] = isset($prof['first_name']) ? $prof['first_name'] : 'Inconnu';
+        }
 
         $clientLastName = isset($client['last_name']) ? $client['last_name'] : 'Inconnu';
         $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
 
         $content .= '<p> Le Responsable de la ressource est ' . $profResLastName . ' ' . $profResFirstName . '.</p>';
-        $content .= '<p> Votre professeur associé à la ressource est ' . $profLastName . ' ' . $profFirstName . '.</p>';
-        $content .= '<p> Votre client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
+        $content .= '<p> Les professeurs associés à la ressource est ';
+        foreach ($profs as $index => $prof) {
+            $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
+            if ($index < count($profs) - 1) {
+                $content .= ', ';
+            }
+        }
+        $content .= '.</p>';
+        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
         if (file_exists($filePath)) {
