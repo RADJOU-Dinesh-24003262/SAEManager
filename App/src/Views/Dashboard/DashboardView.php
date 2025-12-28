@@ -122,7 +122,7 @@ class DashboardView extends AbstractView
         $html = '';
 
         if ($user->isStudent() && $user instanceof Student) {
-            /** @var Student $student */
+            /* @var Student $student */
             $student = $user;
 
             $html .= '<span>Année : ' . $student->getYear() . '</span>';
@@ -132,8 +132,8 @@ class DashboardView extends AbstractView
             }
         } elseif ($user->isProfessor()) {
             $html .= '<span>Département : Informatique</span>';
-        } elseif ($user->isClient()) {
-            /** @var Client $client */
+        } elseif ($user->isClient() && $user instanceof Client) {
+            /* @var Client $client */
             $client = $user;
             $html .= '<span>Entreprise : ' . $client->getOrganisation() . ' </span>';
         }

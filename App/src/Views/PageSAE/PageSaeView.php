@@ -98,86 +98,60 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-                // 3. Groups (Students)
+                // 3. Groups (Students).
+        if ($user->isStudent()) {
+            // Students see their own group members.
+            if (!empty($saeData['groups'])) {
+                // Assuming only one group is returned for the student due to logic in SAE model.
+                foreach ($saeData['groups'] as $groupData) {
+                    $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
 
-                if ($user->isStudent()) {
+                    $content .= '<div class="contact-section"><h5>👥 ' . $groupName . '</h5><ul>';
 
-                    // Students see their own group members
+                    foreach ($groupData['students'] as $student) {
+                        // Don't show the current user in the list? Optional. Showing everyone is fine.
+                        $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
 
-                    if (!empty($saeData['groups'])) {
+                        $sEmail = htmlspecialchars($student['email']);
 
-                        // Assuming only one group is returned for the student due to logic in SAE model
-
-                        foreach ($saeData['groups'] as $groupData) {
-
-                            $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
-
-                            $content .= '<div class="contact-section"><h5>👥 ' . $groupName . '</h5><ul>';
-
-                            foreach ($groupData['students'] as $student) {
-
-                                // Don't show the current user in the list? Optional. Showing everyone is fine.
-
-                                $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
-
-                                $sEmail = htmlspecialchars($student['email']);
-
-                                $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
-
-                            }
-
-                            $content .= '</ul></div>';
-
-                        }
-
+                        $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
                     }
 
-                } elseif ($user->isClient()) {
+                    $content .= '</ul></div>';
+                }
+            }
+        } elseif ($user->isClient()) {
+            // Clients see all groups.
+            if (!empty($saeData['groups'])) {
+                $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
 
-                    // Clients see all groups
+                foreach ($saeData['groups'] as $groupData) {
+                    $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
 
-                    if (!empty($saeData['groups'])) {
+                    $content .= '<h6>' . $groupName . '</h6><ul>';
 
-                        $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
-
-                        foreach ($saeData['groups'] as $groupData) {
-
-                            $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
-
-                            $content .= '<h6>' . $groupName . '</h6><ul>';
-
-                            if (empty($groupData['students'])) {
-
-                                $content .= '<li>Aucun étudiant.</li>';
-
-                            } else {
-
-                                foreach ($groupData['students'] as $student) {
-
-                                    $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
-
-                                    $sEmail = htmlspecialchars($student['email']);
-
-                                    $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
-
-                                }
-
-                            }
-
-                            $content .= '</ul>';
-
-                        }
-
-                        $content .= '</div>';
-
+                    if (empty($groupData['students'])) {
+                        $content .= '<li>Aucun étudiant.</li>';
                     } else {
+                        foreach ($groupData['students'] as $student) {
+                            $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
 
-                         $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+                            $sMail = htmlspecialchars($student['email']);
 
+                            $content .= '<li>' . $sName . ' - <a href="mailto:' . $sMail . '">' . $sMail . '</a></li>';
+                        }
                     }
 
-                } elseif ($user->isProfessor()) {
-            $content .= '<p><em>La gestion détaillée des contacts étudiants se fait via le menu "Gérer les groupes".</em></p>';
+                    $content .= '</ul>';
+                }
+
+                $content .= '</div>';
+            } else {
+                 $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+            }
+        } elseif ($user->isProfessor()) {
+            $content .= '<p><em>La gestion détaillée des contacts 
+                        étudiants se fait via le menu "Gérer les groupes".</em></p>';
         }
 
         return $content;
