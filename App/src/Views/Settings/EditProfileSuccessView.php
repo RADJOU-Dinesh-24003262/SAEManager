@@ -34,6 +34,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The path to the template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -42,8 +43,9 @@ class EditProfileSuccessView extends AbstractView
     /**
      * Get the template keys for data replacement.
      *
-     * @return array<empty> Associative array of template keys and their values.
+     * @return array<string, mixed> Associative array of template keys and their values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
 
@@ -55,6 +57,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The CSS file name.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

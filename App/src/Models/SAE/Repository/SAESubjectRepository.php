@@ -73,6 +73,7 @@ class SAESubjectRepository extends BaseRepository
      *
      * @return string
      */
+    #[\Override]
     protected function getPrimaryKey(): string
     {
         return 'sae_subject_id';
@@ -191,11 +192,12 @@ class SAESubjectRepository extends BaseRepository
     /**
      * Creates a new SAE subject.
      *
-     * @param SAESubject $subject The SAE subject to create.
+     * @param SAESubject $entity The SAE subject to create.
      * @return SAESubject The created SAE with ID.
      * @throws PDOException If creation fails.
      */
-    public function create($subject)
+    #[\Override]
+    public function create($entity)
     {
         try {
             $this->connection->beginTransaction();
@@ -208,19 +210,19 @@ class SAESubjectRepository extends BaseRepository
             );
 
             $stmt->execute([
-                'responsible_prof_id' => $subject->getResponsibleProfId(),
-                'client_id' => $subject->getClientId(),
-                'subject_name' => $subject->getSubjectName(),
-                'begin_date' => $subject->getBeginDate(),
-                'end_date' => $subject->getEndDate(),
-                'file_path' => $subject->getFilePath()
+                'responsible_prof_id' => $entity->getResponsibleProfId(),
+                'client_id' => $entity->getClientId(),
+                'subject_name' => $entity->getSubjectName(),
+                'begin_date' => $entity->getBeginDate(),
+                'end_date' => $entity->getEndDate(),
+                'file_path' => $entity->getFilePath()
             ]);
 
             $id = intval($stmt->fetchColumn());
-            $subject->setSaeSubjectId($id);
+            $entity->setSaeSubjectId($id);
 
             $this->connection->commit();
-            return $subject;
+            return $entity;
         } catch (PDOException $e) {
             $this->connection->rollBack();
             error_log('Erreur création SAE : ' . $e->getMessage());
@@ -233,11 +235,12 @@ class SAESubjectRepository extends BaseRepository
     /**
      * Updates a SAE subject.
      *
-     * @param SAESubject $subject The SAE subject to update.
+     * @param SAESubject $entity The SAE subject to update.
      * @return boolean True on success.
      * @throws PDOException If update fails.
      */
-    public function update($subject): bool
+    #[\Override]
+    public function update($entity): bool
     {
         try {
             $stmt = $this->connection->prepare(
@@ -252,13 +255,13 @@ class SAESubjectRepository extends BaseRepository
             );
 
             return $stmt->execute([
-                'id' => $subject->getSaeSubjectId(),
-                'responsible_prof_id' => $subject->getResponsibleProfId(),
-                'client_id' => $subject->getClientId(),
-                'subject_name' => $subject->getSubjectName(),
-                'begin_date' => $subject->getBeginDate(),
-                'end_date' => $subject->getEndDate(),
-                'file_path' => $subject->getFilePath()
+                'id' => $entity->getSaeSubjectId(),
+                'responsible_prof_id' => $entity->getResponsibleProfId(),
+                'client_id' => $entity->getClientId(),
+                'subject_name' => $entity->getSubjectName(),
+                'begin_date' => $entity->getBeginDate(),
+                'end_date' => $entity->getEndDate(),
+                'file_path' => $entity->getFilePath()
             ]);
         } catch (PDOException $e) {
             error_log('Erreur mise à jour SAE : ' . $e->getMessage());

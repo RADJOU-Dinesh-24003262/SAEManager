@@ -44,6 +44,7 @@ class ValidationServiceRegister extends FormValidator
      *
      * @throws ExceptionValidationRegisters All the errors that might have been found.
      */
+    #[\Override]
     public function validate(array $data): void
     {
         $errors = [];

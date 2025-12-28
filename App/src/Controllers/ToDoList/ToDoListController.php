@@ -34,6 +34,7 @@ class ToDoListController implements ControllerInterface
      * @return void
      * @throws Exception If the user variable is not as expected.
      */
+    #[\Override]
     public function control(): void
     {
         // Redirect to dashboard if already logged in.
@@ -83,6 +84,7 @@ class ToDoListController implements ControllerInterface
      * @param  string $method Add the kind of method to consult the page.
      * @return boolean True if the path and method are supported, false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match('/^\/sae\/\d*\/to-do$/', $path) && $method === "GET";

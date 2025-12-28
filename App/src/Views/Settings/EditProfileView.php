@@ -39,6 +39,7 @@ class EditProfileView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -50,6 +51,7 @@ class EditProfileView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -66,6 +68,7 @@ class EditProfileView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

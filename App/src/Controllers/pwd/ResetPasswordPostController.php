@@ -33,6 +33,7 @@ class ResetPasswordPostController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         try {
@@ -90,6 +91,7 @@ class ResetPasswordPostController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean Is the method post?
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/reset-password" && $method === "POST";

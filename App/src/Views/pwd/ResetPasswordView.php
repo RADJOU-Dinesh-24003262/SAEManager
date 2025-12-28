@@ -162,6 +162,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAE Manager">

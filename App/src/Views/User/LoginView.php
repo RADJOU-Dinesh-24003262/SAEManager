@@ -39,6 +39,7 @@ class LoginView extends AbstractView
      *
      * @return string Template file path.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -51,6 +52,7 @@ class LoginView extends AbstractView
      *
      * @return array<string, string> Template keys and their values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'] ?? [];
@@ -67,6 +69,7 @@ class LoginView extends AbstractView
      *
      * @return string CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'style.css';
@@ -77,6 +80,7 @@ class LoginView extends AbstractView
      *
      * @return string Additional HTML meta tags.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de connexion de SAE Manager">

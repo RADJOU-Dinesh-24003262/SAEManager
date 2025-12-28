@@ -114,6 +114,7 @@ class RegisterView extends AbstractView
      *
      * @return string The full path to the HTML template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -124,6 +125,7 @@ class RegisterView extends AbstractView
      *
      * @return array<string, string> The keys and corresponding rendered values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -145,6 +147,7 @@ class RegisterView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Inscription - SAE Manager';
@@ -155,6 +158,7 @@ class RegisterView extends AbstractView
      *
      * @return string The HTML script tags.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="/scripts/register.js"></script>';
@@ -165,6 +169,7 @@ class RegisterView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'register.css';
@@ -175,6 +180,7 @@ class RegisterView extends AbstractView
      *
      * @return string The HTML meta tags.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page d\'inscription de SAE Manager">

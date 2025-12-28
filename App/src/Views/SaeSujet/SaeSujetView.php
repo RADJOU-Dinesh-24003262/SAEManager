@@ -40,6 +40,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -48,8 +49,9 @@ class SaeSujetView extends AbstractView
     /**
      * Returns an array of keys used in the template for dynamic content replacement.
      *
-     * @return array<empty> An associative array of template keys and their corresponding values.
+     * @return array<string, mixed> An associative array of template keys and their corresponding values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [];
@@ -60,6 +62,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Page SAE - Création du sujet de SAE - SAE Manager';
@@ -70,6 +73,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'sae-sujet.css';
@@ -83,6 +87,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page SAE de SAE Manager partie Création du sujet">

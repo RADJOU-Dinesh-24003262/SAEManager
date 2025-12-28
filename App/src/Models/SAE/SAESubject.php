@@ -83,6 +83,7 @@ class SAESubject extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
+    #[\Override]
     public function validate(): array
     {
         $errors = [];
@@ -154,6 +155,7 @@ class SAESubject extends BaseModel
      *
      * @return array<string, mixed> The array representation.
      */
+    #[\Override]
     public function toArray(): array
     {
         return [

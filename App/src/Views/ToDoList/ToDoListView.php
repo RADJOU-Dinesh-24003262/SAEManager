@@ -38,6 +38,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return string The full path to the HTML template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -51,6 +52,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return array<string, string|integer> An empty associative array.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -70,6 +72,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return string The title of the To-Do List page.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
         return 'Page SAE - To Do List - SAE Manager';
@@ -82,6 +85,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return string The name of the CSS file.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'to-do-list.css';
@@ -95,6 +99,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page SAE de SAE Manager partie To-Do List">
@@ -128,6 +133,7 @@ class ToDoListView extends BaseSaeView
      *
      * @return string The HTML <script> tag to include the JavaScript file.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="/scripts/to-do-list.js" defer></script>';

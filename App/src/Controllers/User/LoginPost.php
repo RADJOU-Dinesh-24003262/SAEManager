@@ -41,6 +41,7 @@ class LoginPost implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
 
@@ -100,6 +101,7 @@ class LoginPost implements ControllerInterface
      *
      * @return boolean True if the path is "/login" and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "POST";

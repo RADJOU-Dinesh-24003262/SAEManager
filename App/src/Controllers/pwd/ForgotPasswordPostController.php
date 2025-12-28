@@ -50,6 +50,7 @@ class ForgotPasswordPostController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         try {
@@ -101,6 +102,7 @@ class ForgotPasswordPostController implements ControllerInterface
      * @param  string $method The HTTP method (e.g., "POST").
      * @return boolean True if the controller should handle the request, false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/forgot-password" && $method === "POST";

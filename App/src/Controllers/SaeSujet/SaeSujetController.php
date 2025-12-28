@@ -30,6 +30,7 @@ class SaeSujetController implements ControllerInterface
      * @method void control() Controls the rendering of the form of subject view.
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $user = unserialize(SessionService::get('USER'));
@@ -56,6 +57,7 @@ class SaeSujetController implements ControllerInterface
      *
      * @return boolean true if the path and method are supported, false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/new-sae" && $method === "GET";

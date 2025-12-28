@@ -58,6 +58,7 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -85,6 +86,7 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -112,10 +114,19 @@ class Professor extends User
      * @param PDO     $connection PDO object representing the database connection.
      * @param integer $userId     The professor's user ID.
      *
-     * @return array<int, array<string, mixed>> Associative array containing the SAE records.
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null
+     * }> Associative array containing the SAE records.
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -144,6 +155,7 @@ class Professor extends User
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
+    #[\Override]
     public function canAccessSAE(int $saeId): bool
     {
         try {
@@ -174,6 +186,7 @@ class Professor extends User
      * @param integer|null $saeId The SAE ID.
      * @return boolean True if allowed, false otherwise.
      */
+    #[\Override]
     public function canManageSAE(?int $saeId = null): bool
     {
         // Création : Every professor can create a SAE.
@@ -200,6 +213,7 @@ class Professor extends User
      *   tp: int
      * }> The list of accessible group members.
      */
+    #[\Override]
     public function getAccessibleGroupMembers(int $saeId): array
     {
         if ($this->isResponsibleProfessor($saeId)) {
@@ -309,6 +323,7 @@ class Professor extends User
      * @param integer $todoId The to-do item ID.
      * @return boolean Always false for professor.
      */
+    #[\Override]
     public function canModifyTodo(int $todoId): bool
     {
         return false;

@@ -36,10 +36,10 @@ abstract class FormValidator
     protected $required = [];
 
     /**
-     * Escapes form data (HTML special chars).
+     * Escapes form data (HTML special chars) recursively.
      *
-     * @param  array<string, mixed> $data Data of form to espace.
-     * @return array<string, mixed> Data with escaped fields.
+     * @param  array<array-key, mixed> $data Data of form to espace.
+     * @return array<array-key, mixed> Data with escaped fields.
      * @throws ExceptionValidationEmptys If a required field is empty.
      */
     public function escape(array $data): array
@@ -52,9 +52,11 @@ abstract class FormValidator
             }
         }
 
-        foreach ($data as $key => $value) {
-            $data[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-        }
+        array_walk_recursive($data, function (&$item) {
+            if (is_string($item)) {
+                $item = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
+            }
+        });
 
         if (!empty($errors)) {
             throw new ExceptionValidationEmptys($errors);
@@ -112,7 +114,6 @@ abstract class FormValidator
         $escapedLname = strtolower(preg_quote($lname, '/'));
 
         $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
-        $genericEmailPattern = '/^[a-zA-ZÀ-ÿ\-\'\.]+@[a-z]+\.[a-z\.]+$/';
 
         return preg_match($ownEmailPattern, $email)
             && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
