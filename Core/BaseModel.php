@@ -2,12 +2,21 @@
 
 namespace Core;
 
+/**
+ * Base model for all entities.
+ *
+ * @category Model
+ * @package  Core
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
 abstract class BaseModel
 {
     /**
-     * Hydrates the object with the provided data
+     * Hydrates the object with the provided data.
      *
-     * @param array<string, mixed> $data Data to hydrate with
+     * @param array<string, mixed> $data Data to hydrate with.
      * @return void
      */
     protected function hydrate(array $data): void

@@ -6,6 +6,7 @@ use Core\includes\Database;
 use PDO;
 use PDOException;
 use Models\SAE\SAEGroup;
+use Models\Repository\BaseRepository;
 
 /**
  * Repository for SAEGroup operations.
@@ -13,19 +14,47 @@ use Models\SAE\SAEGroup;
  * @category   Models
  * @package    Src
  * @subpackage Models/SAE
- * @author     SAE Manager Team
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
+ * @extends BaseRepository<SAEGroup>
  */
-class SAEGroupRepository
+class SAEGroupRepository extends BaseRepository
 {
-    protected PDO $connection;
+    /**
+     * The singleton instance.
+     * @var SAEGroupRepository|null
+     */
     protected static ?SAEGroupRepository $instance = null;
 
-    private function __construct()
+    /**
+     * The table name.
+     *
+     * @var string
+     */
+    protected string $table = 'sae_groups';
+
+    /**
+     * The entity class name.
+     *
+     * @var class-string<SAEGroup>
+     */
+    protected string $entityClass = SAEGroup::class;
+
+    /**
+     * Constructor.
+     */
+    protected function __construct()
     {
-        $this->connection = Database::getInstance();
+        parent::__construct();
     }
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @return SAEGroupRepository
+     */
     public static function getInstance(): SAEGroupRepository
     {
         if (self::$instance === null) {
@@ -35,31 +64,19 @@ class SAEGroupRepository
     }
 
     /**
-     * Finds a group by ID
+     * Returns the name of the primary key.
      *
-     * @param integer $id The group ID
-     * @return SAEGroup|null
+     * @return string
      */
-    public function findById(int $id): ?SAEGroup
+    protected function getPrimaryKey(): string
     {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_groups WHERE sae_group_id = :id'
-            );
-            $stmt->execute(['id' => $id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $data ? new SAEGroup($data) : null;
-        } catch (PDOException $e) {
-            error_log('Erreur récupération groupe : ' . $e->getMessage());
-            return null;
-        }
+        return 'sae_group_id';
     }
 
     /**
-     * Finds all groups for a SAE
+     * Finds all groups for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return array<SAEGroup>
      */
     public function findBySaeId(int $saeId): array
@@ -78,50 +95,60 @@ class SAEGroupRepository
         }
     }
 
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Creates a new group
+     * Creates a new group.
      *
-     * @param integer $saeId The SAE subject ID
-     * @return SAEGroup The created group
-     * @throws PDOException
+     * @param SAEGroup $entity The group to create.
+     * @return SAEGroup The created group.
+     * @throws PDOException If creation fails.
      */
-    public function create(int $saeId): SAEGroup
+    public function create($entity)
     {
         try {
             $stmt = $this->connection->prepare(
                 'INSERT INTO sae_groups (sae_subject_id) VALUES (:sae_id) RETURNING sae_group_id'
             );
-            $stmt->execute(['sae_id' => $saeId]);
+            $stmt->execute(['sae_id' => $entity->getSaeSubjectId()]);
             $id = intval($stmt->fetchColumn());
 
-            return new SAEGroup(['sae_group_id' => $id, 'sae_subject_id' => $saeId]);
+            $entity->setSaeGroupId($id);
+            return $entity;
         } catch (PDOException $e) {
             error_log('Erreur création groupe : ' . $e->getMessage());
             throw $e;
         }
     }
+    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Deletes a group
+     * Updates a group.
      *
-     * @param integer $id The group ID
-     * @return boolean
+     * @param SAEGroup $entity The group to update.
+     * @return boolean True on success.
      */
-    public function delete(int $id): bool
+    public function update($entity): bool
     {
         try {
-            $stmt = $this->connection->prepare('DELETE FROM sae_groups WHERE sae_group_id = :id');
-            return $stmt->execute(['id' => $id]);
+            $stmt = $this->connection->prepare(
+                'UPDATE sae_groups SET sae_subject_id = :sae_id WHERE sae_group_id = :id'
+            );
+            return $stmt->execute([
+                'sae_id' => $entity->getSaeSubjectId(),
+                'id' => $entity->getSaeGroupId()
+            ]);
         } catch (PDOException $e) {
-            error_log('Erreur suppression groupe : ' . $e->getMessage());
+            error_log('Erreur mise à jour groupe : ' . $e->getMessage());
             return false;
         }
     }
+    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
     /**
-     * Gets all students in a group
+     * Gets all students in a group.
      *
-     * @param integer $groupId The group ID
+     * @param integer $groupId The group ID.
      * @return array<int, array{
      *   student_id: string,
      *   amu_id: string,
@@ -133,7 +160,7 @@ class SAEGroupRepository
      *   last_name: string,
      *   email: string,
      *   phone: string|null
-     * }> Array of student data
+     * }> Array of student data.
      */
     public function getGroupStudents(int $groupId): array
     {
@@ -156,10 +183,10 @@ class SAEGroupRepository
     }
 
     /**
-     * Assigns a student to a group
+     * Assigns a student to a group.
      *
-     * @param integer $studentId The student ID
-     * @param integer $groupId   The group ID
+     * @param integer $studentId The student ID.
+     * @param integer $groupId   The group ID.
      * @return boolean
      */
     public function assignStudent(int $studentId, int $groupId): bool
@@ -176,9 +203,9 @@ class SAEGroupRepository
     }
 
     /**
-     * Removes a student from a group
+     * Removes a student from a group.
      *
-     * @param integer $studentId The student ID
+     * @param integer $studentId The student ID.
      * @return boolean
      */
     public function unassignStudent(int $studentId): bool
@@ -195,10 +222,10 @@ class SAEGroupRepository
     }
 
     /**
-     * Gets the group ID of a student in a SAE
+     * Gets the group ID of a student in a SAE.
      *
-     * @param integer $studentId The student ID
-     * @param integer $saeId     The SAE subject ID
+     * @param integer $studentId The student ID.
+     * @param integer $saeId     The SAE subject ID.
      * @return integer|null
      */
     public function getStudentGroupId(int $studentId, int $saeId): ?int
@@ -220,9 +247,9 @@ class SAEGroupRepository
     }
 
     /**
-     * Gets student count for a group
+     * Gets student count for a group.
      *
-     * @param integer $groupId The group ID
+     * @param integer $groupId The group ID.
      * @return integer
      */
     public function getStudentCount(int $groupId): int

@@ -20,21 +20,46 @@ use PDepend\Util\Log;
  * @subpackage Models/SAE
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  * @extends BaseRepository<SAESubject>
  */
 class SAESubjectRepository extends BaseRepository
 {
+    /**
+     * The singleton instance.
+     *
+     * @var SAESubjectRepository|null
+     */
     protected static ?SAESubjectRepository $instance = null;
 
+    /**
+     * The table name.
+     *
+     * @var string
+     */
     protected string $table = 'sae_subjects';
+
+    /**
+     * The entity class name.
+     *
+     * @var class-string<SAESubject>
+     */
     protected string $entityClass = SAESubject::class;
 
-    private function __construct()
+    /**
+     * Constructor.
+     */
+    protected function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @return SAESubjectRepository
+     */
     public static function getInstance(): SAESubjectRepository
     {
         if (self::$instance === null) {
@@ -43,16 +68,21 @@ class SAESubjectRepository extends BaseRepository
         return self::$instance;
     }
 
+    /**
+     * Returns the name of the primary key.
+     *
+     * @return string
+     */
     protected function getPrimaryKey(): string
     {
         return 'sae_subject_id';
     }
 
     /**
-     * Finds all SAE subjects
+     * Finds all SAE subjects.
      *
-     * @return array<SAESubject> The list of all SAE subjects in the database
-     * @throws ExceptionFetchDataBD
+     * @return array<SAESubject> The list of all SAE subjects in the database.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
     public function findAll(): array
     {
@@ -74,17 +104,17 @@ class SAESubjectRepository extends BaseRepository
     }
 
     /**
-     * Finds SAE subjects by professor ID
+     * Finds SAE subjects by professor ID.
      *
-     * @param integer $professorId The professor's user ID
-     * @return array<SAESubject> The list of SAE subjects associated with the professor
-     * @throws ExceptionFetchDataBD
+     * @param integer $professorId The professor's user ID.
+     * @return array<SAESubject> The list of SAE subjects associated with the professor.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
     public function findByProfessorId(int $professorId): array
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT DISTINCT s.* 
+                'SELECT DISTINCT s.*
                 FROM sae_subjects s
                 WHERE s.responsible_prof_id = :prof_id
                    OR s.sae_subject_id IN (
@@ -104,11 +134,11 @@ class SAESubjectRepository extends BaseRepository
     }
 
     /**
-     * Finds SAE subjects by student ID
+     * Finds SAE subjects by student ID.
      *
-     * @param integer $studentId The student's user ID
-     * @return array<SAESubject> The list of SAE subjects associated with the student
-     * @throws ExceptionFetchDataBD
+     * @param integer $studentId The student's user ID.
+     * @return array<SAESubject> The list of SAE subjects associated with the student.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
     public function findByStudentId(int $studentId): array
     {
@@ -132,11 +162,11 @@ class SAESubjectRepository extends BaseRepository
     }
 
     /**
-     * Finds SAE subjects by client ID
+     * Finds SAE subjects by client ID.
      *
-     * @param integer $clientId The client's user ID
-     * @return array<SAESubject> The list of SAE subjects associated with the client
-     * @throws ExceptionFetchDataBD
+     * @param integer $clientId The client's user ID.
+     * @return array<SAESubject> The list of SAE subjects associated with the client.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
     public function findByClientId(int $clientId): array
     {
@@ -156,12 +186,13 @@ class SAESubjectRepository extends BaseRepository
         }
     }
 
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Creates a new SAE subject
+     * Creates a new SAE subject.
      *
-     * @param SAESubject $subject The SAE subject to create
-     * @return SAESubject The created SAE with ID
-     * @throws PDOException
+     * @param SAESubject $subject The SAE subject to create.
+     * @return SAESubject The created SAE with ID.
+     * @throws PDOException If creation fails.
      */
     public function create($subject)
     {
@@ -195,13 +226,15 @@ class SAESubjectRepository extends BaseRepository
             throw $e;
         }
     }
+    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Updates a SAE subject
+     * Updates a SAE subject.
      *
-     * @param SAESubject $subject The SAE subject to update
-     * @return boolean
-     * @throws PDOException
+     * @param SAESubject $subject The SAE subject to update.
+     * @return boolean True on success.
+     * @throws PDOException If update fails.
      */
     public function update($subject): bool
     {
@@ -231,11 +264,12 @@ class SAESubjectRepository extends BaseRepository
             throw $e;
         }
     }
+    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
     /**
-     * Gets responsible professor info
+     * Gets responsible professor info.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return array{
      *   user_id: string,
      *   first_name: string,
@@ -243,7 +277,7 @@ class SAESubjectRepository extends BaseRepository
      *   email: string,
      *   phone: string|null,
      *   amu_id: string
-     * }|null
+     * }|null The professor info or null.
      */
     public function getResponsibleProfessor(int $saeId): ?array
     {
@@ -267,9 +301,9 @@ class SAESubjectRepository extends BaseRepository
     }
 
     /**
-     * Gets all professors info for a SAE
+     * Gets all professors info for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return array<int, array{
      *   user_id: string,
      *   first_name: string,
@@ -279,6 +313,7 @@ class SAESubjectRepository extends BaseRepository
      *   amu_id: string,
      *   is_responsible: int
      * }>
+     * @throws PDOException If query fails.
      */
     public function getAllProfessorsInfo(int $saeId): array
     {
@@ -312,9 +347,9 @@ class SAESubjectRepository extends BaseRepository
     }
 
     /**
-     * Gets client info for a SAE
+     * Gets client info for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return array{
      *   user_id: string,
      *   first_name: string,
@@ -322,7 +357,7 @@ class SAESubjectRepository extends BaseRepository
      *   email: string,
      *   phone: string|null,
      *   organisation: string
-     * }|null
+     * }|null The client info or null.
      */
     public function getClientInfo(int $saeId): ?array
     {

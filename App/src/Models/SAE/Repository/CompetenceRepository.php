@@ -15,19 +15,37 @@ use PDOException;
  * @category   Models
  * @package    Src
  * @subpackage Models/SAE
- * @author     SAE Manager Team
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class CompetenceRepository
 {
+    /**
+     * The PDO connection instance.
+     * @var PDO
+     */
     protected PDO $connection;
+
+    /**
+     * The singleton instance.
+     * @var CompetenceRepository|null
+     */
     protected static ?CompetenceRepository $instance = null;
 
+    /**
+     * Constructor.
+     */
     private function __construct()
     {
         $this->connection = Database::getInstance();
     }
 
+    /**
+     * Gets the singleton instance.
+     *
+     * @return CompetenceRepository
+     */
     public static function getInstance(): CompetenceRepository
     {
         if (self::$instance === null) {
@@ -37,9 +55,9 @@ class CompetenceRepository
     }
 
     /**
-     * Finds all competences for a SAE
+     * Finds all competences for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return array<Competence>
      */
     public function findBySaeId(int $saeId): array
@@ -59,12 +77,12 @@ class CompetenceRepository
     }
 
     /**
-     * Creates a new competence
+     * Creates a new competence.
      *
-     * @param integer $saeId          The SAE subject ID
-     * @param string  $competenceName The competence name
-     * @return Competence The created competence
-     * @throws PDOException
+     * @param integer $saeId          The SAE subject ID.
+     * @param string  $competenceName The competence name.
+     * @return Competence The created competence.
+     * @throws PDOException If creation fails.
      */
     public function create(int $saeId, string $competenceName): Competence
     {
@@ -87,10 +105,10 @@ class CompetenceRepository
     }
 
     /**
-     * Deletes a competence
+     * Deletes a competence.
      *
-     * @param integer $saeId          The SAE subject ID
-     * @param string  $competenceName The competence name
+     * @param integer $saeId          The SAE subject ID.
+     * @param string  $competenceName The competence name.
      * @return boolean
      */
     public function delete(int $saeId, string $competenceName): bool
@@ -108,9 +126,9 @@ class CompetenceRepository
     }
 
     /**
-     * Deletes all competences for a SAE
+     * Deletes all competences for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return boolean
      */
     public function deleteAllBySaeId(int $saeId): bool
@@ -127,21 +145,21 @@ class CompetenceRepository
     }
 
     /**
-     * Updates competences for a SAE (replaces all existing)
+     * Updates competences for a SAE (replaces all existing).
      *
-     * @param integer       $saeId           The SAE subject ID
-     * @param array<string> $competenceNames Array of competence names
-     * @return boolean  If update was successful
+     * @param integer       $saeId           The SAE subject ID.
+     * @param array<string> $competenceNames Array of competence names.
+     * @return boolean  If update was successful.
      */
     public function updateSaeCompetences(int $saeId, array $competenceNames): bool
     {
         try {
             $this->connection->beginTransaction();
 
-            // Delete existing competences
+            // Delete existing competences.
             $this->deleteAllBySaeId($saeId);
 
-            // Insert new competences
+            // Insert new competences.
             $stmt = $this->connection->prepare(
                 'INSERT INTO competences (competence_name, sae_subject_id) VALUES (:name, :sae_id)'
             );
@@ -160,10 +178,10 @@ class CompetenceRepository
     }
 
     /**
-     * Checks if a competence exists
+     * Checks if a competence exists.
      *
-     * @param integer $saeId          The SAE subject ID
-     * @param string  $competenceName The competence name
+     * @param integer $saeId          The SAE subject ID.
+     * @param string  $competenceName The competence name.
      * @return boolean
      */
     public function exists(int $saeId, string $competenceName): bool
@@ -182,9 +200,9 @@ class CompetenceRepository
     }
 
     /**
-     * Gets count of competences for a SAE
+     * Gets count of competences for a SAE.
      *
-     * @param integer $saeId The SAE subject ID
+     * @param integer $saeId The SAE subject ID.
      * @return integer
      */
     public function getCount(int $saeId): int

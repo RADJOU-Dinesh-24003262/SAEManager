@@ -60,7 +60,7 @@ abstract class BaseRepository implements RepositoryInterface
     /**
      * Finds an entity by its ID
      *
-     * @param integer $id The ID of the entry to find in the database
+     * @param integer $id The ID of the entry to find in the database.
      * @return T|null Returns the entity if found, null otherwise
      */
     public function findById(int $id)
@@ -81,6 +81,9 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Deletes an entity by its ID
+     *
+     * @param integer $id The ID of the entity to delete.
+     * @return boolean True on success, false on failure.
      */
     public function delete(int $id): bool
     {
@@ -97,6 +100,9 @@ abstract class BaseRepository implements RepositoryInterface
 
     /**
      * Counts the total number of records
+     *
+     * @return integer The total number of records.
+     * @throws PDOException If the query fails.
      */
     public function count(): int
     {

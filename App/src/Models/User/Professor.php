@@ -140,6 +140,9 @@ class Professor extends User
 
     /**
      * A professor can access an SAE if they are the responsible professor OR assigned to it.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return boolean True if accessible, false otherwise.
      */
     public function canAccessSAE(int $saeId): bool
     {
@@ -166,20 +169,35 @@ class Professor extends User
     /**
      * A professor can manage (create/update) an SAE if they are the responsible professor.
      * For creation (saeId = null), all professors are allowed to create.
+     *
+     * @param integer|null $saeId The SAE ID.
+     * @return boolean True if allowed, false otherwise.
      */
     public function canManageSAE(?int $saeId = null): bool
     {
-        // Création : Every professor can create a SAE
+        // Création : Every professor can create a SAE.
         if ($saeId === null) {
             return true;
         }
 
-        // Modification : sOnly the responsible professor can modify the SAE
+        // Modification : Only the responsible professor can modify the SAE.
         return $this->isResponsibleProfessor($saeId);
     }
 
     /**
      * A responsible professor can see ALL groups; otherwise, only their assigned groups.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
     public function getAccessibleGroupMembers(int $saeId): array
     {
@@ -191,6 +209,18 @@ class Professor extends User
     }
     /**
      * Retrieves ALL members of an SAE (for the responsible professor).
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of all group members.
      */
     private function getAllSAEMembers(int $saeId): array
     {
@@ -215,6 +245,18 @@ class Professor extends User
 
     /**
      * Retrieves the members of the groups assigned to the professor.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
     private function getAssignedGroupMembers(int $saeId): array
     {
@@ -241,8 +283,8 @@ class Professor extends User
     /**
      * Checks whether this user is the responsible professor for an SAE.
      *
-     * @param integer $saeId
-     * @return boolean
+     * @param integer $saeId The SAE ID.
+     * @return boolean If the user is the responsible professor.
      */
     public function isResponsibleProfessor(int $saeId): bool
     {
@@ -261,8 +303,10 @@ class Professor extends User
     }
 
     /**
-     * @param integer $todoId
-     * @return boolean
+     * Checks if the professor can modify a to-do list item.
+     *
+     * @param integer $todoId The to-do item ID.
+     * @return boolean Always false for professor.
      */
     public function canModifyTodo(int $todoId): bool
     {
