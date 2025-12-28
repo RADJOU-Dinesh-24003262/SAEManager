@@ -8,6 +8,7 @@ use Core\AbstractView;
 use hoge\fuga\product\Super;
 use Models\SAE\SAESubject;
 use Models\User\Student;
+use Models\User\Client;
 
 /**
  * Class DashboardView
@@ -121,7 +122,7 @@ class DashboardView extends AbstractView
         $html = '';
 
         if ($user->isStudent() && $user instanceof Student) {
-            /* @var Student $student */
+            /** @var Student $student */
             $student = $user;
 
             $html .= '<span>Année : ' . $student->getYear() . '</span>';
@@ -132,7 +133,9 @@ class DashboardView extends AbstractView
         } elseif ($user->isProfessor()) {
             $html .= '<span>Département : Informatique</span>';
         } elseif ($user->isClient()) {
-            $html .= '<span>Entreprise : À définir</span>';
+            /** @var Client $client */
+            $client = $user;
+            $html .= '<span>Entreprise : ' . $client->getOrganisation() . ' </span>';
         }
 
         return $html;

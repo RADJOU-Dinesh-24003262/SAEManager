@@ -75,14 +75,20 @@
 }
 
 .menu_functionnality a {
-    margin: 10px 0;
+    display: block;
+    padding: 10px 15px;
+    margin: 5px 0;
     color: #333;
-    cursor: pointer;
-    transition: color 0.3s;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
-.menu_functionnality h3:hover {
+.menu_functionnality a:hover {
+    background-color: #f0e6f5;
     color: #3b003b;
+    transform: translateX(5px);
 }
 
 #to-do-list ul {

@@ -156,7 +156,8 @@ class Professor extends User
                           SELECT 1 FROM sae_professor_groups spg
                           WHERE spg.sae_subject_id = :sae_id AND spg.professor_id = :prof_id
                       )
-                 )'
+                 )
+                 OR client_id = :prof_id'
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;

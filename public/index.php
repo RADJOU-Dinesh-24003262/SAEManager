@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
