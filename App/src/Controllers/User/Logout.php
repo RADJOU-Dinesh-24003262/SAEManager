@@ -2,7 +2,7 @@
 
 namespace Controllers\User;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
 use Views\Index\IndexView;
 

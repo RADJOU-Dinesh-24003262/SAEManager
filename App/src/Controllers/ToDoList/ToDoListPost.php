@@ -3,9 +3,7 @@
 namespace Controllers\ToDoList;
 
 use App\Models\ToDoList\ToDoList;
-use Core\AbstractView;
-use Core\ControllerInterface;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;
 use Validator\ToDoListValidator;
@@ -66,9 +64,11 @@ class ToDoListPost implements ControllerInterface
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
         } catch (ExceptionValidationEmptys $e) {
+            $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
+            SessionService::setFlash('errors', $errors);
         } catch (\PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             SessionService::setFlash('errors', ['general' => 'Une erreur est survenu, réessayez plus tard']);

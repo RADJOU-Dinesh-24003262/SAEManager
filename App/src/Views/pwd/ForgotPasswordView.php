@@ -2,8 +2,7 @@
 
 namespace Views\pwd;
 
-use Core\Utilis\SessionService;
-use Core\AbstractView;
+use Core\Views\AbstractView;
 
 /**
  * Class ForgotPasswordView

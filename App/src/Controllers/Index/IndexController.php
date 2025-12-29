@@ -2,7 +2,7 @@
 
 namespace Controllers\Index;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Views\Index\IndexView;
 
 /**

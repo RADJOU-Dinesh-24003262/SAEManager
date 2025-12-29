@@ -2,8 +2,8 @@
 
 namespace Views\User;
 
+use Core\Views\AbstractView;
 use Models\User\Student;
-use Core\AbstractView;
 use Models\User\User;
 
 /**

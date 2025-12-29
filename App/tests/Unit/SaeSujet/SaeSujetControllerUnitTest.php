@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\SaeSujet;
 
+use Controllers\SaeSujet\SaeSujetController;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Controllers\SaeSujet\SaeSujetController;
 
 /**
  * Unit Test for the controller SaeSujetController
@@ -244,7 +243,7 @@ class SaeSujetControllerUnitTest extends TestCase
         $controller2 = new SaeSujetController();
 
         $this->assertNotSame($controller1, $controller2);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller2);
     }
 }

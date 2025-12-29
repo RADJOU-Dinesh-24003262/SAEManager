@@ -4,6 +4,7 @@ namespace Models\User;
 
 use PDO;
 use Core\includes\Database;
+use PDOException;
 
 /**
  * Represents a client user in the system.
@@ -204,6 +205,34 @@ class Client extends User
     public function canModifyTodo(int $todoId): bool
     {
         return false;
+    }
+
+    /**
+     * Gets all clients.
+     *
+     * @return array<int, array{user_id: int, first_name: string, last_name: string, organisation: string}>
+     * @throws PDOException If there is an error retrieving clients from the database.
+     */
+    public static function getAllClients(): array
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->query(
+                'SELECT u.user_id, u.first_name, u.last_name, c.organisation
+                 FROM clients c
+                 JOIN users u ON c.client_id = u.user_id
+                 ORDER BY u.last_name, u.first_name'
+            );
+
+            if (!$stmt) {
+                throw new PDOException('Erreur lors de la récupération des clients.');
+            }
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération tous les clients : ' . $e->getMessage());
+            return [];
+        }
     }
 
     // -----------------

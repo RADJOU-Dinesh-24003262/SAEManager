@@ -2,7 +2,7 @@
 
 namespace Models\SAE;
 
-use Core\BaseModel;
+use Core\Models\BaseModel;
 
 /**
  * Represents the association between a Professor and a SAE.

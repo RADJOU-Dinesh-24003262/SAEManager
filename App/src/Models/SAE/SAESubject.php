@@ -2,7 +2,7 @@
 
 namespace Models\SAE;
 
-use Core\BaseModel;
+use Core\Models\BaseModel;
 use DateTime;
 
 /**

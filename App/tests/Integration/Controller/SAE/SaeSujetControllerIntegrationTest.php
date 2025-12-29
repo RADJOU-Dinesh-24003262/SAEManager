@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\Controller\SaeSujet;
+namespace Tests\Unit\Controller\SAE;
 
+use Controllers\SAE\CreateSaeController;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -26,8 +27,8 @@ use Controllers\SaeSujet\SaeSujetController;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(SaeSujetController::class)]
-class SaeSujetControllerIntegrationTest extends TestCase
+#[CoversClass(CreateSaeController::class)]
+class CreateSaeControllerIntegrationTest extends TestCase
 {
     /**
      * INTEGRATION TESTS - GLOBAL BEHAVIOR
@@ -36,7 +37,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
     public function supportMethodWorksWithoutControllerInstance(): void
     {
         // INTEGRATION TEST : the static method works without instance.
-        $result = SaeSujetController::support('/new-sae', 'GET');
+        $result = CreateSaeController::support('/create-sae', 'GET');
         $this->assertTrue($result);
     }
 
@@ -44,7 +45,7 @@ class SaeSujetControllerIntegrationTest extends TestCase
     public function integrationTestWithReflection(): void
     {
         // Integration test use reflection to check intern state.
-        $controller = new SaeSujetController();
+        $controller = new CreateSaeController();
 
         $reflection = new \ReflectionClass($controller);
 

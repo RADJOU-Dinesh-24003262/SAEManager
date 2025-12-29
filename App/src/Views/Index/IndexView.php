@@ -2,9 +2,8 @@
 
 namespace Views\Index;
 
-use Core\Utilis\SessionService;
-use Core\AbstractView;
 use Controllers\Index\IndexControllerPost;
+use Core\Views\AbstractView;
 
 /**
  * Class IndexView

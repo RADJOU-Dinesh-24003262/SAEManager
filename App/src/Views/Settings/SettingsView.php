@@ -2,8 +2,7 @@
 
 namespace Views\Settings;
 
-use Core\AbstractView;
-use Core\Utilis\SessionService;
+use Core\Views\AbstractView;
 use Models\User\User;
 
 /**

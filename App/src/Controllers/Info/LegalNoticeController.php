@@ -2,7 +2,7 @@
 
 namespace Controllers\Info;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Views\Info\LegalNoticeView;
 
 /**

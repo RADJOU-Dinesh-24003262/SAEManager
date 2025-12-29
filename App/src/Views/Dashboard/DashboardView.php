@@ -2,13 +2,11 @@
 
 namespace Views\Dashboard;
 
-use Models\User\User;
-use Core\Utilis\SessionService;
-use Core\AbstractView;
-use hoge\fuga\product\Super;
+use Core\Views\AbstractView;
 use Models\SAE\SAESubject;
-use Models\User\Student;
 use Models\User\Client;
+use Models\User\Student;
+use Models\User\User;
 
 /**
  * Class DashboardView
@@ -156,7 +154,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>SAE</h3>';
 
         if ($user->isProfessor()) {
-            $html .= '<a class="btn-create" href="/new-sae">+ Créer une nouvelle SAE</a>';
+            $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
             $html .= '<a href="/sae">Toutes les SAE</a>';
             $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {

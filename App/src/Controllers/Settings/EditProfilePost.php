@@ -2,10 +2,10 @@
 
 namespace Controllers\Settings;
 
-use Validator\EditProfileValidator;
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Validator\EditProfileValidator;
 use Views\Settings\EditProfileSuccessView;
 
 /**
