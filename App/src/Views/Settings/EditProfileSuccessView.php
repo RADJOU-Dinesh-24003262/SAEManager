@@ -3,6 +3,7 @@
 namespace Views\Settings;
 
 use Core\Views\AbstractView;
+use Override;
 
 /**
  * Edit Profile Success View
@@ -34,7 +35,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The path to the template.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -45,7 +46,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return array<string, mixed> Associative array of template keys and their values.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
 
@@ -57,7 +58,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The CSS file name.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

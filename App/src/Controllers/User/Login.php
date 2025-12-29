@@ -4,6 +4,7 @@ namespace Controllers\User;
 
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
+use Override;
 use Views\User\LoginView;
 
 /**
@@ -33,7 +34,7 @@ class Login implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // Redirect to dashboard if already logged in.
@@ -54,7 +55,7 @@ class Login implements ControllerInterface
      *
      * @return boolean True if the request is a GET to "/login", false otherwise.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "GET";

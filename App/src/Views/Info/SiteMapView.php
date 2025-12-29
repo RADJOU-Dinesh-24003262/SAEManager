@@ -3,6 +3,7 @@
 namespace Views\Info;
 
 use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class SiteMapView
@@ -36,7 +37,7 @@ class SiteMapView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -49,7 +50,7 @@ class SiteMapView extends AbstractView
      *
      * @return array<string, mixed> An empty array
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return [];
@@ -61,7 +62,7 @@ class SiteMapView extends AbstractView
 
      * @return string the name of the project 'Plan du Site - SAE Manager'.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Plan du Site - SAE Manager';
@@ -75,7 +76,7 @@ class SiteMapView extends AbstractView
      *
      * @return string The name of the CSS file.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'plan-site.css';
@@ -85,7 +86,7 @@ class SiteMapView extends AbstractView
      *
      * @return string The additional HTML headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Plan du Site de SAE Manager">

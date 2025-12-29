@@ -3,6 +3,7 @@
 namespace Views\pwd;
 
 use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class ResetPasswordSuccessView
@@ -38,7 +39,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The full path to the template file.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -52,7 +53,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return array<string, mixed> An empty array.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return [];
@@ -65,7 +66,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The page title.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Mot de passe réinitialisé - SAE Manager';
@@ -78,7 +79,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'reset-password-success.css';
@@ -92,7 +93,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The HTML script tag containing JavaScript code.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalScripts(): string
     {
         return '<script>
@@ -121,7 +122,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAE Manager">

@@ -3,6 +3,7 @@
 namespace Views\SAE;
 
 use Core\Views\AbstractView;
+use Override;
 
 /**
  * View for the SAE creation page.
@@ -28,7 +29,7 @@ class CreateSaeView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -39,7 +40,7 @@ class CreateSaeView extends AbstractView
      *
      * @return array<string, mixed>
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         $clientsHtml = '<option value="">-- Choisir un client --</option>';
@@ -67,7 +68,7 @@ class CreateSaeView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Création d\'une SAE - SAE Manager';
@@ -78,7 +79,7 @@ class CreateSaeView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'create-sae.css';

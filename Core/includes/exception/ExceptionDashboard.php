@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception;
 
+use Exception;
+
 /**
  * Class ExceptionDashboard
  *
@@ -21,7 +23,7 @@ namespace Core\includes\exception;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionDashboard extends \Exception
+class ExceptionDashboard extends Exception
 {
     /**
      * ExceptionDashboard constructor.

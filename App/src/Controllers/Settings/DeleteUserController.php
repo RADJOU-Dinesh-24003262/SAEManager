@@ -5,6 +5,8 @@ namespace Controllers\Settings;
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
+use PDOException;
 use Views\Settings\DeleteUserView;
 
 /**
@@ -34,9 +36,9 @@ class DeleteUserController implements ControllerInterface
      *  Main Controller logic for DeleterUser.
      *
      * @return void
-     * @throws \PDOException If there is a problem with database request.
+     * @throws PDOException If there is a problem with database request.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
 
@@ -60,8 +62,8 @@ class DeleteUserController implements ControllerInterface
             session_destroy();   // Destroy the session.
 
             $view->render();
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage());
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
         }
     }
 
@@ -72,7 +74,7 @@ class DeleteUserController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /delete-user and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/delete-user' && $method === 'GET';

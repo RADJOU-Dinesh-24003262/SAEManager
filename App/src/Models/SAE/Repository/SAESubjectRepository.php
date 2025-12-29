@@ -3,6 +3,7 @@
 namespace Models\SAE\Repository;
 
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Override;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
@@ -73,7 +74,7 @@ class SAESubjectRepository extends BaseRepository
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getPrimaryKey(): string
     {
         return 'sae_subject_id';
@@ -196,7 +197,7 @@ class SAESubjectRepository extends BaseRepository
      * @return SAESubject The created SAE with ID.
      * @throws PDOException If creation fails.
      */
-    #[\Override]
+    #[Override]
     public function create($entity)
     {
         try {
@@ -239,7 +240,7 @@ class SAESubjectRepository extends BaseRepository
      * @return boolean True on success.
      * @throws PDOException If update fails.
      */
-    #[\Override]
+    #[Override]
     public function update($entity): bool
     {
         try {

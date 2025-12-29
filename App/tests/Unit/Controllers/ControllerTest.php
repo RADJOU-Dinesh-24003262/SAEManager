@@ -10,10 +10,12 @@ use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ResetPasswordController;
 use Controllers\ToDoList\ToDoListController;
 use Controllers\User\Register;
+use Core\Controllers\ControllerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Unit tests for simple GET controllers
@@ -59,7 +61,7 @@ class ControllerTest extends TestCase
     {
         // Check that IndexController has the required methods
         $controller = new IndexController();
-        $reflection = new \ReflectionClass($controller);
+        $reflection = new ReflectionClass($controller);
 
         $this->assertTrue($reflection->hasMethod('control'));
         $this->assertTrue($reflection->hasMethod('support'));
@@ -86,7 +88,7 @@ class ControllerTest extends TestCase
     {
         // Check that LegalNoticeController implements the ControllerInterface
         $controller = new LegalNoticeController();
-        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller);
+        $this->assertInstanceOf(ControllerInterface::class, $controller);
     }
 
     // ========================================
@@ -183,7 +185,7 @@ class ControllerTest extends TestCase
     {
         // Check that all controllers implement the ControllerInterface
         $controller = new $controllerClass();
-        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller);
+        $this->assertInstanceOf(ControllerInterface::class, $controller);
     }
 
     #[Test]
@@ -194,7 +196,7 @@ class ControllerTest extends TestCase
         /**
  * @var class-string $controllerClass
 */
-        $reflection = new \ReflectionClass($controllerClass);
+        $reflection = new ReflectionClass($controllerClass);
 
         $this->assertTrue($reflection->hasMethod('control'));
         $this->assertTrue($reflection->hasMethod('support'));
@@ -216,7 +218,7 @@ class ControllerTest extends TestCase
         /**
  * @var class-string $controllerClass
 */
-        $reflection = new \ReflectionClass($controllerClass);
+        $reflection = new ReflectionClass($controllerClass);
         $method = $reflection->getMethod('support');
 
         $parameters = $method->getParameters();
@@ -360,8 +362,8 @@ class ControllerTest extends TestCase
 
         $this->assertNotSame($controller1, $controller2);
         $this->assertNotSame($controller1, $controller3);
-        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller2);
-        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller3);
+        $this->assertInstanceOf(ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(ControllerInterface::class, $controller3);
     }
 }

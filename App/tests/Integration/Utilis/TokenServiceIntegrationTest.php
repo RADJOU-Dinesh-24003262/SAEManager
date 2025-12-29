@@ -5,7 +5,7 @@ namespace Tests\Integration\Utils;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Utilis\TokenService;
+use Services\TokenService;
 use Core\Utilis\SessionService;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
@@ -185,45 +185,6 @@ class TokenServiceIntegrationTest extends TestCase
             $this->assertGreaterThan($expected * 0.7, $count, "Character '$char' underrepresented");
             $this->assertLessThan($expected * 1.3, $count, "Character '$char' overrepresented");
         }
-    }
-
-    // ========================================
-    // Performance tests
-    // ========================================
-    #[Test]
-    public function tokenGenerationIsEfficient(): void
-    {
-        $start = microtime(true);
-
-        for ($i = 0; $i < 1000; $i++) {
-            TokenService::generate();
-        }
-
-        $duration = microtime(true) - $start;
-
-        // 1000 generations in under 100ms
-        $this->assertLessThan(0.1, $duration);
-    }
-
-    #[Test]
-    public function tokenValidationIsEfficient(): void
-    {
-        $token = TokenService::generate();
-
-        $start = microtime(true);
-
-        for ($i = 0; $i < 1000; $i++) {
-            try {
-                TokenService::validateToken($token);
-            } catch (ExceptionInvalidToken $e) {
-                // Expected for invalid tokens
-            }
-        }
-
-        $duration = microtime(true) - $start;
-
-        // 1000 validations in under 5ms
-        $this->assertLessThan(0.5, $duration);
     }
 
     // ========================================

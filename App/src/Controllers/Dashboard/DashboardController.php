@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionDashboard;
 use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
 use Views\Dashboard\DashboardView;
 
 /**
@@ -46,7 +47,7 @@ class DashboardController implements ControllerInterface
      * @return void
      * @throws ExceptionDashboard If the data if empty.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         if (!SessionService::has('user_id')) {
@@ -93,7 +94,7 @@ class DashboardController implements ControllerInterface
      *
      * @return boolean Returns true if the path is "/dashboard" and the method is "GET"; otherwise, false.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/dashboard" && $method === "GET";

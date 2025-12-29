@@ -2,7 +2,9 @@
 
 namespace tests\Integration\Controller\User;
 
-#[\Attribute]
+use Attribute;
+
+#[Attribute]
 class RunInSeparateProcess
 {
 }

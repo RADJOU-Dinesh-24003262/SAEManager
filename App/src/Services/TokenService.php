@@ -6,6 +6,8 @@ use Core\includes\Database;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\includes\exception\ExceptionSpam;
+use PDO;
+use PDOException;
 
 /**
  * Class TokenService
@@ -79,7 +81,7 @@ class TokenService
             );
 
             return $token ? $token : throw new ExceptionCreationTokenFailed();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur création token: " . $e->getMessage());
 
             if (strpos($e->getMessage(), 'TOO_MANY_RESET_REQUESTS') !== false) {
@@ -102,6 +104,7 @@ class TokenService
      * @return array{email: string, expires_at: string, used: int|bool} The token details if valid.
      *
      * @throws ExceptionInvalidToken If the token is invalid, expired, or already used.
+     * @throws PDOException If a database error occurs.
      */
     public static function validateToken(string $token): array
     {
@@ -121,8 +124,12 @@ class TokenService
             "
             );
 
+            if (!$stmt) {
+                throw new PDOException("Failed to prepare statement: " . implode(" ", $db->errorInfo()));
+            }
+
             $stmt->execute(['token' => $token]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$result) {
                 throw new ExceptionInvalidToken(
@@ -140,7 +147,7 @@ class TokenService
             }
 
             return $result;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
             throw new ExceptionInvalidToken("Erreur lors de la validation du lien. Veuillez réessayer plus tard.");
         }
@@ -167,7 +174,7 @@ class TokenService
             );
 
             return $stmt->execute(['token' => $token]);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur marquage token: " . $e->getMessage());
             return false;
         }
@@ -191,7 +198,7 @@ class TokenService
             );
 
             $stmt->execute();
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur nettoyage global: " . $e->getMessage());
         }
     }

@@ -7,7 +7,10 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
+use Exception;
 use Models\User\User;
+use Override;
+use PDOException;
 use Validator\ValidationServiceRegister;
 use Views\User\RegisterSuccessView;
 use Views\User\RegisterView;
@@ -38,9 +41,9 @@ class RegisterPost implements ControllerInterface
      *
      * @return void
      *
-     * @throws \Exception For any other unexpected errors during the registration process.
+     * @throws Exception For any other unexpected errors during the registration process.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // CSRF Check.
@@ -75,10 +78,10 @@ class RegisterPost implements ControllerInterface
             }
             SessionService::setFlash('errors', $errors);
             Logger::log('REGISTER_FAIL', "Échec validation inscription IP: {$_SERVER['REMOTE_ADDR']}", null, 'INFO');
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             Logger::log('DB_ERROR', "Erreur BDD lors de l'inscription: " . $e->getMessage(), null, 'CRITICAL');
             SessionService::setFlash('errors', ['general' => 'Une erreur est survenue, réessayez plus tard']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Logger::log('REGISTER_ERROR', "Erreur lors de l'inscription: " . $e->getMessage(), null, 'ERROR');
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
@@ -93,7 +96,7 @@ class RegisterPost implements ControllerInterface
      *
      * @return boolean True if the path is "/register" and the method is POST.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/register" && $method === "POST";

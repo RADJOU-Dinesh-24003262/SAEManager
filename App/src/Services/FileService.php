@@ -2,6 +2,8 @@
 
 namespace Services;
 
+use Exception;
+
 /**
  * Service to handle file operations.
  *
@@ -27,13 +29,13 @@ class FileService
      * @param string $content  The markdown content.
      * @param string $filename The desired filename (without extension).
      * @return string The absolute path to the saved file.
-     * @throws \Exception If file cannot be saved.
+     * @throws Exception If file cannot be saved.
      */
     public static function saveSaeDescription(string $content, string $filename): string
     {
         if (!is_dir(self::STORAGE_DIR)) {
             if (!mkdir(self::STORAGE_DIR, 0777, true)) {
-                throw new \Exception("Impossible de créer le dossier de stockage.");
+                throw new Exception("Impossible de créer le dossier de stockage.");
             }
         }
 
@@ -43,7 +45,7 @@ class FileService
         $fullPath = realpath(self::STORAGE_DIR) . '/' . $fileNameWithExt;
 
         if (file_put_contents($fullPath, $content) === false) {
-            throw new \Exception("Impossible d'écrire le fichier de description.");
+            throw new Exception("Impossible d'écrire le fichier de description.");
         }
 
         return $fileNameWithExt;

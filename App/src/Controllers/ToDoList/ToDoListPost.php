@@ -6,6 +6,9 @@ use App\Models\ToDoList\ToDoList;
 use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;
+use Exception;
+use Override;
+use PDOException;
 use Validator\ToDoListValidator;
 use Views\ToDoList\ToDoListView;
 
@@ -35,9 +38,9 @@ class ToDoListPost implements ControllerInterface
      *
      * @return void
      *
-     * @throws \Exception For any other unexpected errors during the save of the task process.
+     * @throws Exception For any other unexpected errors during the save of the task process.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // Validate the data.
@@ -61,7 +64,7 @@ class ToDoListPost implements ControllerInterface
                 return;
             } else {
                 error_log("Erreur tâche enregistré : " . $todolist->getToDoId());
-                throw new \Exception("Erreur lors de la sauvegarde");
+                throw new Exception("Erreur lors de la sauvegarde");
             }
         } catch (ExceptionValidationEmptys $e) {
             $errors = [];
@@ -69,10 +72,10 @@ class ToDoListPost implements ControllerInterface
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Erreur récupération données utilisateur: " . $e->getMessage());
             SessionService::setFlash('errors', ['general' => 'Une erreur est survenu, réessayez plus tard']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
         $view = new ToDoListView();
@@ -87,7 +90,7 @@ class ToDoListPost implements ControllerInterface
      *
      * @return boolean True if the path is "/to-do-list" and the method is POST.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/to-do-list" && $method === "POST";

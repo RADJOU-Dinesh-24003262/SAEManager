@@ -3,6 +3,7 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Override;
 
 /**
  * Class ResetPasswordValidator
@@ -41,7 +42,7 @@ class ResetPasswordValidator extends FormValidator
      *
      * @throws ExceptionValidationResetPassword All the errors that might have been found.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         if (!$this->isValidPassword($data['pwdnew'])) {
