@@ -2,8 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\Controllers\ControllerInterface;
-use Core\Utilis\SessionService;
+use Controllers\BaseController;
 use Override;
 use Views\Settings\SettingsView;
 
@@ -28,7 +27,7 @@ use Views\Settings\SettingsView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class SettingsController implements ControllerInterface
+class SettingsController extends BaseController
 {
     /**
      *  Main Controller logic for SettingsController.
@@ -38,14 +37,9 @@ class SettingsController implements ControllerInterface
     #[Override]
     public function control(): void
     {
+        $this->ensureAuthenticated();
 
-        if (!(SessionService::has('user_id'))) {
-            header('Location: /');
-            exit();
-        }
-
-        $user = unserialize(SessionService::get('USER'));
-        $data['user'] = $user;
+        $data['user'] = $this->user;
         $view = new SettingsView($data);
         $view->render();
     }
