@@ -2,11 +2,10 @@
 
 namespace Controllers\Dashboard;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionDashboard;
 use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
-use Models\User\User;
 use Override;
 use Views\Dashboard\DashboardView;
 
@@ -31,7 +30,7 @@ use Views\Dashboard\DashboardView;
  * @license MIT https://opensource.org/licenses/MIT
  * @link    https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
-class DashboardController implements ControllerInterface
+class DashboardController extends BaseController
 {
     /**
      * Handles the logic to display the dashboard.
@@ -50,24 +49,11 @@ class DashboardController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource.']);
-            header('Location: /login');
-            exit();
-        }
+        $this->ensureAuthenticated();
 
         try {
-            // Retrieve the user object stored in the session.
-            $user = unserialize(SessionService::get('USER'));
-
-            $data['user'] = $user;
-
-            if (!$user || !($user instanceof User)) {
-                SessionService::remove('USER');
-                throw new ExceptionDashboard('Utilisateur inconnu ou non authentifié.');
-            }
-
-            $data['saes'] = $user->getSaes();
+            $data['user'] = $this->user;
+            $data['saes'] = $this->user->getSaes();
 
             // Create and render the dashboard view.
             $view = new DashboardView($data);

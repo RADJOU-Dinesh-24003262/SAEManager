@@ -2,8 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\Controllers\ControllerInterface;
-use Core\Utilis\SessionService;
+use Controllers\BaseController;
 use Override;
 use Views\Settings\EditProfileView;
 
@@ -28,7 +27,7 @@ use Views\Settings\EditProfileView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class EditProfileController implements ControllerInterface
+class EditProfileController extends BaseController
 {
     /**
      * Main Controller logic for EditProfileController.
@@ -38,13 +37,9 @@ class EditProfileController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        if (!(SessionService::has('user_id'))) {
-            header('Location: /');
-            exit();
-        }
-
-        $user = unserialize(SessionService::get('USER'));
-        $data['user'] = $user;
+        $this->ensureAuthenticated();
+        
+        $data['user'] = $this->user;
         $view = new EditProfileView($data);
         $view->render();
     }

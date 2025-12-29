@@ -2,11 +2,10 @@
 
 namespace Controllers\ToDoList;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\SAE\SAE;
-use Models\User\User;
 use Override;
 use Views\ToDoList\ToDoListView;
 
@@ -27,7 +26,7 @@ use Views\ToDoList\ToDoListView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoListController implements ControllerInterface
+class ToDoListController extends BaseController
 {
     /**
      * @method void control() Controls the rendering of the To-Do List view.
@@ -38,30 +37,17 @@ class ToDoListController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        // Redirect to dashboard if already logged in.
-        if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Vous devez vous authentifier avant d\'accéder à cette ressource.']);
-            header('Location: /');
-            exit();
-        }
+        $this->ensureAuthenticated();
 
         try {
-            // Retrieve the user object stored in the session.
-            $user = unserialize(SessionService::get('USER'));
-
-            $data['user'] = $user;
-
-            if (!$user || !($user instanceof User)) {
-                throw new Exception('Unknown user');
-            }
-
-            $data['saes'] = $user->getSaes();
+            $data['user'] = $this->user;
+            $data['saes'] = $this->user->getSaes();
 
             $parts = explode('/', $_SERVER['REQUEST_URI']);
             $sae_id = intval($parts[2]);
 
             $sae = SAE::getInstance();
-            $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
+            $data['sae'] = $sae->getCompleteSAEData($sae_id, $this->user);
             if ($data['sae'] === null) {
                 throw new Exception("Vous n\'avez pas accès à cette SAE.");
             }

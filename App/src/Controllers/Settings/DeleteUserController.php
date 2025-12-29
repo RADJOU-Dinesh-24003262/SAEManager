@@ -2,7 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\User\User;
 use Override;
@@ -30,7 +30,7 @@ use Views\Settings\DeleteUserView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class DeleteUserController implements ControllerInterface
+class DeleteUserController extends BaseController
 {
     /**
      *  Main Controller logic for DeleterUser.
@@ -41,19 +41,12 @@ class DeleteUserController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-
-        if (!(SessionService::has('user_id'))) {
-            http_response_code(404);
-            echo "Page non trouvée";
-            exit();
-        }
-
-
-        $user = unserialize(SessionService::get('USER'));
-        $data['user'] = $user;
+        $this->ensureAuthenticated();
+        
+        $data['user'] = $this->user;
 
         try {
-            $email = $user->getEmail();
+            $email = $this->user->getEmail();
             User::deleteByEmail($email);
             $view = new DeleteUserView($data);
 
