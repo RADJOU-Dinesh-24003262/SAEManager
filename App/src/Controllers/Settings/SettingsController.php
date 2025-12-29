@@ -4,6 +4,7 @@ namespace Controllers\Settings;
 
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
+use Override;
 use Views\Settings\SettingsView;
 
 /**
@@ -34,7 +35,7 @@ class SettingsController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
 
@@ -56,7 +57,7 @@ class SettingsController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /profile and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/settings' and $method === 'GET';

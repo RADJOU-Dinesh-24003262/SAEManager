@@ -3,6 +3,7 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
+use Override;
 
 /**
  * Class SaeSujetValidator
@@ -36,7 +37,7 @@ class CreateSaeValidator extends FormValidator
      * @return void
      * @throws ExeptionValidationSAECreation If validation fails.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         // Validate name length.

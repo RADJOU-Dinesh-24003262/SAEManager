@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception\ExceptionValidation;
 
+use Exception;
+
 /**
  * ExceptionValidationResetPassword
  *
@@ -18,7 +20,7 @@ namespace Core\includes\exception\ExceptionValidation;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionValidationResetPassword extends \Exception
+class ExceptionValidationResetPassword extends Exception
 {
     /**
      * @var string The name of the field that failed validation

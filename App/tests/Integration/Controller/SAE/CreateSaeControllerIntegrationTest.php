@@ -8,10 +8,9 @@ use Controllers\SAE\CreateSaeController;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Controllers\SaeSujet\SaeSujetController;
 
 /**
- * Integration tests for SaeSujetController
+ * Integration tests for CreateSaeController
  *
  * @category Test
  *
@@ -37,7 +36,7 @@ class CreateSaeControllerIntegrationTest extends TestCase
     public function supportMethodWorksWithoutControllerInstance(): void
     {
         // INTEGRATION TEST : the static method works without instance.
-        $result = CreateSaeController::support('/create-sae', 'GET');
+        $result = CreateSaeController::support('/sae/create', 'GET');
         $this->assertTrue($result);
     }
 

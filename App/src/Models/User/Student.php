@@ -3,8 +3,10 @@
 namespace Models\User;
 
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Override;
 use PDO;
 use Core\includes\Database;
+use PDOException;
 
 /**
  * Represents a student user in the system.
@@ -91,7 +93,7 @@ class Student extends User
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -119,7 +121,7 @@ class Student extends User
      * @return void
      * @throws ExceptionFetchDataBD If the data can't be fetch.
      */
-    #[\Override]
+    #[Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -159,7 +161,7 @@ class Student extends User
      *   file_path: string|null
      * }> An array of SAE data (subject and group information).
      */
-    #[\Override]
+    #[Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -180,7 +182,7 @@ class Student extends User
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public function canAccessSAE(int $saeId): bool
     {
         try {
@@ -192,7 +194,7 @@ class Student extends User
             );
             $stmt->execute(['student_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur canAccessSAE (Student) : ' . $e->getMessage());
             return false;
         }
@@ -204,7 +206,7 @@ class Student extends User
      * @param integer $todoId The to-do ID.
      * @return boolean True if modifiable, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public function canModifyTodo(int $todoId): bool
     {
         try {
@@ -216,7 +218,7 @@ class Student extends User
             );
             $stmt->execute(['todo_id' => $todoId, 'student_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur canModifyTodo (Student) : ' . $e->getMessage());
             return false;
         }
@@ -237,7 +239,7 @@ class Student extends User
      *   tp: int
      * }> The list of accessible group members.
      */
-    #[\Override]
+    #[Override]
     public function getAccessibleGroupMembers(int $saeId): array
     {
         try {
@@ -254,7 +256,7 @@ class Student extends User
             );
             $stmt->execute(['user_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur getAccessibleGroupMembers (Student) : ' . $e->getMessage());
             return [];
         }
@@ -266,7 +268,7 @@ class Student extends User
      * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
      * @return boolean Always false for student.
      */
-    #[\Override]
+    #[Override]
     public function canManageSAE(?int $saeId = null): bool
     {
         return false;

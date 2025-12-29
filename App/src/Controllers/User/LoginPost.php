@@ -9,6 +9,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
 use Validator\LoginValidator;
 use Views\User\LoginView;
 
@@ -39,7 +40,7 @@ class LoginPost implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
 
@@ -99,7 +100,7 @@ class LoginPost implements ControllerInterface
      *
      * @return boolean True if the path is "/login" and the method is POST.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "POST";

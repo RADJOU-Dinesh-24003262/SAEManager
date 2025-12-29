@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception\ExceptionToken;
 
+use Exception;
+
 /**
  * ExceptionCreationTokenFailed
  *
@@ -18,7 +20,7 @@ namespace Core\includes\exception\ExceptionToken;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionCreationTokenFailed extends \Exception
+class ExceptionCreationTokenFailed extends Exception
 {
     /**
      * Constructor for the ExceptionCreationTokenFailed class.

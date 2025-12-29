@@ -2,6 +2,9 @@
 
 namespace Core\Models;
 
+use ReflectionClass;
+use ReflectionProperty;
+
 /**
  * Base model for all entities.
  *
@@ -36,9 +39,9 @@ abstract class BaseModel
      */
     public function toArray(): array
     {
-        $reflection = new \ReflectionClass($this);
+        $reflection = new ReflectionClass($this);
         $properties = $reflection->getProperties(
-            \ReflectionProperty::IS_PRIVATE | \ReflectionProperty::IS_PROTECTED
+            ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED
         );
 
         $data = [];

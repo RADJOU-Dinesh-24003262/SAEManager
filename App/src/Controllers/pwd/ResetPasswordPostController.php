@@ -9,6 +9,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
 use Services\TokenService;
 use Validator\ResetPasswordValidator;
 use Views\pwd\ResetPasswordSuccessView;
@@ -33,7 +34,7 @@ class ResetPasswordPostController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         try {
@@ -91,7 +92,7 @@ class ResetPasswordPostController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean Is the method post?
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/reset-password" && $method === "POST";

@@ -5,6 +5,7 @@ namespace Validator;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\includes\exception\ExceptionSpam;
 use Core\Utilis\SessionService;
+use Override;
 
 /**
  * Class ForgotPasswordValidator
@@ -50,7 +51,7 @@ class ForgotPasswordValidator extends FormValidator
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         if (!$this->isValidEmail($data['email'])) {

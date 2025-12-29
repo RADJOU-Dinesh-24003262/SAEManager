@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
+use ReflectionClass;
 use Validator\LoginValidator;
 use Validator\FormValidator;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -177,7 +178,7 @@ class LoginValidatorTest extends TestCase
     #[Test]
     public function validatorHasCorrectRequiredFields(): void
     {
-        $reflection = new \ReflectionClass($this->validator);
+        $reflection = new ReflectionClass($this->validator);
         $property = $reflection->getProperty('required');
         $property->setAccessible(true);
         $required = $property->getValue($this->validator);

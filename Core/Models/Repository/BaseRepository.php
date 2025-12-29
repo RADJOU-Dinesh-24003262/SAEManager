@@ -4,6 +4,7 @@ namespace Core\Models\Repository;
 
 use Core\includes\Database;
 use Exception;
+use Override;
 use PDO;
 use PDOException;
 
@@ -63,7 +64,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param integer $id The ID of the entry to find in the database.
      * @return T|null Returns the entity if found, null otherwise
      */
-    #[\Override]
+    #[Override]
     public function findById(int $id)
     {
         try {
@@ -86,7 +87,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param integer $id The ID of the entity to delete.
      * @return boolean True on success, false on failure.
      */
-    #[\Override]
+    #[Override]
     public function delete(int $id): bool
     {
         try {

@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception\ExceptionValidation;
 
+use Exception;
+
 /**
  * Class ExceptionValidationLogin
  *
@@ -22,7 +24,7 @@ namespace Core\includes\exception\ExceptionValidation;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionValidationLogin extends \Exception
+class ExceptionValidationLogin extends Exception
 {
     /**
      * @var string Additional information about the login validation failure

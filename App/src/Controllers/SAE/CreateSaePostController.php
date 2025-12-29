@@ -11,6 +11,7 @@ use Exception;
 use Models\SAE\SAE;
 use Models\User\Client;
 use Models\User\User;
+use Override;
 use Services\FileService;
 use Validator\CreateSaeValidator;
 use Views\SAE\CreateSaeView;
@@ -33,7 +34,7 @@ class CreateSaePostController implements ControllerInterface
      * @return void
      * @throws Exception If an unknown user is encountered.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // Redirect to /login if not logged in.
@@ -114,7 +115,7 @@ class CreateSaePostController implements ControllerInterface
      *
      * @return boolean
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/sae/create" && $method === "POST";

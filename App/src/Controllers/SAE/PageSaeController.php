@@ -10,6 +10,7 @@ use Core\Utilis\SessionService;
 use Exception;
 use Models\SAE\SAE;
 use Models\User\User;
+use Override;
 use Views\PageSAE\PageSaeView;
 
 /**
@@ -40,7 +41,7 @@ class PageSaeController implements ControllerInterface
      * @throws Exception If the user variable is not as expected.
      * @throws ExceptionAccessDenied If access is denied.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // Redirect to /login if not logged in.
@@ -96,7 +97,7 @@ class PageSaeController implements ControllerInterface
      *
      * @return boolean True if the controller supports the request, otherwise false
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match('/^\/sae\/\d*$/', $path) && strtoupper($method) === 'GET';

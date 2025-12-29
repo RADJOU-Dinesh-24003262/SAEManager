@@ -4,6 +4,7 @@ namespace Controllers\User;
 
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
+use Override;
 use Views\Index\IndexView;
 
 /**
@@ -28,7 +29,7 @@ class Logout implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         // Redirect to login page if user is not logged in.
@@ -59,7 +60,7 @@ class Logout implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /logout and method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/logout" && strtoupper($method) === "GET";

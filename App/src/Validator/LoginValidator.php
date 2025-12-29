@@ -3,6 +3,7 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Override;
 
 /**
  * Class LoginValidator
@@ -41,7 +42,7 @@ class LoginValidator extends FormValidator
      *
      * @throws ExceptionValidationLogin All the errors that might have been found.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         if (!$this->isValidEmail($data['email'])) {

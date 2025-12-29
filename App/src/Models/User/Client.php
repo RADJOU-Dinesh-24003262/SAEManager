@@ -2,6 +2,7 @@
 
 namespace Models\User;
 
+use Override;
 use PDO;
 use Core\includes\Database;
 use PDOException;
@@ -48,7 +49,7 @@ class Client extends User
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -72,7 +73,7 @@ class Client extends User
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -110,7 +111,7 @@ class Client extends User
      *   file_path: string|null
      * }> An array of SAE subjects data.
      */
-    #[\Override]
+    #[Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -128,7 +129,7 @@ class Client extends User
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public function canAccessSAE(int $saeId): bool
     {
         try {
@@ -139,7 +140,7 @@ class Client extends User
             );
             $stmt->execute(['sae_id' => $saeId, 'client_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur canAccessSAE (Client) : ' . $e->getMessage());
             return false;
         }
@@ -160,7 +161,7 @@ class Client extends User
      *   tp: int
      * }> The list of accessible group members.
      */
-    #[\Override]
+    #[Override]
     public function getAccessibleGroupMembers(int $saeId): array
     {
         try {
@@ -177,7 +178,7 @@ class Client extends User
             );
             $stmt->execute(['client_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur getAccessibleGroupMembers (Client) : ' . $e->getMessage());
             return [];
         }
@@ -189,7 +190,7 @@ class Client extends User
      * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
      * @return boolean Always false for client.
      */
-    #[\Override]
+    #[Override]
     public function canManageSAE(?int $saeId = null): bool
     {
         return false;
@@ -201,7 +202,7 @@ class Client extends User
      * @param integer $todoId The to-do item ID.
      * @return boolean Always false for client.
      */
-    #[\Override]
+    #[Override]
     public function canModifyTodo(int $todoId): bool
     {
         return false;

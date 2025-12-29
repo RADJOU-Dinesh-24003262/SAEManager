@@ -5,6 +5,7 @@ namespace Views\User;
 use Core\Views\AbstractView;
 use Models\User\Student;
 use Models\User\User;
+use Override;
 
 /**
  * Class RegisterSuccessView
@@ -64,7 +65,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -75,7 +76,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return array<string, string>
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return [
@@ -147,7 +148,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Inscription réussie - SAE Manager';
@@ -158,7 +159,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return self::CSS_REGISTER_SUCCESS;
@@ -169,7 +170,7 @@ class RegisterSuccessView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de succès d\'inscription de SAE Manager">

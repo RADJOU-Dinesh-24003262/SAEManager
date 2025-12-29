@@ -10,6 +10,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
 use Validator\ForgotPasswordValidator;
@@ -50,7 +51,7 @@ class ForgotPasswordPostController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         try {
@@ -102,7 +103,7 @@ class ForgotPasswordPostController implements ControllerInterface
      * @param  string $method The HTTP method (e.g., "POST").
      * @return boolean True if the controller should handle the request, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/forgot-password" && $method === "POST";

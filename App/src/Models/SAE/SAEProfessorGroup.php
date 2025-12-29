@@ -3,6 +3,7 @@
 namespace Models\SAE;
 
 use Core\Models\BaseModel;
+use Override;
 
 /**
  * Represents the association between a Professor and a SAE.
@@ -45,7 +46,7 @@ class SAEProfessorGroup extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
-    #[\Override]
+    #[Override]
     public function validate(): array
     {
         $errors = [];
@@ -66,7 +67,7 @@ class SAEProfessorGroup extends BaseModel
      *
      * @return array<string, int>
      */
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

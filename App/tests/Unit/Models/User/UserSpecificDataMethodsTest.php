@@ -2,6 +2,9 @@
 
 namespace Tests\Unit\Models\User;
 
+use PDOException;
+use PDOStatement;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,6 +15,8 @@ use Models\User\User;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Tests for the methods fetchSpecificData and saveSpecificData
@@ -25,14 +30,14 @@ use PDO;
 class UserSpecificDataMethodsTest extends TestCase
 {
     /**
-     * @var \Core\includes\Database|\PHPUnit\Framework\MockObject\MockObject|null
+     * @var Database|MockObject|null
      */
-    private \Core\includes\Database|\PHPUnit\Framework\MockObject\MockObject|null $mockPdo = null;
+    private Database|MockObject|null $mockPdo = null;
 
     /**
-     * @var \PDOStatement|\PHPUnit\Framework\MockObject\MockObject|null
+     * @var PDOStatement|MockObject|null
      */
-    private \PDOStatement|\PHPUnit\Framework\MockObject\MockObject|null $mockStmt = null;
+    private PDOStatement|MockObject|null $mockStmt = null;
 
     protected function setUp(): void
     {
@@ -40,7 +45,7 @@ class UserSpecificDataMethodsTest extends TestCase
         // Create a mock of the Database class (extends PDO) to assign
         // it to the typed Database::$instance property in tests.
         $this->mockPdo = $this->createMock(Database::class);
-        $this->mockStmt = $this->createMock(\PDOStatement::class);
+        $this->mockStmt = $this->createMock(PDOStatement::class);
     }
 
     protected function tearDown(): void
@@ -65,7 +70,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'major' => 'A'
         ];
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Expect the execute method to be called once with this parameter
         $this->mockStmt->expects($this->once())
@@ -78,7 +83,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn($studentRow);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         // Expect the prepare method to be called with a query containing 'FROM students'
         $this->mockPdo->expects($this->once())
@@ -87,14 +92,14 @@ class UserSpecificDataMethodsTest extends TestCase
             ->willReturn($this->mockStmt);
 
         // Use reflection to set the Database instance property
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         // Call fetchSpecificData via reflection
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($student, 'fetchSpecificData');
+        $method = new ReflectionMethod($student, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 'test@etu.univ-amu.fr');
 
@@ -111,7 +116,7 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $this->expectException(ExceptionFetchDataBD::class);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Expect execute to be called once
         $this->mockStmt->expects($this->once())
@@ -123,7 +128,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         // Expect prepare to be called
         $this->mockPdo->expects($this->once())
@@ -131,14 +136,14 @@ class UserSpecificDataMethodsTest extends TestCase
             ->willReturn($this->mockStmt);
 
         // Set the Database instance using reflection
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         // Call fetchSpecificData via reflection, expecting an exception
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($student, 'fetchSpecificData');
+        $method = new ReflectionMethod($student, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 'nonexistent@test.fr');
     }
@@ -148,7 +153,7 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedQuery = null;
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Expect execute to be called once
         $this->mockStmt->expects($this->once())
@@ -168,7 +173,7 @@ class UserSpecificDataMethodsTest extends TestCase
                 ]
             );
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         // Capture the prepared SQL query
         $this->mockPdo->expects($this->once())
@@ -181,14 +186,14 @@ class UserSpecificDataMethodsTest extends TestCase
             );
 
         // Set the Database instance
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         // Call fetchSpecificData
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($student, 'fetchSpecificData');
+        $method = new ReflectionMethod($student, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 'test@test.fr');
 
@@ -213,7 +218,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'amu_id' => 'martin456'
         ];
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Expect execute to be called with the email
         $this->mockStmt->expects($this->once())
@@ -226,7 +231,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn($professorRow);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         // Expect prepare to include 'FROM professors'
         $this->mockPdo->expects($this->once())
@@ -235,14 +240,14 @@ class UserSpecificDataMethodsTest extends TestCase
             ->willReturn($this->mockStmt);
 
         // Set Database instance
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         // Call fetchSpecificData
         $professor = new Professor(['first_name' => 'Test', 'last_name' => 'Prof']);
-        $method = new \ReflectionMethod($professor, 'fetchSpecificData');
+        $method = new ReflectionMethod($professor, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($professor, $this->mockPdo, 'prof@univ-amu.fr');
 
@@ -252,7 +257,7 @@ class UserSpecificDataMethodsTest extends TestCase
     #[Test]
     public function professorFetchSpecificDataHandlesEmptyResult(): void
     {
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Mock execute to succeed
         $this->mockStmt->expects($this->once())
@@ -264,19 +269,19 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn(false);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         $professor = new Professor(['first_name' => 'Test', 'last_name' => 'Prof']);
-        $method = new \ReflectionMethod($professor, 'fetchSpecificData');
+        $method = new ReflectionMethod($professor, 'fetchSpecificData');
         $method->setAccessible(true);
 
         // Should not throw any exception for Professor
@@ -296,7 +301,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'organisation' => 'Tech Corp'
         ];
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Expect execute called with email
         $this->mockStmt->expects($this->once())
@@ -308,7 +313,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn($clientRow);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -316,14 +321,14 @@ class UserSpecificDataMethodsTest extends TestCase
             ->willReturn($this->mockStmt);
 
         // Set Database instance
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         // Call fetchSpecificData
         $client = new Client(['first_name' => 'Client', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($client, 'fetchSpecificData');
+        $method = new ReflectionMethod($client, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($client, $this->mockPdo, 'client@company.com');
 
@@ -338,7 +343,7 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -349,14 +354,14 @@ class UserSpecificDataMethodsTest extends TestCase
                 }
             );
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->with($this->stringContains('INSERT INTO students'))
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
@@ -370,7 +375,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ]
         );
 
-        $method = new \ReflectionMethod($student, 'saveSpecificData');
+        $method = new ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 42);
 
@@ -387,13 +392,13 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedQuery = null;
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
@@ -404,7 +409,7 @@ class UserSpecificDataMethodsTest extends TestCase
                 }
             );
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
@@ -418,7 +423,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ]
         );
 
-        $method = new \ReflectionMethod($student, 'saveSpecificData');
+        $method = new ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 1);
 
@@ -442,7 +447,7 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -453,14 +458,14 @@ class UserSpecificDataMethodsTest extends TestCase
                 }
             );
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->with($this->stringContains('INSERT INTO professors'))
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
@@ -471,7 +476,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ]
         );
 
-        $method = new \ReflectionMethod($professor, 'saveSpecificData');
+        $method = new ReflectionMethod($professor, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($professor, $this->mockPdo, 99);
 
@@ -488,7 +493,7 @@ class UserSpecificDataMethodsTest extends TestCase
     {
         $capturedParams = null;
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -499,14 +504,14 @@ class UserSpecificDataMethodsTest extends TestCase
                 }
             );
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->with($this->stringContains('INSERT INTO clients'))
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
@@ -517,7 +522,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ]
         );
 
-        $method = new \ReflectionMethod($client, 'saveSpecificData');
+        $method = new ReflectionMethod($client, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($client, $this->mockPdo, 77);
 
@@ -540,27 +545,27 @@ class UserSpecificDataMethodsTest extends TestCase
             'major' => 'B'
         ];
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         // Test save
         $this->mockStmt->expects($this->once())
             ->method('execute')
             ->willReturn(true);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         $student = new Student($originalData);
 
-        $saveMethod = new \ReflectionMethod($student, 'saveSpecificData');
+        $saveMethod = new ReflectionMethod($student, 'saveSpecificData');
         $saveMethod->setAccessible(true);
         $saveMethod->invoke($student, $this->mockPdo, 1);
 
@@ -578,15 +583,15 @@ class UserSpecificDataMethodsTest extends TestCase
     #[Test]
     public function saveSpecificDataHandlesDatabaseException(): void
     {
-        $this->expectException(\PDOException::class);
+        $this->expectException(PDOException::class);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
-            ->willThrowException(new \PDOException('Database error'));
+            ->willThrowException(new PDOException('Database error'));
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
@@ -600,7 +605,7 @@ class UserSpecificDataMethodsTest extends TestCase
             ]
         );
 
-        $method = new \ReflectionMethod($student, 'saveSpecificData');
+        $method = new ReflectionMethod($student, 'saveSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 1);
     }
@@ -617,7 +622,7 @@ class UserSpecificDataMethodsTest extends TestCase
             'invalid_field' => 'should_be_ignored'
         ];
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
 
         $this->mockStmt->expects($this->once())
             ->method('execute')
@@ -627,19 +632,19 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn($studentRow);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($student, 'fetchSpecificData');
+        $method = new ReflectionMethod($student, 'fetchSpecificData');
         $method->setAccessible(true);
 
         // Should not throw any exception
@@ -655,7 +660,7 @@ class UserSpecificDataMethodsTest extends TestCase
     #[Test]
     public function fetchSpecificDataPreservesDataTypes(): void
     {
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockStmt);
+        $this->assertInstanceOf(MockObject::class, $this->mockStmt);
         $studentRow = [
             'student_id' => 1,
             'amu_id' => 'test123',
@@ -673,19 +678,19 @@ class UserSpecificDataMethodsTest extends TestCase
             ->method('fetch')
             ->willReturn($studentRow);
 
-        $this->assertInstanceOf(\PHPUnit\Framework\MockObject\MockObject::class, $this->mockPdo);
+        $this->assertInstanceOf(MockObject::class, $this->mockPdo);
 
         $this->mockPdo->expects($this->once())
             ->method('prepare')
             ->willReturn($this->mockStmt);
 
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, $this->mockPdo);
 
         $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $method = new \ReflectionMethod($student, 'fetchSpecificData');
+        $method = new ReflectionMethod($student, 'fetchSpecificData');
         $method->setAccessible(true);
         $method->invoke($student, $this->mockPdo, 'test@test.fr');
 

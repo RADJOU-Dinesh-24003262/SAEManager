@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
 use PDOException;
@@ -102,7 +103,7 @@ abstract class User
      * @param array<string, mixed> $data The registration data.
      *
      * @return User The created user instance.
-     * @throws \InvalidArgumentException If user is not valid.
+     * @throws InvalidArgumentException If user is not valid.
      */
     public static function createFromRegistrationData(array $data): User
     {
@@ -112,7 +113,7 @@ abstract class User
             'student' => new Student($data),
             'professor' => new Professor($data),
             'client' => new Client($data),
-            default => throw new \InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
+            default => throw new InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
         };
 
         $user->setPassword($data['password']);
@@ -347,7 +348,7 @@ abstract class User
      * @param string $email The user's email.
      *
      * @return void
-     * @throws \PDOException If the User is not found during Deletion of his account.
+     * @throws PDOException If the User is not found during Deletion of his account.
      */
     public static function deleteByEmail(string $email): void
     {
@@ -358,11 +359,11 @@ abstract class User
             $stmt->execute(['email' => $email]);
 
             if ($stmt->rowCount() === 0) {
-                throw new \PDOException();
+                throw new PDOException();
             }
-        } catch (\PDOException $e) {
-            error_log('Erreur suppression du compte utilisateur : ' . $e->getMessage());
-            throw new \PDOException();
+        } catch (PDOException $e) {
+            error_log('Erreur suppression du compte utilisateur : ' . $email . '. ' . $e->getMessage());
+            throw new PDOException();
         }
     }
 
@@ -375,7 +376,7 @@ abstract class User
      *
      * @return void
      *
-     * @throws \PDOException If the modification fails.
+     * @throws PDOException If the modification fails.
      */
     public static function modifyField(string $field, string $value, string $email): void
     {
@@ -385,9 +386,9 @@ abstract class User
             $stmt->execute(['value' => $value, 'email' => $email]);
 
             if ($stmt->rowCount() === 0) {
-                throw new \PDOException("No rows affected for email: {$email}");
+                throw new PDOException("No rows affected for email: {$email}");
             }
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur modification du compte utilisateur : ' . $e->getMessage());
             throw $e;
         }
@@ -454,7 +455,7 @@ abstract class User
             $stmt->execute(['group_id' => $groupId]);
             $result = $stmt->fetchColumn();
             return $result !== false ? (int) $result : null;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Error getting SAE ID from group: ' . $e->getMessage());
             return null;
         }

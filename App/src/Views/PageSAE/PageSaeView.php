@@ -2,6 +2,7 @@
 
 namespace Views\PageSAE;
 
+use Override;
 use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
@@ -45,7 +46,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -58,7 +59,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return array<string, string> An empty array
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return array_merge(
@@ -222,7 +223,7 @@ class PageSaeView extends BaseSaeView
 
      * @return string the name of the project 'Page SAE - SAE Manager'.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'SAE ' . $this->data['sae']['subject']->getSubjectName() . ' - SAE Manager';
@@ -236,7 +237,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string The name of the CSS file.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'page-sae.css';
@@ -246,7 +247,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string The additional HTML headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page SAE de SAE Manager">

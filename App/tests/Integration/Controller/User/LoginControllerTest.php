@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;
 use Core\Views\AbstractView;
+use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Validator\FormValidator;
@@ -84,7 +85,7 @@ class LoginControllerTest extends TestCase
         ob_start();
         try {
             $controller->control();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Expected exception due to redirect or exit
         }
         ob_end_clean();

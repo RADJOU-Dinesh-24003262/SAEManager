@@ -7,6 +7,7 @@ use Models\SAE\SAESubject;
 use Models\User\Client;
 use Models\User\Student;
 use Models\User\User;
+use Override;
 
 /**
  * Class DashboardView
@@ -58,7 +59,7 @@ class DashboardView extends AbstractView
      *
      * @return string The template path.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -69,7 +70,7 @@ class DashboardView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'] ?? [];
@@ -247,7 +248,7 @@ class DashboardView extends AbstractView
      *
      * @return string The title of the dashboard page.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Dashboard - SAE Manager';
@@ -258,7 +259,7 @@ class DashboardView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'dashboard.css';
@@ -269,7 +270,7 @@ class DashboardView extends AbstractView
      *
      * @return string The meta and OG headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Tableau de bord utilisateur de SAE Manager">

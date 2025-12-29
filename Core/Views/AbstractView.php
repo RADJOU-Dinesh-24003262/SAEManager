@@ -3,6 +3,7 @@
 namespace Core\Views;
 
 use Core\Utilis\SessionService;
+use Exception;
 
 /**
  * The abstract class which will will be used to create all of the views.
@@ -58,14 +59,14 @@ abstract class AbstractView
      * returned by the templateKeys() method.
      *
      * @return void
-     * @throws \Exception If the themplate not found.
+     * @throws Exception If the themplate not found.
      */
     protected function renderBody(): void
     {
         $template = file_get_contents($this->templatePath());
 
         if ($template === false) {
-            throw new \Exception("Une eurreur est survenu lors la chargement de la page");
+            throw new Exception("Une eurreur est survenu lors la chargement de la page");
         }
 
         // Replacement of template keys with actual values.

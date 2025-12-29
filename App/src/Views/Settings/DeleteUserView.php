@@ -3,6 +3,7 @@
 namespace Views\Settings;
 
 use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class DeleteUserView
@@ -30,7 +31,7 @@ class DeleteUserView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     public function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -41,7 +42,7 @@ class DeleteUserView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
-    #[\Override]
+    #[Override]
     public function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -56,7 +57,7 @@ class DeleteUserView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     public function getNameCss(): string
     {
         return "";

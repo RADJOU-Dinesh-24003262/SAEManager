@@ -3,6 +3,7 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
+use Override;
 use Validator\FormValidator;
 
 /**
@@ -42,7 +43,7 @@ class EditProfileValidator extends FormValidator
      * @return void
      * @throws ExceptionValidationRegister If validation fails.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         if (!isset($data['phone'])) {
