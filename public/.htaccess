@@ -1,0 +1,116 @@
+# ============================================================
+# SAE MANAGER — Apache .htaccess (Production)
+# DocumentRoot: /home/saemanager/www/public
+# ============================================================
+
+# ---------------------------
+# 1. MVC ROUTING — FRONT CONTROLLER
+# ---------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Allow existing files and directories (assets, sitemap.xml, etc.)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # All other requests go through the front controller
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# ---------------------------
+# 2. BASIC SECURITY (MVC-SAFE)
+# ---------------------------
+
+Options -Indexes
+ServerSignature Off
+
+<FilesMatch "^(\.htaccess|\.env|composer\.(json|lock)|phpunit\.xml|\.git)">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(bak|conf|dist|log|orig|sql|swp|tmp)$">
+    Require all denied
+</FilesMatch>
+
+# ---------------------------
+# 3. SECURITY HEADERS (single-line values)
+# ---------------------------
+<IfModule mod_headers.c>
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Clickjacking protection
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Legacy XSS protection (safe fallback)
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Referrer policy (balanced privacy)
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Remove technology disclosure
+    Header unset X-Powered-By
+    Header always unset X-Powered-By
+
+    # Cross-Origin Resource Policy
+    Header always set Cross-Origin-Resource-Policy "same-origin"
+
+    # Permissions-Policy (single-line value)
+    Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), usb=(), web-share=()"
+
+    # Content Security Policy (single-line value)
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests;"
+
+    # Strict Transport Security (HSTS) — recommended value
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# ---------------------------
+# 4. COMPRESSION (PERFORMANCE & ECOLOGY)
+# ---------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# ---------------------------
+# 5. STATIC CACHE (LESS NETWORK = LESS ENERGY)
+# ---------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png  "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType text/css "access plus 6 months"
+    ExpiresByType application/javascript "access plus 6 months"
+    ExpiresByType text/html "access"
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js|png|jpg|jpeg|webp|svg|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# ---------------------------
+# 6. HTTP METHOD HARDENING
+# ---------------------------
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD)$
+    RewriteRule .* - [R=405,L]
+</IfModule>
+
+# ---------------------------
+# 7. CUSTOM ERROR PAGES (OPTIONAL)
+# ---------------------------
+ErrorDocument 403 /errors/403.php
+ErrorDocument 404 /errors/404.php
+ErrorDocument 500 /errors/500.php
+
+# ---------------------------
+# 8. MISC
+# ---------------------------
+SetEnv TZ Europe/Paris
