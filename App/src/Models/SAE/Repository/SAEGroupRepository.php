@@ -6,7 +6,7 @@ use Core\includes\Database;
 use PDO;
 use PDOException;
 use Models\SAE\SAEGroup;
-use Models\Repository\BaseRepository;
+use Core\Models\Repository\BaseRepository;
 
 /**
  * Repository for SAEGroup operations.

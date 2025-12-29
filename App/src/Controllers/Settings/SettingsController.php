@@ -2,11 +2,8 @@
 
 namespace Controllers\Settings;
 
-use Core;
-use Core\ControllerInterface;
-use Core\includes\exception\ExceptionDashboard;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
-use Core\includes\exception;
 use Views\Settings\SettingsView;
 
 /**

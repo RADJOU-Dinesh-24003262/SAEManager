@@ -2,7 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
 use Views\Settings\EditProfileView;
 

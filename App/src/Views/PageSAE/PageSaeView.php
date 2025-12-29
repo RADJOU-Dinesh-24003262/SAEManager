@@ -100,7 +100,7 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-                // 3. Groups (Students).
+        // 3. Groups (Students).
         if ($user->isStudent()) {
             // Students see their own group members.
             if (!empty($saeData['groups'])) {
@@ -202,8 +202,10 @@ class PageSaeView extends BaseSaeView
 
         $filePath = $this->data['sae']['subject']->getFilePath();
 
+        $content .= '<h3>Description de la SAE :</h3>';
+
         if ($filePath) {
-            $fullPath = __DIR__ . (str_starts_with($filePath, '/') ? '' : '/') . $filePath;
+            $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
             if (file_exists($fullPath)) {
                 $parsedown = new Parsedown();
                 $content .= '<div class="sae-subject-file">';

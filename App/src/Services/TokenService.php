@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Utilis;
+namespace Services;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
@@ -14,9 +14,9 @@ use Core\includes\exception\ExceptionSpam;
  * It can generate, update, delete, and check the validity of tokens.
  * Requires email integration to function properly.
  *
- * @category   Utilis
+ * @category   Services
  * @package    Src
- * @subpackage Utilis
+ * @subpackage App/Services
  * @author     Radjou Dinesh <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager

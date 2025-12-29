@@ -2,18 +2,18 @@
 
 namespace Controllers\pwd;
 
-use Core\ControllerInterface;
-use Models\User\User;
-use Core\Utilis\TokenService;
-use Core\Utilis\EmailService;
+use Core\Controllers\ControllerInterface;
+use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\includes\exception\ExceptionSpam;
+use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\Utilis\SessionService;
+use Models\User\User;
+use Services\Auth\PasswordResetMailer;
+use Services\TokenService;
 use Validator\ForgotPasswordValidator;
 use Views\pwd\ForgotPasswordView;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Core\includes\exception\ExceptionEmailSendingFailed;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionSpam;
 
 /**
  * Handles the POST request to the "/forgot-password" route.
@@ -71,7 +71,7 @@ class ForgotPasswordPostController implements ControllerInterface
                 $token = TokenService::createPasswordResetToken($email);
 
                 // Send the email.
-                EmailService::sendPasswordResetEmail($email, $token);
+                PasswordResetMailer::send($email, $token);
             }
             $_SESSION['last_forgot_password_request'] = time();
 

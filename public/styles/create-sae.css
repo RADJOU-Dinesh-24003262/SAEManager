@@ -51,18 +51,36 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Structure du formulaire */
-form {
+/* Layout */
+.sae-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-md);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.form-header h2 {
+    font-size: var(--text-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.form-header p {
+    color: var(--color-text-light);
+}
+
+.sae-form {
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
 }
 
-/* Fieldset et légende */
-fieldset {
+/* Sections */
+.form-section {
     border: 2px solid var(--color-border);
     border-radius: var(--radius-lg);
     padding: var(--space-xl);
@@ -73,7 +91,7 @@ fieldset {
     gap: var(--space-lg);
 }
 
-fieldset:focus-within {
+.form-section:focus-within {
     border-color: var(--color-primary-light);
     background: var(--color-primary-pale);
 }
@@ -85,17 +103,42 @@ legend {
     padding: 0 var(--space-sm);
 }
 
-/* Labels et champs de texte */
+.section-desc {
+    color: var(--color-text-light);
+    margin-top: -1rem;
+    font-size: var(--text-sm);
+}
+
+/* Groups & Rows */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+}
+
+.half-width {
+    flex: 1;
+    min-width: 250px;
+}
+
+/* Controls */
 label {
     font-weight: 500;
     font-size: var(--text-base);
     color: var(--color-text);
-    display: block;
-    margin-bottom: var(--space-xs);
 }
 
-input[type="text"],
-textarea {
+.required {
+    color: var(--color-error);
+}
+
+.form-control {
     width: 100%;
     padding: var(--space-sm) var(--space-md);
     border: 2px solid var(--color-border);
@@ -108,97 +151,75 @@ textarea {
     transition: border-color var(--transition), background-color var(--transition);
 }
 
-input[type="text"]:focus,
-textarea:focus {
+.form-control:focus {
     outline: var(--focus-width) solid var(--color-primary);
     outline-offset: 0;
     border-color: var(--color-primary);
-    background: var(--color-primary-pale);
+    background: var(--color-bg);
 }
 
-input[type="text"]:invalid:not(:placeholder-shown):not(:focus) {
+.form-control:invalid:not(:placeholder-shown):not(:focus) {
     border-color: var(--color-error);
 }
 
-input[type="text"]:valid:not(:placeholder-shown):not(:focus) {
+.form-control:valid:not(:placeholder-shown):not(:focus) {
     border-color: var(--color-success);
 }
 
-input[type="url"],input[type="date"],
-textarea {
-    width: 100%;
-    padding: var(--space-sm) var(--space-md);
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius);
-    font-family: inherit;
-    font-size: var(--text-base);
-    line-height: 1.5;
-    background: var(--color-bg);
-    color: var(--color-text);
-    transition: border-color var(--transition), background-color var(--transition);
+select.form-control {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
 }
 
-input[type="url"]:focus, input[type="date"]:focus,
-textarea:focus {
-    outline: var(--focus-width) solid var(--color-primary);
-    outline-offset: 0;
-    border-color: var(--color-primary);
-    background: var(--color-primary-pale);
+/* Competences Grid */
+.competences-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-md);
 }
 
-input[type="url"]:invalid:not(:placeholder-shown):not(:focus), input[type="date"]:invalid:not(:placeholder-shown):not(:focus){
-    border-color: var(--color-error);
-}
-
-/* Textarea spécifique */
-.text-name {
-    width: 100%;
-}
-
-textarea {
-    resize: vertical;
-    min-height: 120px;
-    font-family: inherit;
-}
-
-/* Checkboxes */
-.checkbox {
+.checkbox-wrapper {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    padding: var(--space-sm) var(--space-md);
+    padding: var(--space-sm);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
     transition: background-color var(--transition);
     cursor: pointer;
 }
 
-.checkbox:hover {
+.checkbox-wrapper:hover {
     background: var(--color-bg-alt);
+    border-color: var(--color-primary-light);
 }
 
-.checkbox input[type="checkbox"] {
+.checkbox-wrapper input[type="checkbox"] {
     width: 1.25rem;
     height: 1.25rem;
     cursor: pointer;
     accent-color: var(--color-primary);
     flex-shrink: 0;
-    margin: 0;
 }
 
-.checkbox input[type="checkbox"]:focus {
-    outline: var(--focus-width) solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-.checkbox label {
-    margin: 0;
+.checkbox-wrapper label {
     cursor: pointer;
     font-weight: 400;
-    flex: 1;
+    font-size: var(--text-sm);
 }
 
-/* Bouton submit */
-button[type="submit"] {
+/* Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-primary {
     background: var(--color-primary);
     color: var(--color-bg);
     border: none;
@@ -208,80 +229,75 @@ button[type="submit"] {
     font-family: inherit;
     border-radius: var(--radius);
     cursor: pointer;
-    transition: background-color var(--transition);
-    width: 100%;
-    display: flex;
+    transition: background-color var(--transition), transform var(--transition);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-width: 200px;
 }
 
-button[type="submit"]:hover {
+.btn-primary:hover {
     background: var(--color-primary-dark);
 }
 
-button[type="submit"]:focus {
+.btn-primary:focus {
     outline: var(--focus-width) solid var(--color-primary);
     outline-offset: 2px;
 }
 
-button[type="submit"]:active {
+.btn-primary:active {
     transform: translateY(1px);
 }
 
-/* Textes d'aide */
-small {
+/* Hints */
+.hint {
     display: block;
     color: var(--color-text-light);
     font-size: var(--text-sm);
-    margin-top: var(--space-xs);
-    line-height: 1.4;
+    margin-top: 0;
 }
 
-abbr {
-    color: var(--color-error);
-    text-decoration: none;
-    font-weight: 600;
+/* Alerts */
+.alert {
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    margin-bottom: var(--space-md);
 }
 
-/* Accessibilité */
-:focus-visible {
-    outline: var(--focus-width) solid var(--color-primary);
-    outline-offset: 2px;
+.alert-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    *, ::after, ::before {
-        transition-duration: 0s !important;
-        animation-duration: 0s !important;
-    }
+.alert-success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #34d399;
 }
 
 /* Responsive */
 @media (max-width: 48rem) {
-    :root {
-        --text-2xl: 1.75rem;
-        --text-xl: 1.25rem;
-        --space-2xl: 2rem;
+    .sae-container {
+        padding: var(--space-md);
     }
-
-    fieldset {
+    
+    .form-section {
         padding: var(--space-lg);
     }
 }
 
 @media (max-width: 30rem) {
-    fieldset {
+    .form-section {
         padding: var(--space-md);
     }
-
-    input[type="text"],
-    textarea {
-        font-size: 1rem;
+    
+    .form-row {
+        flex-direction: column;
     }
-
-    button[type="submit"] {
-        font-size: var(--text-base);
-        padding: var(--space-sm) var(--space-lg);
+    
+    .btn-primary {
+        width: 100%;
     }
 }
 
@@ -301,5 +317,9 @@ abbr {
         --color-border-dark: #475569;
         --color-success: #10b981;
         --color-error: #ef4444;
+    }
+    
+    select.form-control {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     }
 }

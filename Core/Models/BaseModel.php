@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Core\Models;
 
 /**
  * Base model for all entities.
@@ -43,7 +43,6 @@ abstract class BaseModel
 
         $data = [];
         foreach ($properties as $property) {
-            $property->setAccessible(true);
             $name = $property->getName();
             $data[$name] = $property->getValue($this);
         }

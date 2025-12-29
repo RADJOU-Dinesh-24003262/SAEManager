@@ -2,7 +2,7 @@
 
 namespace Views\Settings;
 
-use Core\AbstractView;
+use Core\Views\AbstractView;
 
 /**
  * Class DeleteUserView

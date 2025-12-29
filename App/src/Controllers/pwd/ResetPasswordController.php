@@ -2,11 +2,11 @@
 
 namespace Controllers\pwd;
 
-use Core\ControllerInterface;
-use Core\Utilis\TokenService;
-use Core\Utilis\SessionService;
-use Views\pwd\ResetPasswordView;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Utilis\SessionService;
+use Services\TokenService;
+use Views\pwd\ResetPasswordView;
 
 /**
  * This class controls the reset password process (get).

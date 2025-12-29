@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Repository;
+namespace Core\Models\Repository;
 
 use Core\includes\Database;
 use Exception;

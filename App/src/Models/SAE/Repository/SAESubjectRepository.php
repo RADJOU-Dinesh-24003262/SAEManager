@@ -6,7 +6,7 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
-use Models\Repository\BaseRepository;
+use Core\Models\Repository\BaseRepository;
 use PDepend\Util\Log;
 
 /**

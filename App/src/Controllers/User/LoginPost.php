@@ -2,17 +2,15 @@
 
 namespace Controllers\User;
 
-use Core\ControllerInterface;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utilis\Logger;
-use PDO;
-use Models\User\User;
 use Core\Utilis\SessionService;
-use Views\Index\IndexView;
-use Views\User\LoginView;
+use Models\User\User;
 use Validator\LoginValidator;
+use Views\User\LoginView;
 
 /**
  * This class controls the login process (post).

@@ -2,8 +2,7 @@
 
 namespace Views\User;
 
-use Core\AbstractView;
-use Core\Utilis\SessionService;
+use Core\Views\AbstractView;
 
 /**
  * Class LoginView

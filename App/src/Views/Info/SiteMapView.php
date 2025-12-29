@@ -2,7 +2,7 @@
 
 namespace Views\Info;
 
-use Core\AbstractView;
+use Core\Views\AbstractView;
 
 /**
  * Class SiteMapView

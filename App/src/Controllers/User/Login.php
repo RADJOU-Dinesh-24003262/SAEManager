@@ -2,9 +2,9 @@
 
 namespace Controllers\User;
 
-use Core\ControllerInterface;
-use Views\User\LoginView;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
+use Views\User\LoginView;
 
 /**
  * Class Login (GET)

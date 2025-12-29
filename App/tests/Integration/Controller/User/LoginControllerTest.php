@@ -2,14 +2,14 @@
 
 namespace tests\Integration\Controller\User;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
-use Core\Utilis\SessionService;
-use Validator\FormValidator;
-use Core\AbstractView;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Utilis\SessionService;
+use Core\Views\AbstractView;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Validator\FormValidator;
 
 /**
  * Integration test for the LoginPost controller.

@@ -2,19 +2,18 @@
 
 namespace Tests\Unit\Controllers;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Test;
+use App\Controllers\SAE\PageSaeController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
-use Controllers\PageSae\PageSaeController;
-use Controllers\ToDoList\ToDoListController;
-use Controllers\User\Register;
-use Controllers\User\Logout;
 use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ResetPasswordController;
+use Controllers\ToDoList\ToDoListController;
+use Controllers\User\Register;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for simple GET controllers
@@ -87,7 +86,7 @@ class ControllerTest extends TestCase
     {
         // Check that LegalNoticeController implements the ControllerInterface
         $controller = new LegalNoticeController();
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller);
     }
 
     // ========================================
@@ -184,7 +183,7 @@ class ControllerTest extends TestCase
     {
         // Check that all controllers implement the ControllerInterface
         $controller = new $controllerClass();
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller);
     }
 
     #[Test]
@@ -361,8 +360,8 @@ class ControllerTest extends TestCase
 
         $this->assertNotSame($controller1, $controller2);
         $this->assertNotSame($controller1, $controller3);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller2);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller3);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller3);
     }
 }

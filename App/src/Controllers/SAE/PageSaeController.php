@@ -1,16 +1,16 @@
 <?php
 
-namespace Controllers\PageSae;
+namespace App\Controllers\SAE;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
-use Core\includes\exception\SAE\ExceptionSAE;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
 use Exception;
+use Models\SAE\SAE;
 use Models\User\User;
 use Views\PageSAE\PageSaeView;
-use Models\SAE\SAE;
 
 /**
  * This class controls the SAE page.
