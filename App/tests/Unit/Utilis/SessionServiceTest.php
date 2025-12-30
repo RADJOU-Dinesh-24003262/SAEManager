@@ -7,6 +7,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Core\Utilis\SessionService;
+use stdClass;
 
 /**
  * Unit tests for SessionService class.
@@ -57,13 +58,13 @@ class SessionServiceTest extends TestCase
     #[Test]
     public function canSetAndGetObject(): void
     {
-        $obj = new \stdClass();
+        $obj = new stdClass();
         $obj->name = 'Test';
 
         SessionService::set('object', $obj);
 
         $retrieved = SessionService::get('object');
-        $this->assertInstanceOf(\stdClass::class, $retrieved);
+        $this->assertInstanceOf(stdClass::class, $retrieved);
         $this->assertEquals('Test', $retrieved->name);
     }
 

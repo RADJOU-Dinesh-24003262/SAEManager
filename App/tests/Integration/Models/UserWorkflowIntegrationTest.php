@@ -10,6 +10,7 @@ use Models\User\Student;
 use Models\User\Professor;
 use Models\User\Client;
 use Core\includes\Database;
+use ReflectionClass;
 
 /**
  * Tests d'intégration pour les workflows complets User
@@ -24,14 +25,14 @@ class UserWorkflowIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $db = new \Core\includes\Database();
-        \Core\includes\Database::setInstance($db);
+        $db = new Database();
+        Database::setInstance($db);
     }
 
     protected function tearDown(): void
     {
         // Réinitialise l'instance statique Database
-        $reflection = new \ReflectionClass(Database::class);
+        $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, null);

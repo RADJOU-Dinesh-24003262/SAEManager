@@ -2,9 +2,11 @@
 
 namespace Models\User;
 
+use Override;
 use PDO;
 use Models\SAE\SAE;
 use Core\includes\Database;
+use PDOException;
 
 /**
  * Represents a professor user in the system.
@@ -56,9 +58,9 @@ class Professor extends User
      *
      * @return void
      *
-     * @throws \PDOException If an error occurs during query execution.
+     * @throws PDOException If an error occurs during query execution.
      */
-    #[\Override]
+    #[Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -84,9 +86,9 @@ class Professor extends User
      *
      * @return void
      *
-     * @throws \PDOException If an error occurs during query execution.
+     * @throws PDOException If an error occurs during query execution.
      */
-    #[\Override]
+    #[Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -124,9 +126,9 @@ class Professor extends User
      *   file_path: string|null
      * }> Associative array containing the SAE records.
      *
-     * @throws \PDOException If an error occurs during query execution.
+     * @throws PDOException If an error occurs during query execution.
      */
-    #[\Override]
+    #[Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -155,7 +157,7 @@ class Professor extends User
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public function canAccessSAE(int $saeId): bool
     {
         try {
@@ -173,7 +175,7 @@ class Professor extends User
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur canAccessSAE (Professor) : ' . $e->getMessage());
             return false;
         }
@@ -186,7 +188,7 @@ class Professor extends User
      * @param integer|null $saeId The SAE ID.
      * @return boolean True if allowed, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public function canManageSAE(?int $saeId = null): bool
     {
         // Creation : Every professor can create a SAE.
@@ -213,7 +215,7 @@ class Professor extends User
      *   tp: int
      * }> The list of accessible group members.
      */
-    #[\Override]
+    #[Override]
     public function getAccessibleGroupMembers(int $saeId): array
     {
         if ($this->isResponsibleProfessor($saeId)) {
@@ -252,7 +254,7 @@ class Professor extends User
             );
             $stmt->execute(['sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur getAllSAEMembers : ' . $e->getMessage());
             return [];
         }
@@ -289,7 +291,7 @@ class Professor extends User
             );
             $stmt->execute(['prof_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Erreur getAssignedGroupMembers : ' . $e->getMessage());
             return [];
         }
@@ -311,7 +313,7 @@ class Professor extends User
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
-        } catch (\PDOException $e) {
+        } catch (PDOException $e) {
             error_log('Error in isResponsibleProfessor: ' . $e->getMessage());
             return false;
         }
@@ -323,7 +325,7 @@ class Professor extends User
      * @param integer $todoId The to-do item ID.
      * @return boolean Always false for professor.
      */
-    #[\Override]
+    #[Override]
     public function canModifyTodo(int $todoId): bool
     {
         return false;

@@ -129,9 +129,9 @@ class SAE
      * @param integer $saeId The SAE subject ID.
      * @param User    $user  The requesting user.
      * @return array{
-     *   subject: \Models\SAE\SAESubject,
+     *   subject: SAESubject,
      *   groups: array<int, array{
-     *     group: \Models\SAE\SAEGroup,
+     *     group: SAEGroup,
      *     students: array<int, array{
      *       student_id: string,
      *       amu_id: string,
@@ -145,7 +145,7 @@ class SAE
      *       phone: string|null
      *     }>
      *   }>,
-     *   competences: array<int, \Models\SAE\Competence>,
+     *   competences: array<int, Competence>,
      *   responsible_professor: array{
      *     user_id: string,
      *     first_name: string,
@@ -211,7 +211,7 @@ class SAE
      * @param integer $saeId The SAE subject ID.
      * @param User    $user  The requesting user.
      * @return array<int, array{
-     *   group: \Models\SAE\SAEGroup,
+     *   group: SAEGroup,
      *   students: array<int, array{
      *     student_id: string,
      *     amu_id: string,

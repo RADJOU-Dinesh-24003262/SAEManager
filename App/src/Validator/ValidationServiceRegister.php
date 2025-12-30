@@ -4,6 +4,7 @@ namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
+use Override;
 
 /**
  * Class ValidationServiceRegister
@@ -44,7 +45,7 @@ class ValidationServiceRegister extends FormValidator
      *
      * @throws ExceptionValidationRegisters All the errors that might have been found.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         $errors = [];

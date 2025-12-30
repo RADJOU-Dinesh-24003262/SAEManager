@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Repository;
+namespace Core\Models\Repository;
 
 /**
  * Common interface for all repositories

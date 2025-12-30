@@ -2,17 +2,16 @@
 
 namespace Controllers\User;
 
-use Core\ControllerInterface;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utilis\Logger;
-use PDO;
-use Models\User\User;
 use Core\Utilis\SessionService;
-use Views\Index\IndexView;
-use Views\User\LoginView;
+use Models\User\User;
+use Override;
 use Validator\LoginValidator;
+use Views\User\LoginView;
 
 /**
  * This class controls the login process (post).
@@ -41,7 +40,7 @@ class LoginPost implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
 
@@ -101,7 +100,7 @@ class LoginPost implements ControllerInterface
      *
      * @return boolean True if the path is "/login" and the method is POST.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "POST";

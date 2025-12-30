@@ -2,8 +2,10 @@
 
 namespace Models\SAE;
 
-use Core\BaseModel;
+use Core\Models\BaseModel;
 use DateTime;
+use Exception;
+use Override;
 
 /**
  * Represents a SAE Subject (project) in the system.
@@ -83,7 +85,7 @@ class SAESubject extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
-    #[\Override]
+    #[Override]
     public function validate(): array
     {
         $errors = [];
@@ -111,7 +113,7 @@ class SAESubject extends BaseModel
             if ($end <= $begin) {
                 $errors[] = 'La date de fin doit être après la date de début';
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $errors[] = 'Les dates ne sont pas valides';
         }
 
@@ -155,7 +157,7 @@ class SAESubject extends BaseModel
      *
      * @return array<string, mixed> The array representation.
      */
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

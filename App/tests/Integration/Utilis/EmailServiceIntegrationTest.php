@@ -5,13 +5,13 @@ namespace Tests\Integration\Utilis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Utilis\EmailService;
-use Core\Utilis\TokenService;
+use Services\Auth\PasswordResetMailer;
+use Services\TokenService;
 
 /**
- * Tests d'intégration pour EmailService
+ * Tests d'intégration pour PasswordResetMailer
  */
-#[CoversClass(EmailService::class)]
+#[CoversClass(PasswordResetMailer::class)]
 #[CoversClass(TokenService::class)]
 class EmailServiceIntegrationTest extends TestCase
 {
@@ -37,7 +37,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $token = TokenService::generate();
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -58,7 +58,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $token = TokenService::generate();
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -90,7 +90,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset?token=test123';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
 
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
@@ -119,7 +119,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset?token=abc123';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
 
@@ -138,7 +138,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $token = TokenService::generate();
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -163,7 +163,7 @@ class EmailServiceIntegrationTest extends TestCase
 
         $token = TokenService::generate();
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -180,7 +180,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
 
@@ -207,7 +207,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $specialToken = 'token_with_special!@#$%';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -229,7 +229,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset?token=test123';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
 
@@ -253,7 +253,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
 
@@ -269,7 +269,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $link = 'https://test.com/reset?token=abc123';
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $htmlMethod = $reflection->getMethod('getHtmlTemplate');
         $htmlMethod->setAccessible(true);
 
@@ -287,7 +287,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $longToken = str_repeat('a', 200);
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 
@@ -313,7 +313,7 @@ class EmailServiceIntegrationTest extends TestCase
             'test-site.fr'
         ];
 
-        $reflection = new \ReflectionClass(EmailService::class);
+        $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
         $getLinkMethod->setAccessible(true);
 

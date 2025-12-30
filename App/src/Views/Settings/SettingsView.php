@@ -2,9 +2,9 @@
 
 namespace Views\Settings;
 
-use Core\AbstractView;
-use Core\Utilis\SessionService;
+use Core\Views\AbstractView;
 use Models\User\User;
+use Override;
 
 /**
  * Class SettingsView
@@ -52,7 +52,7 @@ class SettingsView extends AbstractView
      *
      * @return string The full path to the template file.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -64,7 +64,7 @@ class SettingsView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -104,7 +104,7 @@ class SettingsView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

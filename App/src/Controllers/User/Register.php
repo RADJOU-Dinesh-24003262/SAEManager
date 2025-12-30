@@ -2,8 +2,9 @@
 
 namespace Controllers\User;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
+use Override;
 use Views\User\RegisterView;
 
 /**
@@ -31,7 +32,7 @@ class Register implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
 
@@ -52,7 +53,7 @@ class Register implements ControllerInterface
      *
      * @return boolean True if the request is a GET to "/register", false otherwise.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/register" && $method === "GET";

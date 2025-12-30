@@ -2,7 +2,8 @@
 
 namespace Models\SAE;
 
-use Core\BaseModel;
+use Core\Models\BaseModel;
+use Override;
 
 /**
  * Represents a Competence associated with a SAE.
@@ -46,7 +47,7 @@ class Competence extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
-    #[\Override]
+    #[Override]
     public function validate(): array
     {
         $errors = [];
@@ -71,7 +72,7 @@ class Competence extends BaseModel
      *
      * @return array<string, integer|string>
      */
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

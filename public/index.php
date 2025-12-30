@@ -4,12 +4,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
-use Controllers\Settings\EditProfileController;
+use App\Controllers\SAE\PageSaeController;
 use Controllers\Dashboard\DashboardController;
-use Controllers\User\Login;
-use Controllers\User\LoginPost;
-use Controllers\User\Register;
-use Controllers\User\RegisterPost;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
@@ -17,15 +13,20 @@ use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ForgotPasswordPostController;
 use Controllers\pwd\ResetPasswordController;
 use Controllers\pwd\ResetPasswordPostController;
-use Controllers\PageSae\PageSaeController;
-use Core\Utilis\SessionService;
-use Controllers\ToDoList\ToDoListController;
-use Controllers\User\Logout;
-use Controllers\SaeSujet\SaeSujetController;
-use Controllers\Settings\SettingsController;
+use Controllers\SAE\CreateSaeController;
+use Controllers\SAE\CreateSaePostController;
 use Controllers\Settings\DeleteUserController;
-use Controllers\ToDoList\ToDoListPost;
+use Controllers\Settings\EditProfileController;
 use Controllers\Settings\EditProfilePost;
+use Controllers\Settings\SettingsController;
+use Controllers\ToDoList\ToDoListController;
+use Controllers\ToDoList\ToDoListPost;
+use Controllers\User\Login;
+use Controllers\User\LoginPost;
+use Controllers\User\Logout;
+use Controllers\User\Register;
+use Controllers\User\RegisterPost;
+use Core\Utilis\SessionService;
 
 // List of available controllers.
 $controllers = [
@@ -43,7 +44,8 @@ $controllers = [
     new ResetPasswordPostController(),
     new PageSaeController(),
     new ToDoListController(),
-    new SaeSujetController(),
+    new CreateSaeController(),
+    new CreateSaePostController(),
     new DashboardController(),
     new SettingsController(),
     new DeleteUserController(),
@@ -64,9 +66,9 @@ foreach ($controllers as $controller) {
             exit();
         } catch (\Throwable $e) {
             // Generical fallback for unexpected errors.
-            SessionService::destroy();
+            /* SessionService::destroy(); */
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
-            error_log("Erreur inattendue: " . $e->getMessage());
+            error_log("Erreur inattendue: " . $e->getTraceAsString() . $e->getMessage());
             http_response_code(500);
             header("Location: /");
             exit();
@@ -76,5 +78,6 @@ foreach ($controllers as $controller) {
 
 // 404 - Route not found
 http_response_code(404);
-echo "Page non trouvée";
+SessionService::setFlash('errors', "Page non existante.");
+header("Location: /");
 exit();

@@ -53,8 +53,10 @@ class Database extends PDO
         if (getenv('APP_ENV') === 'testing') {
             // Check if PostgreSQL is available (CI environment).
             if ($this->isPostgreSQLAvailable()) {
+                /* error_log('Database: Using dynamic PostgreSQL for testing.'); */
                 $this->createDynamicTestDatabase();
             } else {
+                /* error_log('Database: Using in-memory SQLite for testing.'); */
                 // Use SQLite for local testing.
                 $this->createSQLiteTestDatabase();
             }
@@ -267,7 +269,6 @@ class Database extends PDO
             used INTEGER NOT NULL
         );
 
-        -- Example seed data
         INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
         VALUES ('azerty', 'azerty', 'azerty.azerty@etu.univ-amu.fr', '0689879878', 'fake_hash', '0');
 
@@ -275,7 +276,14 @@ class Database extends PDO
         VALUES (1, 'azerty', NULL, NULL, 1, 'TD1', 'TPA');
         SQL;
 
-        $this->exec($schemaSql);
+        $statements = array_filter(
+            array_map('trim', explode(';', $schemaSql)),
+            fn($stmt) => !empty($stmt)
+        );
+
+        foreach ($statements as $stmt) {
+            $this->exec($stmt);
+        }
     }
 
     /**

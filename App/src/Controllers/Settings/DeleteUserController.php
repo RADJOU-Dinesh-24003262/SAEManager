@@ -2,9 +2,11 @@
 
 namespace Controllers\Settings;
 
-use Core\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
+use PDOException;
 use Views\Settings\DeleteUserView;
 
 /**
@@ -28,30 +30,23 @@ use Views\Settings\DeleteUserView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class DeleteUserController implements ControllerInterface
+class DeleteUserController extends BaseController
 {
     /**
      *  Main Controller logic for DeleterUser.
      *
      * @return void
-     * @throws \PDOException If there is a problem with database request.
+     * @throws PDOException If there is a problem with database request.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
+        $this->ensureAuthenticated();
 
-        if (!(SessionService::has('user_id'))) {
-            http_response_code(404);
-            echo "Page non trouvée";
-            exit();
-        }
-
-
-        $user = unserialize(SessionService::get('USER'));
-        $data['user'] = $user;
+        $data['user'] = $this->user;
 
         try {
-            $email = $user->getEmail();
+            $email = $this->user->getEmail();
             User::deleteByEmail($email);
             $view = new DeleteUserView($data);
 
@@ -60,8 +55,8 @@ class DeleteUserController implements ControllerInterface
             session_destroy();   // Destroy the session.
 
             $view->render();
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage());
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage());
         }
     }
 
@@ -72,7 +67,7 @@ class DeleteUserController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /delete-user and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/delete-user' && $method === 'GET';

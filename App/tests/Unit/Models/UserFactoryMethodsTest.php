@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Models\User;
 
+use InvalidArgumentException;
+use PDOException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -11,6 +13,7 @@ use Models\User\Student;
 use Models\User\Professor;
 use Models\User\Client;
 use Core\includes\Database;
+use ReflectionClass;
 
 /**
  * Tests for the factory methods of User
@@ -29,8 +32,8 @@ class UserFactoryMethodsTest extends TestCase
     {
         parent::setUp();
         // Crée une instance Database en mémoire et l'injecte
-        $db = new \Core\includes\Database();
-        \Core\includes\Database::setInstance($db);
+        $db = new Database();
+        Database::setInstance($db);
     }
     #[Test]
     public function createFromRegistrationDataCreatesStudentCorrectly(): void
@@ -127,7 +130,7 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function createFromRegistrationDataThrowsExceptionForInvalidType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Type d'utilisateur invalide");
 
         User::createFromRegistrationData(
@@ -146,7 +149,7 @@ class UserFactoryMethodsTest extends TestCase
     #[DataProvider('invalidUserTypesProvider')]
     public function createFromRegistrationDataRejectsInvalidTypes(string $invalidType): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         User::createFromRegistrationData(
             [
@@ -366,7 +369,7 @@ class UserFactoryMethodsTest extends TestCase
         $student = new Student($data);
 
         // Checks that these fields are not accessible as properties
-        $reflection = new \ReflectionClass($student);
+        $reflection = new ReflectionClass($student);
         $this->assertFalse($reflection->hasProperty('password'));
         $this->assertFalse($reflection->hasProperty('passwordverif'));
         $this->assertFalse($reflection->hasProperty('terms'));
@@ -390,7 +393,7 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function deleteByEmailThrowsExceptionForEmptyEmail(): void
     {
-        $this->expectException(\PDOException::class);
+        $this->expectException(PDOException::class);
 
         User::deleteByEmail('');
     }
@@ -440,7 +443,7 @@ class UserFactoryMethodsTest extends TestCase
                 );
 
             default:
-                throw new \InvalidArgumentException("Unknown user type: $userType");
+                throw new InvalidArgumentException("Unknown user type: $userType");
         }
     }
 
@@ -453,7 +456,7 @@ class UserFactoryMethodsTest extends TestCase
             'student' => Student::class,
             'professor' => Professor::class,
             'client' => Client::class,
-            default => throw new \InvalidArgumentException("Unknown user type: $userType")
+            default => throw new InvalidArgumentException("Unknown user type: $userType")
         };
     }
 
@@ -483,7 +486,7 @@ class UserFactoryMethodsTest extends TestCase
         $email = 'notfound@example.com';
 
         // Assert + Act
-        $this->expectException(\PDOException::class);
+        $this->expectException(PDOException::class);
 
         User::deleteByEmail($email);
     }

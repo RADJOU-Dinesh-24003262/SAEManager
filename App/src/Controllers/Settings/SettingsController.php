@@ -2,11 +2,8 @@
 
 namespace Controllers\Settings;
 
-use Core;
-use Core\ControllerInterface;
-use Core\includes\exception\ExceptionDashboard;
-use Core\Utilis\SessionService;
-use Core\includes\exception;
+use Controllers\BaseController;
+use Override;
 use Views\Settings\SettingsView;
 
 /**
@@ -30,24 +27,19 @@ use Views\Settings\SettingsView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class SettingsController implements ControllerInterface
+class SettingsController extends BaseController
 {
     /**
      *  Main Controller logic for SettingsController.
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
+        $this->ensureAuthenticated();
 
-        if (!(SessionService::has('user_id'))) {
-            header('Location: /');
-            exit();
-        }
-
-        $user = unserialize(SessionService::get('USER'));
-        $data['user'] = $user;
+        $data['user'] = $this->user;
         $view = new SettingsView($data);
         $view->render();
     }
@@ -59,7 +51,7 @@ class SettingsController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /profile and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/settings' and $method === 'GET';

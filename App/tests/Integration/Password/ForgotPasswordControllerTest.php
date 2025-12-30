@@ -2,20 +2,21 @@
 
 namespace Tests\Integration\Controller\Password;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ForgotPasswordPostController;
-use Core\AbstractView;
+use Core\Controllers\ControllerInterface;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionSpam;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\Utilis\SessionService;
+use Core\Views\AbstractView;
 use Exception;
 use Models\User\User;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Validator\ForgotPasswordValidator;
 
 /**
@@ -123,7 +124,7 @@ class ForgotPasswordControllerTest extends TestCase
 
         try {
             $controller->control();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // May throw due to database/email issues
         } finally {
             $content = ob_get_clean();
@@ -185,7 +186,7 @@ class ForgotPasswordControllerTest extends TestCase
         $getController = new ForgotPasswordController();
         $postController = new ForgotPasswordPostController();
 
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $getController);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $postController);
+        $this->assertInstanceOf(ControllerInterface::class, $getController);
+        $this->assertInstanceOf(ControllerInterface::class, $postController);
     }
 }

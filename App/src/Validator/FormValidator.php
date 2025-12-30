@@ -4,6 +4,8 @@ namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
+use DateTime;
+use Exception;
 
 /**
  * Class FormValidator
@@ -70,7 +72,7 @@ abstract class FormValidator
      *
      * @param  array<string, mixed> $data The field to validate.
      * @return void
-     * @throws \Exception If the data don't meet the requirement.
+     * @throws Exception If the data don't meet the requirement.
      */
     abstract public function validate(array $data): void;
 
@@ -163,7 +165,7 @@ abstract class FormValidator
      */
     protected function isValidDate(string $date): bool
     {
-        $d = \DateTime::createFromFormat('Y-m-d', $date);
+        $d = DateTime::createFromFormat('Y-m-d', $date);
         return $d && $d->format('Y-m-d') === $date;
     }
 
