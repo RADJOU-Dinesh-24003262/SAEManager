@@ -12,13 +12,16 @@ use Models\User\User;
  * @category   Controllers
  * @package    Src
  * @subpackage Controllers
+ * @author     Dinesh RADJOU <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 abstract class BaseController implements ControllerInterface
 {
     /**
-     * @var User|null The authenticated user.
+     * @var User The authenticated user.
      */
-    protected ?User $user = null;
+    protected User $user;
 
     /**
      * Ensures the user is authenticated.
@@ -35,7 +38,7 @@ abstract class BaseController implements ControllerInterface
             exit();
         }
 
-        // Load and validate user from session
+        // Load and validate user from session.
         $user = unserialize(SessionService::get('USER'));
 
         if (!$user || !($user instanceof User)) {
@@ -57,8 +60,8 @@ abstract class BaseController implements ControllerInterface
      */
     protected function ensureProfessor(): void
     {
-        // Ensure user is loaded
-        if ($this->user === null) {
+        // Ensure user is loaded.
+        if ($this->user == null) {
             $this->ensureAuthenticated();
         }
 

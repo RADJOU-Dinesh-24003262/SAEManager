@@ -37,7 +37,6 @@ class PageSaeController extends BaseController
      * Principal manager of the controller
      *
      * @return void
-     * @throws Exception If the user variable is not as expected.
      * @throws ExceptionAccessDenied If access is denied.
      */
     #[Override]
