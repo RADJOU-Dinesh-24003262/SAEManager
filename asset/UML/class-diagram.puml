@@ -2,13 +2,14 @@
   skinparam svgLinkTarget _blank
   skinparam topurl https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src
   package Views as Views {
+    class "BaseSaeView\n<b>Class BaseSaeView</b>" as Views_BaseSaeView [[/Views/BaseSaeView.php BaseSaeView Class]] {
+      #getCommonSaeTemplateKeys()
+      #getMenuSae()
+    }
     package Index as Views.Index {
       class "IndexView\n<b>Class IndexView</b>" as Views_Index_IndexView [[/Views/Index/IndexView.php IndexView Class]] {
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
-        -renderSuccessMessage(success)
-        #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
       }
@@ -61,14 +62,12 @@
       class "LoginView\n<b>Class LoginView</b>" as Views_User_LoginView [[/Views/User/LoginView.php LoginView Class]] {
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
         #getNameCss()
         #getAdditionalHeaders()
       }
       class "RegisterView\n<b>Class RegisterView</b>" as Views_User_RegisterView [[/Views/User/RegisterView.php RegisterView Class]] {
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
         #getPageTitle()
         #getAdditionalScripts()
         #getNameCss()
@@ -96,8 +95,6 @@
         +__construct(data)
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
-        -renderSuccessMessage()
         -getUserTypeLabel(user)
         -renderUserMetaInfo(user)
         -renderSAENavigation(user)
@@ -113,6 +110,8 @@
       class "PageSaeView\n<b>Class PageSaeView</b>" as Views_PageSAE_PageSaeView [[/Views/PageSAE/PageSaeView.php PageSaeView Class]] {
         #templatePath()
         #templateKeys()
+        #getContactsSae()
+        #getDescriptionSae()
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -124,7 +123,6 @@
         #templatePath()
         #templateKeys()
         -maskEmail(email)
-        -renderErrorMessages(errors)
         #getPageTitle()
         #getNameCss()
         #getAdditionalScripts()
@@ -141,8 +139,6 @@
       class "ForgotPasswordView\n<b>Class ForgotPasswordView</b>" as Views_pwd_ForgotPasswordView [[/Views/pwd/ForgotPasswordView.php ForgotPasswordView Class]] {
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
-        -renderSuccessMessage(success)
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -152,7 +148,6 @@
       class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView [[/Views/ToDoList/ToDoListView.php ToDoListView Class]] {
         #templatePath()
         #templateKeys()
-        -renderErrorMessages(errors)
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -162,16 +157,72 @@
   }
   package Models as Models {
     package SAE as Models.SAE {
-      class "SAE\n<b>Represents a SAE (Situations d'Apprentissage et d'Évaluation) subject in the system.</b>" as Models_SAE_SAE [[/Models/SAE/SAE.php SAE Class]] {
-        -sae_subject_id : integer
-        -responsible_prof_id : integer
-        -client_id : integer
-        -subject_name : string
-        -begin_date : string
-        -end_date : string
-        #__construct(data)
-        {static} +createSAEsFromArray(saes)
-        +getDataArray()
+      class "Competence\n<b>Represents a Competence associated with a SAE.</b>" as Models_SAE_Competence [[/Models/SAE/Competence.php Competence Class]] {
+        #competence_name : string
+        #sae_subject_id : integer
+        +__construct(data)
+        +validate()
+        +toArray()
+        +getCompetenceName()
+        +setCompetenceName(competence_name)
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+      }
+      class "SAE\n<b>Facade for SAE operations.</b>" as Models_SAE_SAE [[/Models/SAE/SAE.php SAE Class]] {
+        #subjectRepo : SAESubjectRepository
+        #groupRepo : SAEGroupRepository
+        #competenceRepo : CompetenceRepository
+        #professorGroupRepo : SAEProfessorGroupRepository
+        #instance : SAE|null
+        -__construct()
+        {static} +getInstance()
+        +getUserSAEs(user)
+        +getCompleteSAEData(saeId, user)
+        -getAccessibleGroups(saeId, user)
+        -getUserGroupId(student, saeId)
+        +createSAE(creator, data)
+        +updateSAE(user, saeId, data)
+        +createGroup(user, saeId)
+        +assignStudentToGroup(professor, studentId, groupId)
+        +assignProfessorToSAE(responsibleProf, saeId, professorId)
+        +getGroupContacts(user, saeId)
+        +deleteSAE(user, saeId)
+      }
+      class "SAEProfessorGroup\n<b>Represents the association between a Professor and a SAE.</b>" as Models_SAE_SAEProfessorGroup [[/Models/SAE/SAEProfessorGroup.php SAEProfessorGroup Class]] {
+        #sae_subject_id : integer
+        #professor_id : integer
+        +__construct(data)
+        +validate()
+        +toArray()
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+        +getProfessorId()
+        +setProfessorId(professor_id)
+      }
+      class "SAEGroup\n<b>Represents a SAE Group in the system.</b>" as Models_SAE_SAEGroup [[/Models/SAE/SAEGroup.php SAEGroup Class]] {
+        #sae_group_id : integer|null
+        #sae_subject_id : integer
+        +__construct(data)
+        +validate()
+        +toArray()
+        +getSaeGroupId()
+        +setSaeGroupId(sae_group_id)
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+      }
+      class "SAESubject\n<b>Represents a SAE Subject (project) in the system.</b>" as Models_SAE_SAESubject [[/Models/SAE/SAESubject.php SAESubject Class]] {
+        #sae_subject_id : integer|null
+        #responsible_prof_id : integer
+        #client_id : integer
+        #subject_name : string
+        #begin_date : string
+        #end_date : string
+        #file_path : string|null
+        +__construct(data)
+        +validate()
+        +isActive()
+        +getDaysRemaining()
+        +toArray()
         +getSaeSubjectId()
         +setSaeSubjectId(sae_subject_id)
         +getResponsibleProfId()
@@ -184,28 +235,87 @@
         +setBeginDate(begin_date)
         +getEndDate()
         +setEndDate(end_date)
+        +getFilePath()
+        +setFilePath(file_path)
+      }
+      package Repository as Models.SAE.Repository {
+        class "SAEProfessorGroupRepository\n<b>Repository for SAEProfessorGroup operations.</b>" as Models_SAE_Repository_SAEProfessorGroupRepository [[/Models/SAE/Repository/SAEProfessorGroupRepository.php SAEProfessorGroupRepository Class]] {
+          #connection : PDO
+          #instance : SAEProfessorGroupRepository|null
+          #table : string
+          #entityClass : class-string<SAEProfessorGroup>
+          #__construct()
+          {static} +getInstance()
+          +assignProfessor(saeId, professorId)
+          +removeProfessor(saeId, professorId)
+          +getAssignedProfessors(saeId)
+          +getProfessorSAEs(professorId)
+          +getProfessorGroups(professorId, saeId)
+          +isProfessorAssigned(saeId, professorId)
+          +removeAllProfessors(saeId)
+        }
+        class "CompetenceRepository\n<b>Repository for Competence operations.</b>" as Models_SAE_Repository_CompetenceRepository [[/Models/SAE/Repository/CompetenceRepository.php CompetenceRepository Class]] {
+          #connection : PDO
+          #instance : CompetenceRepository|null
+          -__construct()
+          {static} +getInstance()
+          +findBySaeId(saeId)
+          +create(saeId, competenceName)
+          +delete(saeId, competenceName)
+          +deleteAllBySaeId(saeId)
+          +updateSaeCompetences(saeId, competenceNames)
+          +exists(saeId, competenceName)
+          +getCount(saeId)
+        }
+        class "SAESubjectRepository\n<b>Repository for SAESubject operations.</b>" as Models_SAE_Repository_SAESubjectRepository [[/Models/SAE/Repository/SAESubjectRepository.php SAESubjectRepository Class]] {
+          #instance : SAESubjectRepository|null
+          #table : string
+          #entityClass : class-string<SAESubject>
+          #__construct()
+          {static} +getInstance()
+          #getPrimaryKey()
+          +findAll()
+          +findByProfessorId(professorId)
+          +findByStudentId(studentId)
+          +findByClientId(clientId)
+          +create(entity)
+          +update(entity)
+          +getResponsibleProfessor(saeId)
+          +getAllProfessorsInfo(saeId)
+          +getClientInfo(saeId)
+        }
+        class "SAEGroupRepository\n<b>Repository for SAEGroup operations.</b>" as Models_SAE_Repository_SAEGroupRepository [[/Models/SAE/Repository/SAEGroupRepository.php SAEGroupRepository Class]] {
+          #instance : SAEGroupRepository|null
+          #table : string
+          #entityClass : class-string<SAEGroup>
+          #__construct()
+          {static} +getInstance()
+          #getPrimaryKey()
+          +findBySaeId(saeId)
+          +create(entity)
+          +update(entity)
+          +getGroupStudents(groupId)
+          +assignStudent(studentId, groupId)
+          +unassignStudent(studentId)
+          +getStudentGroupId(studentId, saeId)
+          +getStudentCount(groupId)
+        }
       }
     }
     package User as Models.User {
-      class "UserRepository\n<b>Class UserRepository</b>" as Models_User_UserRepository [[/Models/User/UserRepository.php UserRepository Class]] {
-        -db : Database
-        +__construct(db)
-        +existsByEmail(email)
-        +save(user)
-      }
       class "Professor\n<b>Represents a professor user in the system.</b>" as Models_User_Professor [[/Models/User/Professor.php Professor Class]] {
         #amu_id : string
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
         #fetchSAEData(connection, userId)
-        #createSAE(connection, clientid, name, begindate, enddate, userId)
-        #updateSAE(connection, sae, data)
-        #createGroup(connection, saeID)
-        #assignedSAE(connection, groupId, student)
-        #removeProfFromSae(connection, saeID, profID)
-        #addProfToSae(connection, saeID, profID)
-        #unassignedSAE(connection, sae, student)
+        +canAccessSAE(saeId)
+        +canManageSAE(saeId)
+        +getAccessibleGroupMembers(saeId)
+        -getAllSAEMembers(saeId)
+        -getAssignedGroupMembers(saeId)
+        +isResponsibleProfessor(saeId)
+        +canModifyTodo(todoId)
         +getAmuId()
       }
       class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client [[/Models/User/Client.php Client Class]] {
@@ -214,6 +324,10 @@
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
         #fetchSAEData(connection, userId)
+        +canAccessSAE(saeId)
+        +getAccessibleGroupMembers(saeId)
+        +canManageSAE(saeId)
+        +canModifyTodo(todoId)
         +getOrganisation()
       }
       class "Student\n<b>Represents a student user in the system.</b>" as Models_User_Student [[/Models/User/Student.php Student Class]] {
@@ -222,20 +336,22 @@
         #major : string|null
         #td : string
         #tp : string
-        #sae_group_id : integer
+        #sae_group_id : integer|null
         #student_id : integer
         +__construct(data)
         #saveSpecificData(connection, userId)
         #fetchSpecificData(db, email)
         #fetchSAEData(connection, userId)
-        #getToDoList(connection)
-        #createToDoIt(connection, desc)
-        #checkToDoIt(connection, todoId, checked)
+        +canAccessSAE(saeId)
+        +canModifyTodo(todoId)
+        +getAccessibleGroupMembers(saeId)
+        +canManageSAE(saeId)
         +getAmuId()
         +getYear()
         +getParcours()
         +getTd()
         +getTp()
+        +getStudentId()
       }
       class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User [[/Models/User/User.php User Class]] {
         #user_id : integer
@@ -259,7 +375,12 @@
         {static} +modifyField(field, value, email)
         {abstract} #fetchSAEData(connection, userId)
         +getSaes()
-        +hasAcessToSae(sae_subject_id)
+        {abstract} +canAccessSAE(saeId)
+        {abstract} +canManageSAE(saeId)
+        #getSaeIdFromGroup(groupId)
+        +canViewTodoList(groupId)
+        {abstract} +canModifyTodo(todoId)
+        {abstract} +getAccessibleGroupMembers(saeId)
         +getFirstName()
         +getLastName()
         +getFullName()
@@ -273,12 +394,30 @@
         +getUserId()
       }
     }
+    package Repository as Models.Repository {
+      class "BaseRepository\n<b>Base repository with common CRUD operations</b>" as Models_Repository_BaseRepository [[/Models/Repository/BaseRepository.php BaseRepository Class]] {
+        #connection : PDO
+        #table : string
+        #entityClass : class-string<T>
+        +__construct()
+        {abstract} #getPrimaryKey()
+        +findById(id)
+        +delete(id)
+        +count()
+      }
+      interface "RepositoryInterface\n<b>Common interface for all repositories</b>" as Models_Repository_RepositoryInterface [[/Models/Repository/RepositoryInterface.php RepositoryInterface Interface]] {
+        +findById(id)
+        +create(entity)
+        +update(entity)
+        +delete(id)
+      }
+    }
     package ToDoList as Models.ToDoList {
       class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList [[/Models/ToDoList/ToDoList.php ToDoList Class]] {
-        -groupId : integer
-        -sae_subject_id : ?integer
-        -todo_id : integer
-        -tododesc : string
+        #groupId : integer
+        #sae_subject_id : ?integer
+        #todo_id : integer
+        #tododesc : string
         -__construct(data)
         {static} +create(data)
         +getTodoId()
@@ -405,6 +544,7 @@
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
+  Controllers_PageSae_PageSaeController ..> Models_SAE_SAE
   Controllers_PageSae_PageSaeController ..> Models_User_User
   Controllers_PageSae_PageSaeController ..> Views_PageSAE_PageSaeView
   Controllers_SaeSujet_SaeSujetController ..> Views_SaeSujet_SaeSujetView
@@ -414,6 +554,7 @@
   Controllers_Settings_EditProfilePost ..> Models_User_User
   Controllers_Settings_EditProfilePost ..> Views_Settings_EditProfileSuccessView
   Controllers_Settings_SettingsController ..> Views_Settings_SettingsView
+  Controllers_ToDoList_ToDoListController ..> Models_SAE_SAE
   Controllers_ToDoList_ToDoListController ..> Models_User_User
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
   Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
@@ -433,9 +574,26 @@
   Controllers_pwd_ResetPasswordPostController ..> Models_User_User
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
-  Models_SAE_SAE "1" ..> "*" Models_SAE_SAE
+  Models_Repository_BaseRepository <|-- Models_SAE_Repository_SAEGroupRepository
+  Models_Repository_BaseRepository <|-- Models_SAE_Repository_SAESubjectRepository
+  Models_Repository_RepositoryInterface <|-- Models_Repository_BaseRepository
+  Models_SAE_Repository_CompetenceRepository ..> Models_SAE_Competence
+  Models_SAE_Repository_CompetenceRepository ..> Models_SAE_Repository_CompetenceRepository
+  Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_Repository_SAEGroupRepository
+  Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_SAEGroup
+  Models_SAE_Repository_SAEProfessorGroupRepository ..> Models_SAE_Repository_SAEProfessorGroupRepository
+  Models_SAE_Repository_SAESubjectRepository ..> Models_SAE_Repository_SAESubjectRepository
+  Models_SAE_Repository_SAESubjectRepository ..> Models_SAE_SAESubject
+  Models_SAE_SAE "1" ..> "*" Models_SAE_SAESubject
+  Models_SAE_SAE ..> Models_SAE_Repository_CompetenceRepository
+  Models_SAE_SAE ..> Models_SAE_Repository_SAEGroupRepository
+  Models_SAE_SAE ..> Models_SAE_Repository_SAEProfessorGroupRepository
+  Models_SAE_SAE ..> Models_SAE_Repository_SAESubjectRepository
   Models_SAE_SAE ..> Models_SAE_SAE
-  Models_User_Professor ..> Models_SAE_SAE
+  Models_SAE_SAE ..> Models_SAE_SAEGroup
+  Models_SAE_SAE ..> Models_SAE_SAESubject
+  Models_SAE_SAE ..> Models_User_Professor
+  Models_SAE_SAE ..> Models_User_User
   Models_User_User ..> Models_SAE_SAE
   Models_User_User ..> Models_User_Client
   Models_User_User ..> Models_User_Professor
@@ -444,8 +602,10 @@
   Models_User_User <|-- Models_User_Client
   Models_User_User <|-- Models_User_Professor
   Models_User_User <|-- Models_User_Student
-  Models_User_UserRepository ..> Models_User_User
-  Views_Dashboard_DashboardView ..> Models_SAE_SAE
+  Views_BaseSaeView <|-- Views_PageSAE_PageSaeView
+  Views_BaseSaeView <|-- Views_ToDoList_ToDoListView
+  Views_Dashboard_DashboardView ..> Models_SAE_SAESubject
+  Views_Dashboard_DashboardView ..> Models_User_Client
   Views_Dashboard_DashboardView ..> Models_User_Student
   Views_Dashboard_DashboardView ..> Models_User_User
   Views_Settings_SettingsView ..> Models_User_User
