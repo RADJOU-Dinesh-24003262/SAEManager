@@ -12,7 +12,7 @@ use Core\AbstractView;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Settings
+ * @subpackage Views/Settings
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -30,6 +30,7 @@ class DeleteUserView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     public function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -40,6 +41,7 @@ class DeleteUserView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
+    #[\Override]
     public function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -54,6 +56,7 @@ class DeleteUserView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     public function getNameCss(): string
     {
         return "";

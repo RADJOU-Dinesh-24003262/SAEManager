@@ -8,14 +8,14 @@ use Core\AbstractView;
  * Class ResetPasswordSuccessView
  *
  * Represents the view responsible for rendering the "Reset Password Success" page
- * of the SAEManager application.
+ * of the SAE Manager application.
  *
  * This class extends {@see AbstractView} and provides specific implementations
  * for rendering the success confirmation page displayed after a password reset.
  *
  * @category   View
  * @package    Src
- * @subpackage Views\pwd
+ * @subpackage Views/pwd
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -38,6 +38,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -49,8 +50,9 @@ class ResetPasswordSuccessView extends AbstractView
      * In this case, the reset password success page does not require
      * any dynamic data, so the method returns an empty array.
      *
-     * @return array<empty> An empty array.
+     * @return array<string, mixed> An empty array.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [];
@@ -63,9 +65,10 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Mot de passe réinitialisé - SAEManager';
+        return 'Mot de passe réinitialisé - SAE Manager';
     }
 
     /**
@@ -75,6 +78,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'reset-password-success.css';
@@ -88,6 +92,7 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The HTML script tag containing JavaScript code.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script>
@@ -116,28 +121,29 @@ class ResetPasswordSuccessView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAEManager">
-                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe, Succès">
+        return '<meta name="description" content="Page de succès de réinitialisation du mot de passe de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Réinitialisation, Mot de passe, Succès">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

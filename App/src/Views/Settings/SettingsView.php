@@ -14,7 +14,7 @@ use Models\User\User;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Settings
+ * @subpackage Views/Settings
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -52,6 +52,7 @@ class SettingsView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -63,6 +64,7 @@ class SettingsView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -102,6 +104,7 @@ class SettingsView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

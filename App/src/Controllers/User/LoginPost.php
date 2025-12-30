@@ -21,7 +21,7 @@ use Validator\LoginValidator;
 
  * @package Src
 
- * @subpackage Controllers\User
+ * @subpackage Controllers/User
 
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -41,6 +41,7 @@ class LoginPost implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
 
@@ -88,6 +89,8 @@ class LoginPost implements ControllerInterface
             Logger::log('DB_ERROR', "Erreur BDD lors du login : " . $e->getMessage(), null, 'CRITICAL');
             SessionService::setFlash('errors', ['general' => 'Erreur technique.']);
         }
+        $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);
+        $view->render();
     }
 
     /**
@@ -98,6 +101,7 @@ class LoginPost implements ControllerInterface
      *
      * @return boolean True if the path is "/login" and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/login" && $method === "POST";

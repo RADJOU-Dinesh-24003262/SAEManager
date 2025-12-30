@@ -15,7 +15,7 @@ use Core\Utilis\SessionService;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\User
+ * @subpackage Views/User
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -114,6 +114,7 @@ class RegisterView extends AbstractView
      *
      * @return string The full path to the HTML template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -124,6 +125,7 @@ class RegisterView extends AbstractView
      *
      * @return array<string, string> The keys and corresponding rendered values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -136,28 +138,6 @@ class RegisterView extends AbstractView
         ];
     }
 
-    /**
-     * Renders the list of error messages into an HTML block.
-     *
-     * @param array<int, string> $errors The list of error messages.
-     *
-     * @return string The HTML representation of the errors, or an empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
-        }
-        $html .= '</ul></section>';
-
-        return $html;
-    }
-
     // -------------------------------------------------------------------------
     // Metadata and Assets
     // -------------------------------------------------------------------------
@@ -167,9 +147,10 @@ class RegisterView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Inscription - SAEManager';
+        return 'Inscription - SAE Manager';
     }
 
     /**
@@ -177,6 +158,7 @@ class RegisterView extends AbstractView
      *
      * @return string The HTML script tags.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="/scripts/register.js"></script>';
@@ -187,6 +169,7 @@ class RegisterView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'register.css';
@@ -197,27 +180,28 @@ class RegisterView extends AbstractView
      *
      * @return string The HTML meta tags.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page d\'inscription de SAEManager">
-                <meta name="keywords" content="SAEManager, Inscription">
+        return '<meta name="description" content="Page d\'inscription de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Inscription">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

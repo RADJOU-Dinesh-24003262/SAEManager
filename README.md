@@ -1,4 +1,4 @@
-# SAEManager
+# SAE Manager
 
 ## **1. Analyse des Besoins & Spécifications**
 ### **a. Besoins du Client (Pages 6-7)**  
@@ -83,7 +83,7 @@ flowchart LR
   rN["👤 New Customer"]:::role
   rM["👤 << service >> Mail Server"]:::role
 
-  subgraph S["SAEManager"]
+  subgraph S["SAE Manager"]
     ucVS([View SAE])
     ucCM([Contact Members of the group])
     ucFP([Follow Progress of the group])

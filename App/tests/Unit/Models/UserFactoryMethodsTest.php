@@ -130,14 +130,16 @@ class UserFactoryMethodsTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage("Type d'utilisateur invalide");
 
-        User::createFromRegistrationData([
+        User::createFromRegistrationData(
+            [
             'user_type' => 'invalid_type',
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@test.fr',
             'phone' => '0612345678',
             'password' => 'password123'
-        ]);
+            ]
+        );
     }
 
     #[Test]
@@ -146,14 +148,16 @@ class UserFactoryMethodsTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        User::createFromRegistrationData([
+        User::createFromRegistrationData(
+            [
             'user_type' => $invalidType,
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@test.fr',
             'phone' => '0612345678',
             'password' => 'password123'
-        ]);
+            ]
+        );
     }
 
     public static function invalidUserTypesProvider(): array
@@ -277,10 +281,12 @@ class UserFactoryMethodsTest extends TestCase
     #[Test]
     public function getFullNameReturnsCorrectFormat(): void
     {
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => 'Jean',
             'last_name' => 'Dupont'
-        ]);
+            ]
+        );
 
         $this->assertEquals('Jean Dupont', $student->getFullName());
     }
@@ -289,10 +295,12 @@ class UserFactoryMethodsTest extends TestCase
     #[DataProvider('nameFormatsProvider')]
     public function getFullNameHandlesDifferentNameFormats(string $firstName, string $lastName, string $expected): void
     {
-        $student = new Student([
+        $student = new Student(
+            [
             'first_name' => $firstName,
             'last_name' => $lastName
-        ]);
+            ]
+        );
 
         $this->assertEquals($expected, $student->getFullName());
     }
@@ -379,7 +387,6 @@ class UserFactoryMethodsTest extends TestCase
     // ===================================
     // Tests for the deleteByEmail method
     // ===================================
-
     #[Test]
     public function deleteByEmailThrowsExceptionForEmptyEmail(): void
     {
@@ -403,25 +410,34 @@ class UserFactoryMethodsTest extends TestCase
 
         switch ($userType) {
             case 'student':
-                return array_merge($baseData, [
+                return array_merge(
+                    $baseData,
+                    [
                     'email' => 'student.test@etu.univ-amu.fr',
                     'amu_id' => 'a12345678',
                     'year' => 1,
                     'td' => 'TD1',
                     'tp' => 'TPA'
-                ]);
+                    ]
+                );
 
             case 'professor':
-                return array_merge($baseData, [
+                return array_merge(
+                    $baseData,
+                    [
                     'email' => 'professor.test@univ-amu.fr',
                     'amu_id' => 'prof123'
-                ]);
+                    ]
+                );
 
             case 'client':
-                return array_merge($baseData, [
+                return array_merge(
+                    $baseData,
+                    [
                     'email' => 'client.test@company.com',
                     'organisation' => 'Test Company'
-                ]);
+                    ]
+                );
 
             default:
                 throw new \InvalidArgumentException("Unknown user type: $userType");
@@ -515,7 +531,6 @@ class UserFactoryMethodsTest extends TestCase
     /**
      * Tests for modifyField method
      */
-
     #[Test]
     public function testModifyFieldUpdatesPhoneSuccessfully(): void
     {

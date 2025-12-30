@@ -18,7 +18,7 @@ use Views\ToDoList\ToDoListView;
 
  * @package Src
 
- * @subpackage Controllers\ToDoList
+ * @subpackage Controllers/ToDoList
 
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -39,6 +39,7 @@ class ToDoListPost implements ControllerInterface
      *
      * @throws \Exception For any other unexpected errors during the save of the task process.
      */
+    #[\Override]
     public function control(): void
     {
         // Validate the data.
@@ -65,7 +66,6 @@ class ToDoListPost implements ControllerInterface
                 throw new \Exception("Erreur lors de la sauvegarde");
             }
         } catch (ExceptionValidationEmptys $e) {
-            $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
@@ -87,6 +87,7 @@ class ToDoListPost implements ControllerInterface
      *
      * @return boolean True if the path is "/to-do-list" and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/to-do-list" && $method === "POST";

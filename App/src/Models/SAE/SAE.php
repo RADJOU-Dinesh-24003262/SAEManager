@@ -2,12 +2,34 @@
 
 namespace Models\SAE;
 
+use Models\User\User;
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\includes\exception\SAE\ExceptionResourceNotFound;
+use Core\includes\exception\SAE\ExceptionInvalidData;
+use Models\SAE\Repository\SAESubjectRepository;
+use Models\SAE\Repository\SAEGroupRepository;
+use Models\SAE\Repository\CompetenceRepository;
+use Models\SAE\Repository\SAEProfessorGroupRepository;
+use Models\User\Professor;
+
 /**
- * Represents a SAE (Situations d'Apprentissage et d'Évaluation) subject in the system.
+ * Facade for SAE operations.
+ *
+ * This class implements the Facade design pattern to provide
+ * a simplified interface for complex SAE operations involving
+ * multiple repositories and models.
+ *
+ * It orchestrates:
+ * - SAESubject operations
+ * - SAEGroup management
+ * - Competence handling
+ * - Professor assignments
+ * - Access control
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\SAE
+ * @subpackage Models/SAE
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -16,234 +38,437 @@ namespace Models\SAE;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-
 class SAE
 {
     /**
-     * The unique identifier for the SAE subject.
+     * The subject repository.
      *
-     * @var integer
+     * @var SAESubjectRepository
      */
-    private int $sae_subject_id;
+    protected SAESubjectRepository $subjectRepo;
 
     /**
-     * The user ID of the responsible professor.
+     * The group repository.
      *
-     * @var integer
+     * @var SAEGroupRepository
      */
-    private int $responsible_prof_id;
+    protected SAEGroupRepository $groupRepo;
 
     /**
-     * The user ID of the client associated with the SAE.
+     * The competence repository.
      *
-     * @var integer
+     * @var CompetenceRepository
      */
-    private int $client_id;
+    protected CompetenceRepository $competenceRepo;
 
     /**
-     * The name or title of the SAE subject.
+     * The professor group repository.
      *
-     * @var string
+     * @var SAEProfessorGroupRepository
      */
-    private string $subject_name;
+    protected SAEProfessorGroupRepository $professorGroupRepo;
 
     /**
-     * The start date of the SAE.
+     * Singleton instance.
      *
-     * @var string
+     * @var SAE|null
      */
-    private string $begin_date;
+    protected static ?SAE $instance = null;
 
     /**
-     * The end date of the SAE.
-     *
-     * @var string
+     * Constructor.
      */
-    private string $end_date;
-
-    /**
-     * Constructs a new SAE object.
-     *
-     * @param array<string, string|integer> $data An array containing the SAE data, typically fetched from the database.
-     */
-    protected function __construct(array $data = [])
+    private function __construct()
     {
-        foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
+        $this->subjectRepo = SAESubjectRepository::getInstance();
+        $this->groupRepo = SAEGroupRepository::getInstance();
+        $this->competenceRepo = CompetenceRepository::getInstance();
+        $this->professorGroupRepo = SAEProfessorGroupRepository::getInstance();
     }
 
     /**
-     * Creates an array of SAE objects from an array of raw SAE data arrays.
+     * Gets the singleton instance.
      *
-     * @param array<int, array<string, string|integer>> $saes An array of arrays,
-     *                                                        where each inner array is raw SAE data.
-     *
-     * @return array<SAE> An array of SAE objects.
+     * @return SAE
      */
-    public static function createSAEsFromArray(array $saes): array
+    public static function getInstance(): SAE
     {
-        $result = [];
-        foreach ($saes as $sae) {
-            $result[] = new SAE($sae);
+        if (self::$instance === null) {
+            self::$instance = new SAE();
         }
-        return $result;
+        return self::$instance;
     }
 
     /**
-     * Returns the SAE data as a numerically indexed array.
+     * Gets all SAEs accessible by a user.
      *
-     * @return array<int, string|integer>  The SAE properties in the order:
-     *                                     [id, prof_id, client_id, name, begin_date, end_date].
+     * @param User $user The requesting user.
+     * @return array<SAESubject> Array of SAE subjects.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
-    public function getDataArray(): array
+    public function getUserSAEs(User $user): array
     {
-        return[
-            $this->sae_subject_id,
-            $this->responsible_prof_id,
-            $this->client_id,
-            $this->subject_name,
-            $this->begin_date,
-            $this->end_date
+        if ($user->isProfessor()) {
+            return $this->subjectRepo->findByProfessorId($user->getUserId());
+        }
+
+        if ($user->isStudent()) {
+            return $this->subjectRepo->findByStudentId($user->getUserId());
+        }
+
+        if ($user->isClient()) {
+            return $this->subjectRepo->findByClientId($user->getUserId());
+        }
+
+        return [];
+    }
+
+    /**
+     * Gets complete SAE data with access control.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @param User    $user  The requesting user.
+     * @return array{
+     *   subject: \Models\SAE\SAESubject,
+     *   groups: array<int, array{
+     *     group: \Models\SAE\SAEGroup,
+     *     students: array<int, array{
+     *       student_id: string,
+     *       amu_id: string,
+     *       year: string,
+     *       major: string,
+     *       td: string,
+     *       tp: string,
+     *       first_name: string,
+     *       last_name: string,
+     *       email: string,
+     *       phone: string|null
+     *     }>
+     *   }>,
+     *   competences: array<int, \Models\SAE\Competence>,
+     *   responsible_professor: array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     amu_id: string
+     *   }|null,
+     *   all_professors: array<int, array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     amu_id: string,
+     *     is_responsible: int
+     *   }>,
+     *   client: array{
+     *     user_id: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null,
+     *     organisation: string
+     *   }|null
+     * }|null Complete SAE data or null if no access.
+     * @throws ExceptionFetchDataBD If data cannot be fetched.
+     */
+    public function getCompleteSAEData(int $saeId, User $user): ?array
+    {
+
+        $subject = $this->subjectRepo->findById($saeId);
+        if (!$subject) {
+            return null;
+        }
+
+        // Get groups accessible by the user.
+        $groups = $this->getAccessibleGroups($saeId, $user);
+
+        // Get competences.
+        $competences = $this->competenceRepo->findBySaeId($saeId);
+
+        // Get professors info.
+        $responsibleProf = $this->subjectRepo->getResponsibleProfessor($saeId);
+        $allProfs = $this->subjectRepo->getAllProfessorsInfo($saeId);
+
+        // Get client info.
+        $client = $this->subjectRepo->getClientInfo($saeId);
+
+        return [
+            'subject' => $subject,
+            'groups' => $groups,
+            'competences' => $competences,
+            'responsible_professor' => $responsibleProf,
+            'all_professors' => $allProfs,
+            'client' => $client
         ];
     }
 
-
-    // ---------------------
-    // Getters and Setters
-    // ---------------------
-
     /**
-     * Gets the unique identifier for the SAE subject.
+     * Gets groups accessible by a user for a SAE.
      *
-     * @return integer
+     * @param integer $saeId The SAE subject ID.
+     * @param User    $user  The requesting user.
+     * @return array<int, array{
+     *   group: \Models\SAE\SAEGroup,
+     *   students: array<int, array{
+     *     student_id: string,
+     *     amu_id: string,
+     *     year: string,
+     *     major: string,
+     *     td: string,
+     *     tp: string,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string|null
+     *   }>
+     * }> Array of groups with member's details.
      */
-    public function getSaeSubjectId(): int
+    private function getAccessibleGroups(int $saeId, User $user): array
     {
-        return $this->sae_subject_id;
+        $allGroups = $this->groupRepo->findBySaeId($saeId);
+
+        // If responsible professor, return all groups.
+        if ($user instanceof Professor && $user->isResponsibleProfessor($saeId)) {
+            return array_map(function ($group) {
+                return [
+                    'group' => $group,
+                    'students' => $this->groupRepo->getGroupStudents(intval($group->getSaeGroupId())),
+                ];
+            }, $allGroups);
+        }
+
+        // If assigned professor, return only assigned groups.
+        if ($user->isProfessor()) {
+            $assignedGroupIds = $this->professorGroupRepo->getProfessorGroups($user->getUserId(), $saeId);
+            $accessibleGroups = array_filter($allGroups, function ($group) use ($assignedGroupIds) {
+                return in_array($group->getSaeGroupId(), $assignedGroupIds);
+            });
+
+            return array_map(function ($group) {
+                return [
+                    'group' => $group,
+                    'students' => $this->groupRepo->getGroupStudents(intval($group->getSaeGroupId())),
+                ];
+            }, $accessibleGroups);
+        }
+
+        // If student or client, return only their group.
+        if ($user->isStudent() || $user->isClient()) {
+            $userGroupId = $this->getUserGroupId($user, $saeId);
+            if ($userGroupId) {
+                $group = $this->groupRepo->findById($userGroupId);
+                if ($group) {
+                    return [[
+                        'group' => $group,
+                        'students' => $this->groupRepo->getGroupStudents($userGroupId),
+                    ]];
+                }
+            }
+        }
+
+        return [];
     }
 
     /**
-     * Sets the unique identifier for the SAE subject.
+     * Gets the group ID of a student in a SAE.
      *
-     * @param integer $sae_subject_id The SAE subject ID.
-     *
-     * @return void
+     * @param User    $student The student.
+     * @param integer $saeId   The SAE subject ID.
+     * @return integer|null
      */
-    public function setSaeSubjectId(int $sae_subject_id): void
+    private function getUserGroupId(User $student, int $saeId): ?int
     {
-        $this->sae_subject_id = $sae_subject_id;
+        return $this->groupRepo->getStudentGroupId($student->getUserId(), $saeId);
     }
 
     /**
-     * Gets the user ID of the responsible professor.
+     * Creates a new SAE with competences.
      *
-     * @return integer
+     * @param User                 $creator The professor creating the SAE.
+     * @param array<string, mixed> $data    SAE data.
+     * @return SAESubject The created SAE.
+     * @throws ExceptionAccessDenied If user doesn't have permission.
+     * @throws ExceptionInvalidData  If data is invalid.
      */
-    public function getResponsibleProfId(): int
+    public function createSAE(User $creator, array $data): SAESubject
     {
-        return $this->responsible_prof_id;
+        // Check permission.
+        if (!$creator->canManageSAE()) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer une SAE");
+        }
+
+        // Create SAE subject.
+        $subject = new SAESubject($data);
+        $errors = $subject->validate();
+        if (!empty($errors)) {
+            throw new ExceptionInvalidData(implode(', ', $errors));
+        }
+
+        $subject = $this->subjectRepo->create($subject);
+
+        // Create competences if provided.
+        if (!empty($data['competences']) && is_array($data['competences'])) {
+            foreach ($data['competences'] as $competenceName) {
+                $this->competenceRepo->create(intval($subject->getSaeSubjectId()), $competenceName);
+            }
+        }
+
+        return $subject;
     }
 
     /**
-     * Sets the user ID of the responsible professor.
+     * Updates a SAE.
      *
-     * @param integer $responsible_prof_id The responsible professor's user ID.
-     *
-     * @return void
+     * @param User                 $user  The user updating the SAE.
+     * @param integer              $saeId The SAE ID.
+     * @param array<string, mixed> $data  Updated data.
+     * @return boolean Success status.
+     * @throws ExceptionAccessDenied    If user doesn't have permission.
+     * @throws ExceptionResourceNotFound If SAE is not found.
+     * @throws ExceptionInvalidData      If data is invalid.
      */
-    public function setResponsibleProfId(int $responsible_prof_id): void
+    public function updateSAE(User $user, int $saeId, array $data): bool
     {
-        $this->responsible_prof_id = $responsible_prof_id;
+        if (!$user->canManageSAE($saeId)) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de modifier cette SAE");
+        }
+
+        $subject = $this->subjectRepo->findById($saeId);
+        if (!$subject) {
+            throw new ExceptionResourceNotFound("SAE non trouvée");
+        }
+
+        // Update subject fields.
+        foreach ($data as $key => $value) {
+            $setter = 'set' . ucfirst($key);
+            if (method_exists($subject, $setter)) {
+                $subject->$setter($value);
+            }
+        }
+
+        $errors = $subject->validate();
+        if (!empty($errors)) {
+            throw new ExceptionInvalidData(implode(', ', $errors));
+        }
+
+        $success = $this->subjectRepo->update($subject);
+
+        // Update competences if provided.
+        if (isset($data['competences']) && is_array($data['competences'])) {
+            $this->competenceRepo->updateSaeCompetences($saeId, $data['competences']);
+        }
+
+        return $success;
     }
 
     /**
-     * Gets the user ID of the client associated with the SAE.
+     * Creates a new group for a SAE.
      *
-     * @return integer
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
+     * @return SAEGroup The created group.
+     * @throws ExceptionAccessDenied If user doesn't have permission.
      */
-    public function getClientId(): int
+    public function createGroup(User $user, int $saeId): SAEGroup
     {
-        return $this->client_id;
+        if (!$user->canManageSAE($saeId)) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
+        }
+
+        $group = new SAEGroup(['sae_subject_id' => $saeId]);
+        return $this->groupRepo->create($group);
     }
 
     /**
-     * Sets the user ID of the client associated with the SAE.
+     * Assigns a student to a group.
      *
-     * @param integer $client_id The client's user ID.
-     *
-     * @return void
+     * @param User    $professor The professor.
+     * @param integer $studentId The student ID.
+     * @param integer $groupId   The group ID.
+     * @return boolean Success status.
+     * @throws ExceptionResourceNotFound If group is not found.
+     * @throws ExceptionAccessDenied     If professor doesn't have permission.
      */
-    public function setClientId(int $client_id): void
+    public function assignStudentToGroup(User $professor, int $studentId, int $groupId): bool
     {
-        $this->client_id = $client_id;
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission d'assigner des étudiants");
+        }
+
+        return $this->groupRepo->assignStudent($studentId, $groupId);
     }
 
     /**
-     * Gets the name or title of the SAE subject.
+     * Assigns a professor to a SAE.
      *
-     * @return string
+     * @param User    $responsibleProf The responsible professor.
+     * @param integer $saeId           The SAE subject ID.
+     * @param integer $professorId     The professor to assign.
+     * @return boolean Success status.
+     * @throws ExceptionAccessDenied If not responsible professor.
      */
-    public function getSubjectName(): string
+    public function assignProfessorToSAE(User $responsibleProf, int $saeId, int $professorId): bool
     {
-        return $this->subject_name;
+        if ($responsibleProf instanceof Professor && $responsibleProf->isResponsibleProfessor($saeId)) {
+            return $this->professorGroupRepo->assignProfessor($saeId, $professorId);
+        } else {
+            throw new ExceptionAccessDenied("Seul le responsable peut assigner des professeurs");
+        }
     }
 
     /**
-     * Sets the name or title of the SAE subject.
+     * Gets contact information of group members grouped by SAE group.
+     * Each key in the returned array is a SAE group ID.
      *
-     * @param string $subject_name The name of the subject.
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
      *
-     * @return void
+     * @return array<int, array<int, array{
+     *     user_id: int,
+     *     first_name: string,
+     *     last_name: string,
+     *     email: string,
+     *     phone: string,
+     *     sae_group_id: int,
+     *     td: int,
+     *     tp: int
+     * }>>
      */
-    public function setSubjectName(string $subject_name): void
+    public function getGroupContacts(User $user, int $saeId): array
     {
-        $this->subject_name = $subject_name;
+        $members = $user->getAccessibleGroupMembers($saeId);
+
+        $grouped = [];
+
+        foreach ($members as $member) {
+            $groupId = $member['sae_group_id'];
+            $grouped[$groupId][] = $member;
+        }
+
+        return $grouped;
     }
 
     /**
-     * Gets the start date of the SAE.
+     * Deletes a SAE.
      *
-     * @return string
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
+     * @return boolean Success status.
+     * @throws ExceptionAccessDenied If user doesn't have permission.
      */
-    public function getBeginDate(): string
+    public function deleteSAE(User $user, int $saeId): bool
     {
-        return $this->begin_date;
-    }
-
-    /**
-     * Sets the start date of the SAE.
-     *
-     * @param string $begin_date The start date (format is typically YYYY-MM-DD).
-     *
-     * @return void
-     */
-    public function setBeginDate(string $begin_date): void
-    {
-        $this->begin_date = $begin_date;
-    }
-
-    /**
-     * Gets the end date of the SAE.
-     *
-     * @return string
-     */
-    public function getEndDate(): string
-    {
-        return $this->end_date;
-    }
-
-    /**
-     * Sets the end date of the SAE.
-     *
-     * @param string $end_date The end date (format is typically YYYY-MM-DD).
-     *
-     * @return void
-     */
-    public function setEndDate(string $end_date): void
-    {
-        $this->end_date = $end_date;
+        if ($user instanceof Professor && $user->isResponsibleProfessor($saeId)) {
+            return $this->subjectRepo->delete($saeId);
+        }
+        throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
     }
 }

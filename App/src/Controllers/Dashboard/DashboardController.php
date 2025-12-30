@@ -4,6 +4,8 @@ namespace Controllers\Dashboard;
 
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
+use Core\includes\exception\SAE\ExceptionSAE;
+use Core\Utilis\Logger;
 use Views\Dashboard\DashboardView;
 use Models\User\User;
 use Core\Utilis\SessionService;
@@ -20,7 +22,7 @@ use Models\SAE\SAE;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers\Dashboard
+ * @subpackage Controllers/Dashboard
  *
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -46,6 +48,7 @@ class DashboardController implements ControllerInterface
      * @return void
      * @throws ExceptionDashboard If the data if empty.
      */
+    #[\Override]
     public function control(): void
     {
         if (!SessionService::has('user_id')) {
@@ -61,7 +64,8 @@ class DashboardController implements ControllerInterface
             $data['user'] = $user;
 
             if (!$user || !($user instanceof User)) {
-                throw new ExceptionDashboard('Unknown user');
+                SessionService::remove('USER');
+                throw new ExceptionDashboard('Utilisateur inconnu ou non authentifié.');
             }
 
             $data['saes'] = $user->getSaes();
@@ -71,7 +75,11 @@ class DashboardController implements ControllerInterface
             $view->render();
         } catch (ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
-            header('Location: /dashboard');
+            header('Location: /');
+            exit();
+        } catch (ExceptionSAE $e) {
+            SessionService::setFlash('errors', "Erreur SAE : " . $e->getMessage());
+            header('Location: /');
             exit();
         }
     }
@@ -87,6 +95,7 @@ class DashboardController implements ControllerInterface
      *
      * @return boolean Returns true if the path is "/dashboard" and the method is "GET"; otherwise, false.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/dashboard" && $method === "GET";

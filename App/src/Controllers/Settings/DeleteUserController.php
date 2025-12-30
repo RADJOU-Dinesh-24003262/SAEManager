@@ -16,7 +16,7 @@ use Views\Settings\DeleteUserView;
  *
  * @package Src
  *
- * @subpackage Controllers\Settings
+ * @subpackage Controllers/Settings
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -36,6 +36,7 @@ class DeleteUserController implements ControllerInterface
      * @return void
      * @throws \PDOException If there is a problem with database request.
      */
+    #[\Override]
     public function control(): void
     {
 
@@ -71,6 +72,7 @@ class DeleteUserController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /delete-user and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/delete-user' && $method === 'GET';

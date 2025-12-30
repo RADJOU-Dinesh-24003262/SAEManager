@@ -12,17 +12,18 @@ use Views\Settings\EditProfileSuccessView;
  * Edit Profile Post Controller
  *
  * Handle User Profile Update (POST request)
+ *
  * @category Controller
  *
  * @package Src
  *
- * @subpackage Controllers\Settings
+ * @subpackage Controllers/Settings
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
  * @license MIT License https://opensource.org/licenses/MIT
  *
@@ -36,6 +37,7 @@ class EditProfilePost implements ControllerInterface
      * @return void
      * @throws \PDOException Trigger PDOException when BD is not accessible.
      */
+    #[\Override]
     public function control(): void
     {
         if (!SessionService::get('USER')) {
@@ -61,10 +63,11 @@ class EditProfilePost implements ControllerInterface
     /**
      * Check if the controller should handle the current request
      *
-     * @param string $path   The request path.
-     * @param string $method The HTTP request method.
+     * @param  string $path   The request path.
+     * @param  string $method The HTTP request method.
      * @return boolean True if path is /edit-profile and the method is POST.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/edit-profile' && $method === 'POST';

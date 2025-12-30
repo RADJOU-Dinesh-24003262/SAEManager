@@ -42,7 +42,12 @@ abstract class AbstractView
     public function __construct(array $data = [])
     {
         $this->data = $data;
-        $this->data['errors'] = SessionService::getFlash('errors', []);
+        $errors = SessionService::getFlash('errors', []);
+        if (is_string($errors)) {
+            $errors = [$errors];
+        }
+        $this->data['errors'] = $errors;
+
         $this->data['success'] = SessionService::getFlash('success', '');
     }
 
@@ -223,13 +228,13 @@ abstract class AbstractView
     }
 
     /**
-     * Returns the name of the project 'SAEManager' or be used in some cases like displaying it by some isolated texts.
+     * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
 
-     * @return string the name of the project 'SAEManager'.
+     * @return string the name of the project 'SAE Manager'.
      */
     protected function getPageTitle(): string
     {
-        return 'SAEManager';
+        return 'SAE Manager';
     }
 
     /**
@@ -250,5 +255,41 @@ abstract class AbstractView
     protected function getAdditionalScripts(): string
     {
         return '';
+    }
+
+        /**
+     * Renders error messages in HTML format.
+     *
+     * @param array<string|integer, string> $errors List of error messages.
+     *
+     * @return string The rendered HTML or an empty string.
+     */
+    protected function renderErrorMessages(array $errors): string
+    {
+        if (empty($errors)) {
+            return '';
+        }
+
+        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
+        foreach ($errors as $error) {
+            $html .= '<li>' . $error . '</li>';
+        }
+        $html .= '</ul></section>';
+        return $html;
+    }
+
+    /**
+     * Renders a success message in HTML format if available.
+     *
+     * @return string The rendered HTML or an empty string.
+     */
+    protected function renderSuccessMessage(): string
+    {
+        $success = $this->data['success'] ?? '';
+        if (empty($success)) {
+            return '';
+        }
+
+        return '<div class="alert alert-success">' . $success . '</div>';
     }
 }

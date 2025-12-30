@@ -8,17 +8,18 @@ use Core\AbstractView;
  * Edit Profile View
  *
  * Display the user profile editing form
+ *
  * @category View
  *
  * @package Src
  *
- * @subpackage Views\Settings
+ * @subpackage Views/Settings
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
  * @license MIT License https://opensource.org/licenses/MIT
  *
@@ -38,6 +39,7 @@ class EditProfileView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -49,6 +51,7 @@ class EditProfileView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $user = $this->data['user'];
@@ -65,6 +68,7 @@ class EditProfileView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

@@ -72,7 +72,9 @@ class TokenServiceIntegrationTest extends TestCase
         $binary = hex2bin($token);
 
         // Count unique bytes
-        /** @var string $binary */
+        /**
+ * @var string $binary
+*/
         $uniqueBytes = count(array_unique(str_split($binary)));
 
         // At least 20 different bytes out of 32 (good entropy)

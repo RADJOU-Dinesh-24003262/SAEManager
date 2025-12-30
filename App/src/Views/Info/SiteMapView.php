@@ -12,7 +12,7 @@ use Core\AbstractView;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Info
+ * @subpackage Views/Info
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -36,6 +36,7 @@ class SiteMapView extends AbstractView
      *
      * @return string
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -46,22 +47,24 @@ class SiteMapView extends AbstractView
      *
      * This method returns an empty array.
      *
-     * @return array<empty> An empty array
+     * @return array<string, mixed> An empty array
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [];
     }
 
     /**
-     * Returns the name of the page 'Plan du Site - SAEManager' or
+     * Returns the name of the page 'Plan du Site - SAE Manager' or
      * be used in some cases like displaying it by some isolated texts.
 
-     * @return string the name of the project 'Plan du Site - SAEManager'.
+     * @return string the name of the project 'Plan du Site - SAE Manager'.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Plan du Site - SAEManager';
+        return 'Plan du Site - SAE Manager';
     }
 
     /**
@@ -72,6 +75,7 @@ class SiteMapView extends AbstractView
      *
      * @return string The name of the CSS file.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'plan-site.css';
@@ -81,28 +85,29 @@ class SiteMapView extends AbstractView
      *
      * @return string The additional HTML headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Plan du Site de SAEManager">
-                <meta name="keywords" content="SAEManager, Plan du Site">
+        return '<meta name="description" content="Plan du Site de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Plan du Site">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />' ;
     }
 }

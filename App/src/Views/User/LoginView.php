@@ -14,7 +14,7 @@ use Core\Utilis\SessionService;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\User
+ * @subpackage Views/User
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -39,6 +39,7 @@ class LoginView extends AbstractView
      *
      * @return string Template file path.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -51,6 +52,7 @@ class LoginView extends AbstractView
      *
      * @return array<string, string> Template keys and their values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'] ?? [];
@@ -63,34 +65,11 @@ class LoginView extends AbstractView
     }
 
     /**
-     * Renders error messages as an HTML list.
-     *
-     * Applies htmlspecialchars to prevent XSS.
-     *
-     * @param array<int, string> $errors List of error messages.
-     *
-     * @return string HTML string of formatted error messages or empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<div class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
-        }
-        $html .= '</ul></div>';
-
-        return $html;
-    }
-
-    /**
      * Returns the name of the CSS file to include for this view.
      *
      * @return string CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'style.css';
@@ -101,15 +80,16 @@ class LoginView extends AbstractView
      *
      * @return string Additional HTML meta tags.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page de connexion de SAEManager">
-                <meta name="keywords" content="SAEManager, Connexion">
+        return '<meta name="description" content="Page de connexion de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Connexion">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:url" content="http://www.instagram.com/" />';
