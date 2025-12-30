@@ -38,7 +38,7 @@ class EditProfileController extends BaseController
     public function control(): void
     {
         $this->ensureAuthenticated();
-        
+
         $data['user'] = $this->user;
         $view = new EditProfileView($data);
         $view->render();
