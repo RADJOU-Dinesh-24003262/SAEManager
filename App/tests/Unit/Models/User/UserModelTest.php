@@ -3,6 +3,7 @@
 namespace Tests\Unit\Models\User;
 
 use Core\includes\Database;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -11,6 +12,7 @@ use Models\User\Student;
 use Models\User\Professor;
 use Models\User\Client;
 use Models\User\User;
+use ReflectionClass;
 
 /**
  * Tests unitaires complets pour les modèles User
@@ -70,7 +72,7 @@ class UserModelTest extends TestCase
         $student = new Student($data);
 
         // Ces champs ne doivent pas être stockés directement
-        $reflection = new \ReflectionClass($student);
+        $reflection = new ReflectionClass($student);
         $this->assertFalse($reflection->hasProperty('password'));
         $this->assertFalse($reflection->hasProperty('passwordverif'));
         $this->assertFalse($reflection->hasProperty('terms'));
@@ -211,7 +213,7 @@ class UserModelTest extends TestCase
     #[Test]
     public function createFromRegistrationDataThrowsExceptionForInvalidType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Type d'utilisateur invalide");
 
         User::createFromRegistrationData(

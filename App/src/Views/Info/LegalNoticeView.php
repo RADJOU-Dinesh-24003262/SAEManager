@@ -2,7 +2,8 @@
 
 namespace Views\Info;
 
-use Core\AbstractView;
+use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class LegalNoticeView
@@ -35,7 +36,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -48,7 +49,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return array<string, mixed> An empty array
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return [];
@@ -60,7 +61,7 @@ class LegalNoticeView extends AbstractView
 
      * @return string the name of the project 'Mentions Légales - SAE Manager'.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Mentions Légales - SA EManager';
@@ -74,7 +75,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return string The name of the CSS file.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'legal-notice.css';
@@ -84,7 +85,7 @@ class LegalNoticeView extends AbstractView
      *
      * @return string The additional HTML headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Mentions légales de SAE Manager">

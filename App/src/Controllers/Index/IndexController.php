@@ -2,7 +2,8 @@
 
 namespace Controllers\Index;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
+use Override;
 use Views\Index\IndexView;
 
 /**
@@ -27,7 +28,7 @@ class IndexController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         $view = new IndexView();
@@ -42,7 +43,7 @@ class IndexController implements ControllerInterface
      *
      * @return boolean True if the path is "/index" or "/" and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return ($path === "/index" || $path === "/") && $method === "GET";

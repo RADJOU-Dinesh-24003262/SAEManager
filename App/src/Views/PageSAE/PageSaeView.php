@@ -2,6 +2,7 @@
 
 namespace Views\PageSAE;
 
+use Override;
 use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
@@ -45,7 +46,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -58,7 +59,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return array<string, string> An empty array
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         return array_merge(
@@ -100,7 +101,7 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-                // 3. Groups (Students).
+        // 3. Groups (Students).
         if ($user->isStudent()) {
             // Students see their own group members.
             if (!empty($saeData['groups'])) {
@@ -202,8 +203,10 @@ class PageSaeView extends BaseSaeView
 
         $filePath = $this->data['sae']['subject']->getFilePath();
 
+        $content .= '<h3>Description de la SAE :</h3>';
+
         if ($filePath) {
-            $fullPath = __DIR__ . (str_starts_with($filePath, '/') ? '' : '/') . $filePath;
+            $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
             if (file_exists($fullPath)) {
                 $parsedown = new Parsedown();
                 $content .= '<div class="sae-subject-file">';
@@ -220,7 +223,7 @@ class PageSaeView extends BaseSaeView
 
      * @return string the name of the project 'Page SAE - SAE Manager'.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'SAE ' . $this->data['sae']['subject']->getSubjectName() . ' - SAE Manager';
@@ -234,7 +237,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string The name of the CSS file.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'page-sae.css';
@@ -244,7 +247,7 @@ class PageSaeView extends BaseSaeView
      *
      * @return string The additional HTML headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page SAE de SAE Manager">

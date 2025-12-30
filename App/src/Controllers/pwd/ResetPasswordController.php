@@ -2,11 +2,11 @@
 
 namespace Controllers\pwd;
 
-use Core\ControllerInterface;
-use Core\Utilis\TokenService;
-use Core\Utilis\SessionService;
-use Views\pwd\ResetPasswordView;
+use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Utilis\SessionService;
+use Services\TokenService;
+use Views\pwd\ResetPasswordView;
 
 /**
  * This class controls the reset password process (get).
@@ -45,14 +45,6 @@ class ResetPasswordController implements ControllerInterface
             SessionService::setFlash('errors', ['Erreur lors de la validation du lien: ' . $e->getMessage()]);
             header('Location: /forgot-password');
             exit();
-        } catch (\PDOException $e) {
-            error_log("Erreur validation token: " . $e->getMessage());
-            SessionService::setFlash(
-                'errors',
-                ['Erreur lors de la validation du lien: 
-            veuillez réessayer plus tard.']
-            );
-            header('Location: /');
         }
     }
 

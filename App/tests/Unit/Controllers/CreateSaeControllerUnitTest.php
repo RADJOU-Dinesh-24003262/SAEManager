@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\SaeSujet;
+namespace Tests\Unit\Controllers;
 
+use Controllers\SAE\CreateSaeController;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\CoversMethod;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Controllers\SaeSujet\SaeSujetController;
 
 /**
- * Unit Test for the controller SaeSujetController
+ * Unit Test for the controller CreateSaeController
  *
  * @category Test
  *
@@ -28,14 +27,14 @@ use Controllers\SaeSujet\SaeSujetController;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(SaeSujetController::class)]
-class SaeSujetControllerUnitTest extends TestCase
+#[CoversClass(CreateSaeController::class)]
+class CreateSaeControllerUnitTest extends TestCase
 {
-    private SaeSujetController $controller;
+    private CreateSaeController $controller;
 
     protected function setUp(): void
     {
-        $this->controller = new SaeSujetController();
+        $this->controller = new CreateSaeController();
     }
 
     /**
@@ -45,7 +44,7 @@ class SaeSujetControllerUnitTest extends TestCase
     public function controllerHasCorrectNamespace(): void
     {
         $this->assertStringContainsString(
-            'Controllers\SaeSujet',
+            'Controllers\SAE',
             get_class($this->controller)
         );
     }
@@ -60,8 +59,11 @@ class SaeSujetControllerUnitTest extends TestCase
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
-        // REPLACE : $this->assertEquals('void', $returnType->getName()); BY :
-        $this->assertEquals('void', (string)$returnType);
+        if (method_exists($returnType, 'getName')) {
+            $this->assertEquals('void', $returnType->getName());
+        } else {
+             $this->assertEquals('void', (string)$returnType);
+        }
     }
 
     #[Test]
@@ -76,14 +78,14 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function supportMethodIsStatic(): void
     {
-        $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
+        $reflection = new \ReflectionMethod(CreateSaeController::class, 'support');
         $this->assertTrue($reflection->isStatic());
     }
 
     #[Test]
     public function supportMethodHasCorrectParameters(): void
     {
-        $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
+        $reflection = new \ReflectionMethod(CreateSaeController::class, 'support');
         $parameters = $reflection->getParameters();
 
         $this->assertCount(2, $parameters);
@@ -96,7 +98,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function supportMethodReturnsBoolean(): void
     {
-        $reflection = new \ReflectionMethod(SaeSujetController::class, 'support');
+        $reflection = new \ReflectionMethod(CreateSaeController::class, 'support');
         $returnType = $reflection->getReturnType();
 
         $this->assertNotNull($returnType);
@@ -114,7 +116,7 @@ class SaeSujetControllerUnitTest extends TestCase
     public static function validSupportProvider(): array
     {
         return [
-            'chemin valide avec méthode GET' => ['/new-sae', 'GET', true],
+            'chemin valide avec méthode GET' => ['/sae/create', 'GET', true],
         ];
     }
 
@@ -123,24 +125,24 @@ class SaeSujetControllerUnitTest extends TestCase
         return [
             'chemin invalide' => ['/invalid', 'GET', false],
             'chemin vide' => ['', 'GET', false],
-            'chemin similaire 1' => ['/new-sae/', 'GET', false],
-            'chemin similaire 2' => ['/new-sae/extra', 'GET', false],
-            'chemin avec underscore' => ['/new_sae', 'GET', false],
-            'chemin en majuscules' => ['/NEW-SAE', 'GET', false],
-            'chemin avec espaces' => ['/new-sae ', 'GET', false],
+            'chemin similaire 1' => ['/sae/create/', 'GET', false],
+            'chemin similaire 2' => ['/sae/create/extra', 'GET', false],
+            'chemin avec underscore' => ['/sae_create', 'GET', false],
+            'chemin en majuscules' => ['/SAE/CREATE', 'GET', false],
+            'chemin avec espaces' => ['/sae/create ', 'GET', false],
         ];
     }
 
     public static function invalidMethodProvider(): array
     {
         return [
-            'méthode POST' => ['/new-sae', 'POST', false],
-            'méthode PUT' => ['/new-sae', 'PUT', false],
-            'méthode DELETE' => ['/new-sae', 'DELETE', false],
-            'méthode PATCH' => ['/new-sae', 'PATCH', false],
-            'méthode vide' => ['/new-sae', '', false],
-            'méthode en minuscules' => ['/new-sae', 'get', false],
-            'méthode mixte' => ['/new-sae', 'Get', false],
+            'méthode POST' => ['/sae/create', 'POST', false],
+            'méthode PUT' => ['/sae/create', 'PUT', false],
+            'méthode DELETE' => ['/sae/create', 'DELETE', false],
+            'méthode PATCH' => ['/sae/create', 'PATCH', false],
+            'méthode vide' => ['/sae/create', '', false],
+            'méthode en minuscules' => ['/sae/create', 'get', false],
+            'méthode mixte' => ['/sae/create', 'Get', false],
         ];
     }
 
@@ -161,7 +163,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[DataProvider('validSupportProvider')]
     public function supportReturnsTrueForValidCases(string $path, string $method, bool $expected): void
     {
-        $result = SaeSujetController::support($path, $method);
+        $result = CreateSaeController::support($path, $method);
         $this->assertSame($expected, $result);
     }
 
@@ -169,7 +171,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[DataProvider('invalidPathProvider')]
     public function supportReturnsFalseForInvalidPaths(string $path, string $method, bool $expected): void
     {
-        $result = SaeSujetController::support($path, $method);
+        $result = CreateSaeController::support($path, $method);
         $this->assertSame($expected, $result);
     }
 
@@ -177,7 +179,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[DataProvider('invalidMethodProvider')]
     public function supportReturnsFalseForInvalidMethods(string $path, string $method, bool $expected): void
     {
-        $result = SaeSujetController::support($path, $method);
+        $result = CreateSaeController::support($path, $method);
         $this->assertSame($expected, $result);
     }
 
@@ -185,7 +187,7 @@ class SaeSujetControllerUnitTest extends TestCase
     #[DataProvider('completelyInvalidProvider')]
     public function supportReturnsFalseForCompletelyInvalidCases(string $path, string $method, bool $expected): void
     {
-        $result = SaeSujetController::support($path, $method);
+        $result = CreateSaeController::support($path, $method);
         $this->assertSame($expected, $result);
     }
 
@@ -195,17 +197,17 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function supportIsCaseSensitiveForMethod(): void
     {
-        $this->assertFalse(SaeSujetController::support('/new-sae', 'get'));
-        $this->assertFalse(SaeSujetController::support('/new-sae', 'Get'));
-        $this->assertTrue(SaeSujetController::support('/new-sae', 'GET'));
+        $this->assertFalse(CreateSaeController::support('/sae/create', 'get'));
+        $this->assertFalse(CreateSaeController::support('/sae/create', 'Get'));
+        $this->assertTrue(CreateSaeController::support('/sae/create', 'GET'));
     }
 
     #[Test]
     public function supportIsExactMatchForPath(): void
     {
-        $this->assertTrue(SaeSujetController::support('/new-sae', 'GET'));
-        $this->assertFalse(SaeSujetController::support('/new-sae/', 'GET'));
-        $this->assertFalse(SaeSujetController::support('/new-sae/extra', 'GET'));
+        $this->assertTrue(CreateSaeController::support('/sae/create', 'GET'));
+        $this->assertFalse(CreateSaeController::support('/sae/create/', 'GET'));
+        $this->assertFalse(CreateSaeController::support('/sae/create/extra', 'GET'));
     }
 
     /**
@@ -215,14 +217,14 @@ class SaeSujetControllerUnitTest extends TestCase
     public function supportHandlesVariousInputFormats(): void
     {
         $testCases = [
-            ['path' => '/new-sae', 'method' => 'GET', 'expected' => true],
-            ['path' => '/new-sae', 'method' => 'GET ', 'expected' => false],
-            ['path' => ' /new-sae', 'method' => 'GET', 'expected' => false],
-            ['path' => '/new-sae', 'method' => ' GET', 'expected' => false],
+            ['path' => '/sae/create', 'method' => 'GET', 'expected' => true],
+            ['path' => '/sae/create', 'method' => 'GET ', 'expected' => false],
+            ['path' => ' /sae/create', 'method' => 'GET', 'expected' => false],
+            ['path' => '/sae/create', 'method' => ' GET', 'expected' => false],
         ];
 
         foreach ($testCases as $case) {
-            $result = SaeSujetController::support($case['path'], $case['method']);
+            $result = CreateSaeController::support($case['path'], $case['method']);
             $this->assertSame($case['expected'], $result);
         }
     }
@@ -240,11 +242,11 @@ class SaeSujetControllerUnitTest extends TestCase
     #[Test]
     public function multipleControllerInstancesAreIndependent(): void
     {
-        $controller1 = new SaeSujetController();
-        $controller2 = new SaeSujetController();
+        $controller1 = new CreateSaeController();
+        $controller2 = new CreateSaeController();
 
         $this->assertNotSame($controller1, $controller2);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller1);
-        $this->assertInstanceOf(\Core\ControllerInterface::class, $controller2);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller1);
+        $this->assertInstanceOf(\Core\Controllers\ControllerInterface::class, $controller2);
     }
 }

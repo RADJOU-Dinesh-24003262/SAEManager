@@ -2,9 +2,9 @@
 
 namespace Views\Index;
 
-use Core\Utilis\SessionService;
-use Core\AbstractView;
 use Controllers\Index\IndexControllerPost;
+use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class IndexView
@@ -41,7 +41,7 @@ class IndexView extends AbstractView
      *
      * @return string The full path to the template file.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -55,7 +55,7 @@ class IndexView extends AbstractView
      *
      * @return array<string, string> An associative array with template keys for messages.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -72,7 +72,7 @@ class IndexView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'index.css';
@@ -86,7 +86,7 @@ class IndexView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page d\'accueil de SAE Manager">

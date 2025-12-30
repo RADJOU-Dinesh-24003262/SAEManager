@@ -2,7 +2,8 @@
 
 namespace Controllers\Info;
 
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
+use Override;
 use Views\Info\SiteMapView;
 
 /**
@@ -26,7 +27,7 @@ class SiteMapController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         $view = new SiteMapView();
@@ -40,7 +41,7 @@ class SiteMapController implements ControllerInterface
      * @param  string $method The HTTP method used in the request.
      * @return boolean True if the path is "/site-map" and the method is GET.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/site-map" && $method === "GET";

@@ -11,3 +11,5 @@ Core/includes/my_settings.ini
 *cache*
 *svg
 *yaml
+storage/sae_descriptions/*
+logs/*

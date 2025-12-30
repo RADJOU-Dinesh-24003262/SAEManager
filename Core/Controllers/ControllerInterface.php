@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Core\Controllers;
 
 /**
  * This class is the interface to be implemented for all the controllers.

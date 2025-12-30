@@ -2,10 +2,12 @@
 
 namespace Controllers\Settings;
 
-use Validator\EditProfileValidator;
-use Core\ControllerInterface;
+use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
 use Models\User\User;
+use Override;
+use PDOException;
+use Validator\EditProfileValidator;
 use Views\Settings\EditProfileSuccessView;
 
 /**
@@ -35,9 +37,9 @@ class EditProfilePost implements ControllerInterface
      * Main Controller logic for EditProfilePost.
      *
      * @return void
-     * @throws \PDOException Trigger PDOException when BD is not accessible.
+     * @throws PDOException Trigger PDOException when BD is not accessible.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
         if (!SessionService::get('USER')) {
@@ -67,7 +69,7 @@ class EditProfilePost implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean True if path is /edit-profile and the method is POST.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === '/edit-profile' && $method === 'POST';

@@ -1,16 +1,16 @@
 <?php
 
-namespace Controllers\PageSae;
+namespace App\Controllers\SAE;
 
-use Core\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionDashboard;
-use Core\includes\exception\SAE\ExceptionSAE;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\User\User;
-use Views\PageSAE\PageSaeView;
 use Models\SAE\SAE;
+use Override;
+use Views\PageSAE\PageSaeView;
 
 /**
  * This class controls the SAE page.
@@ -31,43 +31,30 @@ use Models\SAE\SAE;
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class PageSaeController implements ControllerInterface
+class PageSaeController extends BaseController
 {
     /**
      * Principal manager of the controller
      *
      * @return void
-     * @throws Exception If the user variable is not as expected.
      * @throws ExceptionAccessDenied If access is denied.
      */
-    #[\Override]
+    #[Override]
     public function control(): void
     {
-        // Redirect to /login if not logged in.
-        if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Authentification requise.']);
-            header('Location: /login');
-            exit();
-        }
+        $this->ensureAuthenticated();
 
         try {
-            // Retrieve the user object stored in the session.
-            $user = unserialize(SessionService::get('USER'));
-
-            $data['user'] = $user;
-
-            if (!$user || !($user instanceof User)) {
-                throw new Exception('Unknown user');
-            }
+            $data['user'] = $this->user;
 
             $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
-            if (!$user->canAccessSAE($sae_id)) {
+            if (!$this->user->canAccessSAE($sae_id)) {
                 throw new ExceptionAccessDenied("Vous n'avez pas la permission d'accéder à cette SAE.");
             }
 
             $sae = SAE::getInstance();
-            $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
+            $data['sae'] = $sae->getCompleteSAEData($sae_id, $this->user);
 
             // Create and render the SAE page view.
             $view = new PageSaeView($data);
@@ -96,7 +83,7 @@ class PageSaeController implements ControllerInterface
      *
      * @return boolean True if the controller supports the request, otherwise false
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match('/^\/sae\/\d*$/', $path) && strtoupper($method) === 'GET';

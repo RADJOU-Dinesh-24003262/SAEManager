@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception\ExceptionBD;
 
+use Exception;
+
 /**
  * ExceptionFetchDataBD
  *
@@ -18,7 +20,7 @@ namespace Core\includes\exception\ExceptionBD;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionFetchDataBD extends \Exception
+class ExceptionFetchDataBD extends Exception
 {
     /**
      * Constructor for the ExceptionFetchDataBD class.

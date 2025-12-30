@@ -3,6 +3,7 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Override;
 
 /**
  * Class LoginValidator
@@ -36,7 +37,7 @@ class ToDoListValidator extends FormValidator
      * @return void
      * @throws ExceptionValidationEmpty All the errors that might have been found.
      */
-    #[\Override]
+    #[Override]
     public function validate(array $data): void
     {
         if (empty($data['tododesc'])) {

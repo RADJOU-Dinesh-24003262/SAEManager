@@ -2,7 +2,7 @@
 
 namespace Views;
 
-use Core\AbstractView;
+use Core\Views\AbstractView;
 
 /**
  * Class BaseSaeView

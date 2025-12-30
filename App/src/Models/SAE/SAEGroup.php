@@ -2,7 +2,8 @@
 
 namespace Models\SAE;
 
-use Core\BaseModel;
+use Core\Models\BaseModel;
+use Override;
 
 /**
  * Represents a SAE Group in the system.
@@ -45,7 +46,7 @@ class SAEGroup extends BaseModel
      *
      * @return array<int, string> Array of validation errors (empty if valid).
      */
-    #[\Override]
+    #[Override]
     public function validate(): array
     {
         $errors = [];
@@ -62,7 +63,7 @@ class SAEGroup extends BaseModel
      *
      * @return array<string, integer|null>
      */
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

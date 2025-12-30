@@ -2,6 +2,8 @@
 
 namespace Core\includes\exception\ExceptionValidation;
 
+use Exception;
+
 /**
  * ExceptionValidationRegisters
  *
@@ -18,7 +20,7 @@ namespace Core\includes\exception\ExceptionValidation;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ExceptionValidationRegisters extends \Exception
+class ExceptionValidationRegisters extends Exception
 {
     /**
      * @var ExceptionValidationRegister[] Array of individual field validation errors

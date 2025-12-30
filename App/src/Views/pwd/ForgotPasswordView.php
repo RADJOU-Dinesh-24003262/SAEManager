@@ -2,8 +2,8 @@
 
 namespace Views\pwd;
 
-use Core\Utilis\SessionService;
-use Core\AbstractView;
+use Core\Views\AbstractView;
+use Override;
 
 /**
  * Class ForgotPasswordView
@@ -47,7 +47,7 @@ class ForgotPasswordView extends AbstractView
      *
      * @return string The full path to the template file.
      */
-    #[\Override]
+    #[Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -61,7 +61,7 @@ class ForgotPasswordView extends AbstractView
      *
      * @return array<string, string> An associative array with template keys for messages.
      */
-    #[\Override]
+    #[Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
@@ -77,7 +77,7 @@ class ForgotPasswordView extends AbstractView
      *
      * @return string The page title.
      */
-    #[\Override]
+    #[Override]
     protected function getPageTitle(): string
     {
         return 'Password Forgot - SAE Manager';
@@ -88,7 +88,7 @@ class ForgotPasswordView extends AbstractView
      *
      * @return string The CSS filename.
      */
-    #[\Override]
+    #[Override]
     protected function getNameCss(): string
     {
         return 'forgot-password.css';
@@ -102,7 +102,7 @@ class ForgotPasswordView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
-    #[\Override]
+    #[Override]
     protected function getAdditionalHeaders(): string
     {
         return '<meta name="description" content="Page de réinitialisation du mot de passe de SAE Manager">
