@@ -2,21 +2,21 @@
 
 namespace Views\ToDoList;
 
-use Core\AbstractView;
+use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 
 /**
  * Class ToDoListView
  *
- * Represents the view for the "To-Do List" page of the SAEManager application.
+ * Represents the view for the "To-Do List" page of the SAE Manager application.
  * This view is responsible for displaying the to-do list of the students in a specific SAE.
- * It extends {@see AbstractView} and provides specific implementations
+ * It extends {@see BaseSaeView} and provides specific implementations
  * for rendering the To-Do List page, including the associated CSS file,
  * template path, and metadata headers.
  *
  * @category   View
  * @package    Src
- * @subpackage Views\ToDoList
+ * @subpackage Views/ToDoList
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -25,7 +25,7 @@ use Core\Utilis\SessionService;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoListView extends AbstractView
+class ToDoListView extends BaseSaeView
 {
     private const TEMPLATE_HTML = __DIR__ . '/to-do-list.html';
 
@@ -38,6 +38,7 @@ class ToDoListView extends AbstractView
      *
      * @return string The full path to the HTML template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -49,39 +50,19 @@ class ToDoListView extends AbstractView
      * This method returns an empty array because the To-Do List page
      * does not require dynamic data to render.
      *
-     * @return array<string, mixed> An empty associative array.
+     * @return array<string, string|integer> An empty associative array.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'];
 
-        return [
-            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-            'SAE_NUM' => $this->data['sae']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']->getSubjectName()
-        ];
-    }
-
-    /**
-     * Renders the list of error messages into an HTML block.
-     *
-     * @param array<int, string> $errors The list of error messages.
-     *
-     * @return string The HTML representation of the errors, or an empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error, ENT_QUOTES, 'UTF-8') . '</li>';
-        }
-        $html .= '</ul></section>';
-
-        return $html;
+        return array_merge(
+            $this->getCommonSaeTemplateKeys(),
+            [
+                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            ]
+        );
     }
 
     /**
@@ -91,9 +72,10 @@ class ToDoListView extends AbstractView
      *
      * @return string The title of the To-Do List page.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Page SAE - To Do List - SAEManager';
+        return 'Page SAE - To Do List - SAE Manager';
     }
 
     /**
@@ -103,6 +85,7 @@ class ToDoListView extends AbstractView
      *
      * @return string The name of the CSS file.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'to-do-list.css';
@@ -116,28 +99,29 @@ class ToDoListView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page SAE de SAEManager partie To-Do List">
-                <meta name="keywords" content="SAEManager, SAE, To-Do List">
+        return '<meta name="description" content="Page SAE de SAE Manager partie To-Do List">
+                <meta name="keywords" content="SAE Manager, SAE, To-Do List">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.facebook.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.linkedin.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
 
-                <meta property="og:title" content="SAEManager - To-Do List" />
+                <meta property="og:title" content="SAE Manager - To-Do List" />
                 <meta property="og:url" content="https://www.instagram.com/" />
-                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAEManager." />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:description" content="Consultez la liste des tâches de votre SAE sur SAE Manager." />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 
@@ -149,6 +133,7 @@ class ToDoListView extends AbstractView
      *
      * @return string The HTML <script> tag to include the JavaScript file.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="/scripts/to-do-list.js" defer></script>';

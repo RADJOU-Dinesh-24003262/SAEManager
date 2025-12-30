@@ -18,7 +18,7 @@ namespace Core\Utilis;
  */
 class Logger
 {
-    private const LOG_FILE = __DIR__ . '/../../../logs/security.log';
+    private const LOG_FILE = __DIR__ . '/../../logs/security.log';
 
     /**
      * Log a security event.

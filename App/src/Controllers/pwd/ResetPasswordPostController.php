@@ -17,7 +17,7 @@ use Core\includes\exception\ExceptionPasswordUpdateFailed;
 /**
  * @category   Controller
  * @package    Src
- * @subpackage Controllers\pwd
+ * @subpackage Controllers/pwd
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -33,6 +33,7 @@ class ResetPasswordPostController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         try {
@@ -68,7 +69,7 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
-        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email'] ?? null);
+        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email']);
     }
 
     /**
@@ -90,6 +91,7 @@ class ResetPasswordPostController implements ControllerInterface
      * @param  string $method The HTTP request method.
      * @return boolean Is the method post?
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/reset-password" && $method === "POST";

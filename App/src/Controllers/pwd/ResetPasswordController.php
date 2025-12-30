@@ -13,7 +13,7 @@ use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers\pwd
+ * @subpackage Controllers/pwd
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -29,6 +29,7 @@ class ResetPasswordController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         // Get the token from the URL.
@@ -63,6 +64,7 @@ class ResetPasswordController implements ControllerInterface
      *
      * @return boolean True if the path is "/reset-password" and the method is GET, false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/reset-password" && $method === "GET";

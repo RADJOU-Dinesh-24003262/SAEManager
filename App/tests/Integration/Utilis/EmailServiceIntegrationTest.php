@@ -104,7 +104,7 @@ class EmailServiceIntegrationTest extends TestCase
         // Key information to find in both versions
         $keyInfo = [
             '10 minutes',
-            'SAEManager',
+            'SAE Manager',
             'une seule fois',
         ];
 

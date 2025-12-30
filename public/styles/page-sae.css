@@ -75,14 +75,20 @@
 }
 
 .menu_functionnality a {
-    margin: 10px 0;
+    display: block;
+    padding: 10px 15px;
+    margin: 5px 0;
     color: #333;
-    cursor: pointer;
-    transition: color 0.3s;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
-.menu_functionnality h3:hover {
+.menu_functionnality a:hover {
+    background-color: #f0e6f5;
     color: #3b003b;
+    transform: translateX(5px);
 }
 
 /* --- Sub-block in Container --- */
@@ -143,4 +149,62 @@ h4 {
         width: 100%;
         max-width: 600px;
     }
+}
+
+/* --- Contact Section --- */
+#contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    height: auto !important; /* Override the fixed height from .sub_bloc */
+}
+
+.contact-section {
+    width: 100%;
+}
+
+.contact-section h5 {
+    color: #3b003b;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 5px;
+}
+
+.contact-section h6 {
+    color: #3b003b;
+    font-size: 1em;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.contact-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-section li {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contact-section p {
+    margin: 0 0 10px 0;
+}
+
+.contact-section a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+    color: #0056b3;
 }

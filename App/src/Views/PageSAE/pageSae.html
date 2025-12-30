@@ -6,30 +6,15 @@
 </div>
 <article class="main_functionnality">
         <ul class="menu_functionnality">
-            <li>
-                <h2>Mon groupe</h2>
-            </li>
-            <li>
-                <a href="#avancement">Voir l'avancement</a>
-            </li>
-            <li>
-                <a href="/sae/{{SAE_NUM}}/to-do">Voir le Tableau de bord</a>
-            </li>
-            <li>
-                <a href="/sae/{{SAE_NUM}}/modify">Modifier la SAE</a>
-            </li>
-            <li>
-                <a href="#contacts">Voir les Contacts des membres</a>
-            </li>
-            <li>
-                <a href="/sae/{{SAE_NUM}}">Menu de la page SAE</a>
-            </li>
+            {{SAE_MENU}}
         </ul>
 
 
     <br>
     <br>
     <div class="bloc_to_put">
+        <h4>Description :</h4>
+        {{SAE_CONTENT}}
         <div class="sub_bloc">
             <img class="logo_plus" src="/image/logo-plus.png" alt="">
         </div>
@@ -39,6 +24,11 @@
         <h4>Rendu :</h4>
         <div class="sub_bloc">
             <img class="logo_plus" src="/image/logo-plus.png" alt="">
+        </div>
+
+        <h4>Contacts :</h4>
+        <div id="contacts" class="sub_bloc" style="height: auto; cursor: default; align-items: flex-start; text-align: left;">
+             {{SAE_CONTACTS}}
         </div>
     </div>
 </article>

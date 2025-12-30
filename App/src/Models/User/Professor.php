@@ -4,6 +4,7 @@ namespace Models\User;
 
 use PDO;
 use Models\SAE\SAE;
+use Core\includes\Database;
 
 /**
  * Represents a professor user in the system.
@@ -13,7 +14,7 @@ use Models\SAE\SAE;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\User
+ * @subpackage Models/User
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -57,6 +58,7 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -84,6 +86,7 @@ class Professor extends User
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -111,10 +114,19 @@ class Professor extends User
      * @param PDO     $connection PDO object representing the database connection.
      * @param integer $userId     The professor's user ID.
      *
-     * @return array<int, array<string, mixed>> Associative array containing the SAE records.
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null
+     * }> Associative array containing the SAE records.
      *
      * @throws \PDOException If an error occurs during query execution.
      */
+    #[\Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -138,230 +150,183 @@ class Professor extends User
     }
 
     /**
-     * Creates a new SAE (subject) record linked to the professor.
+     * A professor can access an SAE if they are the responsible professor OR assigned to it.
      *
-     * Dates are converted using STR_TO_DATE according to the expected format.
-     *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $clientid   ID of the client linked to the SAE.
-     * @param string  $name       Name of the SAE.
-     * @param string  $begindate  Start date (expected format: "March 01 2024").
-     * @param string  $enddate    End date (expected format: "June 30 2024").
-     * @param integer $userId     ID of the responsible professor.
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer $saeId The SAE ID.
+     * @return boolean True if accessible, false otherwise.
      */
-    protected function createSAE(
-        PDO $connection,
-        int $clientid,
-        string $name,
-        string $begindate,
-        string $enddate,
-        int $userId
-    ): void {
-        $stmt = $connection->prepare(
-            'INSERT INTO sae_subjects
-                (responsible_prof_id, client_id, subject_name, begin_date, end_date) VALUES
-            (:responsible_prof_id, :client_id, :subject_name, STR_TO_DATE(:begin_date, "%M %d %Y"),
-            STR_TO_DATE(:end_date, "%M %d %Y"));'
-        );
-        $stmt->execute(
-            [
-                'responsible_prof_id' => $userId,
-                'client_id' => $clientid,
-                'subject_name' => $name,
-                'begin_date' => $begindate,
-                'end_date' => $enddate
-            ]
-        );
-    }
-
-    /**
-     * Updates an existing SAE with the provided data.
-     *
-     * If a value in the \$data array is NULL, the current value of the SAE is kept.
-     *
-     * @param PDO                           $connection PDO object representing the database connection.
-     * @param \Models\SAE\SAE               $sae        SAE instance representing the current record.
-     * @param array<string, string|integer> $data       Associative array of fields to update.
-     *                                                  Expected keys: 'responsible_prof_id',
-     *                                                  'client_id', 'subject_name',
-     *                                                  'begin_date', 'end_date'.
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
-     */
-    protected function updateSAE(PDO $connection, SAE $sae, array $data): void
+    #[\Override]
+    public function canAccessSAE(int $saeId): bool
     {
-        $saedata = $sae->getDataArray();
-        for ($i = 0; $i < count($data); $i++) {
-            if ($data[$i] == null) {
-                $data[$i] = $saedata[$i];
-            }
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT COUNT(*) FROM sae_subjects s
+                 WHERE s.sae_subject_id = :sae_id
+                 AND (s.responsible_prof_id = :prof_id
+                      OR EXISTS (
+                          SELECT 1 FROM sae_professor_groups spg
+                          WHERE spg.sae_subject_id = :sae_id AND spg.professor_id = :prof_id
+                      )
+                 )
+                 OR client_id = :prof_id'
+            );
+            $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log('Erreur canAccessSAE (Professor) : ' . $e->getMessage());
+            return false;
         }
-        $stmt = $connection->prepare(
-            'UPDATE sae_subjects
-                                    SET sae_subject_id = sae_subject_id,
-                                        responsible_prof_id = :responsible_prof_id, client_id = :client_id,
-                                        subject_name = :subject_name, begin_date = :begin_date, end_date = :end_date
-                                    WHERE sae_subject_id = :sae_subject_id;'
-        );
-        $stmt->execute(
-            [
-                'sae_subject_id' => $sae->getSaeSubjectId(),
-                'responsible_prof_id' => $data['responsible_prof_id'],
-                'client_id' => $data['client_id'],
-                'subject_name' => $data['subject_name'],
-                'begin_date' => $data['begin_date'],
-                'end_date' => $data['end_date']
-            ]
-        );
     }
 
     /**
-     * Creates an SAE group for a given subject and returns its ID.
+     * A professor can manage (create/update) an SAE if they are the responsible professor.
+     * For creation (saeId = null), all professors are allowed to create.
      *
-     * First inserts a record into `SAE_groups`, then selects an
-     * unassigned group for students for the same SAE.
-     *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $saeID      SAE subject ID.
-     *
-     * @return integer The ID of the created group (sae_group_id).
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer|null $saeId The SAE ID.
+     * @return boolean True if allowed, false otherwise.
      */
-    protected function createGroup(PDO $connection, int $saeID): int
+    #[\Override]
+    public function canManageSAE(?int $saeId = null): bool
     {
-        $stmt = $connection->prepare(
-            'INSERT INTO SAE_groups(sae_subject_id)
-                                    VALUES (:sae_subject_id);'
-        );
-        $stmt->execute(
-            [
-                'sae_subject_id' => $saeID
-            ]
-        );
-        $stmt = $connection->prepare(
-            'SELECT sae_group_id FROM SAE_groups
-                                    WHERE sae_group_id NOT IN (SELECT sae_group_id FROM students)
-                                    AND sae_subject_id = :sae_subject_id
-                                    LIMIT 1;'
-        );
-        $stmt->execute(
-            [
-                'sae_subject_id' => $saeID
-            ]
-        );
-        return (int)$stmt->fetchColumn(0);
+        // Creation : Every professor can create a SAE.
+        if ($saeId === null) {
+            return true;
+        }
+
+        // Modification : Only the responsible professor can modify the SAE.
+        return $this->isResponsibleProfessor($saeId);
     }
 
     /**
-     * Assigns a student to an SAE group.
+     * A responsible professor can see ALL groups; otherwise, only their assigned groups.
      *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $groupId    SAE group ID.
-     * @param integer $student    Student ID (student_id).
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
-    protected function assignedSAE(PDO $connection, int $groupId, int $student): void
+    #[\Override]
+    public function getAccessibleGroupMembers(int $saeId): array
     {
-        $stmt = $connection->prepare(
-            'UPDATE students
-                                    SET sae_group_id = :sae_group_id
-                                    WHERE student_id = :student_id;'
-        );
-        $stmt->execute(
-            [
-                'sae_group_id' => $groupId,
-                'student_id' => $student
-            ]
-        );
+        if ($this->isResponsibleProfessor($saeId)) {
+            return $this->getAllSAEMembers($saeId);
+        }
+
+        return $this->getAssignedGroupMembers($saeId);
+    }
+    /**
+     * Retrieves ALL members of an SAE (for the responsible professor).
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of all group members.
+     */
+    private function getAllSAEMembers(int $saeId): array
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone,
+                        st.sae_group_id, st.td, st.tp
+                 FROM sae_groups sg
+                 JOIN students st ON sg.sae_group_id = st.sae_group_id
+                 JOIN users u ON st.student_id = u.user_id
+                 WHERE sg.sae_subject_id = :sae_id
+                 ORDER BY st.sae_group_id, u.last_name, u.first_name'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('Erreur getAllSAEMembers : ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
-     * Removes a professor's association with an SAE.
+     * Retrieves the members of the groups assigned to the professor.
      *
-     * Deletes the corresponding row in `sae_professor_groups`.
-     *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $saeID      SAE subject ID.
-     * @param integer $profID     Professor ID.
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
      */
-    protected function removeProfFromSae(PDO $connection, int $saeID, int $profID): void
+    private function getAssignedGroupMembers(int $saeId): array
     {
-        $stmt = $connection->prepare(
-            'DELETE FROM sae_professor_groups
-                                    WHERE sae_subject_id = :sae_subject_id
-                                    AND professor_id = :professor_id;'
-        );
-        $stmt->execute(
-            [
-                'sae_subject_id' => $saeID,
-                'professor_id' => $profID
-            ]
-        );
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone,
+                        st.sae_group_id, st.td, st.tp
+                 FROM sae_professor_groups spg
+                 JOIN sae_groups sg ON spg.sae_subject_id = sg.sae_subject_id
+                 JOIN students st ON sg.sae_group_id = st.sae_group_id
+                 JOIN users u ON st.student_id = u.user_id
+                 WHERE spg.professor_id = :prof_id AND spg.sae_subject_id = :sae_id
+                 ORDER BY st.sae_group_id, u.last_name, u.first_name'
+            );
+            $stmt->execute(['prof_id' => $this->user_id, 'sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('Erreur getAssignedGroupMembers : ' . $e->getMessage());
+            return [];
+        }
     }
 
     /**
-     * Adds a professor's association with an SAE.
+     * Checks whether this user is the responsible professor for an SAE.
      *
-     * @param PDO     $connection PDO object representing the database connection.
-     * @param integer $saeID      SAE subject ID.
-     * @param integer $profID     Professor ID.
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer $saeId The SAE ID.
+     * @return boolean If the user is the responsible professor.
      */
-    protected function addProfToSae(PDO $connection, int $saeID, int $profID): void
+    public function isResponsibleProfessor(int $saeId): bool
     {
-        $stmt = $connection->prepare(
-            'INSERT INTO sae_professor_groups(sae_subject_id, professor_id)
-                                    VALUES (:sae_subject_id, :professor_id);'
-        );
-        $stmt->execute(
-            [
-                'sae_subject_id' => $saeID,
-                'professor_id' => $profID
-            ]
-        );
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT COUNT(*) FROM sae_subjects 
+                WHERE sae_subject_id = :sae_id AND responsible_prof_id = :prof_id'
+            );
+            $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log('Error in isResponsibleProfessor: ' . $e->getMessage());
+            return false;
+        }
     }
 
     /**
-     * Unassigns a student from an SAE (removes the student from the group).
+     * Checks if the professor can modify a to-do list item.
      *
-     * @param PDO             $connection PDO object representing the database connection.
-     * @param \Models\SAE\SAE $sae        SAE instance used to retrieve the id.
-     * @param integer         $student    ID of the student to unassign.
-     *
-     * @return void
-     *
-     * @throws \PDOException If an error occurs during query execution.
+     * @param integer $todoId The to-do item ID.
+     * @return boolean Always false for professor.
      */
-    protected function unassignedSAE(PDO $connection, SAE $sae, int $student): void
+    #[\Override]
+    public function canModifyTodo(int $todoId): bool
     {
-        $stmt = $connection->prepare(
-            'UPDATE students
-                                    SET sae_group_id = :sae_subject_id
-                                    WHERE student_id = :student_id;'
-        );
-        $stmt->execute(
-            [
-                'sae_group_id' => $sae->getSaeSubjectId(),
-                'student_id' => null
-            ]
-        );
+        return false;
     }
 
     // -----------------

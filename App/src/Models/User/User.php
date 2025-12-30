@@ -11,13 +11,14 @@ use Models\SAE\SAE;
 use PDO;
 use PDOException;
 use PhpParser\Node\Stmt;
+use Models\SAE\SAESubject;
 
 /**
  * Abstract base class for all user types.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\User
+ * @subpackage Models/User
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -172,37 +173,46 @@ abstract class User
      * Template method - calls saveSpecificData() for type-specific logic.
      *
      * @return void
+     * @throws PDOException If the user cannot be saved.
      */
     public function save(): void
     {
         $connection = Database::getInstance();
+        $connection->beginTransaction();
 
-        $stmt = $connection->prepare(
-            'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
-             VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
-        );
+        try {
+            $stmt = $connection->prepare(
+                'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
+                 VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
+            );
 
-        $stmt->execute(
-            [
-                'first_name' => $this->first_name,
-                'last_name' => $this->last_name,
-                'email' => $this->email,
-                'phone' => $this->phone,
-                'hashed_password' => $this->hashed_password,
-                'user_type' => match ($this->user_type) {
-                    'student'   => '0',
-                    'professor' => '1',
-                    'client'    => '2',
-                    default     => null, // If there something that is unusual.
-                },
-            ]
-        );
+            $stmt->execute(
+                [
+                    'first_name' => $this->first_name,
+                    'last_name' => $this->last_name,
+                    'email' => $this->email,
+                    'phone' => $this->phone,
+                    'hashed_password' => $this->hashed_password,
+                    'user_type' => match ($this->user_type) {
+                        'student'   => '0',
+                        'professor' => '1',
+                        'client'    => '2',
+                        default     => null, // If there something that is unusual.
+                    },
+                ]
+            );
 
-        $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
-        $stmt->execute(['email' => $this->email]);
-        $userId = (int) $stmt->fetchColumn(0);
+            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
+            $stmt->execute(['email' => $this->email]);
+            $userId = (int) $stmt->fetchColumn(0);
 
-        $this->saveSpecificData($connection, $userId);
+            $this->saveSpecificData($connection, $userId);
+            $connection->commit();
+        } catch (PDOException $e) {
+            $connection->rollBack();
+            error_log('Erreur lors de la sauvegarde de l\'utilisateur : ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     /**
@@ -389,50 +399,104 @@ abstract class User
      * @param PDO     $connection The database connection.
      * @param integer $userId     The user's ID.
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null
+     * }>
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
-    /**
+     /**
      * Gets the SAE infos proposed/enrolled by the user.
      *
-     * @return array<SAE> An array of @see SAE data.
+     * @return array<SAESubject> An array of @see SAESubject data.
+     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
      */
     public function getSaes(): array
     {
-        $connection = Database::getInstance();
-        return SAE::createSAEsFromArray($this->fetchSAEData($connection, $this->user_id));
+        $sae = SAE::getInstance();
+        return $sae->getUserSAEs($this);
+    }
+
+
+    /**
+     * Can this user access a specific SAE?
+     *
+     * @param integer $saeId SAE ID.
+     * @return boolean
+     */
+    abstract public function canAccessSAE(int $saeId): bool;
+
+    /**
+     * Can this user MANAGE (edit/create) an SAE?
+     *
+     * @param integer|null $saeId SAE ID (null = creation).
+     * @return boolean
+     */
+    abstract public function canManageSAE(?int $saeId = null): bool;
+
+    /**
+     * Retrieves the SAE ID associated with a group.
+     *
+     * @param integer $groupId The group ID.
+     * @return integer|null The SAE ID or null if not found.
+     */
+    protected function getSaeIdFromGroup(int $groupId): ?int
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare('SELECT sae_subject_id FROM sae_groups WHERE sae_group_id = :group_id');
+            $stmt->execute(['group_id' => $groupId]);
+            $result = $stmt->fetchColumn();
+            return $result !== false ? (int) $result : null;
+        } catch (\PDOException $e) {
+            error_log('Error getting SAE ID from group: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**
-     * Checks if the user has access to a specific SAE.
+     * Can this user view a group's to-do list?
      *
-     * @param integer $sae_subject_id The SAE subject ID.
-     *
-     * @return boolean True if the user has access, false otherwise.
+     * @param integer $groupId Group ID.
+     * @return boolean
      */
-    public function hasAcessToSae(int $sae_subject_id): bool
+    public function canViewTodoList(int $groupId): bool
     {
-        $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT * FROM users 
-                                JOIN professor_groups ON professor_groups.professor_id = users.user_id
-                                JOIN students on students.student_id = users.user_id
-                                JOIN SAE_groups on SAE_groups.sae_group_id = students.sae_group_id
-                                JOIN SAE_subjects ON SAE_subjects.client_id = user.user_id
-                                JOIN SAE_subjects ON SAE_subjecte.responsible_prof_id = users.user_id
-                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
-                                JOIN SAE_subjects ON SAE_subjects.sae_subject_id = professor_groups.sae_subject_id
-                                WHERE users.user_id = :user_id
-                                AND sae_subjects.sae_subject_id = :sae_subject_id;');
-        $stmt->execute(
-            [
-                'user_id' => $this->user_id,
-                'sae_subject_id' => $sae_subject_id
-            ]
-        );
-
-        return $stmt->rowCount() > 1 ;
+        // If the user can access the group's SAE, they can view its to-do list.
+        $saeId = $this->getSaeIdFromGroup($groupId);
+        return $saeId ? $this->canAccessSAE($saeId) : false;
     }
+
+    /**
+     * Can this user MODIFY a to-do list item?
+     *
+     * @param integer $todoId To-do item ID.
+     * @return boolean
+     */
+    abstract public function canModifyTodo(int $todoId): bool;
+
+    /**
+     * Retrieves the group members accessible by this user.
+     *
+     * @param integer $saeId SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> List of members with their information
+     */
+    abstract public function getAccessibleGroupMembers(int $saeId): array;
 
     // -----------------
     // Getters

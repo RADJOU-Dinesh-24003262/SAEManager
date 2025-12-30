@@ -9,7 +9,7 @@ use Core\Utilis\SessionService;
  * Class SaeSujetView
  *
  * Represents the view responsible for displaying and rendering
- * the SAE subject creation page in the SAEManager application.
+ * the SAE subject creation page in the SAE Manager application.
  *
  * This class extends {@see AbstractView} and defines the template path,
  * template keys, page title, CSS, and additional HTML headers specific
@@ -17,7 +17,7 @@ use Core\Utilis\SessionService;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\SaeSujet
+ * @subpackage Views/SaeSujet
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -40,6 +40,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -48,8 +49,9 @@ class SaeSujetView extends AbstractView
     /**
      * Returns an array of keys used in the template for dynamic content replacement.
      *
-     * @return array<empty> An associative array of template keys and their corresponding values.
+     * @return array<string, mixed> An associative array of template keys and their corresponding values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [];
@@ -60,9 +62,10 @@ class SaeSujetView extends AbstractView
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Page SAE - Création du sujet de SAE - SAEManager';
+        return 'Page SAE - Création du sujet de SAE - SAE Manager';
     }
 
     /**
@@ -70,6 +73,7 @@ class SaeSujetView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'sae-sujet.css';
@@ -83,28 +87,29 @@ class SaeSujetView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page SAE de SAEManager partie Création du sujet">
-                <meta name="keywords" content="SAEManager, SAE, création sujet">
+        return '<meta name="description" content="Page SAE de SAE Manager partie Création du sujet">
+                <meta name="keywords" content="SAE Manager, SAE, création sujet">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

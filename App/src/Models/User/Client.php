@@ -3,13 +3,14 @@
 namespace Models\User;
 
 use PDO;
+use Core\includes\Database;
 
 /**
  * Represents a client user in the system.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models\User
+ * @subpackage Models/User
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -46,6 +47,7 @@ class Client extends User
      *
      * @return void
      */
+    #[\Override]
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
@@ -69,6 +71,7 @@ class Client extends User
      *
      * @return void
      */
+    #[\Override]
     protected function fetchSpecificData(PDO $db, string $email): void
     {
         $stmt = $db->prepare(
@@ -96,8 +99,17 @@ class Client extends User
      * @param PDO     $connection The database connection.
      * @param integer $userId     The client's user ID.
      *
-     * @return array<int, array<string, string|integer>> An array of SAE subjects data.
+     * @return array<int, array{
+     *   sae_subject_id: int,
+     *   responsible_prof_id: int,
+     *   client_id: int,
+     *   subject_name: string,
+     *   begin_date: string,
+     *   end_date: string,
+     *   file_path: string|null
+     * }> An array of SAE subjects data.
      */
+    #[\Override]
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
@@ -107,6 +119,91 @@ class Client extends User
 
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * A client can access the SAEs for which they are the client.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return boolean True if accessible, false otherwise.
+     */
+    #[\Override]
+    public function canAccessSAE(int $saeId): bool
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT COUNT(*) FROM sae_subjects
+                 WHERE sae_subject_id = :sae_id AND client_id = :client_id'
+            );
+            $stmt->execute(['sae_id' => $saeId, 'client_id' => $this->user_id]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            error_log('Erreur canAccessSAE (Client) : ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * a client can see all students working on THEIR SAEs.
+     *
+     * @param integer $saeId The SAE ID.
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string,
+     *   sae_group_id: int,
+     *   td: int,
+     *   tp: int
+     * }> The list of accessible group members.
+     */
+    #[\Override]
+    public function getAccessibleGroupMembers(int $saeId): array
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone,
+                        st.sae_group_id, st.td, st.tp
+                 FROM sae_subjects s
+                 JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
+                 JOIN students st ON sg.sae_group_id = st.sae_group_id
+                 JOIN users u ON st.student_id = u.user_id
+                 WHERE s.client_id = :client_id AND s.sae_subject_id = :sae_id
+                 ORDER BY st.sae_group_id, u.last_name, u.first_name'
+            );
+            $stmt->execute(['client_id' => $this->user_id, 'sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log('Erreur getAccessibleGroupMembers (Client) : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Checks if the client can manage the SAE.
+     *
+     * @param integer|null $saeId The SAE ID, null if he want to create a SAE.
+     * @return boolean Always false for client.
+     */
+    #[\Override]
+    public function canManageSAE(?int $saeId = null): bool
+    {
+        return false;
+    }
+
+    /**
+     * Checks if the client can modify a to-do list item.
+     *
+     * @param integer $todoId The to-do item ID.
+     * @return boolean Always false for client.
+     */
+    #[\Override]
+    public function canModifyTodo(int $todoId): bool
+    {
+        return false;
     }
 
     // -----------------

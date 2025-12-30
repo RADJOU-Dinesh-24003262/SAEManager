@@ -32,8 +32,10 @@ coverage: ## Génère le rapport de couverture
 	@echo "${GREEN}✓ Rapport disponible dans: coverage/index.html${NC}"
 
 phpcs: ## Vérifie le code style (PSR-12)
+	-./vendor/bin/phpcbf --standard=PSR12 ./App/ ./Core/
+	-./vendor/bin/phpcbf --standard=phpcs-phpdoc.xml ./App/src/ ./Core/
 	@echo "${YELLOW}Vérification du code style...${NC}"
-	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --standard=PSR12 --colors App/src/ Core/
+	./vendor/bin/phpcs --standard=phpcs-phpdoc.xml --standard=PSR12 --colors ./App/src/ ./Core/
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"

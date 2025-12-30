@@ -9,7 +9,7 @@ use Core\AbstractView;
  * Class ResetPasswordView
  *
  * Represents the view responsible for displaying and rendering
- * the password reset page in the SAEManager application.
+ * the password reset page in the SAE Manager application.
  *
  * This class extends {@see AbstractView} and defines methods to display
  * password reset content, including error messages, the reset token,
@@ -17,7 +17,7 @@ use Core\AbstractView;
  *
  * @category   View
  * @package    Src
- * @subpackage Views\pwd
+ * @subpackage Views/pwd
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -61,6 +61,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The full path to the template file.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -74,6 +75,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return array<string, string> An associative array containing template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         return [
@@ -120,37 +122,14 @@ class ResetPasswordView extends AbstractView
     }
 
     /**
-     * Renders HTML markup for displaying error messages to the user.
-     *
-     * If no errors are present, an empty string is returned.
-     *
-     * @param array<string> $errors The list of error messages to display.
-     *
-     * @return string The HTML markup for error messages, or an empty string if none exist.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
-        }
-        $html .= '</ul></section>';
-
-        return $html;
-    }
-
-    /**
      * Returns the title of the reset password page.
      *
      * @return string The page title.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Password Renew - SAEManager';
+        return 'Password Renew - SAE Manager';
     }
 
     /**
@@ -158,6 +137,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'pwd-renew.css';
@@ -168,6 +148,7 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The HTML script tags for additional JavaScript resources.
      */
+    #[\Override]
     protected function getAdditionalScripts(): string
     {
         return '<script src="scripts/reset-password.js"></script>';
@@ -181,28 +162,29 @@ class ResetPasswordView extends AbstractView
      *
      * @return string The HTML string containing additional meta headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Page de réinitialisation du mot de passe de SAEManager">
-                <meta name="keywords" content="SAEManager, Réinitialisation, Mot de passe">
+        return '<meta name="description" content="Page de réinitialisation du mot de passe de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Réinitialisation, Mot de passe">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.facebook.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.linkedin.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />
                 
                 <meta property="og:title" content="Notre site" />
                 <meta property="og:url" content="http://www.instagram.com/" />
                 <meta property="og:description" content="Pour en savoir plus sur nous" />
-                <meta property="og:site_name" content="SAEManager" />
+                <meta property="og:site_name" content="SAE Manager" />
                 <meta property="og:type" content="website" />';
     }
 }

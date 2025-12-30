@@ -13,7 +13,7 @@ use Models\User\User;
  * Unit tests for Student model
  *
  * @category Test
- * @package Tests\Unit\Models
+ * @package  Tests\Unit\Models
  */
 #[CoversClass(Student::class)]
 #[CoversClass(User::class)]

@@ -10,7 +10,7 @@ use Views\Info\LegalNoticeView;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers\Info
+ * @subpackage Controllers/Info
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -26,6 +26,7 @@ class LegalNoticeController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $view = new LegalNoticeView();
@@ -41,6 +42,7 @@ class LegalNoticeController implements ControllerInterface
      *
      * @return boolean True if the path is "/index" or "/" and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/legal-notice" && $method === "GET";

@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
 include "../Core/includes/Autoloader.php";
 \Core\includes\Autoloader::register();
 
@@ -63,6 +64,7 @@ foreach ($controllers as $controller) {
             exit();
         } catch (\Throwable $e) {
             // Generical fallback for unexpected errors.
+            SessionService::destroy();
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
             error_log("Erreur inattendue: " . $e->getMessage());
             http_response_code(500);

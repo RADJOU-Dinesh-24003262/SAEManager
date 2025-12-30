@@ -4,10 +4,13 @@ namespace Controllers\PageSae;
 
 use Core\ControllerInterface;
 use Core\includes\exception\ExceptionDashboard;
+use Core\includes\exception\SAE\ExceptionSAE;
+use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\User\User;
 use Views\PageSAE\PageSaeView;
+use Models\SAE\SAE;
 
 /**
  * This class controls the SAE page.
@@ -16,7 +19,7 @@ use Views\PageSAE\PageSaeView;
 
  * @package Src
 
- * @subpackage Controllers\PageSae
+ * @subpackage Controllers/PageSae
 
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -35,12 +38,15 @@ class PageSaeController implements ControllerInterface
      *
      * @return void
      * @throws Exception If the user variable is not as expected.
+     * @throws ExceptionAccessDenied If access is denied.
      */
+    #[\Override]
     public function control(): void
     {
-        // Redirect to dashboard if already logged in.
+        // Redirect to /login if not logged in.
         if (!SessionService::has('user_id')) {
-            header('Location: /');
+            SessionService::setFlash('errors', ['Authentification requise.']);
+            header('Location: /login');
             exit();
         }
 
@@ -54,20 +60,28 @@ class PageSaeController implements ControllerInterface
                 throw new Exception('Unknown user');
             }
 
-            $data['saes'] = $user->getSaes();
-            $sae_id = basename($_SERVER['REQUEST_URI']);
+            $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
-            foreach ($data['saes'] as $key => $sae) {
-                if ($sae->getSaeSubjectId() == $sae_id) {
-                    // Create and render the SAE page view.
-                    $data['sae'] = $sae;
-                    $view = new PageSaeView($data);
-                    $view->render();
-                    exit();
-                }
+            if (!$user->canAccessSAE($sae_id)) {
+                throw new ExceptionAccessDenied("Vous n'avez pas la permission d'accéder à cette SAE.");
             }
-            header('Location: /');
-        } catch (Exception $e) {
+
+            $sae = SAE::getInstance();
+            $data['sae'] = $sae->getCompleteSAEData($sae_id, $user);
+
+            // Create and render the SAE page view.
+            $view = new PageSaeView($data);
+            $view->render();
+            exit();
+        } catch (ExceptionAccessDenied $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        } catch (ExceptionSAE $e) {
+            SessionService::setFlash('errors', "Erreur SAE : " . $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        } catch (ExceptionDashboard $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();
@@ -82,6 +96,7 @@ class PageSaeController implements ControllerInterface
      *
      * @return boolean True if the controller supports the request, otherwise false
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match('/^\/sae\/\d*$/', $path) && strtoupper($method) === 'GET';

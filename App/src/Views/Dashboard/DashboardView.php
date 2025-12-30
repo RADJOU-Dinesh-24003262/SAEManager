@@ -5,20 +5,22 @@ namespace Views\Dashboard;
 use Models\User\User;
 use Core\Utilis\SessionService;
 use Core\AbstractView;
-use Models\SAE\SAE;
+use hoge\fuga\product\Super;
+use Models\SAE\SAESubject;
 use Models\User\Student;
+use Models\User\Client;
 
 /**
  * Class DashboardView
  *
- * Represents the view for the user dashboard page of SAEManager.
+ * Represents the view for the user dashboard page of SAE Manager.
  * This page displays personalized information about the connected user
  * (name, email, role, SAE list, etc.) and provides navigation elements
  * specific to their role (student, professor, or client).
  *
  * @category   View
  * @package    Src
- * @subpackage Views\Dashboard
+ * @subpackage Views/Dashboard
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -58,6 +60,7 @@ class DashboardView extends AbstractView
      *
      * @return string The template path.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -68,6 +71,7 @@ class DashboardView extends AbstractView
      *
      * @return array<string, string> The list of template keys and values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
         $errors = $this->data['errors'] ?? [];
@@ -85,43 +89,6 @@ class DashboardView extends AbstractView
             'SAE_NAVIGATION'   => $this->renderSAENavigation($user),
             'SAE_CONTENT'      => $this->renderSAEContent($user, $saes)
         ];
-    }
-
-    /**
-     * Renders error messages in HTML format.
-     *
-     * @param array<string> $errors List of error messages.
-     *
-     * @return string The rendered HTML or an empty string.
-     */
-    private function renderErrorMessages(array $errors): string
-    {
-        if (empty($errors)) {
-            return '';
-        }
-
-        $html = '<div class="alert alert-error"><ul>';
-        foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
-        }
-        $html .= '</ul></div>';
-
-        return $html;
-    }
-
-    /**
-     * Renders a success message in HTML format if available.
-     *
-     * @return string The rendered HTML or an empty string.
-     */
-    private function renderSuccessMessage(): string
-    {
-        $success = $this->data['success'] ?? '';
-        if (empty($success)) {
-            return '';
-        }
-
-        return '<div class="alert alert-success">' . $success . '</div>';
     }
 
     /**
@@ -167,8 +134,10 @@ class DashboardView extends AbstractView
             }
         } elseif ($user->isProfessor()) {
             $html .= '<span>Département : Informatique</span>';
-        } elseif ($user->isClient()) {
-            $html .= '<span>Entreprise : À définir</span>';
+        } elseif ($user->isClient() && $user instanceof Client) {
+            /* @var Client $client */
+            $client = $user;
+            $html .= '<span>Entreprise : ' . $client->getOrganisation() . ' </span>';
         }
 
         return $html;
@@ -204,8 +173,8 @@ class DashboardView extends AbstractView
     /**
      * Renders the SAE content section with cards or an empty message.
      *
-     * @param User            $user The user instance.
-     * @param array<int, SAE> $saes List of SAE data arrays.
+     * @param User              $user The user instance.
+     * @param array<SAESubject> $saes List of SAE data arrays.
      *
      * @return string The rendered HTML content.
      */
@@ -227,16 +196,16 @@ class DashboardView extends AbstractView
     /**
      * Renders a single SAE card with its details.
      *
-     * @param User $user The user instance.
-     * @param SAE  $sae  The SAE data array.
+     * @param User       $user The user instance.
+     * @param SAESubject $sae  The SAE data array.
      *
      * @return string The rendered HTML SAE card.
      */
-    private function renderSAECard(User $user, SAE $sae): string
+    private function renderSAECard(User $user, SAESubject $sae): string
     {
         $html  = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
-        $html .= '<div class="sae-icon" aria-hidden="true">' . $sae->getSaeSubjectId() . '</div>';
+        $html .= '<div class="sae-icon" aria-hidden="true">' . (string) $sae->getSaeSubjectId() . '</div>';
         $html .= '</div>';
         $html .= '<div class="sae-body">';
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
@@ -280,9 +249,10 @@ class DashboardView extends AbstractView
      *
      * @return string The title of the dashboard page.
      */
+    #[\Override]
     protected function getPageTitle(): string
     {
-        return 'Dashboard - SAEManager';
+        return 'Dashboard - SAE Manager';
     }
 
     /**
@@ -290,6 +260,7 @@ class DashboardView extends AbstractView
      *
      * @return string The CSS filename.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'dashboard.css';
@@ -300,10 +271,11 @@ class DashboardView extends AbstractView
      *
      * @return string The meta and OG headers.
      */
+    #[\Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Tableau de bord utilisateur de SAEManager">
-                <meta name="keywords" content="SAEManager, Dashboard, SAE, utilisateur">
+        return '<meta name="description" content="Tableau de bord utilisateur de SAE Manager">
+                <meta name="keywords" content="SAE Manager, Dashboard, SAE, utilisateur">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">';
     }
 }

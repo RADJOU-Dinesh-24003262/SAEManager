@@ -13,7 +13,7 @@ use Views\User\RegisterView;
  *
  * @package Src
 
- * @subpackage Controllers\User
+ * @subpackage Controllers/User
 
  * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
@@ -31,6 +31,7 @@ class Register implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
 
@@ -51,6 +52,7 @@ class Register implements ControllerInterface
      *
      * @return boolean True if the request is a GET to "/register", false otherwise.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/register" && $method === "GET";

@@ -8,17 +8,18 @@ use Core\AbstractView;
  * Edit Profile Success View
  *
  * Display the success page after profile update
+ *
  * @category View
  *
  * @package Src
  *
- * @subpackage Views\Settings
+ * @subpackage Views/Settings
  *
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  *
  * @license MIT License https://opensource.org/licenses/MIT
  *
@@ -33,6 +34,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The path to the template.
      */
+    #[\Override]
     protected function templatePath(): string
     {
         return self::TEMPLATE_HTML;
@@ -41,8 +43,9 @@ class EditProfileSuccessView extends AbstractView
     /**
      * Get the template keys for data replacement.
      *
-     * @return array<empty> Associative array of template keys and their values.
+     * @return array<string, mixed> Associative array of template keys and their values.
      */
+    #[\Override]
     protected function templateKeys(): array
     {
 
@@ -54,6 +57,7 @@ class EditProfileSuccessView extends AbstractView
      *
      * @return string The CSS file name.
      */
+    #[\Override]
     protected function getNameCss(): string
     {
         return 'profile.css';

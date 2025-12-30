@@ -27,6 +27,7 @@ class IndexController implements ControllerInterface
      *
      * @return void
      */
+    #[\Override]
     public function control(): void
     {
         $view = new IndexView();
@@ -41,6 +42,7 @@ class IndexController implements ControllerInterface
      *
      * @return boolean True if the path is "/index" or "/" and the method is GET.
      */
+    #[\Override]
     public static function support(string $path, string $method): bool
     {
         return ($path === "/index" || $path === "/") && $method === "GET";
