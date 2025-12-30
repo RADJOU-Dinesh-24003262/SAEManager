@@ -189,7 +189,7 @@ class Professor extends User
     #[\Override]
     public function canManageSAE(?int $saeId = null): bool
     {
-        // Création : Every professor can create a SAE.
+        // Creation : Every professor can create a SAE.
         if ($saeId === null) {
             return true;
         }
