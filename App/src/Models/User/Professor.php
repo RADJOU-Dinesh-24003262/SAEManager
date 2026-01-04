@@ -160,7 +160,7 @@ class Professor extends User
                  LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
                  WHERE s.sae_subject_id = :sae_id
                  AND (s.responsible_prof_id = :prof_id OR sg.professor_id = :prof_id)
-                 OR client_id = :prof_id'
+                 OR client_id = :prof_id        '
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;

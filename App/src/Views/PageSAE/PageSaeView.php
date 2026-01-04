@@ -91,6 +91,39 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
+        // 1.5 Associated Professors
+        $allProfs = $saeData['all_professors'];
+        $associatedProfsToDisplay = [];
+
+        if ($user->isProfessor() || $user->isClient()) {
+            $associatedProfsToDisplay = $allProfs;
+        } elseif (!empty($saeData['groups'])) {
+             foreach ($saeData['groups'] as $groupData) {
+                $profId = $groupData['group']->getProfessorId();
+                foreach ($allProfs as $p) {
+                    if ($p['user_id'] == $profId) {
+                        $associatedProfsToDisplay[] = $p;
+                        break;
+                    }
+                }
+             }
+             $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
+        }
+
+        if (!empty($associatedProfsToDisplay)) {
+            if ($user->isStudent()) {
+                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur de votre groupe</h5><ul>';
+            } else {
+                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur(s) Associé(s)</h5><ul>';
+            }
+            foreach ($associatedProfsToDisplay as $prof) {
+                $pName = htmlspecialchars($prof['first_name'] . ' ' . $prof['last_name']);
+                $pEmail = htmlspecialchars($prof['email']);
+                $content .= '<li>' . $pName . ' - <a href="mailto:' . $pEmail . '">' . $pEmail . '</a></li>';
+            }
+            $content .= '</ul></div>';
+        }
+
         // 2. Client (if user is not the client)
         if (!$user->isClient() && !empty($saeData['client'])) {
             $client = $saeData['client'];
@@ -174,7 +207,27 @@ class PageSaeView extends BaseSaeView
         $content .= '<p>Fin de la SAE : ' . $this->data['sae']['subject']->getEndDate() . '</p>';
 
         $profRes = $this->data['sae']['responsible_professor'];
-        $profs = $this->data['sae']['all_professors'];
+        $allProfs = $this->data['sae']['all_professors'];
+        
+        $profs = [];
+
+        if ($this->data['user']->isProfessor() || $this->data['user']->isClient()) {
+            $profs = $allProfs;
+        } else {
+            if (!empty($this->data['sae']['groups'])) {
+                foreach ($this->data['sae']['groups'] as $groupData) {
+                    $profId = $groupData['group']->getProfessorId();
+                    foreach ($allProfs as $p) {
+                        if ($p['user_id'] == $profId) {
+                            $profs[] = $p;
+                            break;
+                        }
+                    }
+                }
+            }
+            $profs = array_unique($profs, SORT_REGULAR);
+        }
+
         $client = $this->data['sae']['client'] ?: 'Pas de client';
 
         $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
@@ -191,14 +244,24 @@ class PageSaeView extends BaseSaeView
         $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
 
         $content .= '<p> Le Responsable de la ressource est ' . $profResLastName . ' ' . $profResFirstName . '.</p>';
-        $content .= '<p> Les professeurs associés à la ressource est ';
-        foreach ($profs as $index => $prof) {
-            $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
-            if ($index < count($profs) - 1) {
-                $content .= ', ';
+
+        if (empty($profs)) {
+            $content .= '<p> Aucun professeur associé à la ressource.</p>';
+            return $content;
+        }else {
+            if ($this->data['user']->isStudent()) {
+                $content .= '<p> Le professeur de votre groupe est ';
+            } else {
+                $content .= '<p> Les professeurs associés à la ressource sont ';
             }
+            foreach ($profs as $index => $prof) {
+                $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
+                if ($index < count($profs) - 1) {
+                    $content .= ', ';
+                }
+            }
+            $content .= '.</p>';
         }
-        $content .= '.</p>';
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
