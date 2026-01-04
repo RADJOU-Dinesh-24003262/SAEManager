@@ -60,13 +60,6 @@ class Student extends User
     protected string $tp = '';
 
     /**
-     * The SAE group ID of the student.
-     *
-     * @var integer|null
-     */
-    protected ?int $sae_group_id = null;
-
-    /**
      * The student ID.
      *
      * @var integer
@@ -116,7 +109,7 @@ class Student extends User
      * Fetches student-specific data from the database.
      *
      * @param PDO    $db    The database connection.
-     * @param string $email The user's email.
+     * @param string $email The user ID.
      *
      * @return void
      * @throws ExceptionFetchDataBD If the data can't be fetch.
@@ -165,10 +158,10 @@ class Student extends User
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
-            'SELECT * FROM SAE_subjects
-                                            JOIN SAE_groups on SAE_subjects.sae_subject_id = SAE_groups.sae_subject_id
-                                            JOIN students ON SAE_groups.SAE_group_id = students.sae_group_id
-                                            WHERE students.student_id = :user_id'
+            'SELECT * FROM sae_subjects
+             JOIN sae_groups ON sae_subjects.sae_subject_id = sae_groups.sae_subject_id
+             JOIN participated_in pi ON sae_groups.sae_group_id = pi.sae_group_id
+             WHERE pi.student_id = :user_id'
         );
         $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -188,9 +181,9 @@ class Student extends User
         try {
             $db = Database::getInstance();
             $stmt = $db->prepare(
-                'SELECT COUNT(*) FROM students st
-                 JOIN sae_groups sg ON st.sae_group_id = sg.sae_group_id
-                 WHERE st.student_id = :student_id AND sg.sae_subject_id = :sae_id'
+                'SELECT COUNT(*) FROM participated_in pi
+                 JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                 WHERE pi.student_id = :student_id AND sg.sae_subject_id = :sae_id'
             );
             $stmt->execute(['student_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchColumn() > 0;
@@ -213,8 +206,8 @@ class Student extends User
             $db = Database::getInstance();
             $stmt = $db->prepare(
                 'SELECT COUNT(*) FROM sae_todolists todo
-                 JOIN students st ON todo.sae_group_id = st.sae_group_id
-                 WHERE todo.todoid = :todo_id AND st.student_id = :student_id'
+                 JOIN participated_in pi ON todo.sae_group_id = pi.sae_group_id
+                 WHERE todo.todoid = :todo_id AND pi.student_id = :student_id'
             );
             $stmt->execute(['todo_id' => $todoId, 'student_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
@@ -246,12 +239,13 @@ class Student extends User
             $db = Database::getInstance();
             $stmt = $db->prepare(
                 'SELECT u.user_id, u.first_name, u.last_name, u.email, u.phone,
-                        st.sae_group_id, st.td, st.tp
-                 FROM students st_self
-                 JOIN students st ON st.sae_group_id = st_self.sae_group_id
+                        st.td, st.tp, pi.sae_group_id
+                 FROM participated_in pi_self
+                 JOIN participated_in pi ON pi.sae_group_id = pi_self.sae_group_id
+                 JOIN students st ON st.student_id = pi.student_id
                  JOIN users u ON st.student_id = u.user_id
-                 JOIN sae_groups sg ON st.sae_group_id = sg.sae_group_id
-                 WHERE st_self.student_id = :user_id AND sg.sae_subject_id = :sae_id
+                 JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                 WHERE pi_self.student_id = :user_id AND sg.sae_subject_id = :sae_id
                  ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['user_id' => $this->user_id, 'sae_id' => $saeId]);
