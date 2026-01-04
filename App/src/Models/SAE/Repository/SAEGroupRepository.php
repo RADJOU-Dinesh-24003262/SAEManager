@@ -306,4 +306,45 @@ class SAEGroupRepository extends BaseRepository
             return 0;
         }
     }
+
+    /**
+     * Gets students not assigned to any group in a SAE.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string
+     * }>
+     */
+    public function getAvailableStudents(int $saeId): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT 
+                    s.student_id, s.amu_id, s.year, s.major, s.td, s.tp,
+                    u.first_name, u.last_name, u.email
+                FROM students s
+                JOIN users u ON s.student_id = u.user_id
+                WHERE s.student_id NOT IN (
+                    SELECT pi.student_id 
+                    FROM participated_in pi
+                    JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                    WHERE sg.sae_subject_id = :sae_id
+                )
+                ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération étudiants disponibles : ' . $e->getMessage());
+            return [];
+        }
+    }
 }

@@ -445,4 +445,78 @@ class SAE
         }
         throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
     }
+
+    /**
+     * Removes a student from a group.
+     *
+     * @param User    $professor The professor.
+     * @param integer $studentId The student ID.
+     * @param integer $groupId   The group ID.
+     * @return boolean Success status.
+     * @throws ExceptionResourceNotFound If group is not found.
+     * @throws ExceptionAccessDenied     If professor doesn't have permission.
+     */
+    public function removeStudentFromGroup(User $professor, int $studentId, int $groupId): bool
+    {
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de retirer des étudiants");
+        }
+
+        return $this->groupRepo->unassignStudent($studentId, $groupId);
+    }
+
+    /**
+     * Deletes a group.
+     *
+     * @param User    $professor The professor.
+     * @param integer $groupId   The group ID.
+     * @return boolean Success status.
+     * @throws ExceptionResourceNotFound If group is not found.
+     * @throws ExceptionAccessDenied     If professor doesn't have permission.
+     */
+    public function deleteGroup(User $professor, int $groupId): bool
+    {
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de supprimer des groupes");
+        }
+
+        return $this->groupRepo->delete($groupId);
+    }
+
+    /**
+     * Gets available students for a SAE (not in any group).
+     *
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string
+     * }>
+     * @throws ExceptionAccessDenied If user doesn't have permission.
+     */
+    public function getAvailableStudents(User $user, int $saeId): array
+    {
+        if (!$user->canManageSAE($saeId)) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de voir les étudiants disponibles");
+        }
+
+        return $this->groupRepo->getAvailableStudents($saeId);
+    }
 }
