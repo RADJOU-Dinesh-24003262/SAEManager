@@ -75,37 +75,141 @@ Le client souhaite un développement itératif. On priorise un **MVP (Minimum Vi
 | Créer SAE |  ❌ | ❌ | ✅ | ❌ |
 | Authentification | ❌ | ❌ | ❌ | ✅ |
 
-## Diagramme de cas
+## Diagrammes de classes
+### Diagramme de classes minimale représentatif du projet. (Ne comprends que des modèles) :
 ``` mermaid
-flowchart LR
-  rW["👤 Web Customer"]:::role
-  rR["👤 Registered Customer"]:::role
-  rN["👤 New Customer"]:::role
-  rM["👤 << service >> Mail Server"]:::role
+classDiagram
+ direction TB
 
-  subgraph S["SAE Manager"]
-    ucVS([View SAE])
-    ucCM([Contact Members of the group])
-    ucFP([Follow Progress of the group])
-    ucAS([Attribute Students to SAE])
-    ucCS([Create SAE])
-    ucA([Authentification])
-    ucSM([Send Mail to Students])
-    ucCM -. include .-> ucSM
-    ucAS -. include .-> ucSM
+ class User {
+     <<abstract>>
+     -email : string
+     -name : string
+     -user_type : string
+     +login()  bool
+     +register()  bool
+     +updatePassword()  bool
+ }
 
-  end
-  
+ class Student {
+     -amu_id : string
+     -year : int
+     -specialization : string
+     +createToDoItem(ToDoList)  void
+     +updateToDoItem(ToDoList)  bool
+ }
 
-  rW --- rR
-  rW --- rN
-  rR --- ucVS
-  rR --- ucCM
-  rR --- ucFP
-  rR --- ucAS
-  rR --- ucCS
+ class Professor {
+    -amu_id : string
+     +createSAE()  SAE
+     +updateSAE()  bool
+     +createGroup()  void
+     +assignedGroup()  void
+     +removeProfFromSae()  bool
+     +addProfToSae()  void
+     +unassignedStudentFromSae()  bool
+ }
 
-  rN --- ucA
+ class Client {
+     -organization  string
+ }
 
-  ucSM --- rM
-``` 
+ class SAE {
+     -subject : string
+     -description : string
+     -start_date : date
+     -end_date : date
+     +addCompetence()  void
+ }
+
+ class ToDoList {
+     -task : string
+     -is_done : bool
+     +markAsDone()  void
+ }
+
+ User <|-- Student
+ User <|-- Professor
+ User <|-- Client
+
+ SAE "1" --> "0..*" Professor : -myResponsable
+ SAE "0..*" --> "0..*" Professor : -myViewer
+
+ SAE "0..1" --> "0..*" Client : -myClient
+
+ Student "1" o-- "3..*" SAE : -myStudent[]
+ ToDoList "1" *-- "0..1" SAE : -mySae
+```
+### Représentation simplifiée du MVC autour de la classe User :
+``` mermaid
+classDiagram
+    direction TB
+
+    namespace Controllers {
+
+        class RegisterPost {
+            -validator : ValidationServiceRegister
+            -user : User
+            -registerView : RegisterView
+            -successView : RegisterSuccessView
+            +control() void
+        }
+    }
+
+    namespace Validators {
+        class FormValidator {
+            <<abstract>>
+            -required : array
+            +validate(data : array) void
+            +escape(data : array) array
+        }
+
+        class ValidationServiceRegister {
+            -required : array
+            +validate(data : array) void
+        }
+    }
+
+    namespace Models {
+        class User {
+            <<abstract>>
+            -email : string
+            -name : string
+            -user_type : string
+            +login() User
+            +register() User
+            +updatePassword() void
+        }
+    }
+
+    namespace Views {
+        class IndexView {
+            -TEMPLATE_HTML : string
+            -data : array
+            +render() void
+        }
+
+        class RegisterView {
+            -TEMPLATE_HTML : string
+            -data : array
+            +render() void
+        }
+
+        class RegisterSuccessView {
+            -TEMPLATE_HTML : string
+            -user : User
+            +render() void
+        }
+    }
+
+
+
+RegisterPost --> ValidationServiceRegister : -validator
+RegisterPost --> User : -user
+RegisterPost --> RegisterView : -registerView
+RegisterPost --> RegisterSuccessView : -successView
+
+ValidationServiceRegister --|> FormValidator
+RegisterPost --> IndexView
+note for IndexView "Redirection par flux"
+```
