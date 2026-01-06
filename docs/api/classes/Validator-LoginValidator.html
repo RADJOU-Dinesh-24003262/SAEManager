@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en" id="top-of-site">
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta charset="utf-8"/>
+		<title>
+							SAE Manager API Documentation
+					</title>
+		<meta name="author" content=""/>
+		<meta name="description" content=""/>
+		<base href="../">
+
+		<link href="resources/css/bootstrap.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/style.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/prism.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/font/css/all.min.css" rel="stylesheet" media="all"/>
+		
+		<link rel="shortcut icon" href="resources/images/favicon.ico"/>
+		<link rel="apple-touch-icon" href="resources/images/apple-touch-icon.png"/>
+		<link rel="apple-touch-icon" sizes="72x72" href="resources/images/apple-touch-icon-72x72.png"/>
+		<link rel="apple-touch-icon" sizes="114x114" href="resources/images/apple-touch-icon-114x114.png"/>
+	</head>
+	<body>
+
+		<nav class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<i class="fa-solid fa-bars"></i>
+					</a>
+					<a class="brand" href="index.html">SAE Manager API Documentation</a>
+
+					<div class="nav-collapse navbar-responsive-collapse collapse">
+						<ul class="nav pull-right">
+															<li class="dropdown" id="api-menu">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-labelledby="api-menu">
+										API Documentation
+										<b class="caret"></b>
+									</a>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="api-menu">
+																					<li><a href="namespaces/app.html"><abbr title="\App">App</abbr></a></li>
+																					<li><a href="namespaces/controllers.html"><abbr title="\Controllers">Controllers</abbr></a></li>
+																					<li><a href="namespaces/core.html"><abbr title="\Core">Core</abbr></a></li>
+																					<li><a href="namespaces/models.html"><abbr title="\Models">Models</abbr></a></li>
+																					<li><a href="namespaces/validator.html"><abbr title="\Validator">Validator</abbr></a></li>
+																					<li><a href="namespaces/views.html"><abbr title="\Views">Views</abbr></a></li>
+																			</ul>
+								</li>
+																					<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Reports
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li>
+										<a href="reports/errors.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														<i class="fa-solid fa-bug"></i>&#160;Errors
+											<span class="label label-important pull-right">0</span>
+										</a>
+									</li>
+									<li>
+										<a href="reports/markers.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														<i class="fa-solid fa-location-dot"></i>&#160;&#160;Markers
+											<span class="label label-warning pull-right">0</span>
+										</a>
+									</li>
+									<li>
+										<a href="reports/deprecated.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																<i class="fa-solid fa-file-circle-xmark"></i>&#160;Deprecated
+											<span class="label label-info pull-right">0</span>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="go_to_top">
+				<a href="#top-of-site" style="color: inherit">Back To Top&#160;&#160;<i class="fa-solid fa-chevron-up"></i></a>
+			</div>
+		</nav>
+
+		<div id="___" class="container-fluid"> 	<section class="row-fluid">
+		<div class="span2 sidebar">
+								<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1245463607"></a>
+								<a href="namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+			</div>
+			<div id="namespace-1245463607" class="accordion-body collapse in">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-597933425"></a>
+								<a href="namespaces/app.html" style="margin-left: 30px; padding-left: 0">App</a>
+			</div>
+			<div id="namespace-597933425" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1788069033"></a>
+								<a href="namespaces/app-models.html" style="margin-left: 30px; padding-left: 0">Models</a>
+			</div>
+			<div id="namespace-1788069033" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1706312864"></a>
+								<a href="namespaces/app-models-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-1706312864" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/App-Models-ToDoList-ToDoList.html"><abbr title="\App\Models\ToDoList\ToDoList">ToDoList</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1198726494"></a>
+								<a href="namespaces/controllers.html" style="margin-left: 30px; padding-left: 0">Controllers</a>
+			</div>
+			<div id="namespace-1198726494" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-442349398"></a>
+								<a href="namespaces/controllers-dashboard.html" style="margin-left: 30px; padding-left: 0">Dashboard</a>
+			</div>
+			<div id="namespace-442349398" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Dashboard-DashboardController.html"><abbr title="\Controllers\Dashboard\DashboardController">DashboardController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1371303339"></a>
+								<a href="namespaces/controllers-index.html" style="margin-left: 30px; padding-left: 0">Index</a>
+			</div>
+			<div id="namespace-1371303339" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Index-IndexController.html"><abbr title="\Controllers\Index\IndexController">IndexController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1010956965"></a>
+								<a href="namespaces/controllers-info.html" style="margin-left: 30px; padding-left: 0">Info</a>
+			</div>
+			<div id="namespace-1010956965" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Info-LegalNoticeController.html"><abbr title="\Controllers\Info\LegalNoticeController">LegalNoticeController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Info-SiteMapController.html"><abbr title="\Controllers\Info\SiteMapController">SiteMapController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-851290628"></a>
+								<a href="namespaces/controllers-pagesae.html" style="margin-left: 30px; padding-left: 0">PageSae</a>
+			</div>
+			<div id="namespace-851290628" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-PageSae-PageSaeController.html"><abbr title="\Controllers\PageSae\PageSaeController">PageSaeController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1397614911"></a>
+								<a href="namespaces/controllers-pwd.html" style="margin-left: 30px; padding-left: 0">pwd</a>
+			</div>
+			<div id="namespace-1397614911" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-pwd-ForgotPasswordController.html"><abbr title="\Controllers\pwd\ForgotPasswordController">ForgotPasswordController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ForgotPasswordPostController.html"><abbr title="\Controllers\pwd\ForgotPasswordPostController">ForgotPasswordPostController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ResetPasswordController.html"><abbr title="\Controllers\pwd\ResetPasswordController">ResetPasswordController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ResetPasswordPostController.html"><abbr title="\Controllers\pwd\ResetPasswordPostController">ResetPasswordPostController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2099646014"></a>
+								<a href="namespaces/controllers-saesujet.html" style="margin-left: 30px; padding-left: 0">SaeSujet</a>
+			</div>
+			<div id="namespace-2099646014" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-SaeSujet-SaeSujetController.html"><abbr title="\Controllers\SaeSujet\SaeSujetController">SaeSujetController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1048505236"></a>
+								<a href="namespaces/controllers-settings.html" style="margin-left: 30px; padding-left: 0">Settings</a>
+			</div>
+			<div id="namespace-1048505236" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Settings-DeleteUserController.html"><abbr title="\Controllers\Settings\DeleteUserController">DeleteUserController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-EditProfileController.html"><abbr title="\Controllers\Settings\EditProfileController">EditProfileController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-EditProfilePost.html"><abbr title="\Controllers\Settings\EditProfilePost">EditProfilePost</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-SettingsController.html"><abbr title="\Controllers\Settings\SettingsController">SettingsController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-355277680"></a>
+								<a href="namespaces/controllers-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-355277680" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-ToDoList-ToDoListController.html"><abbr title="\Controllers\ToDoList\ToDoListController">ToDoListController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-ToDoList-ToDoListPost.html"><abbr title="\Controllers\ToDoList\ToDoListPost">ToDoListPost</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1492189430"></a>
+								<a href="namespaces/controllers-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-1492189430" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-User-Login.html"><abbr title="\Controllers\User\Login">Login</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-LoginPost.html"><abbr title="\Controllers\User\LoginPost">LoginPost</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-Logout.html"><abbr title="\Controllers\User\Logout">Logout</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-Register.html"><abbr title="\Controllers\User\Register">Register</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-RegisterPost.html"><abbr title="\Controllers\User\RegisterPost">RegisterPost</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2037444781"></a>
+								<a href="namespaces/core.html" style="margin-left: 30px; padding-left: 0">Core</a>
+			</div>
+			<div id="namespace-2037444781" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1781505898"></a>
+								<a href="namespaces/core-includes.html" style="margin-left: 30px; padding-left: 0">includes</a>
+			</div>
+			<div id="namespace-1781505898" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1544116337"></a>
+								<a href="namespaces/core-includes-exception.html" style="margin-left: 30px; padding-left: 0">exception</a>
+			</div>
+			<div id="namespace-1544116337" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1758984756"></a>
+								<a href="namespaces/core-includes-exception-exceptionbd.html" style="margin-left: 30px; padding-left: 0">ExceptionBD</a>
+			</div>
+			<div id="namespace-1758984756" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionBD-ExceptionFetchDataBD.html"><abbr title="\Core\includes\exception\ExceptionBD\ExceptionFetchDataBD">ExceptionFetchDataBD</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionBD-ExceptionUserNotFoundInDb.html"><abbr title="\Core\includes\exception\ExceptionBD\ExceptionUserNotFoundInDb">ExceptionUserNotFoundInDb</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1053271228"></a>
+								<a href="namespaces/core-includes-exception-exceptiontoken.html" style="margin-left: 30px; padding-left: 0">ExceptionToken</a>
+			</div>
+			<div id="namespace-1053271228" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionToken-ExceptionCreationTokenFailed.html"><abbr title="\Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed">ExceptionCreationTokenFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionToken-ExceptionInvalidToken.html"><abbr title="\Core\includes\exception\ExceptionToken\ExceptionInvalidToken">ExceptionInvalidToken</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2076698657"></a>
+								<a href="namespaces/core-includes-exception-exceptionvalidation.html" style="margin-left: 30px; padding-left: 0">ExceptionValidation</a>
+			</div>
+			<div id="namespace-2076698657" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationEmpty.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty">ExceptionValidationEmpty</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationEmptys.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys">ExceptionValidationEmptys</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationForgotPassword.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword">ExceptionValidationForgotPassword</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationLogin.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationLogin">ExceptionValidationLogin</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationRegister.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationRegister">ExceptionValidationRegister</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationRegisters.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters">ExceptionValidationRegisters</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationResetPassword.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword">ExceptionValidationResetPassword</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExeptionValidationSAECreation.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation">ExeptionValidationSAECreation</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionDashboard.html"><abbr title="\Core\includes\exception\ExceptionDashboard">ExceptionDashboard</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionEmailSendingFailed.html"><abbr title="\Core\includes\exception\ExceptionEmailSendingFailed">ExceptionEmailSendingFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionPasswordUpdateFailed.html"><abbr title="\Core\includes\exception\ExceptionPasswordUpdateFailed">ExceptionPasswordUpdateFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionSpam.html"><abbr title="\Core\includes\exception\ExceptionSpam">ExceptionSpam</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-Autoloader.html"><abbr title="\Core\includes\Autoloader">Autoloader</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-Database.html"><abbr title="\Core\includes\Database">Database</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1179707502"></a>
+								<a href="namespaces/core-utilis.html" style="margin-left: 30px; padding-left: 0">Utilis</a>
+			</div>
+			<div id="namespace-1179707502" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-Utilis-EmailService.html"><abbr title="\Core\Utilis\EmailService">EmailService</abbr></a></li>
+													<li class="class"><a href="classes/Core-Utilis-SessionService.html"><abbr title="\Core\Utilis\SessionService">SessionService</abbr></a></li>
+													<li class="class"><a href="classes/Core-Utilis-TokenService.html"><abbr title="\Core\Utilis\TokenService">TokenService</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+													<li class="interface"><a href="classes/Core-ControllerInterface.html"><abbr title="\Core\ControllerInterface">ControllerInterface</abbr></a></li>
+																									<li class="class"><a href="classes/Core-AbstractView.html"><abbr title="\Core\AbstractView">AbstractView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1180317790"></a>
+								<a href="namespaces/models.html" style="margin-left: 30px; padding-left: 0">Models</a>
+			</div>
+			<div id="namespace-1180317790" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-212630390"></a>
+								<a href="namespaces/models-sae.html" style="margin-left: 30px; padding-left: 0">SAE</a>
+			</div>
+			<div id="namespace-212630390" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Models-SAE-SAE.html"><abbr title="\Models\SAE\SAE">SAE</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1850333776"></a>
+								<a href="namespaces/models-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-1850333776" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Models-User-Client.html"><abbr title="\Models\User\Client">Client</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-Professor.html"><abbr title="\Models\User\Professor">Professor</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-Student.html"><abbr title="\Models\User\Student">Student</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-User.html"><abbr title="\Models\User\User">User</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-UserRepository.html"><abbr title="\Models\User\UserRepository">UserRepository</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1762590848"></a>
+								<a href="namespaces/validator.html" style="margin-left: 30px; padding-left: 0">Validator</a>
+			</div>
+			<div id="namespace-1762590848" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Validator-EditProfileValidator.html"><abbr title="\Validator\EditProfileValidator">EditProfileValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ForgotPasswordValidator.html"><abbr title="\Validator\ForgotPasswordValidator">ForgotPasswordValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-FormValidator.html"><abbr title="\Validator\FormValidator">FormValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-LoginValidator.html"><abbr title="\Validator\LoginValidator">LoginValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ResetPasswordValidator.html"><abbr title="\Validator\ResetPasswordValidator">ResetPasswordValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ToDoListValidator.html"><abbr title="\Validator\ToDoListValidator">ToDoListValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ValidationServiceRegister.html"><abbr title="\Validator\ValidationServiceRegister">ValidationServiceRegister</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2005452074"></a>
+								<a href="namespaces/views.html" style="margin-left: 30px; padding-left: 0">Views</a>
+			</div>
+			<div id="namespace-2005452074" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2024314571"></a>
+								<a href="namespaces/views-dashboard.html" style="margin-left: 30px; padding-left: 0">Dashboard</a>
+			</div>
+			<div id="namespace-2024314571" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Dashboard-DashboardView.html"><abbr title="\Views\Dashboard\DashboardView">DashboardView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1650563688"></a>
+								<a href="namespaces/views-index.html" style="margin-left: 30px; padding-left: 0">Index</a>
+			</div>
+			<div id="namespace-1650563688" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Index-IndexView.html"><abbr title="\Views\Index\IndexView">IndexView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1914399400"></a>
+								<a href="namespaces/views-info.html" style="margin-left: 30px; padding-left: 0">Info</a>
+			</div>
+			<div id="namespace-1914399400" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Info-LegalNoticeView.html"><abbr title="\Views\Info\LegalNoticeView">LegalNoticeView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Info-SiteMapView.html"><abbr title="\Views\Info\SiteMapView">SiteMapView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-273816951"></a>
+								<a href="namespaces/views-pagesae.html" style="margin-left: 30px; padding-left: 0">PageSAE</a>
+			</div>
+			<div id="namespace-273816951" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-PageSAE-PageSaeView.html"><abbr title="\Views\PageSAE\PageSaeView">PageSaeView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1904094087"></a>
+								<a href="namespaces/views-pwd.html" style="margin-left: 30px; padding-left: 0">pwd</a>
+			</div>
+			<div id="namespace-1904094087" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-pwd-ForgotPasswordView.html"><abbr title="\Views\pwd\ForgotPasswordView">ForgotPasswordView</abbr></a></li>
+													<li class="class"><a href="classes/Views-pwd-ResetPasswordSuccessView.html"><abbr title="\Views\pwd\ResetPasswordSuccessView">ResetPasswordSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-pwd-ResetPasswordView.html"><abbr title="\Views\pwd\ResetPasswordView">ResetPasswordView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-341125669"></a>
+								<a href="namespaces/views-saesujet.html" style="margin-left: 30px; padding-left: 0">SaeSujet</a>
+			</div>
+			<div id="namespace-341125669" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-SaeSujet-SaeSujetView.html"><abbr title="\Views\SaeSujet\SaeSujetView">SaeSujetView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-281367934"></a>
+								<a href="namespaces/views-settings.html" style="margin-left: 30px; padding-left: 0">Settings</a>
+			</div>
+			<div id="namespace-281367934" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Settings-DeleteUserView.html"><abbr title="\Views\Settings\DeleteUserView">DeleteUserView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-EditProfileSuccessView.html"><abbr title="\Views\Settings\EditProfileSuccessView">EditProfileSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-EditProfileView.html"><abbr title="\Views\Settings\EditProfileView">EditProfileView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-SettingsView.html"><abbr title="\Views\Settings\SettingsView">SettingsView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-142412441"></a>
+								<a href="namespaces/views-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-142412441" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-ToDoList-ToDoListView.html"><abbr title="\Views\ToDoList\ToDoListView">ToDoListView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-539210606"></a>
+								<a href="namespaces/views-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-539210606" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-User-LoginView.html"><abbr title="\Views\User\LoginView">LoginView</abbr></a></li>
+													<li class="class"><a href="classes/Views-User-RegisterSuccessView.html"><abbr title="\Views\User\RegisterSuccessView">RegisterSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-User-RegisterView.html"><abbr title="\Views\User\RegisterView">RegisterView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		</div>
+	</section>
+	<section class="row-fluid">
+		<div class="span10 offset2">
+			<div class="row-fluid">
+				<div class="span8 content class">
+					<nav>
+												<a href="namespaces/validator.html"><abbr title="\Validator">Validator</abbr></a>
+						<i class="fa-solid fa-turn-up"></i>
+											</nav>
+					
+					<h1>
+						<small>\Validator</small>
+						LoginValidator</h1>
+					<p>
+						<em>Class LoginValidator
+This class regroup function to validate the login process of a user.</em>
+					</p>
+					
+																																																																																							<section id="summary">
+						<h2>Summary</h2>
+						<section class="row-fluid heading">
+							<section class="span4">
+								<a href="#methods">Methods</a>
+							</section>
+							<section class="span4">
+								<a href="#properties">Properties</a>
+							</section>
+							<section class="span4">
+								<a href="#constants">Constants</a>
+							</section>
+						</section>
+						<section class="row-fluid public">
+							<section class="span4">
+																																																																																																																																																																																																																																																																																			
+																											<a href="classes/Validator-FormValidator.html#method_validate" class="">validate</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_escape" class="">escape</a><br/>
+																								</section>
+							<section class="span4">
+																																	
+																	<em>No public properties found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No public constants found</em>
+															</section>
+						</section>
+						<section class="row-fluid protected">
+							<section class="span4">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																														
+																											<a href="classes/Validator-FormValidator.html#method_isValidUserType" class="">isValidUserType</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidEmail" class="">isValidEmail</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isOwnAmuEmail" class="">isOwnAmuEmail</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidAmuId" class="">isValidAmuId</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidPassword" class="">isValidPassword</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidPhone" class="">isValidPhone</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidDate" class="">isValidDate</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidYear" class="">isValidYear</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidParcours" class="">isValidParcours</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidTD" class="">isValidTD</a><br/>
+																			<a href="classes/Validator-FormValidator.html#method_isValidTP" class="">isValidTP</a><br/>
+																								</section>
+							<section class="span4">
+																																																				
+																											<a href="classes/Validator-FormValidator.html#property_required" class="">required</a><br/>
+																								</section>
+							<section class="span4">
+																
+																	<em>No protected constants found</em>
+															</section>
+						</section>
+						<section class="row-fluid private">
+							<section class="span4">
+																																																																																																																																																																																																																																													
+																	<em>No private methods found</em>
+															</section>
+							<section class="span4">
+																																	
+																	<em>No private properties found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No private constants found</em>
+															</section>
+						</section>
+					</section>
+				</div>
+				<aside class="span4 detailsbar">
+										
+					
+					<dl>
+						<dt>File</dt>
+						<dd>
+							<a href="files/app-src-validator-loginvalidator.html">
+								<div class="path-wrapper">App/src/Validator/LoginValidator.php</div>
+							</a>
+						</dd>
+													<dt>Package</dt>
+							<dd>
+								<div class="namespace-wrapper">Src\Validator</div>
+							</dd>
+												<dt>Class hierarchy</dt>
+						<dd class="hierarchy">
+																																																																
+									<div class="namespace-wrapper"><a href="classes/Validator-FormValidator.html"><abbr title="\Validator\FormValidator">FormValidator</abbr></a></div>
+																						<div class="namespace-wrapper">\Validator\LoginValidator</div>
+						</dd>
+
+						
+						
+												
+																																																																																																							<dd>
+										<a href="https://github.com/RADJOU-Dinesh-24003262/SAEManager">
+											<span class="namespace-wrapper"></span>
+										</a>
+									</dd>
+																																																																																																																																																																																																																																																																		
+																	</dl>
+					<h2>Tags</h2>
+					<table class="table table-condensed">
+																											<tr>
+									<th>
+										category
+									</th>
+									<td>
+																																<p>Validator</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										package
+									</th>
+									<td>
+																																<p>Src</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										subpackage
+									</th>
+									<td>
+																																<p>Validator</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										author
+									</th>
+									<td>
+																																<p>Alexandre Benhafessa <a href="mailto:alexandre.benhafessa@etu.univ-amu.fr">alexandre.benhafessa@etu.univ-amu.fr</a></p>
+
+																																<p>François Dargentolle <a href="mailto:francois.dargentolle@etu.univ-amu.fr">francois.dargentolle@etu.univ-amu.fr</a></p>
+
+																																<p>William Edelstein <a href="mailto:william.edelstein@etu.univ-amu.fr">william.edelstein@etu.univ-amu.fr</a></p>
+
+																																<p>Nathan Griguer <a href="mailto:nathan.griguer@etu.univ-amu.fr">nathan.griguer@etu.univ-amu.fr</a></p>
+
+																																<p>Dinesh Radjou <a href="mailto:dinesh.radjou@etu.univ-amu.fr">dinesh.radjou@etu.univ-amu.fr</a></p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										license
+									</th>
+									<td>
+																																<p>MIT License https://opensource.org/licenses/MIT</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										link
+									</th>
+									<td>
+																																
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										uses
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										method
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property-read
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property-write
+									</th>
+									<td>
+																			</td>
+								</tr>
+																		</table>
+				</aside>
+			</div>
+
+						
+										<a id="properties" name="properties"></a>
+				<div class="row-fluid">
+					<div class="span8 content class">
+						<h2>Properties</h2>
+					</div>
+					<aside class="span4 detailsbar"></aside>
+				</div>
+
+																												    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_required" name="property_required" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$required</h3>
+                <pre class="signature">$required : array</pre>
+                <p><em>List of required fields for form validation.</em></p>
+                <p>To be defined in child classes.</p>
+
+
+                                <h4>Type</h4>
+                array&lt;string|int, mixed&gt;
+                &mdash;                             </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas-solid fa-arrow-down"></i></h1>
+                        <dl>
+                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																									
+										<a id="methods" name="methods"></a>
+				<div class="row-fluid">
+					<div class="span8 content class">
+						<h2>Methods</h2>
+					</div>
+					<aside class="span4 detailsbar"></aside>
+				</div>
+
+															    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_validate" name="method_validate" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">validate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">validate(array  <span class="argument">$data</span>) : void</pre>
+                <p><em>Validates form data. To be implemented in child classes.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>The field to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Exception</dt>
+                            <dd><p>If the data don't meet the requirement.</p>
+</dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                        <span class="label label-info">abstract</span>
+                                                <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_escape" name="method_escape" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">escape()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">escape(array  <span class="argument">$data</span>) : array</pre>
+                <p><em>Escapes form data (HTML special chars).</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>Data of form to espace.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys</dt>
+                            <dd><p>If a required field is empty.</p>
+</dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>Data with escaped fields.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																																																																																																																																													    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidUserType" name="method_isValidUserType" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidUserType()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidUserType(string  <span class="argument">$userType</span>) : bool</pre>
+                <p><em>Returns the validity of the userType field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$userType </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidEmail" name="method_isValidEmail" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidEmail()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidEmail(string  <span class="argument">$email</span>) : bool</pre>
+                <p><em>Returns the validity of the email field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$email </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isOwnAmuEmail" name="method_isOwnAmuEmail" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isOwnAmuEmail()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isOwnAmuEmail(string  <span class="argument">$email</span>, string  <span class="argument">$lname</span>, string  <span class="argument">$fname</span>) : bool</pre>
+                <p><em>Returns the validity of the amUemail with the first and last name
+as a amU email should be firstname.lastname[numberIfDuplicated]@(etu\.)?univ-amu\.fr$/</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$email </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$lname </td>
+                                <td><p>The last name of the user.</p>
+</td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$fname </td>
+                                <td><p>The first name of the user.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidAmuId" name="method_isValidAmuId" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidAmuId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidAmuId(string  <span class="argument">$amu_id</span>) : bool</pre>
+                <p><em>Check if Amuid is valid with specific regex.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$amu_id </td>
+                                <td><p>Specific id of a student or a teacher.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidPassword" name="method_isValidPassword" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidPassword()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidPassword(string  <span class="argument">$password</span>) : bool</pre>
+                <p><em>Returns the validity of the password field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$password </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidPhone" name="method_isValidPhone" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidPhone()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidPhone(string  <span class="argument">$phone</span>) : bool</pre>
+                <p><em>Returns the validity of the phone field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$phone </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidDate" name="method_isValidDate" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidDate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidDate(string  <span class="argument">$date</span>) : bool</pre>
+                <p><em>Returns the validity of the date field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$date </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidYear" name="method_isValidYear" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidYear()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidYear(string  <span class="argument">$year</span>) : bool</pre>
+                <p><em>Returns the validity of the year field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$year </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidParcours" name="method_isValidParcours" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidParcours()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidParcours(string  <span class="argument">$parcours</span>) : bool</pre>
+                <p><em>Returns the validity of the parcours field.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$parcours </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidTD" name="method_isValidTD" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidTD()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidTD(string  <span class="argument">$td</span>) : bool</pre>
+                <p><em>Returns the validity of the td field</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$td </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isValidTP" name="method_isValidTP" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isValidTP()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isValidTP(string  <span class="argument">$tp</span>) : bool</pre>
+                <p><em>Returns the validity of the tp field.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tp </td>
+                                <td><p>The value to validate.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/Validator-FormValidator.html"><div class="path-wrapper">\Validator\FormValidator</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																																																																																																																																							</div>
+	</section>
+
+	<div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="source-view-label">LoginValidator.php</h3>
+		</div>
+		<div class="modal-body">
+			<pre data-src="files/App/src/Validator/LoginValidator.php.txt" class="language-php line-numbers"></pre>
+		</div>
+	</div>
+
+			<footer class="row-fluid">
+				<section class="span10 offset2">
+					<section class="row-fluid">
+						<section class="span10 offset1">
+							<section class="row-fluid footer-sections">
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-code"></i>
+									</h1>
+									<div>
+										<ul>
+																							<li><a href="namespaces/app.html"><abbr title="\App">App</abbr></a></li>
+																							<li><a href="namespaces/controllers.html"><abbr title="\Controllers">Controllers</abbr></a></li>
+																							<li><a href="namespaces/core.html"><abbr title="\Core">Core</abbr></a></li>
+																							<li><a href="namespaces/models.html"><abbr title="\Models">Models</abbr></a></li>
+																							<li><a href="namespaces/validator.html"><abbr title="\Validator">Validator</abbr></a></li>
+																							<li><a href="namespaces/views.html"><abbr title="\Views">Views</abbr></a></li>
+																					</ul>
+									</div>
+								</section>
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-project-diagram"></i>
+									</h1>
+									<div>
+										<ul>
+											<li><a href="graphs/class.html">Class Hierarchy Diagram</a></li>
+										</ul>
+									</div>
+								</section>
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-thumbtack"></i>
+									</h1>
+									<div>
+										<ul>
+											<li><a href="reports/errors.html">Errors</a></li>
+											<li><a href="reports/markers.html">Markers</a></li>
+										</ul>
+									</div>
+								</section>
+							</section>
+						</section>
+					</section>
+					<section class="row-fluid">
+						<section class="span10 offset1">
+							<hr/>
+							Documentation is powered by
+							<a href="https://www.phpdoc.org/">phpDocumentor
+							</a>
+							and authored
+							                    on
+							December 18th, 2025 at 12:43.
+						</section>
+					</section>
+				</section>
+			</footer>
+		</div>
+		<script src="resources/js/jquery-1.11.0.min.js"></script>
+		<script src="resources/js/ui/1.10.4/jquery-ui.min.js"></script>
+		<script src="resources/js/jquery.smooth-scroll.js"></script>
+		<script src="resources/js/prism.min.js"></script>
+		<script src="resources/js/bootstrap.js"></script>
+		<script src="resources/js/custom.js"></script>
+			</body>
+</html>

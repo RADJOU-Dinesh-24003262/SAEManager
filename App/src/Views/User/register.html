@@ -3,14 +3,15 @@
 
 <form action="/register" method="post" autocomplete="on">
     <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
-    
-    <fieldset>
-        <legend>Informations personnelles</legend>
+
+    <fieldset role="presentation">
+        <article>
+        <h3>Informations personnelles</h3>
         <label for="userType">
             Statut
             <abbr title="requis" >*</abbr>
         </label>
-        <select name="user_type" id="userType" required aria-required="true">
+        <select name="select" id="userType" required aria-required="true">
             <option value="">-- Sélectionner --</option>
             <option value="student">Étudiant</option>
             <option value="professor">Responsable SAE</option>
@@ -21,12 +22,12 @@
             Identifiant AMU
             <abbr title="requis">*</abbr>
         </label>
-        <input 
-            required 
-            type="text" 
-            id="id" 
-            name="amu_id" 
-            minlength="3" 
+        <input
+            required
+            type="text"
+            id="id"
+            name="amu_id"
+            minlength="3"
             maxlength="9"
             pattern="[a-zA-ZÀ-ÿ\-\'][0-9]{8,}"
             autocomplete="username"
@@ -39,12 +40,12 @@
             Prénom
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="text" 
-            id="fname" 
-            name="first_name" 
-            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
+        <input
+            required
+            type="text"
+            id="fname"
+            name="first_name"
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+"
             autocomplete="given-name"
             aria-required="true">
 
@@ -52,31 +53,32 @@
             Nom
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="text" 
-            id="lname" 
-            name="last_name" 
-            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+" 
+        <input
+            required
+            type="text"
+            id="lname"
+            name="last_name"
+            pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+"
             autocomplete="family-name"
             aria-required="true">
 
-
+        </article>
     </fieldset>
 
-    <fieldset>
-        <legend>Contact</legend>
-        
+    <fieldset role="presentation">
+        <article>
+        <h3>Contact</h3>
+
         <label for="email">
             Email AMU
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="email" 
-            id="email" 
-            name="email" 
-            pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$" 
+        <input
+            required
+            type="email"
+            id="email"
+            name="email"
+            pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$"
             autocomplete="email"
             aria-required="true"
             aria-describedby="email-hint">
@@ -86,55 +88,58 @@
             Téléphone
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="tel" 
-            id="tel" 
-            name="phone" 
-            pattern="0[467][0-9]{8}" 
-            maxlength="10" 
+        <input
+            required
+            type="tel"
+            id="tel"
+            name="phone"
+            pattern="0[467][0-9]{8}"
+            maxlength="10"
             autocomplete="tel"
             aria-required="true"
             aria-describedby="tel-hint">
         <small id="tel-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
+        </article>
     </fieldset>
 
-    <fieldset>
-        <legend>Sécurité</legend>
-        
+    <fieldset role="presentation">
+        <article>
+        <h3>Sécurité</h3>
+
         <label for="password">
             Mot de passe
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="password" 
-            id="password" 
-            name="password" 
-            minlength="8" 
-            autocomplete="new-password" 
+        <input
+            required
+            type="password"
+            id="password"
+            name="password"
+            minlength="8"
+            autocomplete="new-password"
             aria-required="true"
             aria-describedby="pwd-desc">
         <small id="pwd-desc">Au moins 8 caractères</small>
-        
+
         <label for="passwordverif">
             Confirmer le mot de passe
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            required 
-            type="password" 
-            id="passwordverif" 
-            name="passwordverif" 
-            minlength="8" 
+        <input
+            required
+            type="password"
+            id="passwordverif"
+            name="passwordverif"
+            minlength="8"
             autocomplete="new-password"
             aria-required="true">
-
+        </article>
     </fieldset>
 
     <fieldset id="etudiantFields" style="display:none;" aria-hidden="true">
-        <legend>Informations académiques</legend>
-        
+        <article>
+        <h3>Informations académiques</h3>
+
         <label for="year">
             Année
             <abbr title="requis" >*</abbr>
@@ -145,7 +150,7 @@
             <option value="2">BUT 2</option>
             <option value="3">BUT 3</option>
         </select>
-        
+
 
         <label for="parcours">Parcours</label>
         <select id="parcours" name="parcours">
@@ -153,7 +158,7 @@
             <option value="A">Parcours A</option>
             <option value="B">Parcours B</option>
         </select>
-        
+
         <label for="td">
             Groupe TD
             <abbr title="requis" >*</abbr>
@@ -165,7 +170,7 @@
             <option value="TD3">TD3</option>
             <option value="TD4">TD4</option>
         </select>
-        
+
         <label for="tp">
             Groupe TP
             <abbr title="requis" >*</abbr>
@@ -175,20 +180,20 @@
             <option value="TPA">TP A</option>
             <option value="TPB">TP B</option>
         </select>
-        
+        </article>
     </fieldset>
 
-    <input 
-        required 
-        type="checkbox" 
-        id="terms" 
+    <input
+        required
+        type="checkbox"
+        id="terms"
         name="terms"
         aria-required="true">
-    <label for="terms">
+    <label for="terms" style="margin-bottom: 2rem">
         J'accepte les <a href="/conditions-generales" target="_blank" rel="noopener noreferrer">conditions générales</a>
         <abbr title="requis" >*</abbr>
     </label>
-    <small><abbr title="requis">*</abbr> Champs obligatoires</small>    
+    <small><abbr title="requis">*</abbr> Champs obligatoires</small>
 
-    <button type="submit">S'inscrire</button>      
+    <button type="submit">S'inscrire</button>
 </form>
