@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en" id="top-of-site">
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta charset="utf-8"/>
+		<title>
+							SAE Manager API Documentation
+					</title>
+		<meta name="author" content=""/>
+		<meta name="description" content=""/>
+		<base href="../">
+
+		<link href="resources/css/bootstrap.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/bootstrap-responsive.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/style.css" rel="stylesheet" media="all"/>
+		<link href="resources/css/prism.min.css" rel="stylesheet" media="all"/>
+		<link href="resources/font/css/all.min.css" rel="stylesheet" media="all"/>
+		
+		<link rel="shortcut icon" href="resources/images/favicon.ico"/>
+		<link rel="apple-touch-icon" href="resources/images/apple-touch-icon.png"/>
+		<link rel="apple-touch-icon" sizes="72x72" href="resources/images/apple-touch-icon-72x72.png"/>
+		<link rel="apple-touch-icon" sizes="114x114" href="resources/images/apple-touch-icon-114x114.png"/>
+	</head>
+	<body>
+
+		<nav class="navbar navbar-fixed-top navbar-inverse">
+			<div class="navbar-inner">
+				<div class="container">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<i class="fa-solid fa-bars"></i>
+					</a>
+					<a class="brand" href="index.html">SAE Manager API Documentation</a>
+
+					<div class="nav-collapse navbar-responsive-collapse collapse">
+						<ul class="nav pull-right">
+															<li class="dropdown" id="api-menu">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-labelledby="api-menu">
+										API Documentation
+										<b class="caret"></b>
+									</a>
+									<ul class="dropdown-menu" role="menu" aria-labelledby="api-menu">
+																					<li><a href="namespaces/app.html"><abbr title="\App">App</abbr></a></li>
+																					<li><a href="namespaces/controllers.html"><abbr title="\Controllers">Controllers</abbr></a></li>
+																					<li><a href="namespaces/core.html"><abbr title="\Core">Core</abbr></a></li>
+																					<li><a href="namespaces/models.html"><abbr title="\Models">Models</abbr></a></li>
+																					<li><a href="namespaces/validator.html"><abbr title="\Validator">Validator</abbr></a></li>
+																					<li><a href="namespaces/views.html"><abbr title="\Views">Views</abbr></a></li>
+																			</ul>
+								</li>
+																					<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									Reports
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+									<li>
+										<a href="reports/errors.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														<i class="fa-solid fa-bug"></i>&#160;Errors
+											<span class="label label-important pull-right">0</span>
+										</a>
+									</li>
+									<li>
+										<a href="reports/markers.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														<i class="fa-solid fa-location-dot"></i>&#160;&#160;Markers
+											<span class="label label-warning pull-right">0</span>
+										</a>
+									</li>
+									<li>
+										<a href="reports/deprecated.html">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																<i class="fa-solid fa-file-circle-xmark"></i>&#160;Deprecated
+											<span class="label label-info pull-right">0</span>
+										</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="go_to_top">
+				<a href="#top-of-site" style="color: inherit">Back To Top&#160;&#160;<i class="fa-solid fa-chevron-up"></i></a>
+			</div>
+		</nav>
+
+		<div id="___" class="container-fluid"> 	<section class="row-fluid">
+		<div class="span2 sidebar">
+								<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-903312760"></a>
+								<a href="namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+			</div>
+			<div id="namespace-903312760" class="accordion-body collapse in">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-55121443"></a>
+								<a href="namespaces/app.html" style="margin-left: 30px; padding-left: 0">App</a>
+			</div>
+			<div id="namespace-55121443" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1711710536"></a>
+								<a href="namespaces/app-models.html" style="margin-left: 30px; padding-left: 0">Models</a>
+			</div>
+			<div id="namespace-1711710536" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-953375311"></a>
+								<a href="namespaces/app-models-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-953375311" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/App-Models-ToDoList-ToDoList.html"><abbr title="\App\Models\ToDoList\ToDoList">ToDoList</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-218974984"></a>
+								<a href="namespaces/controllers.html" style="margin-left: 30px; padding-left: 0">Controllers</a>
+			</div>
+			<div id="namespace-218974984" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-516023233"></a>
+								<a href="namespaces/controllers-dashboard.html" style="margin-left: 30px; padding-left: 0">Dashboard</a>
+			</div>
+			<div id="namespace-516023233" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Dashboard-DashboardController.html"><abbr title="\Controllers\Dashboard\DashboardController">DashboardController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1192124099"></a>
+								<a href="namespaces/controllers-index.html" style="margin-left: 30px; padding-left: 0">Index</a>
+			</div>
+			<div id="namespace-1192124099" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Index-IndexController.html"><abbr title="\Controllers\Index\IndexController">IndexController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1549311444"></a>
+								<a href="namespaces/controllers-info.html" style="margin-left: 30px; padding-left: 0">Info</a>
+			</div>
+			<div id="namespace-1549311444" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Info-LegalNoticeController.html"><abbr title="\Controllers\Info\LegalNoticeController">LegalNoticeController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Info-SiteMapController.html"><abbr title="\Controllers\Info\SiteMapController">SiteMapController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-991541900"></a>
+								<a href="namespaces/controllers-pagesae.html" style="margin-left: 30px; padding-left: 0">PageSae</a>
+			</div>
+			<div id="namespace-991541900" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-PageSae-PageSaeController.html"><abbr title="\Controllers\PageSae\PageSaeController">PageSaeController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-694179993"></a>
+								<a href="namespaces/controllers-pwd.html" style="margin-left: 30px; padding-left: 0">pwd</a>
+			</div>
+			<div id="namespace-694179993" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-pwd-ForgotPasswordController.html"><abbr title="\Controllers\pwd\ForgotPasswordController">ForgotPasswordController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ForgotPasswordPostController.html"><abbr title="\Controllers\pwd\ForgotPasswordPostController">ForgotPasswordPostController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ResetPasswordController.html"><abbr title="\Controllers\pwd\ResetPasswordController">ResetPasswordController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-pwd-ResetPasswordPostController.html"><abbr title="\Controllers\pwd\ResetPasswordPostController">ResetPasswordPostController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1531756407"></a>
+								<a href="namespaces/controllers-saesujet.html" style="margin-left: 30px; padding-left: 0">SaeSujet</a>
+			</div>
+			<div id="namespace-1531756407" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-SaeSujet-SaeSujetController.html"><abbr title="\Controllers\SaeSujet\SaeSujetController">SaeSujetController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1233817342"></a>
+								<a href="namespaces/controllers-settings.html" style="margin-left: 30px; padding-left: 0">Settings</a>
+			</div>
+			<div id="namespace-1233817342" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-Settings-DeleteUserController.html"><abbr title="\Controllers\Settings\DeleteUserController">DeleteUserController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-EditProfileController.html"><abbr title="\Controllers\Settings\EditProfileController">EditProfileController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-EditProfilePost.html"><abbr title="\Controllers\Settings\EditProfilePost">EditProfilePost</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-Settings-SettingsController.html"><abbr title="\Controllers\Settings\SettingsController">SettingsController</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2037394911"></a>
+								<a href="namespaces/controllers-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-2037394911" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-ToDoList-ToDoListController.html"><abbr title="\Controllers\ToDoList\ToDoListController">ToDoListController</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-ToDoList-ToDoListPost.html"><abbr title="\Controllers\ToDoList\ToDoListPost">ToDoListPost</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-855684668"></a>
+								<a href="namespaces/controllers-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-855684668" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Controllers-User-Login.html"><abbr title="\Controllers\User\Login">Login</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-LoginPost.html"><abbr title="\Controllers\User\LoginPost">LoginPost</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-Logout.html"><abbr title="\Controllers\User\Logout">Logout</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-Register.html"><abbr title="\Controllers\User\Register">Register</abbr></a></li>
+													<li class="class"><a href="classes/Controllers-User-RegisterPost.html"><abbr title="\Controllers\User\RegisterPost">RegisterPost</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1644909409"></a>
+								<a href="namespaces/core.html" style="margin-left: 30px; padding-left: 0">Core</a>
+			</div>
+			<div id="namespace-1644909409" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1323931418"></a>
+								<a href="namespaces/core-includes.html" style="margin-left: 30px; padding-left: 0">includes</a>
+			</div>
+			<div id="namespace-1323931418" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1687128046"></a>
+								<a href="namespaces/core-includes-exception.html" style="margin-left: 30px; padding-left: 0">exception</a>
+			</div>
+			<div id="namespace-1687128046" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-154685769"></a>
+								<a href="namespaces/core-includes-exception-exceptionbd.html" style="margin-left: 30px; padding-left: 0">ExceptionBD</a>
+			</div>
+			<div id="namespace-154685769" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionBD-ExceptionFetchDataBD.html"><abbr title="\Core\includes\exception\ExceptionBD\ExceptionFetchDataBD">ExceptionFetchDataBD</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionBD-ExceptionUserNotFoundInDb.html"><abbr title="\Core\includes\exception\ExceptionBD\ExceptionUserNotFoundInDb">ExceptionUserNotFoundInDb</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-345716227"></a>
+								<a href="namespaces/core-includes-exception-exceptiontoken.html" style="margin-left: 30px; padding-left: 0">ExceptionToken</a>
+			</div>
+			<div id="namespace-345716227" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionToken-ExceptionCreationTokenFailed.html"><abbr title="\Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed">ExceptionCreationTokenFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionToken-ExceptionInvalidToken.html"><abbr title="\Core\includes\exception\ExceptionToken\ExceptionInvalidToken">ExceptionInvalidToken</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-166526372"></a>
+								<a href="namespaces/core-includes-exception-exceptionvalidation.html" style="margin-left: 30px; padding-left: 0">ExceptionValidation</a>
+			</div>
+			<div id="namespace-166526372" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationEmpty.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty">ExceptionValidationEmpty</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationEmptys.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys">ExceptionValidationEmptys</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationForgotPassword.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword">ExceptionValidationForgotPassword</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationLogin.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationLogin">ExceptionValidationLogin</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationRegister.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationRegister">ExceptionValidationRegister</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationRegisters.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters">ExceptionValidationRegisters</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExceptionValidationResetPassword.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword">ExceptionValidationResetPassword</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionValidation-ExeptionValidationSAECreation.html"><abbr title="\Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation">ExeptionValidationSAECreation</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-exception-ExceptionDashboard.html"><abbr title="\Core\includes\exception\ExceptionDashboard">ExceptionDashboard</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionEmailSendingFailed.html"><abbr title="\Core\includes\exception\ExceptionEmailSendingFailed">ExceptionEmailSendingFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionPasswordUpdateFailed.html"><abbr title="\Core\includes\exception\ExceptionPasswordUpdateFailed">ExceptionPasswordUpdateFailed</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-exception-ExceptionSpam.html"><abbr title="\Core\includes\exception\ExceptionSpam">ExceptionSpam</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-includes-Autoloader.html"><abbr title="\Core\includes\Autoloader">Autoloader</abbr></a></li>
+													<li class="class"><a href="classes/Core-includes-Database.html"><abbr title="\Core\includes\Database">Database</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-639042261"></a>
+								<a href="namespaces/core-utilis.html" style="margin-left: 30px; padding-left: 0">Utilis</a>
+			</div>
+			<div id="namespace-639042261" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Core-Utilis-EmailService.html"><abbr title="\Core\Utilis\EmailService">EmailService</abbr></a></li>
+													<li class="class"><a href="classes/Core-Utilis-SessionService.html"><abbr title="\Core\Utilis\SessionService">SessionService</abbr></a></li>
+													<li class="class"><a href="classes/Core-Utilis-TokenService.html"><abbr title="\Core\Utilis\TokenService">TokenService</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+													<li class="interface"><a href="classes/Core-ControllerInterface.html"><abbr title="\Core\ControllerInterface">ControllerInterface</abbr></a></li>
+																									<li class="class"><a href="classes/Core-AbstractView.html"><abbr title="\Core\AbstractView">AbstractView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1248555220"></a>
+								<a href="namespaces/models.html" style="margin-left: 30px; padding-left: 0">Models</a>
+			</div>
+			<div id="namespace-1248555220" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1026337982"></a>
+								<a href="namespaces/models-sae.html" style="margin-left: 30px; padding-left: 0">SAE</a>
+			</div>
+			<div id="namespace-1026337982" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Models-SAE-SAE.html"><abbr title="\Models\SAE\SAE">SAE</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-16479992"></a>
+								<a href="namespaces/models-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-16479992" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Models-User-Client.html"><abbr title="\Models\User\Client">Client</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-Professor.html"><abbr title="\Models\User\Professor">Professor</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-Student.html"><abbr title="\Models\User\Student">Student</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-User.html"><abbr title="\Models\User\User">User</abbr></a></li>
+													<li class="class"><a href="classes/Models-User-UserRepository.html"><abbr title="\Models\User\UserRepository">UserRepository</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1006040873"></a>
+								<a href="namespaces/validator.html" style="margin-left: 30px; padding-left: 0">Validator</a>
+			</div>
+			<div id="namespace-1006040873" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Validator-EditProfileValidator.html"><abbr title="\Validator\EditProfileValidator">EditProfileValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ForgotPasswordValidator.html"><abbr title="\Validator\ForgotPasswordValidator">ForgotPasswordValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-FormValidator.html"><abbr title="\Validator\FormValidator">FormValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-LoginValidator.html"><abbr title="\Validator\LoginValidator">LoginValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ResetPasswordValidator.html"><abbr title="\Validator\ResetPasswordValidator">ResetPasswordValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ToDoListValidator.html"><abbr title="\Validator\ToDoListValidator">ToDoListValidator</abbr></a></li>
+													<li class="class"><a href="classes/Validator-ValidationServiceRegister.html"><abbr title="\Validator\ValidationServiceRegister">ValidationServiceRegister</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1085337105"></a>
+								<a href="namespaces/views.html" style="margin-left: 30px; padding-left: 0">Views</a>
+			</div>
+			<div id="namespace-1085337105" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-145456442"></a>
+								<a href="namespaces/views-dashboard.html" style="margin-left: 30px; padding-left: 0">Dashboard</a>
+			</div>
+			<div id="namespace-145456442" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Dashboard-DashboardView.html"><abbr title="\Views\Dashboard\DashboardView">DashboardView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1853699799"></a>
+								<a href="namespaces/views-index.html" style="margin-left: 30px; padding-left: 0">Index</a>
+			</div>
+			<div id="namespace-1853699799" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Index-IndexView.html"><abbr title="\Views\Index\IndexView">IndexView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2123492073"></a>
+								<a href="namespaces/views-info.html" style="margin-left: 30px; padding-left: 0">Info</a>
+			</div>
+			<div id="namespace-2123492073" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Info-LegalNoticeView.html"><abbr title="\Views\Info\LegalNoticeView">LegalNoticeView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Info-SiteMapView.html"><abbr title="\Views\Info\SiteMapView">SiteMapView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-624503222"></a>
+								<a href="namespaces/views-pagesae.html" style="margin-left: 30px; padding-left: 0">PageSAE</a>
+			</div>
+			<div id="namespace-624503222" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-PageSAE-PageSaeView.html"><abbr title="\Views\PageSAE\PageSaeView">PageSaeView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1342458942"></a>
+								<a href="namespaces/views-pwd.html" style="margin-left: 30px; padding-left: 0">pwd</a>
+			</div>
+			<div id="namespace-1342458942" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-pwd-ForgotPasswordView.html"><abbr title="\Views\pwd\ForgotPasswordView">ForgotPasswordView</abbr></a></li>
+													<li class="class"><a href="classes/Views-pwd-ResetPasswordSuccessView.html"><abbr title="\Views\pwd\ResetPasswordSuccessView">ResetPasswordSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-pwd-ResetPasswordView.html"><abbr title="\Views\pwd\ResetPasswordView">ResetPasswordView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1473021750"></a>
+								<a href="namespaces/views-saesujet.html" style="margin-left: 30px; padding-left: 0">SaeSujet</a>
+			</div>
+			<div id="namespace-1473021750" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-SaeSujet-SaeSujetView.html"><abbr title="\Views\SaeSujet\SaeSujetView">SaeSujetView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1826173353"></a>
+								<a href="namespaces/views-settings.html" style="margin-left: 30px; padding-left: 0">Settings</a>
+			</div>
+			<div id="namespace-1826173353" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-Settings-DeleteUserView.html"><abbr title="\Views\Settings\DeleteUserView">DeleteUserView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-EditProfileSuccessView.html"><abbr title="\Views\Settings\EditProfileSuccessView">EditProfileSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-EditProfileView.html"><abbr title="\Views\Settings\EditProfileView">EditProfileView</abbr></a></li>
+													<li class="class"><a href="classes/Views-Settings-SettingsView.html"><abbr title="\Views\Settings\SettingsView">SettingsView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1610281136"></a>
+								<a href="namespaces/views-todolist.html" style="margin-left: 30px; padding-left: 0">ToDoList</a>
+			</div>
+			<div id="namespace-1610281136" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-ToDoList-ToDoListView.html"><abbr title="\Views\ToDoList\ToDoListView">ToDoListView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+													<div class="accordion" style="margin-bottom: 0">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+									<a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1976775532"></a>
+								<a href="namespaces/views-user.html" style="margin-left: 30px; padding-left: 0">User</a>
+			</div>
+			<div id="namespace-1976775532" class="accordion-body collapse ">
+				<div class="accordion-inner">
+
+					
+					<ul>
+																									<li class="class"><a href="classes/Views-User-LoginView.html"><abbr title="\Views\User\LoginView">LoginView</abbr></a></li>
+													<li class="class"><a href="classes/Views-User-RegisterSuccessView.html"><abbr title="\Views\User\RegisterSuccessView">RegisterSuccessView</abbr></a></li>
+													<li class="class"><a href="classes/Views-User-RegisterView.html"><abbr title="\Views\User\RegisterView">RegisterView</abbr></a></li>
+											</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+					
+					<ul>
+																							</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		</div>
+	</section>
+	<section class="row-fluid">
+		<div class="span10 offset2">
+			<div class="row-fluid">
+				<div class="span8 content class">
+					<nav>
+												<a href="namespaces/app-models-todolist.html"><abbr title="\App\Models\ToDoList">ToDoList</abbr></a>
+						<i class="fa-solid fa-turn-up"></i>
+											</nav>
+					
+					<h1>
+						<small>\App\Models\ToDoList</small>
+						ToDoList</h1>
+					<p>
+						<em>Class ToDoList
+This class contains functions to create and manage the task in to-do-list,
+and handles communication with the database layer.</em>
+					</p>
+					
+																																																																																							<section id="summary">
+						<h2>Summary</h2>
+						<section class="row-fluid heading">
+							<section class="span4">
+								<a href="#methods">Methods</a>
+							</section>
+							<section class="span4">
+								<a href="#properties">Properties</a>
+							</section>
+							<section class="span4">
+								<a href="#constants">Constants</a>
+							</section>
+						</section>
+						<section class="row-fluid public">
+							<section class="span4">
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																
+																											<a href="classes/App-Models-ToDoList-ToDoList.html#method_create" class="">create</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_getTodoId" class="">getTodoId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_getTodoDesc" class="">getTodoDesc</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_getSaeGroupId" class="">getSaeGroupId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_getSaeSubjectId" class="">getSaeSubjectId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_setSaeGroupId" class="">setSaeGroupId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_setSaeSubjectId" class="">setSaeSubjectId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_setTododesc" class="">setTododesc</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_setTodoId" class="">setTodoId</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_save" class="">save</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_fetchDataFromDatabase" class="">fetchDataFromDatabase</a><br/>
+																			<a href="classes/App-Models-ToDoList-ToDoList.html#method_existBySaeGroupId" class="">existBySaeGroupId</a><br/>
+																								</section>
+							<section class="span4">
+																
+																	<em>No public properties found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No public constants found</em>
+															</section>
+						</section>
+						<section class="row-fluid protected">
+							<section class="span4">
+																																																																																																																																																																																																																												
+																	<em>No protected methods found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No protected properties found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No protected constants found</em>
+															</section>
+						</section>
+						<section class="row-fluid private">
+							<section class="span4">
+																																																																																																																																																																																																																												
+																	<em>No private methods found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No private properties found</em>
+															</section>
+							<section class="span4">
+																
+																	<em>No private constants found</em>
+															</section>
+						</section>
+					</section>
+				</div>
+				<aside class="span4 detailsbar">
+										
+					
+					<dl>
+						<dt>File</dt>
+						<dd>
+							<a href="files/app-src-models-todolist-todolist.html">
+								<div class="path-wrapper">App/src/Models/ToDoList/ToDoList.php</div>
+							</a>
+						</dd>
+													<dt>Package</dt>
+							<dd>
+								<div class="namespace-wrapper">Src</div>
+							</dd>
+												<dt>Class hierarchy</dt>
+						<dd class="hierarchy">
+																																				<div class="namespace-wrapper">\App\Models\ToDoList\ToDoList</div>
+						</dd>
+
+						
+						
+												
+																																																																																																							<dd>
+										<a href="https://github.com/RADJOU-Dinesh-24003262/SAEManager">
+											<span class="namespace-wrapper"></span>
+										</a>
+									</dd>
+																																																																																																																																																																																																																																																																		
+																	</dl>
+					<h2>Tags</h2>
+					<table class="table table-condensed">
+																											<tr>
+									<th>
+										category
+									</th>
+									<td>
+																																<p>Models</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										package
+									</th>
+									<td>
+																																<p>Src</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										subpackages
+									</th>
+									<td>
+																																<p>Models\ToDoList</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										author
+									</th>
+									<td>
+																																<p>Alexandre Benhafessa <a href="mailto:alexandre.benhafessa@etu.univ-amu.fr">alexandre.benhafessa@etu.univ-amu.fr</a></p>
+
+																																<p>François Dargentolle <a href="mailto:francois.dargentolle@etu.univ-amu.fr">francois.dargentolle@etu.univ-amu.fr</a></p>
+
+																																<p>William Edelstein <a href="mailto:william.edelstein@etu.univ-amu.fr">william.edelstein@etu.univ-amu.fr</a></p>
+
+																																<p>Nathan Griguer <a href="mailto:nathan.griguer@etu.univ-amu.fr">nathan.griguer@etu.univ-amu.fr</a></p>
+
+																																<p>Dinesh Radjou <a href="mailto:dinesh.radjou@etu.univ-amu.fr">dinesh.radjou@etu.univ-amu.fr</a></p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										license
+									</th>
+									<td>
+																																<p>MIT License https://opensource.org/licenses/MIT</p>
+
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										link
+									</th>
+									<td>
+																																
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										uses
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										method
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property-read
+									</th>
+									<td>
+																			</td>
+								</tr>
+															<tr>
+									<th>
+										property-write
+									</th>
+									<td>
+																			</td>
+								</tr>
+																		</table>
+				</aside>
+			</div>
+
+						
+						
+										<a id="methods" name="methods"></a>
+				<div class="row-fluid">
+					<div class="span8 content class">
+						<h2>Methods</h2>
+					</div>
+					<aside class="span4 detailsbar"></aside>
+				</div>
+
+															    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_create" name="method_create" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">create()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">create(array  <span class="argument">$data = []</span>) : self</pre>
+                <p><em>Creates an instance of the class.</em></p>
+                <p>This method creates a user object with the data array given in parameters.
+Use the connection of the database.</p>
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>The data to make a todolist with.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    self
+                                            &mdash; <p>the new object.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTodoId" name="method_getTodoId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTodoId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTodoId() : int</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    int
+                                            &mdash; <p>the id of the todolist.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTodoDesc" name="method_getTodoDesc" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTodoDesc()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTodoDesc() : string</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                            &mdash; <p>the description of the task in the todolist.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSaeGroupId" name="method_getSaeGroupId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSaeGroupId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSaeGroupId() : int</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    int
+                                            &mdash; <p>the id of the group of SAE.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getSaeSubjectId" name="method_getSaeSubjectId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getSaeSubjectId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getSaeSubjectId() : int|null</pre>
+                <p><em></em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    int|null
+                                            &mdash; <p>the id of the subject of the SAE.</p>
+
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setSaeGroupId" name="method_setSaeGroupId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setSaeGroupId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setSaeGroupId(int  <span class="argument">$groupId</span>) : void</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$groupId </td>
+                                <td><p>The id of the group of SAE.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setSaeSubjectId" name="method_setSaeSubjectId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setSaeSubjectId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setSaeSubjectId(int  <span class="argument">$sae_subject_id</span>) : void</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$sae_subject_id </td>
+                                <td><p>The subject of the group of SAE.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setTododesc" name="method_setTododesc" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setTododesc()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setTododesc(string  <span class="argument">$tododesc</span>) : void</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$tododesc </td>
+                                <td><p>The description of the todolist.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setTodoId" name="method_setTodoId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setTodoId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setTodoId(int  <span class="argument">$todo_id</span>) : void</pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$todo_id </td>
+                                <td><p>The id of the todoList.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_save" name="method_save" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">save()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">save() : bool</pre>
+                <p><em>Saves a todolist object into the database</em></p>
+                <p>Tries to save a new todolist object into the database,
+Only to be used for its creation. use another function for its update.</p>
+
+
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fetchDataFromDatabase" name="method_fetchDataFromDatabase" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fetchDataFromDatabase()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fetchDataFromDatabase(string  <span class="argument">$sae_group_id</span>) : void</pre>
+                <p><em>Fetches user data from the database using the id of the group of SAE.</em></p>
+                <p>This method queries the database for a user record that matches the provided the id of the group.
+If id is found, it populates the current object’s properties with the retrieved data,</p>
+<p>If no id is found or a database error occurs, an ExceptionFetchDataBD is thrown.</p>
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$sae_group_id </td>
+                                <td><p>The id of the group of sae to fetch.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                                    <h4>Throws</h4>
+                    <dl>
+                                                    <dt>\Core\includes\exception\ExceptionBD\ExceptionFetchDataBD</dt>
+                            <dd><p>If the id cannot be found or a database error occurs.</p>
+</dd>
+                                                                    </dl>
+                
+                                    <h4>Returns</h4>
+                    void
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																				    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_existBySaeGroupId" name="method_existBySaeGroupId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">existBySaeGroupId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="fa-solid fa-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">existBySaeGroupId(int  <span class="argument">$sae_group_id</span>) : bool</pre>
+                <p><em>Return the success of searching a todolist by id of group in the database.</em></p>
+                <p>Attempts to find a todolist in the todolist relation in the database based on
+their id of group of sae. If an id is found, returns true. False otherwise.</p>
+
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$sae_group_id </td>
+                                <td><p>The id of group of sae to check for existence.</p>
+</td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                            &mdash; 
+                                                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="fas fa-arrow-down"></i></h1>
+                            <span class="label label-info">static</span>
+                                                            <dl>
+                                                    <dt>Inherited from</dt>
+                    <dd><a href="classes/App-Models-ToDoList-ToDoList.html"><div class="path-wrapper">\App\Models\ToDoList\ToDoList</div></a></dd>
+                                                                                                
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+																																																																																																																																																																																																																																														</div>
+	</section>
+
+	<div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="source-view-label">ToDoList.php</h3>
+		</div>
+		<div class="modal-body">
+			<pre data-src="files/App/src/Models/ToDoList/ToDoList.php.txt" class="language-php line-numbers"></pre>
+		</div>
+	</div>
+
+			<footer class="row-fluid">
+				<section class="span10 offset2">
+					<section class="row-fluid">
+						<section class="span10 offset1">
+							<section class="row-fluid footer-sections">
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-code"></i>
+									</h1>
+									<div>
+										<ul>
+																							<li><a href="namespaces/app.html"><abbr title="\App">App</abbr></a></li>
+																							<li><a href="namespaces/controllers.html"><abbr title="\Controllers">Controllers</abbr></a></li>
+																							<li><a href="namespaces/core.html"><abbr title="\Core">Core</abbr></a></li>
+																							<li><a href="namespaces/models.html"><abbr title="\Models">Models</abbr></a></li>
+																							<li><a href="namespaces/validator.html"><abbr title="\Validator">Validator</abbr></a></li>
+																							<li><a href="namespaces/views.html"><abbr title="\Views">Views</abbr></a></li>
+																					</ul>
+									</div>
+								</section>
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-project-diagram"></i>
+									</h1>
+									<div>
+										<ul>
+											<li><a href="graphs/class.html">Class Hierarchy Diagram</a></li>
+										</ul>
+									</div>
+								</section>
+								<section
+									class="span4">
+																		<h1>
+										<i class="fa-solid fa-thumbtack"></i>
+									</h1>
+									<div>
+										<ul>
+											<li><a href="reports/errors.html">Errors</a></li>
+											<li><a href="reports/markers.html">Markers</a></li>
+										</ul>
+									</div>
+								</section>
+							</section>
+						</section>
+					</section>
+					<section class="row-fluid">
+						<section class="span10 offset1">
+							<hr/>
+							Documentation is powered by
+							<a href="https://www.phpdoc.org/">phpDocumentor
+							</a>
+							and authored
+							                    on
+							December 18th, 2025 at 12:43.
+						</section>
+					</section>
+				</section>
+			</footer>
+		</div>
+		<script src="resources/js/jquery-1.11.0.min.js"></script>
+		<script src="resources/js/ui/1.10.4/jquery-ui.min.js"></script>
+		<script src="resources/js/jquery.smooth-scroll.js"></script>
+		<script src="resources/js/prism.min.js"></script>
+		<script src="resources/js/bootstrap.js"></script>
+		<script src="resources/js/custom.js"></script>
+			</body>
+</html>
