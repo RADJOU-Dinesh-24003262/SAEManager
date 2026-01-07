@@ -9,8 +9,6 @@ use Core\includes\exception\SAE\ExceptionResourceNotFound;
 use Core\includes\exception\SAE\ExceptionInvalidData;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
-use Models\SAE\Repository\CompetenceRepository;
-use Models\SAE\Repository\SAEProfessorGroupRepository;
 use Models\User\Professor;
 
 /**
@@ -55,20 +53,6 @@ class SAE
     protected SAEGroupRepository $groupRepo;
 
     /**
-     * The competence repository.
-     *
-     * @var CompetenceRepository
-     */
-    protected CompetenceRepository $competenceRepo;
-
-    /**
-     * The professor group repository.
-     *
-     * @var SAEProfessorGroupRepository
-     */
-    protected SAEProfessorGroupRepository $professorGroupRepo;
-
-    /**
      * Singleton instance.
      *
      * @var SAE|null
@@ -82,8 +66,6 @@ class SAE
     {
         $this->subjectRepo = SAESubjectRepository::getInstance();
         $this->groupRepo = SAEGroupRepository::getInstance();
-        $this->competenceRepo = CompetenceRepository::getInstance();
-        $this->professorGroupRepo = SAEProfessorGroupRepository::getInstance();
     }
 
     /**
@@ -145,7 +127,6 @@ class SAE
      *       phone: string|null
      *     }>
      *   }>,
-     *   competences: array<int, Competence>,
      *   responsible_professor: array{
      *     user_id: string,
      *     first_name: string,
@@ -185,9 +166,6 @@ class SAE
         // Get groups accessible by the user.
         $groups = $this->getAccessibleGroups($saeId, $user);
 
-        // Get competences.
-        $competences = $this->competenceRepo->findBySaeId($saeId);
-
         // Get professors info.
         $responsibleProf = $this->subjectRepo->getResponsibleProfessor($saeId);
         $allProfs = $this->subjectRepo->getAllProfessorsInfo($saeId);
@@ -198,7 +176,6 @@ class SAE
         return [
             'subject' => $subject,
             'groups' => $groups,
-            'competences' => $competences,
             'responsible_professor' => $responsibleProf,
             'all_professors' => $allProfs,
             'client' => $client
@@ -240,19 +217,16 @@ class SAE
             }, $allGroups);
         }
 
-        // If assigned professor, return only assigned groups.
+        // If assigned professor (managing specific groups), return only managed groups.
         if ($user->isProfessor()) {
-            $assignedGroupIds = $this->professorGroupRepo->getProfessorGroups($user->getUserId(), $saeId);
-            $accessibleGroups = array_filter($allGroups, function ($group) use ($assignedGroupIds) {
-                return in_array($group->getSaeGroupId(), $assignedGroupIds);
-            });
+            $managedGroups = $this->groupRepo->findByProfessorId($user->getUserId(), $saeId);
 
             return array_map(function ($group) {
                 return [
                     'group' => $group,
                     'students' => $this->groupRepo->getGroupStudents(intval($group->getSaeGroupId())),
                 ];
-            }, $accessibleGroups);
+            }, $managedGroups);
         }
 
         // If student or client, return only their group.
@@ -285,7 +259,7 @@ class SAE
     }
 
     /**
-     * Creates a new SAE with competences.
+     * Creates a new SAE.
      *
      * @param User                 $creator The professor creating the SAE.
      * @param array<string, mixed> $data    SAE data.
@@ -308,13 +282,6 @@ class SAE
         }
 
         $subject = $this->subjectRepo->create($subject);
-
-        // Create competences if provided.
-        if (!empty($data['competences']) && is_array($data['competences'])) {
-            foreach ($data['competences'] as $competenceName) {
-                $this->competenceRepo->create(intval($subject->getSaeSubjectId()), $competenceName);
-            }
-        }
 
         return $subject;
     }
@@ -354,31 +321,28 @@ class SAE
             throw new ExceptionInvalidData(implode(', ', $errors));
         }
 
-        $success = $this->subjectRepo->update($subject);
-
-        // Update competences if provided.
-        if (isset($data['competences']) && is_array($data['competences'])) {
-            $this->competenceRepo->updateSaeCompetences($saeId, $data['competences']);
-        }
-
-        return $success;
+        return $this->subjectRepo->update($subject);
     }
 
     /**
      * Creates a new group for a SAE.
      *
-     * @param User    $user  The requesting user.
-     * @param integer $saeId The SAE subject ID.
+     * @param User    $user        The requesting user.
+     * @param integer $saeId       The SAE subject ID.
+     * @param integer $professorId The professor ID managing the group.
      * @return SAEGroup The created group.
      * @throws ExceptionAccessDenied If user doesn't have permission.
      */
-    public function createGroup(User $user, int $saeId): SAEGroup
+    public function createGroup(User $user, int $saeId, int $professorId): SAEGroup
     {
         if (!$user->canManageSAE($saeId)) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
         }
 
-        $group = new SAEGroup(['sae_subject_id' => $saeId]);
+        $group = new SAEGroup([
+            'sae_subject_id' => $saeId,
+            'professor_id' => $professorId
+        ]);
         return $this->groupRepo->create($group);
     }
 
@@ -407,20 +371,30 @@ class SAE
     }
 
     /**
-     * Assigns a professor to a SAE.
+     * Assigns a professor to a SAE group.
      *
      * @param User    $responsibleProf The responsible professor.
-     * @param integer $saeId           The SAE subject ID.
+     * @param integer $groupId         The SAE group ID.
      * @param integer $professorId     The professor to assign.
      * @return boolean Success status.
      * @throws ExceptionAccessDenied If not responsible professor.
+     * @throws ExceptionResourceNotFound If group not found.
      */
-    public function assignProfessorToSAE(User $responsibleProf, int $saeId, int $professorId): bool
+    public function assignProfessorToGroup(User $responsibleProf, int $groupId, int $professorId): bool
     {
-        if ($responsibleProf instanceof Professor && $responsibleProf->isResponsibleProfessor($saeId)) {
-            return $this->professorGroupRepo->assignProfessor($saeId, $professorId);
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (
+            $responsibleProf instanceof Professor
+            && $responsibleProf->isResponsibleProfessor($group->getSaeSubjectId())
+        ) {
+            $group->setProfessorId($professorId);
+            return $this->groupRepo->update($group);
         } else {
-            throw new ExceptionAccessDenied("Seul le responsable peut assigner des professeurs");
+            throw new ExceptionAccessDenied("Seul le responsable peut assigner des professeurs aux groupes");
         }
     }
 
@@ -470,5 +444,79 @@ class SAE
             return $this->subjectRepo->delete($saeId);
         }
         throw new ExceptionAccessDenied("Seul le responsable peut supprimer la SAE");
+    }
+
+    /**
+     * Removes a student from a group.
+     *
+     * @param User    $professor The professor.
+     * @param integer $studentId The student ID.
+     * @param integer $groupId   The group ID.
+     * @return boolean Success status.
+     * @throws ExceptionResourceNotFound If group is not found.
+     * @throws ExceptionAccessDenied     If professor doesn't have permission.
+     */
+    public function removeStudentFromGroup(User $professor, int $studentId, int $groupId): bool
+    {
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de retirer des étudiants");
+        }
+
+        return $this->groupRepo->unassignStudent($studentId, $groupId);
+    }
+
+    /**
+     * Deletes a group.
+     *
+     * @param User    $professor The professor.
+     * @param integer $groupId   The group ID.
+     * @return boolean Success status.
+     * @throws ExceptionResourceNotFound If group is not found.
+     * @throws ExceptionAccessDenied     If professor doesn't have permission.
+     */
+    public function deleteGroup(User $professor, int $groupId): bool
+    {
+        $group = $this->groupRepo->findById($groupId);
+        if (!$group) {
+            throw new ExceptionResourceNotFound("Groupe non trouvé");
+        }
+
+        if (!$professor->canManageSAE($group->getSaeSubjectId())) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de supprimer des groupes");
+        }
+
+        return $this->groupRepo->delete($groupId);
+    }
+
+    /**
+     * Gets available students for a SAE (not in any group).
+     *
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string
+     * }>
+     * @throws ExceptionAccessDenied If user doesn't have permission.
+     */
+    public function getAvailableStudents(User $user, int $saeId): array
+    {
+        if (!$user->canManageSAE($saeId)) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de voir les étudiants disponibles");
+        }
+
+        return $this->groupRepo->getAvailableStudents($saeId);
     }
 }
