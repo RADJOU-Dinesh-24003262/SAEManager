@@ -384,4 +384,27 @@ class SAESubjectRepository extends BaseRepository
             return null;
         }
     }
+
+    /**
+     * Finds all subjects that match the end date.
+     *
+     * @param integer $endDate The end date of the SAE subjects.
+     * @return array<SAESubject> The list of SAE subjects matching the end date.
+     */
+    public function findByEndDate(int $endDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_subjects WHERE end_date = :end_date 
+                 ORDER BY sae_subject_id'
+            );
+            $stmt->execute(['end_date' => $endDate]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn($row) => new SAESubject($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération sujets par date de fin : ' . $e->getMessage());
+            return [];
+        }
+    }
 }
