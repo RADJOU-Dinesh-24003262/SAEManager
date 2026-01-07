@@ -80,8 +80,8 @@ class ResetPasswordView extends AbstractView
     {
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($this->data['errors']),
-            'TOKEN'          => htmlspecialchars($this->data['token']),
-            'EMAIL_DISPLAY'  => htmlspecialchars($this->maskEmail($this->data['email'])),
+            'TOKEN'          => $this->data['token'],
+            'EMAIL_DISPLAY'  => $this->maskEmail($this->data['email']),
         ];
     }
 
