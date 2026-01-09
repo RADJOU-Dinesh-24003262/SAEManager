@@ -321,6 +321,35 @@ class Professor extends User
         return false;
     }
 
+    /**
+     * Retrieves all professors in the system.
+     *
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   amu_id: string
+     * }> The list of all professors.
+     */
+    public function getAllProfessors(): array
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT u.user_id, u.first_name, u.last_name, u.email, p.amu_id
+                 FROM professors p
+                 JOIN users u ON p.professor_id = u.user_id
+                 ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur getAllProfessors : ' . $e->getMessage());
+            return [];
+        }
+    }
+
     // -----------------
     // Getters
     // -----------------

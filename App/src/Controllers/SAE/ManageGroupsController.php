@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
+use Models\User\Professor;
 use Override;
 use Views\SAE\ManageGroupsView;
 
@@ -49,10 +50,15 @@ class ManageGroupsController extends BaseController
             $saeData = $sae->getCompleteSAEData($saeId, $this->user);
             $availableStudents = $sae->getAvailableStudents($this->user, $saeId);
 
+            if ($this->user instanceof Professor) {
+                $profsAvailable = $this->user->getAllProfessors();
+            }
+
             $view = new ManageGroupsView([
                 'user' => $this->user,
                 'sae' => $saeData,
-                'available_students' => $availableStudents
+                'available_students' => $availableStudents,
+                'all_professors' => $profsAvailable,
             ]);
             $view->render();
         } catch (ExceptionAccessDenied $e) {
