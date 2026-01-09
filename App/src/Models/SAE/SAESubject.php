@@ -71,16 +71,6 @@ class SAESubject extends BaseModel
     protected ?string $file_path = null;
 
     /**
-     * Constructor.
-     *
-     * @param array<string, mixed> $data Initial data.
-     */
-    public function __construct(array $data = [])
-    {
-        $this->hydrate($data);
-    }
-
-    /**
      * Validates the SAE subject data.
      *
      * @return array<int, string> Array of validation errors (empty if valid).

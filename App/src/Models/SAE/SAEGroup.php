@@ -38,16 +38,6 @@ class SAEGroup extends BaseModel
     protected int $professor_id;
 
     /**
-     * Constructor.
-     *
-     * @param array<string, mixed> $data Initial data.
-     */
-    public function __construct(array $data = [])
-    {
-        $this->hydrate($data);
-    }
-
-    /**
      * Validates the group data.
      *
      * @return array<int, string> Array of validation errors (empty if valid).
