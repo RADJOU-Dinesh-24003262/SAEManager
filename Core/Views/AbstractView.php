@@ -129,6 +129,7 @@ abstract class AbstractView
     <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
     <link rel="stylesheet" href="/styles/pico.classless.blue.css">
     ' . $this->getAdditionalHeaders() . '
+    <link rel="stylesheet" href="/styles/' . $this->getNameCss() . '">
 </head>
 <body>
 <main role="main" class="container-fluid">
@@ -139,8 +140,8 @@ abstract class AbstractView
                 <li><a href="/">Accueil</a></li>
                 ' . $this->getNavBar() . '
             </ul>
-             <ul style="align-items: flex-end">
-                <li><h1>SAEManager</h1></li>
+             <ul>
+                <li class="header-title"><h1>SAEManager</h1></li>
             </ul>
         </nav>
     </header>
@@ -190,6 +191,7 @@ abstract class AbstractView
     {
         echo '
     <footer class="container-fluid">
+    <link rel="stylesheet" href="/styles/footer.css">
         <hr>
         <nav>
             <ul>
@@ -200,8 +202,8 @@ abstract class AbstractView
             </ul>
 
             <ul>
-                <li><small>📞 +33 02 50 65 14 4</small></li>
-                <li><small>📧 <a href="mailto:sae.manager@gmail.com" class="secondary">Email</a></small></li>
+                <li>+33 02 50 65 14 4 </li>
+                <li>📧 <a href="mailto:sae.manager@gmail.com">Email</a></li>
             </ul>
 
             <ul>
