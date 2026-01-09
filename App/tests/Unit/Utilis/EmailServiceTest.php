@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Core\Utilis\EmailService;
-use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 
 /**
  * Unit tests for EmailService

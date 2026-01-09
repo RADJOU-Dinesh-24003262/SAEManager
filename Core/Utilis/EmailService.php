@@ -2,7 +2,7 @@
 
 namespace Core\Utilis;
 
-use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 
 /**
  * Class EmailService
@@ -48,7 +48,7 @@ class EmailService
      * @param string $textMessage The plain text body content.
      *
      * @return void
-     * @throws ExceptionEmailSendingFailed If the email could not be sent.
+     * @throws ExceptionEmailAlreadyExists If the email could not be sent.
      */
     public static function send(string $to, string $subject, string $htmlMessage, string $textMessage): void
     {
@@ -84,7 +84,7 @@ class EmailService
             error_log("Email envoyé avec succès à: {$to}");
         } else {
             error_log("Échec d'envoi d'email à: {$to}");
-            throw new ExceptionEmailSendingFailed();
+            throw new ExceptionEmailAlreadyExists();
         }
     }
 
