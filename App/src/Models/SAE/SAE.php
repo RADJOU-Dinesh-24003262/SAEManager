@@ -230,7 +230,7 @@ class SAE
         }
 
         // If student or client, return only their group.
-        if ($user->isStudent() || $user->isClient()) {
+        if ($user->isStudent()) {
             $userGroupId = $this->getUserGroupId($user, $saeId);
             if ($userGroupId) {
                 $group = $this->groupRepo->findById($userGroupId);
@@ -241,6 +241,16 @@ class SAE
                     ]];
                 }
             }
+        }
+
+        if ($user->isClient()) {
+            // Clients see all groups.
+            return array_map(function ($group) {
+                return [
+                    'group' => $group,
+                    'students' => $this->groupRepo->getGroupStudents(intval($group->getSaeGroupId())),
+                ];
+            }, $allGroups);
         }
 
         return [];

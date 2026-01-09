@@ -166,7 +166,7 @@ class ManageGroupsView extends BaseSaeView
             $html .= '<div class="add-student-wrapper">';
             $html .= '<select name="student_id" required class="student-select">';
             $html .= '<option value="">Ajouter un étudiant...</option>';
-            
+
             foreach ($groupedStudents as $groupLabel => $studentsInGroup) {
                 $html .= '<optgroup label="' . htmlspecialchars($groupLabel) . '">';
                 foreach ($studentsInGroup as $student) {
