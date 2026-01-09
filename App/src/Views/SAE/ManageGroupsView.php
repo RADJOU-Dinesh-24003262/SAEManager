@@ -199,7 +199,7 @@ class ManageGroupsView extends BaseSaeView
      */
     private function generateProfessorsOptions(): string
     {
-        $professors = $this->data['sae']['all_professors'];
+        $professors = $this->data['all_professors'];
         $html = '';
         foreach ($professors as $prof) {
             $html .= '<option value="' . $prof['user_id'] . '">' . $prof['last_name'] . ' ' . $prof['first_name'] . '</option>';
