@@ -137,7 +137,7 @@ abstract class AbstractView
         <nav aria-label="breadcrumb" style="justify-content: space-between">
             <a href="/"><img src="/image/logoamu.png" alt="Logo AMU" style="height: 40px;"></a></li>
             <ul>
-                <li><a href="/">Accueil</a></li>
+
                 ' . $this->getNavBar() . '
             </ul>
              <ul>
@@ -164,6 +164,7 @@ abstract class AbstractView
                 <li><a href="/logout">Déconnexion</a></li>';
         }
         return '
+                <li><a href="/">Accueil</a></li>
                 <li><a href="/login">Connexion</a></li>
                 <li><a href="/register">Inscription</a></li>';
     }

@@ -3,6 +3,7 @@
 namespace Controllers\Index;
 
 use Core\Controllers\ControllerInterface;
+use Core\Utilis\SessionService;
 use Override;
 use Views\Index\IndexView;
 
@@ -31,6 +32,11 @@ class IndexController implements ControllerInterface
     #[Override]
     public function control(): void
     {
+
+        if (SessionService::has('user_id')) {
+            header('Location: /dashboard');
+            exit();
+        }
         $view = new IndexView();
         $view->render();
     }
