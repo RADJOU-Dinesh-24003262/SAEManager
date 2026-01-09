@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Models\BaseModel;
 use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
@@ -28,7 +29,7 @@ use Models\SAE\SAESubject;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-abstract class User
+abstract class User extends BaseModel
 {
     /**
      * The unique identifier of the user.
@@ -80,21 +81,13 @@ abstract class User
     protected string $phone = '';
 
     /**
-     * Initializes a new User instance with optional data.
+     * Validates the user data.
      *
-     * @param array<string, mixed> $data Optional data to initialize the user with.
+     * @return array<int, string> Array of errors (empty if valid).
      */
-    protected function __construct(array $data = [])
+    public function validate(): array
     {
-        foreach ($data as $key => $value) {
-            if (in_array($key, ['password', 'passwordverif', 'terms'], true)) {
-                continue;
-            }
-
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
+        return [];
     }
 
     /**
