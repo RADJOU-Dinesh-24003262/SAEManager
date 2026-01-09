@@ -3,7 +3,7 @@
 namespace Controllers\pwd;
 
 use Core\Controllers\ControllerInterface;
-use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionSpam;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
@@ -88,7 +88,7 @@ class ForgotPasswordPostController implements ControllerInterface
             SessionService::setFlash('errors', $errors);
         } catch (
             ExceptionValidationForgotPassword | ExceptionCreationTokenFailed |
-                                    ExceptionEmailSendingFailed | ExceptionSpam $e
+                                    ExceptionEmailAlreadyExists | ExceptionSpam $e
         ) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }

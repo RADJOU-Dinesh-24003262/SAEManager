@@ -4,6 +4,7 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -11,6 +12,7 @@ use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
 use PDOException;
+use phpDocumentor\GraphViz\Exception;
 use PhpParser\Node\Stmt;
 use Models\SAE\SAESubject;
 
@@ -182,6 +184,10 @@ abstract class User
         $connection->beginTransaction();
 
         try {
+            if ($this->existsByEmail($this->email)) {
+                throw new ExceptionEmailAlreadyExists($this->getEmail());
+            }
+
             $stmt = $connection->prepare(
                 'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
                  VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
@@ -212,6 +218,11 @@ abstract class User
         } catch (PDOException $e) {
             $connection->rollBack();
             error_log('Erreur lors de la sauvegarde de l\'utilisateur : ' . $e->getMessage());
+            throw $e;
+        }
+        catch (ExceptionEmailAlreadyExists $e) {
+            $connection->rollBack();
+            error_log('Email deja présent :' . $this->getEmail());
             throw $e;
         }
     }
