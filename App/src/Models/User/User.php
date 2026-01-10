@@ -12,8 +12,6 @@ use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
 use PDOException;
-use phpDocumentor\GraphViz\Exception;
-use PhpParser\Node\Stmt;
 use Models\SAE\SAESubject;
 
 /**
@@ -182,6 +180,7 @@ abstract class User
      *
      * @return void
      * @throws PDOException If the user cannot be saved.
+     * @throws ExceptionEmailAlreadyExists If the email is already is DB.
      */
     public function save(): void
     {
@@ -224,8 +223,7 @@ abstract class User
             $connection->rollBack();
             error_log('Erreur lors de la sauvegarde de l\'utilisateur : ' . $e->getMessage());
             throw $e;
-        }
-        catch (ExceptionEmailAlreadyExists $e) {
+        } catch (ExceptionEmailAlreadyExists $e) {
             $connection->rollBack();
             error_log('Email deja présent :' . $this->getEmail());
             throw $e;
@@ -233,6 +231,16 @@ abstract class User
     }
 
 
+    /**
+     * Appends the appropriate university domain name to the email address.
+     *
+     * This method checks if the current email property contains a domain name.
+     * If not, it automatically appends '@etu.univ-amu.fr' for students or
+     * '@univ-amu.fr' for professors. This allows users to register using
+     * only their AMU prefix (firstname.lastname).
+     *
+     * @return void
+     */
     private function addDomainNameToEmail(): void
     {
         if (str_contains($this->email, '@')) {
@@ -240,11 +248,12 @@ abstract class User
         }
 
         if ($this->isStudent()) {
-            $this->email .='@etu.univ-amu.fr';
-        } elseif ($this->isProfessor()){
+            $this->email .= '@etu.univ-amu.fr';
+        } elseif ($this->isProfessor()) {
             $this->email .= '@univ-amu.fr';
         }
     }
+
 
     /**
      * Abstract method to save type-specific data.

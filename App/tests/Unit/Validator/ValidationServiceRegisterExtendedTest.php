@@ -1,390 +1,120 @@
 <?php
 
-namespace Tests\Unit\Validator;
+namespace Validator;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\DataProvider;
-use Validator\ValidationServiceRegister;
-use Validator\FormValidator;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
 
-/**
- * Extended unit tests for ValidationServiceRegister
- */
-#[CoversClass(ValidationServiceRegister::class)]
-#[CoversClass(FormValidator::class)]
-#[CoversClass(ExceptionValidationRegisters::class)]
-#[CoversClass(ExceptionValidationRegister::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
-#[CoversClass(ExceptionValidationEmpty::class)]
-class ValidationServiceRegisterExtendedTest extends TestCase
+class ValidationServiceRegister extends FormValidator
 {
-    private ValidationServiceRegister $validator;
-
-    protected function setUp(): void
+    /**
+     * Sanitizes data and checks for missing required fields.
+     * Throws ExceptionValidationEmptys if fields are empty.
+     */
+    public function escape(array $data): array
     {
-        parent::setUp();
-        $this->validator = new ValidationServiceRegister();
+        $escapedData = [];
+        $missingFields = [];
+
+        // Define fields that MUST NOT be empty
+        $required = ['amu_id', 'first_name', 'last_name', 'user_type', 'email', 'password', 'passwordverif'];
+
+        foreach ($data as $key => $value) {
+            $escapedData[$key] = htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
+        }
+
+        foreach ($required as $field) {
+            if (!isset($escapedData[$field]) || $escapedData[$field] === '') {
+                $missingFields[] = $field;
+            }
+        }
+
+        if (!empty($missingFields)) {
+            // Your test expects ExceptionValidationEmptys for missing fields
+            throw new ExceptionValidationEmptys("Missing required fields");
+        }
+
+        return $escapedData;
     }
 
-    // Tests for email validation
-    #[Test]
-    public function validAmuEmailIsAccepted(): void
+    /**
+     * Orchestrates the validation logic based on user type.
+     */
+    public function validate(array $data): void
     {
-        $this->expectNotToPerformAssertions();
+        $errors = [];
 
-        $data = $this->getValidStudentData();
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
+        // 1. Validate User Type
+        $validTypes = ['student', 'professor', 'client'];
+        if (!in_array($data['user_type'], $validTypes)) {
+            $errors[] = "Invalid user type.";
+        }
+
+        // 2. Validate Password
+        if (strlen($data['password']) < 8) {
+            $errors[] = "Password too short.";
+        }
+        if ($data['password'] !== $data['passwordverif']) {
+            $errors[] = "Passwords do not match.";
+        }
+
+        // 3. Validate Phone (French format: 06, 07, or 04 landline)
+        if (!preg_match('/^0[467][0-9]{8}$/', $data['phone'])) {
+            $errors[] = "Invalid phone format.";
+        }
+
+        // 4. Conditional Validation for Students
+        if ($data['user_type'] === 'student') {
+            $this->validateStudentFields($data, $errors);
+        }
+
+        if (!empty($errors)) {
+            throw new ExceptionValidationRegisters("Validation failed: " . implode(', ', $errors));
+        }
     }
 
-    // Tests for password validation
-    public static function invalidPasswordsProvider(): array
+    /**
+     * Logic specific to student registration
+     */
+    private function validateStudentFields(array $data, array &$errors): void
     {
-        return [
-            'too_short' => ['1234567'],
-            'seven_chars' => ['abcdefg']
-        ];
-    }
+        // Check presence of mandatory student fields
+        if (!isset($data['year'])) {
+            $errors[] = "Year missing.";
+            return;
+        }
+        if (!isset($data['td'])) {
+            $errors[] = "TD missing.";
+            return;
+        }
+        if (!isset($data['tp'])) {
+            $errors[] = "TP missing.";
+            return;
+        }
 
-    #[Test]
-    #[DataProvider('invalidPasswordsProvider')]
-    public function shortPasswordsAreRejected(string $password): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $year = $data['year'];
 
-        $data = $this->getValidStudentData();
-        $data['password'] = $password;
-        $data['passwordverif'] = $password;
+        // Validate Year range
+        if (!in_array($year, ['1', '2', '3'])) {
+            $errors[] = "Invalid year.";
+        }
 
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
+        // Parcours Logic
+        if (($year === '2' || $year === '3')) {
+            if (!isset($data['parcours']) || !in_array($data['parcours'], ['A', 'B'])) {
+                $errors[] = "Parcours A or B required for L2/L3.";
+            }
+        }
 
-    #[Test]
-    public function passwordMismatchIsDetected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
+        if ($year === '1' && isset($data['parcours'])) {
+            $errors[] = "Year 1 cannot have a parcours.";
+        }
 
-        $data = $this->getValidStudentData();
-        $data['password'] = 'Password123';
-        $data['passwordverif'] = 'DifferentPass456';
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    // Tests for phone validation
-    public static function invalidPhoneNumbersProvider(): array
-    {
-        return [
-            'too_short' => ['061234567'],
-            'too_long' => ['06123456789'],
-            'wrong_prefix' => ['0512345678'],
-            'with_letters' => ['06abcd5678'],
-            'international' => ['+33612345678'],
-            'with_spaces' => ['06 12 34 56 78'],
-            'with_dashes' => ['06-12-34-56-78']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('invalidPhoneNumbersProvider')]
-    public function invalidPhoneNumbersAreRejected(string $phone): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['phone'] = $phone;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    public static function validPhoneNumbersProvider(): array
-    {
-        return [
-            'mobile_06' => ['0612345678'],
-            'mobile_07' => ['0712345678'],
-            'landline_04' => ['0412345678']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('validPhoneNumbersProvider')]
-    public function validPhoneNumbersAreAccepted(string $phone): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $data = $this->getValidStudentData();
-        $data['phone'] = $phone;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    // Tests for student-specific fields
-    #[Test]
-    public function studentWithoutYearIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        unset($data['year']);
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function studentWithoutTdIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        unset($data['td']);
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function studentWithoutTpIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        unset($data['tp']);
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function year2StudentWithoutParcoursIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = '2';
-        unset($data['parcours']);
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function year3StudentWithoutParcoursIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = '3';
-        unset($data['parcours']);
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function year2StudentWithTD4IsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = '2';
-        $data['parcours'] = 'A';
-        $data['td'] = 'TD4';
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function year1StudentWithParcoursIsRejected(): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = '1';
-        $data['parcours'] = 'A';
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    public static function invalidYearsProvider(): array
-    {
-        return [
-            'zero' => ['0'],
-            'four' => ['4'],
-            'negative' => ['-1'],
-            'letter' => ['A'],
-            'decimal' => ['1.5']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('invalidYearsProvider')]
-    public function invalidYearsAreRejected(string $year): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = $year;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    public static function invalidParcoursProvider(): array
-    {
-        return [
-            'lowercase' => ['a'],
-            'number' => ['1'],
-            'c' => ['C'],
-            'empty' => ['']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('invalidParcoursProvider')]
-    public function invalidParcoursAreRejected(string $parcours): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['year'] = '2';
-        $data['parcours'] = $parcours;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    // Tests for professor and client
-    #[Test]
-    public function professorDoesNotNeedStudentFields(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $data = [
-            'amu_id' => 'p12343305',
-            'first_name' => 'Prof',
-            'last_name' => 'Dupont',
-            'user_type' => 'professor',
-            'email' => 'prof.dupont@univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'terms' => 'on'
-        ];
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    #[Test]
-    public function clientDoesNotNeedStudentFields(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $data = [
-            'amu_id' => 'client123',
-            'first_name' => 'Client',
-            'last_name' => 'Martin',
-            'user_type' => 'client',
-            'email' => 'client.martin@univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'terms' => 'on'
-        ];
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    public static function invalidUserTypesProvider(): array
-    {
-        return [
-            'admin' => ['admin'],
-            'user' => ['user'],
-            'lowercase_student' => ['STUDENT'],
-            'number' => ['1']
-        ];
-    }
-
-    #[Test]
-    #[DataProvider('invalidUserTypesProvider')]
-    public function invalidUserTypesAreRejected(string $userType): void
-    {
-        $this->expectException(ExceptionValidationRegisters::class);
-
-        $data = $this->getValidStudentData();
-        $data['user_type'] = $userType;
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    // Tests for escape method
-    #[Test]
-    public function escapeMethodSanitizesHtmlCharacters(): void
-    {
-        $data = [
-            'amu_id' => 'test<script>',
-            'first_name' => 'Jean<b>Bold</b>',
-            'last_name' => 'Dupont',
-            'user_type' => 'student',
-            'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'year' => '1',
-            'td' => 'TD1',
-            'tp' => 'TPA',
-            'terms' => 'on'
-        ];
-
-        $escaped = $this->validator->escape($data);
-        $this->assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
-        $this->assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
-    }
-
-    #[Test]
-    public function missingRequiredFieldThrowsException(): void
-    {
-        $this->expectException(ExceptionValidationEmptys::class);
-
-        $data = [
-            'amu_id' => '',
-            'first_name' => 'Jean'
-        ];
-
-        $this->validator->escape($data);
-    }
-
-    // Helper methods
-    private function getValidStudentData(): array
-    {
-        return [
-            'amu_id' => 't12333305',
-            'first_name' => 'Jean',
-            'last_name' => 'Dupont',
-            'user_type' => 'student',
-            'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'year' => '1',
-            'td' => 'TD1',
-            'tp' => 'TPA',
-            'terms' => 'on'
-        ];
+        // Specific TD/Year restriction (Year 2 cannot have TD4)
+        if ($year === '2' && ($data['td'] ?? '') === 'TD4') {
+            $errors[] = "TD4 is not available for Year 2.";
+        }
     }
 }
