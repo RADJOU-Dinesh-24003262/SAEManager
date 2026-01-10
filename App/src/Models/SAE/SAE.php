@@ -337,13 +337,13 @@ class SAE
     /**
      * Creates a new group for a SAE.
      *
-     * @param User    $user        The requesting user.
-     * @param integer $saeId       The SAE subject ID.
-     * @param integer $professorId The professor ID managing the group.
+     * @param User         $user        The requesting user.
+     * @param integer      $saeId       The SAE subject ID.
+     * @param integer|null $professorId The professor ID managing the group.
      * @return SAEGroup The created group.
      * @throws ExceptionAccessDenied If user doesn't have permission.
      */
-    public function createGroup(User $user, int $saeId, int $professorId): SAEGroup
+    public function createGroup(User $user, int $saeId, ?int $professorId): SAEGroup
     {
         if (!$user->canManageSAE($saeId)) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
@@ -383,14 +383,14 @@ class SAE
     /**
      * Assigns a professor to a SAE group.
      *
-     * @param User    $responsibleProf The responsible professor.
-     * @param integer $groupId         The SAE group ID.
-     * @param integer $professorId     The professor to assign.
+     * @param User         $responsibleProf The responsible professor.
+     * @param integer      $groupId         The SAE group ID.
+     * @param integer|null $professorId     The professor to assign.
      * @return boolean Success status.
      * @throws ExceptionAccessDenied If not responsible professor.
      * @throws ExceptionResourceNotFound If group not found.
      */
-    public function assignProfessorToGroup(User $responsibleProf, int $groupId, int $professorId): bool
+    public function assignProfessorToGroup(User $responsibleProf, int $groupId, ?int $professorId): bool
     {
         $group = $this->groupRepo->findById($groupId);
         if (!$group) {

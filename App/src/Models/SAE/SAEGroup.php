@@ -33,9 +33,9 @@ class SAEGroup extends BaseModel
 
     /**
      * The professor ID who manages the group.
-     * @var integer
+     * @var integer|null
      */
-    protected int $professor_id;
+    protected ?int $professor_id = null;
 
     /**
      * Validates the group data.
@@ -51,7 +51,7 @@ class SAEGroup extends BaseModel
             $errors[] = 'L\'ID du sujet SAE doit être valide';
         }
 
-        if ($this->professor_id <= 0) {
+        if ($this->professor_id !== null && $this->professor_id <= 0) {
             $errors[] = 'L\'ID du professeur doit être valide';
         }
 
@@ -118,9 +118,9 @@ class SAEGroup extends BaseModel
     /**
      * Gets the professor ID.
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getProfessorId(): int
+    public function getProfessorId(): ?int
     {
         return $this->professor_id;
     }
@@ -128,10 +128,10 @@ class SAEGroup extends BaseModel
     /**
      * Sets the professor ID.
      *
-     * @param integer $professor_id The professor ID.
+     * @param integer|null $professor_id The professor ID.
      * @return void
      */
-    public function setProfessorId(int $professor_id): void
+    public function setProfessorId(?int $professor_id): void
     {
         $this->professor_id = $professor_id;
     }
