@@ -60,6 +60,7 @@ class RegisterPost implements ControllerInterface
         $validator = new ValidationServiceRegister();
 
         try {
+
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
@@ -74,7 +75,6 @@ class RegisterPost implements ControllerInterface
             exit();
 
         } catch (ExceptionEmailAlreadyExists $e) {
-            // Gestion spécifique pour l'email déjà existant
             SessionService::setFlash('errors', ['email' => $e->getMessage()]);
             Logger::log('REGISTER_FAIL', "Email déjà utilisé: " . $e->getEmail(), null, 'INFO');
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {

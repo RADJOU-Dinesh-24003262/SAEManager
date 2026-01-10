@@ -55,8 +55,14 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
 
-        if (!$this->isValidEmail($data['email'])) {
-            $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
+        if ($data['user_type'] === 'client') {
+            if (!$this->isValidEmail($data['email'])) {
+                $errors[] = new ExceptionValidationRegister("email", "string", "Email invalide.");
+            }
+        } else {
+            if (empty($data['email'])) {
+                $errors[] = new ExceptionValidationRegister("email", "string", "L'identifiant email est requis.");
+            }
         }
 
         if (!$this->isValidPassword($data['password'])) {
@@ -108,11 +114,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "Utilisez votre adresse e-mail universitaire."
+                "L'email doit correspondre au format prenom.nom (minuscules)."
             );
         }
 
@@ -173,11 +179,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "Utilisez votre adresse e-mail universitaire."
+                "L'email doit correspondre au format prenom.nom (minuscules)."
             );
         }
 
@@ -187,11 +193,11 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
         }
 
-        if (!$this->isOwnAmuEmail($data['email'], $data['last_name'], $data['first_name'])) {
+        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "Utilisez votre adresse e-mail universitaire."
+                "L'email doit correspondre au format prenom.nom (minuscules)."
             );
         }
 

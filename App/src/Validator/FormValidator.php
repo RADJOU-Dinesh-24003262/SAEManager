@@ -110,17 +110,21 @@ abstract class FormValidator
      *
      * @return boolean
      */
-    protected function isOwnAmuEmail(string $email, string $lname, string $fname): bool
+    protected function isOwnAmuPrefix(string $prefix, string $fname, string $lname): bool
     {
-        $escapedFname = strtolower(preg_quote($fname, '/'));
-        $escapedLname = strtolower(preg_quote($lname, '/'));
+        // Nettoyage pour la comparaison (minuscules et sans accents)
+        // Idéalement, utilise une fonction de suppression d'accents
+        $f = mb_strtolower(trim($fname), 'UTF-8');
+        $l = mb_strtolower(trim($lname), 'UTF-8');
 
-        $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
+        $escapedF = preg_quote($f, '/');
+        $escapedL = preg_quote($l, '/');
 
-        return preg_match($ownEmailPattern, $email)
-            && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
+        // Regex : début, prenom, point, nom, optionnel(.chiffres), fin
+        $pattern = "/^{$escapedF}\.{$escapedL}(\.[0-9]+)?$/i";
+
+        return (bool) preg_match($pattern, $prefix);
     }
-
     /**
      * Check if Amuid is valid with specific regex.
      *

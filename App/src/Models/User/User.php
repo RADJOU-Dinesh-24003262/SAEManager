@@ -111,6 +111,8 @@ abstract class User
     {
         $userType = $data['user_type'] ?? '';
 
+
+
         $user = match ($userType) {
             'student' => new Student($data),
             'professor' => new Professor($data),
@@ -119,6 +121,9 @@ abstract class User
         };
 
         $user->setPassword($data['password']);
+
+        $user->addDomainNameToEmail();
+
         return $user;
     }
 
@@ -224,6 +229,20 @@ abstract class User
             $connection->rollBack();
             error_log('Email deja présent :' . $this->getEmail());
             throw $e;
+        }
+    }
+
+
+    private function addDomainNameToEmail(): void
+    {
+        if (str_contains($this->email, '@')) {
+            return;
+        }
+
+        if ($this->isStudent()) {
+            $this->email .='@etu.univ-amu.fr';
+        } elseif ($this->isProfessor()){
+            $this->email .= '@univ-amu.fr';
         }
     }
 
