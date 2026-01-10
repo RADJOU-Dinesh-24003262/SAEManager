@@ -81,16 +81,6 @@ abstract class User extends BaseModel
     protected string $phone = '';
 
     /**
-     * Validates the user data.
-     *
-     * @return array<int, string> Array of errors (empty if valid).
-     */
-    public function validate(): array
-    {
-        return [];
-    }
-
-    /**
      * Factory method to create the appropriate user type from registration data.
      *
      * @param array<string, mixed> $data The registration data.
@@ -132,6 +122,7 @@ abstract class User extends BaseModel
         $stmt->execute(['email' => $data['email']]);
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         if (!$result || !password_verify($data['password'], $result['hashed_password'])) {
             throw new ExceptionValidationLogin();
@@ -199,6 +190,7 @@ abstract class User extends BaseModel
             $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $this->email]);
             $userId = (int) $stmt->fetchColumn(0);
+            $stmt->closeCursor();
 
             $this->saveSpecificData($connection, $userId);
             $connection->commit();
@@ -237,6 +229,7 @@ abstract class User extends BaseModel
             $stmt = $db->prepare('SELECT * FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
 
             if (empty($data)) {
                 throw new ExceptionFetchDataBD();

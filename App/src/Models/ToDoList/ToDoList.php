@@ -57,16 +57,6 @@ class ToDoList extends BaseModel
     protected string $tododesc;
 
     /**
-     * Validates the to-do list data.
-     *
-     * @return array<int, string> Array of validation errors (empty if valid).
-     */
-    public function validate(): array
-    {
-        return [];
-    }
-
-    /**
      * Creates an instance of the class.
      *
      * This method creates a user object with the data array given in parameters.
@@ -121,7 +111,7 @@ class ToDoList extends BaseModel
      */
     public function setSaeGroupId(int $groupId): void
     {
-        $this->$groupId = $groupId;
+        $this->groupId = $groupId;
     }
 
     /**

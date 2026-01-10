@@ -4,7 +4,6 @@ namespace Models\SAE;
 
 use Core\Models\BaseModel;
 use DateTime;
-use Exception;
 use Override;
 
 /**
@@ -70,45 +69,6 @@ class SAESubject extends BaseModel
      */
     protected ?string $file_path = null;
 
-    /**
-     * Validates the SAE subject data.
-     *
-     * @return array<int, string> Array of validation errors (empty if valid).
-     */
-    #[Override]
-    public function validate(): array
-    {
-        $errors = [];
-
-        if (empty($this->subject_name)) {
-            $errors[] = 'Le nom du sujet ne peut pas être vide';
-        }
-
-        if (strlen($this->subject_name) > 255) {
-            $errors[] = 'Le nom du sujet ne peut pas dépasser 255 caractères';
-        }
-
-        if ($this->responsible_prof_id <= 0) {
-            $errors[] = 'L\'ID du professeur responsable doit être valide';
-        }
-
-        if ($this->client_id !== null && $this->client_id <= 0) {
-            $errors[] = 'L\'ID du client doit être valide';
-        }
-
-        try {
-            $begin = new DateTime($this->begin_date);
-            $end = new DateTime($this->end_date);
-
-            if ($end <= $begin) {
-                $errors[] = 'La date de fin doit être après la date de début';
-            }
-        } catch (Exception $e) {
-            $errors[] = 'Les dates ne sont pas valides';
-        }
-
-        return $errors;
-    }
 
     /**
      * Checks if the SAE is currently active.

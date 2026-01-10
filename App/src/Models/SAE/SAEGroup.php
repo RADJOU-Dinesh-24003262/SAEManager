@@ -38,27 +38,6 @@ class SAEGroup extends BaseModel
     protected ?int $professor_id = null;
 
     /**
-     * Validates the group data.
-     *
-     * @return array<int, string> Array of validation errors (empty if valid).
-     */
-    #[Override]
-    public function validate(): array
-    {
-        $errors = [];
-
-        if ($this->sae_subject_id <= 0) {
-            $errors[] = 'L\'ID du sujet SAE doit être valide';
-        }
-
-        if ($this->professor_id !== null && $this->professor_id <= 0) {
-            $errors[] = 'L\'ID du professeur doit être valide';
-        }
-
-        return $errors;
-    }
-
-    /**
      * Converts to array.
      *
      * @return array<string, integer|null>

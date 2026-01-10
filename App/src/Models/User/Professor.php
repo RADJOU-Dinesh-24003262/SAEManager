@@ -100,6 +100,7 @@ class Professor extends User
 
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         if ($data) {
             foreach ($data as $key => $value) {

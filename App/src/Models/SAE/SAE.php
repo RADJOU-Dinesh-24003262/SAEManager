@@ -6,7 +6,6 @@ use Models\User\User;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\includes\exception\SAE\ExceptionResourceNotFound;
-use Core\includes\exception\SAE\ExceptionInvalidData;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
 use Models\User\Professor;
@@ -275,7 +274,6 @@ class SAE
      * @param array<string, mixed> $data    SAE data.
      * @return SAESubject The created SAE.
      * @throws ExceptionAccessDenied If user doesn't have permission.
-     * @throws ExceptionInvalidData  If data is invalid.
      */
     public function createSAE(User $creator, array $data): SAESubject
     {
@@ -286,10 +284,6 @@ class SAE
 
         // Create SAE subject.
         $subject = new SAESubject($data);
-        $errors = $subject->validate();
-        if (!empty($errors)) {
-            throw new ExceptionInvalidData(implode(', ', $errors));
-        }
 
         $subject = $this->subjectRepo->create($subject);
 
@@ -305,7 +299,6 @@ class SAE
      * @return boolean Success status.
      * @throws ExceptionAccessDenied    If user doesn't have permission.
      * @throws ExceptionResourceNotFound If SAE is not found.
-     * @throws ExceptionInvalidData      If data is invalid.
      */
     public function updateSAE(User $user, int $saeId, array $data): bool
     {
@@ -324,11 +317,6 @@ class SAE
             if (method_exists($subject, $setter)) {
                 $subject->$setter($value);
             }
-        }
-
-        $errors = $subject->validate();
-        if (!empty($errors)) {
-            throw new ExceptionInvalidData(implode(', ', $errors));
         }
 
         return $this->subjectRepo->update($subject);
