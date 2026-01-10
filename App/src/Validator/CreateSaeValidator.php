@@ -68,10 +68,5 @@ class CreateSaeValidator extends FormValidator
         if (!filter_var($data['client_id'], FILTER_VALIDATE_INT)) {
             throw new ExeptionValidationSAECreation('L\'identifiant client est invalide.');
         }
-
-        // Competences validation (optional but must be array if present).
-        if (isset($data['competence']) && !is_array($data['competence'])) {
-             throw new ExeptionValidationSAECreation('Format des compétences invalide.');
-        }
     }
 }
