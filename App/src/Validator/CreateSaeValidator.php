@@ -26,7 +26,6 @@ class CreateSaeValidator extends FormValidator
     protected $required = [
         'nameSae',
         'date_rendu',
-        'client_id',
         'description'
     ];
 
@@ -65,7 +64,7 @@ class CreateSaeValidator extends FormValidator
         }
 
         // Validate client ID (basic integer check).
-        if (!filter_var($data['client_id'], FILTER_VALIDATE_INT)) {
+        if ($data['client_id'] && !filter_var($data['client_id'], FILTER_VALIDATE_INT)) {
             throw new ExeptionValidationSAECreation('L\'identifiant client est invalide.');
         }
     }
