@@ -23,7 +23,7 @@ class PasswordResetMailer
      * @param string $toEmail The user's email address.
      * @param string $token   The reset token.
      * @return void
-     * @throws ExceptionEmailSendingFailed if sending fail
+     * @throws ExceptionEmailSendingFailed If sending fails.
      */
     public static function send(string $toEmail, string $token): void
     {

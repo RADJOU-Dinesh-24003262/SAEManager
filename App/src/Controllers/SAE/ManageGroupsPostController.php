@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
 use Override;
+use Exception;
 
 /**
  * Controller to handle POST actions for group management.
@@ -23,15 +24,19 @@ class ManageGroupsPostController extends BaseController
      * Controls the processing of group management actions.
      *
      * @return void
+     * @throws \Exception If an unknown action is encountered or an error occurs during processing.
      */
     #[Override]
     public function control(): void
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
 
-        // Extract SAE ID and Action from URL: /sae/{id}/groups/{action}
+        $saeId = 0;
+        $action = '';
+
+        // Extract SAE ID and Action from URL: /sae/{id}/groups/{action}.
         if (preg_match('/^\/sae\/(\d+)\/groups\/(.+)$/', $path, $matches)) {
             $saeId = intval($matches[1]);
             $action = $matches[2];
@@ -50,16 +55,34 @@ class ManageGroupsPostController extends BaseController
         }
     }
 
+    /**
+     * Creates a new group for a SAE.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @return void
+     * @throws \Exception If an unexpected error occurs during group creation.
+     */
     private function createGroup(int $saeId): void
     {
         $professorId = filter_input(INPUT_POST, 'professor_id', FILTER_VALIDATE_INT);
-        if (!$professorId) {
-            throw new \Exception("ID du professeur manquant");
+
+        // If professorId is false (invalid) or null (not set), treat it as null (no professor).
+        if ($professorId == false) {
+             $professorId = null;
         }
+
         SAE::getInstance()->createGroup($this->user, $saeId, $professorId);
         $this->redirectWithSuccess($saeId, 'Groupe créé avec succès.');
     }
 
+    /**
+     * Deletes a group.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @return void
+     * @throws \Exception If the group ID is missing.
+     * @throws \Exception If an unexpected error occurs during group deletion.
+     */
     private function deleteGroup(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
@@ -70,6 +93,14 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
     }
 
+    /**
+     * Adds a student to a group.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @return void
+     * @throws \Exception If group ID or student ID is missing.
+     * @throws \Exception If an unexpected error occurs during student assignment.
+     */
     private function addStudent(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
@@ -81,6 +112,14 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
     }
 
+    /**
+     * Removes a student from a group.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @return void
+     * @throws \Exception If group ID or student ID is missing.
+     * @throws \Exception If an unexpected error occurs during student removal.
+     */
     private function removeStudent(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
@@ -92,6 +131,13 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');
     }
 
+    /**
+     * Redirects with a success message.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @param string  $msg   The success message.
+     * @return void
+     */
     private function redirectWithSuccess(int $saeId, string $msg): void
     {
         SessionService::setFlash('success', $msg);
@@ -99,6 +145,13 @@ class ManageGroupsPostController extends BaseController
         exit;
     }
 
+    /**
+     * Redirects with an error message.
+     *
+     * @param integer $saeId The ID of the SAE.
+     * @param string  $msg   The error message.
+     * @return void
+     */
     private function redirectWithError(int $saeId, string $msg): void
     {
         SessionService::setFlash('errors', $msg);
