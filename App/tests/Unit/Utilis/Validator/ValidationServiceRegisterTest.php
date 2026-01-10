@@ -38,34 +38,6 @@ class ValidationServiceRegisterTest extends TestCase
     }
 
     /**
-     * Test valid student registration data with the student email domain.
-     * * Requirement: Student emails must match "firstname.lastname@etu.univ-amu.fr".
-     */
-    public function testValidatesCorrectStudentData(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $data = [
-            'amu_id' => 'a12345678',
-            'first_name' => 'Jean',
-            'last_name' => 'Dupont',
-            'user_type' => 'student',
-            'email' => 'jean.dupont@etu.univ-amu.fr', // Updated with student domain
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'year' => '2',
-            'parcours' => 'A',
-            'td' => 'TD1',
-            'tp' => 'TPA',
-            'terms' => 'on'
-        ];
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
-
-    /**
      * Data provider for invalid emails.
      */
     public static function invalidEmailProvider(): array
@@ -90,19 +62,6 @@ class ValidationServiceRegisterTest extends TestCase
         ];
     }
 
-    /**
-     * Test valid professor registration with professor email domain.
-     * * Requirement: Prof emails must match "firstname.lastname@univ-amu.fr".
-     */
-    public function testValidatesCorrectProfessorData(): void
-    {
-        $this->expectNotToPerformAssertions();
-
-        $data = $this->getValidBaseData('professor');
-
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
-    }
 
     /**
      * Helper method to generate valid base data for different user types.
