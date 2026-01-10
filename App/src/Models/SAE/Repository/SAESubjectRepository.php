@@ -388,10 +388,10 @@ class SAESubjectRepository extends BaseRepository
     /**
      * Finds all subjects that match the end date.
      *
-     * @param integer $endDate The end date of the SAE subjects.
+     * @param string $endDate The end date of the SAE subjects.
      * @return array<SAESubject> The list of SAE subjects matching the end date.
      */
-    public function findByEndDate(int $endDate): array
+    public function findByEndDate(string $endDate): array
     {
         try {
             $stmt = $this->connection->prepare(
@@ -404,6 +404,33 @@ class SAESubjectRepository extends BaseRepository
             return array_map(fn($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération sujets par date de fin : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+
+    /**
+     * Finds all students with SAE ending on the given date.
+     *
+     * @param string $endDate The end date of the SAE subjects.
+     * @return array The list of students with SAE ending on the given date.
+     */
+    public function findStudentsWithSaeEndingOnDate(string $endDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone
+                FROM sae_subjects s
+                JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
+                JOIN students st ON sg.sae_group_id = st.sae_group_id
+                JOIN users u ON st.student_id = u.user_id
+                WHERE s.end_date = :end_date
+                ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['end_date' => $endDate]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération étudiants avec SAE finissant à la date : ' . $e->getMessage());
             return [];
         }
     }
