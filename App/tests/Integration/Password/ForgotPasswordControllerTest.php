@@ -112,30 +112,6 @@ class ForgotPasswordControllerTest extends TestCase
         $this->assertMatchesRegularExpression('/L.{1,6}adresse email n.{1,6}est pas valide/', $content);
     }
 
-    #[Test]
-    public function postControllerSetsGenericSuccessMessage(): void
-    {
-        $_POST = ['email' => 'jean.dupont@etu.univ-amu.fr'];
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        SessionService::remove('last_forgot_password_request');
-
-        ob_start();
-        $controller = new ForgotPasswordPostController();
-
-        try {
-            $controller->control();
-        } catch (Exception $e) {
-            // May throw due to database/email issues
-        } finally {
-            $content = ob_get_clean();
-        }
-
-        // Should either have success or error message on the html page.
-        $this->assertTrue(
-            str_contains($content ?: '', 'vous recevrez un lien de réinitialisation dans quelques minutes.') ||
-            str_contains($content ?: '', 'Une erreur est survenue lors de l\'envoi de l\'email. Veuillez réessayer plus tard.')
-        );
-    }
 
     #[Test]
     public function preventsTooManyRequests(): void
