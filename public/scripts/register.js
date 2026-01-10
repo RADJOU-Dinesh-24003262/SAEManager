@@ -2,9 +2,6 @@ const yearSelect = document.getElementById('year');
 const tdSelect = document.getElementById('td');
 const parcoursSelect = document.getElementById('parcours');
 
-// Get the email input field
-const emailInput = document.getElementById('email');
-
 // Disable TD4 if year is 2 or 3
 const td4Option = Array.from(tdSelect.options).find(opt => opt.value === 'TD4');
 
@@ -70,6 +67,28 @@ function toggleAmuFields(){
 }
 
 
+
+function toggleAmuMailParts(){
+
+    const userType = userTypeSelect.value;
+
+    const studentMail = document.getElementById('mail-student');
+    const professorMail = document.getElementById('mail-professor');
+    const mailHint = document.getElementById('email-hint');
+
+    studentMail.style.display = 'none';
+    professorMail.style.display = 'none';
+    mailHint.style.display = 'none';
+
+    if (userType === 'student') {
+        studentMail.style.display = 'inline-block';
+        mailHint.style.display = 'inline-block';
+    } else if (userType === 'professor') {
+        professorMail.style.display = 'inline-block';
+        mailHint.style.display = 'inline-block';
+    }
+}
+
 const pwd = document.getElementById('password');
 const pwdverif = document.getElementById('passwordverif');
 
@@ -84,9 +103,13 @@ function validatePassword() {
 pwd.addEventListener('change', validatePassword);
 pwdverif.addEventListener('input', validatePassword);
 
+userTypeSelect.addEventListener('change', () => {
+    toggleStudentFields();
+    toggleAmuFields();
+    toggleAmuMailParts();
+});
+
 // Apply immediately on page load (case of reload after POST)
 toggleStudentFields();
-
-// Apply on each status change
-userTypeSelect.addEventListener('change', toggleStudentFields);
-userTypeSelect.addEventListener('change', toggleAmuFields);
+toggleAmuFields();
+toggleAmuMailParts();

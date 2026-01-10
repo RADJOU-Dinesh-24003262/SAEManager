@@ -67,20 +67,22 @@
     <fieldset>
         <legend>Contact</legend>
         
-        <label for="email">
+        <label id="email-title" for="email" >
             Email AMU
             <abbr title="requis" >*</abbr>
         </label>
+        <div class="email-field">
         <input 
             required 
-            type="email" 
+            type="text"
             id="email" 
-            name="email" 
-            pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$" 
-            autocomplete="email"
+            name="email"
             aria-required="true"
             aria-describedby="email-hint">
-        <small id="email-hint">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
+            <span id="mail-student">@etu.univ-amu.fr</span>
+            <span id="mail-professor">@univ-amu.fr</span>
+        </div>
+        <small id="email-hint" style="display: none">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
 
         <label for="tel">
             Téléphone
