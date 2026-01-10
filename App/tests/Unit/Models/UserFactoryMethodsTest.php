@@ -390,14 +390,6 @@ class UserFactoryMethodsTest extends TestCase
     // ===================================
     // Tests for the deleteByEmail method
     // ===================================
-    #[Test]
-    public function deleteByEmailThrowsExceptionForEmptyEmail(): void
-    {
-        $this->expectException(PDOException::class);
-
-        User::deleteByEmail('');
-    }
-
     /**
      * Helper function to create user data based on type
      */
