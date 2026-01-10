@@ -4,51 +4,54 @@ namespace Services\Auth;
 
 use Core\Utilis\EmailService;
 use Models\SAE\Repository\SAESubjectRepository;
+use DateTime;
 
 /**
- * Service responsible for sending password reset emails for SAE Manager.
+ * Service responsible for sending reminder emails for SAE Manager.
  *
  * @category Service
  * @package  App
  * @subpackage Services/Auth
- * @author     Dinesh Radjou <dinesh.radjou@univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Services/Auth/PasswordResetMailer.php
  */
 class LastDateMailer
 {
     /**
-     * Sends a password reset email to the user.
+     * Sends a reminder email to the user about the SAE submission deadline.
      *
      * @param string $toEmail The user's email address.
-     * @param string $token   The reset token.
      * @return void
      */
-    public static function send(string $toEmail, string $token): void
+    public static function send(string $toEmail): void
     {
-        $subject = 'Rappel date limite du rendu - SAE Manager';
+        $subjectOfMail = 'Rappel date limite du rendu - SAE Manager';
 
-        $htmlMessage = self::getHtmlTemplate();
-        $textMessage = self::getTextTemplate();
+        $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
+        $repo = SAESubjectRepository::getInstance();
+        $studentsrepo = $repo->findStudentsWithSaeEndingOnDate($dateEndFocus);
 
-        $endDateFocus = date('Y-m-d') + 3; // Example: focus on subjects ending in 3 days
-
-        $subjectsEndingSoon = SAESubjectRepository::getInstance()->findByEndDate($endDateFocus);
-
-        foreach($subjectsEndingSoon ) {
-          EmailService::send($toEmail, $subject, $htmlMessage, $textMessage);  
+        foreach($studentsrepo as $student) {
+            $repoSubject = $repo->findById($student->getSaeSubjectId());
+            $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
+            $textMessage = self::getTextTemplate($student, $repoSubject);
+            EmailService::send($toEmail, $subjectOfMail, $htmlMessage, $textMessage);  
         }
     }
 
     /**
      * Returns the HTML template.
      *
-     * @param string $resetLink The reset link.
+     * @param object $subject The SAE subject.
      * @return string
      */
-    private static function getHtmlTemplate(): string
+    private static function getHtmlTemplate($student, $subject): string
     {
         $year = date('Y');
+        $endDate = $subject->getEndDate()->format('d/m/Y');
+        $title = htmlspecialchars($subject->getTitle());
+        $prenom = htmlspecialchars($student->getFirstName());
 
         return "
 <!DOCTYPE html>
@@ -81,23 +84,11 @@ class LastDateMailer
         </div>
         <div class='content'>
             <h2>Rappel date limite du rendu</h2>
-            <p>Bonjour,</p>
-            <p>Nous vous rappelons que la date limite du rendu approche.</p>
-            <p>Cliquez sur le bouton ci-dessous pour créer un nouveau mot de passe :</p>
-            <p style='text-align: center;'>
-                <a href='' class='button'>Réinitialiser mon mot de passe</a>
-            </p>
-            <p>Ou copiez ce lien dans votre navigateur :</p>
+            <p>Bonjour {$prenom},</p>
+            <p>Nous vous rappelons que la date limite du rendu de la SAE <strong>{$title}</strong> approche.</p>
+            <p>Vous devez rendre ce devoir le <strong>{$endDate}</strong>.</p>
+            <p>Merci de vous assurer que votre travail est bien déposé avant la date limite</p>
             <p style='word-break: break-all; color: #0072ce;'></p>
-            
-            <div class='warning'>
-                <strong>⚠️ Important :</strong>
-                <ul>
-                    <li>Ce lien est valide pendant <strong>10 minutes</strong></li>
-                    <li>Il ne peut être utilisé qu'<strong>une seule fois</strong></li>
-                    <li>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email</li>
-                </ul>
-            </div>
         </div>
         <div class='footer'>
             <p>© {$year} SAE Manager - Aix-Marseille Université</p>
@@ -111,26 +102,24 @@ class LastDateMailer
     /**
      * Returns the plain text template.
      *
-     * @param string $resetLink The reset link.
+     * @param object $subject The SAE subject.
      * @return string
      */
-    private static function getTextTemplate(): string
+    private static function getTextTemplate($student, $subject): string
     {
+        $title = htmlspecialchars($subject->getTitle());
+        $prenom = htmlspecialchars($student->getFirstName());
+        $endDate = $subject->getEndDate()->format('d/m/Y');
         return "
-Réinitialisation de votre mot de passe - SAE Manager
+Rappel date limite du rendu - SAE Manager
 
-Bonjour,
+Bonjour {$prenom},
 
-Vous avez demandé la réinitialisation de votre mot de passe sur SAE Manager.
-Pour créer un nouveau mot de passe, cliquez sur ce lien :
+Nous vous rappelons que la date limite du rendu de la SAE {$title} approche.
+Vous devez rendre ce devoir le {$endDate}.
+Merci de vous assurer que votre travail est bien déposé avant la date limite.
 
-
-IMPORTANT :
-- Ce lien est valide pendant 10 minutes
-- Il ne peut être utilisé qu'une seule fois
-- Si vous n'avez pas demandé cette réinitialisation, ignorez cet email
-
-© 2025 SAE Manager - Aix-Marseille Université
+© 2026 SAE Manager - Aix-Marseille Université
 Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }
