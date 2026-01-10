@@ -38,9 +38,9 @@ class SAESubject extends BaseModel
     /**
      * The client ID.
      *
-     * @var integer
+     * @var integer|null
      */
-    protected int $client_id;
+    protected ?int $client_id = null;
 
     /**
      * The subject name.
@@ -92,7 +92,7 @@ class SAESubject extends BaseModel
             $errors[] = 'L\'ID du professeur responsable doit être valide';
         }
 
-        if ($this->client_id <= 0) {
+        if ($this->client_id !== null && $this->client_id <= 0) {
             $errors[] = 'L\'ID du client doit être valide';
         }
 
@@ -210,9 +210,9 @@ class SAESubject extends BaseModel
     /**
      * Gets the client ID.
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getClientId(): int
+    public function getClientId(): ?int
     {
         return $this->client_id;
     }
@@ -220,10 +220,10 @@ class SAESubject extends BaseModel
     /**
      * Sets the client ID.
      *
-     * @param integer $client_id The client ID.
+     * @param integer|null $client_id The client ID.
      * @return void
      */
-    public function setClientId(int $client_id): void
+    public function setClientId(?int $client_id): void
     {
         $this->client_id = $client_id;
     }
