@@ -101,30 +101,28 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the amUemail with the first and last name
-     * as a amU email should be firstname.lastname[numberIfDuplicated]@(etu\.)?univ-amu\.fr$/
+     * Returns the validity of the AMU prefix with the first and last name.
+     * The prefix should follow the format: firstname.lastname[.number]
      *
-     * @param string $email The value to validate.
-     * @param string $lname The last name of the user.
+     * @param string $email The email prefix to validate.
      * @param string $fname The first name of the user.
+     * @param string $lname The last name of the user.
      *
      * @return boolean
      */
-    protected function isOwnAmuPrefix(string $prefix, string $fname, string $lname): bool
+    protected function isOwnAmuPrefix(string $email, string $fname, string $lname): bool
     {
-        // Nettoyage pour la comparaison (minuscules et sans accents)
-        // Idéalement, utilise une fonction de suppression d'accents
         $f = mb_strtolower(trim($fname), 'UTF-8');
         $l = mb_strtolower(trim($lname), 'UTF-8');
 
         $escapedF = preg_quote($f, '/');
         $escapedL = preg_quote($l, '/');
 
-        // Regex : début, prenom, point, nom, optionnel(.chiffres), fin
         $pattern = "/^{$escapedF}\.{$escapedL}(\.[0-9]+)?$/i";
 
-        return (bool) preg_match($pattern, $prefix);
+        return (bool) preg_match($pattern, $email);
     }
+
     /**
      * Check if Amuid is valid with specific regex.
      *
