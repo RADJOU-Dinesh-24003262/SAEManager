@@ -25,6 +25,8 @@ class ManageGroupsController extends BaseController
      * Controls the rendering of the group management page.
      *
      * @return void
+     *
+     * @throws ExceptionAccessDenied If the user doesn't have permission to manage groups.
      */
     #[Override]
     public function control(): void
@@ -32,12 +34,17 @@ class ManageGroupsController extends BaseController
         $this->ensureProfessor();
 
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
+        if ($path === false || $path === null) {
             header('Location: /dashboard');
             exit;
         }
+
+        if (!preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
+            header('Location: /dashboard');
+            exit;
+        }
+
+        $saeId = intval($matches[1]);
 
         try {
             $sae = SAE::getInstance();
@@ -73,6 +80,6 @@ class ManageGroupsController extends BaseController
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return preg_match('/^\/sae\/\d+\/groups$/', $path) && $method === "GET";
+        return preg_match('/^\/sae\/\d+\/groups$/', $path) === 1 && $method === "GET";
     }
 }
