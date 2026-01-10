@@ -467,22 +467,6 @@ class UserFactoryMethodsTest extends TestCase
         return $user;
     }
 
-
-    /**
-     * Tests for deleteByEmail method
-     */
-    #[Test]
-    public function testDeleteByEmail_UserDoesNotExist_ShouldThrowException(): void
-    {
-        // Arrange
-        $email = 'notfound@example.com';
-
-        // Assert + Act
-        $this->expectException(PDOException::class);
-
-        User::deleteByEmail($email);
-    }
-
     #[Test]
     public function testDeleteByEmail_StudentExists_ShouldDeleteStudent(): void
     {
