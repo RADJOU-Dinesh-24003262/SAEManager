@@ -85,8 +85,7 @@ class CreateSaePostController implements ControllerInterface
                 'subject_name' => $data['nameSae'],
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['date_rendu'],
-                'file_path' => $filePath,
-                'competences' => isset($data['competence']) ? $data['competence'] : []
+                'file_path' => $filePath
             ];
 
             SAE::getInstance()->createSAE($user, $saeData);

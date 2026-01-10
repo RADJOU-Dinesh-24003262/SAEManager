@@ -61,9 +61,7 @@ abstract class BaseController implements ControllerInterface
     protected function ensureProfessor(): void
     {
         // Ensure user is loaded.
-        if ($this->user == null) {
-            $this->ensureAuthenticated();
-        }
+        $this->ensureAuthenticated();
 
         if (!$this->user->isProfessor()) {
             SessionService::setFlash('errors', ['Accès réservé aux professeurs.']);

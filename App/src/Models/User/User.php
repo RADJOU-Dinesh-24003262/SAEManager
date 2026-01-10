@@ -141,7 +141,7 @@ abstract class User
     {
         $connection = Database::getInstance();
         $stmt = $connection->prepare(
-            'SELECT email, hashed_password, user_type FROM users WHERE email = :email'
+            'SELECT email, hashed_password, user_type FROM users WHERE email = LOWER(:email)'
         );
         $stmt->execute(['email' => $data['email']]);
 
@@ -195,7 +195,7 @@ abstract class User
 
             $stmt = $connection->prepare(
                 'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
-                 VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
+                 VALUES (:first_name, :last_name, LOWER(:email), :phone, :hashed_password, :user_type)'
             );
 
             $stmt->execute(
@@ -214,7 +214,7 @@ abstract class User
                 ]
             );
 
-            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
+            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $this->email]);
             $userId = (int) $stmt->fetchColumn(0);
 
@@ -271,7 +271,7 @@ abstract class User
         try {
             $db = Database::getInstance();
 
-            $stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt = $db->prepare('SELECT * FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -321,7 +321,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
+            $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = LOWER(:email)');
 
             if (!$stmt) {
                 throw new PDOException('Impossible de récuperer vos données.');
@@ -353,7 +353,7 @@ abstract class User
             $hashed_password = password_hash($newPassword, PASSWORD_ARGON2ID);
 
             $stmt = $db->prepare(
-                'UPDATE users SET hashed_password = :password_hash WHERE email = :email'
+                'UPDATE users SET hashed_password = :password_hash WHERE email = LOWER(:email)'
             );
 
             $stmt->execute(
@@ -384,7 +384,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
+            $stmt = $db->prepare('DELETE FROM users WHERE email = LOWER(:email); ');
 
             $stmt->execute(['email' => $email]);
 
@@ -412,7 +412,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
+            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = LOWER(:email)');
             $stmt->execute(['value' => $value, 'email' => $email]);
 
             if ($stmt->rowCount() === 0) {
