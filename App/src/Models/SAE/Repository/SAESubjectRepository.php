@@ -220,6 +220,7 @@ class SAESubjectRepository extends BaseRepository
             ]);
 
             $id = intval($stmt->fetchColumn());
+            $stmt->closeCursor();
             $entity->setSaeSubjectId($id);
 
             $this->connection->commit();

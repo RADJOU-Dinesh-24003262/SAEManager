@@ -62,11 +62,4 @@ abstract class BaseModel
 
         return $data;
     }
-
-    /**
-     * Abstract method for model-specific validation
-     *
-     * @return array<int, string> Array of errors (empty if valid)
-     */
-    abstract public function validate(): array;
 }
