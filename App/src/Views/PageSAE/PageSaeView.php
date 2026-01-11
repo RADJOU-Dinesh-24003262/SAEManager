@@ -62,9 +62,13 @@ class PageSaeView extends BaseSaeView
     #[Override]
     protected function templateKeys(): array
     {
+        $errors = $this->data['errors'] ?? [];
+
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
             [
+                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+                'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
                 'SAE_CONTENT' => $this->getDescriptionSae(),
                 'SAE_CONTACTS' => $this->getContactsSae()
             ]
