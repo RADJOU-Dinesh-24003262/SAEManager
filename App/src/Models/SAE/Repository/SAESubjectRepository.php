@@ -426,7 +426,8 @@ class SAESubjectRepository extends BaseRepository
                 ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['end_date' => $endDate]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_map(fn($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération étudiants avec SAE finissant à la date : ' . $e->getMessage());
             return [];
@@ -451,7 +452,8 @@ class SAESubjectRepository extends BaseRepository
                 ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['begin_date' => $beginDate]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return array_map(fn($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération étudiants avec SAE commencant à la date : ' . $e->getMessage());
             return [];
