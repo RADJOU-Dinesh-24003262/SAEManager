@@ -4,6 +4,8 @@ namespace Services\Auth;
 
 use Core\Utilis\EmailService;
 use Models\SAE\Repository\SAESubjectRepository;
+use Models\User\Student;
+use Models\SAE\SAESubject;
 use DateTime;
 
 /**
@@ -30,6 +32,7 @@ class AttributionMailer
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
 
         $repo = SAESubjectRepository::getInstance();
+
         $studentsrepo = $repo->findStudentsWithSaeBeginningOnDate($dateBeginFocus);
 
         foreach ($studentsrepo as $student) {
@@ -44,15 +47,15 @@ class AttributionMailer
     /**
      * Returns the HTML template.
      *
-     * @param object $student The student.
-     * @param object $subject The SAE subject.
+     * @param Student $student The student.
+     * @param SAESubject $subject The SAE subject.
      * @return string
      */
-    private static function getHtmlTemplate($student, $subject): string
+    private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $beginDate = $subject->getBeginDate()->format('Y-m-d');
-        $title = htmlspecialchars($subject->getTitle());
+        $beginDate = $subject->getBeginDate() ??  'Date non disponible';
+        $title = htmlspecialchars($subject->getSubjectName() ?? 'Titre non disponible');
         $prenom = htmlspecialchars($student->getFirstName());
 
         return "
@@ -109,9 +112,9 @@ class AttributionMailer
      */
     private static function getTextTemplate($student, $subject): string
     {
-        $title = htmlspecialchars($subject->getTitle());
+        $beginDate = $subject->getBeginDate() ??  'Date non disponible';
+        $title = htmlspecialchars($subject->getSubjectName() ?? 'Titre non disponible');
         $prenom = htmlspecialchars($student->getFirstName());
-        $beginDate = $subject->getBeginDate()->format('Y-m-d');
         return "
 Rappel date limite du rendu - SAE Manager
 
