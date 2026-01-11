@@ -32,12 +32,12 @@ class AttributionMailer
         $repo = SAESubjectRepository::getInstance();
         $studentsrepo = $repo->findStudentsWithSaeBeginningOnDate($dateBeginFocus);
 
-        foreach($studentsrepo as $student) {
+        foreach ($studentsrepo as $student) {
             $repoSubject = $repo->findById($student->getSaeSubjectId());
             $emailStudent = $student->getEmail();
             $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
             $textMessage = self::getTextTemplate($student, $repoSubject);
-            EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);  
+            EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
         }
     }
 
