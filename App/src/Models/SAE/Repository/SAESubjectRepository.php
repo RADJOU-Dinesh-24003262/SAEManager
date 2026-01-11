@@ -419,11 +419,10 @@ class SAESubjectRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email
                 FROM sae_subjects s
-                JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
-                JOIN students st ON sg.sae_group_id = st.sae_group_id
-                JOIN users u ON st.student_id = u.user_id
+                JOIN participated_in pi ON s.sae_subject_id = pi.sae_subject_id
+                JOIN users u ON pi.student_id = u.user_id
                 WHERE s.end_date = :end_date
                 ORDER BY u.last_name, u.first_name'
             );
