@@ -57,6 +57,20 @@ class ToDoList extends BaseModel
     protected string $tododesc;
 
     /**
+     * The checked status of the task.
+     *
+     * @var boolean $checked
+     */
+    protected bool $checked;
+
+    /**
+     * The priority of the task (1: High, 2: Medium, 3: Low).
+     *
+     * @var integer $priority
+     */
+    protected int $priority = 2;
+
+    /**
      * Creates an instance of the class.
      *
      * This method creates a user object with the data array given in parameters.
@@ -106,6 +120,22 @@ class ToDoList extends BaseModel
     }
 
     /**
+     * @return boolean the checked status of the task.
+     */
+    public function isChecked(): bool
+    {
+        return $this->checked;
+    }
+
+    /**
+     * @return integer the priority of the task.
+     */
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    /**
      * @param  integer $groupId The id of the group of SAE.
      * @return void
      */
@@ -142,6 +172,24 @@ class ToDoList extends BaseModel
     }
 
     /**
+     * @param  boolean $checked The checked status of the task.
+     * @return void
+     */
+    public function setChecked(bool $checked): void
+    {
+        $this->checked = $checked;
+    }
+
+    /**
+     * @param  integer $priority The priority of the task.
+     * @return void
+     */
+    public function setPriority(int $priority): void
+    {
+        $this->priority = $priority;
+    }
+
+    /**
      * Saves a todolist object into the database
      *
      * Tries to save a new todolist object into the database,
@@ -155,14 +203,15 @@ class ToDoList extends BaseModel
 
 
         $stmt = $connection->prepare(
-            'INSERT INTO sae_todolists(sae_group_id, tododesc, checked)
-                                            VALUES (:sae_group_id, :tododesc, :checked)'
+            'INSERT INTO sae_todolists(sae_group_id, tododesc, checked, priority)
+                                            VALUES (:sae_group_id, :tododesc, :checked, :priority)'
         );
         $stmt->execute(
             [
                 'sae_group_id' => $this->groupId,
                 'tododesc' => $this->tododesc,
                 'checked' => false,
+                'priority' => $this->priority
             ]
         );
 
@@ -194,9 +243,11 @@ class ToDoList extends BaseModel
 
             if ($data) {
                 $this->sae_subject_id = $data['sae_subject_id'];
-                $this->todo_id = $data['todo_id'];
+                $this->todo_id = $data['todoid'];
                 $this->tododesc = $data['tododesc'];
                 $this->groupId = $data['sae_group_id'];
+                $this->checked = (bool) $data['checked'];
+                $this->priority = (int) $data['priority'];
             } else {
                 throw new ExceptionFetchDataBD();
             }
@@ -225,6 +276,130 @@ class ToDoList extends BaseModel
             return $stmt->fetchColumn() > 0;
         } catch (PDOException $e) {
             error_log("Erreur vérification de votre groupe: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Fetches all tasks for a specific group.
+     * Sorted by: Unchecked first, then by Priority (High=1 to Low=3), then by ID.
+     *
+     * @param integer $groupId The ID of the SAE group.
+     * @return array<int, array<string, mixed>> List of tasks.
+     */
+    public static function getAllTasks(int $groupId): array
+    {
+        try {
+            $connection = Database::getInstance();
+            $stmt = $connection->prepare(
+                'SELECT * FROM sae_todolists 
+                 WHERE sae_group_id = :group_id 
+                 ORDER BY checked ASC, priority ASC, todoid ASC'
+            );
+            $stmt->execute(['group_id' => $groupId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur récupération des tâches : " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Updates the checked status of a specific task.
+     *
+     * @param integer $todoId  The ID of the to-do item.
+     * @param boolean $checked The new checked status.
+     * @return boolean True on success, false on failure.
+     */
+    public static function updateCheckedStatus(int $todoId, bool $checked): bool
+    {
+
+        try {
+            $connection = Database::getInstance();
+            $stmt = $connection->prepare(
+                'UPDATE sae_todolists SET checked = :checked WHERE todoid = :todo_id'
+            );
+            $stmt->execute([
+                'checked' => (int) $checked,
+                'todo_id' => $todoId
+            ]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Erreur mise à jour statut tâche : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Updates the priority of a specific task.
+     *
+     * @param integer $todoId   The ID of the to-do item.
+     * @param integer $priority The new priority level.
+     * @return boolean True on success, false on failure.
+     */
+    public static function updatePriority(int $todoId, int $priority): bool
+    {
+        try {
+            $connection = Database::getInstance();
+            $stmt = $connection->prepare(
+                'UPDATE sae_todolists SET priority = :priority WHERE todoid = :todo_id'
+            );
+            $stmt->execute([
+                'priority' => $priority,
+                'todo_id' => $todoId
+            ]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Erreur mise à jour priorité tâche : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Creates a new task for a specific group with optional priority.
+     *
+     * @param integer $groupId     The ID of the SAE group.
+     * @param string  $description The description of the new task.
+     * @param integer $priority    The priority of the task.
+     * @return integer|false The ID of the new task on success, false on failure.
+     */
+    public static function createTask(int $groupId, string $description, int $priority = 2): int|false
+    {
+        try {
+            $connection = Database::getInstance();
+            $stmt = $connection->prepare(
+                'INSERT INTO sae_todolists(sae_group_id, tododesc, checked, priority)
+                 VALUES (:sae_group_id, :tododesc, FALSE, :priority)'
+            );
+            $stmt->execute([
+                'sae_group_id' => $groupId,
+                'tododesc' => $description,
+                'priority' => $priority
+            ]);
+
+            // Return the ID of the newly inserted task.
+            return (int) $connection->lastInsertId();
+        } catch (PDOException $e) {
+            error_log("Erreur création nouvelle tâche : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a task by ID.
+     *
+     * @param integer $todoId The ID of the to-do item to delete.
+     * @return boolean True on success, false on failure.
+     */
+    public static function deleteTask(int $todoId): bool
+    {
+        try {
+            $connection = Database::getInstance();
+            $stmt = $connection->prepare('DELETE FROM sae_todolists WHERE todoid = :todo_id');
+            $stmt->execute(['todo_id' => $todoId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Erreur suppression tâche : " . $e->getMessage());
             return false;
         }
     }

@@ -62,7 +62,7 @@ class CreateSaeControllerUnitTest extends TestCase
         if (method_exists($returnType, 'getName')) {
             $this->assertEquals('void', $returnType->getName());
         } else {
-             $this->assertEquals('void', (string)$returnType);
+            $this->assertEquals('void', (string)$returnType);
         }
     }
 
