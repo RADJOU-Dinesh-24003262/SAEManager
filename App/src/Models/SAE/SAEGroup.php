@@ -32,31 +32,10 @@ class SAEGroup extends BaseModel
     protected int $sae_subject_id;
 
     /**
-     * Constructor.
-     *
-     * @param array<string, mixed> $data Initial data.
+     * The professor ID who manages the group.
+     * @var integer|null
      */
-    public function __construct(array $data = [])
-    {
-        $this->hydrate($data);
-    }
-
-    /**
-     * Validates the group data.
-     *
-     * @return array<int, string> Array of validation errors (empty if valid).
-     */
-    #[Override]
-    public function validate(): array
-    {
-        $errors = [];
-
-        if ($this->sae_subject_id <= 0) {
-            $errors[] = 'L\'ID du sujet SAE doit être valide';
-        }
-
-        return $errors;
-    }
+    protected ?int $professor_id = null;
 
     /**
      * Converts to array.
@@ -69,6 +48,7 @@ class SAEGroup extends BaseModel
         return [
             'sae_group_id' => $this->sae_group_id,
             'sae_subject_id' => $this->sae_subject_id,
+            'professor_id' => $this->professor_id,
         ];
     }
 
@@ -112,5 +92,26 @@ class SAEGroup extends BaseModel
     public function setSaeSubjectId(int $sae_subject_id): void
     {
         $this->sae_subject_id = $sae_subject_id;
+    }
+
+    /**
+     * Gets the professor ID.
+     *
+     * @return integer|null
+     */
+    public function getProfessorId(): ?int
+    {
+        return $this->professor_id;
+    }
+
+    /**
+     * Sets the professor ID.
+     *
+     * @param integer|null $professor_id The professor ID.
+     * @return void
+     */
+    public function setProfessorId(?int $professor_id): void
+    {
+        $this->professor_id = $professor_id;
     }
 }

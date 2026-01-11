@@ -221,15 +221,17 @@ class Database extends PDO
         CREATE TABLE sae_subjects (
             sae_subject_id INTEGER PRIMARY KEY AUTOINCREMENT,
             responsible_prof_id INTEGER NOT NULL REFERENCES professors(professor_id) ON DELETE CASCADE,
-            client_id INTEGER NOT NULL REFERENCES clients(client_id) ON DELETE CASCADE,
+            client_id INTEGER REFERENCES clients(client_id) ON DELETE CASCADE,
             subject_name TEXT NOT NULL,
             begin_date DATE NOT NULL,
-            end_date DATE NOT NULL
+            end_date DATE NOT NULL,
+            file_path TEXT
         );
 
         CREATE TABLE sae_groups (
             sae_group_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE
+            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
+            professor_id INTEGER REFERENCES professors(professor_id) ON DELETE SET NULL
         );
 
         CREATE TABLE students (
@@ -243,22 +245,25 @@ class Database extends PDO
             sae_group_id INTEGER REFERENCES sae_groups(sae_group_id)
         );
 
+        CREATE TABLE participated_in (
+            student_id INTEGER NOT NULL REFERENCES students(student_id) ON DELETE CASCADE,
+            sae_group_id INTEGER NOT NULL REFERENCES sae_groups(sae_group_id) ON DELETE CASCADE,
+            sae_subject_id INTEGER REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
+            PRIMARY KEY (student_id, sae_group_id)
+        );
+
         CREATE TABLE competences (
             competence_name TEXT NOT NULL,
             sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
             PRIMARY KEY (competence_name, sae_subject_id)
         );
 
-        CREATE TABLE sae_professor_groups (
-            sae_subject_id INTEGER NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
-            professor_id INTEGER NOT NULL REFERENCES professors(professor_id) ON DELETE CASCADE,
-            PRIMARY KEY (sae_subject_id, professor_id)
-        );
 
         CREATE TABLE sae_todolists (
             todoid INTEGER PRIMARY KEY AUTOINCREMENT,
             sae_group_id INTEGER REFERENCES sae_groups(sae_group_id),
-            tododesc TEXT
+            tododesc TEXT,
+            checked INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE password_resets (
@@ -322,15 +327,17 @@ class Database extends PDO
         CREATE TABLE sae_subjects (
             sae_subject_id SERIAL PRIMARY KEY,
             responsible_prof_id INT NOT NULL REFERENCES professors(professor_id) ON DELETE CASCADE,
-            client_id INT NOT NULL REFERENCES clients(client_id) ON DELETE CASCADE,
+            client_id INT REFERENCES clients(client_id) ON DELETE CASCADE,
             subject_name VARCHAR(255) NOT NULL,
             begin_date DATE NOT NULL,
-            end_date DATE NOT NULL
+            end_date DATE NOT NULL,
+            file_path TEXT
         );
 
         CREATE TABLE sae_groups (
             sae_group_id SERIAL PRIMARY KEY,
-            sae_subject_id INT NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE
+            sae_subject_id INT NOT NULL REFERENCES sae_subjects(sae_subject_id) ON DELETE CASCADE,
+            professor_id INT REFERENCES professors(professor_id) ON DELETE SET NULL
         );
 
         CREATE TABLE students (
@@ -359,7 +366,8 @@ class Database extends PDO
         CREATE TABLE sae_todolists (
             todoid SERIAL PRIMARY KEY,
             sae_group_id INT REFERENCES sae_groups(sae_group_id),
-            tododesc TEXT
+            tododesc TEXT,
+            checked BOOLEAN NOT NULL DEFAULT FALSE
         );
 
         CREATE TABLE password_resets (

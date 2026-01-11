@@ -17,6 +17,16 @@ use ReflectionProperty;
 abstract class BaseModel
 {
     /**
+     * Constructor.
+     *
+     * @param array<string, mixed> $data Initial data to hydrate the object with.
+     */
+    public function __construct(array $data = [])
+    {
+        $this->hydrate($data);
+    }
+
+    /**
      * Hydrates the object with the provided data.
      *
      * @param array<string, mixed> $data Data to hydrate with.
@@ -52,11 +62,4 @@ abstract class BaseModel
 
         return $data;
     }
-
-    /**
-     * Abstract method for model-specific validation
-     *
-     * @return array<int, string> Array of errors (empty if valid)
-     */
-    abstract public function validate(): array;
 }
