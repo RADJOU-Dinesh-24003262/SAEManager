@@ -13,6 +13,7 @@ use DateTime;
  * @package  App
  * @subpackage Services/Auth
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Services/Auth/PasswordResetMailer.php
  */
@@ -43,6 +44,7 @@ class LastDateMailer
     /**
      * Returns the HTML template.
      *
+     * @param object $student The student.
      * @param object $subject The SAE subject.
      * @return string
      */
@@ -102,6 +104,7 @@ class LastDateMailer
     /**
      * Returns the plain text template.
      *
+     * @param object $student The student.
      * @param object $subject The SAE subject.
      * @return string
      */

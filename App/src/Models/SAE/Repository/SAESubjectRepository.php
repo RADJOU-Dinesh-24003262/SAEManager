@@ -408,7 +408,6 @@ class SAESubjectRepository extends BaseRepository
         }
     }
 
-
     /**
      * Finds all students with SAE ending on the given date.
      *
@@ -430,6 +429,31 @@ class SAESubjectRepository extends BaseRepository
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log('Erreur récupération étudiants avec SAE finissant à la date : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Finds all students with SAE beginning on the given date.
+     *
+     * @param string $beginDate The begin date of the SAE subjects.
+     * @return array The list of students with SAE beginning on the given date.
+     */
+    public function findStudentsWithSaeBeginningOnDate(string $beginDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email
+                FROM sae_subjects s
+                JOIN participated_in pi ON s.sae_subject_id = pi.sae_subject_id
+                JOIN users u ON pi.student_id = u.user_id
+                WHERE s.begin_date = :begin_date
+                ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['begin_date' => $beginDate]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération étudiants avec SAE commencant à la date : ' . $e->getMessage());
             return [];
         }
     }
