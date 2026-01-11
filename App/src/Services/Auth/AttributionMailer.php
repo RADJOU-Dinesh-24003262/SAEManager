@@ -5,6 +5,7 @@ namespace Services\Auth;
 use Core\Utilis\EmailService;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\User\Student;
+use Models\User\User;
 use Models\SAE\SAESubject;
 use DateTime;
 
