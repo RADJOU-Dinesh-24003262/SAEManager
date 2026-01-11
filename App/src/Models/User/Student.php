@@ -336,4 +336,35 @@ class Student extends User
     {
         return $this->student_id;
     }
+
+    // ... (previous code of Student.php) ...
+
+    /**
+     * The SAE Subject ID.
+     * Added to allow the repository to inject the subject ID directly into the student object.
+     *
+     * @var integer|null
+     */
+    protected ?int $sae_subject_id = null;
+
+    /**
+     * Gets the SAE Subject ID.
+     *
+     * @return integer|null
+     */
+    public function getSaeSubjectId(): ?int
+    {
+        return $this->sae_subject_id;
+    }
+
+    /**
+     * Sets the SAE Subject ID.
+     *
+     * @param integer $sae_subject_id The SAE Subject ID.
+     * @return void
+     */
+    public function setSaeSubjectId(int $sae_subject_id): void
+    {
+        $this->sae_subject_id = $sae_subject_id;
+    }
 }

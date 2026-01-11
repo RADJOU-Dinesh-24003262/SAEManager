@@ -37,7 +37,15 @@ class AttributionMailer
         $studentsrepo = $repo->findStudentsWithSaeBeginningOnDate($dateBeginFocus);
 
         foreach ($studentsrepo as $student) {
-            $repoSubject = $repo->findById($student->getSaeSubjectId());
+            $saeId = $student->getSaeSubjectId();
+            if ($saeId === null) {
+                continue;
+            }
+            $repoSubject = $repo->findById($saeId);
+            if ($repoSubject === null) {
+                continue;
+            }
+
             $emailStudent = $student->getEmail();
             $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
             $textMessage = self::getTextTemplate($student, $repoSubject);
@@ -55,9 +63,9 @@ class AttributionMailer
     private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $beginDate = $subject->getBeginDate();
-        $title = htmlspecialchars($subject->getSubjectName());
-        $prenom = htmlspecialchars($student->getFirstName());
+        $beginDate = $subject->getBeginDate() ?? 'Date inconnue';
+        $title = htmlspecialchars($subject->getSubjectName() ?? 'Sujet inconnu');
+        $prenom = htmlspecialchars($student->getFirstName() ?? 'Étudiant');
 
         return "
 <!DOCTYPE html>
