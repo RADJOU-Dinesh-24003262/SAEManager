@@ -132,9 +132,11 @@ jobs:
           publish_dir: ./docs/api
           publish_branch: gh-pages
           force_orphan: true
+          enable_jekyll: false
 
       # Update UML in asset/UML
       - name : Update UML diagram
+        if: github.ref == 'refs/heads/dev'  && github.event_name == 'push'
         run: |
           composer require --dev smeghead/php-class-diagram
           sudo apt-get install -y default-jre graphviz
@@ -146,6 +148,7 @@ jobs:
           echo "UML diagram generated successfully"
 
       - name: Commit UML changes
+        if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
