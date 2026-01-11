@@ -90,7 +90,7 @@ class SAEGroupRepository extends BaseRepository
             $stmt->execute(['sae_id' => $saeId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($row) => new SAEGroup($row), $data);
+            return array_map(fn ($row) => new SAEGroup($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération groupes : ' . $e->getMessage());
             return [];
@@ -115,7 +115,7 @@ class SAEGroupRepository extends BaseRepository
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $professorId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($row) => new SAEGroup($row), $data);
+            return array_map(fn ($row) => new SAEGroup($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération groupes prof : ' . $e->getMessage());
             return [];

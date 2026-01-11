@@ -68,7 +68,7 @@ class ManageGroupsPostController extends BaseController
 
         // If professorId is false (invalid) or null (not set), treat it as null (no professor).
         if ($professorId == false) {
-             $professorId = null;
+            $professorId = null;
         }
 
         SAE::getInstance()->createGroup($this->user, $saeId, $professorId);
@@ -87,7 +87,7 @@ class ManageGroupsPostController extends BaseController
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         if (!$groupId) {
-             throw new \Exception("ID du groupe manquant");
+            throw new \Exception("ID du groupe manquant");
         }
         SAE::getInstance()->deleteGroup($this->user, $groupId);
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
@@ -106,7 +106,7 @@ class ManageGroupsPostController extends BaseController
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         $studentId = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         if (!$groupId || !$studentId) {
-             throw new \Exception("Données manquantes");
+            throw new \Exception("Données manquantes");
         }
         SAE::getInstance()->assignStudentToGroup($this->user, $studentId, $groupId);
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
@@ -125,7 +125,7 @@ class ManageGroupsPostController extends BaseController
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         $studentId = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         if (!$groupId || !$studentId) {
-             throw new \Exception("Données manquantes");
+            throw new \Exception("Données manquantes");
         }
         SAE::getInstance()->removeStudentFromGroup($this->user, $studentId, $groupId);
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');

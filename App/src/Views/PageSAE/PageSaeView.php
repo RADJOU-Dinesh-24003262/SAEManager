@@ -111,7 +111,7 @@ class PageSaeView extends BaseSaeView
                     }
                 }
             }
-             $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
+            $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
         }
 
         if (!empty($associatedProfsToDisplay)) {
@@ -187,7 +187,7 @@ class PageSaeView extends BaseSaeView
 
                 $content .= '</div>';
             } else {
-                 $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+                $content .= '<p>Aucun groupe assigné pour le moment.</p>';
             }
         }
 

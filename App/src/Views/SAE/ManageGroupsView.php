@@ -221,10 +221,10 @@ class ManageGroupsView extends BaseSaeView
         $html = '';
 
         if (isset($this->data['success']) && !empty($this->data['success'])) {
-             $html .= '<div class="alert alert-success">' . $this->data['success'] . '</div>';
+            $html .= '<div class="alert alert-success">' . $this->data['success'] . '</div>';
         }
         if (isset($this->data['errors']) && !empty($this->data['errors'])) {
-             $html .= $this->renderErrorMessages($this->data['errors']);
+            $html .= $this->renderErrorMessages($this->data['errors']);
         }
 
         return $html;

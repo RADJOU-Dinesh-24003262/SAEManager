@@ -36,10 +36,21 @@ class ToDoListTest extends TestCase
         $todo->setSaeSubjectId(10);
         $todo->setSaeGroupId(5);
         $todo->setTododesc('New task');
+        $todo->setChecked(true);
+        $todo->setPriority(1);
 
         $this->assertEquals(1, $todo->getTodoId());
         $this->assertEquals(10, $todo->getSaeSubjectId());
         $this->assertEquals(5, $todo->getSaeGroupId());
         $this->assertEquals('New task', $todo->getTodoDesc());
+        $this->assertTrue($todo->isChecked());
+        $this->assertEquals(1, $todo->getPriority());
+    }
+
+    #[Test]
+    public function defaultPriorityIsMedium(): void
+    {
+        $todo = new ToDoList();
+        $this->assertEquals(2, $todo->getPriority()); // Default should be 2 (Medium)
     }
 }
