@@ -32,6 +32,17 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->validator = new ValidationServiceRegister();
     }
 
+    // Tests for email validation
+    #[Test]
+    public function validAmuEmailIsAccepted(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $data = $this->getValidStudentData();
+        $escaped = $this->validator->escape($data);
+        $this->validator->validate($escaped);
+    }
+
     // Tests for password validation
     public static function invalidPasswordsProvider(): array
     {
@@ -102,6 +113,19 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'mobile_07' => ['0712345678'],
             'landline_04' => ['0412345678']
         ];
+    }
+
+    #[Test]
+    #[DataProvider('validPhoneNumbersProvider')]
+    public function validPhoneNumbersAreAccepted(string $phone): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $data = $this->getValidStudentData();
+        $data['phone'] = $phone;
+
+        $escaped = $this->validator->escape($data);
+        $this->validator->validate($escaped);
     }
 
     // Tests for student-specific fields
@@ -242,6 +266,28 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->validator->validate($escaped);
     }
 
+    // Tests for professor and client
+    #[Test]
+    public function professorDoesNotNeedStudentFields(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $data = [
+            'amu_id' => 'p12343305',
+            'first_name' => 'Prof',
+            'last_name' => 'Dupont',
+            'user_type' => 'professor',
+            'email' => 'prof.dupont',
+            'password' => 'SecurePass123',
+            'passwordverif' => 'SecurePass123',
+            'phone' => '0612345678',
+            'terms' => 'on'
+        ];
+
+        $escaped = $this->validator->escape($data);
+        $this->validator->validate($escaped);
+    }
+
     #[Test]
     public function clientDoesNotNeedStudentFields(): void
     {
@@ -331,7 +377,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'student',
-            'email' => 'jean.dupont@etu.univ-amu.fr',
+            'email' => 'jean.dupont',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
