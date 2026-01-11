@@ -55,8 +55,8 @@ class AttributionMailer
     private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $beginDate = $subject->getBeginDate() ??  'Date non disponible';
-        $title = htmlspecialchars($subject->getSubjectName() ?? 'Titre non disponible');
+        $beginDate = $subject->getBeginDate();
+        $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
 
         return "

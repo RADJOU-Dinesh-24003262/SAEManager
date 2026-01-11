@@ -413,12 +413,7 @@ class SAESubjectRepository extends BaseRepository
      * Finds all students with SAE ending on the given date.
      *
      * @param string $endDate The end date of the SAE subjects.
-     * @return @return array<string, array{
-     * user_id : int,
-     * first_name : string,
-     * last_name : string,
-     * email : string
-     * } The list of students with SAE ending on the given date.
+     * @return array<string, Student> The list of students with SAE ending on the given date.
      */
     public function findStudentsWithSaeEndingOnDate(string $endDate): array
     {
@@ -443,12 +438,7 @@ class SAESubjectRepository extends BaseRepository
      * Finds all students with SAE beginning on the given date.
      *
      * @param string $beginDate The begin date of the SAE subjects.
-     * @return array<string, array{
-     * user_id : int,
-     * first_name : string,
-     * last_name : string,
-     * email : string
-     * } The list of students with SAE beginning on the given date.
+     * @return array<string, Student> The list of students with SAE beginning on the given date.
      */
     public function findStudentsWithSaeBeginningOnDate(string $beginDate): array
     {
