@@ -65,7 +65,7 @@ class ManageGroupsController extends BaseController
             ]);
             $view->render();
         } catch (ExceptionAccessDenied $e) {
-            SessionService::setFlash('error', $e->getMessage());
+            SessionService::setFlash('errors', $e->getMessage());
             header('Location: /sae/' . $sae_id);
             exit;
         }
