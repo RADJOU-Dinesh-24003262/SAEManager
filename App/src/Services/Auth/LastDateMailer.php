@@ -21,10 +21,9 @@ class LastDateMailer
     /**
      * Sends a reminder email to the user about the SAE submission deadline.
      *
-     * @param string $toEmail The user's email address.
      * @return void
      */
-    public static function send(string $toEmail): void
+    public static function send(): void
     {
         $subjectOfMail = 'Rappel date limite du rendu - SAE Manager';
 
@@ -34,9 +33,10 @@ class LastDateMailer
 
         foreach($studentsrepo as $student) {
             $repoSubject = $repo->findById($student->getSaeSubjectId());
+            $emailStudent = $student->getEmail();
             $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
             $textMessage = self::getTextTemplate($student, $repoSubject);
-            EmailService::send($toEmail, $subjectOfMail, $htmlMessage, $textMessage);  
+            EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);  
         }
     }
 
@@ -49,7 +49,7 @@ class LastDateMailer
     private static function getHtmlTemplate($student, $subject): string
     {
         $year = date('Y');
-        $endDate = $subject->getEndDate()->format('d/m/Y');
+        $endDate = $subject->getEndDate()->format('Y-m-d');
         $title = htmlspecialchars($subject->getTitle());
         $prenom = htmlspecialchars($student->getFirstName());
 
@@ -109,7 +109,7 @@ class LastDateMailer
     {
         $title = htmlspecialchars($subject->getTitle());
         $prenom = htmlspecialchars($student->getFirstName());
-        $endDate = $subject->getEndDate()->format('d/m/Y');
+        $endDate = $subject->getEndDate()->format('Y-m-d');
         return "
 Rappel date limite du rendu - SAE Manager
 
@@ -122,5 +122,10 @@ Merci de vous assurer que votre travail est bien déposé avant la date limite.
 © 2026 SAE Manager - Aix-Marseille Université
 Ceci est un email automatique, merci de ne pas y répondre.
 ";
+    }
+
+    public static function main(): void
+    {
+        self::send(); // Will be changed later.
     }
 }
