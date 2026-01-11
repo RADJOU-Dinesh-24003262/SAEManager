@@ -7,6 +7,7 @@ use Override;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
+use Models\User\User;
 use Core\Models\Repository\BaseRepository;
 use PDepend\Util\Log;
 
@@ -412,7 +413,7 @@ class SAESubjectRepository extends BaseRepository
      * Finds all students with SAE ending on the given date.
      *
      * @param string $endDate The end date of the SAE subjects.
-     * @return array The list of students with SAE ending on the given date.
+     * @return User[] The list of students with SAE ending on the given date.
      */
     public function findStudentsWithSaeEndingOnDate(string $endDate): array
     {
@@ -427,7 +428,7 @@ class SAESubjectRepository extends BaseRepository
             );
             $stmt->execute(['end_date' => $endDate]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn($row) => new User($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération étudiants avec SAE finissant à la date : ' . $e->getMessage());
             return [];
@@ -438,7 +439,7 @@ class SAESubjectRepository extends BaseRepository
      * Finds all students with SAE beginning on the given date.
      *
      * @param string $beginDate The begin date of the SAE subjects.
-     * @return array The list of students with SAE beginning on the given date.
+     * @return User[] The list of students with SAE beginning on the given date.
      */
     public function findStudentsWithSaeBeginningOnDate(string $beginDate): array
     {
@@ -453,7 +454,7 @@ class SAESubjectRepository extends BaseRepository
             );
             $stmt->execute(['begin_date' => $beginDate]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn($row) => new User($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération étudiants avec SAE commencant à la date : ' . $e->getMessage());
             return [];
