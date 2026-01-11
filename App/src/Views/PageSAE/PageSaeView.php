@@ -85,23 +85,56 @@ class PageSaeView extends BaseSaeView
         // 1. Responsible Professor
         if (!empty($saeData['responsible_professor'])) {
             $prof = $saeData['responsible_professor'];
-            $name = htmlspecialchars($prof['first_name'] . ' ' . $prof['last_name']);
-            $email = htmlspecialchars($prof['email']);
+            $name = $prof['first_name'] . ' ' . $prof['last_name'];
+            $email = $prof['email'];
             $content .= '<div class="contact-section"><h5>🎓 Responsable de la SAE</h5>';
             $content .= '<p>' . $name . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-        // 2. Client (if user is not the client)
+        // 2 Associated Professors
+        $allProfs = $saeData['all_professors'];
+        $associatedProfsToDisplay = [];
+
+        if ($user->isProfessor() || $user->isClient()) {
+            $associatedProfsToDisplay = $allProfs;
+        } elseif (!empty($saeData['groups'])) {
+            foreach ($saeData['groups'] as $groupData) {
+                $profId = $groupData['group']->getProfessorId();
+                foreach ($allProfs as $p) {
+                    if ($p['user_id'] == $profId) {
+                        $associatedProfsToDisplay[] = $p;
+                        break;
+                    }
+                }
+            }
+             $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
+        }
+
+        if (!empty($associatedProfsToDisplay)) {
+            if ($user->isStudent()) {
+                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur de votre groupe</h5><ul>';
+            } else {
+                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur(s) Associé(s)</h5><ul>';
+            }
+            foreach ($associatedProfsToDisplay as $prof) {
+                $pName = $prof['first_name'] . ' ' . $prof['last_name'];
+                $pEmail = $prof['email'];
+                $content .= '<li>' . $pName . ' - <a href="mailto:' . $pEmail . '">' . $pEmail . '</a></li>';
+            }
+            $content .= '</ul></div>';
+        }
+
+        // 3. Client (if user is not the client)
         if (!$user->isClient() && !empty($saeData['client'])) {
             $client = $saeData['client'];
-            $name = htmlspecialchars($client['first_name'] . ' ' . $client['last_name']);
-            $email = htmlspecialchars($client['email']);
-            $org = !empty($client['organisation']) ? ' (' . htmlspecialchars($client['organisation']) . ')' : '';
+            $name = $client['first_name'] . ' ' . $client['last_name'];
+            $email = $client['email'];
+            $org = !empty($client['organisation']) ? ' (' . $client['organisation'] . ')' : '';
             $content .= '<div class="contact-section"><h5>🏢 Client</h5>';
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-        // 3. Groups (Students).
+        // 4. Groups (Students).
         if ($user->isStudent()) {
             // Students see their own group members.
             if (!empty($saeData['groups'])) {
@@ -113,9 +146,9 @@ class PageSaeView extends BaseSaeView
 
                     foreach ($groupData['students'] as $student) {
                         // Don't show the current user in the list? Optional. Showing everyone is fine.
-                        $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
+                        $sName = $student['first_name'] . ' ' . $student['last_name'];
 
-                        $sEmail = htmlspecialchars($student['email']);
+                        $sEmail = $student['email'];
 
                         $content .= '<li>' . $sName . ' - <a href="mailto:' . $sEmail . '">' . $sEmail . '</a></li>';
                     }
@@ -123,7 +156,7 @@ class PageSaeView extends BaseSaeView
                     $content .= '</ul></div>';
                 }
             }
-        } elseif ($user->isClient()) {
+        } else {
             // Clients see all groups.
             if (!empty($saeData['groups'])) {
                 $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
@@ -137,9 +170,9 @@ class PageSaeView extends BaseSaeView
                         $content .= '<li>Aucun étudiant.</li>';
                     } else {
                         foreach ($groupData['students'] as $student) {
-                            $sName = htmlspecialchars($student['first_name'] . ' ' . $student['last_name']);
+                            $sName = $student['first_name'] . ' ' . $student['last_name'];
 
-                            $sMail = htmlspecialchars($student['email']);
+                            $sMail = $student['email'];
 
                             $content .= '<li>' . $sName . ' - <a href="mailto:' . $sMail . '">' . $sMail . '</a></li>';
                         }
@@ -152,9 +185,6 @@ class PageSaeView extends BaseSaeView
             } else {
                  $content .= '<p>Aucun groupe assigné pour le moment.</p>';
             }
-        } elseif ($user->isProfessor()) {
-            $content .= '<p><em>La gestion détaillée des contacts 
-                        étudiants se fait via le menu "Gérer les groupes".</em></p>';
         }
 
         return $content;
@@ -174,7 +204,27 @@ class PageSaeView extends BaseSaeView
         $content .= '<p>Fin de la SAE : ' . $this->data['sae']['subject']->getEndDate() . '</p>';
 
         $profRes = $this->data['sae']['responsible_professor'];
-        $profs = $this->data['sae']['all_professors'];
+        $allProfs = $this->data['sae']['all_professors'];
+
+        $profs = [];
+
+        if ($this->data['user']->isProfessor() || $this->data['user']->isClient()) {
+            $profs = $allProfs;
+        } else {
+            if (!empty($this->data['sae']['groups'])) {
+                foreach ($this->data['sae']['groups'] as $groupData) {
+                    $profId = $groupData['group']->getProfessorId();
+                    foreach ($allProfs as $p) {
+                        if ($p['user_id'] == $profId) {
+                            $profs[] = $p;
+                            break;
+                        }
+                    }
+                }
+            }
+            $profs = array_unique($profs, SORT_REGULAR);
+        }
+
         $client = $this->data['sae']['client'] ?: 'Pas de client';
 
         $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
@@ -191,14 +241,24 @@ class PageSaeView extends BaseSaeView
         $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
 
         $content .= '<p> Le Responsable de la ressource est ' . $profResLastName . ' ' . $profResFirstName . '.</p>';
-        $content .= '<p> Les professeurs associés à la ressource est ';
-        foreach ($profs as $index => $prof) {
-            $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
-            if ($index < count($profs) - 1) {
-                $content .= ', ';
+
+        if (empty($profs)) {
+            $content .= '<p> Aucun professeur associé à la ressource.</p>';
+            return $content;
+        } else {
+            if ($this->data['user']->isStudent()) {
+                $content .= '<p> Le professeur de votre groupe est ';
+            } else {
+                $content .= '<p> Les professeurs associés à la ressource sont ';
             }
+            foreach ($profs as $index => $prof) {
+                $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
+                if ($index < count($profs) - 1) {
+                    $content .= ', ';
+                }
+            }
+            $content .= '.</p>';
         }
-        $content .= '.</p>';
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();

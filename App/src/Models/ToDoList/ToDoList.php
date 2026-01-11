@@ -4,6 +4,7 @@ namespace App\Models\ToDoList;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Models\BaseModel;
 use PDO;
 use PDOException;
 
@@ -23,7 +24,7 @@ use PDOException;
  * @license     MIT License https://opensource.org/licenses/MIT
  * @link        https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoList
+class ToDoList extends BaseModel
 {
     /**
      * This is the id of the group of sae common for each student in it.
@@ -54,20 +55,6 @@ class ToDoList
      * @var string $tododesc
      */
     protected string $tododesc;
-
-    /**
-     * Creates an instance of the class
-     *
-     * This method constructs a user object with the data array given in parameters.
-     *
-     * @param array<string, string|integer|null> $data The data to make a todolist with.
-     */
-    private function __construct(array $data = [])
-    {
-        foreach ($data as $key => $value) {
-            $this->$key = $value;
-        }
-    }
 
     /**
      * Creates an instance of the class.
@@ -124,7 +111,7 @@ class ToDoList
      */
     public function setSaeGroupId(int $groupId): void
     {
-        $this->$groupId = $groupId;
+        $this->groupId = $groupId;
     }
 
     /**

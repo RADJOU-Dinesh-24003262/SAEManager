@@ -1,0 +1,36 @@
+<section class="sae-container">
+    <header class="form-header">
+        <h2>Gestion des groupes - {{sae_name}}</h2>
+        <p>Gérez les groupes, assignez des étudiants et des professeurs référents.</p>
+    </header>
+    
+    {{messages}}
+
+    <section class="form-section">
+        <h3>Créer un nouveau groupe</h3>
+        <form action="/sae/{{sae_id}}/groups/create" method="post" class="inline-form">
+            <input type="hidden" name="sae_id" value="{{sae_id}}">
+            <div class="form-group form-group-inline">
+                <label for="professor_select" class="sr-only">Professeur référent</label>
+                <select id="professor_select" name="professor_id" class="form-control select-full-width">
+                    <option value="">-- Aucun professeur (optionnel) --</option>
+                    {{professors_options}}
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">Créer le groupe</button>
+        </form>
+    </section>
+
+    <hr>
+
+    <section>
+        <h3>Groupes existants</h3>
+        <div class="groups-grid">
+            {{groups_html}}
+        </div>
+    </section>
+    
+    <div class="back-link-container">
+        <a href="/sae/{{sae_id}}" class="btn-secondary">Retour à la SAE</a>
+    </div>
+</section>

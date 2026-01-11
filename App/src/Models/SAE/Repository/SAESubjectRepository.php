@@ -120,9 +120,9 @@ class SAESubjectRepository extends BaseRepository
                 FROM sae_subjects s
                 WHERE s.responsible_prof_id = :prof_id
                    OR s.sae_subject_id IN (
-                       SELECT spg.sae_subject_id 
-                       FROM sae_professor_groups spg 
-                       WHERE spg.professor_id = :prof_id
+                       SELECT sg.sae_subject_id 
+                       FROM sae_groups sg
+                       WHERE sg.professor_id = :prof_id
                    )
                    OR client_id = :prof_id 
                 ORDER BY s.begin_date DESC'
@@ -150,8 +150,8 @@ class SAESubjectRepository extends BaseRepository
                 'SELECT s.* 
                 FROM sae_subjects s
                 JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
-                JOIN students st ON sg.sae_group_id = st.sae_group_id
-                WHERE st.student_id = :student_id
+                JOIN participated_in pi ON sg.sae_group_id = pi.sae_group_id
+                WHERE pi.student_id = :student_id
                 ORDER BY s.begin_date DESC'
             );
             $stmt->execute(['student_id' => $studentId]);
@@ -220,6 +220,7 @@ class SAESubjectRepository extends BaseRepository
             ]);
 
             $id = intval($stmt->fetchColumn());
+            $stmt->closeCursor();
             $entity->setSaeSubjectId($id);
 
             $this->connection->commit();
@@ -332,8 +333,8 @@ class SAESubjectRepository extends BaseRepository
                         ELSE false 
                     END as is_responsible
                 FROM sae_subjects s
-                LEFT JOIN sae_professor_groups spg ON s.sae_subject_id = spg.sae_subject_id
-                JOIN professors p ON (p.professor_id = spg.professor_id OR p.professor_id = s.responsible_prof_id)
+                LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
+                JOIN professors p ON (p.professor_id = sg.professor_id OR p.professor_id = s.responsible_prof_id)
                 JOIN users u ON p.professor_id = u.user_id
                 WHERE s.sae_subject_id = :sae_id
                 ORDER BY is_responsible DESC, u.last_name, u.first_name'

@@ -79,14 +79,15 @@ class CreateSaePostController implements ControllerInterface
             // Save description as Markdown file.
             $filePath = FileService::saveSaeDescription($description, $data['nameSae']);
 
+            $clientId = !empty($data['client_id']) ? intval($data['client_id']) : null;
+
             $saeData = [
                 'responsible_prof_id' => $user->getUserId(),
-                'client_id' => intval($data['client_id']),
+                'client_id' => $clientId,
                 'subject_name' => $data['nameSae'],
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['date_rendu'],
-                'file_path' => $filePath,
-                'competences' => isset($data['competence']) ? $data['competence'] : []
+                'file_path' => $filePath
             ];
 
             SAE::getInstance()->createSAE($user, $saeData);
