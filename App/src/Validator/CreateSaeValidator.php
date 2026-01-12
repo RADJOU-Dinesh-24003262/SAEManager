@@ -4,6 +4,7 @@ namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
 use Override;
+use DateTime;
 
 /**
  * Class SaeSujetValidator
@@ -26,7 +27,7 @@ class CreateSaeValidator extends FormValidator
     protected $required = [
         'nameSae',
         'date_rendu',
-        'client_id',
+        'begin_date',
         'description'
     ];
 
@@ -55,23 +56,28 @@ class CreateSaeValidator extends FormValidator
             throw new ExeptionValidationSAECreation('La date de rendu n\'est pas valide.');
         }
 
-        if (isset($data['begin_date']) && !$this->isValidDate($data['begin_date'])) {
-             throw new ExeptionValidationSAECreation('La date de début n\'est pas valide.');
+        if (!$this->isValidDate($data['begin_date'])) {
+            throw new ExeptionValidationSAECreation('La date de début n\'est pas valide.');
         }
 
         // Check if dates are logical (end > begin).
-        if (isset($data['begin_date']) && $data['date_rendu'] <= $data['begin_date']) {
+        if ($data['date_rendu'] <= $data['begin_date']) {
             throw new ExeptionValidationSAECreation('La date de rendu doit être postérieure à la date de début.');
         }
 
-        // Validate client ID (basic integer check).
-        if (!filter_var($data['client_id'], FILTER_VALIDATE_INT)) {
-            throw new ExeptionValidationSAECreation('L\'identifiant client est invalide.');
+        // Validate client ID (positive integer check).
+        if (!empty($data['client_id'])) {
+            $clientId = filter_var($data['client_id'], FILTER_VALIDATE_INT);
+            if ($clientId === false || $clientId <= 0) {
+                throw new ExeptionValidationSAECreation('L\'identifiant client est invalide.');
+            }
         }
 
-        // Competences validation (optional but must be array if present).
-        if (isset($data['competence']) && !is_array($data['competence'])) {
-             throw new ExeptionValidationSAECreation('Format des compétences invalide.');
+        $begin = new DateTime($data['begin_date']);
+        $end = new DateTime($data['end_date']);
+
+        if ($end <= $begin) {
+            $errors[] = 'La date de fin doit être après la date de début';
         }
     }
 }

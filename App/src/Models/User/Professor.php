@@ -100,6 +100,7 @@ class Professor extends User
 
         $stmt->execute(['email' => $email]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         if ($data) {
             foreach ($data as $key => $value) {
@@ -132,19 +133,11 @@ class Professor extends User
     protected function fetchSAEData(PDO $connection, int $userId): array
     {
         $stmt = $connection->prepare(
-            '  SELECT * FROM SAE_subjects sae, professors
-                                        WHERE (
-                                                -- if the professor is responsible for the SAE
-                                                sae.responsible_prof_id = professors.professor_id
-
-                                                -- or if the professor is assigned to the SAE
-                                                OR sae.sae_subject_id IN (
-                                                    SELECT spg.sae_subject_id
-                                                    FROM sae_professor_groups spg
-                                                    WHERE spg.professor_id = professors.professor_id
-                                                )
-                                            )
-                                        AND professors.professor_id = :user_id;'
+            'SELECT DISTINCT s.* 
+             FROM sae_subjects s
+             LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
+             WHERE s.responsible_prof_id = :user_id
+                OR sg.professor_id = :user_id'
         );
         $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -152,7 +145,7 @@ class Professor extends User
     }
 
     /**
-     * A professor can access an SAE if they are the responsible professor OR assigned to it.
+     * A professor can access an SAE if they are the responsible professor OR assigned to a group in it.
      *
      * @param integer $saeId The SAE ID.
      * @return boolean True if accessible, false otherwise.
@@ -163,15 +156,12 @@ class Professor extends User
         try {
             $db = Database::getInstance();
             $stmt = $db->prepare(
-                'SELECT COUNT(*) FROM sae_subjects s
+                'SELECT COUNT(DISTINCT s.sae_subject_id) 
+                 FROM sae_subjects s
+                 LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
                  WHERE s.sae_subject_id = :sae_id
-                 AND (s.responsible_prof_id = :prof_id
-                      OR EXISTS (
-                          SELECT 1 FROM sae_professor_groups spg
-                          WHERE spg.sae_subject_id = :sae_id AND spg.professor_id = :prof_id
-                      )
-                 )
-                 OR client_id = :prof_id'
+                 AND (s.responsible_prof_id = :prof_id OR sg.professor_id = :prof_id)
+                 OR client_id = :prof_id        '
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $this->user_id]);
             return $stmt->fetchColumn() > 0;
@@ -245,12 +235,13 @@ class Professor extends User
             $db = Database::getInstance();
             $stmt = $db->prepare(
                 'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone,
-                        st.sae_group_id, st.td, st.tp
+                        pi.sae_group_id, st.td, st.tp
                  FROM sae_groups sg
-                 JOIN students st ON sg.sae_group_id = st.sae_group_id
+                 JOIN participated_in pi ON sg.sae_group_id = pi.sae_group_id
+                 JOIN students st ON pi.student_id = st.student_id
                  JOIN users u ON st.student_id = u.user_id
                  WHERE sg.sae_subject_id = :sae_id
-                 ORDER BY st.sae_group_id, u.last_name, u.first_name'
+                 ORDER BY pi.sae_group_id, u.last_name, u.first_name'
             );
             $stmt->execute(['sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -281,13 +272,13 @@ class Professor extends User
             $db = Database::getInstance();
             $stmt = $db->prepare(
                 'SELECT DISTINCT u.user_id, u.first_name, u.last_name, u.email, u.phone,
-                        st.sae_group_id, st.td, st.tp
-                 FROM sae_professor_groups spg
-                 JOIN sae_groups sg ON spg.sae_subject_id = sg.sae_subject_id
-                 JOIN students st ON sg.sae_group_id = st.sae_group_id
+                        pi.sae_group_id, st.td, st.tp
+                 FROM sae_groups sg
+                 JOIN participated_in pi ON sg.sae_group_id = pi.sae_group_id
+                 JOIN students st ON pi.student_id = st.student_id
                  JOIN users u ON st.student_id = u.user_id
-                 WHERE spg.professor_id = :prof_id AND spg.sae_subject_id = :sae_id
-                 ORDER BY st.sae_group_id, u.last_name, u.first_name'
+                 WHERE sg.professor_id = :prof_id AND sg.sae_subject_id = :sae_id
+                 ORDER BY pi.sae_group_id, u.last_name, u.first_name'
             );
             $stmt->execute(['prof_id' => $this->user_id, 'sae_id' => $saeId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -329,6 +320,35 @@ class Professor extends User
     public function canModifyTodo(int $todoId): bool
     {
         return false;
+    }
+
+    /**
+     * Retrieves all professors in the system.
+     *
+     * @return array<int, array{
+     *   user_id: int,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   amu_id: string
+     * }> The list of all professors.
+     */
+    public function getAllProfessors(): array
+    {
+        try {
+            $db = Database::getInstance();
+            $stmt = $db->prepare(
+                'SELECT u.user_id, u.first_name, u.last_name, u.email, p.amu_id
+                 FROM professors p
+                 JOIN users u ON p.professor_id = u.user_id
+                 ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur getAllProfessors : ' . $e->getMessage());
+            return [];
+        }
     }
 
     // -----------------
