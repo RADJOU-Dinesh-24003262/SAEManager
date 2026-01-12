@@ -72,7 +72,7 @@ class LoginView extends AbstractView
     #[Override]
     protected function getNameCss(): string
     {
-        return 'style.css';
+        return '';
     }
 
     /**

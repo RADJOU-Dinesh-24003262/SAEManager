@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
 use Override;
+use Exception;
 
 /**
  * Controller to handle POST actions for group management.
@@ -23,28 +24,23 @@ class ManageGroupsPostController extends BaseController
      * Controls the processing of group management actions.
      *
      * @return void
-     *
-     * @throws \Exception If the action is not recognized or if an error occurs during processing.
+     * @throws \Exception If an unknown action is encountered or an error occurs during processing.
      */
     #[Override]
     public function control(): void
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if ($path === false || $path === null) {
-            header('Location: /dashboard');
-            exit;
-        }
+        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
+
+        $saeId = 0;
+        $action = '';
 
         // Extract SAE ID and Action from URL: /sae/{id}/groups/{action}.
-        if (!preg_match('/^\/sae\/(\d+)\/groups\/(.+)$/', $path, $matches)) {
-            header('Location: /dashboard');
-            exit;
+        if (preg_match('/^\/sae\/(\d+)\/groups\/(.+)$/', $path, $matches)) {
+            $saeId = intval($matches[1]);
+            $action = $matches[2];
         }
-
-        $saeId = intval($matches[1]);
-        $action = $matches[2];
 
         try {
             match ($action) {
@@ -60,32 +56,32 @@ class ManageGroupsPostController extends BaseController
     }
 
     /**
-     * Creates a new group for the specified SAE.
+     * Creates a new group for a SAE.
      *
-     * @param integer $saeId The SAE identifier.
-     *
+     * @param integer $saeId The ID of the SAE.
      * @return void
-     *
-     * @throws \Exception If the professor ID is missing.
+     * @throws \Exception If an unexpected error occurs during group creation.
      */
     private function createGroup(int $saeId): void
     {
         $professorId = filter_input(INPUT_POST, 'professor_id', FILTER_VALIDATE_INT);
-        if (!$professorId) {
-            throw new \Exception("ID du professeur manquant");
+
+        // If professorId is false (invalid) or null (not set), treat it as null (no professor).
+        if ($professorId == false) {
+            $professorId = null;
         }
+
         SAE::getInstance()->createGroup($this->user, $saeId, $professorId);
         $this->redirectWithSuccess($saeId, 'Groupe créé avec succès.');
     }
 
     /**
-     * Deletes a group from the specified SAE.
+     * Deletes a group.
      *
-     * @param integer $saeId The SAE identifier.
-     *
+     * @param integer $saeId The ID of the SAE.
      * @return void
-     *
      * @throws \Exception If the group ID is missing.
+     * @throws \Exception If an unexpected error occurs during group deletion.
      */
     private function deleteGroup(int $saeId): void
     {
@@ -100,11 +96,10 @@ class ManageGroupsPostController extends BaseController
     /**
      * Adds a student to a group.
      *
-     * @param integer $saeId The SAE identifier.
-     *
+     * @param integer $saeId The ID of the SAE.
      * @return void
-     *
-     * @throws \Exception If the group ID or student ID is missing.
+     * @throws \Exception If group ID or student ID is missing.
+     * @throws \Exception If an unexpected error occurs during student assignment.
      */
     private function addStudent(int $saeId): void
     {
@@ -120,11 +115,10 @@ class ManageGroupsPostController extends BaseController
     /**
      * Removes a student from a group.
      *
-     * @param integer $saeId The SAE identifier.
-     *
+     * @param integer $saeId The ID of the SAE.
      * @return void
-     *
-     * @throws \Exception If the group ID or student ID is missing.
+     * @throws \Exception If group ID or student ID is missing.
+     * @throws \Exception If an unexpected error occurs during student removal.
      */
     private function removeStudent(int $saeId): void
     {
@@ -138,11 +132,10 @@ class ManageGroupsPostController extends BaseController
     }
 
     /**
-     * Redirects to the group management page with a success message.
+     * Redirects with a success message.
      *
-     * @param integer $saeId The SAE identifier.
+     * @param integer $saeId The ID of the SAE.
      * @param string  $msg   The success message.
-     *
      * @return void
      */
     private function redirectWithSuccess(int $saeId, string $msg): void
@@ -153,11 +146,10 @@ class ManageGroupsPostController extends BaseController
     }
 
     /**
-     * Redirects to the group management page with an error message.
+     * Redirects with an error message.
      *
-     * @param integer $saeId The SAE identifier.
+     * @param integer $saeId The ID of the SAE.
      * @param string  $msg   The error message.
-     *
      * @return void
      */
     private function redirectWithError(int $saeId, string $msg): void
@@ -182,6 +174,6 @@ class ManageGroupsPostController extends BaseController
             && preg_match(
                 '/^\/sae\/\d+\/groups\/(create|delete|add-student|remove-student)$/',
                 $path
-            ) === 1;
+            );
     }
 }

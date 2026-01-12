@@ -127,8 +127,8 @@ class ManageGroupsView extends BaseSaeView
             // Header.
             $html .= '<header class="group-header">';
             $html .= '<h4>Groupe #' . $groupId . '</h4>';
-            $html .= '<form action="/sae/' . $saeId . '/groups/delete" method="post" ';
-            $html .= 'onsubmit="return confirm(\'Voulez-vous vraiment supprimer ce groupe ?\');">';
+            $html .= '<form action="/sae/' . $saeId . '/groups/delete" method="post" ' .
+                     'onsubmit="return confirm(\'Voulez-vous vraiment supprimer ce groupe ?\');">';
             $html .= '<input type="hidden" name="group_id" value="' . $groupId . '">';
             $html .= '<input type="hidden" name="sae_id" value="' . $saeId . '">';
             $html .= '<button type="submit" class="btn-danger-sm">Supprimer</button>';
@@ -146,11 +146,10 @@ class ManageGroupsView extends BaseSaeView
             $html .= '<ul class="student-items">';
             foreach ($students as $student) {
                 $html .= '<li class="student-item">';
-                $studentDisplay = $student['first_name'] . ' ' . $student['last_name'];
-                $studentGroup = $student['group_name'] ?? $student['td'] ?? '';
-                $html .= '<span>' . $studentDisplay . ' (' . $studentGroup . ')</span>';
-                $html .= '<form action="/sae/' . $saeId . '/groups/remove-student" ';
-                $html .= 'method="post" style="display:inline;">';
+                $html .= '<span>' . $student['first_name'] . ' ' . $student['last_name'] . ' (' .
+                         ($student['group_name'] ?? $student['td'] ?? '') . ')</span>';
+                $html .= '<form action="/sae/' . $saeId . '/groups/remove-student" method="post" ' .
+                         'style="display:inline;">';
                 $html .= '<input type="hidden" name="group_id" value="' . $groupId . '">';
                 $html .= '<input type="hidden" name="student_id" value="' . $student['student_id'] . '">';
                 $html .= '<input type="hidden" name="sae_id" value="' . $saeId . '">';
@@ -178,8 +177,7 @@ class ManageGroupsView extends BaseSaeView
                     if (!empty($student['major'])) {
                         $label .= ' (' . $student['major'] . ')';
                     }
-                    $html .= '<option value="' . $student['student_id'] . '">';
-                    $html .= htmlspecialchars($label) . '</option>';
+                    $html .= '<option value="' . $student['student_id'] . '">' . htmlspecialchars($label) . '</option>';
                 }
                 $html .= '</optgroup>';
             }
@@ -204,11 +202,11 @@ class ManageGroupsView extends BaseSaeView
      */
     private function generateProfessorsOptions(): string
     {
-        $professors = $this->data['sae']['all_professors'];
+        $professors = $this->data['all_professors'];
         $html = '';
         foreach ($professors as $prof) {
-            $profDisplayName = $prof['last_name'] . ' ' . $prof['first_name'];
-            $html .= '<option value="' . $prof['user_id'] . '">' . $profDisplayName . '</option>';
+            $html .= '<option value="' . $prof['user_id'] . '">' . $prof['last_name'] . ' ' .
+                     $prof['first_name'] . '</option>';
         }
         return $html;
     }

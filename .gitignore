@@ -14,3 +14,6 @@ Core/includes/my_settings.ini
 *yaml
 storage/sae_descriptions/*
 logs/*
+package.json
+package-lock.json
+docs/*

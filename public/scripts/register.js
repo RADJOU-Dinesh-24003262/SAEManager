@@ -25,6 +25,10 @@ const tpSelect = document.getElementById('tp');
 const etudiantFields = document.getElementById('etudiantFields');
 const amuId = document.getElementById('id').parentElement;
 
+// Client fields
+const clientFields = document.getElementById('clientFields');
+const organisationInput = document.getElementById('organisation');
+
 function toggleStudentFields() {
     const isStudent = userTypeSelect.value === 'student';
 
@@ -39,6 +43,18 @@ function toggleStudentFields() {
         yearSelect.value = '';
         tdSelect.value = '';
         tpSelect.value = '';
+    }
+}
+
+function toggleClientFields() {
+    const isClient = userTypeSelect.value === 'client';
+
+    clientFields.style.display = isClient ? 'block' : 'none';
+    organisationInput.required = isClient;
+    organisationInput.disabled = !isClient;
+
+    if (!isClient) {
+        organisationInput.value = '';
     }
 }
 
@@ -107,6 +123,8 @@ userTypeSelect.addEventListener('change', () => {
     toggleStudentFields();
     toggleAmuFields();
     toggleAmuMailParts();
+    toggleClientFields();
+
 });
 
 // Apply immediately on page load (case of reload after POST)
