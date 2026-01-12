@@ -6,7 +6,7 @@ use Core\Utilis\SessionService;
 use Exception;
 
 /**
- * The abstract class which will will be used to create all of the views.
+ * The abstract class which will be used to create all of the views.
  *
  * It contains all the required methods and attributes to be used in the implemented views.
  *
@@ -48,7 +48,6 @@ abstract class AbstractView
             $errors = [$errors];
         }
         $this->data['errors'] = $errors;
-
         $this->data['success'] = SessionService::getFlash('success', '');
     }
 
@@ -120,54 +119,37 @@ abstract class AbstractView
     protected function renderHeader(): void
     {
         echo '<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>' . $this->getPageTitle() . '</title>
-        <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>' . $this->getPageTitle() . '</title>
+    <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
 
-        <link rel="stylesheet" href="/styles/' . $this->getNameCss() . '">
-        <link rel="stylesheet" href="/styles/header.css">
-        ' . $this->getAdditionalHeaders() . '
-    </head>
-    <body>
-    <header class="global-header">
-        <p class="saeManager">SAEManager</p>
-        <div class="amuimg" >
-        <img src="/image/logoamu.png" alt="Logo AMU Header" >
-        </div>
-            <div class="burger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-        <nav class="navBar">
-            <a href="/" class="nav-link">Accueil</a>
-            ' . $this->getNavBar() . '
+    <link rel="stylesheet" href="/styles/pico.classless.blue.css">
+
+    <link rel="stylesheet" href="/styles/header.css">
+    <link rel="stylesheet" href="/styles/footer.css">
+
+    ' . $this->getAdditionalHeaders() . '
+    <link rel="stylesheet" href="/styles/' . $this->getNameCss() . '">
+</head>
+<body>
+
+    <header class="container-fluid">
+        <nav aria-label="breadcrumb" class="main-nav">
+            <a href="/" class="nav-logo">
+                <img src="/image/logoamu.png" alt="Logo AMU" style="height: 40px;">
+            </a>
+            <ul class="nav-links">
+                ' . $this->getNavBar() . '
+            </ul>
         </nav>
-    </header>';
-    }
+    </header>
 
-
-    /**
-     * Renders the HTML navigation bar of the page.
-     *
-     * Displays different links depending on whether a user is logged in or not.
-     *
-     * @return string The HTML string of the navigation bar.
-     */
-    protected function getNavBar(): string
-    {
-        if (SessionService::has('user_id')) {
-            return '
-            <a href="/dashboard" class="nav-link">Dashboard</a>
-            <a href="/logout" class="nav-link">Déconnexion</a>';
-        }
-        return '
-            <a href="/login" class="nav-link">Connexion</a>
-            <a href="/register" class="nav-link">Inscription</a>';
+    <main class="container-fluid">
+';
     }
 
 
@@ -191,41 +173,57 @@ abstract class AbstractView
      */
     protected function renderFooter(): void
     {
-        echo $this->getAdditionalScripts() . '
-        <footer>
-        <link rel="stylesheet" href="/styles/footer.css">
-            <div class="footer-container">
-                <div class="footer-left">
-                    <h1 class="saeManager">SAEManager</h1>
-                    <img src="/image/logoamu.png" alt="Logo AMU Header" class="footer-logo-amu">
-                </div>
+        echo '
+    </main>
+    <footer class="container-fluid">
+        <hr>
+        <nav>
+            <ul>
+                <li>
+                    <img src="/image/logoamu.png" alt="Logo AMU" style="height: 35px; margin-right: 10px;">
+                    <strong>SAEManager</strong>
+                </li>
+            </ul>
 
-                <div class="footer-middle">
-                    <h1>Nous contacter :</h1>
-                    <ul>
-                        <li>📞 Tel : +33 02 50 65 14 4</li>
-                        <li>📧 Mail : sae.manager@gmail.com</li>
-                    </ul>
-                    
-                    <ul>
-                        <li><a href="/legal-notice">Mentions légales</a> </li>
-                        <li><a href="/site-map">Plan du site</a> </li>
-                    </ul>
-                </div>
+            <ul>
+                <li>+33 02 50 65 14 4 </li>
+                <li>📧 <a href="mailto:sae.manager@gmail.com">Email</a></li>
+            </ul>
 
-                <div class="footer-right">
-                    <h1>Nous suivre :</h1>
-                    <ul>
-                        <li>Instagram</li>
-                        <li>Facebook</li>
-                        <li>LinkedIn</li>
-                    </ul>
-                </div>
-            </div>
-        </footer>
-        <script src="/scripts/burgermenu.js"></script>
-    </body>
+            <ul>
+                <li><a href="#" class="secondary">Instagram</a></li>
+                <li><a href="#" class="secondary">Facebook</a></li>
+                <li><a href="#" class="secondary">LinkedIn</a></li>
+            </ul>
+
+            <ul>
+                <li><a href="/legal-notice" class="secondary">Mentions légales</a></li>
+                <li><a href="/site-map" class="secondary">Plan du site</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+    ' . $this->getAdditionalScripts() . '
+</body>
 </html>';
+    }
+
+    /**
+     * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
+
+     * @return string the name of the project 'SAE Manager'.
+     */
+    protected function getNavBar(): string
+    {
+        if (SessionService::has('user_id')) {
+            return '
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/logout">Déconnexion</a></li>';
+        }
+        return '
+                <li><a href="/">Accueil</a></li>
+                <li><a href="/login">Connexion</a></li>
+                <li><a href="/register">Inscription</a></li>';
     }
 
     /**
@@ -271,11 +269,12 @@ abstract class AbstractView
             return '';
         }
 
-        $html = '<section role="alert" aria-live="assertive" class="alert alert-error"><ul>';
+        $html = '<article role="alert" style="background-color: var(--pico-del-color); color: white; padding: 1rem; ' .
+            'border-radius: 0.5rem; margin-bottom: 1rem;"><ul style="margin: 0; padding-left: 1.5rem;">';
         foreach ($errors as $error) {
             $html .= '<li>' . $error . '</li>';
         }
-        $html .= '</ul></section>';
+        $html .= '</ul></article>';
         return $html;
     }
 
@@ -290,7 +289,7 @@ abstract class AbstractView
         if (empty($success)) {
             return '';
         }
-
-        return '<div class="alert alert-success">' . $success . '</div>';
+        return '<article role="status" style="background-color: var(--pico-ins-color); color: white; padding: 1rem; ' .
+            'border-radius: 0.5rem; margin-bottom: 1rem;">' . htmlspecialchars($success) . '</article>';
     }
 }

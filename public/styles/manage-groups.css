@@ -1,3 +1,192 @@
+/* Presentation and Main Layout */
+.presentation_SAE {
+    display: flex;
+    align-items: center;
+    background-color: var(--pico-primary-hover-background);
+    min-height: 250px;
+    padding: 0 50px;
+    position: relative;
+    color: white;
+    overflow: hidden;
+    border-radius: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.main_functionnality {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 60px;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.num_resource {
+    background-color: white;
+    color: black;
+    font-weight: 700;
+    font-size: 2em;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.presentation_SAE h1:nth-of-type(2) {
+    color: white;
+    margin-left: 40px;
+    font-weight: 700;
+    font-size: 1.8em;
+}
+
+.menu_functionnality {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+    width: 250px;
+    background-color: #f8f8f8;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+    margin-top: 1rem;
+}
+
+h3 {
+    margin-top: 1rem;
+}
+
+.menu_functionnality li {
+    margin-bottom: 15px;
+    list-style: none;
+}
+
+.menu_functionnality h2 {
+    font-size: 1.4em;
+    color: var(--pico-primary-hover-background);
+    border-bottom: 2px solid var(--pico-primary-hover-background);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.menu_functionnality a {
+    display: block;
+    padding: 10px 15px;
+    margin: 5px 0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.menu_functionnality a:hover {
+    background-color: var(--pico-primary-hover-background);
+    color: white;
+    transform: translateX(5px);
+}
+
+.bloc_to_put {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.sub_bloc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    width: auto;
+    height: 200px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+    cursor: pointer;
+    gap: 10px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.sub_bloc:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+#contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    height: auto !important;
+}
+
+.contact-section {
+    width: 100%;
+}
+
+.contact-section h5 {
+    color: var(--pico-primary-hover-background);
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 5px;
+}
+
+.contact-section h6 {
+    color: var(--pico-primary-hover-background);
+    font-size: 1em;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.contact-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact-section li {
+    margin-bottom: 8px;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    list-style: none;
+}
+
+.contact-section p {
+    margin: 0 0 10px 0;
+}
+
+.contact-section a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}
+
 /* Container and Layout */
 .sae-container {
     max-width: 1200px;
@@ -232,4 +421,127 @@
 
 .select-full-width {
     width: 100%;
+}
+
+/* Media Queries */
+@media (max-width: 1440px) {
+    .presentation_SAE,
+    .main_functionnality {
+        max-width: 95%;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main_functionnality {
+        gap: 30px;
+    }
+    .num_resource {
+        width: 120px;
+        height: 120px;
+        font-size: 1.5em;
+    }
+    .presentation_SAE h1:nth-of-type(2) {
+        font-size: 1.4em;
+        margin-left: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .presentation_SAE {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        min-height: auto;
+        padding: 30px 20px;
+    }
+    .num_resource {
+        margin-bottom: 20px;
+        width: 100px;
+        height: 100px;
+    }
+    .presentation_SAE h1:nth-of-type(2) {
+        margin-left: 0;
+        font-size: 1.2em;
+    }
+    .main_functionnality {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    .menu_functionnality {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+    .bloc_to_put {
+        width: 100%;
+    }
+    .sub_bloc {
+        height: auto;
+        min-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .presentation_SAE {
+        padding: 20px 10px;
+    }
+    .num_resource {
+        width: 80px;
+        height: 80px;
+        font-size: 1.2em;
+    }
+    .contact-section li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    .groups-grid {
+        grid-template-columns: 1fr;
+    }
+    .inline-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .form-group-inline {
+        width: 100%;
+    }
+    .btn-primary {
+        width: 100%;
+    }
+    .add-student-wrapper {
+        flex-direction: column;
+    }
+    .btn-add {
+        width: 100%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    .groups-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-section {
+        padding: 15px;
+    }
+    .inline-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .form-group-inline {
+        width: 100%;
+    }
+    .btn-primary {
+        width: 100%;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .groups-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+    .sae-container {
+        padding: 15px;
+    }
 }

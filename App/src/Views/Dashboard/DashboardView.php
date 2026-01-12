@@ -239,7 +239,7 @@ class DashboardView extends AbstractView
             $message = 'Vous n\'êtes inscrit à aucune SAE actuellement.';
         }
 
-        return '<div class="empty-state"><h3>' . $message . '</h3><p>' . $action . '</p></div>';
+        return '<div class="empty-state"><h4>' . $message . '</h4><p>' . $action . '</p></div>';
     }
 
     /**
