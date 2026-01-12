@@ -1,36 +1,46 @@
-<section class="sae-container">
-    <header class="form-header">
-        <h2>Gestion des groupes - {{sae_name}}</h2>
-        <p>Gérez les groupes, assignez des étudiants et des professeurs référents.</p>
-    </header>
-    
-    {{messages}}
+<div class="presentation_SAE">
+    <h1 class="num_resource">{{SAE_NUM}}</h1>
+    <h1>{{SAE_NAME}}</h1>
+</div>
 
-    <section class="form-section">
-        <h3>Créer un nouveau groupe</h3>
-        <form action="/sae/{{sae_id}}/groups/create" method="post" class="inline-form">
-            <input type="hidden" name="sae_id" value="{{sae_id}}">
-            <div class="form-group form-group-inline">
-                <label for="professor_select" class="sr-only">Professeur référent</label>
-                <select id="professor_select" name="professor_id" required class="form-control select-full-width">
-                    <option value="">-- Sélectionner un professeur référent --</option>
-                    {{professors_options}}
-                </select>
-            </div>
-            <button type="submit" class="btn-primary">Créer le groupe</button>
-        </form>
-    </section>
+<article class="main_functionnality">
+    <ul class="menu_functionnality">
+        {{SAE_MENU}}
+    </ul>
 
-    <hr>
+    <div class="bloc_to_put">
+        <article>
 
-    <section>
-        <h3>Groupes existants</h3>
-        <div class="groups-grid">
-            {{groups_html}}
-        </div>
-    </section>
-    
-    <div class="back-link-container">
-        <a href="/sae/{{sae_id}}" class="btn-secondary">Retour à la SAE</a>
+            <section class="form-section">
+                <h3>Gestion des groupes</h3>
+                <p>Gérez les groupes, assignez des étudiants et des professeurs référents.</p>
+
+                {{messages}}
+
+                <div style="margin-top: 20px;">
+                    <h4>Créer un nouveau groupe</h4>
+                    <form action="/sae/{{sae_id}}/groups/create" method="post" class="inline-form">
+                        <input type="hidden" name="sae_id" value="{{sae_id}}">
+                        <div class="form-group form-group-inline">
+                            <label for="professor_select" class="sr-only">Professeur référent</label>
+                            <select id="professor_select" name="professor_id" required class="form-control select-full-width">
+                                <option value="">-- Sélectionner un professeur référent --</option>
+                                {{professors_options}}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary">Créer le groupe</button>
+                    </form>
+                </div>
+
+                <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
+
+                <div>
+                    <h4>Groupes existants</h4>
+                    <div class="groups-grid">
+                        {{groups_html}}
+                    </div>
+                </div>
+            </section>
+        </article>
     </div>
-</section>
+</article>

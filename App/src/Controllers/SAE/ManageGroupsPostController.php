@@ -36,7 +36,7 @@ class ManageGroupsPostController extends BaseController
             $saeId = intval($matches[1]);
             $action = $matches[2];
         }
-        
+
         try {
             match ($action) {
                 'create' => $this->createGroup($saeId),
