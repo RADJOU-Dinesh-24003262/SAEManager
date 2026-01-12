@@ -6,7 +6,6 @@ use Models\User\User;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\includes\exception\SAE\ExceptionResourceNotFound;
-use Core\includes\exception\SAE\ExceptionInvalidData;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
 use Models\User\Professor;
@@ -230,7 +229,7 @@ class SAE
         }
 
         // If student or client, return only their group.
-        if ($user->isStudent() || $user->isClient()) {
+        if ($user->isStudent()) {
             $userGroupId = $this->getUserGroupId($user, $saeId);
             if ($userGroupId) {
                 $group = $this->groupRepo->findById($userGroupId);
@@ -241,6 +240,16 @@ class SAE
                     ]];
                 }
             }
+        }
+
+        if ($user->isClient()) {
+            // Clients see all groups.
+            return array_map(function ($group) {
+                return [
+                    'group' => $group,
+                    'students' => $this->groupRepo->getGroupStudents(intval($group->getSaeGroupId())),
+                ];
+            }, $allGroups);
         }
 
         return [];
@@ -265,7 +274,6 @@ class SAE
      * @param array<string, mixed> $data    SAE data.
      * @return SAESubject The created SAE.
      * @throws ExceptionAccessDenied If user doesn't have permission.
-     * @throws ExceptionInvalidData  If data is invalid.
      */
     public function createSAE(User $creator, array $data): SAESubject
     {
@@ -276,10 +284,6 @@ class SAE
 
         // Create SAE subject.
         $subject = new SAESubject($data);
-        $errors = $subject->validate();
-        if (!empty($errors)) {
-            throw new ExceptionInvalidData(implode(', ', $errors));
-        }
 
         $subject = $this->subjectRepo->create($subject);
 
@@ -295,7 +299,6 @@ class SAE
      * @return boolean Success status.
      * @throws ExceptionAccessDenied    If user doesn't have permission.
      * @throws ExceptionResourceNotFound If SAE is not found.
-     * @throws ExceptionInvalidData      If data is invalid.
      */
     public function updateSAE(User $user, int $saeId, array $data): bool
     {
@@ -316,24 +319,19 @@ class SAE
             }
         }
 
-        $errors = $subject->validate();
-        if (!empty($errors)) {
-            throw new ExceptionInvalidData(implode(', ', $errors));
-        }
-
         return $this->subjectRepo->update($subject);
     }
 
     /**
      * Creates a new group for a SAE.
      *
-     * @param User    $user        The requesting user.
-     * @param integer $saeId       The SAE subject ID.
-     * @param integer $professorId The professor ID managing the group.
+     * @param User         $user        The requesting user.
+     * @param integer      $saeId       The SAE subject ID.
+     * @param integer|null $professorId The professor ID managing the group.
      * @return SAEGroup The created group.
      * @throws ExceptionAccessDenied If user doesn't have permission.
      */
-    public function createGroup(User $user, int $saeId, int $professorId): SAEGroup
+    public function createGroup(User $user, int $saeId, ?int $professorId): SAEGroup
     {
         if (!$user->canManageSAE($saeId)) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer un groupe");
@@ -373,14 +371,14 @@ class SAE
     /**
      * Assigns a professor to a SAE group.
      *
-     * @param User    $responsibleProf The responsible professor.
-     * @param integer $groupId         The SAE group ID.
-     * @param integer $professorId     The professor to assign.
+     * @param User         $responsibleProf The responsible professor.
+     * @param integer      $groupId         The SAE group ID.
+     * @param integer|null $professorId     The professor to assign.
      * @return boolean Success status.
      * @throws ExceptionAccessDenied If not responsible professor.
      * @throws ExceptionResourceNotFound If group not found.
      */
-    public function assignProfessorToGroup(User $responsibleProf, int $groupId, int $professorId): bool
+    public function assignProfessorToGroup(User $responsibleProf, int $groupId, ?int $professorId): bool
     {
         $group = $this->groupRepo->findById($groupId);
         if (!$group) {

@@ -1,23 +1,23 @@
 {{ERROR_MESSAGES}}
 <div class="mainContainer">
-    <h1 class="title">SAE Manager ‑ Authentification</h1>
+    <article>
+    <h1 class="title" style="text-align: center">SAE Manager ‑ Authentification</h1>
+
     <form method="post" action="/login" class="titlediv">
         <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
-        <h2 class="subtitle">Email : </h2>
+        <h3 class="subtitle">Email : </h3>
         <input type="text" name="email" class="textinput" placeholder="Entrez votre email" required>
-
-        <h2 class="subtitle">Mot de passe : </h2>
+        <h3 class="subtitle">Mot de passe : </h3>
         <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
-
+        </article>
         <div class="button-container">
             <button type="submit" class="button">Se connecter</button>
         </div>
     </form>
 
-    <h3 class="plainText">
+    <strong class="plainText">
         Vous n'avez pas de compte? <a href="/register">Inscrivez vous</a> <br>
         Mot de passe oublié? <a href="/forgot-password">cliquez ici</a>
-    </h3>
+    </strong>
 
-    <img class="logo" src="image/logoamu.png" alt="Logo AMU">
 </div>

@@ -302,6 +302,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
+            'organisation' => 'Ma Société',
             'terms' => 'on'
         ];
 

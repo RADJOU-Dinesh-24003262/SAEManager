@@ -62,9 +62,13 @@ class PageSaeView extends BaseSaeView
     #[Override]
     protected function templateKeys(): array
     {
+        $errors = $this->data['errors'] ?? [];
+
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
             [
+                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+                'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
                 'SAE_CONTENT' => $this->getDescriptionSae(),
                 'SAE_CONTACTS' => $this->getContactsSae()
             ]
@@ -91,7 +95,7 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-        // 1.5 Associated Professors
+        // 2 Associated Professors
         $allProfs = $saeData['all_professors'];
         $associatedProfsToDisplay = [];
 
@@ -107,7 +111,7 @@ class PageSaeView extends BaseSaeView
                     }
                 }
             }
-             $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
+            $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
         }
 
         if (!empty($associatedProfsToDisplay)) {
@@ -124,7 +128,7 @@ class PageSaeView extends BaseSaeView
             $content .= '</ul></div>';
         }
 
-        // 2. Client (if user is not the client)
+        // 3. Client (if user is not the client)
         if (!$user->isClient() && !empty($saeData['client'])) {
             $client = $saeData['client'];
             $name = $client['first_name'] . ' ' . $client['last_name'];
@@ -134,7 +138,7 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
-        // 3. Groups (Students).
+        // 4. Groups (Students).
         if ($user->isStudent()) {
             // Students see their own group members.
             if (!empty($saeData['groups'])) {
@@ -156,7 +160,7 @@ class PageSaeView extends BaseSaeView
                     $content .= '</ul></div>';
                 }
             }
-        } elseif ($user->isClient()) {
+        } else {
             // Clients see all groups.
             if (!empty($saeData['groups'])) {
                 $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
@@ -183,11 +187,8 @@ class PageSaeView extends BaseSaeView
 
                 $content .= '</div>';
             } else {
-                 $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+                $content .= '<p>Aucun groupe assigné pour le moment.</p>';
             }
-        } elseif ($user->isProfessor()) {
-            $content .= '<p><em>La gestion détaillée des contacts 
-                        étudiants se fait via le menu "Gérer les groupes".</em></p>';
         }
 
         return $content;
@@ -262,7 +263,8 @@ class PageSaeView extends BaseSaeView
             }
             $content .= '.</p>';
         }
-        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
+        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
+            '.</p></article>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
 
@@ -272,9 +274,9 @@ class PageSaeView extends BaseSaeView
             $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
             if (file_exists($fullPath)) {
                 $parsedown = new Parsedown();
-                $content .= '<div class="sae-subject-file">';
+                $content .= '<article><div class="sae-subject-file">';
                 $content .= $parsedown->text(file_get_contents($fullPath));
-                $content .= '</div>';
+                $content .= '</div></article>';
             }
         }
         return $content;

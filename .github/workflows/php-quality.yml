@@ -73,7 +73,7 @@ jobs:
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*,*/tests/*
 
-       #Static Analysis - only if PHP files changed
+      #Static Analysis - only if PHP files changed
       - name: Run PHPStan Static Analysis
         if: steps.changed_files.outputs.has_changes == 'true'
         run: |

@@ -1,4 +1,4 @@
-<div class="container">
+<main class="container-fluid">
     <!-- Warning messages -->
     {{ERROR_MESSAGES}}
     {{SUCCESS_MESSAGE}}
@@ -10,7 +10,7 @@
         
         <div class="profile-info">
             <p class="user-badge">{{USER_TYPE_LABEL}}</p>
-            <h1>{{USER_NAME}}</h1>
+            <h3>{{USER_NAME}}</h3>
             <p class="email">{{USER_EMAIL}}</p>
             
             <div class="profile-meta">
@@ -27,7 +27,6 @@
                 <!-- Section SAE (optionnal : depends on the type of user) -->
                 {{SAE_NAVIGATION}}
 
-                <div class="divider" role="separator"></div>
 
                 <!-- Section Parameters -->
                 <div class="nav-section">
@@ -37,6 +36,8 @@
                 </div>
             </nav>
         </aside>
+        <div class="divider" role="separator"></div>
+
 
         <main class="content-area">
             <h2 class="section-title">
@@ -46,4 +47,4 @@
             {{SAE_CONTENT}}
         </main>
     </div>
-</div>
+</main>
