@@ -98,7 +98,7 @@ class SAESubjectRepository extends BaseRepository
             }
 
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn ($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
@@ -129,7 +129,7 @@ class SAESubjectRepository extends BaseRepository
             );
             $stmt->execute(['prof_id' => $professorId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn ($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs du professeur : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
@@ -157,7 +157,7 @@ class SAESubjectRepository extends BaseRepository
             $stmt->execute(['student_id' => $studentId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn ($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs de l\'étudiant : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
@@ -182,7 +182,7 @@ class SAESubjectRepository extends BaseRepository
             $stmt->execute(['client_id' => $clientId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($row) => new SAESubject($row), $data);
+            return array_map(fn ($row) => new SAESubject($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs du client : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
@@ -220,6 +220,7 @@ class SAESubjectRepository extends BaseRepository
             ]);
 
             $id = intval($stmt->fetchColumn());
+            $stmt->closeCursor();
             $entity->setSaeSubjectId($id);
 
             $this->connection->commit();

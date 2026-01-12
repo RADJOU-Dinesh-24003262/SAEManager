@@ -7,18 +7,38 @@ use Exception;
 
 /**
  * The abstract class which will be used to create all of the views.
- */
+ *
+ * It contains all the required methods and attributes to be used in the implemented views.
+ *
+ * @category View
+
+ * @package Src
+ *
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+
+ * @license MIT License https://opensource.org/licenses/MIT
+
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ **/
 abstract class AbstractView
 {
     /**
-     * Stores the data used in the implemented page.
+     * Stores the data used in the implemented page. The var line contains the type stored in this variable.
+     *
      * @var array<string, mixed>
      */
     protected array $data = [];
 
     /**
-     * Initializes the $data attribute with flash messages.
-     * @param array<string, mixed> $data
+     * Initializes the $data attribute with the array of data given when called.
+     *
+     * @param array<string, mixed> $data The array of data to be instantiated.
+
+     * @return void Creates The instance of the class.
      */
     public function __construct(array $data = [])
     {
@@ -32,7 +52,54 @@ abstract class AbstractView
     }
 
     /**
+     * Renders an HTML template by replacing predefined placeholders with actual values.
+     *
+     * This method retrieves an HTML template and replaces placeholders with values
+     * returned by the templateKeys() method.
+     *
+     * @return void
+     * @throws Exception If the themplate not found.
+     */
+    protected function renderBody(): void
+    {
+        $template = file_get_contents($this->templatePath());
+
+        if ($template === false) {
+            throw new Exception("Une eurreur est survenu lors la chargement de la page");
+        }
+
+        // Replacement of template keys with actual values.
+        foreach ($this->templateKeys() as $key => $value) {
+            $template = str_replace("{{{$key}}}", $value, $template);
+        }
+
+        echo $template;
+    }
+
+    /**
+     * Returns the path to the HTML template file.
+     *
+     * @return string
+     */
+    abstract protected function templatePath(): string;
+
+    /**
+     * Returns an associative array of keys and values to be used in the HTML template.
+     *
+     * This method retrieves error messages and success messages from the session
+     * and prepares them for rendering in the template.
+     *
+     * @return array<string, mixed> An associative array with keys for error and success messages.
+     */
+    abstract protected function templateKeys(): array;
+
+    /**
      * Renders the complete HTML page including header, body, and footer.
+     *
+     * This method orchestrates the rendering of the entire HTML page by calling
+     * the methods to render the header, body, and footer in sequence.
+     *
+     * @return void
      */
     public function render(): void
     {
@@ -43,6 +110,11 @@ abstract class AbstractView
 
     /**
      * Renders the HTML header section of the page.
+     *
+     * This method outputs the HTML for the header section, including meta tags,
+     * title, CSS links, and navigation bar.
+     *
+     * @return void
      */
     protected function renderHeader(): void
     {
@@ -54,12 +126,12 @@ abstract class AbstractView
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>' . $this->getPageTitle() . '</title>
     <link rel="icon" type="image/x-icon" href="/image/favicon.ico">
-    
+
     <link rel="stylesheet" href="/styles/pico.classless.blue.css">
-    
+
     <link rel="stylesheet" href="/styles/header.css">
     <link rel="stylesheet" href="/styles/footer.css">
-    
+
     ' . $this->getAdditionalHeaders() . '
     <link rel="stylesheet" href="/styles/' . $this->getNameCss() . '">
 </head>
@@ -80,13 +152,29 @@ abstract class AbstractView
 ';
     }
 
+
+    /**
+     * Returns the name of the CSS file associated with the view.
+     *
+     * This method should be implemented by subclasses to specify the CSS file
+     * that should be included in the HTML header for styling the page.
+     *
+     * @return string The name of the CSS file.
+     */
+    abstract protected function getNameCss(): string;
+
     /**
      * Renders the HTML footer section of the page.
+     *
+     * This method outputs the HTML for the footer section, including contact information
+     * and social media links.
+     *
+     * @return void
      */
     protected function renderFooter(): void
     {
         echo '
-    </main> 
+    </main>
     <footer class="container-fluid">
         <hr>
         <nav>
@@ -121,25 +209,9 @@ abstract class AbstractView
     }
 
     /**
-     * Renders an HTML template by replacing placeholders.
-     */
-    protected function renderBody(): void
-    {
-        $template = file_get_contents($this->templatePath());
+     * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
 
-        if ($template === false) {
-            throw new Exception("Une erreur est survenue lors du chargement de la page");
-        }
-
-        foreach ($this->templateKeys() as $key => $value) {
-            $template = str_replace("{{{$key}}}", $value, $template);
-        }
-
-        echo $template;
-    }
-
-    /**
-     * Returns the HTML navigation bar items.
+     * @return string the name of the project 'SAE Manager'.
      */
     protected function getNavBar(): string
     {
@@ -163,16 +235,33 @@ abstract class AbstractView
         return 'SAE Manager';
     }
 
+    /**
+     * Returns additional HTML headers associated with the view.
+     *
+     * @return string The additional HTML headers.
+     */
     protected function getAdditionalHeaders(): string
     {
         return '';
     }
 
+    /**
+     * Returns additional scripts to be included before closing a body tag.
+     *
+     * @return string The additional scripts.
+     */
     protected function getAdditionalScripts(): string
     {
         return '';
     }
 
+    /**
+     * Renders error messages in HTML format.
+     *
+     * @param array<string|integer, string> $errors List of error messages.
+     *
+     * @return string The rendered HTML or an empty string.
+     */
     protected function renderErrorMessages(array $errors): string
     {
         if (empty($errors)) {
@@ -181,12 +270,17 @@ abstract class AbstractView
 
         $html = '<article role="alert" style="background-color: var(--pico-del-color); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;"><ul style="margin: 0; padding-left: 1.5rem;">';
         foreach ($errors as $error) {
-            $html .= '<li>' . htmlspecialchars($error) . '</li>';
+            $html .= '<li>' . $error . '</li>';
         }
         $html .= '</ul></article>';
         return $html;
     }
 
+    /**
+     * Renders a success message in HTML format if available.
+     *
+     * @return string The rendered HTML or an empty string.
+     */
     protected function renderSuccessMessage(): string
     {
         $success = $this->data['success'] ?? '';
