@@ -1,6 +1,6 @@
 const yearSelect = document.getElementById('year');
 const tdSelect = document.getElementById('td');
-const parcoursSelect = document.getElementById('parcours');
+const majorSelect = document.getElementById('major');
 
 // Get the email input field
 const emailInput = document.getElementById('email');
@@ -11,14 +11,14 @@ const td4Option = Array.from(tdSelect.options).find(opt => opt.value === 'TD4');
 yearSelect.addEventListener('change', () => {
     if (yearSelect.value === '2' || yearSelect.value === '3') {
         td4Option.disabled = true;
-        parcoursSelect.disabled = false;
+        majorSelect.disabled = false;
         if (tdSelect.value === 'TD4') {
             tdSelect.value = '';
         }
     } else {
         td4Option.disabled = false;
-        parcoursSelect.disabled = true;
-        parcoursSelect.value = '';
+        majorSelect.disabled = true;
+        majorSelect.value = '';
     }
 });
 
@@ -36,13 +36,13 @@ function toggleStudentFields() {
     const isStudent = userTypeSelect.value === 'student';
 
     etudiantFields.style.display = isStudent ? 'block' : 'none';
-    parcoursSelect.disabled = !isStudent;
+    majorSelect.disabled = !isStudent;
     yearSelect.disabled = !isStudent;
     tdSelect.disabled = !isStudent;
     tpSelect.disabled = !isStudent;
 
     if (!isStudent) {
-        parcoursSelect.value = '';
+        majorSelect.value = '';
         yearSelect.value = '';
         tdSelect.value = '';
         tpSelect.value = '';

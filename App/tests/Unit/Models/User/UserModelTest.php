@@ -53,7 +53,7 @@ class UserModelTest extends TestCase
         $this->assertEquals(2, $student->getYear());
         $this->assertEquals('TD1', $student->getTd());
         $this->assertEquals('TPA', $student->getTp());
-        $this->assertEquals('A', $student->getParcours());
+        $this->assertEquals('A', $student->getMajor());
     }
 
     #[Test]
@@ -305,7 +305,7 @@ class UserModelTest extends TestCase
     }
 
     #[Test]
-    public function studentWithEmptyParcoursReturnsNull(): void
+    public function studentWithEmptyMajorReturnsNull(): void
     {
         $student = new Student(
             [
@@ -315,7 +315,7 @@ class UserModelTest extends TestCase
             ]
         );
 
-        $this->assertNull($student->getParcours());
+        $this->assertNull($student->getMajor());
     }
 
     #[Test]

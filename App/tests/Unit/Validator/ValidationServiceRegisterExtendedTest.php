@@ -166,26 +166,26 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     }
 
     #[Test]
-    public function year2StudentWithoutParcoursIsRejected(): void
+    public function year2StudentWithoutMajorIsRejected(): void
     {
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
-        unset($data['parcours']);
+        unset($data['major']);
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }
 
     #[Test]
-    public function year3StudentWithoutParcoursIsRejected(): void
+    public function year3StudentWithoutMajorIsRejected(): void
     {
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '3';
-        unset($data['parcours']);
+        unset($data['major']);
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
@@ -198,7 +198,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
-        $data['parcours'] = 'A';
+        $data['major'] = 'A';
         $data['td'] = 'TD4';
 
         $escaped = $this->validator->escape($data);
@@ -206,13 +206,13 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     }
 
     #[Test]
-    public function year1StudentWithParcoursIsRejected(): void
+    public function year1StudentWithMajorIsRejected(): void
     {
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '1';
-        $data['parcours'] = 'A';
+        $data[''] = 'A';
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
@@ -242,7 +242,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->validator->validate($escaped);
     }
 
-    public static function invalidParcoursProvider(): array
+    public static function invalidMajorProvider(): array
     {
         return [
             'lowercase' => ['a'],
@@ -253,14 +253,14 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     }
 
     #[Test]
-    #[DataProvider('invalidParcoursProvider')]
-    public function invalidParcoursAreRejected(string $parcours): void
+    #[DataProvider('invalidMajorProvider')]
+    public function invalidMajorsAreRejected(string $major): void
     {
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
-        $data['parcours'] = $parcours;
+        $data['major'] = $major;
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);

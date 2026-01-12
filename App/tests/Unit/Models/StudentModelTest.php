@@ -72,7 +72,7 @@ class StudentModelTest extends TestCase
 
         $this->assertEquals('test456', $student->getAmuId());
         $this->assertEquals(3, $student->getYear());
-        $this->assertEquals('B', $student->getParcours());
+        $this->assertEquals('B', $student->getMajor());
         $this->assertEquals('TD2', $student->getTd());
         $this->assertEquals('TPB', $student->getTp());
         $this->assertEquals('Marie Martin', $student->getFullName());
@@ -135,7 +135,7 @@ class StudentModelTest extends TestCase
                 'td' => 'TD1',
                 'tp' => 'TPA'
             ]],
-            'second_year_with_parcours' => [[
+            'second_year_with_major' => [[
                 'amu_id' => 'std002',
                 'first_name' => 'Bob',
                 'last_name' => 'Charles',
@@ -144,7 +144,7 @@ class StudentModelTest extends TestCase
                 'td' => 'TD2',
                 'tp' => 'TPB'
             ]],
-            'third_year_with_parcours' => [[
+            'third_year_with_major' => [[
                 'amu_id' => 'std003',
                 'first_name' => 'Charlie',
                 'last_name' => 'David',
@@ -169,7 +169,7 @@ class StudentModelTest extends TestCase
     }
 
     #[Test]
-    public function nullParcoursIsHandledCorrectly(): void
+    public function nullMajorIsHandledCorrectly(): void
     {
         $data = [
             'first_name' => 'Test',
@@ -179,6 +179,6 @@ class StudentModelTest extends TestCase
 
         $student = new Student($data);
 
-        $this->assertNull($student->getParcours());
+        $this->assertNull($student->getMajor());
     }
 }

@@ -182,15 +182,15 @@ abstract class FormValidator
     }
 
     /**
-     * Returns the validity of the parcours field.
+     * Returns the validity of the major field.
      *
-     * @param string $parcours The value to validate.
+     * @param string $major The value to validate.
      *
      * @return boolean
      */
-    protected function isValidParcours(string $parcours): bool
+    protected function isValidMajor(string $major): bool
     {
-        return in_array($parcours, ['A', 'B']);
+        return in_array($major, ['A', 'B']);
     }
 
     /**
