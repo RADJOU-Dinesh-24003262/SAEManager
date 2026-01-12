@@ -3,8 +3,10 @@
 namespace Services\Auth;
 
 use Core\Utilis\EmailService;
+use Core\Utilis\Logger;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\SAE\Repository\SAEGroupRepository;
+use Models\SAE\Repository\ParticipatedInRepository;
 use Models\User\Student;
 use DateTime;
 use Models\SAE\SAESubject;
@@ -29,57 +31,78 @@ class LastDateMailer
      */
     public static function send(): void
     {
+        Logger::log('MAIL_LAST_DATE', 'Starting last date reminder email process.');
         $subjectOfMail = 'Rappel date limite du rendu - SAE Manager';
 
         $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
+        Logger::log('MAIL_LAST_DATE', "Focus date for reminder: $dateEndFocus");
+
         $saeSubjectRepo = SAESubjectRepository::getInstance();
         $saeSubjects = $saeSubjectRepo->findByEndDate($dateEndFocus);
+        Logger::log('MAIL_LAST_DATE', 'Found ' . count($saeSubjects) . ' subjects ending on focus date.');
 
         $saeGroupRepo = SAEGroupRepository::getInstance();
+        $participatedInRepo = ParticipatedInRepository::getInstance();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
 
             if ($saeId === null) {
+                Logger::log('MAIL_LAST_DATE', 'Skipping subject with null ID.', null, 'WARNING');
                 continue;
             }
+
+            Logger::log('MAIL_LAST_DATE', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
             $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
 
             if (empty($studentsGroup)) {
+                Logger::log('MAIL_LAST_DATE', "No groups found for SAE ID: $saeId");
                 continue;
             }
+            
+            Logger::log('MAIL_LAST_DATE', 'Found ' . count($studentsGroup) . " groups for SAE ID: $saeId");
+
             foreach ($studentsGroup as $studentGroup) {
-                $students = $saeGroupRepo->getGroupStudents($saeId);
+                $groupId = $studentGroup->getSaeGroupId();
+                $students = $participatedInRepo->getGroupStudents($groupId);
+                
+                Logger::log('MAIL_LAST_DATE', 'Found ' . count($students) . " students in group ID: $groupId");
 
-                foreach ($students as $student) {
-                    $student = new Student($student);
+                foreach ($students as $studentData) {
+                    $student = new Student($studentData);
 
-                    $repoSubject = $saeSubjectRepo->findById($saeId);
-                    if ($repoSubject === null) {
-                        continue;
-                    }
-
+                    // Re-fetching subject is redundant, using existing $saeSubject
+                    // but keeping logic structure similar for now, just optimized slightly.
+                    
                     $emailStudent = $student->getEmail();
-                    $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
-                    $textMessage = self::getTextTemplate($student, $repoSubject);
-                    EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                    Logger::log('MAIL_LAST_DATE', "Preparing to send email to: $emailStudent");
+
+                    try {
+                        $htmlMessage = self::getHtmlTemplate($student, $saeSubject);
+                        $textMessage = self::getTextTemplate($student, $saeSubject);
+                        EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                        Logger::log('MAIL_LAST_DATE', "Email sent successfully to: $emailStudent");
+                    } catch (\Exception $e) {
+                        Logger::log('MAIL_LAST_DATE', "Failed to send email to $emailStudent: " . $e->getMessage(), null, 'ERROR');
+                    }
                 }
             }
         }
+        Logger::log('MAIL_LAST_DATE', 'Last date reminder email process completed.');
     }
 
     /**
      * Returns the HTML template.
      *
-     * @param object $student The student.
-     * @param object $subject The SAE subject.
+     * @param Student $student The student.
+     * @param SAESubject $subject The SAE subject.
      * @return string
      */
-    private static function getHtmlTemplate($student, $subject): string
+    private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $endDate = $subject->getEndDate()->format('Y-m-d');
-        $title = htmlspecialchars($subject->getTitle());
+        $endDate = $subject->getEndDate();
+        $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
 
         return "
