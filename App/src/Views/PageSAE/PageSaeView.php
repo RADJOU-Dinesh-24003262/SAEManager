@@ -263,7 +263,8 @@ class PageSaeView extends BaseSaeView
             }
             $content .= '.</p>';
         }
-        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p></article>';
+        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
+            '.</p></article>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
 
