@@ -197,6 +197,8 @@ abstract class User extends BaseModel
                 ]
             );
 
+            unset($this->hashed_password);
+
             $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $this->email]);
             $userId = (int) $stmt->fetchColumn(0);
@@ -282,6 +284,8 @@ abstract class User extends BaseModel
                         '2' => 'client',
                         default => 'client'
                     };
+                } elseif ($key === 'hashed_password') {
+                    continue;
                 } elseif (property_exists($this, $key)) {
                     $this->$key = $value;
                 }

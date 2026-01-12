@@ -212,7 +212,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
 
         $data = $this->getValidStudentData();
         $data['year'] = '1';
-        $data[''] = 'A';
+        $data['major'] = 'A';
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
