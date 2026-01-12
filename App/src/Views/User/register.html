@@ -136,6 +136,25 @@
         </article>
     </fieldset>
 
+    <fieldset id="clientFields" style="display:none;" aria-hidden="true">
+        <legend>Informations Partenaire</legend>
+        
+        <label for="organisation">
+            Organisation / Entreprise
+            <abbr title="requis" >*</abbr>
+        </label>
+        <input 
+            type="text" 
+            id="organisation" 
+            name="organisation" 
+            minlength="2" 
+            maxlength="255"
+            autocomplete="organization"
+            aria-required="false"
+            aria-describedby="org-hint">
+        <small id="org-hint">Le nom de votre structure (entreprise, association, etc.)</small>
+    </fieldset>
+
     <fieldset id="etudiantFields" style="display:none;" aria-hidden="true">
         <article>
         <h3>Informations académiques</h3>

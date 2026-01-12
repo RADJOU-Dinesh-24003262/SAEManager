@@ -6,8 +6,10 @@ use Controllers\BaseController;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
+use Models\User\Professor;
 use Override;
 use Views\SAE\ManageGroupsView;
+use Exception;
 
 /**
  * Controller to display the group management page.
@@ -25,15 +27,16 @@ class ManageGroupsController extends BaseController
      * Controls the rendering of the group management page.
      *
      * @return void
+     * @throws ExceptionAccessDenied If the user does not have permission to manage the SAE.
      */
     #[Override]
     public function control(): void
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
         if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
+            $sae_id = intval($matches[1]);
         } else {
             header('Location: /dashboard');
             exit;
@@ -42,22 +45,28 @@ class ManageGroupsController extends BaseController
         try {
             $sae = SAE::getInstance();
 
-            if (!$this->user->canManageSAE($saeId)) {
+            if (!$this->user->canManageSAE($sae_id)) {
                 throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
             }
 
-            $saeData = $sae->getCompleteSAEData($saeId, $this->user);
-            $availableStudents = $sae->getAvailableStudents($this->user, $saeId);
+            $saeData = $sae->getCompleteSAEData($sae_id, $this->user);
+            $availableStudents = $sae->getAvailableStudents($this->user, $sae_id);
+
+            $profsAvailable = [];
+            if ($this->user instanceof Professor) {
+                $profsAvailable = $this->user->getAllProfessors();
+            }
 
             $view = new ManageGroupsView([
                 'user' => $this->user,
                 'sae' => $saeData,
-                'available_students' => $availableStudents
+                'available_students' => $availableStudents,
+                'all_professors' => $profsAvailable,
             ]);
             $view->render();
         } catch (ExceptionAccessDenied $e) {
-            SessionService::setFlash('error', $e->getMessage());
-            header('Location: /sae/' . $saeId);
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /sae/' . $sae_id);
             exit;
         }
     }

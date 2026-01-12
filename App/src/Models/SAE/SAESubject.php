@@ -4,7 +4,6 @@ namespace Models\SAE;
 
 use Core\Models\BaseModel;
 use DateTime;
-use Exception;
 use Override;
 
 /**
@@ -38,9 +37,9 @@ class SAESubject extends BaseModel
     /**
      * The client ID.
      *
-     * @var integer
+     * @var integer|null
      */
-    protected int $client_id;
+    protected ?int $client_id = null;
 
     /**
      * The subject name.
@@ -70,55 +69,6 @@ class SAESubject extends BaseModel
      */
     protected ?string $file_path = null;
 
-    /**
-     * Constructor.
-     *
-     * @param array<string, mixed> $data Initial data.
-     */
-    public function __construct(array $data = [])
-    {
-        $this->hydrate($data);
-    }
-
-    /**
-     * Validates the SAE subject data.
-     *
-     * @return array<int, string> Array of validation errors (empty if valid).
-     */
-    #[Override]
-    public function validate(): array
-    {
-        $errors = [];
-
-        if (empty($this->subject_name)) {
-            $errors[] = 'Le nom du sujet ne peut pas être vide';
-        }
-
-        if (strlen($this->subject_name) > 255) {
-            $errors[] = 'Le nom du sujet ne peut pas dépasser 255 caractères';
-        }
-
-        if ($this->responsible_prof_id <= 0) {
-            $errors[] = 'L\'ID du professeur responsable doit être valide';
-        }
-
-        if ($this->client_id <= 0) {
-            $errors[] = 'L\'ID du client doit être valide';
-        }
-
-        try {
-            $begin = new DateTime($this->begin_date);
-            $end = new DateTime($this->end_date);
-
-            if ($end <= $begin) {
-                $errors[] = 'La date de fin doit être après la date de début';
-            }
-        } catch (Exception $e) {
-            $errors[] = 'Les dates ne sont pas valides';
-        }
-
-        return $errors;
-    }
 
     /**
      * Checks if the SAE is currently active.
@@ -220,9 +170,9 @@ class SAESubject extends BaseModel
     /**
      * Gets the client ID.
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getClientId(): int
+    public function getClientId(): ?int
     {
         return $this->client_id;
     }
@@ -230,10 +180,10 @@ class SAESubject extends BaseModel
     /**
      * Sets the client ID.
      *
-     * @param integer $client_id The client ID.
+     * @param integer|null $client_id The client ID.
      * @return void
      */
-    public function setClientId(int $client_id): void
+    public function setClientId(?int $client_id): void
     {
         $this->client_id = $client_id;
     }

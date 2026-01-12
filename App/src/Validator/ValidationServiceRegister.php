@@ -88,6 +88,9 @@ class ValidationServiceRegister extends FormValidator
             // Add professor specific validations here if needed.
             $professorErrors = $this->validateProfessorFields($data);
             $errors = array_merge($errors, $professorErrors);
+        } elseif ($data['user_type'] === 'client') {
+            $clientErrors = $this->validateClientFields($data);
+            $errors = array_merge($errors, $clientErrors);
         }
 
         if (!empty($errors)) {
@@ -192,6 +195,34 @@ class ValidationServiceRegister extends FormValidator
                 "email",
                 "string",
                 "Utilisez votre adresse e-mail universitaire."
+            );
+        }
+
+        return $errors;
+    }
+
+    /**
+     * This method validates the values given in $data to make a new client user.
+     *
+     * @param array<string, mixed> $data Array, corresponding to the required value fields.
+     *
+     * @return array<ExceptionValidationRegister> Array of errors.
+     */
+    private function validateClientFields(array $data): array
+    {
+        $errors = [];
+
+        if (empty($data['organisation'])) {
+            $errors[] = new ExceptionValidationRegister(
+                'organisation',
+                'string',
+                "Le nom de l'organisation est requis."
+            );
+        } elseif (strlen($data['organisation']) > 255) {
+            $errors[] = new ExceptionValidationRegister(
+                'organisation',
+                'string',
+                "Le nom de l'organisation ne peut pas dépasser 255 caractères."
             );
         }
 
