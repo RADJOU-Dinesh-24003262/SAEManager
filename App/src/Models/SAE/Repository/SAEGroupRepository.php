@@ -8,6 +8,7 @@ use PDO;
 use PDOException;
 use Models\SAE\SAEGroup;
 use Core\Models\Repository\BaseRepository;
+use Models\User\Student;
 
 /**
  * Repository for SAEGroup operations.
@@ -181,6 +182,16 @@ class SAEGroupRepository extends BaseRepository
         }
     }
     // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Gets all students in a group.

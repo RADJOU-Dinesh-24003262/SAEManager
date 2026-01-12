@@ -4,7 +4,10 @@ namespace Services\Auth;
 
 use Core\Utilis\EmailService;
 use Models\SAE\Repository\SAESubjectRepository;
+use Models\SAE\Repository\SAEGroupRepository;
+use Models\User\Student;
 use DateTime;
+use Models\SAE\SAESubject;
 
 /**
  * Service responsible for sending reminder emails for SAE Manager.
@@ -29,15 +32,39 @@ class LastDateMailer
         $subjectOfMail = 'Rappel date limite du rendu - SAE Manager';
 
         $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
-        $repo = SAESubjectRepository::getInstance();
-        $studentsrepo = $repo->findStudentsWithSaeEndingOnDate($dateEndFocus);
+        $saeSubjectRepo = SAESubjectRepository::getInstance();
+        $saeSubjects = $saeSubjectRepo->findByEndDate($dateEndFocus);
 
-        foreach ($studentsrepo as $student) {
-            $repoSubject = $repo->findById($student->getSaeSubjectId());
-            $emailStudent = $student->getEmail();
-            $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
-            $textMessage = self::getTextTemplate($student, $repoSubject);
-            EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+        $saeGroupRepo = SAEGroupRepository::getInstance();
+
+        foreach ($saeSubjects as $saeSubject) {
+            $saeId = $saeSubject->getSaeSubjectId();
+
+            if ($saeId === null) {
+                continue;
+            }
+            $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
+
+            if (empty($studentsGroup)) {
+                continue;
+            }
+            foreach ($studentsGroup as $studentGroup) {
+                $students = $saeGroupRepo->getGroupStudents($saeId);
+
+                foreach ($students as $student) {
+                    $student = new Student($student);
+
+                    $repoSubject = $saeSubjectRepo->findById($saeId);
+                    if ($repoSubject === null) {
+                        continue;
+                    }
+
+                    $emailStudent = $student->getEmail();
+                    $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
+                    $textMessage = self::getTextTemplate($student, $repoSubject);
+                    EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                }
+            }
         }
     }
 
@@ -104,15 +131,16 @@ class LastDateMailer
     /**
      * Returns the plain text template.
      *
-     * @param object $student The student.
-     * @param object $subject The SAE subject.
+     * @param Student $student The student.
+     * @param SAESubject $subject The SAE subject.
      * @return string
      */
-    private static function getTextTemplate($student, $subject): string
+    private static function getTextTemplate(Student $student, SAESubject $subject): string
     {
-        $title = htmlspecialchars($subject->getTitle());
+        $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
-        $endDate = $subject->getEndDate()->format('Y-m-d');
+        $endDate = DateTime::createFromFormat('Y-m-d', $subject->getEndDate());
+        $endDate = $endDate->format('Y-m-d');
         return "
 Rappel date limite du rendu - SAE Manager
 
