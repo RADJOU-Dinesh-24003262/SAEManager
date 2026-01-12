@@ -1,13 +1,13 @@
 {{ERROR_MESSAGES}}
 <div class="mainContainer">
     <article>
-    <h1 class="title">SAE Manager ‑ Authentification</h1>
+    <h1 class="title" style="text-align: center">SAE Manager ‑ Authentification</h1>
 
     <form method="post" action="/login" class="titlediv">
         <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
-        <h2 class="subtitle">Email : </h2>
+        <h3 class="subtitle">Email : </h3>
         <input type="text" name="email" class="textinput" placeholder="Entrez votre email" required>
-        <h2 class="subtitle">Mot de passe : </h2>
+        <h3 class="subtitle">Mot de passe : </h3>
         <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
         </article>
         <div class="button-container">

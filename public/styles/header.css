@@ -1,27 +1,33 @@
-nav.container-fluid {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-.brand-container {
+/* --- Style Global du Header --- */
+header nav.main-nav {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    padding: 1rem 0;
 }
-.brand-title {
-    font-size: 1.25rem;
-    margin-bottom: 0;
-    font-weight: bold;
+
+header nav.main-nav ul.nav-links {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
-@media (max-width: 600px) {
-    nav ul {
-        padding: 0.5rem 0;
-    }
-    .brand-title {
-        display: none;
+
+/* --- Tablette & écrans moyens (sous 800px) --- */
+@media (max-width: 800px) {
+    /* Faire disparaître le logo */
+    header nav.main-nav .nav-logo {
+        display: none !important;
     }
 
+    /* Centrer la barre de navigation */
+    header nav.main-nav {
+        justify-content: center !important;
+    }
 
-    .header-title {
-        display: none; // à corriger
+    header nav.main-nav ul.nav-links {
+        width: auto;
+        justify-content: center;
     }
 }
