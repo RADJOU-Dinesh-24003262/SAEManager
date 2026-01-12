@@ -29,7 +29,7 @@ abstract class AbstractView
     /**
      * Stores the data used in the implemented page. The var line contains the type stored in this variable.
      *
-     * @var array<string, mixed>
+     * @var array<string, mixed> $data The data used in the view.
      */
     protected array $data = [];
 
@@ -89,7 +89,7 @@ abstract class AbstractView
      * This method retrieves error messages and success messages from the session
      * and prepares them for rendering in the template.
      *
-     * @return array<string, mixed> An associative array with keys for error and success messages.
+     * @return array<string, string> An associative array with keys for error and success messages.
      */
     abstract protected function templateKeys(): array;
 
@@ -257,6 +257,36 @@ abstract class AbstractView
     }
 
     /**
+     * Returns the array of error messages.
+     *
+     * @return array<string|int, string>
+     */
+    protected function getErrors(): array
+    {
+        return isset($this->data['errors']) && is_array($this->data['errors']) ? $this->data['errors'] : [];
+    }
+
+    /**
+     * Returns the success message.
+     *
+     * @return string
+     */
+    protected function getSuccess(): string
+    {
+        return isset($this->data['success']) && is_string($this->data['success']) ? $this->data['success'] : '';
+    }
+
+    /**
+     * Returns the current user if set in data.
+     *
+     * @return mixed Usually an instance of User (Student, Professor, Client) or null.
+     */
+    protected function getUser(): mixed
+    {
+        return $this->data['user'] ?? null;
+    }
+
+    /**
      * Renders error messages in HTML format.
      *
      * @param array<string|integer, string> $errors List of error messages.
@@ -272,7 +302,7 @@ abstract class AbstractView
         $html = '<article role="alert" style="background-color: var(--pico-del-color); color: white; padding: 1rem; ' .
             'border-radius: 0.5rem; margin-bottom: 1rem;"><ul style="margin: 0; padding-left: 1.5rem;">';
         foreach ($errors as $error) {
-            $html .= '<li>' . $error . '</li>';
+            $html .= '<li>' . (string) $error . '</li>';
         }
         $html .= '</ul></article>';
         return $html;
@@ -285,11 +315,11 @@ abstract class AbstractView
      */
     protected function renderSuccessMessage(): string
     {
-        $success = $this->data['success'] ?? '';
+        $success = $this->getSuccess();
         if (empty($success)) {
             return '';
         }
         return '<article role="status" style="background-color: var(--pico-ins-color); color: white; padding: 1rem; ' .
-            'border-radius: 0.5rem; margin-bottom: 1rem;">' . htmlspecialchars($success) . '</article>';
+            'border-radius: 0.5rem; margin-bottom: 1rem;">' . (string) $success . '</article>';
     }
 }

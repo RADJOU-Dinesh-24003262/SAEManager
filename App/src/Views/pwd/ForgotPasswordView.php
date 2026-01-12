@@ -64,6 +64,7 @@ class ForgotPasswordView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var array<int|string, string> $errors */
         $errors = $this->data['errors'];
 
         return [

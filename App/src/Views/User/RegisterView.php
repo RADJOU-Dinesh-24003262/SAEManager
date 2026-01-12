@@ -127,7 +127,9 @@ class RegisterView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var array<int|string, string> $errors */
         $errors = $this->data['errors'];
+        /** @var string $csrfToken */
         $csrfToken = $this->data['csrf_token'] ?? '';
 
         return [

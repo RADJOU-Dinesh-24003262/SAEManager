@@ -39,7 +39,7 @@ phpcs: ## Vérifie le code style (PSR-12)
 
 phpstan: ## Lance l'analyse statique
 	@echo "${YELLOW}Analyse statique...${NC}"
-	./vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
+	./vendor/bin/phpstan analyse . --level=9 --memory-limit=512M
 
 generate-phpdoc: ## Génère la documentation
 	@echo "${YELLOW}Génération de la documentation...${NC}"

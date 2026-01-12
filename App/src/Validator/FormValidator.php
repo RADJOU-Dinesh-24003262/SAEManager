@@ -40,8 +40,8 @@ abstract class FormValidator
     /**
      * Escapes form data (HTML special chars) recursively.
      *
-     * @param  array<array-key, mixed> $data Data of form to espace.
-     * @return array<array-key, mixed> Data with escaped fields.
+     * @param  array<array-key, string> $data Data of form to espace.
+     * @return array<array-key, string> Data with escaped fields.
      * @throws ExceptionValidationEmptys If a required field is empty.
      */
     public function escape(array $data): array
@@ -75,6 +75,19 @@ abstract class FormValidator
      * @throws Exception If the data don't meet the requirement.
      */
     abstract public function validate(array $data): void;
+
+    /**
+     * Safely retrieves a string from the data array.
+     *
+     * @param array<string, mixed> $data    The data array.
+     * @param string               $key     The key to retrieve.
+     * @param string               $default The default value if not found or not a string.
+     * @return string
+     */
+    protected function getString(array $data, string $key, string $default = ''): string
+    {
+        return isset($data[$key]) && is_string($data[$key]) ? $data[$key] : $default;
+    }
 
     /**
      * Returns the validity of the userType field

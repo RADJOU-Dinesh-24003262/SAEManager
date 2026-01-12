@@ -70,7 +70,7 @@ class Student extends User
     /**
      * Initializes a new student.
      *
-     * @param array<string, string|integer|null> $data The student data.
+     * @param array<string, mixed> $data The student data.
      */
     public function __construct(array $data = [])
     {
@@ -129,9 +129,9 @@ class Student extends User
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($data) {
+        if (is_array($data)) {
             foreach ($data as $key => $value) {
-                if (property_exists($this, $key)) {
+                if (is_string($key) && property_exists($this, $key)) {
                     $this->$key = $value;
                 }
             }

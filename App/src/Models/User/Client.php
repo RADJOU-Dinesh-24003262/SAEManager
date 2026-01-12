@@ -33,7 +33,7 @@ class Client extends User
     /**
      * Initializes a new client.
      *
-     * @param array<string, string|integer> $data The client data.
+     * @param array<string, mixed> $data The client data.
      */
     public function __construct(array $data = [])
     {
@@ -87,9 +87,9 @@ class Client extends User
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($data) {
+        if (is_array($data)) {
             foreach ($data as $key => $value) {
-                if (property_exists($this, $key)) {
+                if (is_string($key) && property_exists($this, $key)) {
                     $this->$key = $value;
                 }
             }

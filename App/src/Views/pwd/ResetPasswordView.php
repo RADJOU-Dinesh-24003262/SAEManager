@@ -78,10 +78,17 @@ class ResetPasswordView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var array<int|string, string> $errors */
+        $errors = $this->data['errors'];
+        /** @var string $token */
+        $token = $this->data['token'];
+        /** @var string $email */
+        $email = $this->data['email'];
+
         return [
-            'ERROR_MESSAGES' => $this->renderErrorMessages($this->data['errors']),
-            'TOKEN'          => $this->data['token'],
-            'EMAIL_DISPLAY'  => $this->maskEmail($this->data['email']),
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            'TOKEN'          => $token,
+            'EMAIL_DISPLAY'  => $this->maskEmail($email),
         ];
     }
 

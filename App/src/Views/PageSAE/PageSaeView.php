@@ -62,7 +62,7 @@ class PageSaeView extends BaseSaeView
     #[Override]
     protected function templateKeys(): array
     {
-        $errors = $this->data['errors'] ?? [];
+        $errors = $this->getErrors();
 
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
@@ -82,7 +82,16 @@ class PageSaeView extends BaseSaeView
      */
     protected function getContactsSae(): string
     {
-        $user = $this->data['user'];
+        /** @var \Models\User\User $user */
+        $user = $this->getUser();
+        /** @var array{
+         *   responsible_professor: ?array{first_name: string, last_name: string, email: string},
+         *   all_professors: array<int, array{user_id: string|int,
+         *          first_name: string, last_name: string, email: string}>,
+         *   client: ?array{first_name: string, last_name: string, email: string, organisation?: string},
+         *   groups: array<int, array{group: \Models\SAE\SAEGroup,
+         *   students: array<int, array{first_name: string, last_name: string, email: string}>}>
+         * } $saeData */
         $saeData = $this->data['sae'];
         $content = '';
 
@@ -203,20 +212,34 @@ class PageSaeView extends BaseSaeView
      */
     protected function getDescriptionSae(): string
     {
-        $content = '<p>Nom de la SAE : ' . $this->data['sae']['subject']->getSubjectName() . '</p>';
-        $content .= '<p>Début de la SAE : ' . $this->data['sae']['subject']->getBeginDate() . '</p>';
-        $content .= '<p>Fin de la SAE : ' . $this->data['sae']['subject']->getEndDate() . '</p>';
+        /** @var \Models\User\User $user */
+        $user = $this->getUser();
 
-        $profRes = $this->data['sae']['responsible_professor'];
-        $allProfs = $this->data['sae']['all_professors'];
+        /** @var array{
+         *   subject: \Models\SAE\SAESubject,
+         *   responsible_professor: ?array{first_name: string, last_name: string, email: string},
+         *   all_professors: array<int,
+         *          array{user_id: string|int, first_name: string, last_name: string, email: string}>,
+         *   client: ?array{first_name: string, last_name: string, email: string, organisation?: string},
+         *   groups: array<int, array{group: \Models\SAE\SAEGroup,
+         *          students: array<int, array{first_name: string, last_name: string, email: string}>}>
+         * } $saeData */
+        $saeData = $this->data['sae'];
+
+        $content = '<p>Nom de la SAE : ' . $saeData['subject']->getSubjectName() . '</p>';
+        $content .= '<p>Début de la SAE : ' . $saeData['subject']->getBeginDate() . '</p>';
+        $content .= '<p>Fin de la SAE : ' . $saeData['subject']->getEndDate() . '</p>';
+
+        $profRes = $saeData['responsible_professor'];
+        $allProfs = $saeData['all_professors'];
 
         $profs = [];
 
-        if ($this->data['user']->isProfessor() || $this->data['user']->isClient()) {
+        if ($user->isProfessor() || $user->isClient()) {
             $profs = $allProfs;
         } else {
-            if (!empty($this->data['sae']['groups'])) {
-                foreach ($this->data['sae']['groups'] as $groupData) {
+            if (!empty($saeData['groups'])) {
+                foreach ($saeData['groups'] as $groupData) {
                     $profId = $groupData['group']->getProfessorId();
                     foreach ($allProfs as $p) {
                         if ($p['user_id'] == $profId) {
@@ -229,17 +252,10 @@ class PageSaeView extends BaseSaeView
             $profs = array_unique($profs, SORT_REGULAR);
         }
 
-        $client = $this->data['sae']['client'] ?: 'Pas de client';
+        $client = $saeData['client'];
 
-        $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
-        $profResFirstName = isset($profRes['first_name']) ? $profRes['first_name'] : 'Inconnu';
-
-        $profLastName = [];
-        $profFirstName = [];
-        foreach ($profs as $prof) {
-            $profLastName[] = isset($prof['last_name']) ? $prof['last_name'] : 'Inconnu';
-            $profFirstName[] = isset($prof['first_name']) ? $prof['first_name'] : 'Inconnu';
-        }
+        $profResLastName = $profRes['last_name'] ?? 'Inconnu';
+        $profResFirstName = $profRes['first_name'] ?? 'Inconnu';
 
         $clientLastName = isset($client['last_name']) ? $client['last_name'] : 'Inconnu';
         $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
@@ -250,13 +266,13 @@ class PageSaeView extends BaseSaeView
             $content .= '<p> Aucun professeur associé à la ressource.</p>';
             return $content;
         } else {
-            if ($this->data['user']->isStudent()) {
+            if ($user->isStudent()) {
                 $content .= '<p> Le professeur de votre groupe est ';
             } else {
                 $content .= '<p> Les professeurs associés à la ressource sont ';
             }
             foreach ($profs as $index => $prof) {
-                $content .= $profLastName[$index] . ' ' . $profFirstName[$index];
+                $content .= $prof['last_name'] . ' ' . $prof['first_name'];
                 if ($index < count($profs) - 1) {
                     $content .= ', ';
                 }
@@ -266,7 +282,7 @@ class PageSaeView extends BaseSaeView
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
             '.</p></article>';
 
-        $filePath = $this->data['sae']['subject']->getFilePath();
+        $filePath = $saeData['subject']->getFilePath();
 
         $content .= '<h3>Description de la SAE :</h3>';
 
@@ -291,7 +307,9 @@ class PageSaeView extends BaseSaeView
     #[Override]
     protected function getPageTitle(): string
     {
-        return 'SAE ' . $this->data['sae']['subject']->getSubjectName() . ' - SAE Manager';
+        /** @var array{subject: \Models\SAE\SAESubject} $saeData */
+        $saeData = $this->data['sae'];
+        return 'SAE ' . $saeData['subject']->getSubjectName() . ' - SAE Manager';
     }
 
     /**

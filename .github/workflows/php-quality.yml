@@ -78,7 +78,7 @@ jobs:
         if: steps.changed_files.outputs.has_changes == 'true'
         run: |
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
-          vendor/bin/phpstan analyse . --level=8 --memory-limit=512M
+          vendor/bin/phpstan analyse . --level=9 --memory-limit=512M
 
       # Unit Tests
       - name: Run PHPUnit Tests

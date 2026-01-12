@@ -101,10 +101,13 @@ class ToDoListPost extends BaseController
         }
         $parts = explode('/', $path);
 
+        $saeId = isset($parts[2]) && is_numeric($parts[2]) ? (int)$parts[2] : 0;
+        $todoId = isset($parts[5]) && is_numeric($parts[5]) ? (int)$parts[5] : 0;
+
         return [
-            'sae_id' => intval($parts[2] ?? 0),
+            'sae_id' => $saeId,
             'action' => $parts[4] ?? '',
-            'todo_id' => intval($parts[5] ?? 0)
+            'todo_id' => $todoId
         ];
     }
 
@@ -178,8 +181,11 @@ class ToDoListPost extends BaseController
      */
     private function handleAdd(int $groupId, array $input): void
     {
-        $description = isset($input['description']) ? trim((string)$input['description']) : '';
-        $priority = isset($input['priority']) ? intval($input['priority']) : 2;
+        $descRaw = $input['description'] ?? '';
+        $description = is_string($descRaw) ? trim($descRaw) : '';
+
+        $prioRaw = $input['priority'] ?? 2;
+        $priority = is_numeric($prioRaw) ? (int)$prioRaw : 2;
 
         if (empty($description)) {
             throw new ExceptionValidationEmpty("description", 400);
@@ -227,7 +233,8 @@ class ToDoListPost extends BaseController
 
         // Update Priority if provided.
         if (isset($input['priority'])) {
-            $priority = intval($input['priority']);
+            $val = $input['priority'];
+            $priority = is_numeric($val) ? (int)$val : 0;
             if ($priority >= 1 && $priority <= 3) {
                 if (!ToDoList::updatePriority($todoId, $priority)) {
                     $success = false;

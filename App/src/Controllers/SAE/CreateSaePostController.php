@@ -2,7 +2,7 @@
 
 namespace Controllers\SAE;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
 use Core\includes\exception\SAE\ExceptionInvalidData;
@@ -26,7 +26,7 @@ use Views\SAE\CreateSaeView;
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Controllers/SAE/CreateSaePostController.php
  */
-class CreateSaePostController implements ControllerInterface
+class CreateSaePostController extends BaseController
 {
     /**
      * Controls the processing of the SAE creation form.
@@ -37,30 +37,11 @@ class CreateSaePostController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        // Redirect to /login if not logged in.
-        if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Authentification requise.']);
-            header('Location: /login');
-            exit();
-        }
-
-        // Retrieve the user object stored in the session.
-        $user = unserialize(SessionService::get('USER'));
-
-        $data['user'] = $user;
-
-        if (!$user || !($user instanceof User)) {
-            throw new Exception('Unknown user.');
-        }
-
-        $user = unserialize(SessionService::get('USER'));
-
-        if (!$user->isProfessor()) {
-            header('Location: /');
-            exit();
-        }
+        $this->ensureProfessor();
+        $user = $this->user;
 
         $data = $_POST;
+        $data['user'] = $user;
         $validator = new CreateSaeValidator();
 
         try {

@@ -90,9 +90,7 @@ abstract class User extends BaseModel
      */
     public static function createFromRegistrationData(array $data): User
     {
-        $userType = $data['user_type'] ?? '';
-
-
+        $userType = isset($data['user_type']) && is_string($data['user_type']) ? $data['user_type'] : '';
 
         $user = match ($userType) {
             'student' => new Student($data),
@@ -101,7 +99,8 @@ abstract class User extends BaseModel
             default => throw new InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
         };
 
-        $user->setPassword($data['password']);
+        $password = isset($data['password']) && is_string($data['password']) ? $data['password'] : '';
+        $user->setPassword($password);
 
         $user->addDomainNameToEmail();
 
@@ -126,22 +125,30 @@ abstract class User extends BaseModel
         );
         $stmt->execute(['email' => $data['email']]);
 
+        /** @var array<string, mixed>|false $result */
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if (!$result || !password_verify($data['password'], $result['hashed_password'])) {
+        $inputPassword = isset($data['password']) && is_string($data['password']) ? $data['password'] : '';
+        $storedPassword = isset($result['hashed_password']) && is_string($result['hashed_password'])
+            ? $result['hashed_password'] : '';
+
+        if (!is_array($result) || !password_verify($inputPassword, $storedPassword)) {
             throw new ExceptionValidationLogin();
         }
 
+        $userTypeVal = $result['user_type'] ?? '';
+        $userType = is_scalar($userTypeVal) ? (string)$userTypeVal : '';
 
-        $user = match ((string) $result['user_type']) {
+        $user = match ($userType) {
             '0' => new Student($data),
             '1' => new Professor($data),
             '2' => new Client($data),
             default => throw new ExceptionFetchDataBD(),
         };
 
-        $user->fetchData($data['email']);
+        $email = isset($data['email']) && is_string($data['email']) ? $data['email'] : '';
+        $user->fetchData($email);
         return $user;
     }
 
@@ -272,13 +279,16 @@ abstract class User extends BaseModel
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
-            if (empty($data)) {
+            if (!is_array($data)) {
                 throw new ExceptionFetchDataBD();
             }
 
             foreach ($data as $key => $value) {
+                if (!is_string($key)) {
+                    continue;
+                }
                 if ($key === 'user_type') {
-                    $this->user_type = match ((string) $data['user_type']) {
+                    $this->user_type = match ((string) $value) {
                         '0' => 'student',
                         '1' => 'professor',
                         '2' => 'client',

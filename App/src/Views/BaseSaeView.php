@@ -3,6 +3,8 @@
 namespace Views;
 
 use Core\Views\AbstractView;
+use Models\User\User;
+use Models\SAE\SAESubject;
 
 /**
  * Class BaseSaeView
@@ -27,8 +29,8 @@ abstract class BaseSaeView extends AbstractView
     protected function getCommonSaeTemplateKeys(): array
     {
         return [
-            'SAE_NUM' => $this->data['sae']['subject']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']['subject']->getSubjectName(),
+            'SAE_NUM' => (string) $this->getSubject()->getSaeSubjectId(),
+            'SAE_NAME' => $this->getSubject()->getSubjectName(),
             'SAE_MENU' => $this->getMenuSae()
         ];
     }
@@ -40,8 +42,8 @@ abstract class BaseSaeView extends AbstractView
      */
     protected function getMenuSae(): string
     {
-        $user = $this->data['user'];
-        $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+        $user = $this->getUser();
+        $saeId = $this->getSubject()->getSaeSubjectId();
         $menu = '';
 
         if ($user->isStudent()) {
@@ -50,7 +52,7 @@ abstract class BaseSaeView extends AbstractView
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">👥 Contacts</a></li>';
         } elseif ($user->isProfessor()) {
             $menu .= '<li><h2>Navigation</h2></li>';
-            if ($user->getUserId() === $this->data['sae']['subject']->getResponsibleProfId()) {
+            if ($user->getUserId() === $this->getSubject()->getResponsibleProfId()) {
                 $menu .= '<li><a href="/sae/' . $saeId . '/modify">✏️ Modifier la SAE</a></li>';
                 $menu .= '<li><a href="/sae/' . $saeId . '/groups">👥 Gérer les groupes</a></li>';
             }
@@ -65,5 +67,29 @@ abstract class BaseSaeView extends AbstractView
         $menu .= '<li><a href="/sae/' . $saeId . '">🏠 Menu Principal</a></li>';
 
         return $menu;
+    }
+
+    /**
+     * Retrieves the User object from the data.
+     *
+     * @return User
+     */
+    protected function getUser(): User
+    {
+        /** @var User $user */
+        $user = $this->data['user'];
+        return $user;
+    }
+
+    /**
+     * Retrieves the SAESubject object from the data.
+     *
+     * @return SAESubject
+     */
+    protected function getSubject(): SAESubject
+    {
+        /** @var array{subject: SAESubject} $sae */
+        $sae = $this->data['sae'];
+        return $sae['subject'];
     }
 }

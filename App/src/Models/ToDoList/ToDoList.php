@@ -206,7 +206,7 @@ class ToDoList extends BaseModel
             'INSERT INTO sae_todolists(sae_group_id, tododesc, checked, priority)
                                             VALUES (:sae_group_id, :tododesc, :checked, :priority)'
         );
-        $stmt->execute(
+        return $stmt->execute(
             [
                 'sae_group_id' => $this->groupId,
                 'tododesc' => $this->tododesc,
@@ -214,9 +214,6 @@ class ToDoList extends BaseModel
                 'priority' => $this->priority
             ]
         );
-
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['success'] === true;
     }
 
     /**
@@ -241,11 +238,11 @@ class ToDoList extends BaseModel
             $stmt->execute(['sae_group_id' => $sae_group_id]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($data) {
-                $this->sae_subject_id = $data['sae_subject_id'];
-                $this->todo_id = $data['todoid'];
-                $this->tododesc = $data['tododesc'];
-                $this->groupId = $data['sae_group_id'];
+            if (is_array($data)) {
+                $this->sae_subject_id = isset($data['sae_subject_id']) ? (int) $data['sae_subject_id'] : null;
+                $this->todo_id = (int) $data['todoid'];
+                $this->tododesc = (string) $data['tododesc'];
+                $this->groupId = (int) $data['sae_group_id'];
                 $this->checked = (bool) $data['checked'];
                 $this->priority = (int) $data['priority'];
             } else {

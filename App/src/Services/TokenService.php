@@ -131,7 +131,7 @@ class TokenService
             $stmt->execute(['token' => $token]);
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$result) {
+            if (!$result || !is_array($result)) {
                 throw new ExceptionInvalidToken(
                     "Ce lien de réinitialisation est invalide ou a expiré. "
                     . "Veuillez faire une nouvelle demande."
@@ -146,7 +146,11 @@ class TokenService
                 throw new ExceptionInvalidToken("Ce lien de réinitialisation a expiré.");
             }
 
-            return $result;
+            return [
+                    'email'      => (string) $result['email'],
+                    'expires_at' => (string) $result['expires_at'],
+                    'used'       => (bool) $result['used'],
+                ];
         } catch (PDOException $e) {
             error_log("Erreur validation token: " . $e->getMessage());
             throw new ExceptionInvalidToken("Erreur lors de la validation du lien. Veuillez réessayer plus tard.");

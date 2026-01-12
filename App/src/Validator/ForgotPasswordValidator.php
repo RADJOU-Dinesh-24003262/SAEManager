@@ -54,9 +54,13 @@ class ForgotPasswordValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
-        if (!$this->isValidEmail($data['email'])) {
+        $email = $this->getString($data, 'email');
+
+        if (!$this->isValidEmail($email)) {
             throw new ExceptionValidationForgotPassword('email', 'string', "L'adresse email n'est pas valide.");
-        }if (SessionService::get('last_forgot_password_request', 0) > (time() - 120)) {
+        }
+        $lastRequest = (int)SessionService::get('last_forgot_password_request', '0');
+        if ($lastRequest > (time() - 120)) {
             throw new ExceptionSpam("Veuillez attendre au moins 2 minutes avant de refaire une demande.");
         }
     }

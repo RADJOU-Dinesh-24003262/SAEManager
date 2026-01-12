@@ -40,7 +40,7 @@ class Professor extends User
      * Sets the user type and delegates initialization to the parent
      * constructor (User).
      *
-     * @param array<string, string|integer> $data Optional initial data for the professor.
+     * @param array<string, mixed> $data Optional initial data for the professor.
      */
     public function __construct(array $data = [])
     {
@@ -102,9 +102,9 @@ class Professor extends User
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         $stmt->closeCursor();
 
-        if ($data) {
+        if (is_array($data)) {
             foreach ($data as $key => $value) {
-                if (property_exists($this, $key)) {
+                if (is_string($key) && property_exists($this, $key)) {
                     $this->$key = $value;
                 }
             }

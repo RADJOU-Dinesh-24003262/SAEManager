@@ -45,6 +45,8 @@ class SettingsView extends AbstractView
     public function __construct(array $data)
     {
         parent::__construct($data);
+        /** @var \Models\User\User $user */
+        $user = $this->data['user']; // Ensure user is correctly typed for internal use
     }
 
     /**
@@ -67,6 +69,7 @@ class SettingsView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var \Models\User\User $user */
         $user = $this->data['user'];
 
         return [

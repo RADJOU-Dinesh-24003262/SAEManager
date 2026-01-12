@@ -56,7 +56,7 @@ class ToDoListView extends BaseSaeView
     #[Override]
     protected function templateKeys(): array
     {
-        $errors = $this->data['errors'] ?? [];
+        $errors = $this->getErrors();
 
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
@@ -75,17 +75,23 @@ class ToDoListView extends BaseSaeView
      */
     private function renderTodoContent(): string
     {
-        $user = $this->data['user'];
-        $currentGroupId = $this->data['current_group_id'];
+        /** @var \Models\User\User $user */
+        $user = $this->getUser();
+        /** @var int|null $currentGroupId */
+        $currentGroupId = $this->data['current_group_id'] ?? null;
 
         // If a group is selected (Student or Professor who selected a group).
         if ($currentGroupId) {
-            return $this->renderTaskBoard($currentGroupId, $this->data['tasks']);
+            /** @var array<int, array{todoid: int, tododesc: string, checked: bool, priority: int}> $tasks */
+            $tasks = $this->data['tasks'] ?? [];
+            return $this->renderTaskBoard($currentGroupId, $tasks);
         }
 
         // If professor and no group selected.
         if ($user->isProfessor()) {
-            return $this->renderGroupList($this->data['all_groups']);
+            /** @var array<int, array{group: \Models\SAE\SAEGroup}> $allGroups */
+            $allGroups = $this->data['all_groups'] ?? [];
+            return $this->renderGroupList($allGroups);
         }
 
         return '<p>Aucun groupe assigné pour le moment.</p>';
@@ -107,9 +113,13 @@ class ToDoListView extends BaseSaeView
             $html .= '<p>Aucun groupe disponible.</p>';
         } else {
             foreach ($groups as $groupData) {
-                $group = $groupData['group'];
+                /** @var array{group: \Models\SAE\SAEGroup} $groupDataTyped */
+                $groupDataTyped = $groupData;
+                $group = $groupDataTyped['group'];
                 $groupId = $group->getSaeGroupId();
-                $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+                /** @var array{subject: \Models\SAE\SAESubject} $saeData */
+                $saeData = $this->data['sae'];
+                $saeId = $saeData['subject']->getSaeSubjectId();
 
                 $html .= '<a href="/sae/' . $saeId . '/to-do?group_id=' . $groupId . '" class="btn btn-secondary" ';
                 $html .= 'style="padding: 20px; border: 1px solid #ccc; text-decoration: none; ';
@@ -133,9 +143,14 @@ class ToDoListView extends BaseSaeView
     {
         $html = '<h2>Tableau de bord - Groupe ' . $groupId . '</h2>';
 
+        /** @var \Models\User\User $user */
+        $user = $this->getUser();
+
         // Add a "Back to groups" button for professors.
-        if ($this->data['user']->isProfessor()) {
-            $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+        if ($user->isProfessor()) {
+            /** @var array{subject: \Models\SAE\SAESubject} $saeData */
+            $saeData = $this->data['sae'];
+            $saeId = $saeData['subject']->getSaeSubjectId();
             $html .= '<a href="/sae/' . $saeId . '/to-do" class="btn btn-secondary" ';
             $html .= 'style="margin-bottom: 1rem; display: inline-block;">&larr; Retour aux groupes</a>';
         }
@@ -144,10 +159,12 @@ class ToDoListView extends BaseSaeView
         $completedTasks = [];
 
         foreach ($tasks as $task) {
-            if ($task['checked']) {
-                $completedTasks[] = $task;
+            /** @var array{todoid: int, tododesc: string, checked: bool, priority: int} $taskTyped */
+            $taskTyped = $task;
+            if ($taskTyped['checked']) {
+                $completedTasks[] = $taskTyped;
             } else {
-                $pendingTasks[] = $task;
+                $pendingTasks[] = $taskTyped;
             }
         }
 
@@ -184,7 +201,7 @@ class ToDoListView extends BaseSaeView
         $html .= '</div>'; // End tasks-container.
 
         // Add form for students ONLY to add tasks.
-        if ($this->data['user']->isStudent()) {
+        if ($user->isStudent()) {
             $html .= '<div class="add-task-form">';
             $html .= '<h3>Ajouter une tâche</h3>';
             $html .= '<input type="text" id="new-task-input" placeholder="Nouvelle tâche...">';
@@ -203,16 +220,19 @@ class ToDoListView extends BaseSaeView
     /**
      * Renders a single task item.
      *
-     * @param array<string, mixed> $task Task data.
+     * @param array{todoid: int, tododesc: string, checked: bool, priority: int} $task Task data.
      * @return string HTML for the task item.
      */
     private function renderTaskItem(array $task): string
     {
-        $checked = $task['checked'] ? 'checked' : '';
-        $disabled = $this->data['user']->isProfessor() ? 'disabled' : '';
-        $isStudent = $this->data['user']->isStudent();
+        /** @var \Models\User\User $user */
+        $user = $this->getUser();
 
-        $priority = isset($task['priority']) ? (int)$task['priority'] : 2;
+        $checked = $task['checked'] ? 'checked' : '';
+        $disabled = $user->isProfessor() ? 'disabled' : '';
+        $isStudent = $user->isStudent();
+
+        $priority = $task['priority'];
         $priorityClass = [1 => 'priority-high', 2 => 'priority-medium', 3 => 'priority-low'][$priority]
             ?? 'priority-medium';
         $priorityLabel = [1 => 'Haute', 2 => 'Moyenne', 3 => 'Basse'][$priority] ?? 'Moyenne';
@@ -222,7 +242,7 @@ class ToDoListView extends BaseSaeView
         $html .= '<div class="task-content">';
         $html .= '<label>';
         $html .= '<input type="checkbox" class="task-checkbox" ' . $checked . ' ' . $disabled . '>';
-        $html .= '<span class="task-text">' . htmlspecialchars($task['tododesc']) . '</span>';
+        $html .= '<span class="task-text">' . htmlspecialchars((string) $task['tododesc']) . '</span>';
         $html .= '</label>';
         $html .= '</div>';
 

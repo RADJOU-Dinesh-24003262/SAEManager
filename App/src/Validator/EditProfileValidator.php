@@ -46,9 +46,11 @@ class EditProfileValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
+        $phone = $this->getString($data, 'phone');
+
         if (!isset($data['phone'])) {
             throw new ExceptionValidationRegister("phone", "required", "Le champ numéro de téléphone est requis.");
-        } elseif (!($this->isValidPhone($data['phone']))) {
+        } elseif (!($this->isValidPhone($phone))) {
             throw new ExceptionValidationRegister("phone", "string", "Numéro de téléphone invalide.");
         }
     }

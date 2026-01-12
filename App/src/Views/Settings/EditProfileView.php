@@ -55,6 +55,7 @@ class EditProfileView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var \Models\User\User $user */
         $user = $this->data['user'];
 
         return [

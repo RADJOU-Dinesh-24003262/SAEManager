@@ -53,7 +53,7 @@ class CreateSaeView extends AbstractView
             }
         }
 
-        $errorsHtml = $this->renderErrorMessages($this->data['errors'] ?? []);
+        $errorsHtml = $this->renderErrorMessages($this->getErrors());
         $successHtml = $this->renderSuccessMessage();
 
         return [

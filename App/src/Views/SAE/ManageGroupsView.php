@@ -4,6 +4,7 @@ namespace Views\SAE;
 
 use Views\BaseSaeView;
 use Override;
+use Models\SAE\SAEGroup;
 
 /**
  * Class ManageGroupsView
@@ -56,7 +57,7 @@ class ManageGroupsView extends BaseSaeView
     #[Override]
     protected function getPageTitle(): string
     {
-        $subjectName = $this->data['sae']['subject']->getSubjectName();
+        $subjectName = $this->getSubject()->getSubjectName();
         return 'Gestion des Groupes - ' . $subjectName;
     }
 
@@ -71,8 +72,8 @@ class ManageGroupsView extends BaseSaeView
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
             [
-                'sae_name' => $this->data['sae']['subject']->getSubjectName(),
-                'sae_id' => $this->data['sae']['subject']->getSaeSubjectId(),
+                'sae_name' => $this->getSubject()->getSubjectName(),
+                'sae_id' => (string) $this->getSubject()->getSaeSubjectId(),
                 'messages' => $this->getMessagesHtml(),
                 'professors_options' => $this->generateProfessorsOptions(),
                 'groups_html' => $this->generateGroupsHtml(),
@@ -87,17 +88,33 @@ class ManageGroupsView extends BaseSaeView
      */
     private function generateGroupsHtml(): string
     {
-        $groups = $this->data['sae']['groups'];
+        /** @var array{groups: array<int, array{group: SAEGroup, students: array<int, array<string, mixed>>}>, all_professors: array<int, array<string, mixed>>} $saeData */
+        $saeData = $this->data['sae'];
+
+        $groups = $saeData['groups'];
+        $professors = $saeData['all_professors'];
+
+        /** @var array<int, array<string, mixed>> $availableStudents */
         $availableStudents = $this->data['available_students'];
-        $professors = $this->data['sae']['all_professors'];
-        $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+
+        $saeId = $this->getSubject()->getSaeSubjectId();
 
         // Organize students by Year and TD.
         $groupedStudents = [];
         foreach ($availableStudents as $student) {
-            $year = $student['year'] ?? 'Inconnu';
-            $td = $student['td'] ?? 'N/A';
-            $key = "Année $year - TD $td";
+            $yearVal = $student['year'] ?? 'Inconnu';
+            if (!is_string($yearVal) && !is_int($yearVal)) {
+                $yearVal = 'Inconnu';
+            }
+            $year = (string)$yearVal;
+
+            $tdVal = $student['td'] ?? 'N/A';
+            if (!is_string($tdVal) && !is_int($tdVal)) {
+                $tdVal = 'N/A';
+            }
+            $td = (string)$tdVal;
+
+            $key = "Année " . $year . " - TD " . $td;
             $groupedStudents[$key][] = $student;
         }
         ksort($groupedStudents);
@@ -145,8 +162,10 @@ class ManageGroupsView extends BaseSaeView
             $html .= '<h5>Étudiants (' . count($students) . ')</h5>';
             $html .= '<ul class="student-items">';
             foreach ($students as $student) {
+                /** @var array<string, string> $student */
+                $student = $student;
                 $html .= '<li class="student-item">';
-                $html .= '<span>' . $student['first_name'] . ' ' . $student['last_name'] . ' (' .
+                $html .= '<span>' . (string) $student['first_name'] . ' ' . (string) $student['last_name'] . ' (' .
                          ($student['group_name'] ?? $student['td'] ?? '') . ')</span>';
                 $html .= '<form action="/sae/' . $saeId . '/groups/remove-student" method="post" ' .
                          'style="display:inline;">';
@@ -202,6 +221,7 @@ class ManageGroupsView extends BaseSaeView
      */
     private function generateProfessorsOptions(): string
     {
+        /** @var array<int, array<string, mixed>> $professors */
         $professors = $this->data['all_professors'];
         $html = '';
         foreach ($professors as $prof) {
@@ -220,11 +240,14 @@ class ManageGroupsView extends BaseSaeView
     {
         $html = '';
 
-        if (isset($this->data['success']) && !empty($this->data['success'])) {
-            $html .= '<div class="alert alert-success">' . $this->data['success'] . '</div>';
+        $success = $this->getSuccess();
+        if (!empty($success)) {
+            $html .= '<div class="alert alert-success">' . $success . '</div>';
         }
-        if (isset($this->data['errors']) && !empty($this->data['errors'])) {
-            $html .= $this->renderErrorMessages($this->data['errors']);
+
+        $errors = $this->getErrors();
+        if (!empty($errors)) {
+            $html .= $this->renderErrorMessages($errors);
         }
 
         return $html;

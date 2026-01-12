@@ -299,6 +299,7 @@ class SAESubjectRepository extends BaseRepository
                 WHERE s.sae_subject_id = :sae_id'
             );
             $stmt->execute(['sae_id' => $saeId]);
+            /** @var array{user_id: string, first_name: string, last_name: string, email: string, phone: string|null, amu_id: string}|false $result */
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result ?: null;
         } catch (PDOException $e) {
@@ -346,7 +347,9 @@ class SAESubjectRepository extends BaseRepository
                 throw new PDOException('Statement preparation failed');
             }
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            /** @var array<int, array{user_id: string, first_name: string, last_name: string, email: string, phone: string|null, amu_id: string, is_responsible: int}> $results */
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $results;
         } catch (PDOException $e) {
             error_log('Erreur récupération infos professeurs : ' . $e->getMessage());
             return [];
@@ -379,6 +382,7 @@ class SAESubjectRepository extends BaseRepository
                 WHERE s.sae_subject_id = :sae_id'
             );
             $stmt->execute(['sae_id' => $saeId]);
+            /** @var array{user_id: string, first_name: string, last_name: string, email: string, phone: string|null, organisation: string}|false $result */
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result ?: null;
         } catch (PDOException $e) {

@@ -41,27 +41,33 @@ class CreateSaeValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
+        $nameSae = $this->getString($data, 'nameSae');
+        $description = $this->getString($data, 'description');
+        $dateRendu = $this->getString($data, 'date_rendu');
+        $beginDate = $this->getString($data, 'begin_date');
+        $endDate = $this->getString($data, 'end_date');
+
         // Validate name length.
-        if (strlen($data['nameSae']) < 3 || strlen($data['nameSae']) > 255) {
+        if (strlen($nameSae) < 3 || strlen($nameSae) > 255) {
             throw new ExeptionValidationSAECreation('Le nom de la SAE doit faire entre 3 et 255 caractères.');
         }
 
         // Validate description length.
-        if (strlen($data['description']) < 10) {
+        if (strlen($description) < 10) {
             throw new ExeptionValidationSAECreation('La description doit contenir au moins 10 caractères.');
         }
 
         // Validate date format.
-        if (!$this->isValidDate($data['date_rendu'])) {
+        if (!$this->isValidDate($dateRendu)) {
             throw new ExeptionValidationSAECreation('La date de rendu n\'est pas valide.');
         }
 
-        if (!$this->isValidDate($data['begin_date'])) {
+        if (!$this->isValidDate($beginDate)) {
             throw new ExeptionValidationSAECreation('La date de début n\'est pas valide.');
         }
 
         // Check if dates are logical (end > begin).
-        if ($data['date_rendu'] <= $data['begin_date']) {
+        if ($dateRendu <= $beginDate) {
             throw new ExeptionValidationSAECreation('La date de rendu doit être postérieure à la date de début.');
         }
 
@@ -73,8 +79,8 @@ class CreateSaeValidator extends FormValidator
             }
         }
 
-        $begin = new DateTime($data['begin_date']);
-        $end = new DateTime($data['end_date']);
+        $begin = new DateTime($beginDate);
+        $end = new DateTime($endDate);
 
         if ($end <= $begin) {
             throw new ExeptionValidationSAECreation('La date de fin doit être après la date de début');

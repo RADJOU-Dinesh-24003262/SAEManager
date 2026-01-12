@@ -45,6 +45,7 @@ class DeleteUserView extends AbstractView
     #[Override]
     public function templateKeys(): array
     {
+        /** @var \Models\User\User $user */
         $user = $this->data['user'];
 
         return [

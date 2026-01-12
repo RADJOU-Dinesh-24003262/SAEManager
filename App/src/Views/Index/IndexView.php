@@ -58,7 +58,8 @@ class IndexView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
-        $errors = $this->data['errors'];
+        /** @var array<int|string, string> $errors */
+        $errors = $this->data['errors'] ?? [];
 
         return [
             'ERROR_MESSAGES' => $this->renderErrorMessages($errors),

@@ -57,7 +57,7 @@ class SessionService
      * This method creates a key value pair with the key and value given in parametters in the session.
      *
      * @param string $key   The key to set the value of.
-     * @param mixed  $value The value that will be set.
+     * @param string $value The value that will be set.
      *
      * @return void
      */
@@ -73,9 +73,9 @@ class SessionService
      * This method returns the assiociated value to the key given in parametters in the user session.
      *
      * @param string $key     The key to get the message of.
-     * @param mixed  $default Used in case if the value don't exist.
+     * @param string $default Used in case if the value don't exist.
      *
-     * @return mixed
+     * @return string
      */
     public static function get(string $key, mixed $default = null)
     {

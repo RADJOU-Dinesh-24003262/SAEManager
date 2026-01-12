@@ -45,7 +45,9 @@ class ResetPasswordValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
-        if (!$this->isValidPassword($data['pwdnew'])) {
+        $pwdnew = $this->getString($data, 'pwdnew');
+
+        if (!$this->isValidPassword($pwdnew)) {
             throw new ExceptionValidationResetPassword(
                 'pwdnew',
                 'Not Valid',

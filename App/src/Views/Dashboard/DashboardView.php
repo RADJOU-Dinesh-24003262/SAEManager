@@ -74,8 +74,11 @@ class DashboardView extends AbstractView
     #[Override]
     protected function templateKeys(): array
     {
+        /** @var array<int|string, string> $errors */
         $errors = $this->data['errors'] ?? [];
+        /** @var User $user */
         $user   = $this->data['user'];
+        /** @var array<SAESubject> $saes */
         $saes   = $this->data['saes'] ?? [];
 
         return [
@@ -206,7 +209,10 @@ class DashboardView extends AbstractView
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
 
         if (!empty($sae->getResponsibleProfId())) {
-            $html .= '<p><strong>Enseignant :</strong> ' . $this->data['sae'][$sae->getSaeSubjectId()] . '</p>';
+            /** @var array<int, string> $professors */
+            $professors = $this->data['sae'];
+            $profName = $professors[$sae->getSaeSubjectId()] ?? 'Non Connu';
+            $html .= '<p><strong>Enseignant :</strong> ' . $profName . '</p>';
         }
 
         $html .= '<div class="sae-actions">';

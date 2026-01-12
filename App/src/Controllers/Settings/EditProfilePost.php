@@ -2,7 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\User\User;
 use Override;
@@ -31,7 +31,7 @@ use Views\Settings\EditProfileSuccessView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class EditProfilePost implements ControllerInterface
+class EditProfilePost extends BaseController
 {
     /**
      * Main Controller logic for EditProfilePost.
@@ -42,11 +42,8 @@ class EditProfilePost implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        if (!SessionService::get('USER')) {
-            header('Location: /login');
-            exit;
-        }
-        $user = unserialize(SessionService::get('USER'));
+        $this->ensureAuthenticated();
+        $user = $this->user;
         $validator = new EditProfileValidator();
 
         $data = $validator->escape($_POST);

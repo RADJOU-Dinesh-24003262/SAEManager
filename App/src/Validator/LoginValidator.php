@@ -45,7 +45,9 @@ class LoginValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
-        if (!$this->isValidEmail($data['email'])) {
+        $email = $this->getString($data, 'email');
+
+        if (!$this->isValidEmail($email)) {
             throw new ExceptionValidationLogin("L'adresse email n'est pas valide.");
         }
     }
