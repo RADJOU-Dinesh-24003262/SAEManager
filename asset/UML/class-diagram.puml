@@ -176,6 +176,10 @@
       class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView [[/Views/ToDoList/ToDoListView.php ToDoListView Class]] {
         #templatePath()
         #templateKeys()
+        -renderTodoContent()
+        -renderGroupList(groups)
+        -renderTaskBoard(groupId, tasks)
+        -renderTaskItem(task)
         #getPageTitle()
         #getNameCss()
         #getAdditionalHeaders()
@@ -380,18 +384,29 @@
         #sae_subject_id : ?integer
         #todo_id : integer
         #tododesc : string
+        #checked : boolean
+        #priority : integer
         {static} +create(data)
         +getTodoId()
         +getTodoDesc()
         +getSaeGroupId()
         +getSaeSubjectId()
+        +isChecked()
+        +getPriority()
         +setSaeGroupId(groupId)
         +setSaeSubjectId(sae_subject_id)
         +setTododesc(tododesc)
         +setTodoId(todo_id)
+        +setChecked(checked)
+        +setPriority(priority)
         +save()
         +fetchDataFromDatabase(sae_group_id)
         {static} +existBySaeGroupId(sae_group_id)
+        {static} +getAllTasks(groupId)
+        {static} +updateCheckedStatus(todoId, checked)
+        {static} +updatePriority(todoId, priority)
+        {static} +createTask(groupId, description, priority)
+        {static} +deleteTask(todoId)
       }
     }
   }
@@ -515,8 +530,15 @@
         +control()
         {static} +support(path, method)
       }
-      class "ToDoListPost\n<b>This class controls the todolist process (post).</b>" as Controllers_ToDoList_ToDoListPost [[/Controllers/ToDoList/ToDoListPost.php ToDoListPost Class]] {
+      class "ToDoListPost\n<b>Controller for handling To-Do List POST actions (AJAX).</b>" as Controllers_ToDoList_ToDoListPost [[/Controllers/ToDoList/ToDoListPost.php ToDoListPost Class]] {
         +control()
+        -parseUri()
+        -determineTargetGroupId(user, saeId, input)
+        -checkGroupAccess(user, saeId, groupId)
+        -handleAdd(groupId, input)
+        -handleUpdate(todoId, input)
+        -handleDelete(todoId)
+        -sendError(message, code)
         {static} +support(path, method)
       }
     }
@@ -531,6 +553,7 @@
   Controllers_BaseController <|-- Controllers_Settings_EditProfileController
   Controllers_BaseController <|-- Controllers_Settings_SettingsController
   Controllers_BaseController <|-- Controllers_ToDoList_ToDoListController
+  Controllers_BaseController <|-- Controllers_ToDoList_ToDoListPost
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
@@ -555,9 +578,11 @@
   Controllers_Settings_EditProfilePost ..> Views_Settings_EditProfileSuccessView
   Controllers_Settings_SettingsController ..> Views_Settings_SettingsView
   Controllers_ToDoList_ToDoListController ..> Models_SAE_SAE
+  Controllers_ToDoList_ToDoListController ..> Models_ToDoList_ToDoList
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
+  Controllers_ToDoList_ToDoListPost ..> Models_SAE_SAE
   Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
-  Controllers_ToDoList_ToDoListPost ..> Views_ToDoList_ToDoListView
+  Controllers_ToDoList_ToDoListPost ..> Models_User_User
   Controllers_User_Login ..> Views_User_LoginView
   Controllers_User_LoginPost ..> Models_User_User
   Controllers_User_LoginPost ..> Views_User_LoginView
