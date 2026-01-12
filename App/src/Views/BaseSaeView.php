@@ -49,7 +49,7 @@ abstract class BaseSaeView extends AbstractView
             $menu .= '<li><a href="/sae/' . $saeId . '/to-do">📋 Tableau de bord</a></li>';
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">👥 Contacts</a></li>';
         } elseif ($user->isProfessor()) {
-            $menu .= '<li><h2>Administration</h2></li>';
+            $menu .= '<li><h2>Navigation</h2></li>';
             if ($user->getUserId() === $this->data['sae']['subject']->getResponsibleProfId()) {
                 $menu .= '<li><a href="/sae/' . $saeId . '/modify">✏️ Modifier la SAE</a></li>';
                 $menu .= '<li><a href="/sae/' . $saeId . '/groups">👥 Gérer les groupes</a></li>';

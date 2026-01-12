@@ -263,7 +263,8 @@ class PageSaeView extends BaseSaeView
             }
             $content .= '.</p>';
         }
-        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName . '.</p>';
+        $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
+            '.</p></article>';
 
         $filePath = $this->data['sae']['subject']->getFilePath();
 
@@ -273,9 +274,9 @@ class PageSaeView extends BaseSaeView
             $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
             if (file_exists($fullPath)) {
                 $parsedown = new Parsedown();
-                $content .= '<div class="sae-subject-file">';
+                $content .= '<article><div class="sae-subject-file">';
                 $content .= $parsedown->text(file_get_contents($fullPath));
-                $content .= '</div>';
+                $content .= '</div></article>';
             }
         }
         return $content;
