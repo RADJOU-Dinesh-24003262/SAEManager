@@ -226,10 +226,11 @@ abstract class AbstractView
                 <li><a href="/register">Inscription</a></li>';
     }
 
-    abstract protected function templatePath(): string;
-    abstract protected function templateKeys(): array;
-    abstract protected function getNameCss(): string;
+    /**
+     * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
 
+     * @return string the name of the project 'SAE Manager'.
+     */
     protected function getPageTitle(): string
     {
         return 'SAE Manager';
@@ -268,7 +269,8 @@ abstract class AbstractView
             return '';
         }
 
-        $html = '<article role="alert" style="background-color: var(--pico-del-color); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;"><ul style="margin: 0; padding-left: 1.5rem;">';
+        $html = '<article role="alert" style="background-color: var(--pico-del-color); color: white; padding: 1rem; ' .
+            'border-radius: 0.5rem; margin-bottom: 1rem;"><ul style="margin: 0; padding-left: 1.5rem;">';
         foreach ($errors as $error) {
             $html .= '<li>' . $error . '</li>';
         }
@@ -287,6 +289,7 @@ abstract class AbstractView
         if (empty($success)) {
             return '';
         }
-        return '<article role="status" style="background-color: var(--pico-ins-color); color: white; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">' . htmlspecialchars($success) . '</article>';
+        return '<article role="status" style="background-color: var(--pico-ins-color); color: white; padding: 1rem; ' .
+            'border-radius: 0.5rem; margin-bottom: 1rem;">' . htmlspecialchars($success) . '</article>';
     }
 }
