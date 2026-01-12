@@ -182,3 +182,10 @@ Ceci est un email automatique, merci de ne pas y répondre.
         self::sendAttribution(); // Will be changed later.
     }
 }
+
+// Execute if run directly
+if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+    require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
+    \Core\includes\Autoloader::register();
+    AttributionMailer::main();
+}
