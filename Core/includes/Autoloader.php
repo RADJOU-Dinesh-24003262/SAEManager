@@ -19,6 +19,12 @@ namespace Core\includes;
 class Autoloader
 {
     /**
+     * The base directory of the project.
+     * @var string
+     */
+    private static string $projectRoot;
+
+    /**
      * Registers the autoloader function with SPL.
      *
      * This method sets up the autoloader to look for class files in the
@@ -28,22 +34,35 @@ class Autoloader
      */
     public static function register(): void
     {
+        // Calculate project root dynamically.
+        // Assumes Autoloader.php is in Core/includes/
+        self::$projectRoot = dirname(dirname(__DIR__));
+
         spl_autoload_register(
             function ($class) {
-                // Path in App/src directory.
-                $file = '..' . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
-                    str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+                // Convert namespace to file path.
+                $classPath = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
 
-                // Path in Core directory.
-                $coreFile = '..' . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+                $file = null;
 
-                if (file_exists($file)) {
-                    include $file;
-                } elseif (file_exists($coreFile)) {
-                    include $coreFile;
+                // Handle 'App' namespace (e.g., App\Models\User\User -> App/src/Models/User/User.php)
+                if (str_starts_with($class, 'App\\')) {
+                    $file = self::$projectRoot . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
+                            substr($classPath, 4); // Remove 'App\' part
+                }
+                // Handle 'Models', 'Services' namespaces which are under App/src
+                elseif (str_starts_with($class, 'Models\\') || str_starts_with($class, 'Services\\')) {
+                    $file = self::$projectRoot . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $classPath;
+                }
+                // Handle 'Core' namespace (e.g., Core\Utilis\Logger -> Core/Utilis/Logger.php)
+                elseif (str_starts_with($class, 'Core\\')) {
+                    $file = self::$projectRoot . DIRECTORY_SEPARATOR . $classPath;
                 }
 
-                // Return false.
+
+                if ($file !== null && file_exists($file)) {
+                    include $file;
+                }
             }
         );
     }
