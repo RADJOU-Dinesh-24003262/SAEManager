@@ -2,6 +2,7 @@
 
 namespace Services\Auth;
 
+use Core\includes\exception\ExceptionEmailSendingFailed;
 use Core\Utilis\EmailService;
 
 /**
@@ -22,6 +23,7 @@ class PasswordResetMailer
      * @param string $toEmail The user's email address.
      * @param string $token   The reset token.
      * @return void
+     * @throws ExceptionEmailSendingFailed If sending fails.
      */
     public static function send(string $toEmail, string $token): void
     {

@@ -90,9 +90,34 @@ class SAEGroupRepository extends BaseRepository
             $stmt->execute(['sae_id' => $saeId]);
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($row) => new SAEGroup($row), $data);
+            return array_map(fn ($row) => new SAEGroup($row), $data);
         } catch (PDOException $e) {
             error_log('Erreur récupération groupes : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Finds groups managed by a specific professor for a SAE.
+     *
+     * @param integer $professorId The professor ID.
+     * @param integer $saeId       The SAE subject ID.
+     * @return array<SAEGroup>
+     */
+    public function findByProfessorId(int $professorId, int $saeId): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_groups 
+                 WHERE sae_subject_id = :sae_id AND professor_id = :prof_id 
+                 ORDER BY sae_group_id'
+            );
+            $stmt->execute(['sae_id' => $saeId, 'prof_id' => $professorId]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn ($row) => new SAEGroup($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération groupes prof : ' . $e->getMessage());
             return [];
         }
     }
@@ -110,9 +135,14 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'INSERT INTO sae_groups (sae_subject_id) VALUES (:sae_id) RETURNING sae_group_id'
+                'INSERT INTO sae_groups (sae_subject_id, professor_id) 
+                 VALUES (:sae_id, :prof_id) 
+                 RETURNING sae_group_id'
             );
-            $stmt->execute(['sae_id' => $entity->getSaeSubjectId()]);
+            $stmt->execute([
+                'sae_id' => $entity->getSaeSubjectId(),
+                'prof_id' => $entity->getProfessorId()
+            ]);
             $id = intval($stmt->fetchColumn());
 
             $entity->setSaeGroupId($id);
@@ -136,10 +166,13 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE sae_groups SET sae_subject_id = :sae_id WHERE sae_group_id = :id'
+                'UPDATE sae_groups 
+                 SET sae_subject_id = :sae_id, professor_id = :prof_id 
+                 WHERE sae_group_id = :id'
             );
             return $stmt->execute([
                 'sae_id' => $entity->getSaeSubjectId(),
+                'prof_id' => $entity->getProfessorId(),
                 'id' => $entity->getSaeGroupId()
             ]);
         } catch (PDOException $e) {
@@ -175,7 +208,8 @@ class SAEGroupRepository extends BaseRepository
                     u.first_name, u.last_name, u.email, u.phone
                 FROM students s
                 JOIN users u ON s.student_id = u.user_id
-                WHERE s.sae_group_id = :group_id
+                JOIN participated_in pi ON s.student_id = pi.student_id
+                WHERE pi.sae_group_id = :group_id
                 ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['group_id' => $groupId]);
@@ -197,7 +231,8 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE students SET sae_group_id = :group_id WHERE student_id = :student_id'
+                'INSERT INTO participated_in (student_id, sae_group_id) 
+                 VALUES (:student_id, :group_id)'
             );
             return $stmt->execute(['group_id' => $groupId, 'student_id' => $studentId]);
         } catch (PDOException $e) {
@@ -210,15 +245,17 @@ class SAEGroupRepository extends BaseRepository
      * Removes a student from a group.
      *
      * @param integer $studentId The student ID.
+     * @param integer $groupId   The group ID.
      * @return boolean
      */
-    public function unassignStudent(int $studentId): bool
+    public function unassignStudent(int $studentId, int $groupId): bool
     {
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE students SET sae_group_id = NULL WHERE student_id = :student_id'
+                'DELETE FROM participated_in 
+                 WHERE student_id = :student_id AND sae_group_id = :group_id'
             );
-            return $stmt->execute(['student_id' => $studentId]);
+            return $stmt->execute(['student_id' => $studentId, 'group_id' => $groupId]);
         } catch (PDOException $e) {
             error_log('Erreur désassignation étudiant : ' . $e->getMessage());
             return false;
@@ -236,10 +273,10 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT st.sae_group_id 
-                FROM students st
-                JOIN sae_groups sg ON st.sae_group_id = sg.sae_group_id
-                WHERE st.student_id = :student_id AND sg.sae_subject_id = :sae_id'
+                'SELECT pi.sae_group_id 
+                FROM participated_in pi
+                JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                WHERE pi.student_id = :student_id AND sg.sae_subject_id = :sae_id'
             );
             $stmt->execute(['student_id' => $studentId, 'sae_id' => $saeId]);
             $result = $stmt->fetchColumn();
@@ -260,13 +297,54 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT COUNT(*) FROM students WHERE sae_group_id = :group_id'
+                'SELECT COUNT(*) FROM participated_in WHERE sae_group_id = :group_id'
             );
             $stmt->execute(['group_id' => $groupId]);
             return intval($stmt->fetchColumn());
         } catch (PDOException $e) {
             error_log('Erreur comptage étudiants : ' . $e->getMessage());
             return 0;
+        }
+    }
+
+    /**
+     * Gets students not assigned to any group in a SAE.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string
+     * }>
+     */
+    public function getAvailableStudents(int $saeId): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT 
+                    s.student_id, s.amu_id, s.year, s.major, s.td, s.tp,
+                    u.first_name, u.last_name, u.email
+                FROM students s
+                JOIN users u ON s.student_id = u.user_id
+                WHERE s.student_id NOT IN (
+                    SELECT pi.student_id 
+                    FROM participated_in pi
+                    JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                    WHERE sg.sae_subject_id = :sae_id
+                )
+                ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération étudiants disponibles : ' . $e->getMessage());
+            return [];
         }
     }
 }

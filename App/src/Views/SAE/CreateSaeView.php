@@ -46,8 +46,8 @@ class CreateSaeView extends AbstractView
         $clientsHtml = '<option value="">-- Choisir un client --</option>';
         if (isset($this->data['clients']) && is_array($this->data['clients'])) {
             foreach ($this->data['clients'] as $client) {
-                $name = htmlspecialchars($client['last_name'] . ' '
-                        . $client['first_name'] . ' (' . $client['organisation'] . ')');
+                $name = $client['last_name'] . ' '
+                        . $client['first_name'] . ' (' . $client['organisation'] . ')';
                 $id = $client['user_id'];
                 $clientsHtml .= "<option value=\"$id\">$name</option>";
             }

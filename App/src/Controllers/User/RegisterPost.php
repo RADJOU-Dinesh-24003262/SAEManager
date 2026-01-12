@@ -66,7 +66,7 @@ class RegisterPost implements ControllerInterface
             $user = User::createFromRegistrationData($data);
 
             $user->save();
-            Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail(), $user->getUserId());
+            Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail());
 
             $view = new RegisterSuccessView($user);
             $view->render();

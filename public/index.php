@@ -15,6 +15,8 @@ use Controllers\pwd\ResetPasswordController;
 use Controllers\pwd\ResetPasswordPostController;
 use Controllers\SAE\CreateSaeController;
 use Controllers\SAE\CreateSaePostController;
+use Controllers\SAE\ManageGroupsController;
+use Controllers\SAE\ManageGroupsPostController;
 use Controllers\Settings\DeleteUserController;
 use Controllers\Settings\EditProfileController;
 use Controllers\Settings\EditProfilePost;
@@ -51,7 +53,9 @@ $controllers = [
     new DeleteUserController(),
     new ToDoListPost(),
     new EditProfileController(),
-    new EditProfilePost()
+    new EditProfilePost(),
+    new ManageGroupsController(),
+    new ManageGroupsPostController()
 ];
 
 // start the session with a cookie params

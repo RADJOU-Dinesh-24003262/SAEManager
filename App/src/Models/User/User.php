@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Models\BaseModel;
 use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
@@ -28,7 +29,7 @@ use Models\SAE\SAESubject;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-abstract class User
+abstract class User extends BaseModel
 {
     /**
      * The unique identifier of the user.
@@ -80,24 +81,6 @@ abstract class User
     protected string $phone = '';
 
     /**
-     * Initializes a new User instance with optional data.
-     *
-     * @param array<string, mixed> $data Optional data to initialize the user with.
-     */
-    protected function __construct(array $data = [])
-    {
-        foreach ($data as $key => $value) {
-            if (in_array($key, ['password', 'passwordverif', 'terms'], true)) {
-                continue;
-            }
-
-            if (property_exists($this, $key)) {
-                $this->$key = $value;
-            }
-        }
-    }
-
-    /**
      * Factory method to create the appropriate user type from registration data.
      *
      * @param array<string, mixed> $data The registration data.
@@ -134,11 +117,12 @@ abstract class User
     {
         $connection = Database::getInstance();
         $stmt = $connection->prepare(
-            'SELECT email, hashed_password, user_type FROM users WHERE email = :email'
+            'SELECT email, hashed_password, user_type FROM users WHERE email = LOWER(:email)'
         );
         $stmt->execute(['email' => $data['email']]);
 
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
 
         if (!$result || !password_verify($data['password'], $result['hashed_password'])) {
             throw new ExceptionValidationLogin();
@@ -184,7 +168,7 @@ abstract class User
         try {
             $stmt = $connection->prepare(
                 'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
-                 VALUES (:first_name, :last_name, :email, :phone, :hashed_password, :user_type)'
+                 VALUES (:first_name, :last_name, LOWER(:email), :phone, :hashed_password, :user_type)'
             );
 
             $stmt->execute(
@@ -203,9 +187,10 @@ abstract class User
                 ]
             );
 
-            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = :email');
+            $stmt = $connection->prepare('SELECT user_id FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $this->email]);
             $userId = (int) $stmt->fetchColumn(0);
+            $stmt->closeCursor();
 
             $this->saveSpecificData($connection, $userId);
             $connection->commit();
@@ -241,9 +226,10 @@ abstract class User
         try {
             $db = Database::getInstance();
 
-            $stmt = $db->prepare('SELECT * FROM users WHERE email = :email');
+            $stmt = $db->prepare('SELECT * FROM users WHERE email = LOWER(:email)');
             $stmt->execute(['email' => $email]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->closeCursor();
 
             if (empty($data)) {
                 throw new ExceptionFetchDataBD();
@@ -291,7 +277,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = :email');
+            $stmt = $db->prepare('SELECT COUNT(*) FROM users WHERE email = LOWER(:email)');
 
             if (!$stmt) {
                 throw new PDOException('Impossible de récuperer vos données.');
@@ -323,7 +309,7 @@ abstract class User
             $hashed_password = password_hash($newPassword, PASSWORD_ARGON2ID);
 
             $stmt = $db->prepare(
-                'UPDATE users SET hashed_password = :password_hash WHERE email = :email'
+                'UPDATE users SET hashed_password = :password_hash WHERE email = LOWER(:email)'
             );
 
             $stmt->execute(
@@ -354,7 +340,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('DELETE FROM users WHERE email = :email; ');
+            $stmt = $db->prepare('DELETE FROM users WHERE email = LOWER(:email); ');
 
             $stmt->execute(['email' => $email]);
 
@@ -382,7 +368,7 @@ abstract class User
     {
         try {
             $db = Database::getInstance();
-            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = :email');
+            $stmt = $db->prepare('UPDATE users SET phone = :value WHERE email = LOWER(:email)');
             $stmt->execute(['value' => $value, 'email' => $email]);
 
             if ($stmt->rowCount() === 0) {
@@ -412,12 +398,12 @@ abstract class User
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
-     /**
-     * Gets the SAE infos proposed/enrolled by the user.
-     *
-     * @return array<SAESubject> An array of @see SAESubject data.
-     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
-     */
+    /**
+    * Gets the SAE infos proposed/enrolled by the user.
+    *
+    * @return array<SAESubject> An array of @see SAESubject data.
+    * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
+    */
     public function getSaes(): array
     {
         $sae = SAE::getInstance();

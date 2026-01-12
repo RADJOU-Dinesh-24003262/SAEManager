@@ -32,7 +32,7 @@ class ToDoListPostIntegrationTest extends TestCase
      */
     public function testSupportReturnsTrueForValidPostRoute(): void
     {
-        $this->assertTrue(ToDoListPost::support('/to-do-list', 'POST'));
+        $this->assertTrue(ToDoListPost::support('/sae/1/to-do/add', 'POST'));
     }
 
     /**

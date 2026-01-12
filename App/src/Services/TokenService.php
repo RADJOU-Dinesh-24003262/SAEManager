@@ -67,7 +67,7 @@ class TokenService
             $stmt = $db->prepare(
                 "
                 INSERT INTO password_resets (email, token, created_at, expires_at, used)
-                VALUES (:email, :token, :created_at, :expires_at, FALSE)
+                VALUES (LOWER(:email), :token, :created_at, :expires_at, FALSE)
             "
             );
 
