@@ -13,6 +13,18 @@
       {static} +saveSaeDescription(content, filename)
     }
     package Auth as Services.Auth {
+      class "AttributionMailer\n<b>Service responsible for sending an attribution emails for SAE Manager.</b>" as Services_Auth_AttributionMailer [[/Services/Auth/AttributionMailer.php AttributionMailer Class]] {
+        {static} +sendAttribution()
+        {static} -getHtmlTemplate(student, subject)
+        {static} -getTextTemplate(student, subject)
+        {static} +main()
+      }
+      class "LastDateMailer\n<b>Service responsible for sending reminder emails for SAE Manager.</b>" as Services_Auth_LastDateMailer [[/Services/Auth/LastDateMailer.php LastDateMailer Class]] {
+        {static} +send()
+        {static} -getHtmlTemplate(student, subject)
+        {static} -getTextTemplate(student, subject)
+        {static} +main()
+      }
       class "PasswordResetMailer\n<b>Service responsible for sending password reset emails for SAE Manager.</b>" as Services_Auth_PasswordResetMailer [[/Services/Auth/PasswordResetMailer.php PasswordResetMailer Class]] {
         {static} +send(toEmail, token)
         {static} -getResetLink(token)
@@ -189,6 +201,18 @@
   }
   package Models as Models {
     package SAE as Models.SAE {
+      class "ParticipatedIn\n<b>Represents a participation entry in a SAE Group.</b>" as Models_SAE_ParticipatedIn [[/Models/SAE/ParticipatedIn.php ParticipatedIn Class]] {
+        #student_id : integer
+        #sae_group_id : integer
+        #sae_subject_id : integer|null
+        +toArray()
+        +getStudentId()
+        +setStudentId(student_id)
+        +getSaeGroupId()
+        +setSaeGroupId(sae_group_id)
+        +getSaeSubjectId()
+        +setSaeSubjectId(sae_subject_id)
+      }
       class "SAE\n<b>Facade for SAE operations.</b>" as Models_SAE_SAE [[/Models/SAE/SAE.php SAE Class]] {
         #subjectRepo : SAESubjectRepository
         #groupRepo : SAEGroupRepository
@@ -249,6 +273,22 @@
         +setFilePath(file_path)
       }
       package Repository as Models.SAE.Repository {
+        class "ParticipatedInRepository\n<b>Repository for ParticipatedIn operations.</b>" as Models_SAE_Repository_ParticipatedInRepository [[/Models/SAE/Repository/ParticipatedInRepository.php ParticipatedInRepository Class]] {
+          #instance : ParticipatedInRepository|null
+          #table : string
+          #entityClass : class-string<ParticipatedIn>
+          #__construct()
+          {static} +getInstance()
+          #getPrimaryKey()
+          +create(entity)
+          +update(entity)
+          +assignStudent(studentId, groupId)
+          +unassignStudent(studentId, groupId)
+          +getGroupStudents(groupId)
+          +getStudentGroupId(studentId, saeId)
+          +getStudentCount(groupId)
+          +getAvailableStudents(saeId)
+        }
         class "SAESubjectRepository\n<b>Repository for SAESubject operations.</b>" as Models_SAE_Repository_SAESubjectRepository [[/Models/SAE/Repository/SAESubjectRepository.php SAESubjectRepository Class]] {
           #instance : SAESubjectRepository|null
           #table : string
@@ -265,6 +305,8 @@
           +getResponsibleProfessor(saeId)
           +getAllProfessorsInfo(saeId)
           +getClientInfo(saeId)
+          +findByEndDate(endDate)
+          +findByBeginDate(beginDate)
         }
         class "SAEGroupRepository\n<b>Repository for SAEGroup operations.</b>" as Models_SAE_Repository_SAEGroupRepository [[/Models/SAE/Repository/SAEGroupRepository.php SAEGroupRepository Class]] {
           #instance : SAEGroupRepository|null
@@ -602,6 +644,8 @@
   Controllers_pwd_ResetPasswordPostController ..> Services_TokenService
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
   Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Models_SAE_Repository_ParticipatedInRepository ..> Models_SAE_ParticipatedIn
+  Models_SAE_Repository_ParticipatedInRepository ..> Models_SAE_Repository_ParticipatedInRepository
   Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_Repository_SAEGroupRepository
   Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_SAEGroup
   Models_SAE_Repository_SAESubjectRepository ..> Models_SAE_Repository_SAESubjectRepository
@@ -622,6 +666,16 @@
   Models_User_User <|-- Models_User_Client
   Models_User_User <|-- Models_User_Professor
   Models_User_User <|-- Models_User_Student
+  Services_Auth_AttributionMailer ..> Models_SAE_Repository_ParticipatedInRepository
+  Services_Auth_AttributionMailer ..> Models_SAE_Repository_SAEGroupRepository
+  Services_Auth_AttributionMailer ..> Models_SAE_Repository_SAESubjectRepository
+  Services_Auth_AttributionMailer ..> Models_SAE_SAESubject
+  Services_Auth_AttributionMailer ..> Models_User_Student
+  Services_Auth_LastDateMailer ..> Models_SAE_Repository_ParticipatedInRepository
+  Services_Auth_LastDateMailer ..> Models_SAE_Repository_SAEGroupRepository
+  Services_Auth_LastDateMailer ..> Models_SAE_Repository_SAESubjectRepository
+  Services_Auth_LastDateMailer ..> Models_SAE_SAESubject
+  Services_Auth_LastDateMailer ..> Models_User_Student
   Views_BaseSaeView <|-- Views_PageSAE_PageSaeView
   Views_BaseSaeView <|-- Views_SAE_ManageGroupsView
   Views_BaseSaeView <|-- Views_ToDoList_ToDoListView
