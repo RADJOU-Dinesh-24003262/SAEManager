@@ -18,12 +18,14 @@ namespace Core\Utilis;
  */
 class Logger
 {
-    private const LOG_FILE = __DIR__ . '/../../logs/security.log';
+    private const LOG_DIR = __DIR__ . '/../../logs/';
+    private const SECURITY_LOG = self::LOG_DIR . 'security.log';
+    private const MAIL_LOG = self::LOG_DIR . 'mail.log';
 
     /**
      * Log a security event.
      *
-     * @param string       $action  The action being performed (e.g., 'LOGIN_ATTEMPT', 'CSRF_FAIL').
+     * @param string       $action  The action being performed (e.g., 'LOGIN_ATTEMPT', 'CSRF_FAIL', 'MAIL_SEND').
      * @param string       $details Details about the event.
      * @param integer|null $userId  Optional User ID associated with the event.
      * @param string       $level   Severity level (INFO, WARNING, CRITICAL).
@@ -47,12 +49,18 @@ class Logger
             $details
         );
 
+        // Determine log file based on action prefix
+        $targetFile = self::SECURITY_LOG;
+        if (str_starts_with($action, 'MAIL_')) {
+            $targetFile = self::MAIL_LOG;
+        }
+
         // Ensure directory exists.
-        if (!is_dir(dirname(self::LOG_FILE))) {
-            mkdir(dirname(self::LOG_FILE), 0755, true);
+        if (!is_dir(dirname($targetFile))) {
+            mkdir(dirname($targetFile), 0755, true);
         }
 
         // Append to file.
-        file_put_contents(self::LOG_FILE, $logMessage, FILE_APPEND);
+        file_put_contents($targetFile, $logMessage, FILE_APPEND);
     }
 }
