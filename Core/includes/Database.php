@@ -283,7 +283,7 @@ class Database extends PDO
 
         $statements = array_filter(
             array_map('trim', explode(';', $schemaSql)),
-            fn($stmt) => !empty($stmt)
+            fn ($stmt) => !empty($stmt)
         );
 
         foreach ($statements as $stmt) {

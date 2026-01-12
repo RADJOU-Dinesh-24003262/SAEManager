@@ -57,7 +57,7 @@ class CreateSaeValidator extends FormValidator
         }
 
         if (!$this->isValidDate($data['begin_date'])) {
-             throw new ExeptionValidationSAECreation('La date de début n\'est pas valide.');
+            throw new ExeptionValidationSAECreation('La date de début n\'est pas valide.');
         }
 
         // Check if dates are logical (end > begin).

@@ -62,9 +62,13 @@ class PageSaeView extends BaseSaeView
     #[Override]
     protected function templateKeys(): array
     {
+        $errors = $this->data['errors'] ?? [];
+
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
             [
+                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+                'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
                 'SAE_CONTENT' => $this->getDescriptionSae(),
                 'SAE_CONTACTS' => $this->getContactsSae()
             ]
@@ -107,7 +111,7 @@ class PageSaeView extends BaseSaeView
                     }
                 }
             }
-             $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
+            $associatedProfsToDisplay = array_unique($associatedProfsToDisplay, SORT_REGULAR);
         }
 
         if (!empty($associatedProfsToDisplay)) {
@@ -183,7 +187,7 @@ class PageSaeView extends BaseSaeView
 
                 $content .= '</div>';
             } else {
-                 $content .= '<p>Aucun groupe assigné pour le moment.</p>';
+                $content .= '<p>Aucun groupe assigné pour le moment.</p>';
             }
         }
 

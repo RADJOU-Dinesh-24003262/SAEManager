@@ -398,12 +398,12 @@ abstract class User extends BaseModel
      */
     abstract protected function fetchSAEData(PDO $connection, int $userId): array;
 
-     /**
-     * Gets the SAE infos proposed/enrolled by the user.
-     *
-     * @return array<SAESubject> An array of @see SAESubject data.
-     * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
-     */
+    /**
+    * Gets the SAE infos proposed/enrolled by the user.
+    *
+    * @return array<SAESubject> An array of @see SAESubject data.
+    * @throws ExceptionFetchDataBD If can't retrive the data from The DataBase.
+    */
     public function getSaes(): array
     {
         $sae = SAE::getInstance();
