@@ -32,7 +32,7 @@ class LastDateMailer
     public static function send(): void
     {
         Logger::log('MAIL_LAST_DATE', 'Starting last date reminder email process.');
-        $subjectOfMail = 'Rappel date limite du rendu - SAE Manager';
+        $subjectOfMail = 'URGENT : Rappel date limite de rendu - SAE Manager';
 
         $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
         Logger::log('MAIL_LAST_DATE', "Focus date for reminder: $dateEndFocus");
@@ -73,7 +73,6 @@ class LastDateMailer
 
                     // Re-fetching subject is redundant, using existing $saeSubject
                     // but keeping logic structure similar for now, just optimized slightly.
-                    
                     $emailStudent = $student->getEmail();
                     Logger::log('MAIL_LAST_DATE', "Preparing to send email to: $emailStudent");
 
@@ -101,9 +100,10 @@ class LastDateMailer
     private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $endDate = $subject->getEndDate();
+        $endDate = (new DateTime($subject->getEndDate()))->format('d/m/Y');
         $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
+        $dashboardUrl = "https://saemanager.alwaysdata.net/";
 
         return "
 <!DOCTYPE html>
@@ -112,39 +112,49 @@ class LastDateMailer
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #0072ce; color: white; padding: 20px; text-align: center; }
-        .content { background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }
-        .button {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: #0072ce;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
-        .warning { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin: 15px 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .wrapper { width: 100%; background-color: #f4f4f4; padding: 20px 0; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #d32f2f; color: white; padding: 30px 20px; text-align: center; } /* Red for urgency */
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px; }
+        .content { padding: 40px 30px; }
+        .content h2 { color: #d32f2f; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        .warning-box { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; color: #856404; }
+        .info-item { margin-bottom: 5px; }
+        .info-label { font-weight: bold; }
+        .button-container { text-align: center; margin-top: 30px; }
+        .button { display: inline-block; padding: 12px 30px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
+        .button:hover { background-color: #b71c1c; }
+        .footer { background-color: #333; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
+        .footer p { margin: 5px 0; }
     </style>
 </head>
 <body>
-    <div class='container'>
-        <div class='header'>
-            <h1>SAE Manager</h1>
-        </div>
-        <div class='content'>
-            <h2>Rappel date limite du rendu</h2>
-            <p>Bonjour {$prenom},</p>
-            <p>Nous vous rappelons que la date limite du rendu de la SAE <strong>{$title}</strong> approche.</p>
-            <p>Vous devez rendre ce devoir le <strong>{$endDate}</strong>.</p>
-            <p>Merci de vous assurer que votre travail est bien déposé avant la date limite</p>
-            <p style='word-break: break-all; color: #0072ce;'></p>
-        </div>
-        <div class='footer'>
-            <p>© {$year} SAE Manager - Aix-Marseille Université</p>
-            <p>Ceci est un email automatique, merci de ne pas y répondre.</p>
+    <div class='wrapper'>
+        <div class='container'>
+            <div class='header'>
+                <h1>SAE Manager - Rappel</h1>
+            </div>
+            <div class='content'>
+                <p>Bonjour <strong>{$prenom}</strong>,</p>
+                
+                <p>La date limite de rendu pour votre Situation d'Apprentissage et d'Évaluation (SAE) approche à grands pas.</p>
+                
+                <div class='warning-box'>
+                    <div class='info-item'><span class='info-label'>Intitulé :</span> {$title}</div>
+                    <div class='info-item'><span class='info-label'>Date limite de rendu :</span> <strong>{$endDate}</strong></div>
+                </div>
+                
+                <p>Merci de vous assurer que votre travail est bien déposé avant cette date. Tout retard pourrait entraîner des pénalités.</p>
+                
+                <div class='button-container'>
+                    <a href='{$dashboardUrl}' class='button'>Déposer mon rendu</a>
+                </div>
+            </div>
+            <div class='footer'>
+                <p>&copy; {$year} SAE Manager - Aix-Marseille Université</p>
+                <p>Ceci est un email automatique, merci de ne pas y répondre.</p>
+            </div>
         </div>
     </div>
 </body>
@@ -154,26 +164,34 @@ class LastDateMailer
     /**
      * Returns the plain text template.
      *
-     * @param Student $student The student.
+     * @param Student    $student The student.
      * @param SAESubject $subject The SAE subject.
      * @return string
      */
     private static function getTextTemplate(Student $student, SAESubject $subject): string
     {
-        $title = htmlspecialchars($subject->getSubjectName());
-        $prenom = htmlspecialchars($student->getFirstName());
-        $endDate = DateTime::createFromFormat('Y-m-d', $subject->getEndDate());
-        $endDate = $endDate->format('Y-m-d');
+        $endDate = (new DateTime($subject->getEndDate()))->format('d/m/Y');
+        $title = $subject->getSubjectName();
+        $prenom = $student->getFirstName();
+        $dashboardUrl = "https://saemanager.alwaysdata.net/login";
+
         return "
-Rappel date limite du rendu - SAE Manager
+URGENT : RAPPEL DATE LIMITE - SAE MANAGER
+--------------------------------------------------
 
 Bonjour {$prenom},
 
-Nous vous rappelons que la date limite du rendu de la SAE {$title} approche.
-Vous devez rendre ce devoir le {$endDate}.
-Merci de vous assurer que votre travail est bien déposé avant la date limite.
+Nous vous rappelons que la date limite de rendu pour votre SAE approche.
 
-© 2026 SAE Manager - Aix-Marseille Université
+Détails :
+- Intitulé : {$title}
+- Date limite : {$endDate}
+
+Assurez-vous de déposer votre travail à temps en vous connectant à votre espace :
+{$dashboardUrl}
+
+--------------------------------------------------
+© " . date('Y') . " SAE Manager - Aix-Marseille Université
 Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }
@@ -190,3 +208,4 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     \Core\includes\Autoloader::register();
     LastDateMailer::main();
 }
+
