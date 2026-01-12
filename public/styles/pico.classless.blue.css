@@ -763,6 +763,11 @@ ul li {
     list-style: none;
 }
 
+ol li {
+    list-style: none;
+}
+
+
 mark {
   padding: 0.125rem 0.25rem;
   background-color: var(--pico-mark-background-color);
