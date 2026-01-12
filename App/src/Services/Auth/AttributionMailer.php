@@ -33,7 +33,7 @@ class AttributionMailer
     public static function sendAttribution(): void
     {
         Logger::log('MAIL_ATTRIBUTION', 'Starting attribution email process.');
-        $subjectOfMail = 'Attribution SAE - SAE Manager';
+        $subjectOfMail = 'Nouvelle SAE attribuée - SAE Manager';
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
         Logger::log('MAIL_ATTRIBUTION', "Focus date for attribution: $dateBeginFocus");
 
@@ -66,16 +66,15 @@ class AttributionMailer
                 $groupId = $studentGroup->getSaeGroupId();
                 // Utilisation du bon repository pour récupérer les étudiants du groupe
                 $students = $participatedInRepo->getGroupStudents($groupId);
-                
+
                 Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($students) . " students in group ID: $groupId");
 
                 foreach ($students as $studentData) {
                     $student = new Student($studentData);
 
-                    // Re-fetching subject seems redundant if we already have $saeSubject, 
+                    // Re-fetching subject seems redundant if we already have $saeSubject,
                     // but keeping logic close to original while logging.
                     // Optimisation: use existing $saeSubject object.
-                    
                     $emailStudent = $student->getEmail();
                     Logger::log('MAIL_ATTRIBUTION', "Preparing to send email to: $emailStudent");
 
@@ -103,9 +102,10 @@ class AttributionMailer
     private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $beginDate = $subject->getBeginDate();
+        $beginDate = (new DateTime($subject->getBeginDate()))->format('d/m/Y');
         $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
+        $dashboardUrl = "https://saemanager.alwaysdata.net/login"; // URL placeholder
 
         return "
 <!DOCTYPE html>
@@ -114,38 +114,49 @@ class AttributionMailer
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background-color: #0072ce; color: white; padding: 20px; text-align: center; }
-        .content { background-color: #f9f9f9; padding: 30px; border: 1px solid #ddd; }
-        .button {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: #0072ce;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #666; }
-        .warning { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; margin: 15px 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+        .wrapper { width: 100%; background-color: #f4f4f4; padding: 20px 0; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #0072ce; color: white; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px; }
+        .content { padding: 40px 30px; }
+        .content h2 { color: #0072ce; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        .info-box { background-color: #eef7ff; border-left: 4px solid #0072ce; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .info-item { margin-bottom: 5px; }
+        .info-label { font-weight: bold; color: #555; }
+        .button-container { text-align: center; margin-top: 30px; }
+        .button { display: inline-block; padding: 12px 30px; background-color: #0072ce; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
+        .button:hover { background-color: #005bb5; }
+        .footer { background-color: #333; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
+        .footer p { margin: 5px 0; }
     </style>
 </head>
 <body>
-    <div class='container'>
-        <div class='header'>
-            <h1>SAE Manager</h1>
-        </div>
-        <div class='content'>
-            <h2>Rappel date limite du rendu</h2>
-            <p>Bonjour {$prenom},</p>
-            <p>Vous avez été attribué à la SAE <strong>{$title}</strong> approche.</p>
-            <p>Elle commencera le <strong>{$beginDate}</strong>.</p>
-            <p style='word-break: break-all; color: #0072ce;'></p>
-        </div>
-        <div class='footer'>
-            <p>© {$year} SAE Manager - Aix-Marseille Université</p>
-            <p>Ceci est un email automatique, merci de ne pas y répondre.</p>
+    <div class='wrapper'>
+        <div class='container'>
+            <div class='header'>
+                <h1>SAE Manager</h1>
+            </div>
+            <div class='content'>
+                <p>Bonjour <strong>{$prenom}</strong>,</p>
+                
+                <p>Une nouvelle Situation d'Apprentissage et d'Évaluation (SAE) vous a été attribuée.</p>
+                
+                <div class='info-box'>
+                    <div class='info-item'><span class='info-label'>Intitulé :</span> {$title}</div>
+                    <div class='info-item'><span class='info-label'>Date de démarrage :</span> {$beginDate}</div>
+                </div>
+                
+                <p>Vous pouvez dès à présent consulter les détails de ce projet et contacter votre groupe sur votre espace étudiant.</p>
+                
+                <div class='button-container'>
+                    <a href='{$dashboardUrl}' class='button'>Accéder à mon espace</a>
+                </div>
+            </div>
+            <div class='footer'>
+                <p>&copy; {$year} SAE Manager - Aix-Marseille Université</p>
+                <p>Ceci est un email automatique, merci de ne pas y répondre.</p>
+            </div>
         </div>
     </div>
 </body>
@@ -161,18 +172,28 @@ class AttributionMailer
      */
     private static function getTextTemplate(Student $student, SAESubject $subject): string
     {
-        $beginDate = $subject->getBeginDate();
-        $title = htmlspecialchars($subject->getSubjectName());
-        $prenom = htmlspecialchars($student->getFirstName());
+        $beginDate = (new DateTime($subject->getBeginDate()))->format('d/m/Y');
+        $title = $subject->getSubjectName();
+        $prenom = $student->getFirstName();
+        $dashboardUrl = "https://saemanager.alwaysdata.net/";
+
         return "
-Rappel date limite du rendu - SAE Manager
+NOUVELLE SAE ATTRIBUÉE - SAE MANAGER
+--------------------------------------------------
 
 Bonjour {$prenom},
 
-Vous avez été attribué à la SAE {$title} qui commencera le {$beginDate}.
-Elle commencera le {$beginDate}.
+Une nouvelle Situation d'Apprentissage et d'Évaluation (SAE) vous a été attribuée.
 
-© 2026 SAE Manager - Aix-Marseille Université
+Détails du projet :
+- Intitulé : {$title}
+- Date de démarrage : {$beginDate}
+
+Connectez-vous à votre espace étudiant pour consulter les détails et votre groupe :
+{$dashboardUrl}
+
+--------------------------------------------------
+© " . date('Y') . " SAE Manager - Aix-Marseille Université
 Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }
@@ -189,3 +210,4 @@ if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     \Core\includes\Autoloader::register();
     AttributionMailer::main();
 }
+
