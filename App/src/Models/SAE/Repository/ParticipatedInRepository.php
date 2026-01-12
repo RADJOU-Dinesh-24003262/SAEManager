@@ -2,16 +2,16 @@
 
 namespace Models\SAE\Repository;
 
-use Core\includes\Database;
+use Core\Models\Repository\BaseRepository;
+use Models\SAE\ParticipatedIn;
 use Override;
 use PDO;
 use PDOException;
-use Models\SAE\SAEGroup;
-use Core\Models\Repository\BaseRepository;
-use Models\User\Student;
 
 /**
- * Repository for SAEGroup operations.
+ * Repository for ParticipatedIn operations.
+ *
+ * Handles database interactions for student participation in SAE groups.
  *
  * @category   Models
  * @package    Src
@@ -20,29 +20,27 @@ use Models\User\Student;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @extends BaseRepository<SAEGroup>
+ * @extends BaseRepository<ParticipatedIn>
  */
-class SAEGroupRepository extends BaseRepository
+class ParticipatedInRepository extends BaseRepository
 {
     /**
      * The singleton instance.
-     * @var SAEGroupRepository|null
+     * @var ParticipatedInRepository|null
      */
-    protected static ?SAEGroupRepository $instance = null;
+    protected static ?ParticipatedInRepository $instance = null;
 
     /**
      * The table name.
-     *
      * @var string
      */
-    protected string $table = 'sae_groups';
+    protected string $table = 'participated_in';
 
     /**
      * The entity class name.
-     *
-     * @var class-string<SAEGroup>
+     * @var class-string<ParticipatedIn>
      */
-    protected string $entityClass = SAEGroup::class;
+    protected string $entityClass = ParticipatedIn::class;
 
     /**
      * Constructor.
@@ -55,80 +53,36 @@ class SAEGroupRepository extends BaseRepository
     /**
      * Gets the singleton instance.
      *
-     * @return SAEGroupRepository
+     * @return ParticipatedInRepository
      */
-    public static function getInstance(): SAEGroupRepository
+    public static function getInstance(): ParticipatedInRepository
     {
         if (self::$instance === null) {
-            self::$instance = new SAEGroupRepository();
+            self::$instance = new ParticipatedInRepository();
         }
         return self::$instance;
     }
 
     /**
      * Returns the name of the primary key.
+     * Note: This table has a composite primary key (student_id, sae_group_id).
+     * returning one part for compatibility, but methods should handle the composite key.
      *
      * @return string
      */
     #[Override]
     protected function getPrimaryKey(): string
     {
-        return 'sae_group_id';
-    }
-
-    /**
-     * Finds all groups for a SAE.
-     *
-     * @param integer $saeId The SAE subject ID.
-     * @return array<SAEGroup>
-     */
-    public function findBySaeId(int $saeId): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_groups WHERE sae_subject_id = :sae_id ORDER BY sae_group_id'
-            );
-            $stmt->execute(['sae_id' => $saeId]);
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn ($row) => new SAEGroup($row), $data);
-        } catch (PDOException $e) {
-            error_log('Erreur récupération groupes : ' . $e->getMessage());
-            return [];
-        }
-    }
-
-    /**
-     * Finds groups managed by a specific professor for a SAE.
-     *
-     * @param integer $professorId The professor ID.
-     * @param integer $saeId       The SAE subject ID.
-     * @return array<SAEGroup>
-     */
-    public function findByProfessorId(int $professorId, int $saeId): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_groups 
-                 WHERE sae_subject_id = :sae_id AND professor_id = :prof_id 
-                 ORDER BY sae_group_id'
-            );
-            $stmt->execute(['sae_id' => $saeId, 'prof_id' => $professorId]);
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn ($row) => new SAEGroup($row), $data);
-        } catch (PDOException $e) {
-            error_log('Erreur récupération groupes prof : ' . $e->getMessage());
-            return [];
-        }
+        return 'student_id'; // Partial PK, specific methods used instead of generic findById.
     }
 
     // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+
     /**
-     * Creates a new group.
+     * Creates a new participation entry.
      *
-     * @param SAEGroup $entity The group to create.
-     * @return SAEGroup The created group.
+     * @param ParticipatedIn $entity The entity to create.
+     * @return ParticipatedIn The created entity.
      * @throws PDOException If creation fails.
      */
     #[Override]
@@ -136,100 +90,36 @@ class SAEGroupRepository extends BaseRepository
     {
         try {
             $stmt = $this->connection->prepare(
-                'INSERT INTO sae_groups (sae_subject_id, professor_id) 
-                 VALUES (:sae_id, :prof_id) 
-                 RETURNING sae_group_id'
+                'INSERT INTO participated_in (student_id, sae_group_id, sae_subject_id) 
+                 VALUES (:student_id, :group_id, :subject_id)'
             );
             $stmt->execute([
-                'sae_id' => $entity->getSaeSubjectId(),
-                'prof_id' => $entity->getProfessorId()
+                'student_id' => $entity->getStudentId(),
+                'group_id' => $entity->getSaeGroupId(),
+                'subject_id' => $entity->getSaeSubjectId()
             ]);
-            $id = intval($stmt->fetchColumn());
-
-            $entity->setSaeGroupId($id);
             return $entity;
         } catch (PDOException $e) {
-            error_log('Erreur création groupe : ' . $e->getMessage());
+            error_log('Erreur création participation : ' . $e->getMessage());
             throw $e;
         }
     }
-    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
-    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Updates a group.
+     * Updates a participation entry.
      *
-     * @param SAEGroup $entity The group to update.
-     * @return boolean True on success.
+     * @param ParticipatedIn $entity The entity to update.
+     * @return boolean
      */
     #[Override]
     public function update($entity): bool
     {
-        try {
-            $stmt = $this->connection->prepare(
-                'UPDATE sae_groups 
-                 SET sae_subject_id = :sae_id, professor_id = :prof_id 
-                 WHERE sae_group_id = :id'
-            );
-            return $stmt->execute([
-                'sae_id' => $entity->getSaeSubjectId(),
-                'prof_id' => $entity->getProfessorId(),
-                'id' => $entity->getSaeGroupId()
-            ]);
-        } catch (PDOException $e) {
-            error_log('Erreur mise à jour groupe : ' . $e->getMessage());
-            return false;
-        }
+        // Typically not updated, just deleted and re-inserted or just inserted.
+        return false;
     }
+
     // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Gets all students in a group.
-     *
-     * @param integer $groupId The group ID.
-     * @return array<int, array{
-     *   student_id: string,
-     *   amu_id: string,
-     *   year: string,
-     *   major: string,
-     *   td: string,
-     *   tp: string,
-     *   first_name: string,
-     *   last_name: string,
-     *   email: string,
-     *   phone: string|null
-     * }> Array of student data.
-     */
-    public function getGroupStudents(int $groupId): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT 
-                    s.student_id, s.amu_id, s.year, s.major, s.td, s.tp,
-                    u.first_name, u.last_name, u.email, u.phone
-                FROM students s
-                JOIN users u ON s.student_id = u.user_id
-                JOIN participated_in pi ON s.student_id = pi.student_id
-                WHERE pi.sae_group_id = :group_id
-                ORDER BY u.last_name, u.first_name'
-            );
-            $stmt->execute(['group_id' => $groupId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log('Erreur récupération étudiants du groupe : ' . $e->getMessage());
-            return [];
-        }
-    }
 
     /**
      * Assigns a student to a group.
@@ -270,6 +160,44 @@ class SAEGroupRepository extends BaseRepository
         } catch (PDOException $e) {
             error_log('Erreur désassignation étudiant : ' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Gets all students in a group.
+     *
+     * @param integer $groupId The group ID.
+     * @return array<int, array{
+     *   student_id: string,
+     *   amu_id: string,
+     *   year: string,
+     *   major: string,
+     *   td: string,
+     *   tp: string,
+     *   first_name: string,
+     *   last_name: string,
+     *   email: string,
+     *   phone: string|null
+     * }> Array of student data.
+     */
+    public function getGroupStudents(int $groupId): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT 
+                    s.student_id, s.amu_id, s.year, s.major, s.td, s.tp,
+                    u.first_name, u.last_name, u.email, u.phone
+                FROM students s
+                JOIN users u ON s.student_id = u.user_id
+                JOIN participated_in pi ON s.student_id = pi.student_id
+                WHERE pi.sae_group_id = :group_id
+                ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['group_id' => $groupId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération étudiants du groupe : ' . $e->getMessage());
+            return [];
         }
     }
 

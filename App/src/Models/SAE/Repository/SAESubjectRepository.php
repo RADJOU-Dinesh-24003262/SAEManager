@@ -7,6 +7,7 @@ use Override;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
+use Models\User\Student;
 use Core\Models\Repository\BaseRepository;
 use PDepend\Util\Log;
 
@@ -383,6 +384,52 @@ class SAESubjectRepository extends BaseRepository
         } catch (PDOException $e) {
             error_log('Erreur récupération info client : ' . $e->getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Finds all subjects that match the end date.
+     *
+     * @param string $endDate The end date of the SAE subjects.
+     * @return array<SAESubject> The list of SAE subjects matching the end date.
+     */
+    public function findByEndDate(string $endDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_subjects WHERE end_date = :end_date 
+                 ORDER BY sae_subject_id'
+            );
+            $stmt->execute(['end_date' => $endDate]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn($row) => new SAESubject($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération sujets par date de fin : ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Finds all subjects that match the begin date.
+     *
+     * @param string $beginDate The begin date of the SAE subjects.
+     * @return array<SAESubject> The list of SAE subjects matching the begin date.
+     */
+    public function findByBeginDate(string $beginDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_subjects WHERE begin_date = :begin_date 
+                 ORDER BY sae_subject_id'
+            );
+            $stmt->execute(['begin_date' => $beginDate]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn($row) => new SAESubject($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération sujets par date de début : ' . $e->getMessage());
+            return [];
         }
     }
 }
