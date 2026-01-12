@@ -3,7 +3,6 @@
     margin: 0 auto;
 }
 
-/* Header Section */
 .profile-header {
     background: rgba(155, 197, 157, 0.87);
     padding: 3rem 0.5rem;
@@ -33,7 +32,8 @@
     margin-bottom: 0.25rem;
 }
 
-.profile-info h1 {
+.profile-info h3 {
+    margin-top: 1.25rem;
     margin-bottom: 0.25rem;
     grid-column: 1;
 }
@@ -45,12 +45,11 @@
 }
 
 .profile-meta {
-    grid-column: 2;
-    grid-row: 2 / 4;
+    grid-column: 0;
+    grid-row:  2 / 4;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .bio-section {
@@ -97,6 +96,8 @@
 /* Content Area */
 .content-area {
     padding: 2rem;
+    min-height: 20vw;
+    flex-direction: column;
 }
 
 /* SAE Cards */
@@ -114,13 +115,6 @@
 .sae-card:focus-within {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-}
-
-.sae-header {
-    height: 200px;
-    display: flex;
-    align-items: center;
-    padding: 2rem;
 }
 
 .sae-card:nth-child(1) .sae-header {
@@ -142,25 +136,42 @@
     max-width: 1rem;
 }
 
+
+.sae-header {
+    height: 40%;
+    width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centrage pour un meilleur rendu visuel */
+    padding: 2rem;
+}
+
+
+/* L'icône passe de 120px à 180px */
 .sae-icon {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background: white;
     border-radius: 50%;
-    border: 3px solid #000;
+    border: 4px solid #000; /* Bordure légèrement plus épaisse */
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Augmentation de l'espace interne du corps de texte */
 .sae-body {
-    padding: 2rem;
+    padding: 3rem;
 }
 
 /* Responsive */
 @media (max-width: 1200px) {
     .main-layout {
         grid-template-columns: 250px 1fr;
+    }
+
+    .content-area {
+        flex-direction: column;
     }
 }
 
@@ -220,7 +231,7 @@
     }
 }
 
-/* Accessibility */
+
 .visually-hidden {
     position: absolute;
     width: 1px;
@@ -231,4 +242,82 @@
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+
+
+@media (max-width: 768px) {
+    .profile-header {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .profile-info {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+
+    .profile-meta {
+        grid-column: 1;
+        grid-row: auto;
+        align-items: center;
+        margin-top: 1rem;
+    }
+
+    .main-layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .bio-section {
+        border-radius: 25px; /* Moins arrondi sur petit écran */
+        padding: 1.5rem;
+    }
+
+    .sae-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-info h1 {
+        font-size: 1.5rem;
+    }
+
+    .sidebar nav {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sidebar a {
+        text-align: center;
+        padding: 0.5rem;
+    }
+
+    .sae-header {
+        height: 140px;
+        width: 100%;
+    }
+
+    .sae-icon {
+        width: 70px;
+        height: 70px;
+    }
 }

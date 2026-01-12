@@ -760,7 +760,7 @@ hgroup > *:not(:first-child):last-child {
 }
 
 ul li {
-  list-style: square;
+    list-style: none;
 }
 
 mark {

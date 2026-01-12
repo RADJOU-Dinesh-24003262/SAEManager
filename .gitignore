@@ -8,6 +8,7 @@ Core/includes/my_settings.ini
 *coverage*
 *.xml
 .php-cs-fixer.cache
+.php-cs-fixer.dist.php
 *cache*
 *svg
 *yaml
