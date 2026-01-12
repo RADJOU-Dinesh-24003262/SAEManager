@@ -77,7 +77,7 @@ class CreateSaeValidator extends FormValidator
         $end = new DateTime($data['end_date']);
 
         if ($end <= $begin) {
-            $errors[] = 'La date de fin doit être après la date de début';
+            throw new ExeptionValidationSAECreation('La date de fin doit être après la date de début');
         }
     }
 }
