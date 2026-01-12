@@ -40,9 +40,34 @@ class SAEServiceIntegrationTest extends TestCase
     {
         parent::setUp();
 
+        putenv('APP_ENV=testing');
+
+        // Reset Database singleton
+        $reflection = new ReflectionClass(Database::class);
+        $instance = $reflection->getProperty('instance');
+        $instance->setAccessible(true);
+        $instance->setValue(null, null);
+
+        // Reset Repositories
+        $reflectionSubjectRepo = new ReflectionClass(SAESubjectRepository::class);
+        $instanceSubjectRepo = $reflectionSubjectRepo->getProperty('instance');
+        $instanceSubjectRepo->setAccessible(true);
+        $instanceSubjectRepo->setValue(null, null);
+
+        $reflectionGroupRepo = new ReflectionClass(SAEGroupRepository::class);
+        $instanceGroupRepo = $reflectionGroupRepo->getProperty('instance');
+        $instanceGroupRepo->setAccessible(true);
+        $instanceGroupRepo->setValue(null, null);
+
+        // Reset SAE Singleton
+        $reflectionSae = new ReflectionClass(SAE::class);
+        $instanceSae = $reflectionSae->getProperty('instance');
+        $instanceSae->setAccessible(true);
+        $instanceSae->setValue(null, null);
+
         // Ensure we have a fresh database connection
-        $db = new Database();
-        Database::setInstance($db);
+        // We use the singleton getter which respects APP_ENV=testing to create an in-memory DB
+        $db = Database::getInstance();
 
         // Create a Professor
         $this->prof = new Professor([
