@@ -1,0 +1,54 @@
+#email {
+    display: inline-block;
+    width: 60%;
+    vertical-align: middle;
+    margin: 0;
+}
+
+#mail-student:not([style*="display: none"]) ~ #email,
+#mail-professor:not([style*="display: none"]) ~ #email {
+    width: 60%;
+}
+
+#mail-student[style*="display: none"] ~ #email,
+#mail-professor[style*="display: none"] ~ #email {
+    width: 100%;
+}
+
+#mail-student,
+#mail-professor {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    vertical-align: middle;
+    white-space: nowrap;
+    color: #666;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    #email {
+        width: 55%;
+    }
+
+    #mail-student,
+    #mail-professor {
+        font-size: 0.9em;
+        padding: 0.55rem 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #email {
+        width: 50%;
+    }
+
+    #mail-student,
+    #mail-professor {
+        font-size: 0.85em;
+        padding: 0.5rem 0.5rem;
+    }
+}

@@ -3,6 +3,7 @@
 namespace Controllers\User;
 
 use Core\Controllers\ControllerInterface;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utilis\Logger;
@@ -71,6 +72,9 @@ class RegisterPost implements ControllerInterface
             $view = new RegisterSuccessView($user);
             $view->render();
             exit();
+        } catch (ExceptionEmailAlreadyExists $e) {
+            SessionService::setFlash('errors', ['email' => $e->getMessage()]);
+            Logger::log('REGISTER_FAIL', "Email déjà utilisé: " . $e->getEmail(), null, 'INFO');
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {

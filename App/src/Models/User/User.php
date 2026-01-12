@@ -4,6 +4,7 @@ namespace Models\User;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionDeleteUserFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -12,7 +13,6 @@ use InvalidArgumentException;
 use Models\SAE\SAE;
 use PDO;
 use PDOException;
-use PhpParser\Node\Stmt;
 use Models\SAE\SAESubject;
 
 /**
@@ -92,6 +92,8 @@ abstract class User extends BaseModel
     {
         $userType = $data['user_type'] ?? '';
 
+
+
         $user = match ($userType) {
             'student' => new Student($data),
             'professor' => new Professor($data),
@@ -100,6 +102,9 @@ abstract class User extends BaseModel
         };
 
         $user->setPassword($data['password']);
+
+        $user->addDomainNameToEmail();
+
         return $user;
     }
 
@@ -159,6 +164,7 @@ abstract class User extends BaseModel
      *
      * @return void
      * @throws PDOException If the user cannot be saved.
+     * @throws ExceptionEmailAlreadyExists If the email is already is DB.
      */
     public function save(): void
     {
@@ -166,6 +172,10 @@ abstract class User extends BaseModel
         $connection->beginTransaction();
 
         try {
+            if ($this->existsByEmail($this->email)) {
+                throw new ExceptionEmailAlreadyExists($this->getEmail());
+            }
+
             $stmt = $connection->prepare(
                 'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
                  VALUES (:first_name, :last_name, LOWER(:email), :phone, :hashed_password, :user_type)'
@@ -198,8 +208,37 @@ abstract class User extends BaseModel
             $connection->rollBack();
             error_log('Erreur lors de la sauvegarde de l\'utilisateur : ' . $e->getMessage());
             throw $e;
+        } catch (ExceptionEmailAlreadyExists $e) {
+            $connection->rollBack();
+            error_log('Email deja présent :' . $this->getEmail());
+            throw $e;
         }
     }
+
+
+    /**
+     * Appends the appropriate university domain name to the email address.
+     *
+     * This method checks if the current email property contains a domain name.
+     * If not, it automatically appends '@etu.univ-amu.fr' for students or
+     * '@univ-amu.fr' for professors. This allows users to register using
+     * only their AMU prefix (firstname.lastname).
+     *
+     * @return void
+     */
+    private function addDomainNameToEmail(): void
+    {
+        if (str_contains($this->email, '@')) {
+            return;
+        }
+
+        if ($this->isStudent()) {
+            $this->email .= '@etu.univ-amu.fr';
+        } elseif ($this->isProfessor()) {
+            $this->email .= '@univ-amu.fr';
+        }
+    }
+
 
     /**
      * Abstract method to save type-specific data.
