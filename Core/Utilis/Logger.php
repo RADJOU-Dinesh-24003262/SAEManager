@@ -49,7 +49,7 @@ class Logger
             $details
         );
 
-        // Determine log file based on action prefix
+        // Determine log file based on action prefix.
         $targetFile = self::SECURITY_LOG;
         if (str_starts_with($action, 'MAIL_')) {
             $targetFile = self::MAIL_LOG;

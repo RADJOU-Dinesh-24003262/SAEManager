@@ -64,7 +64,12 @@ class AttributionMailer
 
             foreach ($studentsGroup as $studentGroup) {
                 $groupId = $studentGroup->getSaeGroupId();
-                // Utilisation du bon repository pour récupérer les étudiants du groupe
+
+                if ($groupId === null) {
+                    continue;
+                }
+
+                // Use the updated method signature.
                 $students = $participatedInRepo->getGroupStudents($groupId);
 
                 Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($students) . " students in group ID: $groupId");
@@ -84,7 +89,12 @@ class AttributionMailer
                         EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
                         Logger::log('MAIL_ATTRIBUTION', "Email sent successfully to: $emailStudent");
                     } catch (\Exception $e) {
-                        Logger::log('MAIL_ATTRIBUTION', "Failed to send email to $emailStudent: " . $e->getMessage(), null, 'ERROR');
+                        Logger::log(
+                            'MAIL_ATTRIBUTION',
+                            "Failed to send email to $emailStudent: " . $e->getMessage(),
+                            null,
+                            'ERROR'
+                        );
                     }
                 }
             }
@@ -105,7 +115,7 @@ class AttributionMailer
         $beginDate = (new DateTime($subject->getBeginDate()))->format('d/m/Y');
         $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
-        $dashboardUrl = "https://saemanager.alwaysdata.net/login"; // URL placeholder
+        $dashboardUrl = "https://saemanager.alwaysdata.net/login"; // URL placeholder.
 
         return "
 <!DOCTYPE html>
@@ -114,18 +124,23 @@ class AttributionMailer
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; " .
+            "background-color: #f4f4f4; margin: 0; padding: 0; }
         .wrapper { width: 100%; background-color: #f4f4f4; padding: 20px 0; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; " .
+            "overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .header { background-color: #0072ce; color: white; padding: 30px 20px; text-align: center; }
         .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px; }
         .content { padding: 40px 30px; }
-        .content h2 { color: #0072ce; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
-        .info-box { background-color: #eef7ff; border-left: 4px solid #0072ce; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .content h2 { color: #0072ce; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; " .
+            "padding-bottom: 10px; }
+        .info-box { background-color: #eef7ff; border-left: 4px solid #0072ce; padding: 15px; margin: 20px 0; " .
+            "border-radius: 4px; }
         .info-item { margin-bottom: 5px; }
         .info-label { font-weight: bold; color: #555; }
         .button-container { text-align: center; margin-top: 30px; }
-        .button { display: inline-block; padding: 12px 30px; background-color: #0072ce; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
+        .button { display: inline-block; padding: 12px 30px; background-color: #0072ce; color: white; " .
+            "text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
         .button:hover { background-color: #005bb5; }
         .footer { background-color: #333; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
         .footer p { margin: 5px 0; }
@@ -147,7 +162,8 @@ class AttributionMailer
                     <div class='info-item'><span class='info-label'>Date de démarrage :</span> {$beginDate}</div>
                 </div>
                 
-                <p>Vous pouvez dès à présent consulter les détails de ce projet et contacter votre groupe sur votre espace étudiant.</p>
+                <p>Vous pouvez dès à présent consulter les détails de ce projet et contacter votre groupe sur " .
+                    "votre espace étudiant.</p>
                 
                 <div class='button-container'>
                     <a href='{$dashboardUrl}' class='button'>Accéder à mon espace</a>
@@ -198,16 +214,22 @@ Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }
 
+    /**
+     * Main method to execute the mailer.
+     *
+     * @return void
+     */
     public static function main(): void
     {
         self::sendAttribution(); // Will be changed later.
     }
 }
 
-// Execute if run directly
+// phpcs:disable PSR1.Files.SideEffects
+// Execute if run directly.
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
     \Core\includes\Autoloader::register();
     AttributionMailer::main();
 }
-
+// phpcs:enable

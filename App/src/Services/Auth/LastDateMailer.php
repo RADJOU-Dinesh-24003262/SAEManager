@@ -59,13 +59,18 @@ class LastDateMailer
                 Logger::log('MAIL_LAST_DATE', "No groups found for SAE ID: $saeId");
                 continue;
             }
-            
+
             Logger::log('MAIL_LAST_DATE', 'Found ' . count($studentsGroup) . " groups for SAE ID: $saeId");
 
             foreach ($studentsGroup as $studentGroup) {
                 $groupId = $studentGroup->getSaeGroupId();
+
+                if ($groupId === null) {
+                    continue;
+                }
+
                 $students = $participatedInRepo->getGroupStudents($groupId);
-                
+
                 Logger::log('MAIL_LAST_DATE', 'Found ' . count($students) . " students in group ID: $groupId");
 
                 foreach ($students as $studentData) {
@@ -82,7 +87,12 @@ class LastDateMailer
                         EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
                         Logger::log('MAIL_LAST_DATE', "Email sent successfully to: $emailStudent");
                     } catch (\Exception $e) {
-                        Logger::log('MAIL_LAST_DATE', "Failed to send email to $emailStudent: " . $e->getMessage(), null, 'ERROR');
+                        Logger::log(
+                            'MAIL_LAST_DATE',
+                            "Failed to send email to $emailStudent: " . $e->getMessage(),
+                            null,
+                            'ERROR'
+                        );
                     }
                 }
             }
@@ -93,7 +103,7 @@ class LastDateMailer
     /**
      * Returns the HTML template.
      *
-     * @param Student $student The student.
+     * @param Student    $student The student.
      * @param SAESubject $subject The SAE subject.
      * @return string
      */
@@ -112,18 +122,24 @@ class LastDateMailer
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; " .
+            "background-color: #f4f4f4; margin: 0; padding: 0; }
         .wrapper { width: 100%; background-color: #f4f4f4; padding: 20px 0; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header { background-color: #d32f2f; color: white; padding: 30px 20px; text-align: center; } /* Red for urgency */
+        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; " .
+            "overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { background-color: #d32f2f; color: white; padding: 30px 20px; text-align: center; } 
+        /* Red for urgency */
         .header h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: 1px; }
         .content { padding: 40px 30px; }
-        .content h2 { color: #d32f2f; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
-        .warning-box { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; color: #856404; }
+        .content h2 { color: #d32f2f; font-size: 20px; margin-top: 0; border-bottom: 2px solid #f0f0f0; " .
+            "padding-bottom: 10px; }
+        .warning-box { background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; " .
+            "border-radius: 4px; color: #856404; }
         .info-item { margin-bottom: 5px; }
         .info-label { font-weight: bold; }
         .button-container { text-align: center; margin-top: 30px; }
-        .button { display: inline-block; padding: 12px 30px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
+        .button { display: inline-block; padding: 12px 30px; background-color: #d32f2f; color: white; " .
+            "text-decoration: none; border-radius: 50px; font-weight: bold; transition: background-color 0.3s; }
         .button:hover { background-color: #b71c1c; }
         .footer { background-color: #333; color: #aaa; text-align: center; padding: 20px; font-size: 12px; }
         .footer p { margin: 5px 0; }
@@ -138,14 +154,17 @@ class LastDateMailer
             <div class='content'>
                 <p>Bonjour <strong>{$prenom}</strong>,</p>
                 
-                <p>La date limite de rendu pour votre Situation d'Apprentissage et d'Évaluation (SAE) approche à grands pas.</p>
+                <p>La date limite de rendu pour votre Situation d'Apprentissage et d'Évaluation (SAE) " .
+                    "approche à grands pas.</p>
                 
                 <div class='warning-box'>
                     <div class='info-item'><span class='info-label'>Intitulé :</span> {$title}</div>
-                    <div class='info-item'><span class='info-label'>Date limite de rendu :</span> <strong>{$endDate}</strong></div>
+                    <div class='info-item'><span class='info-label'>Date limite de rendu :</span> " .
+                        "<strong>{$endDate}</strong></div>
                 </div>
                 
-                <p>Merci de vous assurer que votre travail est bien déposé avant cette date. Tout retard pourrait entraîner des pénalités.</p>
+                <p>Merci de vous assurer que votre travail est bien déposé avant cette date. " .
+                    "Tout retard pourrait entraîner des pénalités.</p>
                 
                 <div class='button-container'>
                     <a href='{$dashboardUrl}' class='button'>Déposer mon rendu</a>
@@ -196,16 +215,22 @@ Ceci est un email automatique, merci de ne pas y répondre.
 ";
     }
 
+    /**
+     * Main method to execute the mailer.
+     *
+     * @return void
+     */
     public static function main(): void
     {
         self::send(); // Will be changed later.
     }
 }
 
-// Execute if run directly
+// phpcs:disable PSR1.Files.SideEffects
+// Execute if run directly.
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
     \Core\includes\Autoloader::register();
     LastDateMailer::main();
 }
-
+// phpcs:enable
