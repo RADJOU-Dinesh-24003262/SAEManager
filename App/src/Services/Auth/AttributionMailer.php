@@ -3,12 +3,14 @@
 namespace Services\Auth;
 
 use Core\Utilis\EmailService;
+use Core\Utilis\Logger;
 use Models\SAE\Repository\SAESubjectRepository;
 use Models\User\Student;
 use Models\User\User;
 use Models\SAE\SAESubject;
 use DateTime;
 use Models\SAE\Repository\SAEGroupRepository;
+use Models\SAE\Repository\ParticipatedInRepository;
 
 /**
  * Service responsible for sending an attribution emails for SAE Manager.
@@ -30,43 +32,65 @@ class AttributionMailer
      */
     public static function sendAttribution(): void
     {
+        Logger::log('MAIL_ATTRIBUTION', 'Starting attribution email process.');
         $subjectOfMail = 'Attribution SAE - SAE Manager';
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
+        Logger::log('MAIL_ATTRIBUTION', "Focus date for attribution: $dateBeginFocus");
 
         $saeSubjectRepo = SAESubjectRepository::getInstance();
         $saeSubjects = $saeSubjectRepo->findByBeginDate($dateBeginFocus);
+        Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($saeSubjects) . ' subjects starting on focus date.');
 
         $saeGroupRepo = SAEGroupRepository::getInstance();
+        $participatedInRepo = ParticipatedInRepository::getInstance();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
 
             if ($saeId === null) {
+                Logger::log('MAIL_ATTRIBUTION', 'Skipping subject with null ID.', null, 'WARNING');
                 continue;
             }
+
+            Logger::log('MAIL_ATTRIBUTION', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
             $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
 
             if (empty($studentsGroup)) {
+                Logger::log('MAIL_ATTRIBUTION', "No groups found for SAE ID: $saeId");
                 continue;
             }
+
+            Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($studentsGroup) . " groups for SAE ID: $saeId");
+
             foreach ($studentsGroup as $studentGroup) {
-                $students = $saeGroupRepo->getGroupStudents($saeId);
+                $groupId = $studentGroup->getSaeGroupId();
+                // Utilisation du bon repository pour récupérer les étudiants du groupe
+                $students = $participatedInRepo->getGroupStudents($groupId);
+                
+                Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($students) . " students in group ID: $groupId");
 
-                foreach ($students as $student) {
-                    $student = new Student($student);
+                foreach ($students as $studentData) {
+                    $student = new Student($studentData);
 
-                    $repoSubject = $saeSubjectRepo->findById($saeId);
-                    if ($repoSubject === null) {
-                        continue;
-                    }
-
+                    // Re-fetching subject seems redundant if we already have $saeSubject, 
+                    // but keeping logic close to original while logging.
+                    // Optimisation: use existing $saeSubject object.
+                    
                     $emailStudent = $student->getEmail();
-                    $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
-                    $textMessage = self::getTextTemplate($student, $repoSubject);
-                    EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                    Logger::log('MAIL_ATTRIBUTION', "Preparing to send email to: $emailStudent");
+
+                    try {
+                        $htmlMessage = self::getHtmlTemplate($student, $saeSubject);
+                        $textMessage = self::getTextTemplate($student, $saeSubject);
+                        EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                        Logger::log('MAIL_ATTRIBUTION', "Email sent successfully to: $emailStudent");
+                    } catch (\Exception $e) {
+                        Logger::log('MAIL_ATTRIBUTION', "Failed to send email to $emailStudent: " . $e->getMessage(), null, 'ERROR');
+                    }
                 }
             }
         }
+        Logger::log('MAIL_ATTRIBUTION', 'Attribution email process completed.');
     }
 
     /**
