@@ -121,7 +121,7 @@ class RegisterSuccessView extends AbstractView
 
 
             $year    = $student->getYear();
-            $parcours = $student->getParcours() ? $student->getParcours() : null;
+            $major = $student->getMajor() ? $student->getMajor() : null;
             $td      = $student->getTd();
             $tp      = $student->getTp();
 
@@ -129,8 +129,8 @@ class RegisterSuccessView extends AbstractView
             $info .= '<h4>Informations académiques</h4>';
             $info .= "<p><strong>Année :</strong> BUT $year</p>";
 
-            if ($parcours !== null) {
-                $info .= "<p><strong>Parcours :</strong> $parcours</p>";
+            if ($major !== null) {
+                $info .= "<p><strong>Parcours :</strong> $major</p>";
             }
 
             $info .= "<p><strong>Groupe TD :</strong> $td</p>";

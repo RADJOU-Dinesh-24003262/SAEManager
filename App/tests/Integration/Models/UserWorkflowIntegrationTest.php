@@ -221,7 +221,7 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertEquals(3, $student->getYear());
         $this->assertEquals('TD3', $student->getTd());
         $this->assertEquals('TPA', $student->getTp());
-        $this->assertEquals('B', $student->getParcours());
+        $this->assertEquals('B', $student->getMajor());
 
         // Vérifier plusieurs fois (les getters ne devraient pas modifier les données)
         for ($i = 0; $i < 5; $i++) {

@@ -133,16 +133,16 @@ class ValidationServiceRegister extends FormValidator
         }
 
         if (in_array($data['year'] ?? '', ['2', '3'])) {
-            if (empty($data['parcours'])) {
-                $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours requis en BUT 2 et BUT 3.");
-            } elseif (!$this->isValidParcours($data['parcours'])) {
-                $errors[] = new ExceptionValidationRegister('parcours', 'string', "Parcours invalide.");
+            if (empty($data['major'])) {
+                $errors[] = new ExceptionValidationRegister('major', 'string', "Parcours requis en BUT 2 et BUT 3.");
+            } elseif (!$this->isValidMajor($data['major'])) {
+                $errors[] = new ExceptionValidationRegister('major', 'string', "Parcours invalide.");
             } elseif (($data['td'] ?? '') === 'TD4') {
                 $errors[] = new ExceptionValidationRegister('td', 'string', "TD4 uniquement disponible en BUT 1.");
             }
-        } elseif (!empty($data['parcours'])) {
+        } elseif (!empty($data['major'])) {
             $errors[] = new ExceptionValidationRegister(
-                'parcours',
+                'major',
                 'string',
                 "Le parcours n'est pas applicable pour cette année."
             );

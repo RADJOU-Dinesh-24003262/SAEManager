@@ -128,8 +128,8 @@ class DashboardView extends AbstractView
 
             $html .= '<span>Année : ' . $student->getYear() . '</span>';
             $html .= '<span>Groupe : ' . $student->getTd() . '-' . $student->getTp() . '</span>';
-            if ($student->getParcours()) {
-                $html .= '<span>Parcours : ' . $student->getParcours() . '</span>';
+            if ($student->getMajor()) {
+                $html .= '<span>Parcours : ' . $student->getMajor() . '</span>';
             }
         } elseif ($user->isProfessor()) {
             $html .= '<span>Département : Informatique</span>';
@@ -156,13 +156,10 @@ class DashboardView extends AbstractView
 
         if ($user->isProfessor()) {
             $html .= '<a class="btn-create" href="/sae/create">+ Créer une nouvelle SAE</a>';
-            $html .= '<a href="/sae">Toutes les SAE</a>';
-            $html .= '<a href="/student">Gérer les étudiants</a>';
         } elseif ($user->isStudent()) {
-            $html .= '<a href="/sae">Mes SAE</a>';
-            $html .= '<a href="/group">Mon Groupe</a>';
+
         } elseif ($user->isClient()) {
-            $html .= '<a href="/sae">Mes SAE</a>';
+
         }
 
         $html .= '</div>';
