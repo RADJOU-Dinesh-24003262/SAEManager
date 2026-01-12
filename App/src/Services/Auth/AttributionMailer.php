@@ -8,6 +8,7 @@ use Models\User\Student;
 use Models\User\User;
 use Models\SAE\SAESubject;
 use DateTime;
+use Models\SAE\Repository\SAEGroupRepository;
 
 /**
  * Service responsible for sending an attribution emails for SAE Manager.
@@ -32,40 +33,55 @@ class AttributionMailer
         $subjectOfMail = 'Attribution SAE - SAE Manager';
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
 
-        $repo = SAESubjectRepository::getInstance();
+        $saeSubjectRepo = SAESubjectRepository::getInstance();
+        $saeSubjects = $saeSubjectRepo->findByBeginDate($dateBeginFocus);
 
-        $studentsrepo = $repo->findStudentsWithSaeBeginningOnDate($dateBeginFocus);
+        $saeGroupRepo = SAEGroupRepository::getInstance();
 
-        foreach ($studentsrepo as $student) {
-            $saeId = $student->getSaeSubjectId();
+        foreach ($saeSubjects as $saeSubject) {
+            $saeId = $saeSubject->getSaeSubjectId();
+
             if ($saeId === null) {
                 continue;
             }
-            $repoSubject = $repo->findById($saeId);
-            if ($repoSubject === null) {
+            $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
+
+            if (empty($studentsGroup)) {
                 continue;
             }
+            foreach ($studentsGroup as $studentGroup) {
+                $students = $saeGroupRepo->getGroupStudents($saeId);
 
-            $emailStudent = $student->getEmail();
-            $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
-            $textMessage = self::getTextTemplate($student, $repoSubject);
-            EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                foreach ($students as $student) {
+                    $student = new Student($student);
+
+                    $repoSubject = $saeSubjectRepo->findById($saeId);
+                    if ($repoSubject === null) {
+                        continue;
+                    }
+
+                    $emailStudent = $student->getEmail();
+                    $htmlMessage = self::getHtmlTemplate($student, $repoSubject);
+                    $textMessage = self::getTextTemplate($student, $repoSubject);
+                    EmailService::send($emailStudent, $subjectOfMail, $htmlMessage, $textMessage);
+                }
+            }
         }
     }
 
     /**
      * Returns the HTML template.
      *
-     * @param Student $student The student.
+     * @param Student    $student The student.
      * @param SAESubject $subject The SAE subject.
      * @return string
      */
     private static function getHtmlTemplate(Student $student, SAESubject $subject): string
     {
         $year = date('Y');
-        $beginDate = $subject->getBeginDate() ?? 'Date inconnue';
-        $title = htmlspecialchars($subject->getSubjectName() ?? 'Sujet inconnu');
-        $prenom = htmlspecialchars($student->getFirstName() ?? 'Étudiant');
+        $beginDate = $subject->getBeginDate();
+        $title = htmlspecialchars($subject->getSubjectName());
+        $prenom = htmlspecialchars($student->getFirstName());
 
         return "
 <!DOCTYPE html>
@@ -115,14 +131,14 @@ class AttributionMailer
     /**
      * Returns the plain text template.
      *
-     * @param object $student The student.
-     * @param object $subject The SAE subject.
+     * @param Student    $student The student.
+     * @param SAESubject $subject The SAE subject.
      * @return string
      */
-    private static function getTextTemplate($student, $subject): string
+    private static function getTextTemplate(Student $student, SAESubject $subject): string
     {
-        $beginDate = $subject->getBeginDate() ??  'Date non disponible';
-        $title = htmlspecialchars($subject->getSubjectName() ?? 'Titre non disponible');
+        $beginDate = $subject->getBeginDate();
+        $title = htmlspecialchars($subject->getSubjectName());
         $prenom = htmlspecialchars($student->getFirstName());
         return "
 Rappel date limite du rendu - SAE Manager
