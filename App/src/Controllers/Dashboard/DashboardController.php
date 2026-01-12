@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Core\includes\exception\ExceptionDashboard;
 use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
+use Models\SAE\Repository\SAESubjectRepository;
 use Override;
 use Views\Dashboard\DashboardView;
 
@@ -54,6 +55,18 @@ class DashboardController extends BaseController
         try {
             $data['user'] = $this->user;
             $data['saes'] = $this->user->getSaes();
+
+            $subejctRepo = SAESubjectRepository::getInstance();
+            foreach ($data['saes'] as $sae) {
+                $prof_res = $subejctRepo->getResponsibleProfessor($sae->getSaeSubjectId() ?? -1);
+                if (is_array($prof_res)) {
+                    $data['sae'][$sae->getSaeSubjectId()] = $prof_res['first_name'] . ' ' . $prof_res['last_name'];
+                } else {
+                    $data['sae'][$sae->getSaeSubjectId()] = 'N/A'; // Or some other default value.
+                }
+            }
+
+            print_r($data);
 
             // Create and render the dashboard view.
             $view = new DashboardView($data);
