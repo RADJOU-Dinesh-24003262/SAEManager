@@ -392,6 +392,7 @@
         {static} +createFromLoginData(data)
         +setPassword(password)
         +save()
+        -addDomainNameToEmail()
         {abstract} #saveSpecificData(connection, userId)
         +fetchData(email)
         {abstract} #fetchSpecificData(db, email)
