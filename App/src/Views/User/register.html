@@ -69,25 +69,28 @@
         <article>
         <h3>Contact</h3>
 
-        <label for="email">
-            Email AMU
-            <abbr title="requis" >*</abbr>
-        </label>
-        <input
-            required
-            type="email"
-            id="email"
-            name="email"
-            pattern="^[a-zA-ZÀ-ÿ\-']+\.[a-zA-ZÀ-ÿ\-']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$"
-            autocomplete="email"
-            aria-required="true"
-            aria-describedby="email-hint">
-        <small id="email-hint">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
+            <label for="email">
+                Email AMU
+                <abbr title="requis" >*</abbr>
+            </label>
+            <input
+                    required
+                    type="text"
+                    id="email"
+                    name="email"
+                    aria-required="true"
+                    aria-describedby="email-hint"
+            style="margin-bottom: 1vh">
+
+            <span id="mail-student">@etu.univ-amu.fr</span>
+            <span id="mail-professor">@univ-amu.fr</span>
+        <small id="email-hint" style="display: none; margin-bottom: 2vh; opacity: 0.7">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
 
         <label for="tel">
             Téléphone
             <abbr title="requis" >*</abbr>
         </label>
+            <div class="email-input">
         <input
             required
             type="tel"
@@ -99,6 +102,7 @@
             aria-required="true"
             aria-describedby="tel-hint">
         <small id="tel-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
+            </div>
         </article>
     </fieldset>
 
@@ -138,16 +142,16 @@
 
     <fieldset id="clientFields" style="display:none;" aria-hidden="true">
         <legend>Informations Partenaire</legend>
-        
+
         <label for="organisation">
             Organisation / Entreprise
             <abbr title="requis" >*</abbr>
         </label>
-        <input 
-            type="text" 
-            id="organisation" 
-            name="organisation" 
-            minlength="2" 
+        <input
+            type="text"
+            id="organisation"
+            name="organisation"
+            minlength="2"
             maxlength="255"
             autocomplete="organization"
             aria-required="false"

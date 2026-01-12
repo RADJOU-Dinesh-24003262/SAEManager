@@ -58,7 +58,7 @@ $controllers = [
     new ManageGroupsPostController()
 ];
 
-// start the session with a cookie params
+// Start the session with a cookie params.
 SessionService::start();
 
 // Automatic routing.
