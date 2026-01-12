@@ -16,3 +16,4 @@ storage/sae_descriptions/*
 logs/*
 package.json
 package-lock.json
+docs/*
