@@ -73,7 +73,7 @@ jobs:
           echo "${{ steps.changed_files.outputs.changed_files }}" | \
           xargs -r phpcs --standard=PSR12 --colors --ignore=*/vendor/*,*/_assets/*,*/tests/*
 
-       #Static Analysis - only if PHP files changed
+      #Static Analysis - only if PHP files changed
       - name: Run PHPStan Static Analysis
         if: steps.changed_files.outputs.has_changes == 'true'
         run: |
@@ -121,12 +121,14 @@ jobs:
 
       # Generate PHPDoc Documentation via composer - only if PHP files changed
       - name: Generate PHPDoc Documentation
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         run: |
           composer run-script phpdoc || echo "PHPDoc generation completed with warnings"
         continue-on-error: true
 
       # Deploy PHPDoc to GitHub Pages - only when push on dev
       - name: Deploy PHPDoc to gh-pages
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -136,6 +138,7 @@ jobs:
 
       # Update UML in asset/UML
       - name : Update UML diagram
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         run: |
           composer require --dev smeghead/php-class-diagram
           sudo apt-get install -y default-jre graphviz
@@ -147,6 +150,7 @@ jobs:
           echo "UML diagram generated successfully"
 
       - name: Commit UML changes
+        if: steps.changed_files.outputs.has_changes == 'true' && github.ref == 'refs/heads/dev'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
