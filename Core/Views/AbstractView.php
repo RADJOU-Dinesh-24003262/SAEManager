@@ -258,7 +258,7 @@ abstract class AbstractView
         return '';
     }
 
-        /**
+    /**
      * Renders error messages in HTML format.
      *
      * @param array<string|integer, string> $errors List of error messages.

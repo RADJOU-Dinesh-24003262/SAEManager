@@ -11,9 +11,24 @@ use Models\User\Professor;
 use Models\User\Student;
 use Models\User\Client;
 use Core\includes\Database;
+use Core\Models\Repository\BaseRepository;
+use Models\SAE\Repository\SAEGroupRepository;
+use Models\SAE\Repository\SAESubjectRepository;
+use Models\SAE\SAEGroup;
+use Models\SAE\SAESubject;
 use ReflectionClass;
 
 #[CoversClass(SAE::class)]
+#[CoversClass(BaseRepository::class)]
+#[CoversClass(Database::class)]
+#[CoversClass(User::class)]
+#[CoversClass(Professor::class)]
+#[CoversClass(Student::class)]
+#[CoversClass(Client::class)]
+#[CoversClass(SAEGroup::class)]
+#[CoversClass(SAESubjectRepository::class)]
+#[CoversClass(SAESubject::class)]
+#[CoversClass(SAEGroupRepository::class)]
 class SAEServiceIntegrationTest extends TestCase
 {
     private ?Professor $prof;
