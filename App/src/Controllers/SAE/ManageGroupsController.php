@@ -9,7 +9,6 @@ use Models\SAE\SAE;
 use Models\User\Professor;
 use Override;
 use Views\SAE\ManageGroupsView;
-use Exception;
 
 /**
  * Controller to display the group management page.

@@ -135,12 +135,12 @@ class UserFactoryMethodsTest extends TestCase
 
         User::createFromRegistrationData(
             [
-            'user_type' => 'invalid_type',
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@test.fr',
-            'phone' => '0612345678',
-            'password' => 'password123'
+                'user_type' => 'invalid_type',
+                'first_name' => 'Test',
+                'last_name' => 'User',
+                'email' => 'test@test.fr',
+                'phone' => '0612345678',
+                'password' => 'password123'
             ]
         );
     }
@@ -153,12 +153,12 @@ class UserFactoryMethodsTest extends TestCase
 
         User::createFromRegistrationData(
             [
-            'user_type' => $invalidType,
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@test.fr',
-            'phone' => '0612345678',
-            'password' => 'password123'
+                'user_type' => $invalidType,
+                'first_name' => 'Test',
+                'last_name' => 'User',
+                'email' => 'test@test.fr',
+                'phone' => '0612345678',
+                'password' => 'password123'
             ]
         );
     }
@@ -286,8 +286,8 @@ class UserFactoryMethodsTest extends TestCase
     {
         $student = new Student(
             [
-            'first_name' => 'Jean',
-            'last_name' => 'Dupont'
+                'first_name' => 'Jean',
+                'last_name' => 'Dupont'
             ]
         );
 
@@ -300,8 +300,8 @@ class UserFactoryMethodsTest extends TestCase
     {
         $student = new Student(
             [
-            'first_name' => $firstName,
-            'last_name' => $lastName
+                'first_name' => $firstName,
+                'last_name' => $lastName
             ]
         );
 
@@ -416,11 +416,11 @@ class UserFactoryMethodsTest extends TestCase
                 return array_merge(
                     $baseData,
                     [
-                    'email' => 'student.test@etu.univ-amu.fr',
-                    'amu_id' => 'a12345678',
-                    'year' => 1,
-                    'td' => 'TD1',
-                    'tp' => 'TPA'
+                        'email' => 'student.test@etu.univ-amu.fr',
+                        'amu_id' => 'a12345678',
+                        'year' => 1,
+                        'td' => 'TD1',
+                        'tp' => 'TPA'
                     ]
                 );
 
@@ -428,8 +428,8 @@ class UserFactoryMethodsTest extends TestCase
                 return array_merge(
                     $baseData,
                     [
-                    'email' => 'professor.test@univ-amu.fr',
-                    'amu_id' => 'prof123'
+                        'email' => 'professor.test@univ-amu.fr',
+                        'amu_id' => 'prof123'
                     ]
                 );
 
@@ -437,8 +437,8 @@ class UserFactoryMethodsTest extends TestCase
                 return array_merge(
                     $baseData,
                     [
-                    'email' => 'client.test@company.com',
-                    'organisation' => 'Test Company'
+                        'email' => 'client.test@company.com',
+                        'organisation' => 'Test Company'
                     ]
                 );
 
