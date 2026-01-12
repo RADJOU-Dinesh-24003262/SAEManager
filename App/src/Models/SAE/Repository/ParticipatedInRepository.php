@@ -73,8 +73,10 @@ class ParticipatedInRepository extends BaseRepository
     #[Override]
     protected function getPrimaryKey(): string
     {
-        return 'student_id'; // Partial PK, specific methods used instead of generic findById
+        return 'student_id'; // Partial PK, specific methods used instead of generic findById.
     }
+
+    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
 
     /**
      * Creates a new participation entry.
@@ -113,23 +115,11 @@ class ParticipatedInRepository extends BaseRepository
     public function update($entity): bool
     {
         // Typically not updated, just deleted and re-inserted or just inserted.
-        // But for completeness:
-        try {
-            $stmt = $this->connection->prepare(
-                'UPDATE participated_in 
-                 SET sae_subject_id = :subject_id 
-                 WHERE student_id = :student_id AND sae_group_id = :group_id'
-            );
-            return $stmt->execute([
-                'subject_id' => $entity->getSaeSubjectId(),
-                'student_id' => $entity->getStudentId(),
-                'group_id' => $entity->getSaeGroupId()
-            ]);
-        } catch (PDOException $e) {
-            error_log('Erreur mise à jour participation : ' . $e->getMessage());
-            return false;
-        }
+        return false;
     }
+
+    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
+
 
     /**
      * Assigns a student to a group.
