@@ -47,10 +47,10 @@ class ToDoListPost extends BaseController
 
         header('Content-Type: application/json');
 
-        // Verify CSRF Token
+        // Verify CSRF Token.
         $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
         if (!SessionService::verifyCsrfToken($csrfToken)) {
-             Logger::log('CSRF_FAIL', 'Tentative action TODO avec token invalide.', $this->user->getUserId(), 'WARNING');
+             Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO action.', $this->user->getUserId(), 'WARNING');
              $this->sendError("Session invalide (CSRF).", 403);
         }
 
@@ -81,22 +81,23 @@ class ToDoListPost extends BaseController
             // Check permissions based on the group.
             $this->checkGroupAccess($user, $saeId, $targetGroupId);
 
+            $userId = $user->getUserId();
             switch ($action) {
                 case 'add':
-                    // Map description to tododesc for validation
+                    // Map description to tododesc for validation.
                     $dataToValidate = ['tododesc' => $input['description'] ?? ''];
                     $validator->validate($dataToValidate);
-                    
+
                     $this->handleAdd($targetGroupId, $input);
-                    Logger::log('TODO_ADD', "Tâche ajoutée par utilisateur {$user->getUserId()} dans SAE $saeId", $user->getUserId());
+                    Logger::log('TODO_ADD', "Task added by user {$userId} in SAE $saeId", $userId);
                     break;
                 case 'update':
                     $this->handleUpdate($todoId, $input);
-                    Logger::log('TODO_UPDATE', "Tâche $todoId mise à jour par utilisateur {$user->getUserId()}", $user->getUserId());
+                    Logger::log('TODO_UPDATE', "Task $todoId updated by user {$userId}", $userId);
                     break;
                 case 'delete':
                     $this->handleDelete($todoId);
-                    Logger::log('TODO_DELETE', "Tâche $todoId supprimée par utilisateur {$user->getUserId()}", $user->getUserId());
+                    Logger::log('TODO_DELETE', "Task $todoId deleted by user {$userId}", $userId);
                     break;
                 default:
                     $this->sendError("Action non reconnue.", 400);
@@ -199,7 +200,7 @@ class ToDoListPost extends BaseController
      * @param array<string, mixed> $input   An associative array containing 'description' (string)
      *                                      and 'priority' (int) for the new task.
      * @return void This method does not return any value, it sends a JSON response and exits.
-     * @throws ExceptionValidationEmpty If the task description is empty.
+     * @throws Exception If there is an error during task creation.
      */
     private function handleAdd(int $groupId, array $input): void
     {
@@ -227,6 +228,7 @@ class ToDoListPost extends BaseController
      * @param integer              $todoId The task ID.
      * @param array<string, mixed> $input  JSON input data.
      * @return void
+     * @throws Exception If there is an error during the update.
      */
     private function handleUpdate(int $todoId, array $input): void
     {
@@ -278,6 +280,7 @@ class ToDoListPost extends BaseController
      *
      * @param integer $todoId The task ID.
      * @return void
+     * @throws Exception If there is an error during deletion.
      */
     private function handleDelete(int $todoId): void
     {
