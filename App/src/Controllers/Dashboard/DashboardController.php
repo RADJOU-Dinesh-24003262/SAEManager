@@ -66,8 +66,6 @@ class DashboardController extends BaseController
                 }
             }
 
-            print_r($data);
-
             // Create and render the dashboard view.
             $view = new DashboardView($data);
             $view->render();

@@ -3,11 +3,12 @@
 namespace Validator;
 
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Exception;
 use Override;
 
 /**
- * Class LoginValidator
- * This class regroup function to validate the login process of a user.
+ * Class ToDoListValidator
+ * This class regroups function to validate the ToDo list tasks.
 
  * @category Validator
 
@@ -36,12 +37,24 @@ class ToDoListValidator extends FormValidator
      * @param  array<string, mixed> $data Represent the data in the database.
      * @return void
      * @throws ExceptionValidationEmpty All the errors that might have been found.
+     * @throws Exception If other validation rules fail.
      */
     #[Override]
     public function validate(array $data): void
     {
         if (empty($data['tododesc'])) {
             throw new ExceptionValidationEmpty();
+        }
+
+        if (strlen($data['tododesc']) > 255) {
+            throw new Exception("La description ne doit pas dépasser 255 caractères.");
+        }
+
+        if (isset($data['priority'])) {
+            $priority = intval($data['priority']);
+            if (!in_array($priority, [1, 2, 3], true)) {
+                throw new Exception("Priorité invalide.");
+            }
         }
     }
 }
