@@ -305,6 +305,8 @@ class ToDoListView extends BaseSaeView
         $html .= '<meta property="og:site_name" content="SAE Manager" />';
         $html .= '<meta property="og:type" content="website" />';
 
+        $html .= '<meta name="csrf-token" content="' . SessionService::generateCsrfToken() . '">';
+
         return $html;
     }
 
