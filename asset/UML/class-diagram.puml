@@ -375,7 +375,7 @@
         +canManageSAE(saeId)
         +getAmuId()
         +getYear()
-        +getParcours()
+        +getMajor()
         +getTd()
         +getTp()
         +getStudentId()
@@ -597,6 +597,7 @@
   Controllers_BaseController <|-- Controllers_Settings_SettingsController
   Controllers_BaseController <|-- Controllers_ToDoList_ToDoListController
   Controllers_BaseController <|-- Controllers_ToDoList_ToDoListPost
+  Controllers_Dashboard_DashboardController ..> Models_SAE_Repository_SAESubjectRepository
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
