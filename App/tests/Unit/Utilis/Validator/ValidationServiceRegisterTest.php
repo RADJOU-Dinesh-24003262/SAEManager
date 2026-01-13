@@ -48,7 +48,7 @@ class ValidationServiceRegisterTest extends TestCase
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
             'year' => '2',
-            'parcours' => 'A',
+            'major' => 'A',
             'td' => 'TD1',
             'tp' => 'TPA',
             'terms' => 'on'
@@ -165,7 +165,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data = $this->getValidBaseData();
         $data['user_type'] = 'student';
         $data['year'] = '2';
-        $data['parcours'] = 'A';
+        $data['major'] = 'A';
         $data['td'] = 'TD4';
         $data['tp'] = 'TPA';
 
@@ -174,9 +174,9 @@ class ValidationServiceRegisterTest extends TestCase
     }
 
     /**
-     * Test parcours required for BUT 2/3
+     * Test major required for BUT 2/3
      */
-    public function testRequiresParcoursForYearTwoAndThree(): void
+    public function testRequiresMajorForYearTwoAndThree(): void
     {
         $this->expectException(ExceptionValidationRegisters::class);
 
@@ -185,7 +185,7 @@ class ValidationServiceRegisterTest extends TestCase
         $data['year'] = '2';
         $data['td'] = 'TD1';
         $data['tp'] = 'TPA';
-        // Missing parcours
+        // Missing major
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
     }

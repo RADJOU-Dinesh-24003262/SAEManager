@@ -58,7 +58,6 @@ abstract class BaseSaeView extends AbstractView
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">📧 Contacts</a></li>';
         } elseif ($user->isClient()) {
             $menu .= '<li><h2>Espace Client</h2></li>';
-            $menu .= '<li><a href="/sae/' . $saeId . '#avancement">📊 Voir l\'avancement</a></li>';
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">📧 Contacts</a></li>';
         }
 

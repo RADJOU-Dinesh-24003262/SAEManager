@@ -90,8 +90,8 @@ class Student extends User
     protected function saveSpecificData(PDO $connection, int $userId): void
     {
         $stmt = $connection->prepare(
-            'INSERT INTO students (student_id, amu_id, year, td, tp)
-             VALUES (:student_id, :amu_id, :year, :td, :tp)'
+            'INSERT INTO students (student_id, amu_id, year, td, tp, major)
+             VALUES (:student_id, :amu_id, :year, :td, :tp, :major)'
         );
 
         $stmt->execute(
@@ -101,6 +101,7 @@ class Student extends User
                 'year' => $this->year,
                 'td' => $this->td,
                 'tp' => $this->tp,
+                'major' => $this->major
             ]
         );
     }
@@ -294,11 +295,11 @@ class Student extends User
     }
 
     /**
-     * Gets the student's parcours (major).
+     * Gets the student's major.
      *
      * @return string|null
      */
-    public function getParcours(): ?string
+    public function getMajor(): ?string
     {
         return $this->major;
     }
