@@ -49,7 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/update/${todoId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
                     body: JSON.stringify({ checked: isChecked })
                 });
                 
@@ -96,7 +99,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/update/${todoId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
                     body: JSON.stringify({ priority: newPriority })
                 });
                 
@@ -127,7 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/delete/${todoId}`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
                 });
                 const data = await response.json();
                 if (data.success) {
@@ -202,7 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const response = await fetch(`/sae/${saeId}/to-do/add`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
                 body: JSON.stringify(payload)
             });
 

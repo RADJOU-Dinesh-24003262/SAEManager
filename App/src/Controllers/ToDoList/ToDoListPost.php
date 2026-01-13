@@ -6,10 +6,13 @@ use App\Models\ToDoList\ToDoList;
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\Utilis\Logger;
+use Core\Utilis\SessionService;
 use Exception;
 use Models\SAE\SAE;
 use Models\User\User;
 use Override;
+use Validator\ToDoListValidator;
 
 /**
  * Controller for handling To-Do List POST actions (AJAX).
@@ -44,8 +47,17 @@ class ToDoListPost extends BaseController
 
         header('Content-Type: application/json');
 
+        // Verify CSRF Token.
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (!SessionService::verifyCsrfToken($csrfToken)) {
+             Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO action.', $this->user->getUserId(), 'WARNING');
+             $this->sendError("Session invalide (CSRF).", 403);
+        }
+
+        $user = $this->user;
+        $validator = new ToDoListValidator();
+
         try {
-            $user = $this->user;
             $params = $this->parseUri();
             $saeId = $params['sae_id'];
             $action = $params['action'];
@@ -69,22 +81,36 @@ class ToDoListPost extends BaseController
             // Check permissions based on the group.
             $this->checkGroupAccess($user, $saeId, $targetGroupId);
 
+            $userId = $user->getUserId();
             switch ($action) {
                 case 'add':
+                    // Map description to tododesc for validation.
+                    $dataToValidate = ['tododesc' => $input['description'] ?? ''];
+                    $validator->validate($dataToValidate);
+
                     $this->handleAdd($targetGroupId, $input);
+                    Logger::log('TODO_ADD', "Task added by user {$userId} in SAE $saeId", $userId);
                     break;
                 case 'update':
                     $this->handleUpdate($todoId, $input);
+                    Logger::log('TODO_UPDATE', "Task $todoId updated by user {$userId}", $userId);
                     break;
                 case 'delete':
                     $this->handleDelete($todoId);
+                    Logger::log('TODO_DELETE', "Task $todoId deleted by user {$userId}", $userId);
                     break;
                 default:
                     $this->sendError("Action non reconnue.", 400);
             }
-        } catch (ExceptionAccessDenied | ExceptionValidationEmpty $e) {
-            error_log("ToDoListPost Error: " . $e->getMessage());
-            $this->sendError($e->getMessage(), ($e->getCode() ?: 500));
+        } catch (ExceptionAccessDenied $e) {
+            Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
+            $this->sendError($e->getMessage(), ($e->getCode() ?: 403));
+        } catch (ExceptionValidationEmpty $e) {
+            Logger::log('TODO_VALIDATION_ERROR', "Description vide", $user->getUserId(), 'INFO');
+            $this->sendError($e->getMessage(), 400);
+        } catch (Exception $e) {
+            Logger::log('TODO_ERROR', "Erreur interne: " . $e->getMessage(), $user->getUserId(), 'ERROR');
+            $this->sendError("Erreur interne.", 500);
         }
     }
 
@@ -174,16 +200,13 @@ class ToDoListPost extends BaseController
      * @param array<string, mixed> $input   An associative array containing 'description' (string)
      *                                      and 'priority' (int) for the new task.
      * @return void This method does not return any value, it sends a JSON response and exits.
-     * @throws ExceptionValidationEmpty If the task description is empty.
+     * @throws Exception If there is an error during task creation.
      */
     private function handleAdd(int $groupId, array $input): void
     {
         $description = isset($input['description']) ? trim((string)$input['description']) : '';
         $priority = isset($input['priority']) ? intval($input['priority']) : 2;
 
-        if (empty($description)) {
-            throw new ExceptionValidationEmpty("description", 400);
-        }
 
         $newId = ToDoList::createTask($groupId, $description, $priority);
 
@@ -195,7 +218,7 @@ class ToDoListPost extends BaseController
                 'priority' => $priority
             ]);
         } else {
-            $this->sendError("Erreur lors de la création.", 500);
+            throw new Exception("Erreur lors de la création.");
         }
     }
 
@@ -205,6 +228,7 @@ class ToDoListPost extends BaseController
      * @param integer              $todoId The task ID.
      * @param array<string, mixed> $input  JSON input data.
      * @return void
+     * @throws Exception If there is an error during the update.
      */
     private function handleUpdate(int $todoId, array $input): void
     {
@@ -247,7 +271,7 @@ class ToDoListPost extends BaseController
         if ($success) {
             echo json_encode(['success' => true]);
         } else {
-            $this->sendError("Erreur lors de la mise à jour.", 500);
+            throw new Exception("Erreur lors de la mise à jour.");
         }
     }
 
@@ -256,6 +280,7 @@ class ToDoListPost extends BaseController
      *
      * @param integer $todoId The task ID.
      * @return void
+     * @throws Exception If there is an error during deletion.
      */
     private function handleDelete(int $todoId): void
     {
@@ -267,7 +292,7 @@ class ToDoListPost extends BaseController
         if (ToDoList::deleteTask($todoId)) {
             echo json_encode(['success' => true]);
         } else {
-            $this->sendError("Erreur lors de la suppression.", 500);
+            throw new Exception("Erreur lors de la suppression.");
         }
     }
 
