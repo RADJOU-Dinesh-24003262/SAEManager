@@ -81,7 +81,7 @@ class RegisterView extends AbstractView
     /**
      * @var string The student's major or specialization.
      */
-    public const FIELD_PARCOURS = 'parcours';
+    public const FIELD_MAJOR = 'major';
 
     /**
      * @var string The TD (tutorial group) of the user.

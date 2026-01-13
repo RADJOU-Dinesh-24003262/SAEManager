@@ -108,7 +108,7 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->assertEquals(2, $student->getYear());
         $this->assertEquals('TD2', $student->getTd());
         $this->assertEquals('TPB', $student->getTp());
-        $this->assertEquals('A', $student->getParcours());
+        $this->assertEquals('A', $student->getMajor());
     }
 
     #[Test]
@@ -574,7 +574,7 @@ class UserSpecificDataMethodsTest extends TestCase
         $this->assertEquals(3, $student->getYear());
         $this->assertEquals('TD3', $student->getTd());
         $this->assertEquals('TPA', $student->getTp());
-        $this->assertEquals('B', $student->getParcours());
+        $this->assertEquals('B', $student->getMajor());
     }
 
     // ========================================
