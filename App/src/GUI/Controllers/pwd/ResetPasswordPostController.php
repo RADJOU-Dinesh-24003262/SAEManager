@@ -1,0 +1,105 @@
+<?php
+
+namespace App\GUI\Controllers\pwd;
+
+use Core\Controllers\ControllerInterface;
+use App\Infrastructure\Exception\PasswordUpdateException;
+use App\Infrastructure\Security\InputSanitizer;
+use App\Domain\Auth\Exception\InvalidTokenException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Application\Validation\Exception\ResetPasswordValidationException;
+use App\Infrastructure\Service\SessionService;
+use App\Application\User\UpdatePasswordUseCase;
+use App\Infrastructure\Persistence\Pdo\PdoUserRepository;
+use Override;
+use App\Infrastructure\Service\TokenService;
+use \App\Application\Validation\User\ResetPasswordValidator;
+use App\GUI\Views\pwd\ResetPasswordSuccessView;
+use App\GUI\Views\pwd\ResetPasswordView;
+ 
+
+/**
+ * @category   Controller
+ * @package    Src
+ * @subpackage Controllers/pwd
+ * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author     Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
+class ResetPasswordPostController implements ControllerInterface
+{
+    /**
+     * Principal manager of the controller
+     *
+     * @return void
+     */
+    #[Override]
+    public function control(): void
+    {
+        try {
+            // Verify the token.
+            $token = $_GET['token'] ?? '';
+
+            $tokenData = TokenService::validateToken($token);
+
+
+            // 2. Validate the data.
+            $validator = new ResetPasswordValidator();
+            // Sanitization now done before validation
+            $data = InputSanitizer::sanitize($_POST);
+            $validator->validate($data);
+            $password = $data['pwdnew'] ?? '';
+
+            // 3. Update the password.
+            $useCase = new UpdatePasswordUseCase(new PdoUserRepository());
+            $useCase->execute($tokenData->getEmail(), $password);
+
+            // Mark the token as used.
+            TokenService::markTokenAsUsed($token);
+
+            // 5. Render the success page.
+            (new ResetPasswordSuccessView())->render();
+            error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData->getEmail());
+            return;
+        } catch (InvalidTokenException $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+            header("Location: /forgot-password");
+            exit();
+        } catch (EmptyFieldsException $e) {
+            $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
+            SessionService::setFlash('errors', $errors);
+        } catch (ResetPasswordValidationException | PasswordUpdateException $e) {
+            SessionService::setFlash('errors', [$e->getMessage()]);
+        }
+        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData->getEmail());
+    }
+
+    /**
+     * Allow to render ResetPasswordView with a specific token and email from the form
+     *
+     * @param  string      $token The request path.
+     * @param  string|null $email The HTTP request method.
+     * @return void
+     */
+    private function renderFormWithToken(string $token, ?string $email): void
+    {
+        (new ResetPasswordView($token, $email ? $email : ''))->render();
+    }
+
+    /**
+     * Check if this controller can handle the request
+     *
+     * @param  string $path   The request path.
+     * @param  string $method The HTTP request method.
+     * @return boolean Is the method post?
+     */
+    #[Override]
+    public static function support(string $path, string $method): bool
+    {
+        return $path === "/reset-password" && $method === "POST";
+    }
+}

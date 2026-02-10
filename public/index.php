@@ -1,34 +1,34 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-include "../Core/includes/Autoloader.php";
-\Core\includes\Autoloader::register();
+include "../Core/Autoloader.php";
+\Core\Autoloader::register();
 
-use App\Controllers\SAE\PageSaeController;
-use Controllers\Dashboard\DashboardController;
-use Controllers\Index\IndexController;
-use Controllers\Info\LegalNoticeController;
-use Controllers\Info\SiteMapController;
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ForgotPasswordPostController;
-use Controllers\pwd\ResetPasswordController;
-use Controllers\pwd\ResetPasswordPostController;
-use Controllers\SAE\CreateSaeController;
-use Controllers\SAE\CreateSaePostController;
-use Controllers\SAE\ManageGroupsController;
-use Controllers\SAE\ManageGroupsPostController;
-use Controllers\Settings\DeleteUserController;
-use Controllers\Settings\EditProfileController;
-use Controllers\Settings\EditProfilePost;
-use Controllers\Settings\SettingsController;
-use Controllers\ToDoList\ToDoListController;
-use Controllers\ToDoList\ToDoListPost;
-use Controllers\User\Login;
-use Controllers\User\LoginPost;
-use Controllers\User\Logout;
-use Controllers\User\Register;
-use Controllers\User\RegisterPost;
-use Core\Utilis\SessionService;
+use App\GUI\Controllers\SAE\PageSaeController;
+use App\GUI\Controllers\Dashboard\DashboardController;
+use App\GUI\Controllers\Index\IndexController;
+use App\GUI\Controllers\Info\LegalNoticeController;
+use App\GUI\Controllers\Info\SiteMapController;
+use App\GUI\Controllers\pwd\ForgotPasswordController;
+use App\GUI\Controllers\pwd\ForgotPasswordPostController;
+use App\GUI\Controllers\pwd\ResetPasswordController;
+use App\GUI\Controllers\pwd\ResetPasswordPostController;
+use App\GUI\Controllers\SAE\CreateSaeController;
+use App\GUI\Controllers\SAE\CreateSaePostController;
+use App\GUI\Controllers\SAE\ManageGroupsController;
+use App\GUI\Controllers\SAE\ManageGroupsPostController;
+use App\GUI\Controllers\Settings\DeleteUserController;
+use App\GUI\Controllers\Settings\EditProfileController;
+use App\GUI\Controllers\Settings\EditProfilePost;
+use App\GUI\Controllers\Settings\SettingsController;
+use App\GUI\Controllers\ToDoList\ToDoListController;
+use App\GUI\Controllers\ToDoList\ToDoListPost;
+use App\GUI\Controllers\User\Login;
+use App\GUI\Controllers\User\LoginPost;
+use App\GUI\Controllers\User\Logout;
+use App\GUI\Controllers\User\Register;
+use App\GUI\Controllers\User\RegisterPost;
+use App\Infrastructure\Service\SessionService;
 
 // List of available controllers.
 $controllers = [
@@ -68,7 +68,8 @@ foreach ($controllers as $controller) {
         try {
             $controller->control();
             exit();
-        } catch (\Throwable $e) {
+        }
+        catch (\Throwable $e) {
             // Generical fallback for unexpected errors.
             /* SessionService::destroy(); */
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
