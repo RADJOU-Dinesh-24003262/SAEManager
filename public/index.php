@@ -17,6 +17,7 @@ use Controllers\SAE\CreateSaeController;
 use Controllers\SAE\CreateSaePostController;
 use Controllers\SAE\ManageGroupsController;
 use Controllers\SAE\ManageGroupsPostController;
+use Controllers\SAE\ModifySaeController;
 use Controllers\Settings\DeleteUserController;
 use Controllers\Settings\EditProfileController;
 use Controllers\Settings\EditProfilePost;
@@ -29,6 +30,7 @@ use Controllers\User\Logout;
 use Controllers\User\Register;
 use Controllers\User\RegisterPost;
 use Core\Utilis\SessionService;
+use Controllers\SAE\ModifySaePostController;
 
 // List of available controllers.
 $controllers = [
@@ -55,7 +57,9 @@ $controllers = [
     new EditProfileController(),
     new EditProfilePost(),
     new ManageGroupsController(),
-    new ManageGroupsPostController()
+    new ManageGroupsPostController(),
+    new ModifySaeController(),
+    new ModifySaePostController()
 ];
 
 // Start the session with a cookie params.
