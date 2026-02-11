@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Controllers;
 
-use Controllers\SAE\CreateSaeController;
+use App\GUI\Controllers\SAE\CreateSaeController;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -44,7 +44,7 @@ class CreateSaeControllerUnitTest extends TestCase
     public function controllerHasCorrectNamespace(): void
     {
         $this->assertStringContainsString(
-            'Controllers\SAE',
+            'GUI\Controllers\SAE',
             get_class($this->controller)
         );
     }

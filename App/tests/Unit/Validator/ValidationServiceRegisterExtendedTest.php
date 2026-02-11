@@ -6,21 +6,21 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Validator\ValidationServiceRegister;
-use Validator\FormValidator;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
+use App\Application\Validation\User\RegisterStudentValidator;
+use App\Application\Validation\AbstractValidator;
+use App\Application\Validation\Exception\RegisterValidationsException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Application\Validation\Exception\EmptyFieldException;
+use App\Application\Validation\Exception\RegisterValidationException;
 
 /**
  * Extended unit tests for ValidationServiceRegister
  */
 #[CoversClass(ValidationServiceRegister::class)]
 #[CoversClass(FormValidator::class)]
-#[CoversClass(ExceptionValidationRegisters::class)]
+#[CoversClass(RegisterValidationsException::class)]
 #[CoversClass(ExceptionValidationRegister::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(EmptyFieldsException::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
 class ValidationServiceRegisterExtendedTest extends TestCase
 {
@@ -56,7 +56,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[DataProvider('invalidPasswordsProvider')]
     public function shortPasswordsAreRejected(string $password): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['password'] = $password;
@@ -69,7 +69,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function passwordMismatchIsDetected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['password'] = 'Password123';
@@ -97,7 +97,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[DataProvider('invalidPhoneNumbersProvider')]
     public function invalidPhoneNumbersAreRejected(string $phone): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['phone'] = $phone;
@@ -132,7 +132,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function studentWithoutYearIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         unset($data['year']);
@@ -144,7 +144,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function studentWithoutTdIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         unset($data['td']);
@@ -156,7 +156,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function studentWithoutTpIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         unset($data['tp']);
@@ -168,7 +168,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function year2StudentWithoutMajorIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
@@ -181,7 +181,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function year3StudentWithoutMajorIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '3';
@@ -194,7 +194,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function year2StudentWithTD4IsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
@@ -208,7 +208,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function year1StudentWithMajorIsRejected(): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '1';
@@ -233,7 +233,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[DataProvider('invalidYearsProvider')]
     public function invalidYearsAreRejected(string $year): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = $year;
@@ -256,7 +256,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[DataProvider('invalidMajorProvider')]
     public function invalidMajorsAreRejected(string $major): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['year'] = '2';
@@ -324,7 +324,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[DataProvider('invalidUserTypesProvider')]
     public function invalidUserTypesAreRejected(string $userType): void
     {
-        $this->expectException(ExceptionValidationRegisters::class);
+        $this->expectException(RegisterValidationsException::class);
 
         $data = $this->getValidStudentData();
         $data['user_type'] = $userType;
@@ -360,7 +360,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     #[Test]
     public function missingRequiredFieldThrowsException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [
             'amu_id' => '',

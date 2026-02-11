@@ -26,12 +26,12 @@ interface RepositoryInterface
 
     // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Creates a new entity (entry) in the database
+     * Saves an entity (entry) in the database
      *
-     * @param T $entity The entity to create.
-     * @return T The created entity.
+     * @param T $entity The entity to save.
+     * @return T The saved entity.
      */
-    public function create($entity);
+    public function save($entity);
     // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
     // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing

@@ -26,10 +26,6 @@
     "psr-4": {
       "Core\\": "Core/",
       "Utilis\\": "Core/Utilis/",
-      "Controllers\\": "App/src/Controllers/",
-      "Models\\": "App/src/Models/",
-      "Views\\": "App/src/Views/",
-      "Validator\\": "App/src/Validator/",
       "App\\": "App/src/",
       "public\\": "public/"
     }

@@ -4,7 +4,7 @@ namespace tests\Unit\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListController;
+use APP\GUI\Controllers\ToDoList\ToDoListController;
 
 /**
  * Unit test for ToDoListController class.

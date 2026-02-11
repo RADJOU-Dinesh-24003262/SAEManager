@@ -7,7 +7,7 @@
  * PHPUnit Bootstrap File
  */
 
-use Core\Utilis\SessionService;
+use App\Infrastructure\Service\SessionService;
 
 // Set error reporting
 error_reporting(E_ALL);
@@ -21,18 +21,7 @@ define('APP_ENV', 'testing');
 // Load Composer autoloader
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Load Special Autoloader for the tests
-spl_autoload_register(function ($class) {
-    $file = 'App' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
-    str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-    $coreFile = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
-
-    if (file_exists($file)) {
-        require $file;
-    } elseif (file_exists($coreFile)) {
-        require $coreFile;
-    }
-});
+// Custom autoloader removed in favor of Composer
 
 
 // Start session for tests

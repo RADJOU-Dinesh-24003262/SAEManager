@@ -2,7 +2,7 @@
 
 namespace Core\Models\Repository;
 
-use Core\includes\Database;
+use Core\Database\Database;
 use Exception;
 use Override;
 use PDO;

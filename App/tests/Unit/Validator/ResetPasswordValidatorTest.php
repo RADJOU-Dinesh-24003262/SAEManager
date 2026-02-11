@@ -7,19 +7,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
-use Validator\ResetPasswordValidator;
-use Validator\FormValidator;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use App\Application\Validation\User\ResetPasswordValidator;
+use App\Application\Validation\AbstractValidator;
+use App\Application\Validation\Exception\ResetPasswordValidationException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Application\Validation\Exception\EmptyFieldException;
 
 /**
  * Unit tests for ResetPasswordValidator
  */
 #[CoversClass(ResetPasswordValidator::class)]
 #[CoversClass(FormValidator::class)]
-#[CoversClass(ExceptionValidationResetPassword::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(ResetPasswordValidationException::class)]
+#[CoversClass(EmptyFieldsException::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
 class ResetPasswordValidatorTest extends TestCase
 {
@@ -83,7 +83,7 @@ class ResetPasswordValidatorTest extends TestCase
     #[DataProvider('shortPasswordsProvider')]
     public function shortPasswordsAreRejected(string $pwd1, string $pwd2): void
     {
-        $this->expectException(ExceptionValidationResetPassword::class);
+        $this->expectException(ResetPasswordValidationException::class);
 
         $data = [
             'pwdnew' => $pwd1,
@@ -97,7 +97,7 @@ class ResetPasswordValidatorTest extends TestCase
     #[Test]
     public function mismatchedPasswordsAreRejected(): void
     {
-        $this->expectException(ExceptionValidationResetPassword::class);
+        $this->expectException(ResetPasswordValidationException::class);
 
         $data = [
             'pwdnew' => 'Password123',
@@ -122,7 +122,7 @@ class ResetPasswordValidatorTest extends TestCase
     #[DataProvider('mismatchedPasswordsProvider')]
     public function subtlyDifferentPasswordsAreRejected(string $pwd1, string $pwd2): void
     {
-        $this->expectException(ExceptionValidationResetPassword::class);
+        $this->expectException(ResetPasswordValidationException::class);
 
         $data = [
             'pwdnew' => $pwd1,
@@ -136,7 +136,7 @@ class ResetPasswordValidatorTest extends TestCase
     #[Test]
     public function emptyFieldsThrowEmptysException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [
             'pwdnew' => '',
@@ -149,7 +149,7 @@ class ResetPasswordValidatorTest extends TestCase
     #[Test]
     public function missingFieldsThrowEmptysException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [];
         $this->validator->escape($data);
@@ -183,7 +183,7 @@ class ResetPasswordValidatorTest extends TestCase
             $this->validator->validate($escaped);
 
             $this->fail('Should have thrown exception');
-        } catch (ExceptionValidationResetPassword $e) {
+        } catch (ResetPasswordValidationException $e) {
             $this->assertEquals('pwdnew', $e->getField());
             $this->assertNotEmpty($e->getAdditionalInfo());
         }
@@ -202,7 +202,7 @@ class ResetPasswordValidatorTest extends TestCase
             $this->validator->validate($escaped);
 
             $this->fail('Should have thrown exception');
-        } catch (ExceptionValidationResetPassword $e) {
+        } catch (ResetPasswordValidationException $e) {
             $this->assertEquals('pwdverif', $e->getField());
             $this->assertStringContainsString('correspondent', $e->getAdditionalInfo());
         }

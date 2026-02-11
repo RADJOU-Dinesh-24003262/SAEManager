@@ -5,15 +5,15 @@ namespace Tests\Integration\Controller\Password;
 use Controllers\pwd\ForgotPasswordController;
 use Controllers\pwd\ForgotPasswordPostController;
 use Core\Controllers\ControllerInterface;
-use Core\includes\Database;
-use Core\includes\exception\ExceptionSpam;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use Core\Utilis\SessionService;
+use Core\Database\Database;
+use App\Domain\User\Exception\SpamException;
+use App\Application\Validation\Exception\EmptyFieldException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Application\Validation\Exception\ForgotPasswordValidationException;
+use App\Infrastructure\Service\SessionService;
 use Core\Views\AbstractView;
 use Exception;
-use Models\User\User;
+use App\Domain\User\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -27,12 +27,12 @@ use Validator\ForgotPasswordValidator;
 #[CoversClass(ForgotPasswordValidator::class)]
 #[CoversClass(AbstractView::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
-#[CoversClass(ExceptionValidationForgotPassword::class)]
+#[CoversClass(EmptyFieldsException::class)]
+#[CoversClass(ForgotPasswordValidationException::class)]
 #[CoversClass(SessionService::class)]
 #[CoversClass(Database::class)]
 #[CoversClass(User::class)]
-#[CoversClass(ExceptionSpam::class)]
+#[CoversClass(SpamException::class)]
 class ForgotPasswordControllerTest extends TestCase
 {
     protected function setUp(): void
@@ -160,7 +160,7 @@ class ForgotPasswordControllerTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = ['email' => 'jean.dupont@etu.univ-amu.fr'];
 
-        $escaped = $validator->escape($data);
+        $escaped = InputSanitizer::sanitize($data);
 
         // Should not throw exception
         $this->expectNotToPerformAssertions();
@@ -173,7 +173,7 @@ class ForgotPasswordControllerTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = ['email' => 'prof.dupont@univ-amu.fr'];
 
-        $escaped = $validator->escape($data);
+        $escaped = InputSanitizer::sanitize($data);
 
         // Should not throw exception
         $this->expectNotToPerformAssertions();

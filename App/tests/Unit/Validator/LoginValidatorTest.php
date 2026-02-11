@@ -7,19 +7,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
-use Validator\LoginValidator;
-use Validator\FormValidator;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use App\Application\Validation\User\LoginValidator;
+use App\Application\Validation\AbstractValidator;
+use App\Application\Validation\Exception\LoginValidationException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Application\Validation\Exception\EmptyFieldException;
 
 /**
  * Unit tests for LoginValidator
  */
 #[CoversClass(LoginValidator::class)]
 #[CoversClass(FormValidator::class)]
-#[CoversClass(ExceptionValidationLogin::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(LoginValidationException::class)]
+#[CoversClass(EmptyFieldsException::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
 class LoginValidatorTest extends TestCase
 {
@@ -86,7 +86,7 @@ class LoginValidatorTest extends TestCase
     #[DataProvider('invalidEmailsProvider')]
     public function invalidEmailsAreRejected(string $email): void
     {
-        $this->expectException(ExceptionValidationLogin::class);
+        $this->expectException(LoginValidationException::class);
 
         $data = [
             'email' => $email,
@@ -100,7 +100,7 @@ class LoginValidatorTest extends TestCase
     #[Test]
     public function emptyEmailIsRejected(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [
             'email' => '',
@@ -113,7 +113,7 @@ class LoginValidatorTest extends TestCase
     #[Test]
     public function emptyPasswordIsRejected(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
@@ -126,7 +126,7 @@ class LoginValidatorTest extends TestCase
     #[Test]
     public function bothFieldsEmptyThrowsException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [
             'email' => '',
@@ -139,7 +139,7 @@ class LoginValidatorTest extends TestCase
     #[Test]
     public function missingFieldsThrowException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this->expectException(EmptyFieldsException::class);
 
         $data = [];
         $this->validator->escape($data);
@@ -201,7 +201,7 @@ class LoginValidatorTest extends TestCase
             $this->validator->validate($escaped);
 
             $this->fail('Should have thrown exception');
-        } catch (ExceptionValidationLogin $e) {
+        } catch (LoginValidationException $e) {
             $message = $e->getAdditionalInfo();
             $this->assertNotEmpty($message);
             $this->assertIsString($message);

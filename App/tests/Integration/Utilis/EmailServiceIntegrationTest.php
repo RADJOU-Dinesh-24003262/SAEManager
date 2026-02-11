@@ -5,8 +5,8 @@ namespace Tests\Integration\Utilis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Services\Auth\PasswordResetMailer;
-use Services\TokenService;
+use App\Application\Auth\PasswordResetMailer;
+use App\Infrastructure\Service\TokenService;
 
 /**
  * Tests d'intégration pour PasswordResetMailer
@@ -35,7 +35,7 @@ class EmailServiceIntegrationTest extends TestCase
     #[Test]
     public function emailTemplateContainsValidTokenLink(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
@@ -56,7 +56,7 @@ class EmailServiceIntegrationTest extends TestCase
     #[Test]
     public function emailContainsBothHtmlAndTextVersions(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
@@ -136,7 +136,7 @@ class EmailServiceIntegrationTest extends TestCase
     #[Test]
     public function emailDoesNotLeakSensitiveInformation(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');
@@ -161,7 +161,7 @@ class EmailServiceIntegrationTest extends TestCase
     {
         $_SERVER['HTTPS'] = 'on';
 
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         $reflection = new \ReflectionClass(PasswordResetMailer::class);
         $getLinkMethod = $reflection->getMethod('getResetLink');

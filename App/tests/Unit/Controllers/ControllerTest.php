@@ -3,13 +3,13 @@
 namespace Tests\Unit\Controllers;
 
 use App\Controllers\SAE\PageSaeController;
-use Controllers\Index\IndexController;
-use Controllers\Info\LegalNoticeController;
-use Controllers\Info\SiteMapController;
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ResetPasswordController;
-use Controllers\ToDoList\ToDoListController;
-use Controllers\User\Register;
+use App\GUI\Controllers\Index\IndexController;
+use App\GUI\Controllers\Info\LegalNoticeController;
+use App\GUI\Controllers\Info\SiteMapController;
+use App\GUI\Controllers\pwd\ForgotPasswordController;
+use App\GUI\Controllers\pwd\ResetPasswordController;
+use App\GUI\Controllers\ToDoList\ToDoListController;
+use App\GUI\Controllers\User\Register;
 use Core\Controllers\ControllerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;

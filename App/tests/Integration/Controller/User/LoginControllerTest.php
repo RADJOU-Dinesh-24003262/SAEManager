@@ -3,14 +3,14 @@
 namespace tests\Integration\Controller\User;
 
 use Controllers\User\LoginPost;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\Utilis\SessionService;
+use App\Application\Validation\Exception\EmptyFieldException;
+use App\Application\Validation\Exception\EmptyFieldsException;
+use App\Infrastructure\Service\SessionService;
 use Core\Views\AbstractView;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Validator\FormValidator;
+use App\Application\Validation\AbstractValidator;
 
 /**
  * Integration test for the LoginPost controller.
@@ -19,7 +19,7 @@ use Validator\FormValidator;
 #[CoversClass(SessionService::class)]
 #[CoversClass(FormValidator::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
-#[CoversClass(ExceptionValidationEmptys::class)]
+#[CoversClass(EmptyFieldsException::class)]
 #[CoversClass(AbstractView::class)]
 #[RunInSeparateProcess]
 class LoginControllerTest extends TestCase

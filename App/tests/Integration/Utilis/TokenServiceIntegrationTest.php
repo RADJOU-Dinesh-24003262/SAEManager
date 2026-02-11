@@ -5,11 +5,11 @@ namespace Tests\Integration\Utils;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Services\TokenService;
-use Core\Utilis\SessionService;
-use Core\includes\Database;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
+use App\Infrastructure\Service\TokenService;
+use App\Infrastructure\Service\SessionService;
+use Core\Database\Database;
+use App\Domain\Auth\Exception\InvalidTokenException;
+use App\Infrastructure\Exception\TokenCreationException;
 
 /**
  * Integration Test for TokenService
@@ -17,7 +17,7 @@ use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
 #[CoversClass(TokenService::class)]
 #[CoversClass(SessionService::class)]
 #[CoversClass(Database::class)]
-#[CoversClass(ExceptionInvalidToken::class)]
+#[CoversClass(InvalidTokenException::class)]
 class TokenServiceIntegrationTest extends TestCase
 {
     protected function setUp(): void
@@ -38,7 +38,7 @@ class TokenServiceIntegrationTest extends TestCase
     #[Test]
     public function generatedTokenCanBeValidated(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         $this->assertIsString($token);
         $this->assertEquals(64, strlen($token));
@@ -52,7 +52,7 @@ class TokenServiceIntegrationTest extends TestCase
         $count = 1000;
 
         for ($i = 0; $i < $count; $i++) {
-            $tokens[] = TokenService::generate();
+            $tokens[] = TokenService::generateRandomTokenValue();
         }
 
         $uniqueTokens = array_unique($tokens);
@@ -66,7 +66,7 @@ class TokenServiceIntegrationTest extends TestCase
     #[Test]
     public function tokensHaveHighEntropy(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         // Convert to binary for analysis
         $binary = hex2bin($token);
@@ -84,8 +84,8 @@ class TokenServiceIntegrationTest extends TestCase
     #[Test]
     public function tokensAreNotSequential(): void
     {
-        $token1 = TokenService::generate();
-        $token2 = TokenService::generate();
+        $token1 = TokenService::generateRandomTokenValue();
+        $token2 = TokenService::generateRandomTokenValue();
 
         // Compute Hamming distance
         $diff = 0;
@@ -105,7 +105,7 @@ class TokenServiceIntegrationTest extends TestCase
     #[Test]
     public function validTokenFormatIsAccepted(): void
     {
-        $token = TokenService::generate();
+        $token = TokenService::generateRandomTokenValue();
 
         // A valid token should not throw an exception during format validation
         $this->assertIsString($token);
@@ -129,8 +129,8 @@ class TokenServiceIntegrationTest extends TestCase
             try {
                 TokenService::validateToken($invalidToken);
                 $this->fail('Should have thrown exception for invalid token: ' . substr($invalidToken, 0, 20));
-            } catch (ExceptionInvalidToken $e) {
-                $this->assertInstanceOf(ExceptionInvalidToken::class, $e);
+            } catch (InvalidTokenException $e) {
+                $this->assertInstanceOf(InvalidTokenException::class, $e);
             }
         }
     }
@@ -151,8 +151,8 @@ class TokenServiceIntegrationTest extends TestCase
             try {
                 TokenService::validateToken($attempt);
                 $this->fail('Should have rejected injection attempt: ' . $attempt);
-            } catch (ExceptionInvalidToken $e) {
-                $this->assertInstanceOf(ExceptionInvalidToken::class, $e);
+            } catch (InvalidTokenException $e) {
+                $this->assertInstanceOf(InvalidTokenException::class, $e);
             }
         }
     }
@@ -167,7 +167,7 @@ class TokenServiceIntegrationTest extends TestCase
         $charCount = array_fill_keys(str_split('0123456789abcdef'), 0);
 
         for ($i = 0; $i < 100; $i++) {
-            $token = strtolower(TokenService::generate());
+            $token = strtolower(TokenService::generateRandomTokenValue());
             $tokens[] = $token;
 
             // Count each character
@@ -197,7 +197,7 @@ class TokenServiceIntegrationTest extends TestCase
         $tokens = [];
 
         for ($i = 0; $i < 100; $i++) {
-            $tokens[] = TokenService::generate();
+            $tokens[] = TokenService::generateRandomTokenValue();
         }
 
         // All must be unique
@@ -211,7 +211,7 @@ class TokenServiceIntegrationTest extends TestCase
 
         $tokens = [];
         for ($i = 0; $i < 1000; $i++) {
-            $tokens[] = TokenService::generate();
+            $tokens[] = TokenService::generateRandomTokenValue();
         }
 
         $memoryAfter = memory_get_usage();
@@ -232,7 +232,7 @@ class TokenServiceIntegrationTest extends TestCase
         $lastToken = null;
 
         for ($i = 0; $i < 10000; $i++) {
-            $token = TokenService::generate();
+            $token = TokenService::generateRandomTokenValue();
 
             $this->assertNotEquals($lastToken, $token);
             $lastToken = $token;
@@ -255,9 +255,9 @@ class TokenServiceIntegrationTest extends TestCase
         foreach ($edgeCases as $token) {
             try {
                 TokenService::validateToken($token);
-            } catch (ExceptionInvalidToken $e) {
+            } catch (InvalidTokenException $e) {
                 // Expected - these tokens should not exist in DB
-                $this->assertInstanceOf(ExceptionInvalidToken::class, $e);
+                $this->assertInstanceOf(InvalidTokenException::class, $e);
             }
         }
     }
@@ -270,7 +270,7 @@ class TokenServiceIntegrationTest extends TestCase
     {
         $tokens = [];
         for ($i = 0; $i < 100; $i++) {
-            $tokens[] = TokenService::generate();
+            $tokens[] = TokenService::generateRandomTokenValue();
         }
 
         foreach ($tokens as $token) {

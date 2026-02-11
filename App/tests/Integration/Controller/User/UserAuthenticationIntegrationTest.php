@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
-use Core\Utilis\SessionService;
-use Models\User\User;
+use App\Infrastructure\Service\SessionService;
+use App\Domain\User\User;
 
 /**
  * Integration tests for user authentication flow
