@@ -6,6 +6,7 @@ include "../Core/includes/Autoloader.php";
 
 use App\Controllers\SAE\PageSaeController;
 use App\Controllers\LegalTermsConditions\LegalTermsConditionsController;
+use App\Controllers\LegalTermsConditions\ConfigConservationDateController;
 use Controllers\Dashboard\DashboardController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
@@ -57,7 +58,8 @@ $controllers = [
     new EditProfilePost(),
     new ManageGroupsController(),
     new ManageGroupsPostController(),
-    new LegalTermsConditionsController()
+    new LegalTermsConditionsController(),
+    new ConfigConservationDateController()
 ];
 
 // Start the session with a cookie params.
