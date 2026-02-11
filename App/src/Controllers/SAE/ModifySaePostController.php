@@ -1,4 +1,5 @@
 <?php
+
 namespace Controllers\SAE;
 
 use Controllers\BaseController;
@@ -37,7 +38,6 @@ use Views\SAE\CreateSaeView;
  */
 class ModifySaePostController extends BaseController
 {
-
     /**
      * Principal manager of the controller
      *

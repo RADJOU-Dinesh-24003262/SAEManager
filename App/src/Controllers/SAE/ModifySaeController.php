@@ -82,7 +82,6 @@ class ModifySaeController extends BaseController
             ]);
 
             $view->render();
-
         } catch (\Exception $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
             header('Location: /dashboard');
