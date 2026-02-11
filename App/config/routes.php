@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Routes configuration file.
+ *
+ * @category   Configuration
+ * @package    App
+ * @subpackage Config
+ * @author     Dinesh RADJOU <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
+
 use Controllers\SAE\PageSaeController;
 use Controllers\Dashboard\DashboardController;
 use Controllers\Index\IndexController;
@@ -24,17 +35,6 @@ use Controllers\User\LoginPost;
 use Controllers\User\Logout;
 use Controllers\User\Register;
 use Controllers\User\RegisterPost;
-
-/**
- * Routes configuration file.
- *
- * @category   Configuration
- * @package    App
- * @subpackage Config
- * @author     Dinesh RADJOU <dinesh.radjou@etu.univ-amu.fr>
- * @license    MIT License https://opensource.org/licenses/MIT
- * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- */
 
 const ROUTES = [
     // ============================================================
