@@ -51,7 +51,12 @@ class ModifySaePostController extends BaseController
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '';
+        // Correction : Gestion explicite du cas où parse_url retourne false ou null
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        if (!is_string($path)) {
+            $path = '';
+        }
+
         if (preg_match('/^\/sae\/(\d+)\/modify$/', $path, $matches)) {
             $saeId = intval($matches[1]);
         } else {

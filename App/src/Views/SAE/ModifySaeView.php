@@ -85,7 +85,9 @@ class ModifySaeView extends BaseSaeView
         if ($filePath) {
             $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
             if (file_exists($fullPath)) {
-                return file_get_contents($fullPath);
+                $content = file_get_contents($fullPath);
+                // Correction ici : on vérifie que le contenu n'est pas false
+                return $content !== false ? $content : '';
             }
         }
 
