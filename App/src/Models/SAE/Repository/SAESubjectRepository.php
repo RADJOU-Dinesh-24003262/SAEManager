@@ -432,4 +432,21 @@ class SAESubjectRepository extends BaseRepository
             return [];
         }
     }
+
+
+    public function getFileName(int $saeId): string
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT file_path FROM sae_subjects WHERE sae_subject_id = :sae_id'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $data['file_path'];
+        } catch (PDOException $e) {
+            error_log('Erreur récuperation chemin relatif du fichier' . $e->getMessage());
+            return '';
+        }
+    }
+
 }

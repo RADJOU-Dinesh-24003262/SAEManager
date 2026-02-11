@@ -311,14 +311,14 @@ class SAE
             throw new ExceptionResourceNotFound("SAE non trouvée");
         }
 
-        // Update subject fields.
         foreach ($data as $key => $value) {
-            $setter = 'set' . ucfirst($key);
+            $camelKey = str_replace('_', '', ucwords($key, '_'));
+            $setter = 'set' . $camelKey;
+
             if (method_exists($subject, $setter)) {
                 $subject->$setter($value);
             }
         }
-
         return $this->subjectRepo->update($subject);
     }
 
@@ -517,4 +517,14 @@ class SAE
 
         return $this->groupRepo->getAvailableStudents($saeId);
     }
+
+    public function getFileName(User $user, int $saeId): string
+    {
+        if (!$user->canManageSAE($saeId)) {
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de voir les étudiants disponibles");
+        }
+
+        return $this->subjectRepo->getFileName($saeId);
+    }
+
 }

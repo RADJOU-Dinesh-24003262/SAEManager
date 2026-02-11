@@ -50,4 +50,21 @@ class FileService
 
         return $fileNameWithExt;
     }
+
+    /**
+     * @throws Exception
+     */
+    public static function removeFile(string $filename): bool
+    {
+
+        if (empty($filename)) {
+            return false;
+        }
+        $fullPath = realpath(self::STORAGE_DIR) . '/' . $filename;
+
+        if (!is_file($fullPath)) {
+            return false;
+        }
+        return  unlink($fullPath);
+    }
 }
