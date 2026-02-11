@@ -17,3 +17,5 @@ logs/*
 package.json
 package-lock.json
 docs/*
+build/*
+*.log

@@ -51,7 +51,6 @@ class ModifySaePostController extends BaseController
     {
         $this->ensureProfessor();
 
-        // Correction : Gestion explicite du cas où parse_url retourne false ou null
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         if (!is_string($path)) {
             $path = '';
