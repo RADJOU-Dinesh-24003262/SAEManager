@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\Controllers\SAE\PageSaeController;
+use Controllers\SAE\PageSaeController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;

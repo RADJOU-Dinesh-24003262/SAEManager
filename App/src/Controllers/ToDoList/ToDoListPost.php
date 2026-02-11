@@ -2,7 +2,7 @@
 
 namespace Controllers\ToDoList;
 
-use App\Models\ToDoList\ToDoList;
+use Models\ToDoList\ToDoList;
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\SAE\ExceptionAccessDenied;

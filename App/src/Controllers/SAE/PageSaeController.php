@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\SAE;
+namespace Controllers\SAE;
 
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionDashboard;
