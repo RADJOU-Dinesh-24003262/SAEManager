@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\ToDoList;
+namespace Models\ToDoList;
 
 use Core\includes\Database;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
@@ -15,7 +15,7 @@ use PDOException;
  *
  * @category    Models
  * @package     Src
- * @subpackages Models/ToDoList
+ * @subpackage  Models/ToDoList
  * @author      Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author      François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author      William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -361,9 +361,9 @@ class ToDoList extends BaseModel
      * @param integer $groupId     The ID of the SAE group.
      * @param string  $description The description of the new task.
      * @param integer $priority    The priority of the task.
-     * @return integer|false The ID of the new task on success, false on failure.
+     * @return integer|boolean The ID of the new task on success, false on failure.
      */
-    public static function createTask(int $groupId, string $description, int $priority = 2): int|false
+    public static function createTask(int $groupId, string $description, int $priority = 2): int|bool
     {
         try {
             $connection = Database::getInstance();
