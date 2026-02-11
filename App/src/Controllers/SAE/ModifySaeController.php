@@ -9,8 +9,39 @@ use Models\User\Client;
 use Override;
 use Views\SAE\ModifySaeView;
 
+/**
+ * Controller for displaying the SAE modification form.
+ *
+ * This class handles the GET request to show the form for editing an existing SAE.
+ * It retrieves the necessary SAE data and the list of clients to populate the view.
+ *
+ * @category Controller
+ *
+ * @package Src
+ *
+ * @subpackage Controllers/SAE
+ *
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ *
+ * @license MIT License https://opensource.org/licenses/MIT
+ *
+ * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
 class ModifySaeController extends BaseController
 {
+    /**
+     * Principal manager of the controller.
+     *
+     * Verifies permissions, fetches SAE data and available clients,
+     * and renders the modification view.
+     *
+     * @return void
+     * @throws \Exception If the SAE is not found or an error occurs during data retrieval.
+     */
     #[Override]
     public function control(): void
     {
@@ -33,17 +64,17 @@ class ModifySaeController extends BaseController
         try {
             $sae = SAE::getInstance();
 
-            // 🔑 POINT IMPORTANT 3 : Récupérer les données complètes de la SAE
+            // Retrieve complete SAE data.
             $saeData = $sae->getCompleteSAEData($saeId, $this->user);
 
             if (!$saeData) {
                 throw new \Exception("SAE non trouvée");
             }
 
-            // 🔑 POINT IMPORTANT 4 : Récupérer la liste des clients
+            // Retrieve the list of clients.
             $clients = Client::getAllClients();
 
-            // 🔑 POINT IMPORTANT 5 : Passer les données à la vue
+            // Pass data to the view.
             $view = new ModifySaeView([
                 'sae' => $saeData,
                 'clients' => $clients,
@@ -59,10 +90,17 @@ class ModifySaeController extends BaseController
         }
     }
 
+    /**
+     * Check if this controller can handle the request.
+     *
+     * @param string $path   The request path.
+     * @param string $method The HTTP request method.
+     *
+     * @return boolean True if the controller supports the request, otherwise false.
+     */
     #[Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match('/^\/sae\/\d+\/modify$/', $path) && $method === "GET";
     }
 }
-?>

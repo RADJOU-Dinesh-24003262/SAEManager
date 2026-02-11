@@ -17,7 +17,7 @@ use DateTime;
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Validator/CreateSaeValidator.php
  */
-class ModifySaeValidator extends FormValidator
+class FormSaeValidator extends FormValidator
 {
     /**
      * List of required fields.
@@ -74,7 +74,7 @@ class ModifySaeValidator extends FormValidator
         }
 
         $begin = new DateTime($data['begin_date']);
-        $end = new DateTime($data['date_rendu']);
+        $end = new DateTime($data['end_date']);
 
         if ($end <= $begin) {
             throw new ExeptionValidationSAECreation('La date de fin doit être après la date de début');

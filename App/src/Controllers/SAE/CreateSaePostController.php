@@ -61,7 +61,7 @@ class CreateSaePostController implements ControllerInterface
         }
 
         $data = $_POST;
-        $validator = new CreateSaeValidator();
+        $validator = new FormSaeValidator();
 
         try {
             // Extract description before escape to preserve Markdown.

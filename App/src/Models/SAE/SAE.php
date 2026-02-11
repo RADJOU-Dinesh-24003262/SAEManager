@@ -110,47 +110,47 @@ class SAE
      * @param integer $saeId The SAE subject ID.
      * @param User    $user  The requesting user.
      * @return array{
-     *   subject: SAESubject,
-     *   groups: array<int, array{
-     *     group: SAEGroup,
-     *     students: array<int, array{
-     *       student_id: string,
-     *       amu_id: string,
-     *       year: string,
-     *       major: string,
-     *       td: string,
-     *       tp: string,
-     *       first_name: string,
-     *       last_name: string,
-     *       email: string,
-     *       phone: string|null
-     *     }>
-     *   }>,
-     *   responsible_professor: array{
-     *     user_id: string,
-     *     first_name: string,
-     *     last_name: string,
-     *     email: string,
-     *     phone: string|null,
-     *     amu_id: string
-     *   }|null,
-     *   all_professors: array<int, array{
-     *     user_id: string,
-     *     first_name: string,
-     *     last_name: string,
-     *     email: string,
-     *     phone: string|null,
-     *     amu_id: string,
-     *     is_responsible: int
-     *   }>,
-     *   client: array{
-     *     user_id: string,
-     *     first_name: string,
-     *     last_name: string,
-     *     email: string,
-     *     phone: string|null,
-     *     organisation: string
-     *   }|null
+     * subject: SAESubject,
+     * groups: array<int, array{
+     * group: SAEGroup,
+     * students: array<int, array{
+     * student_id: string,
+     * amu_id: string,
+     * year: string,
+     * major: string,
+     * td: string,
+     * tp: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null
+     * }>
+     * }>,
+     * responsible_professor: array{
+     * user_id: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null,
+     * amu_id: string
+     * }|null,
+     * all_professors: array<int, array{
+     * user_id: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null,
+     * amu_id: string,
+     * is_responsible: int
+     * }>,
+     * client: array{
+     * user_id: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null,
+     * organisation: string
+     * }|null
      * }|null Complete SAE data or null if no access.
      * @throws ExceptionFetchDataBD If data cannot be fetched.
      */
@@ -187,19 +187,19 @@ class SAE
      * @param integer $saeId The SAE subject ID.
      * @param User    $user  The requesting user.
      * @return array<int, array{
-     *   group: SAEGroup,
-     *   students: array<int, array{
-     *     student_id: string,
-     *     amu_id: string,
-     *     year: string,
-     *     major: string,
-     *     td: string,
-     *     tp: string,
-     *     first_name: string,
-     *     last_name: string,
-     *     email: string,
-     *     phone: string|null
-     *   }>
+     * group: SAEGroup,
+     * students: array<int, array{
+     * student_id: string,
+     * amu_id: string,
+     * year: string,
+     * major: string,
+     * td: string,
+     * tp: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null
+     * }>
      * }> Array of groups with member's details.
      */
     private function getAccessibleGroups(int $saeId, User $user): array
@@ -260,7 +260,7 @@ class SAE
      *
      * @param User    $student The student.
      * @param integer $saeId   The SAE subject ID.
-     * @return integer|null
+     * @return integer|null The group ID or null if not assigned.
      */
     private function getUserGroupId(User $student, int $saeId): ?int
     {
@@ -398,20 +398,21 @@ class SAE
 
     /**
      * Gets contact information of group members grouped by SAE group.
+     *
      * Each key in the returned array is a SAE group ID.
      *
      * @param User    $user  The requesting user.
      * @param integer $saeId The SAE subject ID.
      *
      * @return array<int, array<int, array{
-     *     user_id: int,
-     *     first_name: string,
-     *     last_name: string,
-     *     email: string,
-     *     phone: string,
-     *     sae_group_id: int,
-     *     td: int,
-     *     tp: int
+     * user_id: int,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string,
+     * sae_group_id: int,
+     * td: int,
+     * tp: int
      * }>>
      */
     public function getGroupContacts(User $user, int $saeId): array
@@ -497,15 +498,15 @@ class SAE
      * @param User    $user  The requesting user.
      * @param integer $saeId The SAE subject ID.
      * @return array<int, array{
-     *   student_id: string,
-     *   amu_id: string,
-     *   year: string,
-     *   major: string,
-     *   td: string,
-     *   tp: string,
-     *   first_name: string,
-     *   last_name: string,
-     *   email: string
+     * student_id: string,
+     * amu_id: string,
+     * year: string,
+     * major: string,
+     * td: string,
+     * tp: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string
      * }>
      * @throws ExceptionAccessDenied If user doesn't have permission.
      */
@@ -518,6 +519,14 @@ class SAE
         return $this->groupRepo->getAvailableStudents($saeId);
     }
 
+    /**
+     * Gets the file name (path) of the SAE subject.
+     *
+     * @param User    $user  The requesting user.
+     * @param integer $saeId The SAE subject ID.
+     * @return string The relative file path.
+     * @throws ExceptionAccessDenied If user doesn't have permission.
+     */
     public function getFileName(User $user, int $saeId): string
     {
         if (!$user->canManageSAE($saeId)) {
