@@ -48,9 +48,9 @@ class ManageGroupsPostController extends BaseController
                 'delete' => $this->deleteGroup($saeId),
                 'add-student' => $this->addStudent($saeId),
                 'remove-student' => $this->removeStudent($saeId),
-                default => throw new \Exception('Action non reconnue')
+                default => throw new Exception("Action inconnue: $action")
             };
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->redirectWithError($saeId, $e->getMessage());
         }
     }
@@ -60,7 +60,7 @@ class ManageGroupsPostController extends BaseController
      *
      * @param integer $saeId The ID of the SAE.
      * @return void
-     * @throws \Exception If an unexpected error occurs during group creation.
+     * @throws Exception If an unexpected error occurs during group creation.
      */
     private function createGroup(int $saeId): void
     {
@@ -80,14 +80,14 @@ class ManageGroupsPostController extends BaseController
      *
      * @param integer $saeId The ID of the SAE.
      * @return void
-     * @throws \Exception If the group ID is missing.
-     * @throws \Exception If an unexpected error occurs during group deletion.
+     * @throws Exception If the group ID is missing.
+     * @throws Exception If an unexpected error occurs during group deletion.
      */
     private function deleteGroup(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         if (!$groupId) {
-            throw new \Exception("ID du groupe manquant");
+            throw new Exception("ID du groupe manquant");
         }
         SAE::getInstance()->deleteGroup($this->user, $groupId);
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
@@ -98,15 +98,15 @@ class ManageGroupsPostController extends BaseController
      *
      * @param integer $saeId The ID of the SAE.
      * @return void
-     * @throws \Exception If group ID or student ID is missing.
-     * @throws \Exception If an unexpected error occurs during student assignment.
+     * @throws Exception If group ID or student ID is missing.
+     * @throws Exception If an unexpected error occurs during student assignment.
      */
     private function addStudent(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         $studentId = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         if (!$groupId || !$studentId) {
-            throw new \Exception("Données manquantes");
+            throw new Exception("Données manquantes");
         }
         SAE::getInstance()->assignStudentToGroup($this->user, $studentId, $groupId);
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
@@ -117,15 +117,15 @@ class ManageGroupsPostController extends BaseController
      *
      * @param integer $saeId The ID of the SAE.
      * @return void
-     * @throws \Exception If group ID or student ID is missing.
-     * @throws \Exception If an unexpected error occurs during student removal.
+     * @throws Exception If group ID or student ID is missing.
+     * @throws Exception If an unexpected error occurs during student removal.
      */
     private function removeStudent(int $saeId): void
     {
         $groupId = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
         $studentId = filter_input(INPUT_POST, 'student_id', FILTER_VALIDATE_INT);
         if (!$groupId || !$studentId) {
-            throw new \Exception("Données manquantes");
+            throw new Exception("Données manquantes");
         }
         SAE::getInstance()->removeStudentFromGroup($this->user, $studentId, $groupId);
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');

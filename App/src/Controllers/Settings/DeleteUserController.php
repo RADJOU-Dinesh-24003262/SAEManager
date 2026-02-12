@@ -65,11 +65,11 @@ class DeleteUserController extends BaseController
      *
      * @param  string $path   The request path.
      * @param  string $method The HTTP request method.
-     * @return boolean True if path is /delete-user and the method is GET.
+     * @return boolean True if path is /settings/delete and the method is GET.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === '/delete-user' && $method === 'GET';
+        return $path === '/settings/delete' && $method === 'GET';
     }
 }
