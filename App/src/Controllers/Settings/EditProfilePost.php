@@ -67,11 +67,11 @@ class EditProfilePost implements ControllerInterface
      *
      * @param  string $path   The request path.
      * @param  string $method The HTTP request method.
-     * @return boolean True if path is /edit-profile and the method is POST.
+     * @return boolean True if path is /settings/edit-profile and the method is POST.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === '/edit-profile' && $method === 'POST';
+        return $path === '/settings/edit-profile' && $method === 'POST';
     }
 }
