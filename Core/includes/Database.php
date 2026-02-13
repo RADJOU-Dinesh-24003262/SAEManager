@@ -263,7 +263,8 @@ class Database extends PDO
             todoid INTEGER PRIMARY KEY AUTOINCREMENT,
             sae_group_id INTEGER REFERENCES sae_groups(sae_group_id),
             tododesc TEXT,
-            checked INTEGER NOT NULL DEFAULT 0
+            checked INTEGER NOT NULL DEFAULT 0,
+            priority INTEGER DEFAULT 2 NOT NULL
         );
 
         CREATE TABLE password_resets (

@@ -23,10 +23,8 @@ use PDOException;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @template T of object
- * @implements RepositoryInterface<T>
  */
-abstract class BaseRepository implements RepositoryInterface
+abstract class BaseRepository
 {
     /**
      * The PDO connection instance
@@ -64,7 +62,6 @@ abstract class BaseRepository implements RepositoryInterface
      * @param integer $id The ID of the entry to find in the database.
      * @return T|null Returns the entity if found, null otherwise
      */
-    #[Override]
     public function findById(int $id)
     {
         try {
@@ -87,7 +84,6 @@ abstract class BaseRepository implements RepositoryInterface
      * @param integer $id The ID of the entity to delete.
      * @return boolean True on success, false on failure.
      */
-    #[Override]
     public function delete(int $id): bool
     {
         try {

@@ -114,8 +114,7 @@ class Router
         $controllerClass = $routeConfig['controller'];
         $method = $routeConfig['method'];
 
-        error_log($controllerClass);
-        error_log($method);
+
         try {
             $controller = new $controllerClass();
 

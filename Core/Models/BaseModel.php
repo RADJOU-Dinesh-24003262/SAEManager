@@ -35,7 +35,7 @@ abstract class BaseModel
     protected function hydrate(array $data): void
     {
         foreach ($data as $key => $value) {
-            if (property_exists($this, $key)) {
+            if (property_exists($this, $key) && $value !== null) {
                 $this->$key = $value;
             }
         }
