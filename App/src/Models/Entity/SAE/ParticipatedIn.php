@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\SAE;
+namespace Models\Entity\SAE;
 
 use Core\Models\BaseModel;
 use Override;
@@ -8,11 +8,11 @@ use Override;
 /**
  * Represents a participation entry in a SAE Group.
  *
- * Links a student to a SAE Group and Subject.
+ * Links a student to a SAE Group.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models/SAE
+ * @subpackage Models/Entity/SAE
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
@@ -31,26 +31,6 @@ class ParticipatedIn extends BaseModel
      */
     protected int $sae_group_id;
 
-    /**
-     * The SAE Subject ID.
-     * @var integer|null
-     */
-    protected ?int $sae_subject_id = null;
-
-    /**
-     * Converts to array.
-     *
-     * @return array<string, integer|null>
-     */
-    #[Override]
-    public function toArray(): array
-    {
-        return [
-            'student_id' => $this->student_id,
-            'sae_group_id' => $this->sae_group_id,
-            'sae_subject_id' => $this->sae_subject_id,
-        ];
-    }
 
     /**
      * Gets the Student ID.
@@ -92,26 +72,5 @@ class ParticipatedIn extends BaseModel
     public function setSaeGroupId(int $sae_group_id): void
     {
         $this->sae_group_id = $sae_group_id;
-    }
-
-    /**
-     * Gets the SAE Subject ID.
-     *
-     * @return integer|null
-     */
-    public function getSaeSubjectId(): ?int
-    {
-        return $this->sae_subject_id;
-    }
-
-    /**
-     * Sets the SAE Subject ID.
-     *
-     * @param integer|null $sae_subject_id The SAE Subject ID.
-     * @return void
-     */
-    public function setSaeSubjectId(?int $sae_subject_id): void
-    {
-        $this->sae_subject_id = $sae_subject_id;
     }
 }
