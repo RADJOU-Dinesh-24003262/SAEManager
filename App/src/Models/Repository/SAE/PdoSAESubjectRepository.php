@@ -1,39 +1,38 @@
 <?php
 
-namespace Models\SAE\Repository;
+namespace Models\Repository\SAE;
 
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Models\Repository\BaseRepository;
+use Models\Entity\SAE\SAESubject;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Override;
 use PDO;
 use PDOException;
-use Models\SAE\SAESubject;
-use Models\User\Student;
-use Core\Models\Repository\BaseRepository;
-use PDepend\Util\Log;
 
 /**
- * Repository for SAESubject operations.
+ * PDO implementation of SAESubjectInterface.
  *
- * Handles all database interactions for SAE subjects.
- * Follows the Repository pattern for data access abstraction.
+ * This is the Infrastructure layer implementation of the Interface.
+ * It implements the Interface defined in the Use Cases layer.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models/SAE
+ * @subpackage Models/Repository/SAE
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  * @extends BaseRepository<SAESubject>
  */
-class SAESubjectRepository extends BaseRepository
+class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterface
 {
     /**
      * The singleton instance.
      *
-     * @var SAESubjectRepository|null
+     * @var PdoSAESubjectRepository|null
      */
-    protected static ?SAESubjectRepository $instance = null;
+    protected static ?PdoSAESubjectRepository $instance = null;
 
     /**
      * The table name.
@@ -60,12 +59,12 @@ class SAESubjectRepository extends BaseRepository
     /**
      * Gets the singleton instance.
      *
-     * @return SAESubjectRepository
+     * @return PdoSAESubjectRepository
      */
-    public static function getInstance(): SAESubjectRepository
+    public static function getInstance(): PdoSAESubjectRepository
     {
         if (self::$instance === null) {
-            self::$instance = new SAESubjectRepository();
+            self::$instance = new PdoSAESubjectRepository();
         }
         return self::$instance;
     }
@@ -84,9 +83,9 @@ class SAESubjectRepository extends BaseRepository
     /**
      * Finds all SAE subjects.
      *
-     * @return array<SAESubject> The list of all SAE subjects in the database.
-     * @throws ExceptionFetchDataBD If data cannot be fetched.
+     * @return array<SAESubject>
      */
+    #[Override]
     public function findAll(): array
     {
         try {
@@ -110,9 +109,9 @@ class SAESubjectRepository extends BaseRepository
      * Finds SAE subjects by professor ID.
      *
      * @param integer $professorId The professor's user ID.
-     * @return array<SAESubject> The list of SAE subjects associated with the professor.
-     * @throws ExceptionFetchDataBD If data cannot be fetched.
+     * @return array<SAESubject>
      */
+    #[Override]
     public function findByProfessorId(int $professorId): array
     {
         try {
@@ -141,9 +140,9 @@ class SAESubjectRepository extends BaseRepository
      * Finds SAE subjects by student ID.
      *
      * @param integer $studentId The student's user ID.
-     * @return array<SAESubject> The list of SAE subjects associated with the student.
-     * @throws ExceptionFetchDataBD If data cannot be fetched.
+     * @return array<SAESubject>
      */
+    #[Override]
     public function findByStudentId(int $studentId): array
     {
         try {
@@ -169,9 +168,9 @@ class SAESubjectRepository extends BaseRepository
      * Finds SAE subjects by client ID.
      *
      * @param integer $clientId The client's user ID.
-     * @return array<SAESubject> The list of SAE subjects associated with the client.
-     * @throws ExceptionFetchDataBD If data cannot be fetched.
+     * @return array<SAESubject>
      */
+    #[Override]
     public function findByClientId(int $clientId): array
     {
         try {
@@ -190,16 +189,14 @@ class SAESubjectRepository extends BaseRepository
         }
     }
 
-    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
      * Creates a new SAE subject.
      *
      * @param SAESubject $entity The SAE subject to create.
      * @return SAESubject The created SAE with ID.
-     * @throws PDOException If creation fails.
      */
     #[Override]
-    public function create($entity)
+    public function create(SAESubject $entity): SAESubject
     {
         try {
             $this->connection->beginTransaction();
@@ -232,18 +229,15 @@ class SAESubjectRepository extends BaseRepository
             throw $e;
         }
     }
-    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
-    // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
      * Updates a SAE subject.
      *
      * @param SAESubject $entity The SAE subject to update.
      * @return boolean True on success.
-     * @throws PDOException If update fails.
      */
     #[Override]
-    public function update($entity): bool
+    public function update(SAESubject $entity): bool
     {
         try {
             $stmt = $this->connection->prepare(
@@ -271,7 +265,30 @@ class SAESubjectRepository extends BaseRepository
             throw $e;
         }
     }
-    // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
+
+    /**
+     * Deletes a SAE subject.
+     *
+     * @param integer $id The SAE subject ID.
+     * @return boolean True on success.
+     */
+    #[Override]
+    public function delete(int $id): bool
+    {
+        return parent::delete($id);
+    }
+
+    /**
+     * Finds a SAE subject by ID.
+     *
+     * @param integer $id The SAE subject ID.
+     * @return SAESubject|null
+     */
+    #[Override]
+    public function findById(int $id): ?SAESubject
+    {
+        return parent::findById($id);
+    }
 
     /**
      * Gets responsible professor info.
@@ -284,8 +301,9 @@ class SAESubjectRepository extends BaseRepository
      *   email: string,
      *   phone: string|null,
      *   amu_id: string
-     * }|null The professor info or null.
+     * }|null
      */
+    #[Override]
     public function getResponsibleProfessor(int $saeId): ?array
     {
         try {
@@ -320,8 +338,8 @@ class SAESubjectRepository extends BaseRepository
      *   amu_id: string,
      *   is_responsible: int
      * }>
-     * @throws PDOException If query fails.
      */
+    #[Override]
     public function getAllProfessorsInfo(int $saeId): array
     {
         try {
@@ -364,8 +382,9 @@ class SAESubjectRepository extends BaseRepository
      *   email: string,
      *   phone: string|null,
      *   organisation: string
-     * }|null The client info or null.
+     * }|null
      */
+    #[Override]
     public function getClientInfo(int $saeId): ?array
     {
         try {
@@ -384,52 +403,6 @@ class SAESubjectRepository extends BaseRepository
         } catch (PDOException $e) {
             error_log('Erreur récupération info client : ' . $e->getMessage());
             return null;
-        }
-    }
-
-    /**
-     * Finds all subjects that match the end date.
-     *
-     * @param string $endDate The end date of the SAE subjects.
-     * @return array<SAESubject> The list of SAE subjects matching the end date.
-     */
-    public function findByEndDate(string $endDate): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_subjects WHERE end_date = :end_date 
-                 ORDER BY sae_subject_id'
-            );
-            $stmt->execute(['end_date' => $endDate]);
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn($row) => new SAESubject($row), $data);
-        } catch (PDOException $e) {
-            error_log('Erreur récupération sujets par date de fin : ' . $e->getMessage());
-            return [];
-        }
-    }
-
-    /**
-     * Finds all subjects that match the begin date.
-     *
-     * @param string $beginDate The begin date of the SAE subjects.
-     * @return array<SAESubject> The list of SAE subjects matching the begin date.
-     */
-    public function findByBeginDate(string $beginDate): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_subjects WHERE begin_date = :begin_date 
-                 ORDER BY sae_subject_id'
-            );
-            $stmt->execute(['begin_date' => $beginDate]);
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn($row) => new SAESubject($row), $data);
-        } catch (PDOException $e) {
-            error_log('Erreur récupération sujets par date de début : ' . $e->getMessage());
-            return [];
         }
     }
 }

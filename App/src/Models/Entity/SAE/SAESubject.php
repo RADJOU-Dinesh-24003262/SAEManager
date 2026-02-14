@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\SAE;
+namespace Models\Entity\SAE;
 
 use Core\Models\BaseModel;
 use DateTime;
@@ -13,7 +13,7 @@ use Override;
  *
  * @category   Models
  * @package    Src
- * @subpackage Models/SAE
+ * @subpackage Models/Entity/SAE
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager

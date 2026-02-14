@@ -1,18 +1,18 @@
 <?php
 
-namespace Models\SAE;
+namespace Models\Entity\SAE;
 
 use Core\Models\BaseModel;
 use Override;
 
 /**
- * Represents a SAE Group in the system.
+ * Represents a SAE Group.
  *
  * A group contains multiple students working together on a SAE project.
  *
  * @category   Models
  * @package    Src
- * @subpackage Models/SAE
+ * @subpackage Models/Entity/SAE
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
@@ -37,20 +37,6 @@ class SAEGroup extends BaseModel
      */
     protected ?int $professor_id = null;
 
-    /**
-     * Converts to array.
-     *
-     * @return array<string, integer|null>
-     */
-    #[Override]
-    public function toArray(): array
-    {
-        return [
-            'sae_group_id' => $this->sae_group_id,
-            'sae_subject_id' => $this->sae_subject_id,
-            'professor_id' => $this->professor_id,
-        ];
-    }
 
     /**
      * Gets the SAE group ID.
