@@ -7,7 +7,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\User\LoginPost;
 use Controllers\User\RegisterPost;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
 
 /**
  * Integration tests for user authentication flow

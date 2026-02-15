@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models\ToDoList;
 
-use Models\ToDoList\ToDoList;
+use Models\Entity\ToDoList\ToDoList;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
