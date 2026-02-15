@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Controllers\ToDoList\ToDoListPost;
-use Models\ToDoList\ToDoList;
+use Models\Entity\ToDoList\ToDoList;
 
 /**
  * Integration test for ToDoListPost controller interacting with ToDoList model.

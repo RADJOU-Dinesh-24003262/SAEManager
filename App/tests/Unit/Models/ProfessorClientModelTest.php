@@ -5,9 +5,9 @@ namespace Tests\Unit\Models;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Models\User\Professor;
-use Models\User\Client;
-use Models\User\User;
+use Models\Entity\User\Professor;
+use Models\Entity\User\Client;
+use Models\Entity\User\User;
 
 /**
  * Unit tests for Professor and Client models
