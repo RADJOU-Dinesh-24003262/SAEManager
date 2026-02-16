@@ -3,19 +3,14 @@
 namespace Controllers\SAE;
 
 use Controllers\BaseController;
-use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
-use Core\includes\exception\SAE\ExceptionInvalidData;
 use Core\Utilis\SessionService;
 use Exception;
 use Models\SAE\SAE;
-use Models\User\Client;
-use Models\User\User;
 use Override;
 use Services\FileService;
 use Validator\FormSaeValidator;
-use Views\SAE\CreateSaeView;
 
 /**
  * This class controls the modification of an SAE via POST request.
@@ -103,6 +98,7 @@ class ModifySaePostController extends BaseController
             }
 
             SAE::getInstance()->updateSAE($user, $saeId, $updateData);
+            SessionService::setFlash('success', 'SAE modifiée avec succès');
             header('Location: /sae/' . $saeId);
             exit();
         } catch (ExeptionValidationSAECreation $e) {

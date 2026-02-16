@@ -11,6 +11,7 @@
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 
+use Controllers\SAE\DeleteSaeController;
 use Controllers\SAE\ModifySaeController;
 use Controllers\SAE\ModifySaePostController;
 use Controllers\SAE\PageSaeController;
@@ -100,23 +101,25 @@ const ROUTES = [
         'POST' => ['controller' => EditProfilePost::class , 'method' => 'control']
     ],
     '/settings/delete' => [
-        'POST' => ['controller' => DeleteUserController::class , 'method' => 'control']
+        'GET' => ['controller' => DeleteUserController::class , 'method' => 'control']
     ],
 
     // ============================================================
     // SAE ROUTES
     // ============================================================
-
+    '/sae/create' => [
+        'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],
+        'POST' => ['controller' => CreateSaePostController::class , 'method' => 'control']
+    ],
+    '/sae/{id}/delete' => [
+        'GET' => ['controller' => DeleteSaeController::class , 'method' => 'control'],
+    ],
     '/sae/{id}' => [
         'GET' => ['controller' => PageSaeController::class , 'method' => 'control']
     ],
     '/sae/{id}/modify' => [
         'GET' => ['controller' => ModifySaeController::class , 'method' => 'control'],
         'POST' => ['controller' => ModifySaePostController::class , 'method' => 'control']
-    ],
-    '/create-sae' => [
-        'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],
-        'POST' => ['controller' => CreateSaePostController::class , 'method' => 'control']
     ],
     '/sae/{id}/groups' => [
         'GET' => ['controller' => ManageGroupsController::class , 'method' => 'control'],
