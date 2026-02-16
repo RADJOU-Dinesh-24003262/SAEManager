@@ -4,7 +4,7 @@ namespace Controllers;
 
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
 
 /**
  * Abstract BaseController to handle common controller logic like authentication.
@@ -65,8 +65,19 @@ abstract class BaseController implements ControllerInterface
 
         if (!$this->user->isProfessor()) {
             SessionService::setFlash('errors', ['Accès réservé aux professeurs.']);
-            header('Location: /dashboard');
-            exit();
+            $this->redirect('/dashboard');
         }
+    }
+
+    /**
+     * Redirects to the given URL.
+     *
+     * @param string $url The URL to redirect to.
+     * @return void
+     */
+    protected function redirect(string $url): void
+    {
+        header("Location: $url");
+        exit;
     }
 }

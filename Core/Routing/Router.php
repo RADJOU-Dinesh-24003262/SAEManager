@@ -59,40 +59,22 @@ class Router
      */
     private function parseRoutes(): void
     {
-        $explodedRequestedPath = $this->explodePath($this->requestedPath);
-        $params = [];
+        foreach ($this->routes as $pattern => $route) {
+            if (preg_match($pattern, $this->requestedPath, $matches)) {
+                $params = array_filter(
+                    $matches,
+                    fn($key) => !is_int($key),
+                    ARRAY_FILTER_USE_KEY
+                );
 
-        foreach ($this->availablePaths as $candidatePath) {
-            $foundMatch = true;
-            $explodedCandidatePath = $this->explodePath($candidatePath);
-
-            // Check if path segments count matches.
-            if (count($explodedCandidatePath) === count($explodedRequestedPath)) {
-                foreach ($explodedRequestedPath as $key => $requestedPathPart) {
-                    $candidatePathPart = $explodedCandidatePath[$key];
-
-                    if ($this->isParam($candidatePathPart)) {
-                        // Extract parameter value.
-                        $params[substr($candidatePathPart, 1, -1)] = $requestedPathPart;
-                    } elseif ($candidatePathPart !== $requestedPathPart) {
-                        $foundMatch = false;
-                        break;
-                    }
-                }
-
-                if ($foundMatch) {
-                    $route = $this->routes[$candidatePath];
-                    break;
-                }
+                $this->dispatch($route, $params);
+                return;
             }
         }
 
-        if (isset($route)) {
-            $this->dispatch($route, $params);
-        } else {
-            $this->handleNotFound();
-        }
+        $this->handleNotFound();
     }
+
 
     /**
      * Dispatch to controller.

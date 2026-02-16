@@ -54,4 +54,11 @@ interface StudentInterface extends UserInterface
      * @return boolean True if modifiable, false otherwise.
      */
     public function canModifyTodo(int $studentId, int $todoId): bool;
+    /**
+     * Finds students who are not participating in a specific SAE.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return array<Student> Array of students not in the SAE.
+     */
+    public function findStudentsNotInSAE(int $saeId): array;
 }

@@ -41,9 +41,9 @@ interface UserInterface
      * Creates a new user.
      *
      * @param T $user The user entity to create.
-     * @return T|boolean The created user with ID or false on failure.
+     * @return T|boolean The created user or false on failure.
      */
-    public function create(User $user): User|bool;
+    public function insert(object $user): int|bool;
 
     /**
      * Updates an existing user.
@@ -51,7 +51,7 @@ interface UserInterface
      * @param T $user The user entity to update.
      * @return boolean True on success, false on failure.
      */
-    public function update(User $user): bool;
+    public function update(object $user): bool;
 
     /**
      * Deletes a user by ID.

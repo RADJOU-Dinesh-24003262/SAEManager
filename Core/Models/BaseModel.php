@@ -57,9 +57,18 @@ abstract class BaseModel
         $data = [];
         foreach ($properties as $property) {
             $name = $property->getName();
-            $data[$name] = $property->getValue($this);
+            if ($property->isInitialized($this)) {
+                $data[$name] = $property->getValue($this);
+            }
         }
 
         return $data;
     }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    abstract public function getId(): ?int;
 }

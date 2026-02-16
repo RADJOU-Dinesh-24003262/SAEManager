@@ -39,9 +39,9 @@ interface SAEGroupInterface
      * Creates a new SAE group.
      *
      * @param SAEGroup $entity The SAE group to create.
-     * @return SAEGroup The created group with ID.
+     * @return integer|boolean The created group with ID or false on failure.
      */
-    public function create(SAEGroup $entity): SAEGroup;
+    public function insert(SAEGroup $entity): int|bool;
 
     /**
      * Updates a SAE group.
