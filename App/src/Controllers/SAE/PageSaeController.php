@@ -8,9 +8,15 @@ use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\SAE\SAE;
-use Override;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use Views\PageSAE\PageSaeView;
+use Override;
 
 /**
  * This class controls the SAE page.
@@ -49,15 +55,28 @@ class PageSaeController extends BaseController
 
             $sae_id = intval(basename($_SERVER['REQUEST_URI']));
 
-            if (!$this->user->canAccessSAE($sae_id)) {
-                throw new ExceptionAccessDenied("Vous n'avez pas la permission d'accéder à cette SAE.");
-            }
+            $subjectInterface = new PdoSAESubjectRepository();
+            $groupInterface = new PdoSAEGroupRepository();
+            $participatedInInterface = new PdoParticipatedInRepository();
 
-            $sae = SAE::getInstance();
-            $data['sae'] = $sae->getCompleteSAEData($sae_id, $this->user);
+            $studentInterface = new PdoStudentRepository();
+            $professorInterface = new PdoProfessorRepository();
+            $clientInterface = new PdoClientRepository();
+
+            $sae = new GetCompleteSAEDataUseCase(
+                $subjectInterface,
+                $groupInterface,
+                $participatedInInterface,
+                $studentInterface,
+                $professorInterface,
+                $clientInterface
+            );
+
+            $saeData = $sae->execute($sae_id, $this->user);
+
 
             // Create and render the SAE page view.
-            $view = new PageSaeView($data);
+            $view = new PageSaeView($saeData, $this->user);
             $view->render();
             exit();
         } catch (ExceptionAccessDenied $e) {
