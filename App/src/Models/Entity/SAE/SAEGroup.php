@@ -100,4 +100,15 @@ class SAEGroup extends BaseModel
     {
         $this->professor_id = $professor_id;
     }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    #[Override]
+    public function getId(): ?int
+    {
+        return $this->sae_group_id;
+    }
 }

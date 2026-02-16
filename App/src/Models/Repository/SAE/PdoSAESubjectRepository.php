@@ -51,22 +51,9 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
     /**
      * Constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * Gets the singleton instance.
-     *
-     * @return PdoSAESubjectRepository
-     */
-    public static function getInstance(): PdoSAESubjectRepository
-    {
-        if (self::$instance === null) {
-            self::$instance = new PdoSAESubjectRepository();
-        }
-        return self::$instance;
     }
 
     /**
@@ -79,6 +66,28 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
     {
         return 'sae_subject_id';
     }
+
+    public function insert(object $entity): int|bool
+    {
+        return parent::insert($entity);
+    }
+
+    public function update(object $entity): bool
+    {
+        return parent::update($entity);
+    }
+
+    public function delete(int $id): bool
+    {
+        return parent::delete($id);
+    }
+
+    public function findById(int $id): ?SAESubject
+    {
+        return parent::findById($id);
+    }
+
+
 
     /**
      * Finds all SAE subjects.
@@ -189,106 +198,6 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         }
     }
 
-    /**
-     * Creates a new SAE subject.
-     *
-     * @param SAESubject $entity The SAE subject to create.
-     * @return SAESubject The created SAE with ID.
-     */
-    #[Override]
-    public function create(SAESubject $entity): SAESubject
-    {
-        try {
-            $this->connection->beginTransaction();
-
-            $stmt = $this->connection->prepare(
-                'INSERT INTO sae_subjects 
-                (responsible_prof_id, client_id, subject_name, begin_date, end_date, file_path)
-                VALUES (:responsible_prof_id, :client_id, :subject_name, :begin_date, :end_date, :file_path)
-                RETURNING sae_subject_id'
-            );
-
-            $stmt->execute([
-                'responsible_prof_id' => $entity->getResponsibleProfId(),
-                'client_id' => $entity->getClientId(),
-                'subject_name' => $entity->getSubjectName(),
-                'begin_date' => $entity->getBeginDate(),
-                'end_date' => $entity->getEndDate(),
-                'file_path' => $entity->getFilePath()
-            ]);
-
-            $id = intval($stmt->fetchColumn());
-            $stmt->closeCursor();
-            $entity->setSaeSubjectId($id);
-
-            $this->connection->commit();
-            return $entity;
-        } catch (PDOException $e) {
-            $this->connection->rollBack();
-            error_log('Erreur création SAE : ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    /**
-     * Updates a SAE subject.
-     *
-     * @param SAESubject $entity The SAE subject to update.
-     * @return boolean True on success.
-     */
-    #[Override]
-    public function update(SAESubject $entity): bool
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'UPDATE sae_subjects 
-                SET responsible_prof_id = :responsible_prof_id,
-                    client_id = :client_id,
-                    subject_name = :subject_name,
-                    begin_date = :begin_date,
-                    end_date = :end_date,
-                    file_path = :file_path
-                WHERE sae_subject_id = :id'
-            );
-
-            return $stmt->execute([
-                'id' => $entity->getSaeSubjectId(),
-                'responsible_prof_id' => $entity->getResponsibleProfId(),
-                'client_id' => $entity->getClientId(),
-                'subject_name' => $entity->getSubjectName(),
-                'begin_date' => $entity->getBeginDate(),
-                'end_date' => $entity->getEndDate(),
-                'file_path' => $entity->getFilePath()
-            ]);
-        } catch (PDOException $e) {
-            error_log('Erreur mise à jour SAE : ' . $e->getMessage());
-            throw $e;
-        }
-    }
-
-    /**
-     * Deletes a SAE subject.
-     *
-     * @param integer $id The SAE subject ID.
-     * @return boolean True on success.
-     */
-    #[Override]
-    public function delete(int $id): bool
-    {
-        return parent::delete($id);
-    }
-
-    /**
-     * Finds a SAE subject by ID.
-     *
-     * @param integer $id The SAE subject ID.
-     * @return SAESubject|null
-     */
-    #[Override]
-    public function findById(int $id): ?SAESubject
-    {
-        return parent::findById($id);
-    }
 
     /**
      * Gets responsible professor info.
@@ -403,6 +312,42 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         } catch (PDOException $e) {
             error_log('Erreur récupération info client : ' . $e->getMessage());
             return null;
+        }
+    }
+
+    public function findByBeginDate(string $beginDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_subjects 
+                WHERE begin_date = :begin_date 
+                ORDER BY begin_date DESC'
+            );
+            $stmt->execute(['begin_date' => $beginDate]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn ($row) => new SAESubject($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération SAEs par date de début : ' . $e->getMessage());
+            throw new ExceptionFetchDataBD();
+        }
+    }
+
+    public function findByEndDate(string $endDate): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT * FROM sae_subjects 
+                WHERE end_date = :end_date 
+                ORDER BY end_date DESC'
+            );
+            $stmt->execute(['end_date' => $endDate]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn ($row) => new SAESubject($row), $data);
+        } catch (PDOException $e) {
+            error_log('Erreur récupération SAEs par date de fin : ' . $e->getMessage());
+            throw new ExceptionFetchDataBD();
         }
     }
 }

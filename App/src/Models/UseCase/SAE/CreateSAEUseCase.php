@@ -53,7 +53,13 @@ class CreateSAEUseCase
 
         // Create SAE subject.
         $subject = new SAESubject($data);
+        $subjectId = $this->subjectInterface->insert($subject);
 
-        return $this->subjectInterface->create($subject);
+        if ($subjectId) {
+            $subject->setSaeSubjectId((int)$subjectId);
+            return $subject;
+        }
+
+        throw new \RuntimeException("Erreur lors de la création de la SAE");
     }
 }

@@ -73,4 +73,15 @@ class ParticipatedIn extends BaseModel
     {
         $this->sae_group_id = $sae_group_id;
     }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    #[Override]
+    public function getId(): ?int
+    {
+        return null; // Composite key or no single ID
+    }
 }

@@ -73,6 +73,12 @@ class CreateSAEGroupUseCase
             'professor_id' => $professorId
         ]);
 
-        return $this->groupInterface->create($group);
+        $groupId = $this->groupInterface->insert($group);
+        if ($groupId) {
+            $group->setSaeGroupId((int)$groupId);
+            return $group;
+        }
+
+        throw new \RuntimeException("Erreur lors de la création du groupe");
     }
 }

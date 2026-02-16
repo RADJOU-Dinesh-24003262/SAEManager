@@ -271,4 +271,15 @@ class SAESubject extends BaseModel
     {
         $this->file_path = $file_path;
     }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    #[Override]
+    public function getId(): ?int
+    {
+        return $this->sae_subject_id;
+    }
 }

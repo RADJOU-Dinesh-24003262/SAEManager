@@ -36,23 +36,11 @@ class PdoParticipatedInRepository implements ParticipatedInInterface
     /**
      * Constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->connection = Database::getInstance();
     }
 
-    /**
-     * Gets the singleton instance.
-     *
-     * @return PdoParticipatedInRepository
-     */
-    public static function getInstance(): PdoParticipatedInRepository
-    {
-        if (self::$instance === null) {
-            self::$instance = new PdoParticipatedInRepository();
-        }
-        return self::$instance;
-    }
 
     /**
      * Assigns a student to a group.
