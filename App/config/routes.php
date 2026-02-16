@@ -11,6 +11,8 @@
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 
+use Controllers\SAE\ModifySaeController;
+use Controllers\SAE\ModifySaePostController;
 use Controllers\SAE\PageSaeController;
 use Controllers\Dashboard\DashboardController;
 use Controllers\Index\IndexController;
@@ -107,6 +109,10 @@ const ROUTES = [
 
     '/sae/{id}' => [
         'GET' => ['controller' => PageSaeController::class , 'method' => 'control']
+    ],
+    '/sae/{id}/modify' => [
+        'GET' => ['controller' => ModifySaeController::class , 'method' => 'control'],
+        'POST' => ['controller' => ModifySaePostController::class , 'method' => 'control']
     ],
     '/create-sae' => [
         'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],

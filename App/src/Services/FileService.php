@@ -7,12 +7,15 @@ use Exception;
 /**
  * Service to handle file operations.
  *
+ * This service manages the storage and deletion of SAE description files
+ * in the server's filesystem.
+ *
  * @category Services
  * @package  Src
- * @subpackage App/Services
+ * @subpackage Services
  * @author     Dinesh Radjou <dinesh.radjou@univ-amu.fr>
- * @license    https://opensource.org/licenses/MIT MIT License
- * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Services/FileService.php
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class FileService
 {
@@ -26,10 +29,14 @@ class FileService
     /**
      * Saves content to a markdown file.
      *
-     * @param string $content  The markdown content.
-     * @param string $filename The desired filename (without extension).
-     * @return string The absolute path to the saved file.
-     * @throws Exception If file cannot be saved.
+     * Creates the storage directory if it does not exist, sanitizes the filename,
+     * and saves the content.
+     *
+     * @param string $content  The markdown content to save.
+     * @param string $filename The desired base filename (without extension).
+     *
+     * @return string The generated filename with extension (not the full path).
+     * @throws Exception If the storage directory cannot be created or the file cannot be written.
      */
     public static function saveSaeDescription(string $content, string $filename): string
     {
@@ -49,5 +56,29 @@ class FileService
         }
 
         return $fileNameWithExt;
+    }
+
+    /**
+     * Removes a file from storage.
+     *
+     * Checks if the file exists before attempting deletion.
+     *
+     * @param string $filename The name of the file to remove.
+     *
+     * @return boolean True if the file was successfully deleted or didn't exist, false on failure.
+     * @throws Exception If an error occurs during file deletion (implied by context, though not explicitly thrown).
+     */
+    public static function removeFile(string $filename): bool
+    {
+
+        if (empty($filename)) {
+            return false;
+        }
+        $fullPath = realpath(self::STORAGE_DIR) . '/' . $filename;
+
+        if (!is_file($fullPath)) {
+            return false;
+        }
+        return  unlink($fullPath);
     }
 }

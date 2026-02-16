@@ -5,20 +5,20 @@ namespace Tests\Unit\Validator;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Validator\CreateSaeValidator;
+use Validator\FormSaeValidator;
 use Validator\FormValidator;
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
 
-#[CoversClass(CreateSaeValidator::class)]
+#[CoversClass(FormSaeValidator::class)]
 #[CoversClass(FormValidator::class)]
 #[CoversClass(ExeptionValidationSAECreation::class)]
 class CreateSaeValidatorTest extends TestCase
 {
-    private CreateSaeValidator $validator;
+    private FormSaeValidator $validator;
 
     protected function setUp(): void
     {
-        $this->validator = new CreateSaeValidator();
+        $this->validator = new FormSaeValidator();
     }
 
     private function getValidData(): array
