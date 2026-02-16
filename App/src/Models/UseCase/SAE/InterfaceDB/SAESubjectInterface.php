@@ -62,9 +62,9 @@ interface SAESubjectInterface
      * Creates a new SAE subject.
      *
      * @param SAESubject $entity The SAE subject to create.
-     * @return SAESubject The created SAE with ID.
+     * @return integer|boolean The id of the created SAE subject or false on failure.
      */
-    public function create(SAESubject $entity): SAESubject;
+    public function insert(object $entity): int|bool;
 
     /**
      * Updates a SAE subject.
@@ -72,7 +72,7 @@ interface SAESubjectInterface
      * @param SAESubject $entity The SAE subject to update.
      * @return boolean True on success.
      */
-    public function update(SAESubject $entity): bool;
+    public function update(object $entity): bool;
 
     /**
      * Deletes a SAE subject.

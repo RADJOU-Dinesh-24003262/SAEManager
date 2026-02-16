@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\ToDoList\InterfaceDB;
 
-use Models\Entity\ToDoList\ToDoList;
+use Models\Entity\ToDoItem\ToDoItem;
 
 /**
  * Interface for ToDoList repository.
@@ -22,33 +22,33 @@ interface ToDoListInterface
      * Finds a task by ID.
      *
      * @param integer $id The task ID.
-     * @return ToDoList|null The task or null if not found.
+     * @return ToDoItem|null The task or null if not found.
      */
-    public function findById(int $id): ?ToDoList;
+    public function findById(int $id): ?ToDoItem;
 
     /**
      * Finds all tasks for a given SAE group.
      *
      * @param integer $groupId The group ID.
-     * @return array<ToDoList> The list of tasks.
+     * @return array<ToDoItem> The list of tasks.
      */
     public function findByGroupId(int $groupId): array;
 
     /**
-     * Creates a new task.
+     * Inserts a new task.
      *
-     * @param ToDoList $task The task entity to create.
-     * @return ToDoList|false The created task with ID or false on failure.
+     * @param ToDoItem $task The task entity to insert.
+     * @return integer|boolean The ID of the created task or false on failure.
      */
-    public function create(ToDoList $task): ToDoList|bool;
+    public function insert(ToDoItem $task): int|bool;
 
     /**
      * Updates an existing task.
      *
-     * @param ToDoList $task The task entity to update.
+     * @param ToDoItem $task The task entity to update.
      * @return boolean True on success, false on failure.
      */
-    public function update(ToDoList $task): bool;
+    public function update(ToDoItem $task): bool;
 
     /**
      * Deletes a task by ID.

@@ -42,41 +42,41 @@ const ROUTES = [
     // ============================================================
 
     // Home
-    '/' => [
+    '/^\/$/' => [
         'GET' => ['controller' => IndexController::class , 'method' => 'control']
     ],
-    '/index' => [
+    '/^\/index$/' => [
         'GET' => ['controller' => IndexController::class , 'method' => 'control']
     ],
 
     // Authentication
-    '/login' => [
+    '/^\/login$/' => [
         'GET' => ['controller' => Login::class , 'method' => 'control'],
         'POST' => ['controller' => LoginPost::class , 'method' => 'control']
     ],
-    '/register' => [
+    '/^\/register$/' => [
         'GET' => ['controller' => Register::class , 'method' => 'control'],
         'POST' => ['controller' => RegisterPost::class , 'method' => 'control']
     ],
-    '/logout' => [
+    '/^\/logout$/' => [
         'GET' => ['controller' => Logout::class , 'method' => 'control']
     ],
 
     // Password Reset
-    '/forgot-password' => [
+    '/^\/forgot-password$/' => [
         'GET' => ['controller' => ForgotPasswordController::class , 'method' => 'control'],
         'POST' => ['controller' => ForgotPasswordPostController::class , 'method' => 'control']
     ],
-    '/reset-password' => [
+    '/^\/reset-password$/' => [
         'GET' => ['controller' => ResetPasswordController::class , 'method' => 'control'],
         'POST' => ['controller' => ResetPasswordPostController::class , 'method' => 'control']
     ],
 
     // Info
-    '/legal-notice' => [
+    '/^\/legal-notice$/' => [
         'GET' => ['controller' => LegalNoticeController::class , 'method' => 'control']
     ],
-    '/site-map' => [
+    '/^\/site-map$/' => [
         'GET' => ['controller' => SiteMapController::class , 'method' => 'control']
     ],
 
@@ -85,19 +85,19 @@ const ROUTES = [
     // ============================================================
 
     // Dashboard
-    '/dashboard' => [
+    '/^\/dashboard$/' => [
         'GET' => ['controller' => DashboardController::class , 'method' => 'control']
     ],
 
     // Settings
-    '/settings' => [
+    '/^\/settings$/' => [
         'GET' => ['controller' => SettingsController::class , 'method' => 'control']
     ],
-    '/settings/edit-profile' => [
+    '/^\/settings\/edit-profile$/' => [
         'GET' => ['controller' => EditProfileController::class , 'method' => 'control'],
         'POST' => ['controller' => EditProfilePost::class , 'method' => 'control']
     ],
-    '/settings/delete' => [
+    '/^\/settings\/delete$/' => [
         'POST' => ['controller' => DeleteUserController::class , 'method' => 'control']
     ],
 
@@ -105,26 +105,26 @@ const ROUTES = [
     // SAE ROUTES
     // ============================================================
 
-    '/sae/{id}' => [
+    '/^\/sae\/\d+$/' => [
         'GET' => ['controller' => PageSaeController::class , 'method' => 'control']
     ],
-    '/create-sae' => [
+    '/^\/sae\/create$/' => [
         'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],
         'POST' => ['controller' => CreateSaePostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/groups' => [
+    '/^\/sae\/\d+\/groups$/' => [
         'GET' => ['controller' => ManageGroupsController::class , 'method' => 'control'],
     ],
-    '/sae/{id}/groups/create' => [
+    '/^\/sae\/\d+\/groups\/create$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/groups/delete' => [
+    '/^\/sae\/\d+\/groups\/delete$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/groups/add-student' => [
+    '/^\/sae\/\d+\/groups\/add-student$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/groups/remove-student' => [
+    '/^\/sae\/\d+\/groups\/remove-student$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
 
@@ -132,16 +132,16 @@ const ROUTES = [
     // TODO LIST ROUTES
     // ============================================================
 
-    '/sae/{id}/to-do' => [
+    '/^\/sae\/\d+\/to-do$/' => [
         'GET' => ['controller' => ToDoListController::class , 'method' => 'control'],
     ],
-    '/sae/{id}/to-do/add' => [
+    '/^\/sae\/\d+\/to-do\/add$/' => [
         'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
     ],
-    '/sae/{id}/to-do/delete/{id}' => [
+    '/^\/sae\/\d+\/to-do\/delete\/\d+$/' => [
         'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
     ],
-    '/sae/{id}/to-do/update/{id}' => [
+    '/^\/sae\/\d+\/to-do\/update\/\d+$/' => [
         'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
     ],
 ];
