@@ -211,7 +211,7 @@ class DashboardView extends AbstractView
 
         $html .= '<div class="sae-actions">';
         $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
-        if ($user->isProfessor()){
+        if ($user->isProfessor()) {
             $html .= '<a href=/sae/' . intval($sae->getSaeSubjectId()) . '/delete " >Supprimer la SAE</a>';
         }
         $html .= '</div></div></article>';
