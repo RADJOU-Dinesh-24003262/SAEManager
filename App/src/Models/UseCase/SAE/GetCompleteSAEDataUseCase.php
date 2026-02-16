@@ -4,9 +4,14 @@ namespace Models\UseCase\SAE;
 
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Models\Entity\SAE\SAESubject;
+use Models\Entity\User\Client;
+use Models\Entity\User\Student;
 use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
 use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
+use Models\UseCase\User\InterfaceDB\ProfessorInterface;
+use Models\UseCase\User\InterfaceDB\ClientInterface;
 use Models\Entity\User\Professor;
 use Models\Entity\User\User;
 
@@ -44,20 +49,47 @@ class GetCompleteSAEDataUseCase
     private ParticipatedInInterface $participatedInInterface;
 
     /**
+     * The student interface.
+     * @var StudentInterface
+     */
+    private StudentInterface $studentInterface;
+
+    /**
+     * The professor interface.
+     * @var ProfessorInterface
+     */
+    private ProfessorInterface $professorInterface;
+
+    /**
+     * The client interface.
+     * @var ClientInterface
+     */
+    private ClientInterface $clientInterface;
+
+    /**
      * Constructor.
      *
      * @param SAESubjectInterface     $subjectInterface        The SAE subject interface.
      * @param SAEGroupInterface       $groupInterface          The SAE group interface.
      * @param ParticipatedInInterface $participatedInInterface The participated in interface.
+     * @param StudentInterface        $studentInterface        The student interface.
+     * @param ProfessorInterface      $professorInterface      The professor interface.
+     * @param ClientInterface         $clientInterface         The client interface.
      */
     public function __construct(
         SAESubjectInterface $subjectInterface,
         SAEGroupInterface $groupInterface,
-        ParticipatedInInterface $participatedInInterface
+        ParticipatedInInterface $participatedInInterface,
+        StudentInterface $studentInterface,
+        ProfessorInterface $professorInterface,
+        ClientInterface $clientInterface
     ) {
         $this->subjectInterface = $subjectInterface;
         $this->groupInterface = $groupInterface;
         $this->participatedInInterface = $participatedInInterface;
+        $this->studentInterface = $studentInterface;
+        $this->professorInterface = $professorInterface;
+        $this->clientInterface = $clientInterface;
     }
 
     /**
@@ -111,6 +143,20 @@ class GetCompleteSAEDataUseCase
      */
     public function execute(int $saeId, User $user): ?array
     {
+        // Check if the user has access to the SAE.
+        $canAccess = false;
+        if ($user instanceof Student) {
+            $canAccess = $this->studentInterface->canAccessSAE($user->getUserId(), $saeId);
+        } elseif ($user instanceof Professor) {
+            $canAccess = $this->professorInterface->canAccessSAE($user->getUserId(), $saeId);
+        } elseif ($user instanceof Client) {
+            $canAccess = $this->clientInterface->canAccessSAE($user->getUserId(), $saeId);
+        }
+
+        if (!$canAccess) {
+            return null;
+        }
+
         $subject = $this->subjectInterface->findById($saeId);
         if (!$subject) {
             return null;
@@ -131,7 +177,7 @@ class GetCompleteSAEDataUseCase
             'groups' => $groups,
             'responsible_professor' => $responsibleProf,
             'all_professors' => $allProfs,
-            'client' => $client
+            'client' => $client ? $client : []
         ];
     }
 

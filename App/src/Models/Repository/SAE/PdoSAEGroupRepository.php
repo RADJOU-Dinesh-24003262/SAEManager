@@ -48,22 +48,9 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
     /**
      * Constructor.
      */
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * Gets the singleton instance.
-     *
-     * @return PdoSAEGroupRepository
-     */
-    public static function getInstance(): PdoSAEGroupRepository
-    {
-        if (self::$instance === null) {
-            self::$instance = new PdoSAEGroupRepository();
-        }
-        return self::$instance;
     }
 
     /**
@@ -116,10 +103,10 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
      * Creates a new SAE group.
      *
      * @param SAEGroup $entity The SAE group to create.
-     * @return SAEGroup The created group with ID.
+     * @return integer|boolean The created group with ID or false on failure.
      */
     #[Override]
-    public function create(SAEGroup $entity): SAEGroup
+    public function insert(object $entity): int|bool
     {
         try {
             $this->connection->beginTransaction();
@@ -138,14 +125,12 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
             $id = intval($stmt->fetchColumn());
             $stmt->closeCursor();
 
-            $entity->setSaeGroupId($id);
-
             $this->connection->commit();
-            return $entity;
+            return $id;
         } catch (PDOException $e) {
             $this->connection->rollBack();
             error_log('Error creating SAE group: ' . $e->getMessage());
-            throw $e;
+            return false;
         }
     }
 
@@ -156,7 +141,7 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
      * @return boolean True on success.
      */
     #[Override]
-    public function update(SAEGroup $entity): bool
+    public function update(object $entity): bool
     {
         try {
             $stmt = $this->connection->prepare(
@@ -185,6 +170,17 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
     public function delete(int $id): bool
     {
         return parent::delete($id);
+    }
+
+    /**
+     * Finds all SAE groups.
+     *
+     * @return array<SAEGroup>
+     */
+    #[Override]
+    public function findAll(): array
+    {
+        return parent::findAll();
     }
 
     /**
