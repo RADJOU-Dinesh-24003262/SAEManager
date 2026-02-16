@@ -5,8 +5,14 @@ namespace Controllers\SAE;
 use Controllers\BaseController;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
-use Models\SAE\SAE;
-use Models\User\Professor;
+use Models\Entity\User\Professor;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use Override;
 use Views\SAE\ManageGroupsView;
 
@@ -33,28 +39,40 @@ class ManageGroupsController extends BaseController
     {
         $this->ensureProfessor();
 
-        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
-        if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
-            $sae_id = intval($matches[1]);
-        } else {
+        $sae_id = $this->extractSaeId();
+        if (!$sae_id) {
             header('Location: /dashboard');
             exit;
         }
 
         try {
-            $sae = SAE::getInstance();
+            $subjectRepo = new PdoSAESubjectRepository();
+            $groupRepo = new PdoSAEGroupRepository();
+            $participatedInRepo = new PdoParticipatedInRepository();
+            $studentRepo = new PdoStudentRepository();
+            $professorRepo = new PdoProfessorRepository();
+            $clientRepo = new PdoClientRepository();
 
-            if (!$this->user->canManageSAE($sae_id)) {
-                throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
+            $useCase = new GetCompleteSAEDataUseCase(
+                $subjectRepo,
+                $groupRepo,
+                $participatedInRepo,
+                $studentRepo,
+                $professorRepo,
+                $clientRepo
+            );
+
+            $saeData = $useCase->execute($sae_id, $this->user);
+
+            if (!$saeData) {
+                throw new ExceptionAccessDenied("Accès refusé ou SAE introuvable.");
             }
 
-            $saeData = $sae->getCompleteSAEData($sae_id, $this->user);
-            $availableStudents = $sae->getAvailableStudents($this->user, $sae_id);
+            $this->verifyOwnership($saeData);
 
-            $profsAvailable = [];
-            if ($this->user instanceof Professor) {
-                $profsAvailable = $this->user->getAllProfessors();
-            }
+            // Prepare data for view
+            $availableStudents = $this->getAvailableStudents($studentRepo, $sae_id);
+            $profsAvailable = $this->getAvailableProfessors($professorRepo);
 
             $view = new ManageGroupsView([
                 'user' => $this->user,
@@ -68,6 +86,38 @@ class ManageGroupsController extends BaseController
             header('Location: /sae/' . $sae_id);
             exit;
         }
+    }
+
+    private function extractSaeId(): ?int
+    {
+        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
+        if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
+            return intval($matches[1]);
+        }
+        return null;
+    }
+
+    private function verifyOwnership(array $saeData): void
+    {
+        $responsibleProfId = $saeData['responsible_professor']['user_id'] ?? null;
+        if ($this->user->getUserId() !== (int)$responsibleProfId) {
+             throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
+        }
+    }
+
+    private function getAvailableStudents(PdoStudentRepository $repo, int $saeId): array
+    {
+        $students = $repo->findStudentsNotInSAE($saeId);
+        return array_map(fn($s) => $s->toArray(), $students);
+    }
+
+    private function getAvailableProfessors(PdoProfessorRepository $repo): array
+    {
+        if ($this->user instanceof Professor) {
+            $profs = $repo->findAll();
+            return array_map(fn($p) => $p->toArray(), $profs);
+        }
+        return [];
     }
 
     /**

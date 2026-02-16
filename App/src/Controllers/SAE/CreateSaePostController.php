@@ -8,9 +8,11 @@ use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
 use Core\includes\exception\SAE\ExceptionInvalidData;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\SAE\SAE;
-use Models\User\Client;
-use Models\User\User;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\UseCase\SAE\CreateSAEUseCase;
+use Models\Entity\User\Client;
+use Models\Entity\User\User;
 use Override;
 use Services\FileService;
 use Validator\CreateSaeValidator;
@@ -86,11 +88,15 @@ class CreateSaePostController implements ControllerInterface
                 'client_id' => $clientId,
                 'subject_name' => $data['nameSae'],
                 'begin_date' => $data['begin_date'],
-                'end_date' => $data['date_rendu'],
+                'end_date' => $data['end_date'],
                 'file_path' => $filePath
             ];
 
-            SAE::getInstance()->createSAE($user, $saeData);
+            // Use the new CreateSAEUseCase with Interface pattern (Clean Architecture).
+            // Interface is defined in Use Cases layer, implementation in Infrastructure.
+            $subjectInterface = new PdoSAESubjectRepository();
+            $createSAEUseCase = new CreateSAEUseCase($subjectInterface);
+            $createSAEUseCase->execute($user, $saeData);
 
             SessionService::setFlash('success', 'SAE créée avec succès !');
             header('Location: /dashboard');
@@ -103,7 +109,10 @@ class CreateSaePostController implements ControllerInterface
             $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
         }
-        $clients = Client::getAllClients();
+
+        $clientInterface = new PdoClientRepository();
+        $clients = $clientInterface->findAll();
+
         $view = new CreateSaeView(['clients' => $clients]);
         $view->render();
     }
