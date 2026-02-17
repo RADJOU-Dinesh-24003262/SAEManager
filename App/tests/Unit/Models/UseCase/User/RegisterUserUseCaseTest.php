@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(RegisterUserUseCase::class)]
+#[CoversClass(User::class)]
+#[CoversClass(Student::class)]
+#[CoversClass(ExceptionEmailAlreadyExists::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
     private UserInterface|MockObject $userRepository;

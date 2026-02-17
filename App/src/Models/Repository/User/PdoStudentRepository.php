@@ -2,10 +2,10 @@
 
 namespace Models\Repository\User;
 
+use Core\includes\Database;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\StudentInterface;
-use Override;
 use PDO;
 use PDOException;
 
@@ -21,17 +21,29 @@ use PDOException;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @extends PdoUserRepository
  */
-class PdoStudentRepository extends PdoUserRepository implements StudentInterface
+class PdoStudentRepository implements StudentInterface
 {
+    /**
+     * The User repository for base user operations.
+     *
+     * @var PdoUserRepository
+     */
+    private PdoUserRepository $userRepository;
+
+    /**
+     * The PDO connection instance
+     * @var PDO
+     */
+    protected PDO $connection;
+
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->entityClass = Student::class;
+        $this->userRepository = new PdoUserRepository();
+        $this->connection = Database::getInstance();
     }
 
     /**
@@ -40,28 +52,31 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      * @param integer $id The student ID.
      * @return Student|null The student entity or null if not found.
      */
-    #[Override]
+    /**
+     * Finds a student by ID.
+     *
+     * @param integer $id The student ID.
+     * @return Student|null The student entity or null if not found.
+     */
     public function findById(int $id): ?Student
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT * FROM users
-                 JOIN students ON users.user_id = students.student_id
-                 WHERE users.user_id = :id'
+                'SELECT u.*, s.* 
+                 FROM users u
+                 JOIN students s ON u.user_id = s.student_id
+                 WHERE u.user_id = :id'
             );
             $stmt->execute(['id' => $id]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
 
-            if (!$data) {
-                return null;
-            }
-
-            return new Student($data);
+            return $data ? new Student($data) : null;
         } catch (PDOException $e) {
+            error_log("Error in findById (Student): " . $e->getMessage());
             return null;
         }
     }
+
 
     /**
      * Finds a student by email.
@@ -71,31 +86,27 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      */
     public function findByEmail(string $email): ?Student
     {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM users
-                 JOIN students ON users.user_id = students.student_id
-                 WHERE users.email = LOWER(:email)'
-            );
-            $stmt->execute(['email' => $email]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
-
-            if (!$data) {
-                return null;
-            }
-
-            return new Student($data);
-        } catch (PDOException $e) {
-            error_log("Error in PdoStudentRepository::findByEmail: " . $e->getMessage());
-            return null;
-        }
+        return $this->userRepository->findByEmail($email);
     }
 
-    #[Override]
-    public function create($student): Student|bool
+    /**
+     * Inserts a student into the database.
+     *
+     * @param object $student The student object to insert.
+     * @return integer|boolean The id of the inserted student or false on failure.
+     */
+    public function insert(object $student): int|bool
     {
-        $userId = parent::createUser($student);
+
+        if (!$student instanceof Student) {
+            return false;
+        }
+
+        $userId = $this->userRepository->insert($student);
+        if (!$userId) {
+            return false;
+        }
+
         $this->connection->beginTransaction();
 
         try {
@@ -115,9 +126,8 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
             $stmt->closeCursor();
 
             $this->connection->commit();
-            $student = $this->findById($userId);
 
-            return $student;
+            return $userId;
         } catch (PDOException $e) {
             $this->connection->rollBack();
             error_log('Error creating student: ' . $e->getMessage());
@@ -131,7 +141,6 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      * @param string $td The TD group.
      * @return array<Student> Array of student entities.
      */
-    #[Override]
     public function findByTdGroup(string $td): array
     {
         try {
@@ -158,7 +167,6 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      * @param string $tp The TP group.
      * @return array<Student> Array of student entities.
      */
-    #[Override]
     public function findByTpGroup(string $tp): array
     {
         try {
@@ -186,7 +194,6 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      * @param integer $saeId     The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[Override]
     public function canAccessSAE(int $studentId, int $saeId): bool
     {
         try {
@@ -210,7 +217,6 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
      * @param integer $todoId    The to-do ID.
      * @return boolean True if modifiable, false otherwise.
      */
-    #[Override]
     public function canModifyTodo(int $studentId, int $todoId): bool
     {
         try {
@@ -224,6 +230,118 @@ class PdoStudentRepository extends PdoUserRepository implements StudentInterface
         } catch (PDOException $e) {
             error_log('Error in canModifyTodo (Student): ' . $e->getMessage());
             return false;
+        }
+    }
+    /**
+     * Updates an existing student.
+     *
+     * @param User $student The student entity to update.
+     * @return boolean True on success, false on failure.
+     */
+    public function update(object $student): bool
+    {
+        if (!$student instanceof Student) {
+            return false;
+        }
+
+        if (!$this->userRepository->update($student)) {
+            return false;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'UPDATE students 
+                 SET td = :td, 
+                     tp = :tp, 
+                     amu_id = :amu_id,
+                     major = :major,
+                     year = :year
+                 WHERE student_id = :id'
+            );
+
+            return $stmt->execute([
+                'td' => $student->getTd(),
+                'tp' => $student->getTp(),
+                'amu_id' => $student->getAmuId(),
+                'major' => $student->getMajor(),
+                'year' => $student->getYear(),
+                'id' => $student->getUserId()
+            ]);
+        } catch (PDOException $e) {
+            error_log('Error updating student: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a student exists by email.
+     *
+     * @param string $email The email to check.
+     * @return boolean True if exists, false otherwise.
+     */
+    public function existsByEmail(string $email): bool
+    {
+        return $this->userRepository->existsByEmail($email);
+    }
+
+    /**
+     * Updates a student's password.
+     *
+     * @param integer $userId       The user ID.
+     * @param string  $passwordHash The new hashed password.
+     * @return boolean True on success, false on failure.
+     */
+    public function updatePassword(int $userId, string $passwordHash): bool
+    {
+        return $this->userRepository->updatePassword($userId, $passwordHash);
+    }
+
+    public function delete(int $id): bool
+    {
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare("DELETE FROM students WHERE student_id = :id");
+            $stmt->execute(['id' => $id]);
+
+            if (!$this->userRepository->delete($id)) {
+                throw new PDOException("Failed to delete user");
+            }
+
+            $this->connection->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            return false;
+        }
+    }
+    /**
+     * Finds students who are not participating in a specific SAE.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return array<Student> Array of students not in the SAE.
+     */
+    public function findStudentsNotInSAE(int $saeId): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT u.*, s.* 
+                 FROM students s
+                 JOIN users u ON s.student_id = u.user_id
+                 WHERE s.student_id NOT IN (
+                     SELECT pi.student_id
+                     FROM participated_in pi
+                     JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                     WHERE sg.sae_subject_id = :sae_id
+                 )
+                 ORDER BY u.last_name, u.first_name'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn($data) => new Student($data), $results);
+        } catch (PDOException $e) {
+            error_log("Error in findStudentsNotInSAE: " . $e->getMessage());
+            return [];
         }
     }
 }

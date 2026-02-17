@@ -28,6 +28,15 @@ use ReflectionClass;
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(LoginUseCase::class)]
 #[CoversClass(ResetPasswordUseCase::class)]
+#[CoversClass(PdoClientRepository::class)]
+#[CoversClass(PdoProfessorRepository::class)]
+#[CoversClass(PdoStudentRepository::class)]
+#[CoversClass(Database::class)]
+#[CoversClass(User::class)]
+#[CoversClass(Student::class)]
+#[CoversClass(Professor::class)]
+#[CoversClass(Client::class)]
+
 class UserWorkflowIntegrationTest extends TestCase
 {
     private PdoUserRepository $userRepository;
@@ -64,7 +73,7 @@ class UserWorkflowIntegrationTest extends TestCase
             'françois.müller@etu.univ-amu.fr'
         ];
 
-        $this->userRepository = new PdoClientRepository();
+        $this->userRepository = new PdoUserRepository();
 
         foreach ($emails as $email) {
             if ($this->userRepository->existsByEmail($email)) {
@@ -97,10 +106,13 @@ class UserWorkflowIntegrationTest extends TestCase
             'major' => 'A'
         ];
 
-        $this->userRepository = new PdoStudentRepository();
+        $studentRepository = new PdoStudentRepository();
+        $clientRepository = new PdoClientRepository();
+        $professorRepository = new PdoProfessorRepository();
+        $userRepository = new PdoUserRepository();
 
 
-        $registerUseCase = new RegisterUserUseCase($this->userRepository);
+        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
         $student = $registerUseCase->execute($registrationData);
 
         $this->assertInstanceOf(Student::class, $student);
@@ -114,7 +126,7 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertTrue(password_verify('SecurePassword123', $passwordHash));
 
         // Étape 2: Connexion via LoginUseCase
-        $loginUseCase = new LoginUseCase($this->userRepository);
+        $loginUseCase = new LoginUseCase($userRepository);
         $loggedInStudent = $loginUseCase->execute('jean.dupont@etu.univ-amu.fr', 'SecurePassword123');
 
 
@@ -138,10 +150,13 @@ class UserWorkflowIntegrationTest extends TestCase
     public function completePasswordResetWorkflow(): void
     {
 
-        $this->userRepository = new PdoStudentRepository();
+        $studentRepository = new PdoStudentRepository();
+        $clientRepository = new PdoClientRepository();
+        $professorRepository = new PdoProfessorRepository();
+        $userRepository = new PdoUserRepository();
 
         // Étape 1: Créer un utilisateur
-        $registerUseCase = new RegisterUserUseCase($this->userRepository);
+        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
         $student = $registerUseCase->execute([
             'user_type' => 'student',
             'first_name' => 'Marie',
@@ -158,11 +173,11 @@ class UserWorkflowIntegrationTest extends TestCase
 
         // Étape 2: Réinitialiser le mot de passe via ResetPasswordUseCase
         $newPassword = 'NewSecurePassword456';
-        $resetPasswordUseCase = new ResetPasswordUseCase($this->userRepository);
+        $resetPasswordUseCase = new ResetPasswordUseCase($userRepository);
         $resetPasswordUseCase->execute('marie.martin@etu.univ-amu.fr', $newPassword);
 
         // Étape 3: Vérifier que le nouveau mot de passe fonctionne
-        $loginUseCase = new LoginUseCase($this->userRepository);
+        $loginUseCase = new LoginUseCase($userRepository);
         $loggedInStudent = $loginUseCase->execute('marie.martin@etu.univ-amu.fr', $newPassword);
 
         $this->assertInstanceOf(Student::class, $loggedInStudent);

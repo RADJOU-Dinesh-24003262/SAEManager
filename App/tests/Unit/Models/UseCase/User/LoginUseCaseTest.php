@@ -12,6 +12,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(LoginUseCase::class)]
+#[CoversClass(ExceptionValidationLogin::class)]
+#[CoversClass(User::class)]
+#[CoversClass(ExceptionValidationLogin::class)]
 class LoginUseCaseTest extends TestCase
 {
     private UserInterface|MockObject $userRepository;

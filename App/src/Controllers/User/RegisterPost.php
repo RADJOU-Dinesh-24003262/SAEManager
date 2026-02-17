@@ -9,7 +9,10 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\{PdoStudentRepository, PdoProfessorRepository, PdoClientRepository};
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
 use Validator\ValidationServiceRegister;
@@ -64,9 +67,19 @@ class RegisterPost implements ControllerInterface
             $validator->validate($data);
 
             // Create the user.
-            $user = User::createFromRegistrationData($data);
+            $studentRepo = new PdoStudentRepository();
+            $professorRepo = new PdoProfessorRepository();
+            $clientRepo = new PdoClientRepository();
+            $userRepo = new PdoUserRepository();
 
-            $user->save();
+            $registerUseCase = new RegisterUserUseCase(
+                $studentRepo,
+                $professorRepo,
+                $clientRepo,
+                $userRepo
+            );
+
+            $user = $registerUseCase->execute($data);
             Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail());
 
             $view = new RegisterSuccessView($user);

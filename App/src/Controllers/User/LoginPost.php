@@ -8,7 +8,9 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\LoginUseCase;
 use Override;
 use Validator\LoginValidator;
 use Views\User\LoginView;
@@ -58,6 +60,8 @@ class LoginPost implements ControllerInterface
             exit();
         }
 
+        $data = [];
+
         try {
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
@@ -66,7 +70,12 @@ class LoginPost implements ControllerInterface
             $data['email'] = trim($data['email'] ?? '');
             Logger::log('LOGIN_ATTEMPT', "Tentative de connexion pour : {$data['email']}");
 
-            $user = User::createFromLoginData($data);
+            $userRepository = new PdoUserRepository();
+            $loginUseCase = new LoginUseCase($userRepository);
+            $user = $loginUseCase->execute($data['email'], $data['password']);
+
+
+
             SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());

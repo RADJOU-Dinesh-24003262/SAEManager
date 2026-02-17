@@ -195,6 +195,17 @@ abstract class User extends BaseModel
     // -----------------
 
     /**
+     * Sets the user's ID.
+     *
+     * @param integer $userId The user ID.
+     * @return void
+     */
+    public function setUserId(int $userId): void
+    {
+        $this->user_id = $userId;
+    }
+
+    /**
      * Sets the user's phone number.
      *
      * @param string $phone The new phone number.
@@ -263,10 +274,21 @@ abstract class User extends BaseModel
     public function getUserTypeCode(): string
     {
         return match ($this->user_type) {
-            'student' => '0',
-            'professor' => '1',
-            'client' => '2',
-            default => '0',
+                'student' => '0',
+                'professor' => '1',
+                'client' => '2',
+                default => '0',
         };
+    }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    #[Override]
+    public function getId(): ?int
+    {
+        return $this->user_id ?? null;
     }
 }

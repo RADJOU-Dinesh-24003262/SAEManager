@@ -2,7 +2,7 @@
 
 namespace Models\Repository\User;
 
-use DEPTRAC_INTERNAL\PhpParser\Node\Stmt\Use_;
+use Core\includes\Database;
 use Models\Entity\User\Client;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\ClientInterface;
@@ -22,18 +22,34 @@ use PDOException;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @extends <PdoUserRepository>
  */
-class PdoClientRepository extends PdoUserRepository implements ClientInterface
+class PdoClientRepository implements ClientInterface
 {
+    /**
+     * The User repository for base user operations.
+     *
+     * @var PdoUserRepository
+     */
+    private PdoUserRepository $userRepository;
+
+    /**
+     * The database connection.
+     *
+     * @var PDO
+     */
+    private PDO $connection;
+
+
+
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->entityClass = Client::class;
+        $this->userRepository = new PdoUserRepository();
+        $this->connection = Database::getInstance();
     }
+
 
     /**
      * Finds a client by ID.
@@ -41,11 +57,10 @@ class PdoClientRepository extends PdoUserRepository implements ClientInterface
      * @param integer $id The client ID.
      * @return Client|null The client entity or null if not found.
      */
-    #[Override]
     public function findById(int $id): ?Client
     {
-        $data = parent::findByIdUser($id);
-            return new Client($data);
+
+        return $this->userRepository->findById($id);
     }
 
     /**
@@ -56,20 +71,26 @@ class PdoClientRepository extends PdoUserRepository implements ClientInterface
      */
     public function findByEmail(string $email): ?Client
     {
-        $data = parent::findByEmailUser($email);
-            return new Client($data);
+        return $this->userRepository->findByEmail($email);
     }
 
     /**
-     * Creates a new client in the database.
+     * Inserts a new client into the database.
      *
-     * @param User $client The client entity to create.
-     * @return Client|boolean The created client entity or false on failure.
+     * @param object $client The client entity to create.
+     * @return integer|boolean The id of created user or false on failure.
      */
-    #[Override]
-    public function create(User $client): Client|bool
+    public function insert(object $client): int|bool
     {
-        $userId = parent::createUser($client);
+        if (!$client instanceof Client) {
+            return false;
+        }
+
+        $userId = $this->userRepository->insert($client);
+        if (!$userId) {
+            return false;
+        }
+
         $this->connection->beginTransaction();
 
         try {
@@ -85,7 +106,7 @@ class PdoClientRepository extends PdoUserRepository implements ClientInterface
 
             $this->connection->commit();
 
-            return $this->findById($userId);
+            return $userId;
         } catch (PDOException $e) {
             $this->connection->rollBack();
             error_log('Error creating client: ' . $e->getMessage());
@@ -124,7 +145,6 @@ class PdoClientRepository extends PdoUserRepository implements ClientInterface
      * @param integer $saeId    The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[Override]
     public function canAccessSAE(int $clientId, int $saeId): bool
     {
         try {
@@ -136,6 +156,81 @@ class PdoClientRepository extends PdoUserRepository implements ClientInterface
             return $stmt->fetchColumn() > 0;
         } catch (PDOException $e) {
             error_log('Error in canAccessSAE (Client): ' . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    /**
+     * Updates an existing client.
+     *
+     * @param User $client The client entity to update.
+     * @return boolean True on success, false on failure.
+     */
+    public function update(object $client): bool
+    {
+        if (!$client instanceof Client) {
+            return false;
+        }
+
+        if (!$this->userRepository->update($client)) {
+            return false;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'UPDATE clients 
+                 SET organisation = :organisation
+                 WHERE client_id = :id'
+            );
+
+            return $stmt->execute([
+                'organisation' => $client->getOrganisation(),
+                'id' => $client->getUserId()
+            ]);
+        } catch (PDOException $e) {
+            error_log('Error updating client: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a client exists by email.
+     *
+     * @param string $email The email to check.
+     * @return boolean True if exists, false otherwise.
+     */
+    public function existsByEmail(string $email): bool
+    {
+        return $this->userRepository->existsByEmail($email);
+    }
+
+    /**
+     * Updates a client's password.
+     *
+     * @param integer $userId       The user ID.
+     * @param string  $passwordHash The new hashed password.
+     * @return boolean True on success, false on failure.
+     */
+    public function updatePassword(int $userId, string $passwordHash): bool
+    {
+        return $this->userRepository->updatePassword($userId, $passwordHash);
+    }
+
+
+    public function delete(int $id): bool
+    {
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare("DELETE FROM clients WHERE client_id = :id");
+            $stmt->execute(['id' => $id]);
+
+            $this->userRepository->delete($id);
+
+            $this->connection->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
             return false;
         }
     }

@@ -4,7 +4,9 @@ namespace Controllers\Settings;
 
 use Core\Controllers\ControllerInterface;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\UpdateProfileUseCase;
 use Override;
 use PDOException;
 use Validator\EditProfileValidator;
@@ -51,10 +53,11 @@ class EditProfilePost implements ControllerInterface
 
         $data = $validator->escape($_POST);
         $validator->validate($data);
-        $email = $user->getEmail();
-        User::modifyField('phone', $data['phone'], $email);
 
-        $user->fetchData($email);
+        $userRepository = new PdoUserRepository();
+        $updateProfileUseCase = new UpdateProfileUseCase($userRepository);
+        $user = $updateProfileUseCase->execute($user->getUserId(), $data);
+
 
         SessionService::set('USER', serialize($user));
 
