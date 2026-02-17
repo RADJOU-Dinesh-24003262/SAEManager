@@ -4,12 +4,15 @@ namespace Services\Auth;
 
 use Core\Utilis\EmailService;
 use Core\Utilis\Logger;
-use Models\SAE\Repository\SAESubjectRepository;
-use Models\SAE\Repository\SAEGroupRepository;
-use Models\SAE\Repository\ParticipatedInRepository;
-use Models\User\Student;
+use Models\Entity\SAE\Repository\SAESubjectRepository;
+use Models\Entity\SAE\Repository\SAEGroupRepository;
+use Models\Entity\SAE\Repository\ParticipatedInRepository;
+use Models\Entity\User\Student;
 use DateTime;
-use Models\SAE\SAESubject;
+use Models\Entity\SAE\SAESubject;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
 
 /**
  * Service responsible for sending reminder emails for SAE Manager.
@@ -37,30 +40,27 @@ class LastDateMailer
         $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
         Logger::log('MAIL_LAST_DATE', "Focus date for reminder: $dateEndFocus");
 
-        $saeSubjectRepo = SAESubjectRepository::getInstance();
+        $saeSubjectRepo = new PdoSAESubjectRepository();
         $saeSubjects = $saeSubjectRepo->findByEndDate($dateEndFocus);
         Logger::log('MAIL_LAST_DATE', 'Found ' . count($saeSubjects) . ' subjects ending on focus date.');
 
-        $saeGroupRepo = SAEGroupRepository::getInstance();
-        $participatedInRepo = ParticipatedInRepository::getInstance();
+        $saeGroupRepo = new PdoSAEGroupRepository();
+        $participatedInRepo = new PdoParticipatedInRepository();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
 
             if ($saeId === null) {
-                Logger::log('MAIL_LAST_DATE', 'Skipping subject with null ID.', null, 'WARNING');
                 continue;
             }
 
             Logger::log('MAIL_LAST_DATE', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
-            $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
+            $studentsGroup = $saeGroupRepo->findById($saeId);
 
             if (empty($studentsGroup)) {
                 Logger::log('MAIL_LAST_DATE', "No groups found for SAE ID: $saeId");
                 continue;
             }
-
-            Logger::log('MAIL_LAST_DATE', 'Found ' . count($studentsGroup) . " groups for SAE ID: $saeId");
 
             foreach ($studentsGroup as $studentGroup) {
                 $groupId = $studentGroup->getSaeGroupId();

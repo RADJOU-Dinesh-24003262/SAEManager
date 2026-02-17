@@ -5,6 +5,7 @@ namespace Tests\Integration\Models\SAE;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
+use Models\Repository\User\PdoUserRepository;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -45,6 +46,12 @@ use ReflectionClass;
 #[CoversClass(PdoSAESubjectRepository::class)]
 #[CoversClass(SAESubject::class)]
 #[CoversClass(PdoSAEGroupRepository::class)]
+#[CoversClass(PdoParticipatedInRepository::class)]
+#[CoversClass(PdoClientRepository::class)]
+#[CoversClass(PdoProfessorRepository::class)]
+#[CoversClass(PdoStudentRepository::class)]
+#[CoversClass(PdoUserRepository::class)]
+
 class SAEServiceIntegrationTest extends TestCase
 {
     private ?Professor $prof;
@@ -82,7 +89,8 @@ class SAEServiceIntegrationTest extends TestCase
         ]);
         $prof->setPassword('password');
         $userRepository = new PdoProfessorRepository();
-        $this->prof = $userRepository->create($prof);
+        $createdUserId = $userRepository->insert($prof);
+        $this->prof = $userRepository->findById($createdUserId);
 
         // Create a Student
         $student = new Student([
@@ -97,7 +105,8 @@ class SAEServiceIntegrationTest extends TestCase
         ]);
         $student->setPassword('password');
         $userRepository = new PdoStudentRepository();
-        $this->student = $userRepository->create($student);
+        $createdUserId = $userRepository->insert($student);
+        $this->student = $userRepository->findById($createdUserId);
 
         // Create a Client
         $client = new Client([
@@ -109,7 +118,8 @@ class SAEServiceIntegrationTest extends TestCase
         ]);
         $client->setPassword('password');
         $userRepository = new PdoClientRepository();
-        $this->client = $userRepository->create($client);
+        $createdUserId = $userRepository->insert($client);
+        $this->client = $userRepository->findById($createdUserId);
     }
 
     private function resetSingleton(string $className): void
@@ -149,9 +159,10 @@ class SAEServiceIntegrationTest extends TestCase
     public function canCreateSAEAndGroups(): void
     {
         // Repositories
-        $saeSubjectRepo = PdoSAESubjectRepository::getInstance();
-        $saeGroupRepo = PdoSAEGroupRepository::getInstance();
-        $participatedInRepo = PdoParticipatedInRepository::getInstance();
+        $saeSubjectRepo = new PdoSAESubjectRepository();
+        $saeGroupRepo = new PdoSAEGroupRepository();
+        $participatedInRepo = new PdoParticipatedInRepository();
+        $userRepo = new PdoUserRepository();
 
         // 1. Create SAE
         $createSaeUseCase = new CreateSAEUseCase($saeSubjectRepo);
@@ -187,7 +198,14 @@ class SAEServiceIntegrationTest extends TestCase
         $this->assertTrue($assigned);
 
         // 5. Verify Complete Data
-        $getCompleteDataUseCase = new GetCompleteSAEDataUseCase($saeSubjectRepo, $saeGroupRepo, $participatedInRepo);
+        $getCompleteDataUseCase = new GetCompleteSAEDataUseCase(
+            $saeSubjectRepo,
+            $saeGroupRepo,
+            $participatedInRepo,
+            new PdoStudentRepository(),
+            new PdoProfessorRepository(),
+            new PdoClientRepository()
+        );
         $data = $getCompleteDataUseCase->execute($this->saeId, $this->prof);
 
         $this->assertNotNull($data);
