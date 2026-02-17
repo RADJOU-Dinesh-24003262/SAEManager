@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Controllers\ToDoList\ToDoListPost;
-use Models\Entity\ToDoList\ToDoList;
+use Models\Entity\ToDoItem\ToDoItem;
 
 /**
  * Integration test for ToDoListPost controller interacting with ToDoList model.
@@ -21,7 +21,7 @@ use Models\Entity\ToDoList\ToDoList;
  * @license  MIT License https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(ToDoList::class)]
+#[CoversClass(ToDoItem::class)]
 #[CoversClass(ToDoListPost::class)]
 class ToDoListPostIntegrationTest extends TestCase
 {

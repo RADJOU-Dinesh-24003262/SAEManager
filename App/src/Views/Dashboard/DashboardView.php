@@ -3,10 +3,10 @@
 namespace Views\Dashboard;
 
 use Core\Views\AbstractView;
-use Models\SAE\SAESubject;
-use Models\User\Client;
-use Models\User\Student;
-use Models\User\User;
+use Models\Entity\SAE\SAESubject;
+use Models\Entity\User\Client;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
 use Override;
 
 /**
@@ -48,8 +48,7 @@ class DashboardView extends AbstractView
     {
         $data = [
             'user'    => $data['user'],
-            'saes'    => $data['saes'],
-            'sae'     => $data['sae']
+            'saes'    => $data['saes']
         ];
 
         parent::__construct($data);
@@ -206,7 +205,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
 
         if (!empty($sae->getResponsibleProfId())) {
-            $html .= '<p><strong>Enseignant :</strong> ' . $this->data['sae'][$sae->getSaeSubjectId()] . '</p>';
+            $html .= '<p><strong>Enseignant :</strong> ' . 'Inconnu' . '</p>';
         }
 
         $html .= '<div class="sae-actions">';
