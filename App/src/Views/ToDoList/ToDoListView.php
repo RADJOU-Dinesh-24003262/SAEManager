@@ -2,9 +2,11 @@
 
 namespace Views\ToDoList;
 
+use Models\Entity\User\User;
 use Override;
 use Views\BaseSaeView;
 use Core\Utilis\SessionService;
+use Models\Entity\ToDoItem\ToDoItem;
 
 /**
  * Class ToDoListView
@@ -30,9 +32,39 @@ class ToDoListView extends BaseSaeView
 {
     private const TEMPLATE_HTML = __DIR__ . '/to-do-list.html';
 
+
+    /**
+     * @var integer The current group ID.
+     */
+    protected $currentGroupId;
+
+    /**
+     * @var array<ToDoItem> The list of tasks.
+     */
+    protected $tasks;
+
+    /**
+     * @var array The list of all groups.
+     */
+    protected $allGroups;
+
+
     // -------------------------------------------------------------------------
     // Constructor
     // -------------------------------------------------------------------------
+
+    /**
+     * @param array $data The SAE data.
+     * @param User  $user The user data.
+     */
+    public function __construct(array $data, User $user)
+    {
+        parent::__construct($data['subject'], $user);
+
+        $this->currentGroupId = $data['current_group_id'];
+        $this->tasks = $data['tasks'];
+        $this->allGroups = $data['all_groups'];
+    }
 
     /**
      * Returns the path to the HTML template file.
@@ -75,17 +107,16 @@ class ToDoListView extends BaseSaeView
      */
     private function renderTodoContent(): string
     {
-        $user = $this->data['user'];
-        $currentGroupId = $this->data['current_group_id'];
+        $currentGroupId = $this->currentGroupId;
 
         // If a group is selected (Student or Professor who selected a group).
         if ($currentGroupId) {
-            return $this->renderTaskBoard($currentGroupId, $this->data['tasks']);
+            return $this->renderTaskBoard($currentGroupId, $this->tasks);
         }
 
         // If professor and no group selected.
-        if ($user->isProfessor()) {
-            return $this->renderGroupList($this->data['all_groups']);
+        if ($this->user->isProfessor()) {
+            return $this->renderGroupList($this->allGroups);
         }
 
         return '<p>Aucun groupe assigné pour le moment.</p>';
@@ -109,7 +140,7 @@ class ToDoListView extends BaseSaeView
             foreach ($groups as $groupData) {
                 $group = $groupData['group'];
                 $groupId = $group->getSaeGroupId();
-                $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+                $saeId = $this->subject->getSaeSubjectId();
 
                 $html .= '<a href="/sae/' . $saeId . '/to-do?group_id=' . $groupId . '" class="btn btn-secondary" ';
                 $html .= 'style="padding: 20px; border: 1px solid #ccc; text-decoration: none; ';
@@ -125,8 +156,8 @@ class ToDoListView extends BaseSaeView
     /**
      * Renders the task board for a specific group.
      *
-     * @param integer           $groupId The group ID.
-     * @param array<int, mixed> $tasks   The list of tasks.
+     * @param integer              $groupId The group ID.
+     * @param array<int, ToDoItem> $tasks   The list of tasks.
      * @return string HTML content.
      */
     private function renderTaskBoard(int $groupId, array $tasks): string
@@ -134,8 +165,8 @@ class ToDoListView extends BaseSaeView
         $html = '<h2>Tableau de bord - Groupe ' . $groupId . '</h2>';
 
         // Add a "Back to groups" button for professors.
-        if ($this->data['user']->isProfessor()) {
-            $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+        if ($this->user->isProfessor()) {
+            $saeId = $this->subject->getSaeSubjectId();
             $html .= '<a href="/sae/' . $saeId . '/to-do" class="btn btn-secondary" ';
             $html .= 'style="margin-bottom: 1rem; display: inline-block;">&larr; Retour aux groupes</a>';
         }
@@ -144,7 +175,7 @@ class ToDoListView extends BaseSaeView
         $completedTasks = [];
 
         foreach ($tasks as $task) {
-            if ($task['checked']) {
+            if ($task->isChecked()) {
                 $completedTasks[] = $task;
             } else {
                 $pendingTasks[] = $task;
@@ -184,7 +215,7 @@ class ToDoListView extends BaseSaeView
         $html .= '</div>'; // End tasks-container.
 
         // Add form for students ONLY to add tasks.
-        if ($this->data['user']->isStudent()) {
+        if ($this->user->isStudent()) {
             $html .= '<div class="add-task-form">';
             $html .= '<h3>Ajouter une tâche</h3>';
             $html .= '<input type="text" id="new-task-input" placeholder="Nouvelle tâche...">';
@@ -203,33 +234,33 @@ class ToDoListView extends BaseSaeView
     /**
      * Renders a single task item.
      *
-     * @param array<string, mixed> $task Task data.
+     * @param ToDoItem $task Task data.
      * @return string HTML for the task item.
      */
-    private function renderTaskItem(array $task): string
+    private function renderTaskItem(ToDoItem $task): string
     {
-        $checked = $task['checked'] ? 'checked' : '';
-        $disabled = $this->data['user']->isProfessor() ? 'disabled' : '';
-        $isStudent = $this->data['user']->isStudent();
+        $checked = $task->isChecked() ? 'checked' : '';
+        $disabled = $this->user->isProfessor() ? 'disabled' : '';
+        $isStudent = $this->user->isStudent();
 
-        $priority = isset($task['priority']) ? (int)$task['priority'] : 2;
+        $priority = $task->getPriority();
         $priorityClass = [1 => 'priority-high', 2 => 'priority-medium', 3 => 'priority-low'][$priority]
             ?? 'priority-medium';
         $priorityLabel = [1 => 'Haute', 2 => 'Moyenne', 3 => 'Basse'][$priority] ?? 'Moyenne';
 
-        $html = '<li class="task-item ' . $priorityClass . '" data-id="' . $task['todoid'] . '" ';
+        $html = '<li class="task-item ' . $priorityClass . '" data-id="' . $task->getTodoId() . '" ';
         $html .= 'data-priority="' . $priority . '">';
         $html .= '<div class="task-content">';
         $html .= '<label>';
         $html .= '<input type="checkbox" class="task-checkbox" ' . $checked . ' ' . $disabled . '>';
-        $html .= '<span class="task-text">' . htmlspecialchars($task['tododesc']) . '</span>';
+        $html .= '<span class="task-text">' . $task->getTodoDesc() . '</span>';
         $html .= '</label>';
         $html .= '</div>';
 
         $html .= '<div class="task-actions">';
         if ($isStudent) {
             // Priority selector for students.
-            $html .= '<select class="priority-select" ' . ($task['checked'] ? 'disabled' : '') . '>';
+            $html .= '<select class="priority-select" ' . ($task->isChecked() ? 'disabled' : '') . '>';
             $html .= '<option value="1" ' . ($priority === 1 ? 'selected' : '') . '>Haute</option>';
             $html .= '<option value="2" ' . ($priority === 2 ? 'selected' : '') . '>Moyenne</option>';
             $html .= '<option value="3" ' . ($priority === 3 ? 'selected' : '') . '>Basse</option>';

@@ -3,7 +3,7 @@
 namespace Models\Repository\ToDoList;
 
 use Core\Models\Repository\BaseRepository;
-use Models\Entity\ToDoList\ToDoList;
+use Models\Entity\ToDoItem\ToDoItem;
 use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
 use Override;
 use PDO;
@@ -45,10 +45,10 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
      * Finds a task by ID.
      *
      * @param integer $id The task ID.
-     * @return ToDoList|null The task or null if not found.
+     * @return ToDoItem|null The task or null if not found.
      */
     #[Override]
-    public function findById(int $id): ?ToDoList
+    public function findById(int $id): ?ToDoItem
     {
         try {
             $stmt = $this->connection->prepare(
@@ -66,8 +66,8 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
             $data['todo_id'] = $data['todoid'];
             unset($data['todoid']);
             $data['checked'] = (bool) $data['checked'];
-            
-            return new ToDoList($data);
+
+            return new ToDoItem($data);
         } catch (PDOException $e) {
             error_log("Error in PdoToDoListRepository::findById: " . $e->getMessage());
             return null;
@@ -78,7 +78,7 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
      * Finds all tasks for a given SAE group.
      *
      * @param integer $groupId The group ID.
-     * @return array<ToDoList> The list of tasks.
+     * @return array<ToDoItem> The list of tasks.
      */
     #[Override]
     public function findByGroupId(int $groupId): array
@@ -94,7 +94,7 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
                 $data['todo_id'] = $data['todoid'];
                 unset($data['todoid']);
                 $data['checked'] = (bool) $data['checked'];
-                return new ToDoList($data);
+                return new ToDoItem($data);
             }, $results);
         } catch (PDOException $e) {
             error_log("Error in PdoToDoListRepository::findByGroupId: " . $e->getMessage());
@@ -105,22 +105,22 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
     /**
      * Creates a new task.
      *
-     * @param ToDoList $task The task entity to create.
-     * @return ToDoList|false The created task with ID or false on failure.
+     * @param ToDoItem $task The task entity to create.
+     * @return integer|boolean The ID of the created task or false on failure.
      */
     #[Override]
-    public function create(ToDoList $task): ToDoList|bool
+    public function insert(object $task): int|bool
     {
         try {
             $stmt = $this->connection->prepare(
                 'INSERT INTO sae_todolists (sae_group_id, tododesc, checked, priority) 
                  VALUES (:groupId, :desc, :checked, :priority) RETURNING todoid'
             );
-            
+
 
             $stmt->bindValue(':groupId', $task->getSaeGroupId(), PDO::PARAM_INT);
             $stmt->bindValue(':desc', $task->getTodoDesc(), PDO::PARAM_STR);
-            $stmt->bindValue(':checked', $task->isChecked(), PDO::PARAM_BOOL); 
+            $stmt->bindValue(':checked', $task->isChecked(), PDO::PARAM_BOOL);
             $stmt->bindValue(':priority', $task->getPriority(), PDO::PARAM_INT);
 
             $stmt->execute();
@@ -128,8 +128,7 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
             $stmt->closeCursor();
 
             if ($result) {
-                $task->setTodoId($result['todoid']);
-                return $task;
+                return $result['todoid'];
             }
             return false;
         } catch (PDOException $e) {
@@ -141,11 +140,11 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
     /**
      * Updates an existing task.
      *
-     * @param ToDoList $task The task entity to update.
+     * @param ToDoItem $task The task entity to update.
      * @return boolean True on success, false on failure.
      */
     #[Override]
-    public function update(ToDoList $task): bool
+    public function update(object $task): bool
     {
         try {
             $stmt = $this->connection->prepare(
