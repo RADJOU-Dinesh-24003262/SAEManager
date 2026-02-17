@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\ToDoList;
 
-use Models\Entity\ToDoList\ToDoList;
+use Models\Entity\ToDoItem\ToDoItem;
 use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
 use Exception;
 
@@ -40,24 +40,24 @@ class CreateTaskUseCase
      * @param string  $description The task description.
      * @param integer $priority    The task priority.
      *
-     * @return ToDoList The created task.
+     * @return ToDoItem The created task.
      * @throws Exception If creation fails.
      */
-    public function execute(int $groupId, string $description, int $priority): ToDoList
+    public function execute(int $groupId, string $description, int $priority): ToDoItem
     {
-        $task = new ToDoList([
+        $task = new ToDoItem([
             'sae_group_id' => $groupId,
             'tododesc' => $description,
             'priority' => $priority,
             'checked' => false
         ]);
 
-        $createdTask = $this->toDoListInterface->create($task);
-
-        if (!$createdTask) {
+        $taskId = $this->toDoListInterface->insert($task);
+        if (!$taskId) {
             throw new Exception("Impossible de créer la tâche.");
         }
 
-        return $createdTask;
+        $task->setTodoId((int)$taskId);
+        return $task;
     }
 }

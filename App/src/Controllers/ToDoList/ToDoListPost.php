@@ -2,15 +2,25 @@
 
 namespace Controllers\ToDoList;
 
-use Models\ToDoList\ToDoList;
+use Models\Entity\ToDoItem\ToDoItem;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\ToDoList\PdoToDoListRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
+use Models\UseCase\ToDoList\CreateTaskUseCase;
+use Models\UseCase\ToDoList\DeleteTaskUseCase;
+use Models\UseCase\ToDoList\UpdateTaskUseCase;
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\SAE\SAE;
-use Models\User\User;
+use Models\Entity\User\User;
 use Override;
 use Validator\ToDoListValidator;
 
@@ -34,6 +44,11 @@ use Validator\ToDoListValidator;
 class ToDoListPost extends BaseController
 {
     /**
+     * @var PdoToDoListRepository
+     */
+    private PdoToDoListRepository $repository;
+
+    /**
      * Main control method.
      * Dispatches to specific handlers based on the action.
      *
@@ -44,6 +59,8 @@ class ToDoListPost extends BaseController
     public function control(): void
     {
         $this->ensureAuthenticated();
+
+        $this->repository = new PdoToDoListRepository();
 
         header('Content-Type: application/json');
 
@@ -72,7 +89,14 @@ class ToDoListPost extends BaseController
                 $input = [];
             }
 
-            if (!$this->user->canAccessSAE($saeId)) {
+            $saeRepo = null;
+            if ($this->user->isStudent()) {
+                $saeRepo = new PdoStudentRepository();
+            } else {
+                throw new ExceptionAccessDenied("Vous n'avez pas le droit de modifier cette To-Do List.");
+            }
+
+            if (!$saeRepo->canAccessSAE($user->getUserId(), $saeId)) {
                 throw new ExceptionAccessDenied("Vous n'avez pas accès à cette SAE.");
             }
 
@@ -145,8 +169,16 @@ class ToDoListPost extends BaseController
      */
     private function determineTargetGroupId(User $user, int $saeId, array $input): int
     {
-        $saeManager = SAE::getInstance();
-        $saeData = $saeManager->getCompleteSAEData($saeId, $user);
+
+        $useCase = new GetCompleteSAEDataUseCase(
+            new PdoSAESubjectRepository(),
+            new PdoSAEGroupRepository(),
+            new PdoParticipatedInRepository(),
+            new PdoStudentRepository(),
+            new PdoProfessorRepository(),
+            new PdoClientRepository()
+        );
+        $saeData = $useCase->execute($saeId, $user);
 
         if (!$saeData) {
             throw new ExceptionAccessDenied("Accès non autorisé à cette SAE.", 403);
@@ -175,8 +207,15 @@ class ToDoListPost extends BaseController
      */
     private function checkGroupAccess(User $user, int $saeId, int $groupId): void
     {
-        $saeManager = SAE::getInstance();
-        $saeData = $saeManager->getCompleteSAEData($saeId, $user);
+        $useCase = new GetCompleteSAEDataUseCase(
+            new PdoSAESubjectRepository(),
+            new PdoSAEGroupRepository(),
+            new PdoParticipatedInRepository(),
+            new PdoStudentRepository(),
+            new PdoProfessorRepository(),
+            new PdoClientRepository()
+        );
+        $saeData = $useCase->execute($saeId, $user);
 
         $hasAccess = false;
         if (isset($saeData['groups'])) {
@@ -207,19 +246,15 @@ class ToDoListPost extends BaseController
         $description = isset($input['description']) ? trim((string)$input['description']) : '';
         $priority = isset($input['priority']) ? intval($input['priority']) : 2;
 
+        $createTaskUseCase = new CreateTaskUseCase($this->repository);
+        $task = $createTaskUseCase->execute($groupId, $description, $priority);
 
-        $newId = ToDoList::createTask($groupId, $description, $priority);
-
-        if ($newId) {
-            echo json_encode([
-                'success' => true,
-                'todo_id' => $newId,
-                'description' => $description,
-                'priority' => $priority
-            ]);
-        } else {
-            throw new Exception("Erreur lors de la création.");
-        }
+        echo json_encode([
+            'success' => true,
+            'todo_id' => $task->getTodoId(),
+            'description' => $task->getTodoDesc(),
+            'priority' => $task->getPriority()
+        ]);
     }
 
     /**
@@ -237,42 +272,33 @@ class ToDoListPost extends BaseController
             return;
         }
 
-        $success = true;
-        $updated = false;
+        $updates = [];
 
         // Update Checked Status if provided.
         if (isset($input['checked'])) {
-            $checked = (bool)$input['checked'];
-            if (!ToDoList::updateCheckedStatus($todoId, $checked)) {
-                $success = false;
-            }
-            $updated = true;
+            $updates['checked'] = (bool)$input['checked'];
         }
 
         // Update Priority if provided.
         if (isset($input['priority'])) {
             $priority = intval($input['priority']);
             if ($priority >= 1 && $priority <= 3) {
-                if (!ToDoList::updatePriority($todoId, $priority)) {
-                    $success = false;
-                }
-                $updated = true;
+                $updates['priority'] = $priority;
             } else {
                 $this->sendError("Priorité invalide (doit être entre 1 et 3).", 400);
                 return;
             }
         }
 
-        if (!$updated) {
+        if (empty($updates)) {
             $this->sendError("Aucune donnée à mettre à jour.", 400);
             return;
         }
 
-        if ($success) {
-            echo json_encode(['success' => true]);
-        } else {
-            throw new Exception("Erreur lors de la mise à jour.");
-        }
+        $updateTaskUseCase = new UpdateTaskUseCase($this->repository);
+        $updateTaskUseCase->execute($todoId, $updates);
+
+        echo json_encode(['success' => true]);
     }
 
     /**
@@ -289,11 +315,10 @@ class ToDoListPost extends BaseController
             return;
         }
 
-        if (ToDoList::deleteTask($todoId)) {
-            echo json_encode(['success' => true]);
-        } else {
-            throw new Exception("Erreur lors de la suppression.");
-        }
+        $deleteTaskUseCase = new DeleteTaskUseCase($this->repository);
+        $deleteTaskUseCase->execute($todoId);
+
+        echo json_encode(['success' => true]);
     }
 
     /**

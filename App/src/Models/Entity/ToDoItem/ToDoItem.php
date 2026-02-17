@@ -1,6 +1,6 @@
 <?php
 
-namespace Models\Entity\ToDoList;
+namespace Models\Entity\ToDoItem;
 
 use Core\Models\BaseModel;
 
@@ -17,7 +17,7 @@ use Core\Models\BaseModel;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoList extends BaseModel
+class ToDoItem extends BaseModel
 {
     /**
      * The unique identifier of the to-do item.
@@ -209,5 +209,16 @@ class ToDoList extends BaseModel
     public function setPriority(int $priority): void
     {
         $this->priority = $priority;
+    }
+
+    /**
+     * Get the ID of the entity.
+     *
+     * @return integer|null
+     */
+    #[Override]
+    public function getId(): ?int
+    {
+        return $this->todo_id ?? null;
     }
 }

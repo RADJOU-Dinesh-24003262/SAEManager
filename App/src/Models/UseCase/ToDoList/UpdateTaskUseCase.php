@@ -35,8 +35,8 @@ class UpdateTaskUseCase
     /**
      * Executes the use case.
      *
-     * @param integer  $todoId      The task ID.
-     * @param array    $updates     Associative array of updates ('checked', 'priority', 'tododesc').
+     * @param integer $todoId  The task ID.
+     * @param array   $updates Associative array of updates ('checked', 'priority', 'tododesc').
      *
      * @return void
      * @throws Exception If task not found or update fails.

@@ -2,14 +2,17 @@
 
 namespace Controllers\ToDoList;
 
-use Models\ToDoList\ToDoList;
+use Models\Entity\ToDoList\ToDoList;
+use Models\Repository\ToDoList\PdoToDoListRepository;
+use Models\UseCase\ToDoList\GetTasksUseCase;
 use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Exception;
-use Models\SAE\SAE;
 use Override;
 use Views\ToDoList\ToDoListView;
+use Models\Repository\SAE\{PdoSAESubjectRepository, PdoSAEGroupRepository, PdoParticipatedInRepository};
+use Models\Repository\User\{PdoStudentRepository, PdoProfessorRepository, PdoClientRepository};
 
 /**
  * Handles the control logic for the To-Do List page.
@@ -42,43 +45,59 @@ class ToDoListController extends BaseController
         $this->ensureAuthenticated();
 
         try {
-            $data['user'] = $this->user;
-            $data['saes'] = $this->user->getSaes();
-
             $parts = explode('/', $_SERVER['REQUEST_URI']);
             // Extract the SAE ID and remove any query parameters..
             $sae_id = intval(explode('?', $parts[2])[0]);
 
-            if (!$this->user->canAccessSAE($sae_id)) {
+            $userId = $this->user->getUserId();
+            $canAccess = false;
+
+            $saeSubjectRepo = new PdoSAESubjectRepository();
+            $saeGroupRepo = new PdoSAEGroupRepository();
+            $participatedInRepo = new PdoParticipatedInRepository();
+
+            if ($this->user->isStudent()) {
+                $studentRepo = new PdoStudentRepository();
+                $canAccess = $studentRepo->canAccessSAE($userId, $sae_id);
+            } elseif ($this->user->isProfessor()) {
+                $professorRepo = new PdoProfessorRepository();
+                $canAccess = $professorRepo->canAccessSAE($userId, $sae_id);
+            } elseif ($this->user->isClient()) {
+                $clientRepo = new PdoClientRepository();
+                $canAccess = $clientRepo->canAccessSAE($userId, $sae_id);
+            }
+
+            if (!$canAccess) {
                 throw new ExceptionAccessDenied("Vous n'avez pas accès à cette SAE.");
             }
 
-            $sae = SAE::getInstance();
-            // Fetch complete SAE data to check access and get group info.
-            $data['sae'] = $sae->getCompleteSAEData($sae_id, $this->user);
+            // Fetch basic SAE data
+            $saeSubject = $saeSubjectRepo->findById($sae_id);
+            if (!$saeSubject) {
+                 throw new Exception("SAE introuvable.");
+            }
+            $data['subject'] = $saeSubject;
+
+            // Reconstruct groups structure expected by view/logic
+            $groups = $saeGroupRepo->findBySaeSubjectId($sae_id);
+            $formattedGroups = [];
+            foreach ($groups as $group) {
+                $formattedGroups[] = ['group' => $group];
+            }
+            $data['groups'] = $formattedGroups;
+
 
             $currentGroupId = null;
             $tasks = [];
-            $allGroups = [];
+            $allGroups = $formattedGroups;
 
             if ($this->user->isStudent()) {
-                // Students see their own group's todo list.
-                if ($data['sae'] !== null && !empty($data['sae']['groups'])) {
-                    // Assuming a student is in only one group per SAE.
-                    $groupData = reset($data['sae']['groups']);
-
-                    if ($groupData !== false) {
-                        $currentGroupId = $groupData['group']->getSaeGroupId();
-                    }
-                }
+                $currentGroupId = $participatedInRepo->getStudentGroupId($userId, $sae_id);
             } elseif ($this->user->isProfessor()) {
-                // Professors see all groups they manage (or all if responsible).
-                $allGroups = $data['sae']['groups'] ?? [];
-
                 // Check if a specific group is selected via GET parameter.
                 if (isset($_GET['group_id'])) {
                     $selectedGroupId = intval($_GET['group_id']);
-                    // Verify if the professor has access to this group.
+                    // Verify if the professor has access to this group
                     foreach ($allGroups as $groupData) {
                         if ($groupData['group']->getSaeGroupId() == $selectedGroupId) {
                             $currentGroupId = $selectedGroupId;
@@ -90,7 +109,9 @@ class ToDoListController extends BaseController
 
             // Fetch tasks if a group is identified.
             if ($currentGroupId) {
-                $tasks = ToDoList::getAllTasks($currentGroupId);
+                $repository = new PdoToDoListRepository();
+                $getTasksUseCase = new GetTasksUseCase($repository);
+                $tasks = $getTasksUseCase->execute($currentGroupId);
             }
 
             $data['current_group_id'] = $currentGroupId;
@@ -98,10 +119,14 @@ class ToDoListController extends BaseController
             $data['all_groups'] = $allGroups;
 
             // Create and render the SAE page view.
-            $view = new ToDoListView($data);
+            $view = new ToDoListView($data, $this->user);
             $view->render();
             exit();
         } catch (ExceptionAccessDenied $e) {
+            SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /dashboard');
+            exit();
+        } catch (\Exception $e) { // Catch general exception for SAE not found
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /dashboard');
             exit();
