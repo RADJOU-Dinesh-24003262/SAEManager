@@ -16,6 +16,9 @@ use Models\Entity\User\Student;
 #[CoversClass(DeleteUserUseCase::class)]
 #[CoversClass(PdoUserRepository::class)]
 #[CoversClass(User::class)]
+#[CoversClass(Student::class)]
+#[CoversClass(Database::class)]
+#[CoversClass(PdoStudentRepository::class)]
 class DeleteUserUseCaseTest extends TestCase
 {
     private ?User $user;
@@ -55,9 +58,9 @@ class DeleteUserUseCaseTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $createdUser = $studentRepo->create($user);
-        $this->user = $createdUser;
-        $this->userId = $createdUser->getUserId();
+        $createdUserId = $studentRepo->insert($user);
+        $this->user = $studentRepo->findById($createdUserId);
+        $this->userId = $createdUserId;
     }
 
     protected function tearDown(): void

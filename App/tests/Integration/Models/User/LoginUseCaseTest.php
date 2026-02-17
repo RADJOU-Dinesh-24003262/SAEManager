@@ -19,6 +19,8 @@ use Models\Entity\User\Student;
 #[CoversClass(User::class)]
 #[CoversClass(PdoStudentRepository::class)]
 #[CoversClass(Student::class)]
+#[CoversClass(Database::class)]
+#[CoversClass(ExceptionValidationLogin::class)]
 class LoginUseCaseTest extends TestCase
 {
     private ?User $user;
@@ -60,13 +62,13 @@ class LoginUseCaseTest extends TestCase
         } catch (\Exception $e) {
         }
 
-        $createdUser = $studentRepo->create($user);
-        $this->user = $createdUser;
+        $createdUserId = $studentRepo->insert($user);
+        $this->user = $studentRepo->findById($createdUserId);
         // In case create returns object without properties updated (unlikely but possible)
         // Re-fetch to be sure
         // But let's trust create for now, or use getUserId()
-        if ($createdUser instanceof User) {
-             $this->userId = $createdUser->getUserId();
+        if ($this->user instanceof User) {
+             $this->userId = $this->user->getUserId();
         }
     }
 

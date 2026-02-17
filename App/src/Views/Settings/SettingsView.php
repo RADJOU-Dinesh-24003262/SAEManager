@@ -3,7 +3,7 @@
 namespace Views\Settings;
 
 use Core\Views\AbstractView;
-use Models\User\User;
+use Models\Entity\User\User;
 use Override;
 
 /**

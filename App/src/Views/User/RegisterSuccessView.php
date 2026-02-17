@@ -3,8 +3,8 @@
 namespace Views\User;
 
 use Core\Views\AbstractView;
-use Models\User\Student;
-use Models\User\User;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
 use Override;
 
 /**

@@ -9,6 +9,9 @@ use Models\Entity\User\Professor;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\UserInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
+use Models\UseCase\User\InterfaceDB\ProfessorInterface;
+use Models\UseCase\User\InterfaceDB\ClientInterface;
 
 /**
  * Use Case for user registration.
@@ -25,19 +28,46 @@ use Models\UseCase\User\InterfaceDB\UserInterface;
 class RegisterUserUseCase
 {
     /**
-     * The User repository interface.
-     *
-     * @var UserInterface<User>
+     * The Student repository interface.
+     * @var StudentInterface
+     */
+    private StudentInterface $studentInterface;
+
+    /**
+     * The Professor repository interface.
+     * @var ProfessorInterface
+     */
+    private ProfessorInterface $professorInterface;
+
+    /**
+     * The Client repository interface.
+     * @var ClientInterface
+     */
+    private ClientInterface $clientInterface;
+
+    /**
+     * The User repository interface (for common checks like email existence).
+     * @var UserInterface
      */
     private UserInterface $userInterface;
 
     /**
      * Constructor.
      *
-     * @param UserInterface<User> $userInterface The User repository.
+     * @param StudentInterface   $studentInterface   The Student repository.
+     * @param ProfessorInterface $professorInterface The Professor repository.
+     * @param ClientInterface    $clientInterface    The Client repository.
+     * @param UserInterface      $userInterface      The User repository.
      */
-    public function __construct(UserInterface $userInterface)
-    {
+    public function __construct(
+        StudentInterface $studentInterface,
+        ProfessorInterface $professorInterface,
+        ClientInterface $clientInterface,
+        UserInterface $userInterface
+    ) {
+        $this->studentInterface = $studentInterface;
+        $this->professorInterface = $professorInterface;
+        $this->clientInterface = $clientInterface;
         $this->userInterface = $userInterface;
     }
 
@@ -69,13 +99,25 @@ class RegisterUserUseCase
             throw new ExceptionEmailAlreadyExists($user->getEmail());
         }
 
-        // 5. Save the user
-        $result = $this->userInterface->create($user);
+        // 5. Save the user using the specific repository
+        $result = false;
+        if ($user instanceof Student) {
+            $result = $this->studentInterface->insert($user);
+        } elseif ($user instanceof Professor) {
+            $result = $this->professorInterface->insert($user);
+        } elseif ($user instanceof Client) {
+            $result = $this->clientInterface->insert($user);
+        }
+
         if ($result === false) {
             throw new \Exception("Failed to create user");
         }
 
-        return $result;
+        if (is_int($result)) {
+            $user->setUserId($result);
+        }
+
+        return $user;
     }
 
     /**

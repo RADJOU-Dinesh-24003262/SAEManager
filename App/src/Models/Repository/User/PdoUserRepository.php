@@ -4,7 +4,6 @@ namespace Models\Repository\User;
 
 use Core\includes\Database;
 use Core\Models\Repository\BaseRepository;
-use DEPTRAC_INTERNAL\phpDocumentor\Reflection\Types\Void_;
 use Models\Entity\User\User;
 use Models\Entity\User\Student;
 use Models\Entity\User\Professor;
@@ -28,6 +27,7 @@ use PDOException;
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  * @extends BaseRepository<User>
+ * @implements UserInterface<User>
  */
 class PdoUserRepository extends BaseRepository implements UserInterface
 {
@@ -52,13 +52,17 @@ class PdoUserRepository extends BaseRepository implements UserInterface
         return 'user_id';
     }
 
+
+
+
     /**
      * Finds a user by ID.
      *
      * @param integer $id The user ID.
      * @return User|null The user entity or null if not found.
      */
-    public function findByIdUser(int $id): ?array
+    #[Override]
+    public function findById(int $id): ?User
     {
         try {
             $stmt = $this->connection->prepare(
@@ -76,11 +80,7 @@ class PdoUserRepository extends BaseRepository implements UserInterface
                 return null;
             }
 
-            $data['user_type'] = $data['user_type'] == '0'
-                ? 'student'
-                : ($data['user_type'] == '1' ? 'professor' : '2');
-
-            return $data;
+            return $this->instantiateUser($data);
         } catch (PDOException $e) {
             error_log("Error in findById: " . $e->getMessage());
             return null;
@@ -91,9 +91,10 @@ class PdoUserRepository extends BaseRepository implements UserInterface
      * Finds a user by email.
      *
      * @param string $email The user's email.
-     * @return array|null The user entity or null if not found.
+     * @return User|null The user entity or null if not found.
      */
-    public function findByEmailUser(string $email): ?array
+    #[Override]
+    public function findByEmail(string $email): ?User
     {
         try {
             $stmt = $this->connection->prepare(
@@ -112,11 +113,7 @@ class PdoUserRepository extends BaseRepository implements UserInterface
                 return null;
             }
 
-            $data['user_type'] = $data['user_type'] == '0'
-                ? 'student'
-                : ($data['user_type'] == '1' ? 'professor' : '2');
-
-            return $data;
+            return $this->instantiateUser($data);
         } catch (PDOException $e) {
             error_log("Error in findByEmail: " . $e->getMessage());
             return null;
@@ -124,73 +121,77 @@ class PdoUserRepository extends BaseRepository implements UserInterface
     }
 
     /**
-     * Creates a new user.
+     * Instantiates the correct User subclass based on data.
      *
-     * @param User $user The user entity to create.
-     * @return integer The created user ID.
+     * @param array<string, mixed> $data The user data.
+     * @return User
      */
-    public function createUser($user): int
+    private function instantiateUser(array $data): User
     {
-        $this->connection->beginTransaction();
+        $typeMap = [
+            '0' => 'student',
+            '1' => 'professor',
+            '2' => 'client'
+        ];
+
+        if (isset($data['user_type']) && isset($typeMap[$data['user_type']])) {
+            $data['user_type'] = $typeMap[$data['user_type']];
+        }
+
+        return match ($data['user_type']) {
+            'student' => new Student($data),
+            'professor' => new Professor($data),
+            'client' => new Client($data),
+            default => throw new \RuntimeException("Unknown user type: " . ($data['user_type'] ?? 'null')),
+        };
+    }
+
+    /**
+     * Inserts base user data into the database.
+     *
+     * @param object $user The user entity.
+     * @return integer|boolean The id of the created user or false on failure.
+     */
+    #[Override]
+    public function insert(object $user): int|bool
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $query = "INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type) 
+                  VALUES (:first_name, :last_name, :email, :phone, :password, :user_type)";
 
         try {
-            // Insert into users table
-            $stmt = $this->connection->prepare(
-                'INSERT INTO users (first_name, last_name, email, phone, hashed_password, user_type)
-                 VALUES (:first_name, :last_name, LOWER(:email), :phone, :hashed_password, :user_type)'
-            );
+            $this->connection->beginTransaction();
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindValue(':first_name', $user->getFirstName());
+            $stmt->bindValue(':last_name', $user->getLastName());
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->bindValue(':phone', $user->getPhone());
+            $stmt->bindValue(':password', $user->getPasswordHash());
+            $stmt->bindValue(':user_type', $user->getUserTypeCode());
 
-            $stmt->execute([
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
-                'phone' => $user->getPhone(),
-                'hashed_password' => $user->getPasswordHash(),
-                'user_type' => $user->getUserTypeCode(),
-            ]);
-
-            // Get the inserted user ID
-            $userId = (int) $this->connection->lastInsertId();
-
+            $stmt->execute();
+            $id = (int) $this->connection->lastInsertId();
             $this->connection->commit();
-
-            return $userId;
+            return $id;
         } catch (PDOException $e) {
             $this->connection->rollBack();
-            error_log('Error creating user: ' . $e->getMessage());
-            throw $e;
+            error_log("Error in insert in users: " . $e->getMessage());
+            return false;
         }
     }
 
     /**
-     * Updates an existing user.
+     * Updates user data.
      *
-     * @param User $user The user entity to update.
-     * @return boolean True on success, false on failure.
+     * @param User $user The user entity.
+     * @return boolean True on success.
      */
-    public function update($user): bool
+    public function update(object $user): bool
     {
-        try {
-            $stmt = $this->connection->prepare(
-                'UPDATE users 
-                 SET first_name = :first_name, 
-                     last_name = :last_name, 
-                     email = LOWER(:email), 
-                     phone = :phone
-                 WHERE user_id = :user_id'
-            );
-
-            return $stmt->execute([
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail(),
-                'phone' => $user->getPhone(),
-                'user_id' => $user->getUserId(),
-            ]);
-        } catch (PDOException $e) {
-            error_log('Error updating user: ' . $e->getMessage());
-            return false;
-        }
+        return parent::update($user);
     }
 
     /**
@@ -237,81 +238,31 @@ class PdoUserRepository extends BaseRepository implements UserInterface
     }
 
     /**
-     * Hydrates a User entity from an array.
+     * Checks if a user can access a SAE.
      *
-     * @param array $data The user data.
-     * @return User|null The hydrated user entity or null if invalid type.
+     * @param integer $userId The user ID.
+     * @param integer $saeId  The SAE ID.
+     * @return boolean True if accessible, false otherwise.
      */
-    private function hydrateUser(array $data): ?User
+    public function canAccessSAE(int $userId, int $saeId): bool
     {
-        if (!isset($data['user_type'])) {
-            return null;
-        }
-
-        switch ($data['user_type']) {
-            case 'student':
-                return new Student($data);
-            case 'professor':
-                return new Professor($data);
-            case 'client':
-            case '2':
-                return new Client($data);
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * Finds a user by email.
-     *
-     * @param string $email The user's email.
-     * @return User|null The user entity or null if not found.
-     */
-    #[Override]
-    public function findByEmail(string $email): ?User
-    {
-        $data = $this->findByEmailUser($email);
-        if (!$data) {
-            return null;
-        }
-        return $this->hydrateUser($data);
-    }
-
-    /**
-     * Creates a new user (partial creation in users table).
-     *
-     * @param User $user The user entity to create.
-     * @return User|boolean The created user with ID or false on failure.
-     */
-    #[Override]
-    public function create(User $user): User|bool
-    {
-        try {
-            $id = $this->createUser($user);
-            // Assuming setUserId exists, but it might be protected/private or constructor only?
-            // User entity usually has setUserId?
-            // Let's check User.php later. For now assuming it works or partial implementation.
-            // Actually BaseRepository methods might need refactoring too.
-            // But let's verify if setUserId is available.
-            return $user;
-        } catch (PDOException $e) {
+        $user = $this->findById($userId);
+        if (!$user) {
             return false;
         }
-    }
 
-    /**
-     * Finds a user by ID.
-     *
-     * @param integer $id The user ID.
-     * @return User|null The user entity or null if not found.
-     */
-    #[Override]
-    public function findById(int $id): ?User
-    {
-        $data = $this->findByIdUser($id);
-        if (!$data) {
-            return null;
+        if ($user instanceof Student) {
+            return (new PdoStudentRepository())->canAccessSAE($userId, $saeId);
         }
-        return $this->hydrateUser($data);
+
+        if ($user instanceof Professor) {
+            return (new PdoProfessorRepository())->canAccessSAE($userId, $saeId);
+        }
+
+        if ($user instanceof Client) {
+            return (new PdoClientRepository())->canAccessSAE($userId, $saeId);
+        }
+
+        return false;
     }
 }

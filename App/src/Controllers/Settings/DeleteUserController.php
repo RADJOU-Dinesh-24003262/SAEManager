@@ -4,7 +4,9 @@ namespace Controllers\Settings;
 
 use Controllers\BaseController;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\DeleteUserUseCase;
 use Override;
 use PDOException;
 use Views\Settings\DeleteUserView;
@@ -47,13 +49,16 @@ class DeleteUserController extends BaseController
 
         try {
             $email = $this->user->getEmail();
-            User::deleteByEmail($email);
-            $view = new DeleteUserView($data);
+
+            $userRepository = new PdoUserRepository();
+            $deleteUserUseCase = new DeleteUserUseCase($userRepository);
+            $deleteUserUseCase->executeByEmail($email);
 
             // Clear session.
             session_unset();     // Unset all session variables.
             session_destroy();   // Destroy the session.
 
+            $view = new DeleteUserView($data);
             $view->render();
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());

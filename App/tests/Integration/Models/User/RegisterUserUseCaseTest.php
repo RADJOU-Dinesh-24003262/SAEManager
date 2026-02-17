@@ -27,6 +27,8 @@ use Core\includes\exception\ExceptionEmailAlreadyExists;
 #[CoversClass(Student::class)]
 #[CoversClass(Professor::class)]
 #[CoversClass(Client::class)]
+#[CoversClass(Database::class)]
+#[CoversClass(ExceptionEmailAlreadyExists::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
     private array $createdUserIds = [];
@@ -72,8 +74,12 @@ class RegisterUserUseCaseTest extends TestCase
     #[Test]
     public function canRegisterStudent(): void
     {
-        $repo = new PdoStudentRepository();
-        $useCase = new RegisterUserUseCase($repo);
+        $studentRepo = new PdoStudentRepository();
+        $professorRepo = new PdoProfessorRepository();
+        $clientRepo = new PdoClientRepository();
+        $userRepo = new PdoUserRepository();
+
+        $useCase = new RegisterUserUseCase($studentRepo, $professorRepo, $clientRepo, $userRepo);
 
         $email = 'john.student.reg@test.com';
         $this->cleanEmail($email);
@@ -99,7 +105,7 @@ class RegisterUserUseCaseTest extends TestCase
         $this->assertEquals($email, $user->getEmail());
 
         // Verify via repository
-        $fetched = $repo->findById($user->getUserId());
+        $fetched = $studentRepo->findById($user->getUserId());
         $this->assertNotNull($fetched);
         $this->assertEquals('s_reg_1', $fetched->getAmuId());
     }
@@ -107,8 +113,12 @@ class RegisterUserUseCaseTest extends TestCase
     #[Test]
     public function canRegisterProfessor(): void
     {
-        $repo = new PdoProfessorRepository();
-        $useCase = new RegisterUserUseCase($repo);
+        $studentRepo = new PdoStudentRepository();
+        $professorRepo = new PdoProfessorRepository();
+        $clientRepo = new PdoClientRepository();
+        $userRepo = new PdoUserRepository();
+
+        $useCase = new RegisterUserUseCase($studentRepo, $professorRepo, $clientRepo, $userRepo);
 
         $email = 'prof.reg@test.com';
         $this->cleanEmail($email);
@@ -130,7 +140,7 @@ class RegisterUserUseCaseTest extends TestCase
         $this->assertInstanceOf(Professor::class, $user);
 
         // Verify via repository
-        $fetched = $repo->findById($user->getUserId());
+        $fetched = $professorRepo->findById($user->getUserId());
         $this->assertNotNull($fetched);
         $this->assertEquals('p_reg_1', $fetched->getAmuId());
     }
@@ -138,8 +148,12 @@ class RegisterUserUseCaseTest extends TestCase
     #[Test]
     public function canRegisterClient(): void
     {
-        $repo = new PdoClientRepository();
-        $useCase = new RegisterUserUseCase($repo);
+        $studentRepo = new PdoStudentRepository();
+        $professorRepo = new PdoProfessorRepository();
+        $clientRepo = new PdoClientRepository();
+        $userRepo = new PdoUserRepository();
+
+        $useCase = new RegisterUserUseCase($studentRepo, $professorRepo, $clientRepo, $userRepo);
 
         $email = 'client.reg@test.com';
         $this->cleanEmail($email);
@@ -161,7 +175,7 @@ class RegisterUserUseCaseTest extends TestCase
         $this->assertInstanceOf(Client::class, $user);
 
         // Verify via repository
-        $fetched = $repo->findById($user->getUserId());
+        $fetched = $clientRepo->findById($user->getUserId());
         $this->assertNotNull($fetched);
         $this->assertEquals('Test Corp', $fetched->getOrganisation());
     }
@@ -169,8 +183,12 @@ class RegisterUserUseCaseTest extends TestCase
     #[Test]
     public function cannotRegisterDuplicateEmail(): void
     {
-        $repo = new PdoStudentRepository();
-        $useCase = new RegisterUserUseCase($repo);
+        $studentRepo = new PdoStudentRepository();
+        $professorRepo = new PdoProfessorRepository();
+        $clientRepo = new PdoClientRepository();
+        $userRepo = new PdoUserRepository();
+
+        $useCase = new RegisterUserUseCase($studentRepo, $professorRepo, $clientRepo, $userRepo);
 
         $email = 'dup.student@test.com';
         $this->cleanEmail($email);

@@ -2,7 +2,9 @@
 
 namespace Models\Repository\User;
 
+use Core\includes\Database;
 use Models\Entity\User\Professor;
+use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\ProfessorInterface;
 use Override;
 use PDO;
@@ -20,17 +22,29 @@ use PDOException;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @extends <PdoUserRepository>
  */
-class PdoProfessorRepository extends PdoUserRepository implements ProfessorInterface
+class PdoProfessorRepository implements ProfessorInterface
 {
+    /**
+     * The User repository for base user operations.
+     *
+     * @var PdoUserRepository
+     */
+    private PdoUserRepository $userRepository;
+
+    /**
+     * The PDO connection instance
+     * @var PDO
+     */
+    protected PDO $connection;
+
     /**
      * Constructor.
      */
     public function __construct()
     {
-        parent::__construct();
-        $this->entityClass = Professor::class;
+        $this->userRepository = new PdoUserRepository();
+        $this->connection = Database::getInstance();
     }
 
     /**
@@ -39,11 +53,29 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
      * @param integer $id The professor ID.
      * @return Professor|null The professor entity or null if not found.
      */
-    #[Override]
+    /**
+     * Finds a professor by ID.
+     *
+     * @param integer $id The professor ID.
+     * @return Professor|null The professor entity or null if not found.
+     */
     public function findById(int $id): ?Professor
     {
-        $data = parent::findByIdUser($id);
-        return new Professor($data);
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT u.*, p.* 
+                 FROM users u
+                 JOIN professors p ON u.user_id = p.professor_id
+                 WHERE u.user_id = :id'
+            );
+            $stmt->execute(['id' => $id]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $data ? new Professor($data) : null;
+        } catch (PDOException $e) {
+            error_log("Error in findById (Professor): " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -54,14 +86,26 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
      */
     public function findByEmail(string $email): ?Professor
     {
-        $data = parent::findByEmailUser($email);
-            return new Professor($data);
+        return $this->userRepository->findByEmail($email);
     }
 
-    #[Override]
-    public function create($professor): Professor|bool
+    /**
+     * Inserts a new professor into the database.
+     *
+     * @param object $user The professor entity to create.
+     * @return integer|boolean The id of the created user or false on failure.
+     */
+    public function insert(object $user): int|bool
     {
-        $userId = parent::createUser($professor);
+        if (!$user instanceof Professor) {
+            return false;
+        }
+
+        $userId = $this->userRepository->insert($user);
+        if (!$userId) {
+            return false;
+        }
+
         $this->connection->beginTransaction();
 
         try {
@@ -70,14 +114,14 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
                  VALUES (:professor_id, :amu_id)'
             );
             $stmt->bindValue(':professor_id', $userId, PDO::PARAM_INT);
-            $stmt->bindValue(':amu_id', $professor->getAmuId(), PDO::PARAM_STR);
+            $stmt->bindValue(':amu_id', $user->getAmuId(), PDO::PARAM_STR);
 
             $stmt->execute();
             $stmt->closeCursor();
 
             $this->connection->commit();
 
-            return $this->findById($userId);
+            return $userId;
         } catch (PDOException $e) {
             $this->connection->rollBack();
             error_log('Error creating professor: ' . $e->getMessage());
@@ -116,7 +160,6 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
      * @param integer $saeId       The SAE ID.
      * @return boolean True if responsible, false otherwise.
      */
-    #[Override]
     public function isResponsibleProfessor(int $professorId, int $saeId): bool
     {
         try {
@@ -139,7 +182,6 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
      * @param integer $saeId       The SAE ID.
      * @return boolean True if accessible, false otherwise.
      */
-    #[Override]
     public function canAccessSAE(int $professorId, int $saeId): bool
     {
         try {
@@ -154,6 +196,84 @@ class PdoProfessorRepository extends PdoUserRepository implements ProfessorInter
             return $stmt->fetchColumn() > 0;
         } catch (PDOException $e) {
             error_log('Error in canAccessSAE (Professor): ' . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    /**
+     * Updates an existing professor.
+     *
+     * @param User $professor The professor entity to update.
+     * @return boolean True on success, false on failure.
+     */
+    public function update(object $professor): bool
+    {
+        if (!$professor instanceof Professor) {
+            return false;
+        }
+
+        if (!$this->userRepository->update($professor)) {
+            return false;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'UPDATE professors 
+                 SET amu_id = :amu_id 
+                 WHERE professor_id = :id'
+            );
+
+            return $stmt->execute([
+                'amu_id' => $professor->getAmuId(),
+                'id' => $professor->getUserId()
+            ]);
+        } catch (PDOException $e) {
+            error_log('Error updating professor: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Checks if a professor exists by email.
+     *
+     * @param string $email The email to check.
+     * @return boolean True if exists, false otherwise.
+     */
+    public function existsByEmail(string $email): bool
+    {
+        return $this->userRepository->existsByEmail($email);
+    }
+
+    /**
+     * Updates a professor's password.
+     *
+     * @param integer $userId       The user ID.
+     * @param string  $passwordHash The new hashed password.
+     * @return boolean True on success, false on failure.
+     */
+    public function updatePassword(int $userId, string $passwordHash): bool
+    {
+        return $this->userRepository->updatePassword($userId, $passwordHash);
+    }
+
+
+    public function delete(int $id): bool
+    {
+        // Start transaction
+        $this->connection->beginTransaction();
+        try {
+            // Delete specific professor data first
+            $stmt = $this->connection->prepare("DELETE FROM professors WHERE professor_id = :id");
+            $stmt->execute(['id' => $id]);
+
+            // Then delete base user data
+            $this->userRepository->delete($id);
+
+            $this->connection->commit();
+            return true;
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
             return false;
         }
     }
