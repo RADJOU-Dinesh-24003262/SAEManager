@@ -82,7 +82,8 @@ class ModifySaeController extends BaseController
             $view = new ModifySaeView([
                 'sae' => $saeData,
                 'clients' => $clients,
-                'user' => $this->user
+                'user' => $this->user,
+                'csrf_token' => SessionService::generateCsrfToken()
             ]);
 
             $view->render();

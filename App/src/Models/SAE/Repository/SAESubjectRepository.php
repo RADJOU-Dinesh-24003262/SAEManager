@@ -446,7 +446,10 @@ class SAESubjectRepository extends BaseRepository
             );
             $stmt->execute(['sae_id' => $saeId]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $data['file_path'];
+            if (!$data) {
+                throw new PDOException('SAE subject not found');
+            }
+            return $data['file_path'] ?? '';
         } catch (PDOException $e) {
             error_log('Erreur récuperation chemin relatif du fichier' . $e->getMessage());
             return '';

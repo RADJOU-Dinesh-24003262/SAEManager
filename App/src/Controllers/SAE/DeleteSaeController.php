@@ -7,6 +7,7 @@ use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
 use Models\SAE\SAE;
 use Override;
+use Services\FileService;
 
 /**
  * This class controls the deletion of an SAE via GET request.
@@ -60,6 +61,8 @@ class DeleteSaeController extends BaseController
         }
 
         try {
+            $path = SAE::getInstance()->getFileName($user, $saeId);
+            FileService::removeFile($path);
             SAE::getInstance()->deleteSAE($user, $saeId);
 
             header('Location: /dashboard');
