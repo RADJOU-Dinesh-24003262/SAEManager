@@ -2,6 +2,7 @@
 
 namespace Views\SAE;
 
+use Services\FileService;
 use Views\BaseSaeView;
 use Override;
 
@@ -66,7 +67,8 @@ class ModifySaeView extends BaseSaeView
                 'description' => $this->getDescription(),
                 'clients_options' => $this->generateClientsOptions(),
                 'error_messages' => $this->renderErrorMessages($this->data['errors'] ?? []),
-                'success_message' => $this->renderSuccessMessage()
+                'success_message' => $this->renderSuccessMessage(),
+                'csrf_token' => htmlspecialchars($this->data['csrf_token'] ?? '')
             ]
         );
     }
@@ -80,17 +82,9 @@ class ModifySaeView extends BaseSaeView
      */
     private function getDescription(): string
     {
-        $filePath = $this->data['sae']['subject']->getFilePath();
+        $filePath = $this->data['sae']['subject']->getFilePath() ?? '';
 
-        if ($filePath) {
-            $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
-            if (file_exists($fullPath)) {
-                $content = file_get_contents($fullPath);
-                return $content !== false ? $content : '';
-            }
-        }
-
-        return '';
+        return FileService::getSaeDescription($filePath);
     }
 
     /**

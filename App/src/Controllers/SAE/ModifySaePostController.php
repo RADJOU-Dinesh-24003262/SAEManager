@@ -58,6 +58,13 @@ class ModifySaePostController extends BaseController
             exit;
         }
 
+        // CSRF Protection.
+        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
+            header('Location: /sae/' . $saeId . '/modify');
+            exit();
+        }
+
         if (!$this->user->canManageSAE($saeId)) {
             SessionService::setFlash('errors', ["Vous n'avez pas la permission de modifier cette SAE."]);
             header('Location: /sae/' . $saeId);
@@ -71,29 +78,36 @@ class ModifySaePostController extends BaseController
             $data = $validator->escape($data);
 
             $user = $this->user;
-            $validator->validate($data);
 
+            // Extract description before escape to preserve Markdown.
+            $description = $data['description'];
 
-            $oldFileName = SAE::getInstance()->getFileName($user, $saeId);
+            // Basic sanitization.
+            $data = $validator->escape($data);
 
+            // Restore description for length check and saving.
+            $data['description'] = $description;
 
+            $fileName = SAE::getInstance()->getFileName($user, $saeId);
 
-            $fileName = FileService::saveSaeDescription($data['description'], $data['nameSae']);
 
             $updateData = [
                 'subject_name' => $data['nameSae'],
                 'client_id' => !empty($data['client_id']) ? intval($data['client_id']) : null,
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['date_rendu'],
-                'file_path' => $fileName
+                'file_path' => $fileName, // Keep old file by default
             ];
 
 
-            if (!empty($oldFileName)) {
+            if (!empty($fileName)) {
                 try {
-                    FileService::removeFile($oldFileName);
+                    FileService::updateSaeDescription($fileName, $description);
                 } catch (\Exception $e) {
-                    error_log("Erreur suppression fichier: " . $e->getMessage());
+                    error_log("Erreur mise à jour fichier: " . $e->getMessage());
+                    SessionService::setFlash('errors', ['description' => 'Erreur lors de la mise à jour du fichier de description.']);
+                    header('Location: /sae/' . $saeId . '/modify');
+                    exit();
                 }
             }
 
@@ -103,15 +117,17 @@ class ModifySaePostController extends BaseController
             exit();
         } catch (ExeptionValidationSAECreation $e) {
             SessionService::setFlash('errors', $e->getMessage());
+            header('Location: /sae/' . $saeId . '/modify');
+            exit();
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
             header('Location: /sae/' . $saeId . '/modify');
-            exit;
+            exit();
         } catch (\Exception $e) {
             SessionService::setFlash('errors', ['Erreur : ' . $e->getMessage()]);
             header('Location: /sae/' . $saeId . '/modify');
-            exit;
+            exit();
         }
     }
 
