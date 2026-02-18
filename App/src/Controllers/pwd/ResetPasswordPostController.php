@@ -8,7 +8,9 @@ use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\ResetPasswordUseCase;
 use Override;
 use Services\TokenService;
 use Validator\ResetPasswordValidator;
@@ -51,7 +53,9 @@ class ResetPasswordPostController implements ControllerInterface
             $password = $data['pwdnew'] ?? '';
 
             // 3. Update the password.
-            User::updatePasswordByEmail($tokenData['email'], $password);
+            $userRepository = new PdoUserRepository();
+            $resetPasswordUseCase = new ResetPasswordUseCase($userRepository);
+            $resetPasswordUseCase->execute($tokenData['email'], $password);
 
             // Mark the token as used.
             TokenService::markTokenAsUsed($token);

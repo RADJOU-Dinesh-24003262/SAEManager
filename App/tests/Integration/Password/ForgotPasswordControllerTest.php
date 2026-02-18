@@ -13,7 +13,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPasswor
 use Core\Utilis\SessionService;
 use Core\Views\AbstractView;
 use Exception;
-use Models\User\User;
+use Models\Entity\User\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
