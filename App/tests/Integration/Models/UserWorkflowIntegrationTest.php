@@ -124,6 +124,13 @@ class UserWorkflowIntegrationTest extends TestCase
         $this->assertNotEmpty($passwordHash);
         $this->assertNotEquals('SecurePassword123', $passwordHash);
         $this->assertTrue(password_verify('SecurePassword123', $passwordHash));
+        $this->assertEquals($student->getLastName(), 'Dupont');
+        $this->assertEquals($student->getFirstName(), 'Jean');
+        $this->assertEquals($student->getAmuId(), 'dupont123');
+        $this->assertEquals($student->getYear(), 2);
+        $this->assertEquals($student->getTd(), 'TD1');
+        $this->assertEquals($student->getTp(), 'TPA');
+        $this->assertEquals($student->getMajor(), 'A');
 
         // Étape 2: Connexion via LoginUseCase
         $loginUseCase = new LoginUseCase($userRepository);
@@ -206,7 +213,6 @@ class UserWorkflowIntegrationTest extends TestCase
                     'td' => 'TD1',
                     'tp' => 'TPA'
                 ],
-                'pdo' => new PdoStudentRepository()
             ],
             [
                 'type' => 'professor',
@@ -220,7 +226,6 @@ class UserWorkflowIntegrationTest extends TestCase
                     'password' => 'Pass123',
                     'amu_id' => 'prof'
                 ],
-                'pdo' => new PdoProfessorRepository()
             ],
             [
                 'type' => 'client',
@@ -234,15 +239,19 @@ class UserWorkflowIntegrationTest extends TestCase
                     'password' => 'Pass123',
                     'organisation' => 'Company'
                 ],
-                'pdo' => new PdoClientRepository()
             ]
         ];
 
 
 
         foreach ($userTypes as $userType) {
-            $this->userRepository = $userType['pdo'];
-            $registerUseCase = new RegisterUserUseCase($this->userRepository);
+            $studentRepository = new PdoStudentRepository();
+            $clientRepository = new PdoClientRepository();
+            $professorRepository = new PdoProfessorRepository();
+            $userRepository = new PdoUserRepository();
+
+
+            $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
             $user = $registerUseCase->execute($userType['data']);
 
 
@@ -273,8 +282,12 @@ class UserWorkflowIntegrationTest extends TestCase
         ];
 
         // Créer l'utilisateur
-        $this->userRepository = new PdoStudentRepository();
-        $registerUseCase = new RegisterUserUseCase($this->userRepository);
+        $studentRepository = new PdoStudentRepository();
+        $clientRepository = new PdoClientRepository();
+        $professorRepository = new PdoProfessorRepository();
+        $userRepository = new PdoUserRepository();
+
+        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
         $student = $registerUseCase->execute($originalData);
 
         $this->assertInstanceOf(Student::class, $student);
@@ -311,8 +324,12 @@ class UserWorkflowIntegrationTest extends TestCase
             'tp' => 'TPA'
         ];
 
-        $this->userRepository = new PdoStudentRepository();
-        $registerUseCase = new RegisterUserUseCase($this->userRepository);
+        $studentrepository = new PdoStudentRepository();
+        $clientrepository = new PdoClientRepository();
+        $professorrepository = new PdoProfessorRepository();
+        $userrepository = new PdoUserRepository();
+
+        $registerUseCase = new RegisterUserUseCase($studentrepository, $professorrepository, $clientrepository, $userrepository);
         $student = $registerUseCase->execute($data);
 
         $this->assertEquals('François', $student->getFirstName());

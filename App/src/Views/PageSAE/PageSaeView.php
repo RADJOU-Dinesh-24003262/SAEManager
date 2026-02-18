@@ -8,6 +8,7 @@ use Override;
 use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 use Parsedown;
+use Models\Entity\SAE\SAEGroup;
 
 use function Parsica\Parsica\append;
 
@@ -42,34 +43,60 @@ class PageSaeView extends BaseSaeView
     private const TEMPLATE_HTML = __DIR__ . '/pageSae.html';
 
     /**
-     * @var array{user_id: int, student_id: int}
+     * @var array<int, array{
+     *      group: SAEGroup,
+     *      students: array<int, array{
+     *          student_id: string,
+     *          amu_id: string,
+     *          year: string,
+     *          td: string,
+     *          tp: string,
+     *          first_name: string,
+     *          last_name: string,
+     *          email: string
+     *      }>
+     * }>
      */
     protected array $groups;
     /**
-     * @var array{user_id: int, first_name: string, last_name: string, email: string, phone: string, amu_id: string}
+     * @var array<string, mixed>
      */
     protected array $responsibleProf;
+
     /**
-     * @var array{user_id: int, first_name: string, last_name: string,
-     * email: string, phone: string, amu_id: string, is_responsible: int}
-    */
+     * @var array<int, array<string, mixed>>
+     */
     protected array $allProfessors;
 
     /**
-     * @var array{user_id: int, first_name: string, last_name:
-     * string, email: string, phone: string, organisation: string}
+     * @var array<string, mixed>|null
      */
-    protected array $client;
+    protected ?array $client;
 
+    /**
+     * Constructs a new PageSaeView instance.
+     * @param SAESubject                $subject              The SAE subject details.
+     * @param array<int, mixed>         $groups               The groups associated with the SAE.
+     * @param array<string, mixed>|null $responsibleProfessor The responsible professor's details,
+     *                                                        or null if none.
+     * @param array<int, mixed>|null    $allProfessors        All professors associated with the SAE.
+     * @param array<mixed>|null         $client               The client's details, or null if none.
+     * @param User                      $user                 The current user.
+    */
+    public function __construct(
+        SAESubject $subject,
+        array $groups,
+        ?array $responsibleProfessor,
+        ?array $allProfessors,
+        ?array $client,
+        User $user
+    ) {
+        parent::__construct($subject, $user);
 
-    public function __construct(array $sae, User $user)
-    {
-        parent::__construct($sae['subject'], $user);
-
-        $this->groups = $sae['groups'];
-        $this->responsibleProf = $sae['responsible_professor'];
-        $this->allProfessors = $sae['all_professors'];
-        $this->client = $sae['client'];
+        $this->groups = $groups;
+        $this->responsibleProf = $responsibleProfessor ?? [];
+        $this->allProfessors = $allProfessors ?? [];
+        $this->client = $client;
     }
 
     /**
@@ -84,12 +111,13 @@ class PageSaeView extends BaseSaeView
     }
 
     /**
-     * Returns an empty array. Implemented from the parent class.
-     *
-     * This method returns an empty array.
-     *
-     * @return array<string, string> An empty array
-     */
+    * Returns an associative array of keys and values to be used in the HTML template.
+    *
+    * This method retrieves error messages and success messages from the session
+    * and prepares them for rendering in the template.
+    *
+    * @return array<string, int|string|null> An associative array.
+    */
     #[Override]
     protected function templateKeys(): array
     {
@@ -98,10 +126,10 @@ class PageSaeView extends BaseSaeView
         return array_merge(
             $this->getCommonSaeTemplateKeys(),
             [
-                'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
-                'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
-                'SAE_CONTENT' => $this->getDescriptionSae(),
-                'SAE_CONTACTS' => $this->getContactsSae()
+            'ERROR_MESSAGES' => $this->renderErrorMessages($errors),
+            'SUCCESS_MESSAGE' => $this->renderSuccessMessage(),
+            'SAE_CONTENT' => $this->getDescriptionSae(),
+            'SAE_CONTACTS' => $this->getContactsSae()
             ]
         );
     }
@@ -260,18 +288,18 @@ class PageSaeView extends BaseSaeView
 
         $client = $this->client ?: 'Pas de client';
 
-        $profResLastName = isset($profRes['last_name']) ? $profRes['last_name'] : 'Inconnu';
-        $profResFirstName = isset($profRes['first_name']) ? $profRes['first_name'] : 'Inconnu';
+        $profResLastName = $profRes['last_name'] ?? 'Inconnu';
+        $profResFirstName = $profRes['first_name'] ?? 'Inconnu';
 
         $profLastName = [];
         $profFirstName = [];
         foreach ($profs as $prof) {
-            $profLastName[] = isset($prof['last_name']) ? $prof['last_name'] : 'Inconnu';
-            $profFirstName[] = isset($prof['first_name']) ? $prof['first_name'] : 'Inconnu';
+            $profLastName[] = $prof['last_name'];
+            $profFirstName[] = $prof['first_name'];
         }
 
-        $clientLastName = isset($client['last_name']) ? $client['last_name'] : 'Inconnu';
-        $clientFirstName = isset($client['first_name']) ? $client['first_name'] : 'Inconnu';
+        $clientLastName = $client['last_name'] ?? 'Inconnu';
+        $clientFirstName = $client['first_name'] ?? 'Inconnu';
 
         $content .= '<p> Le Responsable de la ressource est ' . $profResLastName . ' ' . $profResFirstName . '.</p>';
 
@@ -293,7 +321,7 @@ class PageSaeView extends BaseSaeView
             $content .= '.</p>';
         }
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
-            '.</p></article>';
+        '.</p></article>';
 
         $filePath = $this->subject->getFilePath();
 

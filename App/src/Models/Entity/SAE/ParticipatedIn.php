@@ -82,6 +82,6 @@ class ParticipatedIn extends BaseModel
     #[Override]
     public function getId(): ?int
     {
-        return null; // Composite key or no single ID
+        return null; // Composite key or no single ID.
     }
 }

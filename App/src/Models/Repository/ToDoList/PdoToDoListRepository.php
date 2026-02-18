@@ -18,6 +18,7 @@ use PDOException;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @extends    BaseRepository<ToDoItem>
  */
 class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
 {
@@ -28,7 +29,7 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
     {
         parent::__construct();
         $this->table = 'sae_todolists';
-        $this->entityClass = ToDoList::class;
+        $this->entityClass = ToDoItem::class;
     }
 
     /**
@@ -105,12 +106,16 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
     /**
      * Creates a new task.
      *
-     * @param ToDoItem $task The task entity to create.
+     * @param object $task The task entity to create.
      * @return integer|boolean The ID of the created task or false on failure.
      */
     #[Override]
     public function insert(object $task): int|bool
     {
+        if (!$task instanceof ToDoItem) {
+            return false;
+        }
+
         try {
             $stmt = $this->connection->prepare(
                 'INSERT INTO sae_todolists (sae_group_id, tododesc, checked, priority) 
@@ -140,12 +145,16 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
     /**
      * Updates an existing task.
      *
-     * @param ToDoItem $task The task entity to update.
+     * @param object $task The task entity to update.
      * @return boolean True on success, false on failure.
      */
     #[Override]
     public function update(object $task): bool
     {
+        if (!$task instanceof ToDoItem) {
+            return false;
+        }
+
         try {
             $stmt = $this->connection->prepare(
                 'UPDATE sae_todolists 

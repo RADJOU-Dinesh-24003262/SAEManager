@@ -86,7 +86,29 @@ class PdoStudentRepository implements StudentInterface
      */
     public function findByEmail(string $email): ?Student
     {
-        return $this->userRepository->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
+
+        if (!$user) {
+            return null;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT s.td, s.tp, s.amu_id, s.major, s.year FROM students s WHERE student_id = :id'
+            );
+            $stmt->execute(['id' => $user->getUserId()]);
+            $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($studentData) {
+                // Merge user data with student-specific data.
+                $data = array_merge($user->toArray(), $studentData);
+                return new Student($data);
+            }
+            return null; // User found but not a student.
+        } catch (PDOException $e) {
+            error_log("Error in PdoStudentRepository::findByEmail (student data): " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -111,9 +133,10 @@ class PdoStudentRepository implements StudentInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'INSERT INTO students (student_id, td, tp, amu_id, major, year) 
-                 VALUES (:student_id, :td, :tp, :amu_id, :major, :year)'
+                'INSERT INTO students (student_id, td, tp, amu_id, major, year)
+                             VALUES (:student_id, :td, :tp, :amu_id, :major, :year)'
             );
+
             $stmt->execute([
                 'student_id' => $userId,
                 'td' => $student->getTd(),
@@ -126,6 +149,7 @@ class PdoStudentRepository implements StudentInterface
             $stmt->closeCursor();
 
             $this->connection->commit();
+
 
             return $userId;
         } catch (PDOException $e) {
@@ -145,11 +169,11 @@ class PdoStudentRepository implements StudentInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT u.*, s.* 
-                 FROM users u
-                 JOIN students s ON u.user_id = s.student_id
-                 WHERE s.td = :td
-                 ORDER BY u.last_name, u.first_name'
+                'SELECT u.*, s.*
+                             FROM users u
+                             JOIN students s ON u.user_id = s.student_id
+                             WHERE s.td = :td
+                             ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['td' => $td]);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -171,11 +195,11 @@ class PdoStudentRepository implements StudentInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT u.*, s.* 
-                 FROM users u
-                 JOIN students s ON u.user_id = s.student_id
-                 WHERE s.tp = :tp
-                 ORDER BY u.last_name, u.first_name'
+                'SELECT u.*, s.*
+                             FROM users u
+                             JOIN students s ON u.user_id = s.student_id
+                             WHERE s.tp = :tp
+                             ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['tp' => $tp]);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -199,8 +223,8 @@ class PdoStudentRepository implements StudentInterface
         try {
             $stmt = $this->connection->prepare(
                 'SELECT COUNT(*) FROM participated_in pi
-                 JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
-                 WHERE pi.student_id = :student_id AND sg.sae_subject_id = :sae_id'
+                             JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                             WHERE pi.student_id = :student_id AND sg.sae_subject_id = :sae_id'
             );
             $stmt->execute(['student_id' => $studentId, 'sae_id' => $saeId]);
             return $stmt->fetchColumn() > 0;
@@ -222,8 +246,8 @@ class PdoStudentRepository implements StudentInterface
         try {
             $stmt = $this->connection->prepare(
                 'SELECT COUNT(*) FROM sae_todolists todo
-                 JOIN participated_in pi ON todo.sae_group_id = pi.sae_group_id
-                 WHERE todo.todoid = :todo_id AND pi.student_id = :student_id'
+                             JOIN participated_in pi ON todo.sae_group_id = pi.sae_group_id
+                             WHERE todo.todoid = :todo_id AND pi.student_id = :student_id'
             );
             $stmt->execute(['todo_id' => $todoId, 'student_id' => $studentId]);
             return $stmt->fetchColumn() > 0;
@@ -232,10 +256,11 @@ class PdoStudentRepository implements StudentInterface
             return false;
         }
     }
+
     /**
      * Updates an existing student.
      *
-     * @param User $student The student entity to update.
+     * @param object $student The student entity to update.
      * @return boolean True on success, false on failure.
      */
     public function update(object $student): bool
@@ -250,13 +275,13 @@ class PdoStudentRepository implements StudentInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE students 
-                 SET td = :td, 
-                     tp = :tp, 
-                     amu_id = :amu_id,
-                     major = :major,
-                     year = :year
-                 WHERE student_id = :id'
+                'UPDATE students
+                             SET td = :td,
+                                 tp = :tp,
+                                 amu_id = :amu_id,
+                                 major = :major,
+                                 year = :year
+                             WHERE student_id = :id'
             );
 
             return $stmt->execute([
@@ -296,6 +321,13 @@ class PdoStudentRepository implements StudentInterface
         return $this->userRepository->updatePassword($userId, $passwordHash);
     }
 
+    /**
+     * Deletes a student from the database.
+     *
+     * @param integer $id The ID of the student to delete.
+     * @return boolean True on success, false on failure.
+     * @throws PDOException If the deletion fails.
+     */
     public function delete(int $id): bool
     {
         $this->connection->beginTransaction();
@@ -314,6 +346,7 @@ class PdoStudentRepository implements StudentInterface
             return false;
         }
     }
+
     /**
      * Finds students who are not participating in a specific SAE.
      *
@@ -324,16 +357,16 @@ class PdoStudentRepository implements StudentInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT u.*, s.* 
-                 FROM students s
-                 JOIN users u ON s.student_id = u.user_id
-                 WHERE s.student_id NOT IN (
-                     SELECT pi.student_id
-                     FROM participated_in pi
-                     JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
-                     WHERE sg.sae_subject_id = :sae_id
-                 )
-                 ORDER BY u.last_name, u.first_name'
+                'SELECT u.*, s.*
+                             FROM students s
+                             JOIN users u ON s.student_id = u.user_id
+                             WHERE s.student_id NOT IN (
+                                 SELECT pi.student_id
+                                 FROM participated_in pi
+                                 JOIN sae_groups sg ON pi.sae_group_id = sg.sae_group_id
+                                 WHERE sg.sae_subject_id = :sae_id
+                             )
+                             ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute(['sae_id' => $saeId]);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);

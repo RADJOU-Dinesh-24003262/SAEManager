@@ -56,6 +56,7 @@ class CreateSAEGroupUseCase
      * @return SAEGroup The created group.
      * @throws ExceptionAccessDenied      If user doesn't have permission.
      * @throws ExceptionResourceNotFound  If SAE not found.
+     * @throws \RuntimeException If the group creation fails.
      */
     public function execute(User $creator, int $saeId, ?int $professorId = null): SAEGroup
     {

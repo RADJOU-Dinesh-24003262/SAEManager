@@ -59,18 +59,18 @@ interface SAESubjectInterface
     public function findByClientId(int $clientId): array;
 
     /**
-     * Creates a new SAE subject.
+     * Inserts a new SAE subject into the database.
      *
-     * @param SAESubject $entity The SAE subject to create.
-     * @return integer|boolean The id of the created SAE subject or false on failure.
+     * @param object $entity The SAE subject entity to insert.
+     * @return integer|boolean The ID of the inserted SAE subject, or false on failure.
      */
     public function insert(object $entity): int|bool;
 
     /**
-     * Updates a SAE subject.
+     * Updates an existing SAE subject in the database.
      *
-     * @param SAESubject $entity The SAE subject to update.
-     * @return boolean True on success.
+     * @param object $entity The SAE subject entity to update.
+     * @return boolean True on success, false on failure.
      */
     public function update(object $entity): bool;
 

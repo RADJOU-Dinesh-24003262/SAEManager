@@ -86,7 +86,29 @@ class PdoProfessorRepository implements ProfessorInterface
      */
     public function findByEmail(string $email): ?Professor
     {
-        return $this->userRepository->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
+
+        if (!$user) {
+            return null;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT p.amu_id FROM professors p WHERE professor_id = :id'
+            );
+            $stmt->execute(['id' => $user->getUserId()]);
+            $professorData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($professorData) {
+                // Merge user data with professor-specific data.
+                $data = array_merge($user->toArray(), $professorData);
+                return new Professor($data);
+            }
+            return null; // User found but not a professor.
+        } catch (PDOException $e) {
+            error_log("Error in PdoProfessorRepository::findByEmail (professor data): " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -110,8 +132,8 @@ class PdoProfessorRepository implements ProfessorInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'INSERT INTO professors (professor_id, amu_id) 
-                 VALUES (:professor_id, :amu_id)'
+                'INSERT INTO professors (professor_id, amu_id)
+                             VALUES (:professor_id, :amu_id)'
             );
             $stmt->bindValue(':professor_id', $userId, PDO::PARAM_INT);
             $stmt->bindValue(':amu_id', $user->getAmuId(), PDO::PARAM_STR);
@@ -138,10 +160,10 @@ class PdoProfessorRepository implements ProfessorInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT u.*, p.* 
-                 FROM users u
-                 JOIN professors p ON u.user_id = p.professor_id
-                 ORDER BY u.last_name, u.first_name'
+                'SELECT u.*, p.*
+                             FROM users u
+                             JOIN professors p ON u.user_id = p.professor_id
+                             ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -164,8 +186,8 @@ class PdoProfessorRepository implements ProfessorInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT COUNT(*) FROM sae_subjects 
-                 WHERE sae_subject_id = :sae_id AND responsible_prof_id = :prof_id'
+                'SELECT COUNT(*) FROM sae_subjects
+                             WHERE sae_subject_id = :sae_id AND responsible_prof_id = :prof_id'
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $professorId]);
             return $stmt->fetchColumn() > 0;
@@ -186,11 +208,13 @@ class PdoProfessorRepository implements ProfessorInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT COUNT(DISTINCT s.sae_subject_id) 
-                 FROM sae_subjects s
-                 LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
-                 WHERE s.sae_subject_id = :sae_id
-                 AND (s.responsible_prof_id = :prof_id OR sg.professor_id = :prof_id OR s.client_id = :prof_id)'
+                'SELECT COUNT(DISTINCT s.sae_subject_id)
+                             FROM sae_subjects s
+                             LEFT JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
+                             WHERE s.sae_subject_id = :sae_id
+                             AND (s.responsible_prof_id = :prof_id 
+                                  OR sg.professor_id = :prof_id 
+                                  OR s.client_id = :prof_id)'
             );
             $stmt->execute(['sae_id' => $saeId, 'prof_id' => $professorId]);
             return $stmt->fetchColumn() > 0;
@@ -204,7 +228,7 @@ class PdoProfessorRepository implements ProfessorInterface
     /**
      * Updates an existing professor.
      *
-     * @param User $professor The professor entity to update.
+     * @param object $professor The professor entity to update.
      * @return boolean True on success, false on failure.
      */
     public function update(object $professor): bool
@@ -219,9 +243,9 @@ class PdoProfessorRepository implements ProfessorInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE professors 
-                 SET amu_id = :amu_id 
-                 WHERE professor_id = :id'
+                'UPDATE professors
+                             SET amu_id = :amu_id
+                             WHERE professor_id = :id'
             );
 
             return $stmt->execute([
@@ -257,17 +281,22 @@ class PdoProfessorRepository implements ProfessorInterface
         return $this->userRepository->updatePassword($userId, $passwordHash);
     }
 
-
+    /**
+     * Deletes a professor from the database.
+     *
+     * @param integer $id The ID of the professor to delete.
+     * @return boolean True on success, false on failure.
+     */
     public function delete(int $id): bool
     {
-        // Start transaction
+        // Start transaction.
         $this->connection->beginTransaction();
         try {
-            // Delete specific professor data first
+            // Delete specific professor data first.
             $stmt = $this->connection->prepare("DELETE FROM professors WHERE professor_id = :id");
             $stmt->execute(['id' => $id]);
 
-            // Then delete base user data
+            // Then delete base user data.
             $this->userRepository->delete($id);
 
             $this->connection->commit();

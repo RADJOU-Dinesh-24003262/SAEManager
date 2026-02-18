@@ -4,6 +4,7 @@ namespace Models\UseCase\User;
 
 use Exception;
 use Models\UseCase\User\InterfaceDB\UserInterface;
+use Models\Entity\User\User;
 
 /**
  * Use Case for deleting a user.

@@ -137,7 +137,7 @@ class GetCompleteSAEDataUseCase
      *     email: string,
      *     phone: string|null,
      *     organisation: string
-     *   }|null
+     *   }|array{}|null
      * }|null Complete SAE data or null if no access.
      * @throws ExceptionFetchDataBD If data cannot be fetched.
      */

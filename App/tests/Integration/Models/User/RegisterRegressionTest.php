@@ -8,8 +8,10 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoClientRepository;
 use Models\UseCase\User\RegisterUserUseCase;
+use Models\Entity\User\User;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Core\includes\Database;
 use ReflectionClass;
 
@@ -20,8 +22,9 @@ use ReflectionClass;
 #[CoversClass(PdoProfessorRepository::class)]
 #[CoversClass(PdoClientRepository::class)]
 #[CoversClass(Database::class)]
+#[CoversClass(User::class)]
 class RegisterRegressionTest extends TestCase
-{   
+{
     private array $createdUserIds = [];
 
     protected function setUp(): void

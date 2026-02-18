@@ -3,6 +3,7 @@
 namespace Models\Entity\ToDoItem;
 
 use Core\Models\BaseModel;
+use Override;
 
 /**
  * Represents a to-do list item in the system.
@@ -59,7 +60,7 @@ class ToDoItem extends BaseModel
      *
      * @var integer
      */
-    protected int $priority = 2; // Default: Medium
+    protected int $priority = 2; // Default: Medium.
 
     /**
      * Constructor.
@@ -68,7 +69,6 @@ class ToDoItem extends BaseModel
      */
     public function __construct(array $data = [])
     {
-        // Handle groupId -> sae_group_id mapping
         if (isset($data['groupId']) && !isset($data['sae_group_id'])) {
             $data['sae_group_id'] = $data['groupId'];
             unset($data['groupId']);

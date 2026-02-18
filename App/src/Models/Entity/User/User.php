@@ -3,6 +3,7 @@
 namespace Models\Entity\User;
 
 use Core\Models\BaseModel;
+use Override;
 
 /**
  * Abstract base class for all user types.
@@ -271,13 +272,18 @@ abstract class User extends BaseModel
     {
         return $this->user_type == 'client';
     }
+    /**
+     * Gets the user type code.
+     *
+     * @return string The user type code (0 for student, 1 for professor, 2 for client).
+     */
     public function getUserTypeCode(): string
     {
         return match ($this->user_type) {
-                'student' => '0',
-                'professor' => '1',
-                'client' => '2',
-                default => '0',
+            'student' => '0',
+            'professor' => '1',
+            'client' => '2',
+            default => '0',
         };
     }
 

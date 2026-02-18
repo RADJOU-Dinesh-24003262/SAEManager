@@ -23,14 +23,14 @@ class UpdatePasswordUseCase
     /**
      * The User repository interface.
      *
-     * @var UserInterface<User>
+     * @var UserInterface
      */
     private UserInterface $userInterface;
 
     /**
      * Constructor.
      *
-     * @param UserInterface<User> $userInterface The User repository.
+     * @param UserInterface $userInterface The User repository.
      */
     public function __construct(UserInterface $userInterface)
     {

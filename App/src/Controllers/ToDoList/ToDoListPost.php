@@ -67,8 +67,8 @@ class ToDoListPost extends BaseController
         // Verify CSRF Token.
         $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
         if (!SessionService::verifyCsrfToken($csrfToken)) {
-             Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO action.', $this->user->getUserId(), 'WARNING');
-             $this->sendError("Session invalide (CSRF).", 403);
+            Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO action.', $this->user->getUserId(), 'WARNING');
+            $this->sendError("Session invalide (CSRF).", 403);
         }
 
         $user = $this->user;

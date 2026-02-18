@@ -27,7 +27,6 @@ use PDOException;
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  * @extends BaseRepository<User>
- * @implements UserInterface<User>
  */
 class PdoUserRepository extends BaseRepository implements UserInterface
 {
@@ -66,7 +65,11 @@ class PdoUserRepository extends BaseRepository implements UserInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT * FROM users
+                'SELECT users.*, 
+                        students.td, students.tp, students.major, students.year,
+                        clients.organisation,
+                        COALESCE(students.amu_id, professors.amu_id) as amu_id
+                FROM users
                 LEFT JOIN students ON users.user_id = students.student_id
                 LEFT JOIN professors ON users.user_id = professors.professor_id
                 LEFT JOIN clients ON users.user_id = clients.client_id
@@ -98,7 +101,10 @@ class PdoUserRepository extends BaseRepository implements UserInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT *
+                'SELECT users.*, 
+                        students.td, students.tp, students.major, students.year,
+                        clients.organisation,
+                        COALESCE(students.amu_id, professors.amu_id) as amu_id
                 FROM users
                 LEFT JOIN students ON users.user_id = students.student_id
                 LEFT JOIN professors ON users.user_id = professors.professor_id
@@ -125,6 +131,7 @@ class PdoUserRepository extends BaseRepository implements UserInterface
      *
      * @param array<string, mixed> $data The user data.
      * @return User
+     * @throws \RuntimeException If the user type is unknown.
      */
     private function instantiateUser(array $data): User
     {
@@ -186,12 +193,47 @@ class PdoUserRepository extends BaseRepository implements UserInterface
     /**
      * Updates user data.
      *
-     * @param User $user The user entity.
+     * @param object $user The user entity.
      * @return boolean True on success.
+     * @throws PDOException If a database error occurs.
      */
     public function update(object $user): bool
     {
-        return parent::update($user);
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $query = "UPDATE users SET 
+                  first_name = :first_name, 
+                  last_name = :last_name, 
+                  email = :email, 
+                  phone = :phone, 
+                  hashed_password = :password,
+                  user_type = :user_type
+                  WHERE user_id = :user_id";
+
+        try {
+            $this->connection->beginTransaction();
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindValue(':first_name', $user->getFirstName());
+            $stmt->bindValue(':last_name', $user->getLastName());
+            $stmt->bindValue(':email', $user->getEmail());
+            $stmt->bindValue(':phone', $user->getPhone());
+            $stmt->bindValue(':password', $user->getPasswordHash());
+            $stmt->bindValue(':user_type', $user->getUserTypeCode());
+            $stmt->bindValue(':user_id', $user->getUserId());
+
+            $result = $stmt->execute();
+            $this->connection->commit();
+
+            return $result;
+        } catch (PDOException $e) {
+            if ($this->connection->inTransaction()) {
+                $this->connection->rollBack();
+            }
+            error_log("Error in update in users: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**

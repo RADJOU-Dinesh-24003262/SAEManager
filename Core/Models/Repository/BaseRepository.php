@@ -3,6 +3,7 @@
 namespace Core\Models\Repository;
 
 use Core\includes\Database;
+use Core\Models\BaseModel;
 use Exception;
 use Override;
 use PDO;
@@ -23,7 +24,7 @@ use PDOException;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @template T of \Core\Models\BaseModel
+ * @template T of BaseModel
  */
 abstract class BaseRepository
 {
@@ -73,8 +74,7 @@ abstract class BaseRepository
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $data ? new $this->entityClass($data) : null;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error in findById in {$this->table}: " . $e->getMessage());
             return null;
         }
@@ -89,6 +89,10 @@ abstract class BaseRepository
     {
         try {
             $stmt = $this->connection->query("SELECT * FROM {$this->table}");
+
+            if ($stmt === false) {
+                return [];
+            }
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             $entities = [];
@@ -97,8 +101,7 @@ abstract class BaseRepository
             }
 
             return $entities;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error in findAll in {$this->table}: " . $e->getMessage());
             return [];
         }
@@ -117,8 +120,7 @@ abstract class BaseRepository
                 "DELETE FROM {$this->table} WHERE {$this->getPrimaryKey()} = :id"
             );
             return $stmt->execute(['id' => $id]);
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error in delete in {$this->table}: " . $e->getMessage());
             return false;
         }
@@ -140,21 +142,24 @@ abstract class BaseRepository
             }
 
             return (int)$stmt->fetchColumn();
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             error_log("Error in count in {$this->table}: " . $e->getMessage());
             return 0;
         }
     }
 
     /**
-     * Updates an entity in the database
+     * Updates data in the database.
      *
-     * @param object $data The data of the entity to update.
+     * @param object $data The entity to update.
      * @return boolean True on success, false on failure.
      */
     public function update(object $data): bool
     {
+        if (!$data instanceof BaseModel) {
+            return false;
+        }
+
         $attributes = $data->toArray();
         $query = "UPDATE {$this->table} SET ";
         foreach ($attributes as $key => $value) {
@@ -173,8 +178,7 @@ abstract class BaseRepository
             $this->connection->commit();
 
             return $result;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }
@@ -184,14 +188,16 @@ abstract class BaseRepository
     }
 
     /**
-     * Inserts an entity into the database
+     * Inserts data into the database.
      *
-     * @param object $data The data of the entity to insert.
-     * @return integer|boolean The id of the inserted entity or false on failure.
+     * @param object $data The entity to insert.
+     * @return integer|boolean The ID of the inserted row or false on failure.
      */
     public function insert(object $data): int|bool
     {
-
+        if (!$data instanceof BaseModel) {
+            return false;
+        }
 
         $attributes = $data->toArray();
         unset($attributes[$this->getPrimaryKey()]);
@@ -215,8 +221,7 @@ abstract class BaseRepository
             $id = (int)$this->connection->lastInsertId();
             $this->connection->commit();
             return $id;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }

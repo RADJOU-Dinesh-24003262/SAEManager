@@ -2,6 +2,7 @@
 
 namespace Views\ToDoList;
 
+use Models\Entity\SAE\SAESubject;
 use Models\Entity\User\User;
 use Override;
 use Views\BaseSaeView;
@@ -34,9 +35,9 @@ class ToDoListView extends BaseSaeView
 
 
     /**
-     * @var integer The current group ID.
+     * @var integer|null The current group ID.
      */
-    protected $currentGroupId;
+    protected ?int $currentGroupId;
 
     /**
      * @var array<ToDoItem> The list of tasks.
@@ -44,9 +45,12 @@ class ToDoListView extends BaseSaeView
     protected $tasks;
 
     /**
-     * @var array The list of all groups.
+     * @var array<int, array{
+     *      group: \Models\Entity\SAE\SAEGroup,
+     *      students: array<int, array<string, string|null>>
+     * }> The list of all groups.
      */
-    protected $allGroups;
+    protected array $allGroups;
 
 
     // -------------------------------------------------------------------------
@@ -54,16 +58,31 @@ class ToDoListView extends BaseSaeView
     // -------------------------------------------------------------------------
 
     /**
-     * @param array $data The SAE data.
-     * @param User  $user The user data.
+     * Constructs a new ToDoListView instance.
+     *
+     * @param SAESubject           $subject        The SAE subject details.
+     * @param integer|null         $currentGroupId The ID of the currently selected group,
+     *                                             or null if no group is selected.
+     * @param array<int, ToDoItem> $tasks          The list of ToDoItem objects for the selected group.
+     * @param array                $allGroups      An array containing details of all SAE groups.
+     * @phpstan-param array<int, array{
+     *     group: \Models\Entity\SAE\SAEGroup,
+     *     students: array<int, array<string, string|null>>
+     * }> $allGroups
+     * @param User                 $user           The current user object.
      */
-    public function __construct(array $data, User $user)
-    {
-        parent::__construct($data['subject'], $user);
+    public function __construct(
+        SAESubject $subject,
+        ?int $currentGroupId,
+        array $tasks,
+        array $allGroups,
+        User $user
+    ) {
+        parent::__construct($subject, $user);
 
-        $this->currentGroupId = $data['current_group_id'];
-        $this->tasks = $data['tasks'];
-        $this->allGroups = $data['all_groups'];
+        $this->currentGroupId = $currentGroupId;
+        $this->tasks = $tasks;
+        $this->allGroups = $allGroups;
     }
 
     /**
@@ -83,7 +102,7 @@ class ToDoListView extends BaseSaeView
      * This method returns an empty array because the To-Do List page
      * does not require dynamic data to render.
      *
-     * @return array<string, string|integer> An empty associative array.
+     * @return array<string, string|integer|null> An empty associative array.
      */
     #[Override]
     protected function templateKeys(): array
