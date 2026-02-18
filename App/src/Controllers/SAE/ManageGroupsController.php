@@ -68,9 +68,9 @@ class ManageGroupsController extends BaseController
                 throw new ExceptionAccessDenied("Accès refusé ou SAE introuvable.");
             }
 
-            $this->verifyOwnership($saeData);
+            $this->verifyOwnership($saeData); // Verify ownership of the SAE.
 
-            // Prepare data for view
+            // Prepare data for view.
             $availableStudents = $this->getAvailableStudents($studentRepo, $sae_id);
             $profsAvailable = $this->getAvailableProfessors($professorRepo);
 
@@ -88,6 +88,11 @@ class ManageGroupsController extends BaseController
         }
     }
 
+    /**
+     * Extracts the SAE ID from the request URI.
+     *
+     * @return integer|null The extracted SAE ID, or null if not found.
+     */
     private function extractSaeId(): ?int
     {
         $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
@@ -97,25 +102,48 @@ class ManageGroupsController extends BaseController
         return null;
     }
 
+    /**
+     * Verifies if the user has the permission to manage the SAE.
+     *
+     * @param array<mixed> $saeData The SAE data.
+     *
+     * @return void
+     * @throws ExceptionAccessDenied If the user does not have permission to manage the SAE.
+     */
     private function verifyOwnership(array $saeData): void
     {
         $responsibleProfId = $saeData['responsible_professor']['user_id'] ?? null;
         if ($this->user->getUserId() !== (int)$responsibleProfId) {
-             throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
+            throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
         }
     }
 
+    /**
+     * Retrieves the list of students not in the SAE.
+     *
+     * @param PdoStudentRepository $repo  The student repository.
+     * @param integer              $saeId The SAE ID.
+     *
+     * @return array<mixed> The list of students not in the SAE.
+     */
     private function getAvailableStudents(PdoStudentRepository $repo, int $saeId): array
     {
         $students = $repo->findStudentsNotInSAE($saeId);
-        return array_map(fn($s) => $s->toArray(), $students);
+        return array_map(fn ($s) => $s->toArray(), $students);
     }
 
+    /**
+     * Retrieves the list of professors available to manage the SAE.
+     *
+     * @param PdoProfessorRepository $repo The professor repository.
+     *
+     * @return array<mixed> The list of professors available to manage the SAE.
+     */
     private function getAvailableProfessors(PdoProfessorRepository $repo): array
     {
         if ($this->user instanceof Professor) {
             $profs = $repo->findAll();
-            return array_map(fn($p) => $p->toArray(), $profs);
+            return array_map(fn ($p) => $p->toArray(), $profs);
         }
         return [];
     }

@@ -80,6 +80,11 @@ class RegisterPost implements ControllerInterface
             );
 
             $user = $registerUseCase->execute($data);
+
+            if ($user === null) {
+                throw new Exception("L'utilisateur n'a pas pu être récupéré après sa création.");
+            }
+
             Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail());
 
             $view = new RegisterSuccessView($user);

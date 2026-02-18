@@ -16,8 +16,6 @@ use Models\Entity\User\User;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- *
- * @template T of User
  */
 interface UserInterface
 {
@@ -25,7 +23,7 @@ interface UserInterface
      * Finds a user by ID.
      *
      * @param integer $id The user ID.
-     * @return T|null The user entity or null if not found.
+     * @return User|null The user entity or null if not found.
      */
     public function findById(int $id): ?User;
 
@@ -33,23 +31,23 @@ interface UserInterface
      * Finds a user by email.
      *
      * @param string $email The user's email.
-     * @return T|null The user entity or null if not found.
+     * @return User|null The user entity or null if not found.
      */
     public function findByEmail(string $email): ?User;
 
     /**
-     * Creates a new user.
+     * Inserts a user into the database.
      *
-     * @param T $user The user entity to create.
-     * @return T|boolean The created user or false on failure.
+     * @param object $user The user entity.
+     * @return integer|boolean The id of the created user or false on failure.
      */
     public function insert(object $user): int|bool;
 
     /**
-     * Updates an existing user.
+     * Updates a user.
      *
-     * @param T $user The user entity to update.
-     * @return boolean True on success, false on failure.
+     * @param object $user The user entity.
+     * @return boolean True on success.
      */
     public function update(object $user): bool;
 

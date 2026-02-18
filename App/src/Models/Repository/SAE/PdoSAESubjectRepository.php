@@ -67,21 +67,55 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         return 'sae_subject_id';
     }
 
+    /**
+     * Inserts a new SAE subject into the database.
+     *
+     * @param object $entity The SAE subject entity to insert.
+     * @return integer|boolean The ID of the inserted SAE subject, or false on failure.
+     * @throws PDOException If a database error occurs.
+     */
     public function insert(object $entity): int|bool
     {
+        if (!$entity instanceof SAESubject) {
+            return false;
+        }
         return parent::insert($entity);
     }
 
+    /**
+     * Updates an existing SAE subject in the database.
+     *
+     * @param object $entity The SAE subject entity to update.
+     * @return boolean True on success, false on failure.
+     * @throws PDOException If a database error occurs.
+     */
     public function update(object $entity): bool
     {
+        if (!$entity instanceof SAESubject) {
+            return false;
+        }
         return parent::update($entity);
     }
 
+    /**
+     * Deletes an SAE subject from the database.
+     *
+     * @param integer $id The ID of the SAE subject to delete.
+     * @return boolean True on success, false on failure.
+     * @throws PDOException If a database error occurs.
+     */
     public function delete(int $id): bool
     {
         return parent::delete($id);
     }
 
+    /**
+     * Finds a SAE subject by its ID.
+     *
+     * @param integer $id The ID of the SAE subject to find.
+     * @return SAESubject|null The SAE subject entity, or null if not found.
+     * @throws PDOException If a database error occurs.
+     */
     public function findById(int $id): ?SAESubject
     {
         return parent::findById($id);
@@ -93,6 +127,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      * Finds all SAE subjects.
      *
      * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
      */
     #[Override]
     public function findAll(): array
@@ -119,6 +154,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *
      * @param integer $professorId The professor's user ID.
      * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
      */
     #[Override]
     public function findByProfessorId(int $professorId): array
@@ -150,6 +186,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *
      * @param integer $studentId The student's user ID.
      * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
      */
     #[Override]
     public function findByStudentId(int $studentId): array
@@ -178,6 +215,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *
      * @param integer $clientId The client's user ID.
      * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
      */
     #[Override]
     public function findByClientId(int $clientId): array
@@ -211,6 +249,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *   phone: string|null,
      *   amu_id: string
      * }|null
+     * @throws PDOException If a database error occurs.
      */
     #[Override]
     public function getResponsibleProfessor(int $saeId): ?array
@@ -247,6 +286,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *   amu_id: string,
      *   is_responsible: int
      * }>
+     * @throws PDOException If a database error occurs.
      */
     #[Override]
     public function getAllProfessorsInfo(int $saeId): array
@@ -292,6 +332,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *   phone: string|null,
      *   organisation: string
      * }|null
+     * @throws PDOException If a database error occurs.
      */
     #[Override]
     public function getClientInfo(int $saeId): ?array
@@ -315,6 +356,13 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         }
     }
 
+    /**
+     * Gets SAEs by begin date.
+     *
+     * @param string $beginDate The begin date.
+     * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
+     */
     public function findByBeginDate(string $beginDate): array
     {
         try {
@@ -333,6 +381,13 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         }
     }
 
+    /**
+     * Gets SAEs by end date.
+     *
+     * @param string $endDate The end date.
+     * @return array<SAESubject>
+     * @throws ExceptionFetchDataBD If the database query fails.
+     */
     public function findByEndDate(string $endDate): array
     {
         try {

@@ -52,6 +52,12 @@ class RegisterUserUseCase
     private UserInterface $userInterface;
 
     /**
+     * The PDO interface.
+     * @var UserInterface
+     */
+    private UserInterface $pdoInterface;
+
+    /**
      * Constructor.
      *
      * @param StudentInterface   $studentInterface   The Student repository.
@@ -76,12 +82,12 @@ class RegisterUserUseCase
      *
      * @param array<string, mixed> $data The validated user data.
      *
-     * @return User The registered user.
+     * @return User|null The registered user.
      *
      * @throws ExceptionEmailAlreadyExists If the email is already in the database.
-     * @throws InvalidArgumentException If the user type is invalid.
+     * @throws \Exception If the user creation fails.
      */
-    public function execute(array $data): User
+    public function execute(array $data): ?User
     {
         // 1. Create the user entity
         $user = $this->createUserEntity($data);
@@ -102,12 +108,14 @@ class RegisterUserUseCase
         // 5. Save the user using the specific repository
         $result = false;
         if ($user instanceof Student) {
-            $result = $this->studentInterface->insert($user);
+            $this->pdoInterface = $this->studentInterface;
         } elseif ($user instanceof Professor) {
-            $result = $this->professorInterface->insert($user);
+            $this->pdoInterface = $this->professorInterface;
         } elseif ($user instanceof Client) {
-            $result = $this->clientInterface->insert($user);
+            $this->pdoInterface = $this->clientInterface;
         }
+
+        $result = $this->pdoInterface->insert($user);
 
         if ($result === false) {
             throw new \Exception("Failed to create user");
@@ -117,7 +125,7 @@ class RegisterUserUseCase
             $user->setUserId($result);
         }
 
-        return $user;
+        return $this->pdoInterface->findById($user->getUserId());
     }
 
     /**
@@ -132,10 +140,10 @@ class RegisterUserUseCase
         $userType = $data['user_type'] ?? '';
 
         return match ($userType) {
-                'student' => new Student($data),
-                'professor' => new Professor($data),
-                'client' => new Client($data),
-                default => throw new InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
+            'student' => new Student($data),
+            'professor' => new Professor($data),
+            'client' => new Client($data),
+            default => throw new InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
         };
     }
 }

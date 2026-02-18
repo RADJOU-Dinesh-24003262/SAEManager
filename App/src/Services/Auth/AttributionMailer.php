@@ -56,7 +56,7 @@ class AttributionMailer
             }
 
             Logger::log('MAIL_ATTRIBUTION', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
-            $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
+            $studentsGroup = $saeGroupRepo->findBySaeSubjectId($saeId);
 
             if (empty($studentsGroup)) {
                 Logger::log('MAIL_ATTRIBUTION', "No groups found for SAE ID: $saeId");
@@ -73,7 +73,7 @@ class AttributionMailer
                 }
 
                 // Use the updated method signature.
-                $students = $participatedInRepo->getGroupStudents($groupId);
+                $students = $saeGroupRepo->getStudentsInGroup($groupId);
 
                 Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($students) . " students in group ID: $groupId");
 

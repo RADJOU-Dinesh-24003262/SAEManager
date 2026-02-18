@@ -3,6 +3,7 @@
 namespace Models\UseCase\ToDoList;
 
 use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
+use Models\Entity\ToDoItem\ToDoItem;
 
 /**
  * Use Case for retrieving tasks.
@@ -35,7 +36,7 @@ class GetTasksUseCase
      * Executes the use case.
      *
      * @param integer $groupId The group ID.
-     * @return array The list of tasks.
+     * @return array<ToDoItem> The list of tasks.
      */
     public function execute(int $groupId): array
     {

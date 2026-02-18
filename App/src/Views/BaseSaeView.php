@@ -31,6 +31,12 @@ abstract class BaseSaeView extends AbstractView
      */
     protected User $user;
 
+    /**
+     * Constructor.
+     *
+     * @param SAESubject $subject The SAE subject associated with the view.
+     * @param User       $user    The current user.
+     */
     public function __construct(SAESubject $subject, User $user)
     {
         parent::__construct([]);
@@ -41,7 +47,7 @@ abstract class BaseSaeView extends AbstractView
     /**
      * Returns the common template keys for SAE pages.
      *
-     * @return array<string, string> The common template keys.
+     * @return array<string, int|string|null> The common template keys.
      */
     protected function getCommonSaeTemplateKeys(): array
     {

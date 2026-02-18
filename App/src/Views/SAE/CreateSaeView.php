@@ -34,6 +34,11 @@ class CreateSaeView extends AbstractView
     private array $clients;
 
 
+    /**
+     * Constructor.
+     *
+     * @param array<string, mixed> $data The data to initialize the view with.
+     */
     public function __construct(array $data = [])
     {
         $this->clients = $data['clients'];
@@ -60,7 +65,7 @@ class CreateSaeView extends AbstractView
     protected function templateKeys(): array
     {
         $clientsHtml = '<option value="">-- Choisir un client --</option>';
-        if (isset($this->clients) && is_array($this->clients)) {
+        if (isset($this->clients)) {
             foreach ($this->clients as $client) {
                 $name = $client->getLastName() . ' '
                         . $client->getFirstName() . ' (' . $client->getOrganisation() . ')';

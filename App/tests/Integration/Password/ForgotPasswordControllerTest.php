@@ -14,7 +14,10 @@ use Core\Utilis\SessionService;
 use Core\Views\AbstractView;
 use Exception;
 use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Core\Models\Repository\BaseRepository;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Validator\ForgotPasswordValidator;
@@ -32,6 +35,8 @@ use Validator\ForgotPasswordValidator;
 #[CoversClass(SessionService::class)]
 #[CoversClass(Database::class)]
 #[CoversClass(User::class)]
+#[UsesClass(BaseRepository::class)]
+#[UsesClass(PdoUserRepository::class)]
 #[CoversClass(ExceptionSpam::class)]
 class ForgotPasswordControllerTest extends TestCase
 {

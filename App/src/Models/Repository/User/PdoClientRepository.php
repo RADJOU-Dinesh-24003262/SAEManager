@@ -59,8 +59,29 @@ class PdoClientRepository implements ClientInterface
      */
     public function findById(int $id): ?Client
     {
+        $user = $this->userRepository->findById($id);
 
-        return $this->userRepository->findById($id);
+        if (!$user) {
+            return null;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT organisation FROM clients WHERE client_id = :id'
+            );
+            $stmt->execute(['id' => $id]);
+            $clientData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($clientData) {
+                // Merge user data with client-specific data.
+                $data = array_merge($user->toArray(), $clientData);
+                return new Client($data);
+            }
+            return null; // User found but not a client.
+        } catch (PDOException $e) {
+            error_log("Error in PdoClientRepository::findById (client data): " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -71,7 +92,29 @@ class PdoClientRepository implements ClientInterface
      */
     public function findByEmail(string $email): ?Client
     {
-        return $this->userRepository->findByEmail($email);
+        $user = $this->userRepository->findByEmail($email);
+
+        if (!$user) {
+            return null;
+        }
+
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT organisation FROM clients WHERE client_id = :id'
+            );
+            $stmt->execute(['id' => $user->getUserId()]);
+            $clientData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($clientData) {
+                // Merge user data with client-specific data.
+                $data = array_merge($user->toArray(), $clientData);
+                return new Client($data);
+            }
+            return null; // User found but not a client.
+        } catch (PDOException $e) {
+            error_log("Error in PdoClientRepository::findByEmail (client data): " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
@@ -95,8 +138,8 @@ class PdoClientRepository implements ClientInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'INSERT INTO clients (client_id, organisation) 
-                 VALUES (:client_id, :organisation)'
+                'INSERT INTO clients (client_id, organisation)
+                             VALUES (:client_id, :organisation)'
             );
             $stmt->execute([
                 'client_id' => $userId,
@@ -123,10 +166,10 @@ class PdoClientRepository implements ClientInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT u.*, c.* 
-                 FROM users u
-                 JOIN clients c ON u.user_id = c.client_id
-                 ORDER BY u.last_name, u.first_name'
+                'SELECT u.*, c.*
+                             FROM users u
+                             JOIN clients c ON u.user_id = c.client_id
+                             ORDER BY u.last_name, u.first_name'
             );
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -149,8 +192,8 @@ class PdoClientRepository implements ClientInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT COUNT(*) FROM sae_subjects 
-                 WHERE sae_subject_id = :sae_id AND client_id = :client_id'
+                'SELECT COUNT(*) FROM sae_subjects
+                             WHERE sae_subject_id = :sae_id AND client_id = :client_id'
             );
             $stmt->execute(['sae_id' => $saeId, 'client_id' => $clientId]);
             return $stmt->fetchColumn() > 0;
@@ -164,7 +207,7 @@ class PdoClientRepository implements ClientInterface
     /**
      * Updates an existing client.
      *
-     * @param User $client The client entity to update.
+     * @param object $client The client entity to update.
      * @return boolean True on success, false on failure.
      */
     public function update(object $client): bool
@@ -179,9 +222,9 @@ class PdoClientRepository implements ClientInterface
 
         try {
             $stmt = $this->connection->prepare(
-                'UPDATE clients 
-                 SET organisation = :organisation
-                 WHERE client_id = :id'
+                'UPDATE clients
+                             SET organisation = :organisation
+                             WHERE client_id = :id'
             );
 
             return $stmt->execute([
@@ -217,7 +260,12 @@ class PdoClientRepository implements ClientInterface
         return $this->userRepository->updatePassword($userId, $passwordHash);
     }
 
-
+    /**
+     * Deletes a client from the database.
+     *
+     * @param integer $id The ID of the client to delete.
+     * @return boolean True on success, false on failure.
+     */
     public function delete(int $id): bool
     {
         $this->connection->beginTransaction();

@@ -17,7 +17,6 @@ use Models\Entity\User\Student;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @extends UserInterface<Student>
  */
 interface StudentInterface extends UserInterface
 {

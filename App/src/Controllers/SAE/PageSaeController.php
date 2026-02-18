@@ -74,9 +74,21 @@ class PageSaeController extends BaseController
 
             $saeData = $sae->execute($sae_id, $this->user);
 
+            if ($saeData === null) {
+                SessionService::setFlash('errors', "SAE introuvable ou accès refusé.");
+                header('Location: /dashboard');
+                exit();
+            }
 
             // Create and render the SAE page view.
-            $view = new PageSaeView($saeData, $this->user);
+            $view = new PageSaeView(
+                $saeData['subject'],
+                $saeData['groups'],
+                $saeData['responsible_professor'],
+                $saeData['all_professors'],
+                $saeData['client'],
+                $this->user
+            );
             $view->render();
             exit();
         } catch (ExceptionAccessDenied $e) {

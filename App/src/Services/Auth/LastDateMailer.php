@@ -55,7 +55,7 @@ class LastDateMailer
             }
 
             Logger::log('MAIL_LAST_DATE', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
-            $studentsGroup = $saeGroupRepo->findById($saeId);
+            $studentsGroup = $saeGroupRepo->findBySaeSubjectId($saeId);
 
             if (empty($studentsGroup)) {
                 Logger::log('MAIL_LAST_DATE', "No groups found for SAE ID: $saeId");
@@ -69,7 +69,7 @@ class LastDateMailer
                     continue;
                 }
 
-                $students = $participatedInRepo->getGroupStudents($groupId);
+                $students = $saeGroupRepo->getStudentsInGroup($groupId);
 
                 Logger::log('MAIL_LAST_DATE', 'Found ' . count($students) . " students in group ID: $groupId");
 

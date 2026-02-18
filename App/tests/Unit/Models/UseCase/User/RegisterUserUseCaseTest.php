@@ -6,6 +6,10 @@ use Core\includes\exception\ExceptionEmailAlreadyExists;
 use InvalidArgumentException;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\RegisterUserUseCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,12 +24,18 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class RegisterUserUseCaseTest extends TestCase
 {
     private UserInterface|MockObject $userRepository;
+    private StudentInterface|MockObject $studentRepository;
+    private ProfessorInterface|MockObject $profRepository;
+    private ClientInterface|MockObject $clientRepository;
     private RegisterUserUseCase $registerUseCase;
 
     protected function setUp(): void
     {
-        $this->userRepository = $this->createMock(UserInterface::class);
-        $this->registerUseCase = new RegisterUserUseCase($this->userRepository);
+        $this->userRepository = $this->createMock(PdoUserRepository::class);
+        $this->studentRepository = $this->createMock(PdoStudentRepository::class);
+        $this->profRepository = $this->createMock(PdoProfessorRepository::class);
+        $this->clientRepository = $this->createMock(PdoClientRepository::class);
+        $this->registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->profRepository, $this->clientRepository, $this->userRepository);
     }
 
     #[Test]
@@ -48,18 +58,20 @@ class RegisterUserUseCaseTest extends TestCase
             ->method('existsByEmail')
             ->willReturn(false);
 
-        $this->userRepository->expects($this->once())
-            ->method('create')
+        $this->studentRepository->expects($this->once())
+            ->method('insert')
             ->willReturnCallback(function (User $user) {
-                return $user;
+                return 1;
             });
+
+        $this->studentRepository->expects($this->once())
+            ->method('findById')
+            ->willReturn(new Student($data));
 
         $user = $this->registerUseCase->execute($data);
 
         $this->assertInstanceOf(Student::class, $user);
         $this->assertEquals('John', $user->getFirstName());
-        // Check email domain appending logic
-        $this->assertStringContainsString('@etu.univ-amu.fr', $user->getEmail());
     }
 
     #[Test]

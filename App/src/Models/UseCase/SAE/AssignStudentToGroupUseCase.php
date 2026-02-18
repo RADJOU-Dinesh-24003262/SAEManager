@@ -85,8 +85,9 @@ class AssignStudentToGroupUseCase
             throw new ExceptionAccessDenied("Vous n'avez pas la permission d'assigner des étudiants");
         }
 
-        // test if student is not already in agroup for the same SAE
-        $studentGroup = $this->participatedInInterface->getStudentGroupId($studentId, $sae->getSaeSubjectId());
+        // Test if student is not already in a group for the same SAE.
+        $saeId = (int) $sae->getSaeSubjectId();
+        $studentGroup = $this->participatedInInterface->getStudentGroupId($studentId, $saeId);
         if ($studentGroup) {
             throw new ExceptionAccessDenied("L'étudiant est déjà dans un groupe pour cette SAE");
         }

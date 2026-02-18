@@ -4,6 +4,7 @@ namespace Models\UseCase\User;
 
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Models\UseCase\User\InterfaceDB\UserInterface;
+use Models\Entity\User\User;
 
 /**
  * Use Case for resetting user password (forgot password flow).
@@ -22,14 +23,14 @@ class ResetPasswordUseCase
     /**
      * The User repository interface.
      *
-     * @var UserInterface<User>
+     * @var UserInterface
      */
     private UserInterface $userInterface;
 
     /**
      * Constructor.
      *
-     * @param UserInterface<User> $userInterface The User repository.
+     * @param UserInterface $userInterface The User repository.
      */
     public function __construct(UserInterface $userInterface)
     {

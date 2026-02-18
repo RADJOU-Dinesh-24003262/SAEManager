@@ -102,12 +102,16 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
     /**
      * Creates a new SAE group.
      *
-     * @param SAEGroup $entity The SAE group to create.
+     * @param object $entity The SAE group to create.
      * @return integer|boolean The created group with ID or false on failure.
      */
     #[Override]
     public function insert(object $entity): int|bool
     {
+        if (!$entity instanceof SAEGroup) {
+            return false;
+        }
+
         try {
             $this->connection->beginTransaction();
 
@@ -137,12 +141,16 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
     /**
      * Updates a SAE group.
      *
-     * @param SAEGroup $entity The SAE group to update.
+     * @param object $entity The SAE group to update.
      * @return boolean True on success.
      */
     #[Override]
     public function update(object $entity): bool
     {
+        if (!$entity instanceof SAEGroup) {
+            return false;
+        }
+
         try {
             $stmt = $this->connection->prepare(
                 'UPDATE sae_groups 

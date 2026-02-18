@@ -68,7 +68,7 @@ class LoginUseCaseTest extends TestCase
         // Re-fetch to be sure
         // But let's trust create for now, or use getUserId()
         if ($this->user instanceof User) {
-             $this->userId = $this->user->getUserId();
+            $this->userId = $this->user->getUserId();
         }
     }
 

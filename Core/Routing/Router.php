@@ -23,11 +23,6 @@ class Router
     private array $routes;
 
     /**
-     * @var array<string> Available paths from routes
-     */
-    private array $availablePaths;
-
-    /**
      * @var string Requested path from URL
      */
     private string $requestedPath;
@@ -46,7 +41,6 @@ class Router
     public function __construct(string $path, string $method)
     {
         $this->routes = ROUTES;
-        $this->availablePaths = array_keys($this->routes);
         $this->requestedPath = $path;
         $this->requestedMethod = strtoupper($method);
         $this->parseRoutes();
@@ -63,7 +57,7 @@ class Router
             if (preg_match($pattern, $this->requestedPath, $matches)) {
                 $params = array_filter(
                     $matches,
-                    fn($key) => !is_int($key),
+                    fn ($key) => !is_int($key),
                     ARRAY_FILTER_USE_KEY
                 );
 

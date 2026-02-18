@@ -43,6 +43,7 @@ class CreateSAEUseCase
      * @param array<string, mixed> $data    SAE data.
      * @return SAESubject The created SAE.
      * @throws ExceptionAccessDenied If user doesn't have permission.
+     * @throws \RuntimeException If the creation of the SAE fails.
      */
     public function execute(User $creator, array $data): SAESubject
     {
