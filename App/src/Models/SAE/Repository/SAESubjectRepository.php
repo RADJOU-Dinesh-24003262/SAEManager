@@ -7,9 +7,8 @@ use Override;
 use PDO;
 use PDOException;
 use Models\SAE\SAESubject;
-use Models\User\Student;
 use Core\Models\Repository\BaseRepository;
-use PDepend\Util\Log;
+use Models\SAE\SAE;
 
 /**
  * Repository for SAESubject operations.
@@ -437,6 +436,7 @@ class SAESubjectRepository extends BaseRepository
      *
      * @param integer $saeId The SAE subject ID.
      * @return string The relative file path.
+     * @throws PDOException If query fails.
      */
     public function getFileName(int $saeId): string
     {

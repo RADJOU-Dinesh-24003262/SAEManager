@@ -120,7 +120,11 @@ class FileService
             throw new Exception("Fichier non trouvé.");
         }
 
-        return file_get_contents($fullPath) ?? '';
+        $content = file_get_contents($fullPath);
+        if ($content === false) {
+            throw new Exception("Impossible de lire le fichier de description.");
+        }
+        return $content;
     }
 
     /**
