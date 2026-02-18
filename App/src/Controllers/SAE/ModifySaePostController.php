@@ -96,7 +96,7 @@ class ModifySaePostController extends BaseController
                 'client_id' => !empty($data['client_id']) ? intval($data['client_id']) : null,
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['date_rendu'],
-                'file_path' => $fileName, // Keep old file by default
+                'file_path' => $fileName, // Keep old file by default.
             ];
 
 
@@ -105,7 +105,9 @@ class ModifySaePostController extends BaseController
                     FileService::updateSaeDescription($fileName, $description);
                 } catch (\Exception $e) {
                     error_log("Erreur mise à jour fichier: " . $e->getMessage());
-                    SessionService::setFlash('errors', ['description' => 'Erreur lors de la mise à jour du fichier de description.']);
+                    SessionService::setFlash('errors', [
+                        'description' => 'Erreur lors de la mise à jour du fichier de description.'
+                    ]);
                     header('Location: /sae/' . $saeId . '/modify');
                     exit();
                 }
