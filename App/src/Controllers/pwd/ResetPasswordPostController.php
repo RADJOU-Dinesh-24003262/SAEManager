@@ -10,6 +10,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ResetPasswordUseCase;
 use Override;
 use Services\TokenService;
@@ -40,29 +41,18 @@ class ResetPasswordPostController implements ControllerInterface
     public function control(): void
     {
         try {
-            // Verify the token.
             $token = $_GET['token'] ?? '';
 
-            $tokenData = TokenService::validateToken($token);
-
-
-            // 2. Validate the data.
             $validator = new ResetPasswordValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            // 3. Update the password.
-            $userRepository = new PdoUserRepository();
-            $resetPasswordUseCase = new ResetPasswordUseCase($userRepository);
-            $resetPasswordUseCase->execute($tokenData['email'], $password);
+            $handlePasswordResetUseCase = new HandlePasswordResetUseCase(new PdoUserRepository());
+            $email = $handlePasswordResetUseCase->execute($token, $password);
 
-            // Mark the token as used.
-            TokenService::markTokenAsUsed($token);
-
-            // 5. Render the success page.
             (new ResetPasswordSuccessView())->render();
-            error_log("Mot de passe réinitialisé avec succès pour: " . $tokenData['email']);
+            error_log("Mot de passe réinitialisé avec succès pour: " . $email);
             return;
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
@@ -74,19 +64,9 @@ class ResetPasswordPostController implements ControllerInterface
         } catch (ExceptionValidationResetPassword | ExceptionPasswordUpdateFailed $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
-        $this->renderFormWithToken($_GET['token'] ?? '', $tokenData['email']);
-    }
 
-    /**
-     * Allow to render ResetPasswordView with a specific token and email from the form
-     *
-     * @param  string      $token The request path.
-     * @param  string|null $email The HTTP request method.
-     * @return void
-     */
-    private function renderFormWithToken(string $token, ?string $email): void
-    {
-        (new ResetPasswordView($token, $email ? $email : ''))->render();
+        $view = new ResetPasswordView($_GET['token'] ?? '', $email ?? '');
+        $view->render();
     }
 
     /**

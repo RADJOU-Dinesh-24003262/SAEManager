@@ -25,7 +25,7 @@ class CreateSaeValidator extends FormValidator
      * @var array<string>
      */
     protected $required = [
-        'nameSae',
+        'subject_name',
         'end_date',
         'begin_date',
         'description'
@@ -42,7 +42,7 @@ class CreateSaeValidator extends FormValidator
     public function validate(array $data): void
     {
         // Validate name length.
-        if (strlen($data['nameSae']) < 3 || strlen($data['nameSae']) > 255) {
+        if (strlen($data['subject_name']) < 3 || strlen($data['subject_name']) > 255) {
             throw new ExeptionValidationSAECreation('Le nom de la SAE doit faire entre 3 et 255 caractères.');
         }
 
