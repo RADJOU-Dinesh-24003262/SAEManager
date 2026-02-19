@@ -7,6 +7,8 @@ use Models\Entity\SAE\SAESubject;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Models\Entity\User\User;
 
+use Services\FileService;
+
 /**
  * Use case for creating a new SAE.
  *
@@ -51,6 +53,9 @@ class CreateSAEUseCase
         if (!$creator->isProfessor()) {
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer une SAE");
         }
+
+        // Handle File Saving
+        $data['file_path'] = FileService::saveSaeDescription($data['description'], $data['subject_name']);
 
         // Create SAE subject.
         $subject = new SAESubject($data);

@@ -2,6 +2,7 @@
 
 namespace Controllers\SAE;
 
+use Controllers\BaseController;
 use Core\Controllers\ControllerInterface;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
@@ -14,7 +15,6 @@ use Models\UseCase\SAE\CreateSAEUseCase;
 use Models\Entity\User\Client;
 use Models\Entity\User\User;
 use Override;
-use Services\FileService;
 use Validator\CreateSaeValidator;
 use Views\SAE\CreateSaeView;
 
@@ -28,7 +28,7 @@ use Views\SAE\CreateSaeView;
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Controllers/SAE/CreateSaePostController.php
  */
-class CreateSaePostController implements ControllerInterface
+class CreateSaePostController extends BaseController
 {
     /**
      * Controls the processing of the SAE creation form.
@@ -39,28 +39,7 @@ class CreateSaePostController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        // Redirect to /login if not logged in.
-        if (!SessionService::has('user_id')) {
-            SessionService::setFlash('errors', ['Authentification requise.']);
-            header('Location: /login');
-            exit();
-        }
-
-        // Retrieve the user object stored in the session.
-        $user = unserialize(SessionService::get('USER'));
-
-        $data['user'] = $user;
-
-        if (!$user || !($user instanceof User)) {
-            throw new Exception('Unknown user.');
-        }
-
-        $user = unserialize(SessionService::get('USER'));
-
-        if (!$user->isProfessor()) {
-            header('Location: /');
-            exit();
-        }
+        $this->ensureProfessor();
 
         $data = $_POST;
         $validator = new CreateSaeValidator();
@@ -78,25 +57,20 @@ class CreateSaePostController implements ControllerInterface
             // Validation.
             $validator->validate($data);
 
-            // Save description as Markdown file.
-            $filePath = FileService::saveSaeDescription($description, $data['nameSae']);
-
             $clientId = !empty($data['client_id']) ? intval($data['client_id']) : null;
 
             $saeData = [
-                'responsible_prof_id' => $user->getUserId(),
+                'responsible_prof_id' => $this->user->getUserId(),
                 'client_id' => $clientId,
-                'subject_name' => $data['nameSae'],
+                'subject_name' => $data['subject_name'],
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['end_date'],
-                'file_path' => $filePath
+                'description' => $description
             ];
 
-            // Use the new CreateSAEUseCase with Interface pattern (Clean Architecture).
-            // Interface is defined in Use Cases layer, implementation in Infrastructure.
             $subjectInterface = new PdoSAESubjectRepository();
             $createSAEUseCase = new CreateSAEUseCase($subjectInterface);
-            $createSAEUseCase->execute($user, $saeData);
+            $createSAEUseCase->execute($this->user, $saeData);
 
             SessionService::setFlash('success', 'SAE créée avec succès !');
             header('Location: /dashboard');

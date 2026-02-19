@@ -12,7 +12,7 @@ use Models\Repository\SAE\PdoSAESubjectRepository;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
-use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
+use Models\UseCase\SAE\GetManageGroupsDataUseCase;
 use Override;
 use Views\SAE\ManageGroupsView;
 
@@ -53,7 +53,7 @@ class ManageGroupsController extends BaseController
             $professorRepo = new PdoProfessorRepository();
             $clientRepo = new PdoClientRepository();
 
-            $useCase = new GetCompleteSAEDataUseCase(
+            $useCase = new GetManageGroupsDataUseCase(
                 $subjectRepo,
                 $groupRepo,
                 $participatedInRepo,
@@ -62,23 +62,13 @@ class ManageGroupsController extends BaseController
                 $clientRepo
             );
 
-            $saeData = $useCase->execute($sae_id, $this->user);
-
-            if (!$saeData) {
-                throw new ExceptionAccessDenied("Accès refusé ou SAE introuvable.");
-            }
-
-            $this->verifyOwnership($saeData); // Verify ownership of the SAE.
-
-            // Prepare data for view.
-            $availableStudents = $this->getAvailableStudents($studentRepo, $sae_id);
-            $profsAvailable = $this->getAvailableProfessors($professorRepo);
+            $data = $useCase->execute($sae_id, $this->user);
 
             $view = new ManageGroupsView([
                 'user' => $this->user,
-                'sae' => $saeData,
-                'available_students' => $availableStudents,
-                'all_professors' => $profsAvailable,
+                'sae' => $data['sae'],
+                'available_students' => $data['available_students'],
+                'all_professors' => $data['all_professors'],
             ]);
             $view->render();
         } catch (ExceptionAccessDenied $e) {
@@ -102,51 +92,7 @@ class ManageGroupsController extends BaseController
         return null;
     }
 
-    /**
-     * Verifies if the user has the permission to manage the SAE.
-     *
-     * @param array<mixed> $saeData The SAE data.
-     *
-     * @return void
-     * @throws ExceptionAccessDenied If the user does not have permission to manage the SAE.
-     */
-    private function verifyOwnership(array $saeData): void
-    {
-        $responsibleProfId = $saeData['responsible_professor']['user_id'] ?? null;
-        if ($this->user->getUserId() !== (int)$responsibleProfId) {
-            throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
-        }
-    }
 
-    /**
-     * Retrieves the list of students not in the SAE.
-     *
-     * @param PdoStudentRepository $repo  The student repository.
-     * @param integer              $saeId The SAE ID.
-     *
-     * @return array<mixed> The list of students not in the SAE.
-     */
-    private function getAvailableStudents(PdoStudentRepository $repo, int $saeId): array
-    {
-        $students = $repo->findStudentsNotInSAE($saeId);
-        return array_map(fn ($s) => $s->toArray(), $students);
-    }
-
-    /**
-     * Retrieves the list of professors available to manage the SAE.
-     *
-     * @param PdoProfessorRepository $repo The professor repository.
-     *
-     * @return array<mixed> The list of professors available to manage the SAE.
-     */
-    private function getAvailableProfessors(PdoProfessorRepository $repo): array
-    {
-        if ($this->user instanceof Professor) {
-            $profs = $repo->findAll();
-            return array_map(fn ($p) => $p->toArray(), $profs);
-        }
-        return [];
-    }
 
     /**
      * Determines if this controller supports the given path and method.

@@ -58,7 +58,6 @@ class DashboardController extends BaseController
             $data['user'] = $this->user;
 
             $saeRepo = new PdoSAESubjectRepository();
-            $saeRepo = new PdoSAESubjectRepository();
             $useCase = new GetUserSAEsUseCase($saeRepo);
             $data['saes'] = $useCase->execute($this->user);
 

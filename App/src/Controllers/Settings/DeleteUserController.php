@@ -54,10 +54,6 @@ class DeleteUserController extends BaseController
             $deleteUserUseCase = new DeleteUserUseCase($userRepository);
             $deleteUserUseCase->executeByEmail($email);
 
-            // Clear session.
-            session_unset();     // Unset all session variables.
-            session_destroy();   // Destroy the session.
-
             $view = new DeleteUserView($data);
             $view->render();
         } catch (PDOException $e) {

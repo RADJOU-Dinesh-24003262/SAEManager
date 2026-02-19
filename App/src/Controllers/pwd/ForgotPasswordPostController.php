@@ -11,6 +11,7 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPasswor
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\ProcessForgotPasswordUseCase;
 use Override;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
@@ -64,18 +65,9 @@ class ForgotPasswordPostController implements ControllerInterface
 
             error_log("Demande réinitialisation pour: {$email}");
 
-            // Verify if the user exists.
-            $userRepository = new PdoUserRepository();
-            $userExists = $userRepository->existsByEmail($email);
-            if ($userExists) {
-                error_log("Utilisateur trouvé pour: {$email}");
-
-                // Create the password reset token.
-                $token = TokenService::createPasswordResetToken($email);
-
-                // Send the email.
-                PasswordResetMailer::send($email, $token);
-            }
+            $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
+            $processForgotPasswordUseCase->execute($email);
+            
             SessionService::set('last_forgot_password_request', time());
 
             // Generic message to avoid revealing if the email exists.

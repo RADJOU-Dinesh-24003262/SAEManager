@@ -73,5 +73,9 @@ class DeleteUserUseCase
         if (!$this->userInterface->delete($user->getUserId())) {
             throw new Exception("Erreur lors de la suppression de l'utilisateur.");
         }
+
+        // Clear session.
+        session_unset();     // Unset all session variables.
+        session_destroy();   // Destroy the session.
     }
 }

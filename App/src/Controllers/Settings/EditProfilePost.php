@@ -2,7 +2,7 @@
 
 namespace Controllers\Settings;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -33,7 +33,7 @@ use Views\Settings\EditProfileSuccessView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class EditProfilePost implements ControllerInterface
+class EditProfilePost extends BaseController
 {
     /**
      * Main Controller logic for EditProfilePost.
@@ -44,11 +44,8 @@ class EditProfilePost implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        if (!SessionService::get('USER')) {
-            header('Location: /login');
-            exit;
-        }
-        $user = unserialize(SessionService::get('USER'));
+        
+        $this->ensureAuthenticated();
         $validator = new EditProfileValidator();
 
         $data = $validator->escape($_POST);
@@ -56,7 +53,7 @@ class EditProfilePost implements ControllerInterface
 
         $userRepository = new PdoUserRepository();
         $updateProfileUseCase = new UpdateProfileUseCase($userRepository);
-        $user = $updateProfileUseCase->execute($user->getUserId(), $data);
+        $user = $updateProfileUseCase->execute($this->user->getUserId(), $data);
 
 
         SessionService::set('USER', serialize($user));

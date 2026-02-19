@@ -11,11 +11,12 @@ use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
+use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
 use Models\UseCase\ToDoList\CreateTaskUseCase;
 use Models\UseCase\ToDoList\DeleteTaskUseCase;
 use Models\UseCase\ToDoList\UpdateTaskUseCase;
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationToDoList;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
@@ -89,33 +90,31 @@ class ToDoListPost extends BaseController
                 $input = [];
             }
 
-            $saeRepo = null;
-            if ($this->user->isStudent()) {
-                $saeRepo = new PdoStudentRepository();
-            } else {
-                throw new ExceptionAccessDenied("Vous n'avez pas le droit de modifier cette To-Do List.");
-            }
+            $validateAccessUseCase = new ValidateToDoListModifyAccessUseCase(
+                new PdoSAESubjectRepository(),
+                new PdoSAEGroupRepository(),
+                new PdoParticipatedInRepository(),
+                new PdoStudentRepository(),
+                new PdoProfessorRepository(),
+                new PdoClientRepository()
+            );
 
-            if (!$saeRepo->canAccessSAE($user->getUserId(), $saeId)) {
-                throw new ExceptionAccessDenied("Vous n'avez pas accès à cette SAE.");
-            }
-
-            $targetGroupId = $this->determineTargetGroupId($user, $saeId, $input);
-
-            // Check permissions based on the group.
-            $this->checkGroupAccess($user, $saeId, $targetGroupId);
+            $targetGroupId = $validateAccessUseCase->execute($user, $saeId);
 
             $userId = $user->getUserId();
             switch ($action) {
                 case 'add':
-                    // Map description to tododesc for validation.
-                    $dataToValidate = ['tododesc' => $input['description'] ?? ''];
-                    $validator->validate($dataToValidate);
+                    // Ensure description is validated (required for add).
+                    if (!isset($input['description'])) {
+                        $input['description'] = '';
+                    }
+                    $validator->validate($input);
 
                     $this->handleAdd($targetGroupId, $input);
                     Logger::log('TODO_ADD', "Task added by user {$userId} in SAE $saeId", $userId);
                     break;
                 case 'update':
+                    $validator->validate($input);
                     $this->handleUpdate($todoId, $input);
                     Logger::log('TODO_UPDATE', "Task $todoId updated by user {$userId}", $userId);
                     break;
@@ -129,8 +128,8 @@ class ToDoListPost extends BaseController
         } catch (ExceptionAccessDenied $e) {
             Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
             $this->sendError($e->getMessage(), ($e->getCode() ?: 403));
-        } catch (ExceptionValidationEmpty $e) {
-            Logger::log('TODO_VALIDATION_ERROR', "Description vide", $user->getUserId(), 'INFO');
+        } catch (ExceptionValidationToDoList $e) {
+            Logger::log('TODO_VALIDATION_ERROR', $e->getMessage(), $user->getUserId(), 'INFO');
             $this->sendError($e->getMessage(), 400);
         } catch (Exception $e) {
             Logger::log('TODO_ERROR', "Erreur interne: " . $e->getMessage(), $user->getUserId(), 'ERROR');
@@ -158,96 +157,21 @@ class ToDoListPost extends BaseController
         ];
     }
 
-    /**
-     * Determines the group ID to operate on.
-     *
-     * @param User                 $user  The user.
-     * @param integer              $saeId The SAE ID.
-     * @param array<string, mixed> $input The input data.
-     * @return integer
-     * @throws ExceptionAccessDenied If access to the SAE is denied.
-     */
-    private function determineTargetGroupId(User $user, int $saeId, array $input): int
-    {
 
-        $useCase = new GetCompleteSAEDataUseCase(
-            new PdoSAESubjectRepository(),
-            new PdoSAEGroupRepository(),
-            new PdoParticipatedInRepository(),
-            new PdoStudentRepository(),
-            new PdoProfessorRepository(),
-            new PdoClientRepository()
-        );
-        $saeData = $useCase->execute($saeId, $user);
-
-        if (!$saeData) {
-            throw new ExceptionAccessDenied("Accès non autorisé à cette SAE.", 403);
-        }
-
-        if ($user->isStudent()) {
-            if (empty($saeData['groups'])) {
-                throw new ExceptionAccessDenied("Vous n'êtes assigné à aucun groupe.", 403);
-            }
-            $groupData = reset($saeData['groups']);
-            return (int) $groupData['group']->getSaeGroupId();
-        }
-
-        // Professors can view but NOT add/modify via this controller.
-        throw new ExceptionAccessDenied("Seuls les étudiants peuvent gérer les tâches.", 403);
-    }
-
-    /**
-     * Checks if the user has access to the specific group.
-     *
-     * @param User    $user    The user to check if has access to the group.
-     * @param integer $saeId   The SAE ID to check.
-     * @param integer $groupId The group ID to check.
-     * @throws ExceptionAccessDenied If the user access to the group is denied.
-     * @return void
-     */
-    private function checkGroupAccess(User $user, int $saeId, int $groupId): void
-    {
-        $useCase = new GetCompleteSAEDataUseCase(
-            new PdoSAESubjectRepository(),
-            new PdoSAEGroupRepository(),
-            new PdoParticipatedInRepository(),
-            new PdoStudentRepository(),
-            new PdoProfessorRepository(),
-            new PdoClientRepository()
-        );
-        $saeData = $useCase->execute($saeId, $user);
-
-        $hasAccess = false;
-        if (isset($saeData['groups'])) {
-            foreach ($saeData['groups'] as $groupData) {
-                if ($groupData['group']->getSaeGroupId() == $groupId) {
-                    $hasAccess = true;
-                    break;
-                }
-            }
-        }
-
-        if (!$hasAccess) {
-            throw new ExceptionAccessDenied("Vous n'avez pas accès à ce groupe.", 403);
-        }
-    }
 
     /**
      * Handles adding a new task to the To-Do list.
      *
      * @param integer              $groupId The ID of the group to which the task will be added.
-     * @param array<string, mixed> $input   An associative array containing 'description' (string)
+     * @param array<string, string> $input   An associative array containing 'description' (string)
      *                                      and 'priority' (int) for the new task.
      * @return void This method does not return any value, it sends a JSON response and exits.
      * @throws Exception If there is an error during task creation.
      */
     private function handleAdd(int $groupId, array $input): void
     {
-        $description = isset($input['description']) ? trim((string)$input['description']) : '';
-        $priority = isset($input['priority']) ? intval($input['priority']) : 2;
-
         $createTaskUseCase = new CreateTaskUseCase($this->repository);
-        $task = $createTaskUseCase->execute($groupId, $description, $priority);
+        $task = $createTaskUseCase->execute($groupId, trim($input['description']), intval($input['priority']));
 
         echo json_encode([
             'success' => true,
@@ -267,11 +191,6 @@ class ToDoListPost extends BaseController
      */
     private function handleUpdate(int $todoId, array $input): void
     {
-        if (!$todoId) {
-            $this->sendError("ID de tâche manquant.", 400);
-            return;
-        }
-
         $updates = [];
 
         // Update Checked Status if provided.
@@ -281,13 +200,7 @@ class ToDoListPost extends BaseController
 
         // Update Priority if provided.
         if (isset($input['priority'])) {
-            $priority = intval($input['priority']);
-            if ($priority >= 1 && $priority <= 3) {
-                $updates['priority'] = $priority;
-            } else {
-                $this->sendError("Priorité invalide (doit être entre 1 et 3).", 400);
-                return;
-            }
+            $updates['priority'] = intval($input['priority']);
         }
 
         if (empty($updates)) {
@@ -310,11 +223,6 @@ class ToDoListPost extends BaseController
      */
     private function handleDelete(int $todoId): void
     {
-        if (!$todoId) {
-            $this->sendError("ID de tâche manquant.", 400);
-            return;
-        }
-
         $deleteTaskUseCase = new DeleteTaskUseCase($this->repository);
         $deleteTaskUseCase->execute($todoId);
 
