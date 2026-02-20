@@ -13,7 +13,7 @@ use Models\User\Client;
 use Models\User\User;
 use Override;
 use Services\FileService;
-use Validator\CreateSaeValidator;
+use Validator\FormSaeValidator;
 use Views\SAE\CreateSaeView;
 
 /**
@@ -61,7 +61,7 @@ class CreateSaePostController implements ControllerInterface
         }
 
         $data = $_POST;
-        $validator = new CreateSaeValidator();
+        $validator = new FormSaeValidator();
 
         try {
             // Extract description before escape to preserve Markdown.
