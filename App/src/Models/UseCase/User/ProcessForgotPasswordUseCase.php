@@ -12,8 +12,11 @@ use Services\TokenService;
 /**
  * Use Case for processing forgot password requests.
  *
- * @category UseCase
- * @package  Models\UseCase\User
+ * @category   UseCase
+ * @package    Models\UseCase\User
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class ProcessForgotPasswordUseCase
 {
@@ -22,6 +25,11 @@ class ProcessForgotPasswordUseCase
      */
     private PdoUserRepository $userRepository;
 
+    /**
+     * Constructor.
+     *
+     * @param PdoUserRepository $userRepository Repo for users.
+     */
     public function __construct(PdoUserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
@@ -32,9 +40,9 @@ class ProcessForgotPasswordUseCase
      *
      * @param string $email The email address.
      * @return void
-     * @throws ExceptionCreationTokenFailed
-     * @throws ExceptionEmailAlreadyExists
-     * @throws ExceptionSpam
+     * @throws ExceptionCreationTokenFailed If token generation fails.
+     * @throws ExceptionEmailAlreadyExists If email exists.
+     * @throws ExceptionSpam If spam detected.
      */
     public function execute(string $email): void
     {

@@ -64,6 +64,11 @@ h3 {
     min-height: 150px;
 }
 
+.sae-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
 /* Layout */
 .main-layout {
     display: flex;

@@ -12,22 +12,69 @@ use Models\Repository\ToDoList\PdoToDoListRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\GetTasksUseCase;
 
+/**
+ * Use case to get context data for Todo list.
+ *
+ * @category   Models
+ * @package    Src
+ * @subpackage Models/UseCase/ToDoList
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
 class GetToDoListContextUseCase
 {
+    /**
+     * The SAE subject repository.
+     *
+     * @var PdoSAESubjectRepository
+     */
     private PdoSAESubjectRepository $saeSubjectRepo;
+
+    /**
+     * The SAE group repository.
+     *
+     * @var PdoSAEGroupRepository
+     */
     private PdoSAEGroupRepository $saeGroupRepo;
+
+    /**
+     * The participated in repository.
+     *
+     * @var PdoParticipatedInRepository
+     */
     private PdoParticipatedInRepository $participatedInRepo;
+
+    /**
+     * The student repository.
+     *
+     * @var PdoStudentRepository
+     */
     private PdoStudentRepository $studentRepo;
+
+    /**
+     * The to-do list repository.
+     *
+     * @var PdoToDoListRepository
+     */
     private PdoToDoListRepository $todoListRepo;
 
+    /**
+     * Constructor.
+     *
+     * @param PdoSAESubjectRepository     $saeSubjectRepo     The SAE subject repository.
+     * @param PdoSAEGroupRepository       $saeGroupRepo       The SAE group repository.
+     * @param PdoParticipatedInRepository $participatedInRepo The participated in repository.
+     * @param PdoStudentRepository        $studentRepo        The student repository.
+     * @param PdoToDoListRepository       $todoListRepo       The to-do list repository.
+     */
     public function __construct(
         PdoSAESubjectRepository $saeSubjectRepo,
         PdoSAEGroupRepository $saeGroupRepo,
         PdoParticipatedInRepository $participatedInRepo,
         PdoStudentRepository $studentRepo,
         PdoToDoListRepository $todoListRepo
-        )
-    {
+    ) {
         $this->saeSubjectRepo = $saeSubjectRepo;
         $this->saeGroupRepo = $saeGroupRepo;
         $this->participatedInRepo = $participatedInRepo;
@@ -38,11 +85,12 @@ class GetToDoListContextUseCase
     /**
      * Execute the use case.
      *
-     * @param int $saeId
-     * @param User $user
-     * @param int|null $requestedGroupId
-     * @return array
-     * @throws Exception
+     * @param integer      $saeId            The SAE ID.
+     * @param User         $user             The current user.
+     * @param integer|null $requestedGroupId The requested group ID (optional).
+     * @return array<string, mixed>
+     * @throws Exception If SAE is not found.
+     * @throws ExceptionAccessDenied If user lacks permission.
      */
     public function execute(int $saeId, User $user, ?int $requestedGroupId = null): array
     {
@@ -69,8 +117,7 @@ class GetToDoListContextUseCase
                 throw new ExceptionAccessDenied("Accès refusé à cette SAE.");
             }
             $currentGroupId = $this->participatedInRepo->getStudentGroupId($user->getUserId(), $saeId);
-        }
-        elseif ($user->isProfessor()) {
+        } elseif ($user->isProfessor()) {
             // Check if a specific group is selected via GET parameter.
             if ($requestedGroupId !== null) {
                 // Verify if the professor has access to this group (exists in this SAE).
@@ -91,7 +138,7 @@ class GetToDoListContextUseCase
 
         return [
             'subject' => $saeSubject,
-            'groups' => $formattedGroups, // Keeping key as 'groups' in intermediate array but controller might use 'all_groups'
+            'groups' => $formattedGroups,
             'current_group_id' => $currentGroupId,
             'tasks' => $tasks,
             'all_groups' => $allGroups

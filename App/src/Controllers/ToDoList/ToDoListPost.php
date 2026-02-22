@@ -162,9 +162,9 @@ class ToDoListPost extends BaseController
     /**
      * Handles adding a new task to the To-Do list.
      *
-     * @param integer              $groupId The ID of the group to which the task will be added.
+     * @param integer               $groupId The ID of the group to which the task will be added.
      * @param array<string, string> $input   An associative array containing 'description' (string)
-     *                                      and 'priority' (int) for the new task.
+     *                                       and 'priority' (int) for the new task.
      * @return void This method does not return any value, it sends a JSON response and exits.
      * @throws Exception If there is an error during task creation.
      */

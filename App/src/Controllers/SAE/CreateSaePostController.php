@@ -16,6 +16,8 @@ use Models\Entity\User\Client;
 use Models\Entity\User\User;
 use Override;
 use Validator\CreateSaeValidator;
+use Services\FileService;
+use Validator\FormSaeValidator;
 use Views\SAE\CreateSaeView;
 
 /**
@@ -42,7 +44,7 @@ class CreateSaePostController extends BaseController
         $this->ensureProfessor();
 
         $data = $_POST;
-        $validator = new CreateSaeValidator();
+        $validator = new FormSaeValidator();
 
         try {
             // Extract description before escape to preserve Markdown.

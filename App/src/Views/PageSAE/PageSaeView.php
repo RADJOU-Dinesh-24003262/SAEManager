@@ -5,6 +5,7 @@ namespace Views\PageSAE;
 use Models\Entity\SAE\SAESubject;
 use Models\Entity\User\User;
 use Override;
+use Services\FileService;
 use Views\BaseSaeView;
 use Core\Utilis\SessionService;
 use Parsedown;
@@ -323,18 +324,16 @@ class PageSaeView extends BaseSaeView
         $content .= '<p> Le client associé à cette SAE est ' . $clientLastName . ' ' . $clientFirstName .
         '.</p></article>';
 
-        $filePath = $this->subject->getFilePath();
+        $filePath = $this->subject->getFilePath() ?? '';
 
         $content .= '<h3>Description de la SAE :</h3>';
 
-        if ($filePath) {
-            $fullPath = __DIR__ . '/../../../../storage/sae_descriptions/' . $filePath;
-            if (file_exists($fullPath)) {
-                $parsedown = new Parsedown();
-                $content .= '<article><div class="sae-subject-file">';
-                $content .= $parsedown->text(file_get_contents($fullPath));
-                $content .= '</div></article>';
-            }
+        $description = FileService::getSaeDescription($filePath);
+        if ($description == '') {
+            $content .= '<p>Aucune description disponible.</p>';
+        } else {
+            $parsedown = new Parsedown();
+            $content .= '<article><div class="sae-subject-file">' . $parsedown->text($description) . '</div></article>';
         }
         return $content;
     }

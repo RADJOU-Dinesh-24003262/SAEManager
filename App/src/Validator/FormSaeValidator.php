@@ -17,7 +17,7 @@ use DateTime;
  * @license    https://opensource.org/licenses/MIT MIT License
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager/blob/main/App/src/Validator/CreateSaeValidator.php
  */
-class CreateSaeValidator extends FormValidator
+class FormSaeValidator extends FormValidator
 {
     /**
      * List of required fields.

@@ -12,15 +12,41 @@ use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 
+/**
+ * Use case to validate if a user can modify a TO-DO list.
+ *
+ * @category   Models
+ * @package    Src
+ * @subpackage Models/UseCase/ToDoList
+ * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license    MIT License https://opensource.org/licenses/MIT
+ * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
 class ValidateToDoListModifyAccessUseCase
 {
+    /** @var PdoSAESubjectRepository */
     private PdoSAESubjectRepository $subjectRepo;
+    /** @var PdoSAEGroupRepository */
     private PdoSAEGroupRepository $groupRepo;
+    /** @var PdoParticipatedInRepository */
     private PdoParticipatedInRepository $participatedInRepo;
+    /** @var PdoStudentRepository */
     private PdoStudentRepository $studentRepo;
+    /** @var PdoProfessorRepository */
     private PdoProfessorRepository $professorRepo;
+    /** @var PdoClientRepository */
     private PdoClientRepository $clientRepo;
 
+    /**
+     * Constructor for ValidateToDoListModifyAccessUseCase.
+     *
+     * @param PdoSAESubjectRepository     $subjectRepo        Repo for subjects.
+     * @param PdoSAEGroupRepository       $groupRepo          Repo for groups.
+     * @param PdoParticipatedInRepository $participatedInRepo Repo for student participations.
+     * @param PdoStudentRepository        $studentRepo        Repo for students.
+     * @param PdoProfessorRepository      $professorRepo      Repo for professors.
+     * @param PdoClientRepository         $clientRepo         Repo for clients.
+     */
     public function __construct(
         PdoSAESubjectRepository $subjectRepo,
         PdoSAEGroupRepository $groupRepo,
@@ -28,8 +54,7 @@ class ValidateToDoListModifyAccessUseCase
         PdoStudentRepository $studentRepo,
         PdoProfessorRepository $professorRepo,
         PdoClientRepository $clientRepo
-        )
-    {
+    ) {
         $this->subjectRepo = $subjectRepo;
         $this->groupRepo = $groupRepo;
         $this->participatedInRepo = $participatedInRepo;
@@ -41,10 +66,10 @@ class ValidateToDoListModifyAccessUseCase
     /**
      * Determine Target Group ID and Validate Access.
      *
-     * @param User $user
-     * @param int $saeId
-     * @return int Target Group ID
-     * @throws ExceptionAccessDenied
+     * @param User    $user  User requesting access.
+     * @param integer $saeId The SAE ID.
+     * @return integer Target Group ID
+     * @throws ExceptionAccessDenied If user lacks permission.
      */
     public function execute(User $user, int $saeId): int
     {
@@ -68,7 +93,7 @@ class ValidateToDoListModifyAccessUseCase
             $this->studentRepo,
             $this->professorRepo,
             $this->clientRepo
-            );
+        );
         $saeData = $useCase->execute($saeId, $user);
 
         if (!$saeData) {

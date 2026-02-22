@@ -21,8 +21,8 @@ class ExceptionValidationToDoList extends Exception
     /**
      * Constructor.
      *
-     * @param string $message error message.
-     * @param int $code error code.
+     * @param string  $message Error message.
+     * @param integer $code    Error code.
      */
     public function __construct(string $message = "Erreur de validation ToDoList.", int $code = 400)
     {

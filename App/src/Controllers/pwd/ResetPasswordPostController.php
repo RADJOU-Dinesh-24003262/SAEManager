@@ -40,6 +40,7 @@ class ResetPasswordPostController implements ControllerInterface
     #[Override]
     public function control(): void
     {
+        $email = '';
         try {
             $token = $_GET['token'] ?? '';
 
@@ -65,7 +66,7 @@ class ResetPasswordPostController implements ControllerInterface
             SessionService::setFlash('errors', [$e->getMessage()]);
         }
 
-        $view = new ResetPasswordView($_GET['token'] ?? '', $email ?? '');
+        $view = new ResetPasswordView($_GET['token'] ?? '', $email);
         $view->render();
     }
 
