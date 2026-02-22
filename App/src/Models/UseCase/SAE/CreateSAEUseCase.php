@@ -6,7 +6,6 @@ use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Models\Entity\SAE\SAESubject;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Models\Entity\User\User;
-
 use Services\FileService;
 
 /**
@@ -54,8 +53,9 @@ class CreateSAEUseCase
             throw new ExceptionAccessDenied("Vous n'avez pas la permission de créer une SAE");
         }
 
-        // Handle File Saving
-        $data['file_path'] = FileService::saveSaeDescription($data['description'], $data['subject_name']);
+        // Handle File Saving.
+        $description = $data['description'] ?? '';
+        $data['file_path'] = FileService::saveSaeDescription($description, $data['subject_name']);
 
         // Create SAE subject.
         $subject = new SAESubject($data);

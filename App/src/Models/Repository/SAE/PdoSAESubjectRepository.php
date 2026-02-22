@@ -193,8 +193,7 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
     {
         try {
             $stmt = $this->connection->prepare(
-                'SELECT s.* 
-                FROM sae_subjects s
+                'SELECT s.* FROM sae_subjects s
                 JOIN sae_groups sg ON s.sae_subject_id = sg.sae_subject_id
                 JOIN participated_in pi ON sg.sae_group_id = pi.sae_group_id
                 WHERE pi.student_id = :student_id
@@ -278,13 +277,13 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
      *
      * @param integer $saeId The SAE subject ID.
      * @return array<int, array{
-     *   user_id: string,
-     *   first_name: string,
-     *   last_name: string,
-     *   email: string,
-     *   phone: string|null,
-     *   amu_id: string,
-     *   is_responsible: int
+     * user_id: string,
+     * first_name: string,
+     * last_name: string,
+     * email: string,
+     * phone: string|null,
+     * amu_id: string,
+     * is_responsible: int
      * }>
      * @throws PDOException If a database error occurs.
      */
@@ -403,6 +402,31 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs par date de fin : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
+        }
+    }
+
+    /**
+     * Gets the file name (path) of the SAE subject.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return string The relative file path.
+     * @throws PDOException If query fails.
+     */
+    public function getFileName(int $saeId): string
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT file_path FROM sae_subjects WHERE sae_subject_id = :sae_id'
+            );
+            $stmt->execute(['sae_id' => $saeId]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$data) {
+                throw new PDOException('SAE subject not found');
+            }
+            return $data['file_path'] ?? '';
+        } catch (PDOException $e) {
+            error_log('Erreur récuperation chemin relatif du fichier' . $e->getMessage());
+            return '';
         }
     }
 }

@@ -67,7 +67,7 @@ class ForgotPasswordPostController implements ControllerInterface
 
             $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
             $processForgotPasswordUseCase->execute($email);
-            
+
             SessionService::set('last_forgot_password_request', time());
 
             // Generic message to avoid revealing if the email exists.

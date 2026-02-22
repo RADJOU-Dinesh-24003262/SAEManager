@@ -44,7 +44,7 @@ class EditProfilePost extends BaseController
     #[Override]
     public function control(): void
     {
-        
+
         $this->ensureAuthenticated();
         $validator = new EditProfileValidator();
 

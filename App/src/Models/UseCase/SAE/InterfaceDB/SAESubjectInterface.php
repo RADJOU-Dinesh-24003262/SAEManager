@@ -127,4 +127,12 @@ interface SAESubjectInterface
      * }|null
      */
     public function getClientInfo(int $saeId): ?array;
+
+    /**
+     * Gets the file name (path) of the SAE subject.
+     *
+     * @param integer $saeId The SAE subject ID.
+     * @return string The relative file path.
+     */
+    public function getFileName(int $saeId): string;
 }
