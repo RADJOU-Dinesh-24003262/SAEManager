@@ -27,8 +27,7 @@ class CreateSaeValidatorTest extends TestCase
             'nameSae' => 'Valid Name',
             'description' => 'Valid description with enough characters',
             'begin_date' => '2023-01-01',
-            'date_rendu' => '2023-01-15',
-            'end_date' => '2023-02-01',
+            'end_date' => '2023-01-15',
             'client_id' => '1'
         ];
     }
@@ -80,7 +79,7 @@ class CreateSaeValidatorTest extends TestCase
     public function invalidDateRenduThrowsException(): void
     {
         $data = $this->getValidData();
-        $data['date_rendu'] = '2023-13-45';
+        $data['end_date'] = '2023-13-45';
 
         $this->expectException(ExeptionValidationSAECreation::class);
         $this->expectExceptionMessage('La date de rendu n\'est pas valide.');
@@ -93,7 +92,7 @@ class CreateSaeValidatorTest extends TestCase
     {
         $data = $this->getValidData();
         $data['begin_date'] = '2023-02-01';
-        $data['date_rendu'] = '2023-01-01'; // Before begin
+        $data['end_date'] = '2023-01-01'; // Before begin
 
         $this->expectException(ExeptionValidationSAECreation::class);
         $this->expectExceptionMessage('La date de rendu doit être postérieure à la date de début.');
@@ -105,12 +104,11 @@ class CreateSaeValidatorTest extends TestCase
     public function endDateBeforeBeginDateThrowsException(): void
     {
         $data = $this->getValidData();
-        $data['begin_date'] = '2023-02-01';
-        $data['date_rendu'] = '2023-02-15'; // Valid (after begin)
+        $data['begin_date'] = '2023-02-02';
         $data['end_date'] = '2023-01-01'; // Invalid (before begin)
 
         $this->expectException(ExeptionValidationSAECreation::class);
-        $this->expectExceptionMessage('La date de fin doit être après la date de début');
+        $this->expectExceptionMessage('La date de rendu doit être postérieure à la date de début.');
 
         $this->validator->validate($data);
     }
