@@ -86,7 +86,7 @@ class CreateSaePostController implements ControllerInterface
                 'client_id' => $clientId,
                 'subject_name' => $data['nameSae'],
                 'begin_date' => $data['begin_date'],
-                'end_date' => $data['date_rendu'],
+                'end_date' => $data['end_date'],
                 'file_path' => $filePath
             ];
 

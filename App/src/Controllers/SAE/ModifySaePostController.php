@@ -95,7 +95,7 @@ class ModifySaePostController extends BaseController
                 'subject_name' => $data['nameSae'],
                 'client_id' => !empty($data['client_id']) ? intval($data['client_id']) : null,
                 'begin_date' => $data['begin_date'],
-                'end_date' => $data['date_rendu'],
+                'end_date' => $data['end_date'],
                 'file_path' => $fileName, // Keep old file by default.
             ];
 

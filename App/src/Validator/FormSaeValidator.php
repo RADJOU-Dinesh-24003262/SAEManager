@@ -26,7 +26,7 @@ class FormSaeValidator extends FormValidator
      */
     protected $required = [
         'nameSae',
-        'date_rendu',
+        'end_date',
         'begin_date',
         'description'
     ];
@@ -52,7 +52,7 @@ class FormSaeValidator extends FormValidator
         }
 
         // Validate date format.
-        if (!$this->isValidDate($data['date_rendu'])) {
+        if (!$this->isValidDate($data['end_date'])) {
             throw new ExeptionValidationSAECreation('La date de rendu n\'est pas valide.');
         }
 
@@ -61,7 +61,7 @@ class FormSaeValidator extends FormValidator
         }
 
         // Check if dates are logical (end > begin).
-        if ($data['date_rendu'] <= $data['begin_date']) {
+        if ($data['end_date'] <= $data['begin_date']) {
             throw new ExeptionValidationSAECreation('La date de rendu doit être postérieure à la date de début.');
         }
 
