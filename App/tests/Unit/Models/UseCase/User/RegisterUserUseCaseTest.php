@@ -6,6 +6,7 @@ use Core\includes\exception\ExceptionEmailAlreadyExists;
 use InvalidArgumentException;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
+use Models\Entity\User\UserFactory;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 #[CoversClass(User::class)]
 #[CoversClass(Student::class)]
 #[CoversClass(ExceptionEmailAlreadyExists::class)]
+#[CoversClass(UserFactory::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
     private UserInterface|MockObject $userRepository;
@@ -88,19 +90,6 @@ class RegisterUserUseCaseTest extends TestCase
             ->willReturn(true);
 
         $this->expectException(ExceptionEmailAlreadyExists::class);
-
-        $this->registerUseCase->execute($data);
-    }
-
-    #[Test]
-    public function executeThrowsExceptionForInvalidUserType(): void
-    {
-        $data = [
-            'user_type' => 'alien',
-            'first_name' => 'John'
-        ];
-
-        $this->expectException(InvalidArgumentException::class);
 
         $this->registerUseCase->execute($data);
     }

@@ -173,25 +173,4 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
             return false;
         }
     }
-
-    /**
-     * Deletes a task by ID.
-     *
-     * @param integer $id The task ID.
-     * @return boolean True on success, false on failure.
-     */
-    #[Override]
-    public function delete(int $id): bool
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'DELETE FROM sae_todolists WHERE todoid = :id'
-            );
-            $stmt->execute(['id' => $id]);
-            return $stmt->rowCount() > 0;
-        } catch (PDOException $e) {
-            error_log("Error in PdoToDoListRepository::delete: " . $e->getMessage());
-            return false;
-        }
-    }
 }

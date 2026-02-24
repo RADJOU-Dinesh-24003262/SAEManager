@@ -2,6 +2,7 @@
 
 namespace Tests\Integration\Models\SAE;
 
+use Models\Entity\User\UserFactory;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
@@ -51,6 +52,7 @@ use ReflectionClass;
 #[CoversClass(PdoProfessorRepository::class)]
 #[CoversClass(PdoStudentRepository::class)]
 #[CoversClass(PdoUserRepository::class)]
+#[CoversClass(UserFactory::class)]
 
 class SAEServiceIntegrationTest extends TestCase
 {

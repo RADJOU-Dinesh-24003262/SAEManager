@@ -82,29 +82,12 @@ class RegisterSuccessView extends AbstractView
         return [
             'USER_FULL_NAME'  => $this->user->getFullName(),
             'USER_EMAIL'      => $this->user->getEmail(),
-            'USER_TYPE_LABEL' => $this->getUserTypeLabel(),
+            'USER_TYPE_LABEL' => $this->user->getRoleLabel(),
             'ACADEMIC_INFO'   => $this->getAcademicInfo(),
         ];
     }
 
-    /**
-     * Returns the user type label in French.
-     *
-     * @return string
-     */
-    private function getUserTypeLabel(): string
-    {
-        switch ($this->user->getUserType()) {
-            case 'student':
-                return 'Étudiant';
-            case 'professor':
-                return 'Responsable SAE';
-            case 'client':
-                return 'Partenaire entreprise';
-            default:
-                return 'Utilisateur';
-        }
-    }
+
 
     /**
      * Returns academic info as an HTML div or empty string if not a student.

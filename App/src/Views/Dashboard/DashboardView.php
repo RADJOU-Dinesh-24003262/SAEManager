@@ -82,34 +82,15 @@ class DashboardView extends AbstractView
             'SUCCESS_MESSAGE'  => $this->renderSuccessMessage(),
             'USER_NAME'        => $user->getFullName(),
             'USER_EMAIL'       => $user->getEmail(),
-            'USER_TYPE_CLASS'  => $this->getUserTypeLabel($user),
-            'USER_TYPE_LABEL'  => ucfirst($this->getUserTypeLabel($user)),
+            'USER_TYPE_CLASS'  => mb_strtolower($user->getRoleLabel()),
+            'USER_TYPE_LABEL'  => $user->getRoleLabel(),
             'USER_META_INFO'   => $this->renderUserMetaInfo($user),
             'SAE_NAVIGATION'   => $this->renderSAENavigation($user),
             'SAE_CONTENT'      => $this->renderSAEContent($user, $saes)
         ];
     }
 
-    /**
-     * Returns a user-friendly label based on the user's role.
-     *
-     * @param User $user The user instance.
-     *
-     * @return string The role label.
-     */
-    private function getUserTypeLabel(User $user): string
-    {
-        if ($user->isStudent()) {
-            return 'étudiant';
-        }
-        if ($user->isProfessor()) {
-            return 'professeur';
-        }
-        if ($user->isClient()) {
-            return 'client';
-        }
-        return 'utilisateur';
-    }
+
 
     /**
      * Renders additional user information depending on the user type.

@@ -2,6 +2,7 @@
 
 namespace Models\UseCase\SAE\InterfaceDB;
 
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Models\Entity\SAE\SAESubject;
 
 /**
@@ -16,24 +17,11 @@ use Models\Entity\SAE\SAESubject;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
+ * @extends RepositoryInterface<SAESubject>
  */
-interface SAESubjectInterface
+interface SAESubjectInterface extends RepositoryInterface
 {
-    /**
-     * Finds all SAE subjects.
-     *
-     * @return array<SAESubject>
-     */
-    public function findAll(): array;
-
-    /**
-     * Finds a SAE subject by ID.
-     *
-     * @param integer $id The SAE subject ID.
-     * @return SAESubject|null
-     */
-    public function findById(int $id): ?SAESubject;
-
     /**
      * Finds SAE subjects by professor ID.
      *
@@ -58,29 +46,6 @@ interface SAESubjectInterface
      */
     public function findByClientId(int $clientId): array;
 
-    /**
-     * Inserts a new SAE subject into the database.
-     *
-     * @param object $entity The SAE subject entity to insert.
-     * @return integer|boolean The ID of the inserted SAE subject, or false on failure.
-     */
-    public function insert(object $entity): int|bool;
-
-    /**
-     * Updates an existing SAE subject in the database.
-     *
-     * @param object $entity The SAE subject entity to update.
-     * @return boolean True on success, false on failure.
-     */
-    public function update(object $entity): bool;
-
-    /**
-     * Deletes a SAE subject.
-     *
-     * @param integer $id The SAE subject ID.
-     * @return boolean True on success.
-     */
-    public function delete(int $id): bool;
 
     /**
      * Gets responsible professor info.
@@ -127,12 +92,4 @@ interface SAESubjectInterface
      * }|null
      */
     public function getClientInfo(int $saeId): ?array;
-
-    /**
-     * Gets the file name (path) of the SAE subject.
-     *
-     * @param integer $saeId The SAE subject ID.
-     * @return string The relative file path.
-     */
-    public function getFileName(int $saeId): string;
 }

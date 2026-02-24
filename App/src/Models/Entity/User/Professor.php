@@ -2,6 +2,8 @@
 
 namespace Models\Entity\User;
 
+use Override;
+
 /**
  * Represents a professor user in the system.
  *
@@ -48,5 +50,16 @@ class Professor extends User
     public function getAmuId(): string
     {
         return $this->amu_id;
+    }
+
+    /**
+     * Gets the user's role label for display.
+     *
+     * @return string
+     */
+    #[Override]
+    public function getRoleLabel(): string
+    {
+        return 'Professeur';
     }
 }

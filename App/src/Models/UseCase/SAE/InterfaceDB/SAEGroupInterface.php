@@ -2,6 +2,7 @@
 
 namespace Models\UseCase\SAE\InterfaceDB;
 
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Models\Entity\SAE\SAEGroup;
 
 /**
@@ -16,17 +17,11 @@ use Models\Entity\SAE\SAEGroup;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
+ * @extends RepositoryInterface<SAEGroup>
  */
-interface SAEGroupInterface
+interface SAEGroupInterface extends RepositoryInterface
 {
-    /**
-     * Finds a SAE group by ID.
-     *
-     * @param integer $id The SAE group ID.
-     * @return SAEGroup|null
-     */
-    public function findById(int $id): ?SAEGroup;
-
     /**
      * Finds all groups for a SAE subject.
      *
@@ -35,29 +30,6 @@ interface SAEGroupInterface
      */
     public function findBySaeSubjectId(int $saeSubjectId): array;
 
-    /**
-     * Creates a new SAE group.
-     *
-     * @param SAEGroup $entity The SAE group to create.
-     * @return integer|boolean The created group with ID or false on failure.
-     */
-    public function insert(SAEGroup $entity): int|bool;
-
-    /**
-     * Updates a SAE group.
-     *
-     * @param SAEGroup $entity The SAE group to update.
-     * @return boolean True on success.
-     */
-    public function update(SAEGroup $entity): bool;
-
-    /**
-     * Deletes a SAE group.
-     *
-     * @param integer $id The SAE group ID.
-     * @return boolean True on success.
-     */
-    public function delete(int $id): bool;
 
     /**
      * Gets students in a group with their details.

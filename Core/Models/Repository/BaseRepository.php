@@ -4,6 +4,7 @@ namespace Core\Models\Repository;
 
 use Core\includes\Database;
 use Core\Models\BaseModel;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Exception;
 use Override;
 use PDO;
@@ -25,8 +26,9 @@ use PDOException;
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  * @template T of BaseModel
+ * @implements RepositoryInterface<T>
  */
-abstract class BaseRepository
+abstract class BaseRepository implements RepositoryInterface
 {
     /**
      * The PDO connection instance
@@ -64,7 +66,7 @@ abstract class BaseRepository
      * @param integer $id The ID of the entry to find in the database.
      * @return T|null Returns the entity if found, null otherwise
      */
-    public function findById(int $id)
+    public function findById(int $id): ?BaseModel
     {
         try {
             $stmt = $this->connection->prepare(
@@ -151,14 +153,11 @@ abstract class BaseRepository
     /**
      * Updates data in the database.
      *
-     * @param object $data The entity to update.
+     * @param BaseModel $data The entity to update.
      * @return boolean True on success, false on failure.
      */
-    public function update(object $data): bool
+    public function update(BaseModel $data): bool
     {
-        if (!$data instanceof BaseModel) {
-            return false;
-        }
 
         $attributes = $data->toArray();
         $query = "UPDATE {$this->table} SET ";
@@ -190,14 +189,11 @@ abstract class BaseRepository
     /**
      * Inserts data into the database.
      *
-     * @param object $data The entity to insert.
+     * @param BaseModel $data The entity to insert.
      * @return integer|boolean The ID of the inserted row or false on failure.
      */
-    public function insert(object $data): int|bool
+    public function insert(BaseModel $data): int|bool
     {
-        if (!$data instanceof BaseModel) {
-            return false;
-        }
 
         $attributes = $data->toArray();
         unset($attributes[$this->getPrimaryKey()]);

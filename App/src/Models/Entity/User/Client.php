@@ -2,6 +2,8 @@
 
 namespace Models\Entity\User;
 
+use Override;
+
 /**
  * Represents a client user in the system.
  *
@@ -47,5 +49,16 @@ class Client extends User
     public function getOrganisation(): string
     {
         return $this->organisation;
+    }
+
+    /**
+     * Gets the user's role label for display.
+     *
+     * @return string
+     */
+    #[Override]
+    public function getRoleLabel(): string
+    {
+        return 'Client';
     }
 }
