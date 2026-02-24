@@ -2,6 +2,8 @@
 
 namespace Models\Entity\User;
 
+use Override;
+
 /**
  * Represents a student user in the system.
  *
@@ -132,5 +134,16 @@ class Student extends User
     public function getStudentId(): int
     {
         return $this->student_id;
+    }
+
+    /**
+     * Gets the user's role label for display.
+     *
+     * @return string
+     */
+    #[Override]
+    public function getRoleLabel(): string
+    {
+        return 'Étudiant';
     }
 }

@@ -6,6 +6,7 @@ use Models\Entity\User\User;
 use Models\Entity\User\Student;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Client;
+use Models\Entity\User\UserFactory;
 use Models\Repository\User\PdoUserRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\Repository\User\PdoProfessorRepository;
@@ -29,6 +30,7 @@ use Core\includes\exception\ExceptionEmailAlreadyExists;
 #[CoversClass(Client::class)]
 #[CoversClass(Database::class)]
 #[CoversClass(ExceptionEmailAlreadyExists::class)]
+#[CoversClass(UserFactory::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
     private array $createdUserIds = [];

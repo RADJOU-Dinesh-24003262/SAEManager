@@ -8,6 +8,7 @@ use Models\Entity\User\User;
 use Models\Entity\User\Student;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Client;
+use Models\Entity\User\UserFactory;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Override;
 use PDO;
@@ -131,26 +132,10 @@ class PdoUserRepository extends BaseRepository implements UserInterface
      *
      * @param array<string, mixed> $data The user data.
      * @return User
-     * @throws \RuntimeException If the user type is unknown.
      */
     private function instantiateUser(array $data): User
     {
-        $typeMap = [
-            '0' => 'student',
-            '1' => 'professor',
-            '2' => 'client'
-        ];
-
-        if (isset($data['user_type']) && isset($typeMap[$data['user_type']])) {
-            $data['user_type'] = $typeMap[$data['user_type']];
-        }
-
-        return match ($data['user_type']) {
-            'student' => new Student($data),
-            'professor' => new Professor($data),
-            'client' => new Client($data),
-            default => throw new \RuntimeException("Unknown user type: " . ($data['user_type'] ?? 'null')),
-        };
+        return UserFactory::create($data);
     }
 
     /**

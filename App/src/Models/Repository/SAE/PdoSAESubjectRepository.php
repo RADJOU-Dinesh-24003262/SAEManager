@@ -67,60 +67,6 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         return 'sae_subject_id';
     }
 
-    /**
-     * Inserts a new SAE subject into the database.
-     *
-     * @param object $entity The SAE subject entity to insert.
-     * @return integer|boolean The ID of the inserted SAE subject, or false on failure.
-     * @throws PDOException If a database error occurs.
-     */
-    public function insert(object $entity): int|bool
-    {
-        if (!$entity instanceof SAESubject) {
-            return false;
-        }
-        return parent::insert($entity);
-    }
-
-    /**
-     * Updates an existing SAE subject in the database.
-     *
-     * @param object $entity The SAE subject entity to update.
-     * @return boolean True on success, false on failure.
-     * @throws PDOException If a database error occurs.
-     */
-    public function update(object $entity): bool
-    {
-        if (!$entity instanceof SAESubject) {
-            return false;
-        }
-        return parent::update($entity);
-    }
-
-    /**
-     * Deletes an SAE subject from the database.
-     *
-     * @param integer $id The ID of the SAE subject to delete.
-     * @return boolean True on success, false on failure.
-     * @throws PDOException If a database error occurs.
-     */
-    public function delete(int $id): bool
-    {
-        return parent::delete($id);
-    }
-
-    /**
-     * Finds a SAE subject by its ID.
-     *
-     * @param integer $id The ID of the SAE subject to find.
-     * @return SAESubject|null The SAE subject entity, or null if not found.
-     * @throws PDOException If a database error occurs.
-     */
-    public function findById(int $id): ?SAESubject
-    {
-        return parent::findById($id);
-    }
-
 
 
     /**
@@ -402,31 +348,6 @@ class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterf
         } catch (PDOException $e) {
             error_log('Erreur récupération SAEs par date de fin : ' . $e->getMessage());
             throw new ExceptionFetchDataBD();
-        }
-    }
-
-    /**
-     * Gets the file name (path) of the SAE subject.
-     *
-     * @param integer $saeId The SAE subject ID.
-     * @return string The relative file path.
-     * @throws PDOException If query fails.
-     */
-    public function getFileName(int $saeId): string
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT file_path FROM sae_subjects WHERE sae_subject_id = :sae_id'
-            );
-            $stmt->execute(['sae_id' => $saeId]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$data) {
-                throw new PDOException('SAE subject not found');
-            }
-            return $data['file_path'] ?? '';
-        } catch (PDOException $e) {
-            error_log('Erreur récuperation chemin relatif du fichier' . $e->getMessage());
-            return '';
         }
     }
 }

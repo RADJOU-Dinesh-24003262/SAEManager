@@ -2,6 +2,7 @@
 
 namespace Tests\Integration\Models;
 
+use Models\Entity\User\UserFactory;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
@@ -36,6 +37,7 @@ use ReflectionClass;
 #[CoversClass(Student::class)]
 #[CoversClass(Professor::class)]
 #[CoversClass(Client::class)]
+#[CoversClass(UserFactory::class)]
 
 class UserWorkflowIntegrationTest extends TestCase
 {

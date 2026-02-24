@@ -2,6 +2,7 @@
 
 namespace Models\UseCase\ToDoList\InterfaceDB;
 
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**
@@ -15,17 +16,11 @@ use Models\Entity\ToDoItem\ToDoItem;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
+ * @extends RepositoryInterface<ToDoItem>
  */
-interface ToDoListInterface
+interface ToDoListInterface extends RepositoryInterface
 {
-    /**
-     * Finds a task by ID.
-     *
-     * @param integer $id The task ID.
-     * @return ToDoItem|null The task or null if not found.
-     */
-    public function findById(int $id): ?ToDoItem;
-
     /**
      * Finds all tasks for a given SAE group.
      *
@@ -33,28 +28,4 @@ interface ToDoListInterface
      * @return array<ToDoItem> The list of tasks.
      */
     public function findByGroupId(int $groupId): array;
-
-    /**
-     * Inserts a new task.
-     *
-     * @param ToDoItem $task The task entity to insert.
-     * @return integer|boolean The ID of the created task or false on failure.
-     */
-    public function insert(ToDoItem $task): int|bool;
-
-    /**
-     * Updates an existing task.
-     *
-     * @param ToDoItem $task The task entity to update.
-     * @return boolean True on success, false on failure.
-     */
-    public function update(ToDoItem $task): bool;
-
-    /**
-     * Deletes a task by ID.
-     *
-     * @param integer $id The task ID.
-     * @return boolean True on success, false on failure.
-     */
-    public function delete(int $id): bool;
 }

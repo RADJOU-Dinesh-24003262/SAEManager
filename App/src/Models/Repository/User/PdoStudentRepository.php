@@ -77,6 +77,29 @@ class PdoStudentRepository implements StudentInterface
         }
     }
 
+    /**
+     * Finds all students.
+     *
+     * @return array<Student> Array of student entities.
+     */
+    public function findAll(): array
+    {
+        try {
+            $stmt = $this->connection->prepare(
+                'SELECT u.*, s.* 
+                 FROM users u
+                 JOIN students s ON u.user_id = s.student_id'
+            );
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return array_map(fn($data) => new Student($data), $results);
+        } catch (PDOException $e) {
+            error_log("Error in findAll (Student): " . $e->getMessage());
+            return [];
+        }
+    }
+
 
     /**
      * Finds a student by email.

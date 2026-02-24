@@ -3,6 +3,7 @@
 namespace Models\UseCase\User\InterfaceDB;
 
 use Models\Entity\User\User;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Interface for User repository operations.
@@ -16,17 +17,11 @@ use Models\Entity\User\User;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ *
+ * @extends RepositoryInterface<User>
  */
-interface UserInterface
+interface UserInterface extends RepositoryInterface
 {
-    /**
-     * Finds a user by ID.
-     *
-     * @param integer $id The user ID.
-     * @return User|null The user entity or null if not found.
-     */
-    public function findById(int $id): ?User;
-
     /**
      * Finds a user by email.
      *
@@ -34,30 +29,6 @@ interface UserInterface
      * @return User|null The user entity or null if not found.
      */
     public function findByEmail(string $email): ?User;
-
-    /**
-     * Inserts a user into the database.
-     *
-     * @param object $user The user entity.
-     * @return integer|boolean The id of the created user or false on failure.
-     */
-    public function insert(object $user): int|bool;
-
-    /**
-     * Updates a user.
-     *
-     * @param object $user The user entity.
-     * @return boolean True on success.
-     */
-    public function update(object $user): bool;
-
-    /**
-     * Deletes a user by ID.
-     *
-     * @param integer $id The user ID.
-     * @return boolean True on success, false on failure.
-     */
-    public function delete(int $id): bool;
 
     /**
      * Checks if a user exists by email.

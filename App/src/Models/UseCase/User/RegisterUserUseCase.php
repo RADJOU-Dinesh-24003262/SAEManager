@@ -8,6 +8,7 @@ use Models\Entity\User\Client;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
+use Models\Entity\User\UserFactory;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\UseCase\User\InterfaceDB\ProfessorInterface;
@@ -90,7 +91,7 @@ class RegisterUserUseCase
     public function execute(array $data): ?User
     {
         // 1. Create the user entity
-        $user = $this->createUserEntity($data);
+        $user = UserFactory::create($data);
 
         // 2. Set password (hash it)
         if (isset($data['password'])) {
@@ -126,24 +127,5 @@ class RegisterUserUseCase
         }
 
         return $this->pdoInterface->findById($user->getUserId());
-    }
-
-    /**
-     * Creates the appropriate User entity based on type.
-     *
-     * @param array<string, mixed> $data The user data.
-     * @return User The user entity.
-     * @throws InvalidArgumentException If user type is invalid.
-     */
-    private function createUserEntity(array $data): User
-    {
-        $userType = $data['user_type'] ?? '';
-
-        return match ($userType) {
-            'student' => new Student($data),
-            'professor' => new Professor($data),
-            'client' => new Client($data),
-            default => throw new InvalidArgumentException("Type d'utilisateur invalide : {$userType}"),
-        };
     }
 }

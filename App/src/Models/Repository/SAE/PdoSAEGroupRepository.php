@@ -65,18 +65,6 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
     }
 
     /**
-     * Finds a SAE group by ID.
-     *
-     * @param integer $id The SAE group ID.
-     * @return SAEGroup|null
-     */
-    #[Override]
-    public function findById(int $id): ?SAEGroup
-    {
-        return parent::findById($id);
-    }
-
-    /**
      * Finds all groups for a SAE subject.
      *
      * @param integer $saeSubjectId The SAE subject ID.
@@ -166,29 +154,6 @@ class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
             error_log('Erreur mise à jour groupe : ' . $e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Deletes a SAE group.
-     *
-     * @param integer $id The SAE group ID.
-     * @return boolean True on success.
-     */
-    #[Override]
-    public function delete(int $id): bool
-    {
-        return parent::delete($id);
-    }
-
-    /**
-     * Finds all SAE groups.
-     *
-     * @return array<SAEGroup>
-     */
-    #[Override]
-    public function findAll(): array
-    {
-        return parent::findAll();
     }
 
     /**

@@ -288,6 +288,13 @@ abstract class User extends BaseModel
     }
 
     /**
+     * Gets the user's role label for display.
+     *
+     * @return string
+     */
+    abstract public function getRoleLabel(): string;
+
+    /**
      * Get the ID of the entity.
      *
      * @return integer|null
