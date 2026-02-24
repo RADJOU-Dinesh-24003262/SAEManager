@@ -146,4 +146,24 @@ class Student extends User
     {
         return 'Étudiant';
     }
+
+    /**
+     * Gets the student's dashboard meta information for display.
+     *
+     * @return array<string, mixed>
+     */
+    #[Override]
+    public function getDashboardMetaInfo(): array
+    {
+        $meta = [
+            'Année' => $this->year,
+            'Groupe' => $this->td . '-' . $this->tp,
+        ];
+
+        if ($this->major) {
+            $meta['Parcours'] = $this->major;
+        }
+
+        return $meta;
+    }
 }

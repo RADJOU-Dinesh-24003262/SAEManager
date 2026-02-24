@@ -61,4 +61,17 @@ class Client extends User
     {
         return 'Client';
     }
+
+    /**
+     * Gets the client's dashboard meta information for display.
+     *
+     * @return array<string, mixed>
+     */
+    #[Override]
+    public function getDashboardMetaInfo(): array
+    {
+        return [
+            'Entreprise' => $this->organisation,
+        ];
+    }
 }

@@ -102,22 +102,10 @@ class DashboardView extends AbstractView
     private function renderUserMetaInfo(User $user): string
     {
         $html = '';
+        $metaInfo = $user->getDashboardMetaInfo();
 
-        if ($user->isStudent() && $user instanceof Student) {
-            /* @var Student $student */
-            $student = $user;
-
-            $html .= '<span>Année : ' . $student->getYear() . '</span>';
-            $html .= '<span>Groupe : ' . $student->getTd() . '-' . $student->getTp() . '</span>';
-            if ($student->getMajor()) {
-                $html .= '<span>Parcours : ' . $student->getMajor() . '</span>';
-            }
-        } elseif ($user->isProfessor()) {
-            $html .= '<span>Département : Informatique</span>';
-        } elseif ($user->isClient() && $user instanceof Client) {
-            /* @var Client $client */
-            $client = $user;
-            $html .= '<span>Entreprise : ' . $client->getOrganisation() . ' </span>';
+        foreach ($metaInfo as $label => $value) {
+            $html .= '<span>' . $label . ' : ' . $value . '</span>';
         }
 
         return $html;

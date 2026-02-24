@@ -9,6 +9,7 @@ use Models\Entity\User\Student;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Client;
 use Models\Entity\User\UserFactory;
+use Models\UseCase\User\InterfaceDB\RoleAccessInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Override;
 use PDO;
@@ -262,34 +263,5 @@ class PdoUserRepository extends BaseRepository implements UserInterface
             error_log('Error updating password: ' . $e->getMessage());
             return false;
         }
-    }
-
-    /**
-     * Checks if a user can access a SAE.
-     *
-     * @param integer $userId The user ID.
-     * @param integer $saeId  The SAE ID.
-     * @return boolean True if accessible, false otherwise.
-     */
-    public function canAccessSAE(int $userId, int $saeId): bool
-    {
-        $user = $this->findById($userId);
-        if (!$user) {
-            return false;
-        }
-
-        if ($user instanceof Student) {
-            return (new PdoStudentRepository())->canAccessSAE($userId, $saeId);
-        }
-
-        if ($user instanceof Professor) {
-            return (new PdoProfessorRepository())->canAccessSAE($userId, $saeId);
-        }
-
-        if ($user instanceof Client) {
-            return (new PdoClientRepository())->canAccessSAE($userId, $saeId);
-        }
-
-        return false;
     }
 }

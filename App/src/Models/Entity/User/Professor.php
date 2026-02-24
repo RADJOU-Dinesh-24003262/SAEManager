@@ -62,4 +62,17 @@ class Professor extends User
     {
         return 'Professeur';
     }
+
+    /**
+     * Gets the professor's dashboard meta information for display.
+     *
+     * @return array<string, mixed>
+     */
+    #[Override]
+    public function getDashboardMetaInfo(): array
+    {
+        return [
+            'Département' => 'Informatique',
+        ];
+    }
 }

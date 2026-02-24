@@ -17,7 +17,7 @@ use Models\Entity\User\Professor;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-interface ProfessorInterface extends UserInterface
+interface ProfessorInterface extends UserInterface, RoleAccessInterface
 {
     /**
      * Finds all professors.
@@ -34,13 +34,4 @@ interface ProfessorInterface extends UserInterface
      * @return boolean True if responsible, false otherwise.
      */
     public function isResponsibleProfessor(int $professorId, int $saeId): bool;
-
-    /**
-     * Checks if a professor can access a SAE.
-     *
-     * @param integer $professorId The professor ID.
-     * @param integer $saeId       The SAE ID.
-     * @return boolean True if accessible, false otherwise.
-     */
-    public function canAccessSAE(int $professorId, int $saeId): bool;
 }

@@ -90,40 +90,23 @@ class RegisterSuccessView extends AbstractView
 
 
     /**
-     * Returns academic info as an HTML div or empty string if not a student.
+     * Returns extra user info as an HTML div or empty string if none.
      *
      * @return string
      */
     private function getAcademicInfo(): string
     {
-        if (!$this->user->isStudent() && $this->user instanceof Student) {
-            /*
-            * @var Student $student
-            */
-            $student = $this->user;
+        $metaInfo = $this->user->getDashboardMetaInfo();
 
+        $info = '<div class="academic-info">';
+        $info .= '<h4>Informations complémentaires</h4>';
 
-            $year    = $student->getYear();
-            $major = $student->getMajor() ? $student->getMajor() : null;
-            $td      = $student->getTd();
-            $tp      = $student->getTp();
-
-            $info = '<div class="academic-info">';
-            $info .= '<h4>Informations académiques</h4>';
-            $info .= "<p><strong>Année :</strong> BUT $year</p>";
-
-            if ($major !== null) {
-                $info .= "<p><strong>Parcours :</strong> $major</p>";
-            }
-
-            $info .= "<p><strong>Groupe TD :</strong> $td</p>";
-            $info .= "<p><strong>Groupe TP :</strong> $tp</p>";
-            $info .= '</div>';
-
-            return $info;
+        foreach ($metaInfo as $label => $value) {
+            $info .= "<p><strong>" . $label . " :</strong> " . (string) $value . "</p>";
         }
 
-        return '';
+        $info .= '</div>';
+        return $info;
     }
 
     /**

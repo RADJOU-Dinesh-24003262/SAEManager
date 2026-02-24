@@ -295,6 +295,13 @@ abstract class User extends BaseModel
     abstract public function getRoleLabel(): string;
 
     /**
+     * Gets the user's dashboard meta information for display.
+     *
+     * @return array<string, mixed> A dictionary of label-value pairs.
+     */
+    abstract public function getDashboardMetaInfo(): array;
+
+    /**
      * Get the ID of the entity.
      *
      * @return integer|null

@@ -328,7 +328,12 @@ class PageSaeView extends BaseSaeView
 
         $content .= '<h3>Description de la SAE :</h3>';
 
-        $description = FileService::getSaeDescription($filePath);
+        try {
+            $description = FileService::getSaeDescription($filePath);
+        } catch (\Exception $e) {
+            $description = '';
+        }
+
         if ($description == '') {
             $content .= '<p>Aucune description disponible.</p>';
         } else {
