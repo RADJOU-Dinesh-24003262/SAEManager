@@ -18,7 +18,7 @@ use Models\Entity\User\Student;
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
  */
-interface StudentInterface extends UserInterface
+interface StudentInterface extends UserInterface, RoleAccessInterface
 {
     /**
      * Finds students by TD group.
@@ -35,15 +35,6 @@ interface StudentInterface extends UserInterface
      * @return array<Student> Array of student entities.
      */
     public function findByTpGroup(string $tp): array;
-
-    /**
-     * Checks if a student can access a SAE.
-     *
-     * @param integer $studentId The student ID.
-     * @param integer $saeId     The SAE ID.
-     * @return boolean True if accessible, false otherwise.
-     */
-    public function canAccessSAE(int $studentId, int $saeId): bool;
 
     /**
      * Checks if a student can modify a to-do.

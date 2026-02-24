@@ -106,15 +106,13 @@ class RegisterUserUseCase
             throw new ExceptionEmailAlreadyExists($user->getEmail());
         }
 
-        // 5. Save the user using the specific repository
-        $result = false;
-        if ($user instanceof Student) {
-            $this->pdoInterface = $this->studentInterface;
-        } elseif ($user instanceof Professor) {
-            $this->pdoInterface = $this->professorInterface;
-        } elseif ($user instanceof Client) {
-            $this->pdoInterface = $this->clientInterface;
-        }
+        $repositories = [
+            'student' => $this->studentInterface,
+            'professor' => $this->professorInterface,
+            'client' => $this->clientInterface,
+        ];
+
+        $this->pdoInterface = $repositories[$user->getUserType()];
 
         $result = $this->pdoInterface->insert($user);
 

@@ -16,9 +16,8 @@ use Models\Entity\User\Client;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- *
  */
-interface ClientInterface extends UserInterface
+interface ClientInterface extends UserInterface, RoleAccessInterface
 {
     /**
      * Finds all clients.
@@ -26,13 +25,4 @@ interface ClientInterface extends UserInterface
      * @return array<Client> Array of client entities.
      */
     public function findAll(): array;
-
-    /**
-     * Checks if a client can access a SAE.
-     *
-     * @param integer $clientId The client ID.
-     * @param integer $saeId    The SAE ID.
-     * @return boolean True if accessible, false otherwise.
-     */
-    public function canAccessSAE(int $clientId, int $saeId): bool;
 }

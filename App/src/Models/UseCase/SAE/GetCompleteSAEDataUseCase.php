@@ -143,14 +143,15 @@ class GetCompleteSAEDataUseCase
      */
     public function execute(int $saeId, User $user): ?array
     {
-        // Check if the user has access to the SAE.
+        $accessInterfaces = [
+            'student' => $this->studentInterface,
+            'professor' => $this->professorInterface,
+            'client' => $this->clientInterface,
+        ];
+
         $canAccess = false;
-        if ($user instanceof Student) {
-            $canAccess = $this->studentInterface->canAccessSAE($user->getUserId(), $saeId);
-        } elseif ($user instanceof Professor) {
-            $canAccess = $this->professorInterface->canAccessSAE($user->getUserId(), $saeId);
-        } elseif ($user instanceof Client) {
-            $canAccess = $this->clientInterface->canAccessSAE($user->getUserId(), $saeId);
+        if (isset($accessInterfaces[$user->getUserType()])) {
+            $canAccess = $accessInterfaces[$user->getUserType()]->canAccessSAE($user->getUserId(), $saeId);
         }
 
         if (!$canAccess) {
@@ -206,40 +207,76 @@ class GetCompleteSAEDataUseCase
         $saeId = (int)$subject->getSaeSubjectId();
         $allGroups = $this->groupInterface->findBySaeSubjectId($saeId);
 
-        // If responsible professor, return all groups.
-        if ($user instanceof Professor && $subject->getResponsibleProfId() === $user->getUserId()) {
-            return array_map(function ($group) {
-                return [
-                    'group' => $group,
-                    'students' => $this->groupInterface->getStudentsInGroup(intval($group->getSaeGroupId())),
-                ];
-            }, $allGroups);
-        }
+        $strategies = [
 
-        // If student, return only their group.
-        if ($user->isStudent()) {
-            $userGroupId = $this->participatedInInterface->getStudentGroupId($user->getUserId(), $saeId);
-            if ($userGroupId) {
-                $group = $this->groupInterface->findById($userGroupId);
-                if ($group) {
-                    return [[
-                            'group' => $group,
-                            'students' => $this->groupInterface->getStudentsInGroup($userGroupId),
-                        ]];
+            'professor' => function () use ($allGroups, $subject, $user) {
+
+                $result = [];
+
+                $isResponsible = $subject->getResponsibleProfId() === $user->getUserId();
+                if (!$isResponsible) {
+                    return $result;
                 }
-            }
-        }
 
-        // If client, see all groups.
-        if ($user->isClient()) {
-            return array_map(function ($group) {
-                return [
-                    'group' => $group,
-                    'students' => $this->groupInterface->getStudentsInGroup(intval($group->getSaeGroupId())),
+                foreach ($allGroups as $group) {
+                    $groupId = (int) $group->getSaeGroupId();
+
+                    $students = $this->groupInterface->getStudentsInGroup($groupId);
+
+                    $result[] = [
+                        'group'    => $group,
+                        'students' => $students,
+                    ];
+                }
+
+                return $result;
+            },
+
+            'student' => function () use ($saeId, $user) {
+
+                $result = [];
+
+                $userId  = $user->getUserId();
+                $groupId = $this->participatedInInterface->getStudentGroupId($userId, $saeId);
+
+                if (!$groupId) {
+                    return $result;
+                }
+
+                $group = $this->groupInterface->findById($groupId);
+                if (!$group) {
+                    return $result;
+                }
+
+                $students = $this->groupInterface->getStudentsInGroup((int) $groupId);
+
+                $result[] = [
+                    'group'    => $group,
+                    'students' => $students,
                 ];
-            }, $allGroups);
-        }
 
-        return [];
+                return $result;
+            },
+
+            'client' => function () use ($allGroups) {
+
+                $result = [];
+
+                foreach ($allGroups as $group) {
+                    $groupId = (int) $group->getSaeGroupId();
+
+                    $students = $this->groupInterface->getStudentsInGroup($groupId);
+
+                    $result[] = [
+                        'group'    => $group,
+                        'students' => $students,
+                    ];
+                }
+
+                return $result;
+            },
+        ];
+
+        return $strategies[$user->getUserType()]();
     }
 }
