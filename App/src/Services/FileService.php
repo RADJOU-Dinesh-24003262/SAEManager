@@ -122,10 +122,10 @@ class FileService
         } else {
             $content = "";
         }
-        //if ($content === false) {
-        //    throw new Exception("Impossible de lire le fichier de description.");
-        //}
-        return $content;
+        // A if ($content === false) {.
+        // A throw new Exception("Impossible de lire le fichier de description.");.
+        // A }.
+        return $content ? $content : '';
     }
 
     /**
@@ -149,9 +149,8 @@ class FileService
             throw new Exception("Fichier non trouvé ou accès refusé.");
         }
 
-        if(!is_file($fullPath)){
-            //not found
-            
+        if (!is_file($fullPath)) {
+            // Not found.
         }
 
         if (file_put_contents($fullPath, $content) === false) {
