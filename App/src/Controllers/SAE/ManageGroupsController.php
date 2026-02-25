@@ -31,19 +31,16 @@ class ManageGroupsController extends BaseController
     /**
      * Controls the rendering of the group management page.
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws ExceptionAccessDenied If the user does not have permission to manage the SAE.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
 
-        $sae_id = $this->extractSaeId();
-        if (!$sae_id) {
-            header('Location: /dashboard');
-            exit;
-        }
+        $sae_id = $saeId;
 
         try {
             $subjectRepo = new PdoSAESubjectRepository();
@@ -77,22 +74,6 @@ class ManageGroupsController extends BaseController
             exit;
         }
     }
-
-    /**
-     * Extracts the SAE ID from the request URI.
-     *
-     * @return integer|null The extracted SAE ID, or null if not found.
-     */
-    private function extractSaeId(): ?int
-    {
-        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
-        if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
-            return intval($matches[1]);
-        }
-        return null;
-    }
-
-
 
     /**
      * Determines if this controller supports the given path and method.

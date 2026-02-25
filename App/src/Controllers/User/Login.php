@@ -34,7 +34,6 @@ class Login implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         // Redirect to dashboard if already logged in.

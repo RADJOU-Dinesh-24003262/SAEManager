@@ -37,7 +37,6 @@ class ResetPasswordPostController implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $email = '';

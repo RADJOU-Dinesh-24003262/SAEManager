@@ -40,7 +40,6 @@ class DeleteUserController extends BaseController
      * @return void
      * @throws PDOException If there is a problem with database request.
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();

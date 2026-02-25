@@ -27,7 +27,6 @@ class LegalNoticeController implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $view = new LegalNoticeView();

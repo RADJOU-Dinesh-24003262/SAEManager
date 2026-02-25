@@ -94,9 +94,7 @@ class Router
         try {
             $controller = new $controllerClass();
 
-            // TODO: Add support for parameters
-            // $controller->$method(...$params);.
-            $controller->$method();
+            $controller->$method(...$params);
             exit();
         } catch (\Throwable $e) {
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);

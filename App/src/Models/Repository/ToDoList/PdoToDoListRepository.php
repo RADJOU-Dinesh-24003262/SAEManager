@@ -60,46 +60,12 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             return array_map(function ($data) {
-                $data['todo_id'] = $data['todoid'];
-                unset($data['todoid']);
                 $data['checked'] = (bool) $data['checked'];
                 return new ToDoItem($data);
             }, $results);
         } catch (PDOException $e) {
             error_log("Error in PdoToDoListRepository::findByGroupId: " . $e->getMessage());
             return [];
-        }
-    }
-
-    /**
-     * Updates an existing task.
-     *
-     * @param object $task The task entity to update.
-     * @return boolean True on success, false on failure.
-     */
-    #[Override]
-    public function update(object $task): bool
-    {
-        if (!$task instanceof ToDoItem) {
-            return false;
-        }
-
-        try {
-            $stmt = $this->connection->prepare(
-                'UPDATE sae_todolists 
-                 SET tododesc = :desc, checked = :checked, priority = :priority 
-                 WHERE todoid = :id'
-            );
-
-            $stmt->bindValue(':id', $task->getTodoId(), PDO::PARAM_INT);
-            $stmt->bindValue(':desc', $task->getTodoDesc(), PDO::PARAM_STR);
-            $stmt->bindValue(':checked', $task->isChecked(), PDO::PARAM_BOOL);
-            $stmt->bindValue(':priority', $task->getPriority(), PDO::PARAM_INT);
-
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            error_log("Error in PdoToDoListRepository::update: " . $e->getMessage());
-            return false;
         }
     }
 }

@@ -46,25 +46,14 @@ class ModifySaeController extends BaseController
      * Verifies permissions, fetches SAE data and available clients,
      * and renders the modification view.
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws \Exception If the SAE is not found or an error occurs during data retrieval.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
-
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/modify$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
 
         try {
             $useCase = new GetCompleteSAEDataUseCase(

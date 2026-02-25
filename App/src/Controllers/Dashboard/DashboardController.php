@@ -49,7 +49,6 @@ class DashboardController extends BaseController
      * @return void
      * @throws ExceptionDashboard If the data if empty.
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();

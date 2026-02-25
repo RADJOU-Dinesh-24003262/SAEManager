@@ -29,24 +29,15 @@ class ManageGroupsPostController extends BaseController
     /**
      * Controls the processing of group management actions.
      *
+     * @param integer $saeId  The SAE ID.
+     * @param string  $action The action to perform.
+     *
      * @return void
      * @throws \Exception If an unknown action is encountered or an error occurs during processing.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0, string $action = ''): void
     {
         $this->ensureProfessor();
-
-        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
-
-        $saeId = 0;
-        $action = '';
-
-        // Extract SAE ID and Action from URL: /sae/{id}/groups/{action}.
-        if (preg_match('/^\/sae\/(\d+)\/groups\/(.+)$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-            $action = $matches[2];
-        }
 
         try {
             match ($action) {
@@ -65,6 +56,7 @@ class ManageGroupsPostController extends BaseController
      * Creates a new group for a SAE.
      *
      * @param integer $saeId The ID of the SAE.
+     *
      * @return void
      * @throws Exception If an unexpected error occurs during group creation.
      */

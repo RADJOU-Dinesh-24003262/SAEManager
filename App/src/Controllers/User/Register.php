@@ -32,7 +32,6 @@ class Register implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
 

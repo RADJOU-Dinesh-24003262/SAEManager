@@ -173,7 +173,20 @@ abstract class BaseRepository implements RepositoryInterface
         $this->connection->beginTransaction();
         try {
             $stmt = $this->connection->prepare($query);
-            $result = $stmt->execute($data->toArray());
+
+            foreach ($attributes as $key => $value) {
+                $type = PDO::PARAM_STR;
+                if (is_int($value)) {
+                    $type = PDO::PARAM_INT;
+                } elseif (is_bool($value)) {
+                    $type = PDO::PARAM_BOOL;
+                } elseif (is_null($value)) {
+                    $type = PDO::PARAM_NULL;
+                }
+                $stmt->bindValue(":$key", $value, $type);
+            }
+
+            $result = $stmt->execute();
             $this->connection->commit();
 
             return $result;
@@ -213,11 +226,24 @@ abstract class BaseRepository implements RepositoryInterface
         $this->connection->beginTransaction();
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->execute($attributes);
+
+            foreach ($attributes as $key => $value) {
+                $type = \PDO::PARAM_STR;
+                if (is_int($value)) {
+                    $type = \PDO::PARAM_INT;
+                } elseif (is_bool($value)) {
+                    $type = \PDO::PARAM_BOOL;
+                } elseif (is_null($value)) {
+                    $type = \PDO::PARAM_NULL;
+                }
+                $stmt->bindValue(":$key", $value, $type);
+            }
+
+            $stmt->execute();
             $id = (int)$this->connection->lastInsertId();
             $this->connection->commit();
             return $id;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }

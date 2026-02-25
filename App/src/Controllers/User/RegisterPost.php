@@ -47,7 +47,6 @@ class RegisterPost implements ControllerInterface
      *
      * @throws Exception For any other unexpected errors during the registration process.
      */
-    #[Override]
     public function control(): void
     {
         // CSRF Check.

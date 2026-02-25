@@ -34,7 +34,6 @@ class EditProfileController extends BaseController
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();
