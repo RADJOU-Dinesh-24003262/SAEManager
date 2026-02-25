@@ -3,6 +3,7 @@
 namespace Models\UseCase\User\InterfaceDB;
 
 use Models\Entity\User\Professor;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Interface for Professor repository operations.
@@ -16,8 +17,9 @@ use Models\Entity\User\Professor;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @extends RepositoryInterface<Professor>
  */
-interface ProfessorInterface extends UserInterface, RoleAccessInterface
+interface ProfessorInterface extends RepositoryInterface, RoleAccessInterface
 {
     /**
      * Finds all professors.

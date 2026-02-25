@@ -13,6 +13,7 @@ use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\UseCase\User\InterfaceDB\ProfessorInterface;
 use Models\UseCase\User\InterfaceDB\ClientInterface;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Use Case for user registration.
@@ -54,9 +55,9 @@ class RegisterUserUseCase
 
     /**
      * The PDO interface.
-     * @var UserInterface
+     * @var StudentInterface|ProfessorInterface|ClientInterface
      */
-    private UserInterface $pdoInterface;
+    private StudentInterface|ProfessorInterface|ClientInterface $pdoInterface;
 
     /**
      * Constructor.

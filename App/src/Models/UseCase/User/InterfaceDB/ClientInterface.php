@@ -3,6 +3,7 @@
 namespace Models\UseCase\User\InterfaceDB;
 
 use Models\Entity\User\Client;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Interface for Client repository operations.
@@ -16,8 +17,9 @@ use Models\Entity\User\Client;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ * @extends RepositoryInterface<Client>
  */
-interface ClientInterface extends UserInterface, RoleAccessInterface
+interface ClientInterface extends RepositoryInterface, RoleAccessInterface
 {
     /**
      * Finds all clients.

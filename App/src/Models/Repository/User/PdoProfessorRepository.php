@@ -78,38 +78,7 @@ class PdoProfessorRepository implements ProfessorInterface
         }
     }
 
-    /**
-     * Finds a professor by email.
-     *
-     * @param string $email The professor's email.
-     * @return Professor|null The professor entity or null if not found.
-     */
-    public function findByEmail(string $email): ?Professor
-    {
-        $user = $this->userRepository->findByEmail($email);
 
-        if (!$user) {
-            return null;
-        }
-
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT p.amu_id FROM professors p WHERE professor_id = :id'
-            );
-            $stmt->execute(['id' => $user->getUserId()]);
-            $professorData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($professorData) {
-                // Merge user data with professor-specific data.
-                $data = array_merge($user->toArray(), $professorData);
-                return new Professor($data);
-            }
-            return null; // User found but not a professor.
-        } catch (PDOException $e) {
-            error_log("Error in PdoProfessorRepository::findByEmail (professor data): " . $e->getMessage());
-            return null;
-        }
-    }
 
     /**
      * Inserts a new professor into the database.
@@ -258,28 +227,7 @@ class PdoProfessorRepository implements ProfessorInterface
         }
     }
 
-    /**
-     * Checks if a professor exists by email.
-     *
-     * @param string $email The email to check.
-     * @return boolean True if exists, false otherwise.
-     */
-    public function existsByEmail(string $email): bool
-    {
-        return $this->userRepository->existsByEmail($email);
-    }
 
-    /**
-     * Updates a professor's password.
-     *
-     * @param integer $userId       The user ID.
-     * @param string  $passwordHash The new hashed password.
-     * @return boolean True on success, false on failure.
-     */
-    public function updatePassword(int $userId, string $passwordHash): bool
-    {
-        return $this->userRepository->updatePassword($userId, $passwordHash);
-    }
 
     /**
      * Deletes a professor from the database.

@@ -84,38 +84,7 @@ class PdoClientRepository implements ClientInterface
         }
     }
 
-    /**
-     * Finds a client by email.
-     *
-     * @param string $email The client's email.
-     * @return Client|null The client entity or null if not found.
-     */
-    public function findByEmail(string $email): ?Client
-    {
-        $user = $this->userRepository->findByEmail($email);
 
-        if (!$user) {
-            return null;
-        }
-
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT organisation FROM clients WHERE client_id = :id'
-            );
-            $stmt->execute(['id' => $user->getUserId()]);
-            $clientData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($clientData) {
-                // Merge user data with client-specific data.
-                $data = array_merge($user->toArray(), $clientData);
-                return new Client($data);
-            }
-            return null; // User found but not a client.
-        } catch (PDOException $e) {
-            error_log("Error in PdoClientRepository::findByEmail (client data): " . $e->getMessage());
-            return null;
-        }
-    }
 
     /**
      * Inserts a new client into the database.
@@ -237,28 +206,7 @@ class PdoClientRepository implements ClientInterface
         }
     }
 
-    /**
-     * Checks if a client exists by email.
-     *
-     * @param string $email The email to check.
-     * @return boolean True if exists, false otherwise.
-     */
-    public function existsByEmail(string $email): bool
-    {
-        return $this->userRepository->existsByEmail($email);
-    }
 
-    /**
-     * Updates a client's password.
-     *
-     * @param integer $userId       The user ID.
-     * @param string  $passwordHash The new hashed password.
-     * @return boolean True on success, false on failure.
-     */
-    public function updatePassword(int $userId, string $passwordHash): bool
-    {
-        return $this->userRepository->updatePassword($userId, $passwordHash);
-    }
 
     /**
      * Deletes a client from the database.
