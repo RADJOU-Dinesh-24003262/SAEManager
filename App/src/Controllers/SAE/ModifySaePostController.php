@@ -60,9 +60,6 @@ class ModifySaePostController extends BaseController
         $validator = new FormSaeValidator();
 
         try {
-            $data = $validator->escape($data);
-            $user = $this->user;
-
             // Extract description before escape to preserve Markdown.
             $description = $data['description'];
 
@@ -73,16 +70,17 @@ class ModifySaePostController extends BaseController
             $data['description'] = $description;
 
             $updateData = [
-                'subject_name' => $data['nameSae'],
+                'subject_name' => $data['subject_name'],
                 'client_id' => !empty($data['client_id']) ? intval($data['client_id']) : null,
                 'begin_date' => $data['begin_date'],
-                'end_date' => $data['date_rendu'],
+                'end_date' => $data['end_date'],
             ];
 
             $repository = new PdoSAESubjectRepository();
             $useCase = new ModifySAEUseCase($repository);
 
-            $useCase->execute($saeId, $updateData, $description, $user);
+            $useCase->execute($saeId, $updateData, $description, $this->user);
+
 
             SessionService::setFlash('success', 'SAE modifiée avec succès');
             header('Location: /sae/' . $saeId);
@@ -96,7 +94,7 @@ class ModifySaePostController extends BaseController
             SessionService::setFlash('errors', $errors);
             header('Location: /sae/' . $saeId . '/modify');
             exit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             SessionService::setFlash('errors', ['Erreur : ' . $e->getMessage()]);
             header('Location: /sae/' . $saeId . '/modify');
             exit();

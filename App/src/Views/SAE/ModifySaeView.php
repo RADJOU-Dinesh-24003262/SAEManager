@@ -47,12 +47,12 @@ class ModifySaeView extends BaseSaeView
         /* @var SAESubject $subject */
         $subject = $saeData['subject'];
         parent::__construct($subject, $user);
-        $this->data = [
+        $this->data = array_merge($this->data, [
             'sae' => $saeData,
             'clients' => $clients,
             'user' => $user,
             'csrf_token' => $csrfToken
-        ];
+        ]);
     }
 
     /**
