@@ -101,38 +101,7 @@ class PdoStudentRepository implements StudentInterface
     }
 
 
-    /**
-     * Finds a student by email.
-     *
-     * @param string $email The student's email.
-     * @return Student|null The student entity or null if not found.
-     */
-    public function findByEmail(string $email): ?Student
-    {
-        $user = $this->userRepository->findByEmail($email);
 
-        if (!$user) {
-            return null;
-        }
-
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT s.td, s.tp, s.amu_id, s.major, s.year FROM students s WHERE student_id = :id'
-            );
-            $stmt->execute(['id' => $user->getUserId()]);
-            $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($studentData) {
-                // Merge user data with student-specific data.
-                $data = array_merge($user->toArray(), $studentData);
-                return new Student($data);
-            }
-            return null; // User found but not a student.
-        } catch (PDOException $e) {
-            error_log("Error in PdoStudentRepository::findByEmail (student data): " . $e->getMessage());
-            return null;
-        }
-    }
 
     /**
      * Inserts a student into the database.
@@ -321,28 +290,7 @@ class PdoStudentRepository implements StudentInterface
         }
     }
 
-    /**
-     * Checks if a student exists by email.
-     *
-     * @param string $email The email to check.
-     * @return boolean True if exists, false otherwise.
-     */
-    public function existsByEmail(string $email): bool
-    {
-        return $this->userRepository->existsByEmail($email);
-    }
 
-    /**
-     * Updates a student's password.
-     *
-     * @param integer $userId       The user ID.
-     * @param string  $passwordHash The new hashed password.
-     * @return boolean True on success, false on failure.
-     */
-    public function updatePassword(int $userId, string $passwordHash): bool
-    {
-        return $this->userRepository->updatePassword($userId, $passwordHash);
-    }
 
     /**
      * Deletes a student from the database.

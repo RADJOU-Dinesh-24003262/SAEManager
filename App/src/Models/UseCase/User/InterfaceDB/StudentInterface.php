@@ -3,6 +3,7 @@
 namespace Models\UseCase\User\InterfaceDB;
 
 use Models\Entity\User\Student;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Interface for Student repository operations.
@@ -16,9 +17,9 @@ use Models\Entity\User\Student;
  * @author     Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
- *
+ * @extends RepositoryInterface<Student>
  */
-interface StudentInterface extends UserInterface, RoleAccessInterface
+interface StudentInterface extends RepositoryInterface, RoleAccessInterface
 {
     /**
      * Finds students by TD group.

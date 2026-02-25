@@ -42,38 +42,6 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
         return 'todoid';
     }
 
-    /**
-     * Finds a task by ID.
-     *
-     * @param integer $id The task ID.
-     * @return ToDoItem|null The task or null if not found.
-     */
-    #[Override]
-    public function findById(int $id): ?ToDoItem
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT * FROM sae_todolists WHERE todoid = :id'
-            );
-            $stmt->execute(['id' => $id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
-
-            if (!$data) {
-                return null;
-            }
-
-
-            $data['todo_id'] = $data['todoid'];
-            unset($data['todoid']);
-            $data['checked'] = (bool) $data['checked'];
-
-            return new ToDoItem($data);
-        } catch (PDOException $e) {
-            error_log("Error in PdoToDoListRepository::findById: " . $e->getMessage());
-            return null;
-        }
-    }
 
     /**
      * Finds all tasks for a given SAE group.
@@ -100,45 +68,6 @@ class PdoToDoListRepository extends BaseRepository implements ToDoListInterface
         } catch (PDOException $e) {
             error_log("Error in PdoToDoListRepository::findByGroupId: " . $e->getMessage());
             return [];
-        }
-    }
-
-    /**
-     * Creates a new task.
-     *
-     * @param object $task The task entity to create.
-     * @return integer|boolean The ID of the created task or false on failure.
-     */
-    #[Override]
-    public function insert(object $task): int|bool
-    {
-        if (!$task instanceof ToDoItem) {
-            return false;
-        }
-
-        try {
-            $stmt = $this->connection->prepare(
-                'INSERT INTO sae_todolists (sae_group_id, tododesc, checked, priority) 
-                 VALUES (:groupId, :desc, :checked, :priority) RETURNING todoid'
-            );
-
-
-            $stmt->bindValue(':groupId', $task->getSaeGroupId(), PDO::PARAM_INT);
-            $stmt->bindValue(':desc', $task->getTodoDesc(), PDO::PARAM_STR);
-            $stmt->bindValue(':checked', $task->isChecked(), PDO::PARAM_BOOL);
-            $stmt->bindValue(':priority', $task->getPriority(), PDO::PARAM_INT);
-
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            $stmt->closeCursor();
-
-            if ($result) {
-                return $result['todoid'];
-            }
-            return false;
-        } catch (PDOException $e) {
-            error_log("Error in PdoToDoListRepository::create: " . $e->getMessage());
-            return false;
         }
     }
 
