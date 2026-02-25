@@ -53,7 +53,6 @@ class ForgotPasswordPostController implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         try {

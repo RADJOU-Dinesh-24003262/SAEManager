@@ -29,7 +29,6 @@ class ResetPasswordController implements ControllerInterface
      *
      * @return void
      */
-    #[\Override]
     public function control(): void
     {
         // Get the token from the URL.

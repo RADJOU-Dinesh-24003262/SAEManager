@@ -27,7 +27,6 @@ class SiteMapController implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $view = new SiteMapView();

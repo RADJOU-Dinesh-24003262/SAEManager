@@ -25,7 +25,7 @@ class ToDoItem extends BaseModel
      *
      * @var integer
      */
-    protected int $todo_id;
+    protected int $todoid;
 
     /**
      * The SAE subject ID this to-do belongs to.
@@ -88,7 +88,7 @@ class ToDoItem extends BaseModel
      */
     public function getTodoId(): int
     {
-        return $this->todo_id;
+        return $this->todoid;
     }
 
     /**
@@ -153,7 +153,7 @@ class ToDoItem extends BaseModel
      */
     public function setTodoId(int $todoId): void
     {
-        $this->todo_id = $todoId;
+        $this->todoid = $todoId;
     }
 
     /**
@@ -219,6 +219,6 @@ class ToDoItem extends BaseModel
     #[Override]
     public function getId(): ?int
     {
-        return $this->todo_id ?? null;
+        return $this->todoid ?? null;
     }
 }

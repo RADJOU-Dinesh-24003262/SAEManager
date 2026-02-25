@@ -38,27 +38,16 @@ class ModifySaePostController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws ExceptionValidationEmptys If required fields are empty.
      * @throws ExeptionValidationSAECreation If validation fails during SAE modification.
      * @throws Exception If a general error occurs during the modification process.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
-
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/modify$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
 
         // CSRF Protection.
         if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {

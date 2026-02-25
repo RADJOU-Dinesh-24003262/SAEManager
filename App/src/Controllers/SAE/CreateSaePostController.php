@@ -38,7 +38,6 @@ class CreateSaePostController extends BaseController
      * @return void
      * @throws Exception If an unknown user is encountered.
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureProfessor();

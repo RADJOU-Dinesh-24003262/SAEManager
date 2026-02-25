@@ -42,19 +42,16 @@ class PageSaeController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+
      * @return void
      * @throws ExceptionAccessDenied If access is denied.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureAuthenticated();
 
         try {
-            $data['user'] = $this->user;
-
-            $sae_id = intval(basename($_SERVER['REQUEST_URI']));
-
             $subjectInterface = new PdoSAESubjectRepository();
             $groupInterface = new PdoSAEGroupRepository();
             $participatedInInterface = new PdoParticipatedInRepository();
@@ -72,7 +69,7 @@ class PageSaeController extends BaseController
                 $clientInterface
             );
 
-            $saeData = $sae->execute($sae_id, $this->user);
+            $saeData = $sae->execute($saeId, $this->user);
 
             if ($saeData === null) {
                 SessionService::setFlash('errors', "SAE introuvable ou accès refusé.");

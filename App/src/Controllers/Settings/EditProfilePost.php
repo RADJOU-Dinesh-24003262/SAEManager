@@ -41,7 +41,6 @@ class EditProfilePost extends BaseController
      * @return void
      * @throws PDOException Trigger PDOException when BD is not accessible.
      */
-    #[Override]
     public function control(): void
     {
 

@@ -36,19 +36,16 @@ class ToDoListController extends BaseController
     /**
      * Controls the rendering of the To-Do List view.
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws Exception If the SAE doesn't exist.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureAuthenticated();
 
         try {
-            $parts = explode('/', $_SERVER['REQUEST_URI']);
-            // Extract the SAE ID and remove any query parameters.
-            $sae_id = intval(explode('?', $parts[2])[0]);
-
             $saeSubjectRepo = new PdoSAESubjectRepository();
             $saeGroupRepo = new PdoSAEGroupRepository();
             $participatedInRepo = new PdoParticipatedInRepository();
@@ -63,7 +60,7 @@ class ToDoListController extends BaseController
             );
 
             $requestedGroupId = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
-            $data = $useCase->execute($sae_id, $this->user, $requestedGroupId);
+            $data = $useCase->execute($saeId, $this->user, $requestedGroupId);
 
             // Create and render the SAE page view.
             $view = new ToDoListView(

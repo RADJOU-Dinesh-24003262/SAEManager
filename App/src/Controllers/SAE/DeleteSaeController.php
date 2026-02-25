@@ -35,32 +35,20 @@ class DeleteSaeController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws \Exception If a general error occurs during the modification process.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
-        $this->ensureAuthenticated();
-        $user = $this->user;
         $this->ensureProfessor();
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/delete$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
 
         try {
             $repository = new PdoSAESubjectRepository();
             $useCase = new DeleteSAEUseCase($repository);
 
-            $useCase->execute($saeId, $user);
+            $useCase->execute($saeId, $this->user);
 
             header('Location: /dashboard');
             SessionService::setFlash('success', 'SAE supprimée avec succès');

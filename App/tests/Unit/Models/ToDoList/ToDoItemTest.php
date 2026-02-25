@@ -14,7 +14,7 @@ class ToDoItemTest extends TestCase
     public function canBeInstantiatedWithData(): void
     {
         $data = [
-            'todo_id' => 1,
+            'todoid' => 1,
             'sae_subject_id' => 10,
             'groupId' => 5,
             'tododesc' => 'Test task'
@@ -57,7 +57,7 @@ class ToDoItemTest extends TestCase
     #[Test]
     public function getIdReturnsTodoId(): void
     {
-        $todo = new ToDoItem(['todo_id' => 123]);
+        $todo = new ToDoItem(['todoid' => 123]);
         $this->assertEquals(123, $todo->getId());
     }
 }

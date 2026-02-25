@@ -72,6 +72,7 @@ class CreateSaeControllerUnitTest extends TestCase
         $reflection = new \ReflectionMethod($this->controller, 'control');
         $parameters = $reflection->getParameters();
 
+        // Reverted to 0 because the ControllerInterface no longer enforces parameters.
         $this->assertCount(0, $parameters);
     }
 

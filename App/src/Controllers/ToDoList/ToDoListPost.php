@@ -53,11 +53,14 @@ class ToDoListPost extends BaseController
      * Main control method.
      * Dispatches to specific handlers based on the action.
      *
+     * @param integer $saeId  The SAE ID.
+     * @param integer $todoId The To-Do ID.
+     * @param string  $action The action to perform.
+     *
      * @return void
      * @throws ExceptionAccessDenied If the user access to SAE is denied.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0, int $todoId = 0, string $action = ''): void
     {
         $this->ensureAuthenticated();
 
@@ -76,11 +79,6 @@ class ToDoListPost extends BaseController
         $validator = new ToDoListValidator();
 
         try {
-            $params = $this->parseUri();
-            $saeId = $params['sae_id'];
-            $action = $params['action'];
-            $todoId = $params['todo_id'];
-
             $json = file_get_contents('php://input');
             if ($json === false) {
                 $json = '{}';
@@ -136,28 +134,6 @@ class ToDoListPost extends BaseController
             $this->sendError("Erreur interne.", 500);
         }
     }
-
-    /**
-     * Parses the request URI to extract SAE ID, action, and Task ID.
-     *
-     * @return array{sae_id: int, action: string, todo_id: int}
-     */
-    private function parseUri(): array
-    {
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-        $parts = explode('/', $path);
-
-        return [
-            'sae_id' => intval($parts[2] ?? 0),
-            'action' => $parts[4] ?? '',
-            'todo_id' => intval($parts[5] ?? 0)
-        ];
-    }
-
-
 
     /**
      * Handles adding a new task to the To-Do list.

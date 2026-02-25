@@ -42,7 +42,6 @@ class LoginPost implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
 

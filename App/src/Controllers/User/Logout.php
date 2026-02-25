@@ -29,7 +29,6 @@ class Logout implements ControllerInterface
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         // Redirect to login page if user is not logged in.

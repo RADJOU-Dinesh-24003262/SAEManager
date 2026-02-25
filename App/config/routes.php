@@ -111,29 +111,20 @@ const ROUTES = [
         'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],
         'POST' => ['controller' => CreateSaePostController::class , 'method' => 'control']
     ],
-    '/^\/sae\/\d+\/delete$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/delete$/' => [
         'GET' => ['controller' => DeleteSaeController::class , 'method' => 'control'],
     ],
-    '/^\/sae\/\d+$/' => [
+    '/^\/sae\/(?<saeId>\d+)$/' => [
         'GET' => ['controller' => PageSaeController::class , 'method' => 'control']
     ],
-    '/^\/sae\/\d+\/modify$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/modify$/' => [
         'GET' => ['controller' => ModifySaeController::class , 'method' => 'control'],
         'POST' => ['controller' => ModifySaePostController::class , 'method' => 'control']
     ],
-    '/^\/sae\/\d+\/groups$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/groups$/' => [
         'GET' => ['controller' => ManageGroupsController::class , 'method' => 'control'],
     ],
-    '/^\/sae\/\d+\/groups\/create$/' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/^\/sae\/\d+\/groups\/delete$/' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/^\/sae\/\d+\/groups\/add-student$/' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/^\/sae\/\d+\/groups\/remove-student$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/groups\/(?<action>create|delete|add-student|remove-student)$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
 
@@ -141,16 +132,13 @@ const ROUTES = [
     // TODO LIST ROUTES
     // ============================================================
 
-    '/^\/sae\/\d+\/to-do$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/to-do$/' => [
         'GET' => ['controller' => ToDoListController::class , 'method' => 'control'],
     ],
-    '/^\/sae\/\d+\/to-do\/add$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/(?<action>add)$/' => [
         'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
     ],
-    '/^\/sae\/\d+\/to-do\/delete\/\d+$/' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
-    ],
-    '/^\/sae\/\d+\/to-do\/update\/\d+$/' => [
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/(?<action>delete|update)\/(?<todoId>\d+)$/' => [
         'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
     ],
 ];
