@@ -11,7 +11,7 @@
             Statut
             <abbr title="requis" >*</abbr>
         </label>
-        <select name="user_type" id="userType" required aria-required="true">
+        <select name="user_type" id="userType" required>
             <option value="">-- Sélectionner --</option>
             <option value="student">Étudiant</option>
             <option value="professor">Responsable SAE</option>
@@ -31,7 +31,6 @@
             maxlength="9"
             pattern="[a-zA-ZÀ-ÿ\-\'][0-9]{8,}"
             autocomplete="username"
-            aria-required="true"
             aria-describedby="id-hint">
         <small id="id-hint">3 à 30 caractères (lettres, chiffres, points, tirets, underscores)</small>
 
@@ -47,7 +46,7 @@
             name="first_name"
             pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+"
             autocomplete="given-name"
-            aria-required="true">
+        >
 
         <label for="lname">
             Nom
@@ -60,7 +59,7 @@
             name="last_name"
             pattern="[A-Za-zÀ-ÖØ-öø-ÿ\-']+"
             autocomplete="family-name"
-            aria-required="true">
+        >
 
         </article>
     </fieldset>
@@ -78,7 +77,6 @@
                     type="text"
                     id="email"
                     name="email"
-                    aria-required="true"
                     aria-describedby="email-hint"
             style="margin-bottom: 1vh">
 
@@ -99,7 +97,6 @@
             pattern="0[467][0-9]{8}"
             maxlength="10"
             autocomplete="tel"
-            aria-required="true"
             aria-describedby="tel-hint">
         <small id="tel-hint">Format : 10 chiffres commençant par 04, 06 ou 07</small>
             </div>
@@ -121,7 +118,6 @@
             name="password"
             minlength="8"
             autocomplete="new-password"
-            aria-required="true"
             aria-describedby="pwd-desc">
         <small id="pwd-desc">Au moins 8 caractères</small>
 
@@ -136,7 +132,7 @@
             name="passwordverif"
             minlength="8"
             autocomplete="new-password"
-            aria-required="true">
+        >
         </article>
     </fieldset>
 
@@ -211,7 +207,7 @@
         type="checkbox"
         id="terms"
         name="terms"
-        aria-required="true">
+    >
     <label for="terms" style="margin-bottom: 2rem">
         J'accepte les <a href="/conditions-generales" target="_blank" rel="noopener noreferrer">conditions générales</a>
         <abbr title="requis" >*</abbr>
