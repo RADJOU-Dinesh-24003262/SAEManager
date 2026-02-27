@@ -50,17 +50,9 @@ class UpdateTaskUseCase
             throw new Exception("Tâche introuvable (ID: $todoId).");
         }
 
-        if (array_key_exists('checked', $updates)) {
-            $task->setChecked((bool)$updates['checked']);
-        }
-
-        if (array_key_exists('priority', $updates)) {
-            $task->setPriority((int)$updates['priority']);
-        }
-
-        if (array_key_exists('tododesc', $updates)) {
-            $task->setTododesc((string)$updates['tododesc']);
-        }
+        $task->setChecked((bool)$updates['checked']);
+        $task->setPriority((int)$updates['priority']);
+        $task->setTododesc((string)$updates['tododesc']);
 
         if (!$this->toDoListInterface->update($task)) {
             throw new Exception("Impossible de mettre à jour la tâche.");

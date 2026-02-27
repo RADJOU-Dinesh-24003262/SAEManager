@@ -32,7 +32,9 @@ use Controllers\Settings\EditProfileController;
 use Controllers\Settings\EditProfilePost;
 use Controllers\Settings\SettingsController;
 use Controllers\ToDoList\ToDoListController;
-use Controllers\ToDoList\ToDoListPost;
+use Controllers\ToDoList\ToDoListAddPost;
+use Controllers\ToDoList\ToDoListUpdatePost;
+use Controllers\ToDoList\ToDoListDeletePost;
 use Controllers\User\Login;
 use Controllers\User\LoginPost;
 use Controllers\User\Logout;
@@ -135,10 +137,13 @@ const ROUTES = [
     '/^\/sae\/(?<saeId>\d+)\/to-do$/' => [
         'GET' => ['controller' => ToDoListController::class , 'method' => 'control'],
     ],
-    '/^\/sae\/(?<saeId>\d+)\/to-do\/(?<action>add)$/' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/add$/' => [
+        'POST' => ['controller' => ToDoListAddPost::class , 'method' => 'control']
     ],
-    '/^\/sae\/(?<saeId>\d+)\/to-do\/(?<action>delete|update)\/(?<todoId>\d+)$/' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/update\/(?<todoId>\d+)$/' => [
+        'POST' => ['controller' => ToDoListUpdatePost::class , 'method' => 'control']
+    ],
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/delete\/(?<todoId>\d+)$/' => [
+        'POST' => ['controller' => ToDoListDeletePost::class , 'method' => 'control']
     ],
 ];

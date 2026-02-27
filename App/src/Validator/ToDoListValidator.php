@@ -42,7 +42,7 @@ class ToDoListValidator extends FormValidator
     {
         // Validate description if present.
         if (array_key_exists('description', $data)) {
-            $desc = trim((string)$data['description']);
+            $desc = trim((string) $data['description']);
             if (empty($desc)) {
                 throw new ExceptionValidationToDoList("La description ne doit pas être vide.");
             }
