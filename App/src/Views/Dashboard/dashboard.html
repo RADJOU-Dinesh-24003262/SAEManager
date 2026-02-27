@@ -1,24 +1,24 @@
+<header class="profile-header {{USER_TYPE_CLASS}}">
+    <svg class="profile-avatar" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="90" fill="#eee"/>
+        <circle cx="100" cy="80" r="30" fill="#666"/>
+        <path d="M50 150 Q100 120 150 150" fill="#666"/>
+    </svg>
+    <div class="profile-info">
+        <p class="user-badge">{{USER_TYPE_LABEL}}</p>
+        <h1>{{USER_NAME}}</h1>
+        <p class="email">{{USER_EMAIL}}</p>
+
+        <div class="profile-meta">
+            {{USER_META_INFO}}
+        </div>
+    </div>
+</header>
+
 <main class="container-fluid">
     <!-- Warning messages -->
     {{ERROR_MESSAGES}}
     {{SUCCESS_MESSAGE}}
-
-    <header class="profile-header {{USER_TYPE_CLASS}}">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Ccircle cx='100' cy='100' r='100' fill='%23D9D9D9'/%3E%3Ccircle cx='100' cy='80' r='30' fill='%23666'/%3E%3Cpath d='M50 150 Q100 120 150 150' fill='%23666'/%3E%3C/svg%3E" 
-                alt="Photo de profil de {{USER_NAME}}" 
-                class="profile-avatar">
-        
-        <div class="profile-info">
-            <p class="user-badge">{{USER_TYPE_LABEL}}</p>
-            <h1>{{USER_NAME}}</h1>
-            <p class="email">{{USER_EMAIL}}</p>
-            
-            <div class="profile-meta">
-                {{USER_META_INFO}}
-            </div>
-        </div>
-    </header>
-
     <div class="main-layout">
         <aside class="sidebar">
             <nav aria-label="Navigation principale">
@@ -39,12 +39,12 @@
         <div class="divider" role="separator"></div>
 
 
-        <main class="content-area">
+        <section class="content-area">
             <h2 class="section-title">
                 Mes SAEs
             </h2>
             
             {{SAE_CONTENT}}
-        </main>
+        </section>
     </div>
 </main>

@@ -12,13 +12,13 @@
         <article>
 
             <section class="form-section">
-                <h3>Gestion des groupes</h3>
+                <h2>Gestion des groupes</h2>
                 <p>Gérez les groupes, assignez des étudiants et des professeurs référents.</p>
 
                 {{messages}}
 
                 <div style="margin-top: 20px;">
-                    <h4>Créer un nouveau groupe</h4>
+                    <h3>Créer un nouveau groupe</h3>
                     <form action="/sae/{{sae_id}}/groups/create" method="post" class="inline-form">
                         <input type="hidden" name="sae_id" value="{{sae_id}}">
                         <div class="form-group form-group-inline">
@@ -35,7 +35,7 @@
                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
 
                 <div>
-                    <h4>Groupes existants</h4>
+                    <h3>Groupes existants</h3>
                     <div class="groups-grid">
                         {{groups_html}}
                     </div>
