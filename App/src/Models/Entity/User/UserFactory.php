@@ -2,8 +2,6 @@
 
 namespace Models\Entity\User;
 
-use RuntimeException;
-
 /**
  * Factory for creating User entities according to their type.
  *
@@ -20,12 +18,16 @@ use RuntimeException;
 class UserFactory
 {
     /**
-     * Map of user type codes to string representations.
+     * Map of user type codes or strings to their respective User entity classes.
+     * @var array<int|string, class-string<User>>
      */
-    private const TYPE_MAP = [
-        '0' => 'student',
-        '1' => 'professor',
-        '2' => 'client'
+    private static array $typeRegistry = [
+        'student' => Student::class ,
+        'professor' => Professor::class ,
+        'client' => Client::class ,
+        '0' => Student::class ,
+        '1' => Professor::class ,
+        '2' => Client::class ,
     ];
 
     /**
@@ -38,14 +40,8 @@ class UserFactory
     {
         $type = $data['user_type'] ?? 'student';
 
-        if (array_key_exists((string)$type, self::TYPE_MAP)) {
-            $type = self::TYPE_MAP[(string)$type];
-        }
+        $className = self::$typeRegistry[$type];
 
-        return match ($type) {
-                'professor' => new Professor($data),
-                'client' => new Client($data),
-                default => new Student($data),
-        };
+        return new $className($data);
     }
 }

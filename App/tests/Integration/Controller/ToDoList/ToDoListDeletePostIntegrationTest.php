@@ -1,15 +1,15 @@
 <?php
 
-namespace test\Integration\Controller\ToDoList;
+namespace Tests\Integration\Controller\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListPost;
+use Controllers\ToDoList\ToDoListDeletePost;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**
- * Integration test for ToDoListPost controller interacting with ToDoList model.
+ * Integration test for ToDoListDeletePost controller interacting with ToDoList model.
  *
  * @category Tests
  * @package  Tests\Controllers\ToDoList
@@ -22,27 +22,27 @@ use Models\Entity\ToDoItem\ToDoItem;
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 #[CoversClass(ToDoItem::class)]
-#[CoversClass(ToDoListPost::class)]
-class ToDoListPostIntegrationTest extends TestCase
+#[CoversClass(ToDoListDeletePost::class)]
+class ToDoListDeletePostIntegrationTest extends TestCase
 {
     /**
-     * Test that the controller supports POST method for the correct route.
+     * Test that the controller supports POST method for the correct route for delete.
      *
      * @return void
      */
     public function testSupportReturnsTrueForValidPostRoute(): void
     {
-        $this->assertTrue(ToDoListPost::support('/sae/1/to-do/add', 'POST'));
+        $this->assertTrue(ToDoListDeletePost::support('/sae/99/to-do/delete/123', 'POST'));
     }
 
     /**
-     * Test that the controller does not support invalid routes or methods.
+     * Test that the controller does not support invalid routes or methods for delete.
      *
      * @return void
      */
     public function testSupportReturnsFalseForInvalidRouteOrMethod(): void
     {
-        $this->assertFalse(ToDoListPost::support('/invalid', 'POST'));
-        $this->assertFalse(ToDoListPost::support('/to-do-list', 'GET'));
+        $this->assertFalse(ToDoListDeletePost::support('/invalid', 'POST'));
+        $this->assertFalse(ToDoListDeletePost::support('/to-do-list/delete/123', 'GET'));
     }
 }
