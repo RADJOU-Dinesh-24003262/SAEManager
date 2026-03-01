@@ -2,7 +2,7 @@
 
 namespace Controllers\Info;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Override;
 use Views\Info\LegalNoticeView;
 
@@ -20,7 +20,7 @@ use Views\Info\LegalNoticeView;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class LegalNoticeController implements ControllerInterface
+class LegalNoticeController extends BaseController
 {
     /**
      * Principal manager of the controller

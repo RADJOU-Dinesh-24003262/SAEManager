@@ -2,7 +2,7 @@
 
 namespace Controllers\User;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
@@ -38,7 +38,7 @@ use Views\User\RegisterView;
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class RegisterPost implements ControllerInterface
+class RegisterPostController extends BaseController
 {
     /**
      * Principal manager of the controller
@@ -49,14 +49,7 @@ class RegisterPost implements ControllerInterface
      */
     public function control(): void
     {
-        // CSRF Check.
-        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-            Logger::log('CSRF_FAIL', 'Tentative inscription avec token invalide.', null, 'WARNING');
-            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
-            $view = new RegisterView(['csrf_token' => SessionService::generateCsrfToken()]);
-            $view->render();
-            exit();
-        }
+        $this->checkCsrf('REGISTER', '/register');
 
         // Validate the data.
         $validator = new ValidationServiceRegister();

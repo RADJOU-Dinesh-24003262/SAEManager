@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers\pwd;
+namespace Controllers\Password;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionEmailAlreadyExists;
 use Core\includes\exception\ExceptionSpam;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
@@ -37,7 +37,7 @@ use Views\pwd\ForgotPasswordView;
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ForgotPasswordPostController implements ControllerInterface
+class ForgotPasswordPostController extends BaseController
 {
     /**
      * Main controller logic for processing the forgot password request.

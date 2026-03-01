@@ -10,7 +10,7 @@ use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
-use Models\UseCase\ToDoList\DeleteTaskUseCase;
+use Models\UseCase\ToDoList\UpdateTaskUseCase;
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationToDoList;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
@@ -18,9 +18,10 @@ use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Exception;
 use Override;
+use Validator\ToDoListValidator;
 
 /**
- * Controller for handling To-Do List Delete POST actions (AJAX).
+ * Controller for handling To-Do List Update POST actions (AJAX).
  *
  * @category Controller
  * @package Src
@@ -34,10 +35,10 @@ use Override;
  * @license MIT License https://opensource.org/licenses/MIT
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoListDeletePost extends BaseController
+class ToDoListUpdatePostController extends BaseController
 {
     /**
-     * Main control method for deleting a task.
+     * Main control method for updating a task.
      *
      * @param integer $saeId  The SAE ID.
      * @param integer $todoId The To-Do ID.
@@ -51,15 +52,18 @@ class ToDoListDeletePost extends BaseController
 
         header('Content-Type: application/json');
 
-        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-        if (!SessionService::verifyCsrfToken($csrfToken)) {
-            Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO delete.', $this->user->getUserId(), 'WARNING');
-            $this->sendError("Session invalide (CSRF).", 403);
-        }
+        $this->checkCsrfAjax('TODO_UPDATE');
 
         $user = $this->user;
+        $validator = new ToDoListValidator();
 
         try {
+            $json = file_get_contents('php://input');
+            $input = json_decode($json !== false ? $json : '{}', true) ?? [];
+            if (!is_array($input)) {
+                $input = [];
+            }
+
             $validateAccessUseCase = new ValidateToDoListModifyAccessUseCase(
                 new PdoSAESubjectRepository(),
                 new PdoSAEGroupRepository(),
@@ -71,10 +75,13 @@ class ToDoListDeletePost extends BaseController
 
             $validateAccessUseCase->execute($user, $saeId);
 
-            $deleteTaskUseCase = new DeleteTaskUseCase($repository);
-            $deleteTaskUseCase->execute($todoId);
+            $input = $validator->escape($input);
+            $validator->validate($input);
 
-            Logger::log('TODO_DELETE', "Task $todoId deleted by user {$user->getUserId()}", $user->getUserId());
+            $updateTaskUseCase = new UpdateTaskUseCase($repository);
+            $updateTaskUseCase->execute($todoId, $input);
+
+            Logger::log('TODO_UPDATE', "Task $todoId updated by user {$user->getUserId()}", $user->getUserId());
 
             echo json_encode(['success' => true]);
         } catch (ExceptionAccessDenied $e) {
@@ -104,17 +111,17 @@ class ToDoListDeletePost extends BaseController
     }
 
     /**
-     * Checks if the controller supports the given path and method.
+     * Checks if the request path and method are supported.
      *
-     * @param string $path   The path to check.
-     * @param string $method The HTTP method to check.
-     * @return boolean True if the controller supports the path and method, false otherwise.
+     * @param string $path   The request path.
+     * @param string $method The request method.
+     * @return boolean True if the request is supported, false otherwise.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
         return preg_match(
-            '/^\/sae\/\d+\/to-do\/delete\/\d+$/',
+            '/^\/sae\/\d+\/to-do\/update\/\d+$/',
             $path
         ) && $method === "POST";
     }

@@ -13,6 +13,11 @@ use PDOException;
 /**
  * PDO implementation of ClientInterface.
  *
+ * [Architecture Strategy]
+ * Type 2 Repository (Inherited/Polymorphic).
+ * This repository DOES NOT extend BaseRepository because it handles logic that involves
+ * joining with the parent `users` table instead of mapping perfectly to a single table.
+ *
  * This is the Infrastructure layer implementation of the Interface.
  *
  * @category   Models
@@ -73,11 +78,9 @@ class PdoClientRepository implements ClientInterface
             $clientData = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($clientData) {
-                // Merge user data with client-specific data.
-                $data = array_merge($user->toArray(), $clientData);
-                return new Client($data);
+                return new Client($clientData);
             }
-            return null; // User found but not a client.
+            return null;
         } catch (PDOException $e) {
             error_log("Error in PdoClientRepository::findById (client data): " . $e->getMessage());
             return null;

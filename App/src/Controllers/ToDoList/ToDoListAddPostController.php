@@ -35,7 +35,7 @@ use Validator\ToDoListValidator;
  * @license MIT License https://opensource.org/licenses/MIT
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ToDoListAddPost extends BaseController
+class ToDoListAddPostController extends BaseController
 {
     /**
      * Main control method for adding a task.
@@ -51,11 +51,7 @@ class ToDoListAddPost extends BaseController
 
         header('Content-Type: application/json');
 
-        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-        if (!SessionService::verifyCsrfToken($csrfToken)) {
-            Logger::log('CSRF_FAIL', 'Invalid CSRF token for TODO add.', $this->user->getUserId(), 'WARNING');
-            $this->sendError("Session invalide (CSRF).", 403);
-        }
+        $this->checkCsrfAjax('TODO_ADD');
 
         $user = $this->user;
         $validator = new ToDoListValidator();

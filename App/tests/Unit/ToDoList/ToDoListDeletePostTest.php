@@ -4,7 +4,7 @@ namespace Tests\Unit\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListDeletePost;
+use Controllers\ToDoList\ToDoListDeletePostController;
 
 /**
  * Unit test for ToDoListDeletePost class.
@@ -15,7 +15,7 @@ use Controllers\ToDoList\ToDoListDeletePost;
  * @license  MIT License https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(ToDoListDeletePost::class)]
+#[CoversClass(ToDoListDeletePostController::class)]
 class ToDoListDeletePostTest extends TestCase
 {
     /**
@@ -25,7 +25,7 @@ class ToDoListDeletePostTest extends TestCase
      */
     public function testSupportReturnsTrueForDeleteAction(): void
     {
-        $this->assertTrue(ToDoListDeletePost::support('/sae/99/to-do/delete/123', 'POST'));
+        $this->assertTrue(ToDoListDeletePostController::support('/sae/99/to-do/delete/123', 'POST'));
     }
 
     /**
@@ -35,8 +35,8 @@ class ToDoListDeletePostTest extends TestCase
      */
     public function testSupportReturnsFalseForInvalidPathOrMethod(): void
     {
-        $this->assertFalse(ToDoListDeletePost::support('/sae/99/to-do/delete/123', 'GET')); // Wrong method
-        $this->assertFalse(ToDoListDeletePost::support('/to-do-list/delete/123', 'POST')); // Old path
-        $this->assertFalse(ToDoListDeletePost::support('/sae/99/to-do/unknown/123', 'POST')); // Invalid action
+        $this->assertFalse(ToDoListDeletePostController::support('/sae/99/to-do/delete/123', 'GET')); // Wrong method
+        $this->assertFalse(ToDoListDeletePostController::support('/to-do-list/delete/123', 'POST')); // Old path
+        $this->assertFalse(ToDoListDeletePostController::support('/sae/99/to-do/unknown/123', 'POST')); // Invalid action
     }
 }

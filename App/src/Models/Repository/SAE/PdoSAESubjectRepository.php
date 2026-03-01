@@ -28,32 +28,13 @@ use PDOException;
 class PdoSAESubjectRepository extends BaseRepository implements SAESubjectInterface
 {
     /**
-     * The singleton instance.
-     *
-     * @var PdoSAESubjectRepository|null
-     */
-    protected static ?PdoSAESubjectRepository $instance = null;
-
-    /**
-     * The table name.
-     *
-     * @var string
-     */
-    protected string $table = 'sae_subjects';
-
-    /**
-     * The entity class name.
-     *
-     * @var class-string<SAESubject>
-     */
-    protected string $entityClass = SAESubject::class;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
+        $this->table = 'sae_subjects';
+        $this->entityClass = SAESubject::class;
     }
 
     /**

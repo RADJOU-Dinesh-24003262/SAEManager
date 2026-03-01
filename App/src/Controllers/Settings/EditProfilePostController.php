@@ -33,7 +33,7 @@ use Views\Settings\EditProfileSuccessView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class EditProfilePost extends BaseController
+class EditProfilePostController extends BaseController
 {
     /**
      * Main Controller logic for EditProfilePost.

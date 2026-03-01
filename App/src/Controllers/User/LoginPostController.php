@@ -2,7 +2,7 @@
 
 namespace Controllers\User;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
@@ -35,7 +35,7 @@ use Views\User\LoginView;
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 
-class LoginPost implements ControllerInterface
+class LoginPostController extends BaseController
 {
     /**
      * Principal manager of the controller
@@ -50,14 +50,7 @@ class LoginPost implements ControllerInterface
             return;
         }
 
-        // CSRF Protection.
-        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-            Logger::log('CSRF_FAIL', 'Tentative de connexion avec token invalide.', null, 'WARNING');
-            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
-            $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);
-            $view->render();
-            exit();
-        }
+        $this->checkCsrf('LOGIN', '/login');
 
         $data = [];
 
@@ -72,8 +65,6 @@ class LoginPost implements ControllerInterface
             $userRepository = new PdoUserRepository();
             $loginUseCase = new LoginUseCase($userRepository);
             $user = $loginUseCase->execute($data['email'], $data['password']);
-
-
 
             SessionService::regenerateId();
 

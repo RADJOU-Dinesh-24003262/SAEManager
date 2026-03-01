@@ -4,7 +4,7 @@ namespace Tests\Unit\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListAddPost;
+use Controllers\ToDoList\ToDoListAddPostController;
 
 /**
  * Unit test for ToDoListAddPost class.
@@ -15,7 +15,7 @@ use Controllers\ToDoList\ToDoListAddPost;
  * @license  MIT License https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(ToDoListAddPost::class)]
+#[CoversClass(ToDoListAddPostController::class)]
 class ToDoListAddPostTest extends TestCase
 {
     /**
@@ -25,7 +25,7 @@ class ToDoListAddPostTest extends TestCase
      */
     public function testSupportReturnsTrueForAddAction(): void
     {
-        $this->assertTrue(ToDoListAddPost::support('/sae/1/to-do/add', 'POST'));
+        $this->assertTrue(ToDoListAddPostController::support('/sae/1/to-do/add', 'POST'));
     }
 
     /**
@@ -35,8 +35,8 @@ class ToDoListAddPostTest extends TestCase
      */
     public function testSupportReturnsFalseForInvalidPathOrMethod(): void
     {
-        $this->assertFalse(ToDoListAddPost::support('/sae/1/to-do/add', 'GET')); // Wrong method
-        $this->assertFalse(ToDoListAddPost::support('/to-do-list', 'POST')); // Old path
-        $this->assertFalse(ToDoListAddPost::support('/sae/1/to-do/unknown', 'POST')); // Invalid action
+        $this->assertFalse(ToDoListAddPostController::support('/sae/1/to-do/add', 'GET')); // Wrong method
+        $this->assertFalse(ToDoListAddPostController::support('/to-do-list', 'POST')); // Old path
+        $this->assertFalse(ToDoListAddPostController::support('/sae/1/to-do/unknown', 'POST')); // Invalid action
     }
 }

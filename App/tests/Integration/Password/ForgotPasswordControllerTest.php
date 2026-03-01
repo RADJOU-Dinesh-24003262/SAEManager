@@ -2,8 +2,8 @@
 
 namespace Tests\Integration\Controller\Password;
 
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ForgotPasswordPostController;
+use Controllers\Password\ForgotPasswordController;
+use Controllers\Password\ForgotPasswordPostController;
 use Core\Controllers\ControllerInterface;
 use Core\includes\Database;
 use Core\includes\exception\ExceptionSpam;
