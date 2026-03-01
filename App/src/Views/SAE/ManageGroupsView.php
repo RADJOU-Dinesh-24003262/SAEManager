@@ -27,6 +27,17 @@ class ManageGroupsView extends BaseSaeView
     private const TEMPLATE_HTML = __DIR__ . '/manage-groups.html';
 
     /**
+     * Constructor.
+     *
+     * @param array<string, mixed> $data The view data.
+     */
+    public function __construct(array $data)
+    {
+        parent::__construct($data['sae']['subject'], $data['user']);
+        $this->data = array_merge($this->data, $data);
+    }
+
+    /**
      * Returns the path to the HTML template file.
      *
      * @return string

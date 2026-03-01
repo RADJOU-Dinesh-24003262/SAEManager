@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Models\User\Student;
-use Models\User\User;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
 
 /**
  * Unit tests for Student model
@@ -179,6 +179,6 @@ class StudentModelTest extends TestCase
 
         $student = new Student($data);
 
-        $this->assertNull($student->getMajor());
+        $this->assertEquals('', $student->getMajor());
     }
 }

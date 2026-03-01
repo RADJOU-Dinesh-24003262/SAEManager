@@ -8,9 +8,15 @@ use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\includes\exception\SAE\ExceptionSAE;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\SAE\SAE;
-use Override;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use Views\PageSAE\PageSaeView;
+use Override;
 
 /**
  * This class controls the SAE page.
@@ -36,28 +42,50 @@ class PageSaeController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+
      * @return void
      * @throws ExceptionAccessDenied If access is denied.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureAuthenticated();
 
         try {
-            $data['user'] = $this->user;
+            $subjectInterface = new PdoSAESubjectRepository();
+            $groupInterface = new PdoSAEGroupRepository();
+            $participatedInInterface = new PdoParticipatedInRepository();
 
-            $sae_id = intval(basename($_SERVER['REQUEST_URI']));
+            $studentInterface = new PdoStudentRepository();
+            $professorInterface = new PdoProfessorRepository();
+            $clientInterface = new PdoClientRepository();
 
-            if (!$this->user->canAccessSAE($sae_id)) {
-                throw new ExceptionAccessDenied("Vous n'avez pas la permission d'accéder à cette SAE.");
+            $sae = new GetCompleteSAEDataUseCase(
+                $subjectInterface,
+                $groupInterface,
+                $participatedInInterface,
+                $studentInterface,
+                $professorInterface,
+                $clientInterface
+            );
+
+            $saeData = $sae->execute($saeId, $this->user);
+
+            if ($saeData === null) {
+                SessionService::setFlash('errors', "SAE introuvable ou accès refusé.");
+                header('Location: /dashboard');
+                exit();
             }
 
-            $sae = SAE::getInstance();
-            $data['sae'] = $sae->getCompleteSAEData($sae_id, $this->user);
-
             // Create and render the SAE page view.
-            $view = new PageSaeView($data);
+            $view = new PageSaeView(
+                $saeData['subject'],
+                $saeData['groups'],
+                $saeData['responsible_professor'],
+                $saeData['all_professors'],
+                $saeData['client'],
+                $this->user
+            );
             $view->render();
             exit();
         } catch (ExceptionAccessDenied $e) {

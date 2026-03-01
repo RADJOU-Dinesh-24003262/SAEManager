@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models\SAE;
 
-use Models\SAE\SAEGroup;
+use Models\Entity\SAE\SAEGroup;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;

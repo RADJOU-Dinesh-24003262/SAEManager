@@ -8,6 +8,8 @@ use Core\Utilis\SessionService;
 use Models\SAE\SAE;
 use Override;
 use Services\FileService;
+use Models\UseCase\SAE\DeleteSAEUseCase;
+use Models\Repository\SAE\PdoSAESubjectRepository;
 
 /**
  * This class controls the deletion of an SAE via GET request.
@@ -33,37 +35,20 @@ class DeleteSaeController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws \Exception If a general error occurs during the modification process.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
-        $this->ensureAuthenticated();
-        $user = $this->user;
         $this->ensureProfessor();
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/delete$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
-
-        if (!$this->user->canManageSAE($saeId)) {
-            SessionService::setFlash('errors', ["Vous n'avez pas la permission de modifier cette SAE."]);
-            header('Location: /sae/' . $saeId);
-            exit;
-        }
 
         try {
-            $path = SAE::getInstance()->getFileName($user, $saeId);
-            FileService::removeFile($path);
-            SAE::getInstance()->deleteSAE($user, $saeId);
+            $repository = new PdoSAESubjectRepository();
+            $useCase = new DeleteSAEUseCase($repository);
+
+            $useCase->execute($saeId, $this->user);
 
             header('Location: /dashboard');
             SessionService::setFlash('success', 'SAE supprimée avec succès');

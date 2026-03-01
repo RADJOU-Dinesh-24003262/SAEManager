@@ -23,11 +23,6 @@ class Router
     private array $routes;
 
     /**
-     * @var array<string> Available paths from routes
-     */
-    private array $availablePaths;
-
-    /**
      * @var string Requested path from URL
      */
     private string $requestedPath;
@@ -46,7 +41,6 @@ class Router
     public function __construct(string $path, string $method)
     {
         $this->routes = ROUTES;
-        $this->availablePaths = array_keys($this->routes);
         $this->requestedPath = $path;
         $this->requestedMethod = strtoupper($method);
         $this->parseRoutes();
@@ -59,40 +53,22 @@ class Router
      */
     private function parseRoutes(): void
     {
-        $explodedRequestedPath = $this->explodePath($this->requestedPath);
-        $params = [];
+        foreach ($this->routes as $pattern => $route) {
+            if (preg_match($pattern, $this->requestedPath, $matches)) {
+                $params = array_filter(
+                    $matches,
+                    fn ($key) => !is_int($key),
+                    ARRAY_FILTER_USE_KEY
+                );
 
-        foreach ($this->availablePaths as $candidatePath) {
-            $foundMatch = true;
-            $explodedCandidatePath = $this->explodePath($candidatePath);
-
-            // Check if path segments count matches.
-            if (count($explodedCandidatePath) === count($explodedRequestedPath)) {
-                foreach ($explodedRequestedPath as $key => $requestedPathPart) {
-                    $candidatePathPart = $explodedCandidatePath[$key];
-
-                    if ($this->isParam($candidatePathPart)) {
-                        // Extract parameter value.
-                        $params[substr($candidatePathPart, 1, -1)] = $requestedPathPart;
-                    } elseif ($candidatePathPart !== $requestedPathPart) {
-                        $foundMatch = false;
-                        break;
-                    }
-                }
-
-                if ($foundMatch) {
-                    $route = $this->routes[$candidatePath];
-                    break;
-                }
+                $this->dispatch($route, $params);
+                return;
             }
         }
 
-        if (isset($route)) {
-            $this->dispatch($route, $params);
-        } else {
-            $this->handleNotFound();
-        }
+        $this->handleNotFound();
     }
+
 
     /**
      * Dispatch to controller.
@@ -114,14 +90,11 @@ class Router
         $controllerClass = $routeConfig['controller'];
         $method = $routeConfig['method'];
 
-        error_log($controllerClass);
-        error_log($method);
+
         try {
             $controller = new $controllerClass();
 
-            // TODO: Add support for parameters
-            // $controller->$method(...$params);.
-            $controller->$method();
+            $controller->$method(...$params);
             exit();
         } catch (\Throwable $e) {
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);

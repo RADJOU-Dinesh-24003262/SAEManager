@@ -26,12 +26,12 @@ interface RepositoryInterface
 
     // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
     /**
-     * Creates a new entity (entry) in the database
+     * Inserts a new entity (entry) in the database
      *
-     * @param T $entity The entity to create.
-     * @return T The created entity.
+     * @param T $entity The entity to insert.
+     * @return T The inserted entity.
      */
-    public function create($entity);
+    public function insert($entity);
     // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
 
     // phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
@@ -43,6 +43,20 @@ interface RepositoryInterface
      */
     public function update($entity): bool;
     // phpcs:enable Squiz.Commenting.FunctionComment.TypeHintMissing
+
+    /**
+     * Finds all entities in the database
+     *
+     * @return array<T> An array of entities.
+     */
+    public function findAll(): array;
+
+    /**
+     * Counts the total number of records
+     *
+     * @return integer The total number of records.
+     */
+    public function count(): int;
 
     /**
      * Deletes an entity by its ID in the database

@@ -3,10 +3,10 @@
 namespace Views\Dashboard;
 
 use Core\Views\AbstractView;
-use Models\SAE\SAESubject;
-use Models\User\Client;
-use Models\User\Student;
-use Models\User\User;
+use Models\Entity\SAE\SAESubject;
+use Models\Entity\User\Client;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
 use Override;
 
 /**
@@ -48,8 +48,7 @@ class DashboardView extends AbstractView
     {
         $data = [
             'user'    => $data['user'],
-            'saes'    => $data['saes'],
-            'sae'     => $data['sae']
+            'saes'    => $data['saes']
         ];
 
         parent::__construct($data);
@@ -83,34 +82,15 @@ class DashboardView extends AbstractView
             'SUCCESS_MESSAGE'  => $this->renderSuccessMessage(),
             'USER_NAME'        => $user->getFullName(),
             'USER_EMAIL'       => $user->getEmail(),
-            'USER_TYPE_CLASS'  => $this->getUserTypeLabel($user),
-            'USER_TYPE_LABEL'  => ucfirst($this->getUserTypeLabel($user)),
+            'USER_TYPE_CLASS'  => mb_strtolower($user->getRoleLabel()),
+            'USER_TYPE_LABEL'  => $user->getRoleLabel(),
             'USER_META_INFO'   => $this->renderUserMetaInfo($user),
             'SAE_NAVIGATION'   => $this->renderSAENavigation($user),
             'SAE_CONTENT'      => $this->renderSAEContent($user, $saes)
         ];
     }
 
-    /**
-     * Returns a user-friendly label based on the user's role.
-     *
-     * @param User $user The user instance.
-     *
-     * @return string The role label.
-     */
-    private function getUserTypeLabel(User $user): string
-    {
-        if ($user->isStudent()) {
-            return 'étudiant';
-        }
-        if ($user->isProfessor()) {
-            return 'professeur';
-        }
-        if ($user->isClient()) {
-            return 'client';
-        }
-        return 'utilisateur';
-    }
+
 
     /**
      * Renders additional user information depending on the user type.
@@ -122,22 +102,10 @@ class DashboardView extends AbstractView
     private function renderUserMetaInfo(User $user): string
     {
         $html = '';
+        $metaInfo = $user->getDashboardMetaInfo();
 
-        if ($user->isStudent() && $user instanceof Student) {
-            /* @var Student $student */
-            $student = $user;
-
-            $html .= '<span>Année : ' . $student->getYear() . '</span>';
-            $html .= '<span>Groupe : ' . $student->getTd() . '-' . $student->getTp() . '</span>';
-            if ($student->getMajor()) {
-                $html .= '<span>Parcours : ' . $student->getMajor() . '</span>';
-            }
-        } elseif ($user->isProfessor()) {
-            $html .= '<span>Département : Informatique</span>';
-        } elseif ($user->isClient() && $user instanceof Client) {
-            /* @var Client $client */
-            $client = $user;
-            $html .= '<span>Entreprise : ' . $client->getOrganisation() . ' </span>';
+        foreach ($metaInfo as $label => $value) {
+            $html .= '<span>' . $label . ' : ' . $value . '</span>';
         }
 
         return $html;
@@ -206,7 +174,7 @@ class DashboardView extends AbstractView
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
 
         if (!empty($sae->getResponsibleProfId())) {
-            $html .= '<p><strong>Enseignant :</strong> ' . $this->data['sae'][$sae->getSaeSubjectId()] . '</p>';
+            $html .= '<p><strong>Enseignant :</strong> ' . 'Inconnu' . '</p>';
         }
 
         $html .= '<div class="sae-actions">';
