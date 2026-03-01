@@ -19,25 +19,27 @@ use Controllers\Dashboard\DashboardController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ForgotPasswordPostController;
-use Controllers\pwd\ResetPasswordController;
-use Controllers\pwd\ResetPasswordPostController;
+use Controllers\Password\ForgotPasswordController;
+use Controllers\Password\ForgotPasswordPostController;
+use Controllers\Password\ResetPasswordController;
+use Controllers\Password\ResetPasswordPostController;
 use Controllers\SAE\CreateSaeController;
 use Controllers\SAE\CreateSaePostController;
 use Controllers\SAE\ManageGroupsController;
 use Controllers\SAE\ManageGroupsPostController;
 use Controllers\Settings\DeleteUserController;
 use Controllers\Settings\EditProfileController;
-use Controllers\Settings\EditProfilePost;
+use Controllers\Settings\EditProfilePostController;
 use Controllers\Settings\SettingsController;
 use Controllers\ToDoList\ToDoListController;
-use Controllers\ToDoList\ToDoListPost;
-use Controllers\User\Login;
-use Controllers\User\LoginPost;
-use Controllers\User\Logout;
-use Controllers\User\Register;
-use Controllers\User\RegisterPost;
+use Controllers\ToDoList\ToDoListAddPostController;
+use Controllers\ToDoList\ToDoListUpdatePostController;
+use Controllers\ToDoList\ToDoListDeletePostController;
+use Controllers\User\LoginController;
+use Controllers\User\LoginPostController;
+use Controllers\User\LogoutController;
+use Controllers\User\RegisterController;
+use Controllers\User\RegisterPostController;
 
 const ROUTES = [
     // ============================================================
@@ -45,41 +47,41 @@ const ROUTES = [
     // ============================================================
 
     // Home
-    '/' => [
+    '/^\/$/' => [
         'GET' => ['controller' => IndexController::class , 'method' => 'control']
     ],
-    '/index' => [
+    '/^\/index$/' => [
         'GET' => ['controller' => IndexController::class , 'method' => 'control']
     ],
 
     // Authentication
-    '/login' => [
-        'GET' => ['controller' => Login::class , 'method' => 'control'],
-        'POST' => ['controller' => LoginPost::class , 'method' => 'control']
+    '/^\/login$/' => [
+        'GET' => ['controller' => LoginController::class , 'method' => 'control'],
+        'POST' => ['controller' => LoginPostController::class , 'method' => 'control']
     ],
-    '/register' => [
-        'GET' => ['controller' => Register::class , 'method' => 'control'],
-        'POST' => ['controller' => RegisterPost::class , 'method' => 'control']
+    '/^\/register$/' => [
+        'GET' => ['controller' => RegisterController::class , 'method' => 'control'],
+        'POST' => ['controller' => RegisterPostController::class , 'method' => 'control']
     ],
-    '/logout' => [
-        'GET' => ['controller' => Logout::class , 'method' => 'control']
+    '/^\/logout$/' => [
+        'GET' => ['controller' => LogoutController::class , 'method' => 'control']
     ],
 
     // Password Reset
-    '/forgot-password' => [
+    '/^\/forgot-password$/' => [
         'GET' => ['controller' => ForgotPasswordController::class , 'method' => 'control'],
         'POST' => ['controller' => ForgotPasswordPostController::class , 'method' => 'control']
     ],
-    '/reset-password' => [
+    '/^\/reset-password$/' => [
         'GET' => ['controller' => ResetPasswordController::class , 'method' => 'control'],
         'POST' => ['controller' => ResetPasswordPostController::class , 'method' => 'control']
     ],
 
     // Info
-    '/legal-notice' => [
+    '/^\/legal-notice$/' => [
         'GET' => ['controller' => LegalNoticeController::class , 'method' => 'control']
     ],
-    '/site-map' => [
+    '/^\/site-map$/' => [
         'GET' => ['controller' => SiteMapController::class , 'method' => 'control']
     ],
 
@@ -88,52 +90,43 @@ const ROUTES = [
     // ============================================================
 
     // Dashboard
-    '/dashboard' => [
+    '/^\/dashboard$/' => [
         'GET' => ['controller' => DashboardController::class , 'method' => 'control']
     ],
 
     // Settings
-    '/settings' => [
+    '/^\/settings$/' => [
         'GET' => ['controller' => SettingsController::class , 'method' => 'control']
     ],
-    '/settings/edit-profile' => [
+    '/^\/settings\/edit-profile$/' => [
         'GET' => ['controller' => EditProfileController::class , 'method' => 'control'],
-        'POST' => ['controller' => EditProfilePost::class , 'method' => 'control']
+        'POST' => ['controller' => EditProfilePostController::class , 'method' => 'control']
     ],
-    '/settings/delete' => [
+    '/^\/settings\/delete$/' => [
         'GET' => ['controller' => DeleteUserController::class , 'method' => 'control']
     ],
 
     // ============================================================
     // SAE ROUTES
     // ============================================================
-    '/sae/create' => [
+    '/^\/sae\/create$/' => [
         'GET' => ['controller' => CreateSaeController::class , 'method' => 'control'],
         'POST' => ['controller' => CreateSaePostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/delete' => [
+    '/^\/sae\/(?<saeId>\d+)\/delete$/' => [
         'GET' => ['controller' => DeleteSaeController::class , 'method' => 'control'],
     ],
-    '/sae/{id}' => [
+    '/^\/sae\/(?<saeId>\d+)$/' => [
         'GET' => ['controller' => PageSaeController::class , 'method' => 'control']
     ],
-    '/sae/{id}/modify' => [
+    '/^\/sae\/(?<saeId>\d+)\/modify$/' => [
         'GET' => ['controller' => ModifySaeController::class , 'method' => 'control'],
         'POST' => ['controller' => ModifySaePostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/groups' => [
+    '/^\/sae\/(?<saeId>\d+)\/groups$/' => [
         'GET' => ['controller' => ManageGroupsController::class , 'method' => 'control'],
     ],
-    '/sae/{id}/groups/create' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/sae/{id}/groups/delete' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/sae/{id}/groups/add-student' => [
-        'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
-    ],
-    '/sae/{id}/groups/remove-student' => [
+    '/^\/sae\/(?<saeId>\d+)\/groups\/(?<action>create|delete|add-student|remove-student)$/' => [
         'POST' => ['controller' => ManageGroupsPostController::class , 'method' => 'control']
     ],
 
@@ -141,16 +134,16 @@ const ROUTES = [
     // TODO LIST ROUTES
     // ============================================================
 
-    '/sae/{id}/to-do' => [
+    '/^\/sae\/(?<saeId>\d+)\/to-do$/' => [
         'GET' => ['controller' => ToDoListController::class , 'method' => 'control'],
     ],
-    '/sae/{id}/to-do/add' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/add$/' => [
+        'POST' => ['controller' => ToDoListAddPostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/to-do/delete/{id}' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/update\/(?<todoId>\d+)$/' => [
+        'POST' => ['controller' => ToDoListUpdatePostController::class , 'method' => 'control']
     ],
-    '/sae/{id}/to-do/update/{id}' => [
-        'POST' => ['controller' => ToDoListPost::class , 'method' => 'control']
+    '/^\/sae\/(?<saeId>\d+)\/to-do\/delete\/(?<todoId>\d+)$/' => [
+        'POST' => ['controller' => ToDoListDeletePostController::class , 'method' => 'control']
     ],
 ];

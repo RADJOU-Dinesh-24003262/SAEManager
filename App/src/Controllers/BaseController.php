@@ -3,8 +3,11 @@
 namespace Controllers;
 
 use Core\Controllers\ControllerInterface;
+use Core\includes\exception\ExceptionEmailAlreadyExists;
+use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
 
 /**
  * Abstract BaseController to handle common controller logic like authentication.
@@ -65,7 +68,53 @@ abstract class BaseController implements ControllerInterface
 
         if (!$this->user->isProfessor()) {
             SessionService::setFlash('errors', ['Accès réservé aux professeurs.']);
-            header('Location: /dashboard');
+            $this->redirect('/dashboard');
+        }
+    }
+
+    /**
+     * Redirects to the given URL.
+     *
+     * @param string $url The URL to redirect to.
+     * @return void
+     */
+    protected function redirect(string $url): void
+    {
+        header("Location: $url");
+        exit;
+    }
+
+    /**
+     * Checks if the CSRF token is valid. If not, it logs the attempt, sets a flash error, and redirects.
+     *
+     * @param string $logActionName The prefix for the log message (e.g., 'LOGIN', 'REGISTER').
+     * @param string $redirectUrl   The URL to redirect to upon failure.
+     * @return void
+     */
+    protected function checkCsrf(string $logActionName, string $redirectUrl): void
+    {
+        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            Logger::log($logActionName . '_CSRF_FAIL', 'Tentative action avec token invalide.', null, 'WARNING');
+            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
+            header("Location: $redirectUrl");
+            exit();
+        }
+    }
+
+    /**
+     * Checks if the CSRF token is valid for an AJAX request. If not, it returns a 403 JSON response.
+     *
+     * @param string $logActionName The prefix for the log message.
+     * @return void
+     */
+    protected function checkCsrfAjax(string $logActionName): void
+    {
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (!SessionService::verifyCsrfToken($csrfToken)) {
+            $userOrNull = isset($this->user) ? $this->user->getUserId() : null;
+            Logger::log($logActionName . '_CSRF_FAIL', 'Invalid CSRF token.', $userOrNull, 'WARNING');
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'Session invalide (CSRF).']);
             exit();
         }
     }

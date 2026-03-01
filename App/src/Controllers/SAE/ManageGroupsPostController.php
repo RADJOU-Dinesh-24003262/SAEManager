@@ -4,7 +4,13 @@ namespace Controllers\SAE;
 
 use Controllers\BaseController;
 use Core\Utilis\SessionService;
-use Models\SAE\SAE;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\UseCase\SAE\AssignStudentToGroupUseCase;
+use Models\UseCase\SAE\CreateSAEGroupUseCase;
+use Models\UseCase\SAE\DeleteSAEGroupUseCase;
+use Models\UseCase\SAE\RemoveStudentFromGroupUseCase;
 use Override;
 use Exception;
 
@@ -23,24 +29,15 @@ class ManageGroupsPostController extends BaseController
     /**
      * Controls the processing of group management actions.
      *
+     * @param integer $saeId  The SAE ID.
+     * @param string  $action The action to perform.
+     *
      * @return void
      * @throws \Exception If an unknown action is encountered or an error occurs during processing.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0, string $action = ''): void
     {
         $this->ensureProfessor();
-
-        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
-
-        $saeId = 0;
-        $action = '';
-
-        // Extract SAE ID and Action from URL: /sae/{id}/groups/{action}.
-        if (preg_match('/^\/sae\/(\d+)\/groups\/(.+)$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-            $action = $matches[2];
-        }
 
         try {
             match ($action) {
@@ -59,6 +56,7 @@ class ManageGroupsPostController extends BaseController
      * Creates a new group for a SAE.
      *
      * @param integer $saeId The ID of the SAE.
+     *
      * @return void
      * @throws Exception If an unexpected error occurs during group creation.
      */
@@ -71,7 +69,12 @@ class ManageGroupsPostController extends BaseController
             $professorId = null;
         }
 
-        SAE::getInstance()->createGroup($this->user, $saeId, $professorId);
+        $useCase = new CreateSAEGroupUseCase(
+            new PdoSAEGroupRepository(),
+            new PdoSAESubjectRepository()
+        );
+        $useCase->execute($this->user, $saeId, $professorId);
+
         $this->redirectWithSuccess($saeId, 'Groupe créé avec succès.');
     }
 
@@ -89,7 +92,13 @@ class ManageGroupsPostController extends BaseController
         if (!$groupId) {
             throw new Exception("ID du groupe manquant");
         }
-        SAE::getInstance()->deleteGroup($this->user, $groupId);
+
+        $useCase = new DeleteSAEGroupUseCase(
+            new PdoSAEGroupRepository(),
+            new PdoSAESubjectRepository()
+        );
+        $useCase->execute($this->user, $groupId);
+
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
     }
 
@@ -108,7 +117,14 @@ class ManageGroupsPostController extends BaseController
         if (!$groupId || !$studentId) {
             throw new Exception("Données manquantes");
         }
-        SAE::getInstance()->assignStudentToGroup($this->user, $studentId, $groupId);
+
+        $useCase = new AssignStudentToGroupUseCase(
+            new PdoSAEGroupRepository(),
+            new PdoParticipatedInRepository(),
+            new PdoSAESubjectRepository()
+        );
+        $useCase->execute($this->user, $studentId, $groupId);
+
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
     }
 
@@ -127,7 +143,14 @@ class ManageGroupsPostController extends BaseController
         if (!$groupId || !$studentId) {
             throw new Exception("Données manquantes");
         }
-        SAE::getInstance()->removeStudentFromGroup($this->user, $studentId, $groupId);
+
+        $useCase = new RemoveStudentFromGroupUseCase(
+            new PdoSAEGroupRepository(),
+            new PdoParticipatedInRepository(),
+            new PdoSAESubjectRepository()
+        );
+        $useCase->execute($this->user, $studentId, $groupId);
+
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');
     }
 

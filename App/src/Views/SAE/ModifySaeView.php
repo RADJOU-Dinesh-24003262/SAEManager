@@ -5,6 +5,8 @@ namespace Views\SAE;
 use Services\FileService;
 use Views\BaseSaeView;
 use Override;
+use Models\Entity\User\User;
+use Models\Entity\SAE\SAESubject;
 
 /**
  * View for the SAE modification page.
@@ -31,6 +33,27 @@ class ModifySaeView extends BaseSaeView
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/modify-sae.html';
+
+    /**
+     * Constructor for ModifySaeView.
+     *
+     * @param array<string, mixed>             $saeData   The data needed for rendering.
+     * @param array<int, array<string, mixed>> $clients   The list of available clients.
+     * @param User                             $user      The current user.
+     * @param string                           $csrfToken The CSRF token.
+     */
+    public function __construct(array $saeData, array $clients, User $user, string $csrfToken)
+    {
+        /* @var SAESubject $subject */
+        $subject = $saeData['subject'];
+        parent::__construct($subject, $user);
+        $this->data = array_merge($this->data, [
+            'sae' => $saeData,
+            'clients' => $clients,
+            'user' => $user,
+            'csrf_token' => $csrfToken
+        ]);
+    }
 
     /**
      * Returns the path to the HTML template.

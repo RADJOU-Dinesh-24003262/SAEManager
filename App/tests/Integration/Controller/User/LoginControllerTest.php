@@ -2,7 +2,7 @@
 
 namespace tests\Integration\Controller\User;
 
-use Controllers\User\LoginPost;
+use Controllers\User\LoginPostController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;
@@ -13,9 +13,9 @@ use PHPUnit\Framework\TestCase;
 use Validator\FormValidator;
 
 /**
- * Integration test for the LoginPost controller.
+ * Integration test for the LoginPostController controller.
  */
-#[CoversClass(LoginPost::class)]
+#[CoversClass(LoginPostController::class)]
 #[CoversClass(SessionService::class)]
 #[CoversClass(FormValidator::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
@@ -46,29 +46,29 @@ class LoginControllerTest extends TestCase
     }
 
     /**
-     * Test that the LoginPost controller supports the POST /login route.
+     * Test that the LoginPostController controller supports the POST /login route.
      */
-    public function testSupportsLoginPostRoute(): void
+    public function testSupportsLoginPostControllerRoute(): void
     {
-        $supported = LoginPost::support('/login', 'POST');
+        $supported = LoginPostController::support('/login', 'POST');
         $this->assertTrue($supported);
     }
 
     /**
-     * Test that the LoginPost controller does not support GET requests.
+     * Test that the LoginPostController controller does not support GET requests.
      */
     public function testDoesNotSupportGetMethod(): void
     {
-        $supported = LoginPost::support('/login', 'GET');
+        $supported = LoginPostController::support('/login', 'GET');
         $this->assertFalse($supported);
     }
 
     /**
-     * Test that the LoginPost controller does not support other routes.
+     * Test that the LoginPostController controller does not support other routes.
      */
     public function testDoesNotSupportOtherRoutes(): void
     {
-        $supported = LoginPost::support('/register', 'POST');
+        $supported = LoginPostController::support('/register', 'POST');
         $this->assertFalse($supported);
     }
 
@@ -80,7 +80,7 @@ class LoginControllerTest extends TestCase
         // Simulate a logged-in user
         $_SESSION['user_id'] = 'test@univ-amu.fr';
 
-        $controller = new LoginPost();
+        $controller = new LoginPostController();
 
         ob_start();
         try {
@@ -107,7 +107,7 @@ class LoginControllerTest extends TestCase
             'password' => ''
         ];
 
-        $controller = new LoginPost();
+        $controller = new LoginPostController();
 
         ob_start();
         $controller->control();

@@ -7,7 +7,9 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
 use Core\Utilis\SessionService;
 use Exception;
+use Models\Repository\SAE\PdoSAESubjectRepository;
 use Models\SAE\SAE;
+use Models\UseCase\SAE\ModifySAEUseCase;
 use Override;
 use Services\FileService;
 use Validator\FormSaeValidator;
@@ -36,49 +38,24 @@ class ModifySaePostController extends BaseController
     /**
      * Principal manager of the controller
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws ExceptionValidationEmptys If required fields are empty.
      * @throws ExeptionValidationSAECreation If validation fails during SAE modification.
      * @throws Exception If a general error occurs during the modification process.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/modify$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
-
         // CSRF Protection.
-        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
-            header('Location: /sae/' . $saeId . '/modify');
-            exit();
-        }
-
-        if (!$this->user->canManageSAE($saeId)) {
-            SessionService::setFlash('errors', ["Vous n'avez pas la permission de modifier cette SAE."]);
-            header('Location: /sae/' . $saeId);
-            exit;
-        }
+        $this->checkCsrf('MODIFY_SAE', '/sae/' . $saeId . '/modify');
 
         $data = $_POST;
         $validator = new FormSaeValidator();
 
         try {
-            $data = $validator->escape($data);
-
-            $user = $this->user;
-
             // Extract description before escape to preserve Markdown.
             $description = $data['description'];
 
@@ -88,32 +65,19 @@ class ModifySaePostController extends BaseController
             // Restore description for length check and saving.
             $data['description'] = $description;
 
-            $fileName = SAE::getInstance()->getFileName($user, $saeId);
-
-
             $updateData = [
-                'subject_name' => $data['nameSae'],
+                'subject_name' => $data['subject_name'],
                 'client_id' => !empty($data['client_id']) ? intval($data['client_id']) : null,
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['end_date'],
-                'file_path' => $fileName, // Keep old file by default.
             ];
 
+            $repository = new PdoSAESubjectRepository();
+            $useCase = new ModifySAEUseCase($repository);
 
-            if (!empty($fileName)) {
-                try {
-                    FileService::updateSaeDescription($fileName, $description);
-                } catch (\Exception $e) {
-                    error_log("Erreur mise à jour fichier: " . $e->getMessage());
-                    SessionService::setFlash('errors', [
-                        'description' => 'Erreur lors de la mise à jour du fichier de description.'
-                    ]);
-                    header('Location: /sae/' . $saeId . '/modify');
-                    exit();
-                }
-            }
+            $useCase->execute($saeId, $updateData, $description, $this->user);
 
-            SAE::getInstance()->updateSAE($user, $saeId, $updateData);
+
             SessionService::setFlash('success', 'SAE modifiée avec succès');
             header('Location: /sae/' . $saeId);
             exit();
@@ -126,7 +90,7 @@ class ModifySaePostController extends BaseController
             SessionService::setFlash('errors', $errors);
             header('Location: /sae/' . $saeId . '/modify');
             exit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             SessionService::setFlash('errors', ['Erreur : ' . $e->getMessage()]);
             header('Location: /sae/' . $saeId . '/modify');
             exit();

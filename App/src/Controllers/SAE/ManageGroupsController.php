@@ -5,8 +5,14 @@ namespace Controllers\SAE;
 use Controllers\BaseController;
 use Core\includes\exception\SAE\ExceptionAccessDenied;
 use Core\Utilis\SessionService;
-use Models\SAE\SAE;
-use Models\User\Professor;
+use Models\Entity\User\Professor;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\GetManageGroupsDataUseCase;
 use Override;
 use Views\SAE\ManageGroupsView;
 
@@ -25,42 +31,41 @@ class ManageGroupsController extends BaseController
     /**
      * Controls the rendering of the group management page.
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws ExceptionAccessDenied If the user does not have permission to manage the SAE.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
 
-        $path = (string) (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '');
-        if (preg_match('/^\/sae\/(\d+)\/groups$/', $path, $matches)) {
-            $sae_id = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
+        $sae_id = $saeId;
 
         try {
-            $sae = SAE::getInstance();
+            $subjectRepo = new PdoSAESubjectRepository();
+            $groupRepo = new PdoSAEGroupRepository();
+            $participatedInRepo = new PdoParticipatedInRepository();
+            $studentRepo = new PdoStudentRepository();
+            $professorRepo = new PdoProfessorRepository();
+            $clientRepo = new PdoClientRepository();
 
-            if (!$this->user->canManageSAE($sae_id)) {
-                throw new ExceptionAccessDenied("Vous n'avez pas la permission de gérer les groupes.");
-            }
+            $useCase = new GetManageGroupsDataUseCase(
+                $subjectRepo,
+                $groupRepo,
+                $participatedInRepo,
+                $studentRepo,
+                $professorRepo,
+                $clientRepo
+            );
 
-            $saeData = $sae->getCompleteSAEData($sae_id, $this->user);
-            $availableStudents = $sae->getAvailableStudents($this->user, $sae_id);
-
-            $profsAvailable = [];
-            if ($this->user instanceof Professor) {
-                $profsAvailable = $this->user->getAllProfessors();
-            }
+            $data = $useCase->execute($sae_id, $this->user);
 
             $view = new ManageGroupsView([
                 'user' => $this->user,
-                'sae' => $saeData,
-                'available_students' => $availableStudents,
-                'all_professors' => $profsAvailable,
+                'sae' => $data['sae'],
+                'available_students' => $data['available_students'],
+                'all_professors' => $data['all_professors'],
             ]);
             $view->render();
         } catch (ExceptionAccessDenied $e) {

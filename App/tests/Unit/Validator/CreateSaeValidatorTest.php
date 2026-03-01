@@ -24,10 +24,10 @@ class CreateSaeValidatorTest extends TestCase
     private function getValidData(): array
     {
         return [
-            'nameSae' => 'Valid Name',
+            'subject_name' => 'Valid Name',
             'description' => 'Valid description with enough characters',
             'begin_date' => '2023-01-01',
-            'end_date' => '2023-01-15',
+            'end_date' => '2023-02-01',
             'client_id' => '1'
         ];
     }
@@ -43,7 +43,7 @@ class CreateSaeValidatorTest extends TestCase
     public function shortNameThrowsException(): void
     {
         $data = $this->getValidData();
-        $data['nameSae'] = 'AB'; // Less than 3 chars
+        $data['subject_name'] = 'AB'; // Less than 3 chars
 
         $this->expectException(ExeptionValidationSAECreation::class);
         $this->expectExceptionMessage('Le nom de la SAE doit faire entre 3 et 255 caractères.');
@@ -104,7 +104,7 @@ class CreateSaeValidatorTest extends TestCase
     public function endDateBeforeBeginDateThrowsException(): void
     {
         $data = $this->getValidData();
-        $data['begin_date'] = '2023-02-02';
+        $data['begin_date'] = '2024-02-01';
         $data['end_date'] = '2023-01-01'; // Invalid (before begin)
 
         $this->expectException(ExeptionValidationSAECreation::class);
