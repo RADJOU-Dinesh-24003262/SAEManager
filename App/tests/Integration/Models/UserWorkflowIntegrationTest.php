@@ -23,8 +23,6 @@ use ReflectionClass;
 /**
  * Tests d'intégration pour les workflows complets User
  */
-#[CoversClass(User::class)]
-#[CoversClass(Student::class)]
 #[CoversClass(PdoUserRepository::class)]
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(LoginUseCase::class)]
