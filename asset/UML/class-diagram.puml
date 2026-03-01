@@ -2,261 +2,456 @@
   skinparam svgLinkTarget _blank
   skinparam topurl https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src
   package Models as Models {
-    package SAE as Models.SAE {
-      class "SAEGroup\n<b>Represents a SAE Group in the system.</b>" as Models_SAE_SAEGroup [[/Models/SAE/SAEGroup.php SAEGroup Class]] {
-        #sae_group_id : integer|null
-        #sae_subject_id : integer
-        #professor_id : integer|null
-        +toArray()
-        +getSaeGroupId()
-        +setSaeGroupId(sae_group_id)
-        +getSaeSubjectId()
-        +setSaeSubjectId(sae_subject_id)
-        +getProfessorId()
-        +setProfessorId(professor_id)
-      }
-      class "SAESubject\n<b>Represents a SAE Subject (project) in the system.</b>" as Models_SAE_SAESubject [[/Models/SAE/SAESubject.php SAESubject Class]] {
-        #sae_subject_id : integer|null
-        #responsible_prof_id : integer
-        #client_id : integer|null
-        #subject_name : string
-        #begin_date : string
-        #end_date : string
-        #file_path : string|null
-        +isActive()
-        +getDaysRemaining()
-        +toArray()
-        +getSaeSubjectId()
-        +setSaeSubjectId(sae_subject_id)
-        +getResponsibleProfId()
-        +setResponsibleProfId(responsible_prof_id)
-        +getClientId()
-        +setClientId(client_id)
-        +getSubjectName()
-        +setSubjectName(subject_name)
-        +getBeginDate()
-        +setBeginDate(begin_date)
-        +getEndDate()
-        +setEndDate(end_date)
-        +getFilePath()
-        +setFilePath(file_path)
-      }
-      class "SAE\n<b>Facade for SAE operations.</b>" as Models_SAE_SAE [[/Models/SAE/SAE.php SAE Class]] {
-        #subjectRepo : SAESubjectRepository
-        #groupRepo : SAEGroupRepository
-        #instance : SAE|null
-        -__construct()
-        {static} +getInstance()
-        +getUserSAEs(user)
-        +getCompleteSAEData(saeId, user)
-        -getAccessibleGroups(saeId, user)
-        -getUserGroupId(student, saeId)
-        +createSAE(creator, data)
-        +updateSAE(user, saeId, data)
-        +createGroup(user, saeId, professorId)
-        +assignStudentToGroup(professor, studentId, groupId)
-        +assignProfessorToGroup(responsibleProf, groupId, professorId)
-        +getGroupContacts(user, saeId)
-        +deleteSAE(user, saeId)
-        +removeStudentFromGroup(professor, studentId, groupId)
-        +deleteGroup(professor, groupId)
-        +getAvailableStudents(user, saeId)
-      }
-      class "ParticipatedIn\n<b>Represents a participation entry in a SAE Group.</b>" as Models_SAE_ParticipatedIn [[/Models/SAE/ParticipatedIn.php ParticipatedIn Class]] {
-        #student_id : integer
-        #sae_group_id : integer
-        #sae_subject_id : integer|null
-        +toArray()
-        +getStudentId()
-        +setStudentId(student_id)
-        +getSaeGroupId()
-        +setSaeGroupId(sae_group_id)
-        +getSaeSubjectId()
-        +setSaeSubjectId(sae_subject_id)
-      }
-      package Repository as Models.SAE.Repository {
-        class "SAEGroupRepository\n<b>Repository for SAEGroup operations.</b>" as Models_SAE_Repository_SAEGroupRepository [[/Models/SAE/Repository/SAEGroupRepository.php SAEGroupRepository Class]] {
-          #instance : SAEGroupRepository|null
-          #table : string
-          #entityClass : class-string<SAEGroup>
-          #__construct()
-          {static} +getInstance()
+    package Repository as Models.Repository {
+      package SAE as Models.Repository.SAE {
+        class "PdoSAEGroupRepository\n<b>PDO implementation of SAEGroupInterface.</b>" as Models_Repository_SAE_PdoSAEGroupRepository [[/Models/Repository/SAE/PdoSAEGroupRepository.php PdoSAEGroupRepository Class]] {
+          +__construct()
           #getPrimaryKey()
-          +findBySaeId(saeId)
-          +findByProfessorId(professorId, saeId)
-          +create(entity)
+          +findBySaeSubjectId(saeSubjectId)
+          +insert(entity)
           +update(entity)
-          +getGroupStudents(groupId)
-          +assignStudent(studentId, groupId)
-          +unassignStudent(studentId, groupId)
-          +getStudentGroupId(studentId, saeId)
-          +getStudentCount(groupId)
-          +getAvailableStudents(saeId)
+          +getStudentsInGroup(groupId)
         }
-        class "SAESubjectRepository\n<b>Repository for SAESubject operations.</b>" as Models_SAE_Repository_SAESubjectRepository [[/Models/SAE/Repository/SAESubjectRepository.php SAESubjectRepository Class]] {
-          #instance : SAESubjectRepository|null
-          #table : string
-          #entityClass : class-string<SAESubject>
-          #__construct()
-          {static} +getInstance()
+        class "PdoParticipatedInRepository\n<b>PDO implementation of ParticipatedInInterface.</b>" as Models_Repository_SAE_PdoParticipatedInRepository [[/Models/Repository/SAE/PdoParticipatedInRepository.php PdoParticipatedInRepository Class]] {
+          #connection : PDO
+          +__construct()
+          +assignStudentToGroup(studentId, groupId)
+          +removeStudentFromGroup(studentId, groupId)
+          +getStudentGroupId(studentId, saeSubjectId)
+          +isStudentInGroup(studentId, groupId)
+        }
+        class "PdoSAESubjectRepository\n<b>PDO implementation of SAESubjectInterface.</b>" as Models_Repository_SAE_PdoSAESubjectRepository [[/Models/Repository/SAE/PdoSAESubjectRepository.php PdoSAESubjectRepository Class]] {
+          +__construct()
           #getPrimaryKey()
           +findAll()
           +findByProfessorId(professorId)
           +findByStudentId(studentId)
           +findByClientId(clientId)
-          +create(entity)
-          +update(entity)
           +getResponsibleProfessor(saeId)
           +getAllProfessorsInfo(saeId)
           +getClientInfo(saeId)
-          +findByEndDate(endDate)
           +findByBeginDate(beginDate)
+          +findByEndDate(endDate)
         }
-        class "ParticipatedInRepository\n<b>Repository for ParticipatedIn operations.</b>" as Models_SAE_Repository_ParticipatedInRepository [[/Models/SAE/Repository/ParticipatedInRepository.php ParticipatedInRepository Class]] {
-          #instance : ParticipatedInRepository|null
-          #table : string
-          #entityClass : class-string<ParticipatedIn>
-          #__construct()
-          {static} +getInstance()
+      }
+      package User as Models.Repository.User {
+        class "PdoProfessorRepository\n<b>PDO implementation of ProfessorInterface.</b>" as Models_Repository_User_PdoProfessorRepository [[/Models/Repository/User/PdoProfessorRepository.php PdoProfessorRepository Class]] {
+          -userRepository : PdoUserRepository
+          #connection : PDO
+          +__construct()
+          +findById(id)
+          +insert(user)
+          +findAll()
+          +isResponsibleProfessor(professorId, saeId)
+          +canAccessSAE(professorId, saeId)
+          +update(professor)
+          +delete(id)
+        }
+        class "PdoUserRepository\n<b>PDO implementation of UserInterface.</b>" as Models_Repository_User_PdoUserRepository [[/Models/Repository/User/PdoUserRepository.php PdoUserRepository Class]] {
+          +__construct()
           #getPrimaryKey()
-          +create(entity)
-          +update(entity)
-          +assignStudent(studentId, groupId)
-          +unassignStudent(studentId, groupId)
-          +getGroupStudents(groupId)
-          +getStudentGroupId(studentId, saeId)
-          +getStudentCount(groupId)
-          +getAvailableStudents(saeId)
+          +findById(id)
+          +findByEmail(email)
+          -instantiateUser(data)
+          +insert(user)
+          +update(user)
+          +existsByEmail(email)
+          +updatePassword(userId, passwordHash)
+        }
+        class "PdoClientRepository\n<b>PDO implementation of ClientInterface.</b>" as Models_Repository_User_PdoClientRepository [[/Models/Repository/User/PdoClientRepository.php PdoClientRepository Class]] {
+          -userRepository : PdoUserRepository
+          -connection : PDO
+          +__construct()
+          +findById(id)
+          +insert(client)
+          +findAll()
+          +canAccessSAE(clientId, saeId)
+          +update(client)
+          +delete(id)
+        }
+        class "PdoStudentRepository\n<b>PDO implementation of StudentInterface.</b>" as Models_Repository_User_PdoStudentRepository [[/Models/Repository/User/PdoStudentRepository.php PdoStudentRepository Class]] {
+          -userRepository : PdoUserRepository
+          #connection : PDO
+          +__construct()
+          +findById(id)
+          +findAll()
+          +insert(student)
+          +canAccessSAE(studentId, saeId)
+          +canModifyTodo(studentId, todoId)
+          +update(student)
+          +delete(id)
+          +findStudentsNotInSAE(saeId)
+        }
+      }
+      package ToDoList as Models.Repository.ToDoList {
+        class "PdoToDoListRepository\n<b>PDO implementation of ToDoListInterface.</b>" as Models_Repository_ToDoList_PdoToDoListRepository [[/Models/Repository/ToDoList/PdoToDoListRepository.php PdoToDoListRepository Class]] {
+          +__construct()
+          #getPrimaryKey()
+          +findByGroupId(groupId)
         }
       }
     }
-    package User as Models.User {
-      class "Client\n<b>Represents a client user in the system.</b>" as Models_User_Client [[/Models/User/Client.php Client Class]] {
-        #organisation : string
-        +__construct(data)
-        #saveSpecificData(connection, userId)
-        #fetchSpecificData(db, email)
-        #fetchSAEData(connection, userId)
-        +canAccessSAE(saeId)
-        +getAccessibleGroupMembers(saeId)
-        +canManageSAE(saeId)
-        +canModifyTodo(todoId)
-        {static} +getAllClients()
-        +getOrganisation()
+    package Entity as Models.Entity {
+      package SAE as Models.Entity.SAE {
+        class "SAEGroup\n<b>Represents a SAE Group.</b>" as Models_Entity_SAE_SAEGroup [[/Models/Entity/SAE/SAEGroup.php SAEGroup Class]] {
+          #sae_group_id : integer|null
+          #sae_subject_id : integer
+          #professor_id : integer|null
+          +getSaeGroupId()
+          +setSaeGroupId(sae_group_id)
+          +getSaeSubjectId()
+          +setSaeSubjectId(sae_subject_id)
+          +getProfessorId()
+          +setProfessorId(professor_id)
+          +getId()
+        }
+        class "SAESubject\n<b>Represents a SAE Subject (project) in the system.</b>" as Models_Entity_SAE_SAESubject [[/Models/Entity/SAE/SAESubject.php SAESubject Class]] {
+          #sae_subject_id : integer|null
+          #responsible_prof_id : integer
+          #client_id : integer|null
+          #subject_name : string
+          #begin_date : string
+          #end_date : string
+          #file_path : string|null
+          +isActive()
+          +getDaysRemaining()
+          +toArray()
+          +getSaeSubjectId()
+          +setSaeSubjectId(sae_subject_id)
+          +getResponsibleProfId()
+          +setResponsibleProfId(responsible_prof_id)
+          +getClientId()
+          +setClientId(client_id)
+          +getSubjectName()
+          +setSubjectName(subject_name)
+          +getBeginDate()
+          +setBeginDate(begin_date)
+          +getEndDate()
+          +setEndDate(end_date)
+          +getFilePath()
+          +setFilePath(file_path)
+          +getId()
+        }
+        class "ParticipatedIn\n<b>Represents a participation entry in a SAE Group.</b>" as Models_Entity_SAE_ParticipatedIn [[/Models/Entity/SAE/ParticipatedIn.php ParticipatedIn Class]] {
+          #student_id : integer
+          #sae_group_id : integer
+          +getStudentId()
+          +setStudentId(student_id)
+          +getSaeGroupId()
+          +setSaeGroupId(sae_group_id)
+          +getId()
+        }
       }
-      class "Professor\n<b>Represents a professor user in the system.</b>" as Models_User_Professor [[/Models/User/Professor.php Professor Class]] {
-        #amu_id : string
-        +__construct(data)
-        #saveSpecificData(connection, userId)
-        #fetchSpecificData(db, email)
-        #fetchSAEData(connection, userId)
-        +canAccessSAE(saeId)
-        +canManageSAE(saeId)
-        +getAccessibleGroupMembers(saeId)
-        -getAllSAEMembers(saeId)
-        -getAssignedGroupMembers(saeId)
-        +isResponsibleProfessor(saeId)
-        +canModifyTodo(todoId)
-        +getAllProfessors()
-        +getAmuId()
+      package ToDoItem as Models.Entity.ToDoItem {
+        class "ToDoItem\n<b>Represents a to-do list item in the system.</b>" as Models_Entity_ToDoItem_ToDoItem [[/Models/Entity/ToDoItem/ToDoItem.php ToDoItem Class]] {
+          #todoid : integer
+          #sae_subject_id : integer
+          #sae_group_id : integer
+          #tododesc : string
+          #checked : boolean
+          #priority : integer
+          +__construct(data)
+          +getTodoId()
+          +getSaeSubjectId()
+          +getSaeGroupId()
+          +getTodoDesc()
+          +isChecked()
+          +getPriority()
+          +setTodoId(todoId)
+          +setSaeSubjectId(saeSubjectId)
+          +setSaeGroupId(saeGroupId)
+          +setTododesc(tododesc)
+          +setChecked(checked)
+          +setPriority(priority)
+          +getId()
+        }
       }
-      class "Student\n<b>Represents a student user in the system.</b>" as Models_User_Student [[/Models/User/Student.php Student Class]] {
-        #amu_id : string
-        #year : integer
-        #major : string|null
-        #td : string
-        #tp : string
-        #student_id : integer
-        +__construct(data)
-        #saveSpecificData(connection, userId)
-        #fetchSpecificData(db, email)
-        #fetchSAEData(connection, userId)
-        +canAccessSAE(saeId)
-        +canModifyTodo(todoId)
-        +getAccessibleGroupMembers(saeId)
-        +canManageSAE(saeId)
-        +getAmuId()
-        +getYear()
-        +getMajor()
-        +getTd()
-        +getTp()
-        +getStudentId()
-      }
-      class "User\n<b>Abstract base class for all user types.</b>" as Models_User_User [[/Models/User/User.php User Class]] {
-        #user_id : integer
-        #first_name : string
-        #last_name : string
-        #user_type : string
-        #email : string
-        #hashed_password : string
-        #phone : string
-        {static} +createFromRegistrationData(data)
-        {static} +createFromLoginData(data)
-        +setPassword(password)
-        +save()
-        -addDomainNameToEmail()
-        {abstract} #saveSpecificData(connection, userId)
-        +fetchData(email)
-        {abstract} #fetchSpecificData(db, email)
-        {static} +existsByEmail(email)
-        {static} +updatePasswordByEmail(email, newPassword)
-        {static} +deleteByEmail(email)
-        {static} +modifyField(field, value, email)
-        {abstract} #fetchSAEData(connection, userId)
-        +getSaes()
-        {abstract} +canAccessSAE(saeId)
-        {abstract} +canManageSAE(saeId)
-        #getSaeIdFromGroup(groupId)
-        +canViewTodoList(groupId)
-        {abstract} +canModifyTodo(todoId)
-        {abstract} +getAccessibleGroupMembers(saeId)
-        +getFirstName()
-        +getLastName()
-        +getFullName()
-        +getUserType()
-        +getEmail()
-        +getPasswordHash()
-        +getPhone()
-        +isStudent()
-        +isProfessor()
-        +isClient()
-        +getUserId()
+      package User as Models.Entity.User {
+        class "Client\n<b>Represents a client user in the system.</b>" as Models_Entity_User_Client [[/Models/Entity/User/Client.php Client Class]] {
+          #organisation : string
+          +__construct(data)
+          +getOrganisation()
+          +getRoleLabel()
+          +getDashboardMetaInfo()
+        }
+        class "Professor\n<b>Represents a professor user in the system.</b>" as Models_Entity_User_Professor [[/Models/Entity/User/Professor.php Professor Class]] {
+          #amu_id : string
+          +__construct(data)
+          +getAmuId()
+          +getRoleLabel()
+          +getDashboardMetaInfo()
+        }
+        class "UserFactory\n<b>Factory for creating User entities according to their type.</b>" as Models_Entity_User_UserFactory [[/Models/Entity/User/UserFactory.php UserFactory Class]] {
+          -typeRegistry : array<(int|string), class-string<User>>
+          {static} +create(data)
+        }
+        class "Student\n<b>Represents a student user in the system.</b>" as Models_Entity_User_Student [[/Models/Entity/User/Student.php Student Class]] {
+          #amu_id : string
+          #year : integer
+          #major : string|null
+          #td : string
+          #tp : string
+          #student_id : integer
+          +__construct(data)
+          +getAmuId()
+          +getYear()
+          +getMajor()
+          +getTd()
+          +getTp()
+          +getStudentId()
+          +getRoleLabel()
+          +getDashboardMetaInfo()
+        }
+        class "User\n<b>Abstract base class for all user types.</b>" as Models_Entity_User_User [[/Models/Entity/User/User.php User Class]] {
+          #user_id : integer
+          #first_name : string
+          #last_name : string
+          #user_type : string
+          #email : string
+          #hashed_password : string
+          #phone : string
+          +setPassword(password)
+          +verifyPassword(password)
+          +addDomainNameToEmail()
+          +getUserId()
+          +getFirstName()
+          +getLastName()
+          +getFullName()
+          +getUserType()
+          +getEmail()
+          +getPasswordHash()
+          +getPhone()
+          +setUserId(userId)
+          +setPhone(phone)
+          +setFirstName(firstName)
+          +setLastName(lastName)
+          +isStudent()
+          +isProfessor()
+          +isClient()
+          +getUserTypeCode()
+          {abstract} +getRoleLabel()
+          {abstract} +getDashboardMetaInfo()
+          +getId()
+        }
       }
     }
-    package ToDoList as Models.ToDoList {
-      class "ToDoList\n<b>Class ToDoList</b>" as Models_ToDoList_ToDoList [[/Models/ToDoList/ToDoList.php ToDoList Class]] {
-        #groupId : integer
-        #sae_subject_id : ?integer
-        #todo_id : integer
-        #tododesc : string
-        #checked : boolean
-        #priority : integer
-        {static} +create(data)
-        +getTodoId()
-        +getTodoDesc()
-        +getSaeGroupId()
-        +getSaeSubjectId()
-        +isChecked()
-        +getPriority()
-        +setSaeGroupId(groupId)
-        +setSaeSubjectId(sae_subject_id)
-        +setTododesc(tododesc)
-        +setTodoId(todo_id)
-        +setChecked(checked)
-        +setPriority(priority)
-        +save()
-        +fetchDataFromDatabase(sae_group_id)
-        {static} +existBySaeGroupId(sae_group_id)
-        {static} +getAllTasks(groupId)
-        {static} +updateCheckedStatus(todoId, checked)
-        {static} +updatePriority(todoId, priority)
-        {static} +createTask(groupId, description, priority)
-        {static} +deleteTask(todoId)
+    package UseCase as Models.UseCase {
+      package SAE as Models.UseCase.SAE {
+        class "ModifySAEUseCase\n<b>Use case for modifying an SAE.</b>" as Models_UseCase_SAE_ModifySAEUseCase [[/Models/UseCase/SAE/ModifySAEUseCase.php ModifySAEUseCase Class]] {
+          -subjectInterface : SAESubjectInterface
+          +__construct(subjectInterface)
+          +execute(saeId, data, description, user)
+        }
+        class "RemoveStudentFromGroupUseCase\n<b>Use case for removing a student from a SAE group.</b>" as Models_UseCase_SAE_RemoveStudentFromGroupUseCase [[/Models/UseCase/SAE/RemoveStudentFromGroupUseCase.php RemoveStudentFromGroupUseCase Class]] {
+          -groupInterface : SAEGroupInterface
+          -participatedInInterface : ParticipatedInInterface
+          -subjectInterface : SAESubjectInterface
+          +__construct(groupInterface, participatedInInterface, subjectInterface)
+          +execute(user, studentId, groupId)
+        }
+        class "CreateSAEUseCase\n<b>Use case for creating a new SAE.</b>" as Models_UseCase_SAE_CreateSAEUseCase [[/Models/UseCase/SAE/CreateSAEUseCase.php CreateSAEUseCase Class]] {
+          -subjectInterface : SAESubjectInterface
+          +__construct(subjectInterface)
+          +execute(creator, data)
+        }
+        class "GetManageGroupsDataUseCase\n<b>Use case for getting data needed to manage SAE groups.</b>" as Models_UseCase_SAE_GetManageGroupsDataUseCase [[/Models/UseCase/SAE/GetManageGroupsDataUseCase.php GetManageGroupsDataUseCase Class]] {
+          -subjectRepo : PdoSAESubjectRepository
+          -groupRepo : PdoSAEGroupRepository
+          -participatedInRepo : PdoParticipatedInRepository
+          -studentRepo : PdoStudentRepository
+          -professorRepo : PdoProfessorRepository
+          -clientRepo : PdoClientRepository
+          +__construct(subjectRepo, groupRepo, participatedInRepo, studentRepo, professorRepo, clientRepo)
+          +execute(saeId, user)
+        }
+        class "AssignStudentToGroupUseCase\n<b>Use case for assigning a student to a SAE group.</b>" as Models_UseCase_SAE_AssignStudentToGroupUseCase [[/Models/UseCase/SAE/AssignStudentToGroupUseCase.php AssignStudentToGroupUseCase Class]] {
+          -groupInterface : SAEGroupInterface
+          -participatedInInterface : ParticipatedInInterface
+          -subjectInterface : SAESubjectInterface
+          +__construct(groupInterface, participatedInInterface, subjectInterface)
+          +execute(professor, studentId, groupId)
+        }
+        class "DeleteSAEGroupUseCase\n<b>Use case for deleting a SAE group.</b>" as Models_UseCase_SAE_DeleteSAEGroupUseCase [[/Models/UseCase/SAE/DeleteSAEGroupUseCase.php DeleteSAEGroupUseCase Class]] {
+          -groupInterface : SAEGroupInterface
+          -subjectInterface : SAESubjectInterface
+          +__construct(groupInterface, subjectInterface)
+          +execute(user, groupId)
+        }
+        class "DeleteSAEUseCase\n<b>Use case for deleting an SAE.</b>" as Models_UseCase_SAE_DeleteSAEUseCase [[/Models/UseCase/SAE/DeleteSAEUseCase.php DeleteSAEUseCase Class]] {
+          -subjectInterface : SAESubjectInterface
+          +__construct(subjectInterface)
+          +execute(saeId, user)
+        }
+        class "GetCompleteSAEDataUseCase\n<b>Use case for retrieving complete SAE data with access control.</b>" as Models_UseCase_SAE_GetCompleteSAEDataUseCase [[/Models/UseCase/SAE/GetCompleteSAEDataUseCase.php GetCompleteSAEDataUseCase Class]] {
+          -subjectInterface : SAESubjectInterface
+          -groupInterface : SAEGroupInterface
+          -participatedInInterface : ParticipatedInInterface
+          -studentInterface : StudentInterface
+          -professorInterface : ProfessorInterface
+          -clientInterface : ClientInterface
+          +__construct(subjectInterface, groupInterface, participatedInInterface, studentInterface, professorInterface, clientInterface)
+          +execute(saeId, user)
+          -getAccessibleGroups(subject, user)
+        }
+        class "GetUserSAEsUseCase\n<b>Use case for retrieving SAEs accessible by a user.</b>" as Models_UseCase_SAE_GetUserSAEsUseCase [[/Models/UseCase/SAE/GetUserSAEsUseCase.php GetUserSAEsUseCase Class]] {
+          -subjectInterface : SAESubjectInterface
+          +__construct(subjectInterface)
+          +execute(user)
+        }
+        class "AssignProfessorToGroupUseCase\n<b>Use case for assigning a professor to a SAE group.</b>" as Models_UseCase_SAE_AssignProfessorToGroupUseCase [[/Models/UseCase/SAE/AssignProfessorToGroupUseCase.php AssignProfessorToGroupUseCase Class]] {
+          -groupInterface : SAEGroupInterface
+          -subjectInterface : SAESubjectInterface
+          +__construct(groupInterface, subjectInterface)
+          +execute(user, groupId, professorId)
+        }
+        class "CreateSAEGroupUseCase\n<b>Use case for creating a SAE group.</b>" as Models_UseCase_SAE_CreateSAEGroupUseCase [[/Models/UseCase/SAE/CreateSAEGroupUseCase.php CreateSAEGroupUseCase Class]] {
+          -groupInterface : SAEGroupInterface
+          -subjectInterface : SAESubjectInterface
+          +__construct(groupInterface, subjectInterface)
+          +execute(creator, saeId, professorId)
+        }
+        package InterfaceDB as Models.UseCase.SAE.InterfaceDB {
+          interface "SAEGroupInterface\n<b>Interface for SAE Group operations.</b>" as Models_UseCase_SAE_InterfaceDB_SAEGroupInterface [[/Models/UseCase/SAE/InterfaceDB/SAEGroupInterface.php SAEGroupInterface Interface]] {
+            +findBySaeSubjectId(saeSubjectId)
+            +getStudentsInGroup(groupId)
+          }
+          interface "ParticipatedInInterface\n<b>Interface for ParticipatedIn (student-group relationship) operations.</b>" as Models_UseCase_SAE_InterfaceDB_ParticipatedInInterface [[/Models/UseCase/SAE/InterfaceDB/ParticipatedInInterface.php ParticipatedInInterface Interface]] {
+            +assignStudentToGroup(studentId, groupId)
+            +removeStudentFromGroup(studentId, groupId)
+            +getStudentGroupId(studentId, saeSubjectId)
+            +isStudentInGroup(studentId, groupId)
+          }
+          interface "SAESubjectInterface\n<b>Interface for SAE Subject operations.</b>" as Models_UseCase_SAE_InterfaceDB_SAESubjectInterface [[/Models/UseCase/SAE/InterfaceDB/SAESubjectInterface.php SAESubjectInterface Interface]] {
+            +findByProfessorId(professorId)
+            +findByStudentId(studentId)
+            +findByClientId(clientId)
+            +getResponsibleProfessor(saeId)
+            +getAllProfessorsInfo(saeId)
+            +getClientInfo(saeId)
+          }
+        }
+      }
+      package User as Models.UseCase.User {
+        class "UpdatePasswordUseCase\n<b>Use Case for updating user password (authenticated user).</b>" as Models_UseCase_User_UpdatePasswordUseCase [[/Models/UseCase/User/UpdatePasswordUseCase.php UpdatePasswordUseCase Class]] {
+          -userInterface : UserInterface
+          +__construct(userInterface)
+          +execute(user, oldPassword, newPassword)
+        }
+        class "ResetPasswordUseCase\n<b>Use Case for resetting user password (forgot password flow).</b>" as Models_UseCase_User_ResetPasswordUseCase [[/Models/UseCase/User/ResetPasswordUseCase.php ResetPasswordUseCase Class]] {
+          -userInterface : UserInterface
+          +__construct(userInterface)
+          +execute(email, newPassword)
+        }
+        class "ProcessForgotPasswordUseCase\n<b>Use Case for processing forgot password requests.</b>" as Models_UseCase_User_ProcessForgotPasswordUseCase [[/Models/UseCase/User/ProcessForgotPasswordUseCase.php ProcessForgotPasswordUseCase Class]] {
+          -userRepository : PdoUserRepository
+          +__construct(userRepository)
+          +execute(email)
+        }
+        class "HandlePasswordResetUseCase\n<b>Use case to handle password reset.</b>" as Models_UseCase_User_HandlePasswordResetUseCase [[/Models/UseCase/User/HandlePasswordResetUseCase.php HandlePasswordResetUseCase Class]] {
+          -userRepository : PdoUserRepository
+          +__construct(userRepository)
+          +execute(token, password)
+        }
+        class "DeleteUserUseCase\n<b>Use Case for deleting a user.</b>" as Models_UseCase_User_DeleteUserUseCase [[/Models/UseCase/User/DeleteUserUseCase.php DeleteUserUseCase Class]] {
+          -userInterface : UserInterface
+          +__construct(userInterface)
+          +execute(userId)
+          +executeByEmail(email)
+        }
+        class "LoginUseCase\n<b>Use Case for user login.</b>" as Models_UseCase_User_LoginUseCase [[/Models/UseCase/User/LoginUseCase.php LoginUseCase Class]] {
+          -userInterface : UserInterface
+          +__construct(userInterface)
+          +execute(email, password)
+        }
+        class "UpdateProfileUseCase\n<b>Use Case for updating user profile.</b>" as Models_UseCase_User_UpdateProfileUseCase [[/Models/UseCase/User/UpdateProfileUseCase.php UpdateProfileUseCase Class]] {
+          -userInterface : UserInterface
+          +__construct(userInterface)
+          +execute(userId, data)
+        }
+        class "RegisterUserUseCase\n<b>Use Case for user registration.</b>" as Models_UseCase_User_RegisterUserUseCase [[/Models/UseCase/User/RegisterUserUseCase.php RegisterUserUseCase Class]] {
+          -studentInterface : StudentInterface
+          -professorInterface : ProfessorInterface
+          -clientInterface : ClientInterface
+          -userInterface : UserInterface
+          -pdoInterface : StudentInterface|ProfessorInterface|ClientInterface
+          +__construct(studentInterface, professorInterface, clientInterface, userInterface)
+          +execute(data)
+        }
+        package InterfaceDB as Models.UseCase.User.InterfaceDB {
+          interface "ProfessorInterface\n<b>Interface for Professor repository operations.</b>" as Models_UseCase_User_InterfaceDB_ProfessorInterface [[/Models/UseCase/User/InterfaceDB/ProfessorInterface.php ProfessorInterface Interface]] {
+            +findAll()
+            +isResponsibleProfessor(professorId, saeId)
+          }
+          interface "StudentInterface\n<b>Interface for Student repository operations.</b>" as Models_UseCase_User_InterfaceDB_StudentInterface [[/Models/UseCase/User/InterfaceDB/StudentInterface.php StudentInterface Interface]] {
+            +canModifyTodo(studentId, todoId)
+            +findStudentsNotInSAE(saeId)
+          }
+          interface "RoleAccessInterface\n<b>Interface RoleAccessInterface</b>" as Models_UseCase_User_InterfaceDB_RoleAccessInterface [[/Models/UseCase/User/InterfaceDB/RoleAccessInterface.php RoleAccessInterface Interface]] {
+            +canAccessSAE(userId, saeId)
+          }
+          interface "UserInterface\n<b>Interface for User repository operations.</b>" as Models_UseCase_User_InterfaceDB_UserInterface [[/Models/UseCase/User/InterfaceDB/UserInterface.php UserInterface Interface]] {
+            +findByEmail(email)
+            +existsByEmail(email)
+            +updatePassword(userId, passwordHash)
+          }
+          interface "ClientInterface\n<b>Interface for Client repository operations.</b>" as Models_UseCase_User_InterfaceDB_ClientInterface [[/Models/UseCase/User/InterfaceDB/ClientInterface.php ClientInterface Interface]] {
+            +findAll()
+          }
+        }
+      }
+      package ToDoList as Models.UseCase.ToDoList {
+        class "UpdateTaskUseCase\n<b>Use Case for updating a task.</b>" as Models_UseCase_ToDoList_UpdateTaskUseCase [[/Models/UseCase/ToDoList/UpdateTaskUseCase.php UpdateTaskUseCase Class]] {
+          -toDoListInterface : ToDoListInterface
+          +__construct(toDoListInterface)
+          +execute(todoId, updates)
+        }
+        class "CreateTaskUseCase\n<b>Use Case for creating a task.</b>" as Models_UseCase_ToDoList_CreateTaskUseCase [[/Models/UseCase/ToDoList/CreateTaskUseCase.php CreateTaskUseCase Class]] {
+          -toDoListInterface : ToDoListInterface
+          +__construct(toDoListInterface)
+          +execute(groupId, description, priority)
+        }
+        class "GetToDoListContextUseCase\n<b>Use case to get context data for Todo list.</b>" as Models_UseCase_ToDoList_GetToDoListContextUseCase [[/Models/UseCase/ToDoList/GetToDoListContextUseCase.php GetToDoListContextUseCase Class]] {
+          -saeSubjectRepo : PdoSAESubjectRepository
+          -saeGroupRepo : PdoSAEGroupRepository
+          -participatedInRepo : PdoParticipatedInRepository
+          -studentRepo : PdoStudentRepository
+          -todoListRepo : PdoToDoListRepository
+          +__construct(saeSubjectRepo, saeGroupRepo, participatedInRepo, studentRepo, todoListRepo)
+          +execute(saeId, user, requestedGroupId)
+        }
+        class "ValidateToDoListModifyAccessUseCase\n<b>Use case to validate if a user can modify a TO-DO list.</b>" as Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase [[/Models/UseCase/ToDoList/ValidateToDoListModifyAccessUseCase.php ValidateToDoListModifyAccessUseCase Class]] {
+          -subjectRepo : PdoSAESubjectRepository
+          -groupRepo : PdoSAEGroupRepository
+          -participatedInRepo : PdoParticipatedInRepository
+          -studentRepo : PdoStudentRepository
+          -professorRepo : PdoProfessorRepository
+          -clientRepo : PdoClientRepository
+          +__construct(subjectRepo, groupRepo, participatedInRepo, studentRepo, professorRepo, clientRepo)
+          +execute(user, saeId)
+        }
+        class "GetTasksUseCase\n<b>Use Case for retrieving tasks.</b>" as Models_UseCase_ToDoList_GetTasksUseCase [[/Models/UseCase/ToDoList/GetTasksUseCase.php GetTasksUseCase Class]] {
+          -toDoListInterface : ToDoListInterface
+          +__construct(toDoListInterface)
+          +execute(groupId)
+        }
+        class "DeleteTaskUseCase\n<b>Use Case for deleting a task.</b>" as Models_UseCase_ToDoList_DeleteTaskUseCase [[/Models/UseCase/ToDoList/DeleteTaskUseCase.php DeleteTaskUseCase Class]] {
+          -toDoListInterface : ToDoListInterface
+          +__construct(toDoListInterface)
+          +execute(todoId)
+        }
+        package InterfaceDB as Models.UseCase.ToDoList.InterfaceDB {
+          interface "ToDoListInterface\n<b>Interface for ToDoList repository.</b>" as Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface [[/Models/UseCase/ToDoList/InterfaceDB/ToDoListInterface.php ToDoListInterface Interface]] {
+            +findByGroupId(groupId)
+          }
+        }
       }
     }
   }
   package Views as Views {
     class "BaseSaeView\n<b>Class BaseSaeView</b>" as Views_BaseSaeView [[/Views/BaseSaeView.php BaseSaeView Class]] {
+      #subject : SAESubject
+      #user : User
+      +__construct(subject, user)
       #getCommonSaeTemplateKeys()
       #getMenuSae()
     }
@@ -289,6 +484,11 @@
     }
     package PageSAE as Views.PageSAE {
       class "PageSaeView\n<b>Class PageSaeView</b>" as Views_PageSAE_PageSaeView [[/Views/PageSAE/PageSaeView.php PageSaeView Class]] {
+        #groups : array<int, array{group: SAEGroup, students: array<int, array{student_id: string, amu_id: string, year: string, td: string, tp: string, first_name: string, last_name: string, email: string}>}>
+        #responsibleProf : array<string, mixed>
+        #allProfessors : array<int, array<string, mixed>>
+        #client : array<string, mixed>|null
+        +__construct(subject, groups, responsibleProfessor, allProfessors, client, user)
         #templatePath()
         #templateKeys()
         #getContactsSae()
@@ -308,6 +508,7 @@
     }
     package SAE as Views.SAE {
       class "ManageGroupsView\n<b>Class ManageGroupsView</b>" as Views_SAE_ManageGroupsView [[/Views/SAE/ManageGroupsView.php ManageGroupsView Class]] {
+        +__construct(data)
         #templatePath()
         #getNameCss()
         #getPageTitle()
@@ -316,7 +517,18 @@
         -generateProfessorsOptions()
         -getMessagesHtml()
       }
+      class "ModifySaeView\n<b>View for the SAE modification page.</b>" as Views_SAE_ModifySaeView [[/Views/SAE/ModifySaeView.php ModifySaeView Class]] {
+        +__construct(saeData, clients, user, csrfToken)
+        #templatePath()
+        #templateKeys()
+        -getDescription()
+        -generateClientsOptions()
+        #getPageTitle()
+        #getNameCss()
+      }
       class "CreateSaeView\n<b>View for the SAE creation page.</b>" as Views_SAE_CreateSaeView [[/Views/SAE/CreateSaeView.php CreateSaeView Class]] {
+        -clients : array<Client>
+        +__construct(data)
         #templatePath()
         #templateKeys()
         #getPageTitle()
@@ -333,7 +545,6 @@
         +__construct(data)
         #templatePath()
         #templateKeys()
-        -getUserTypeLabel(user)
         #getNameCss()
       }
       class "EditProfileSuccessView\n<b>Edit Profile Success View</b>" as Views_Settings_EditProfileSuccessView [[/Views/Settings/EditProfileSuccessView.php EditProfileSuccessView Class]] {
@@ -369,7 +580,6 @@
         +__construct(user)
         #templatePath()
         #templateKeys()
-        -getUserTypeLabel()
         -getAcademicInfo()
         #getPageTitle()
         #getNameCss()
@@ -395,7 +605,6 @@
         +__construct(data)
         #templatePath()
         #templateKeys()
-        -getUserTypeLabel(user)
         -renderUserMetaInfo(user)
         -renderSAENavigation(user)
         -renderSAEContent(user, saes)
@@ -408,6 +617,10 @@
     }
     package ToDoList as Views.ToDoList {
       class "ToDoListView\n<b>Class ToDoListView</b>" as Views_ToDoList_ToDoListView [[/Views/ToDoList/ToDoListView.php ToDoListView Class]] {
+        #currentGroupId : integer|null
+        #tasks : array<ToDoItem>
+        #allGroups : SAEGroup, students: array<int, array<string, (string|null)>>}>
+        +__construct(subject, currentGroupId, tasks, allGroups, user)
         #templatePath()
         #templateKeys()
         -renderTodoContent()
@@ -426,25 +639,9 @@
       #user : User
       #ensureAuthenticated()
       #ensureProfessor()
-    }
-    package pwd as Controllers.pwd {
-      class "ResetPasswordController\n<b>This class controls the reset password process (get).</b>" as Controllers_pwd_ResetPasswordController [[/Controllers/pwd/ResetPasswordController.php ResetPasswordController Class]] {
-        +control()
-        {static} +support(path, method)
-      }
-      class "ForgotPasswordPostController\n<b>Handles the POST request to the "/forgot-password" route.</b>" as Controllers_pwd_ForgotPasswordPostController [[/Controllers/pwd/ForgotPasswordPostController.php ForgotPasswordPostController Class]] {
-        +control()
-        {static} +support(path, method)
-      }
-      class "ResetPasswordPostController" as Controllers_pwd_ResetPasswordPostController [[/Controllers/pwd/ResetPasswordPostController.php ResetPasswordPostController Class]] {
-        +control()
-        -renderFormWithToken(token, email)
-        {static} +support(path, method)
-      }
-      class "ForgotPasswordController\n<b>This class controls the forgot password process (get).</b>" as Controllers_pwd_ForgotPasswordController [[/Controllers/pwd/ForgotPasswordController.php ForgotPasswordController Class]] {
-        +control()
-        {static} +support(path, method)
-      }
+      #redirect(url)
+      #checkCsrf(logActionName, redirectUrl)
+      #checkCsrfAjax(logActionName)
     }
     package Index as Controllers.Index {
       class "IndexController\n<b>This class controls the Index page.</b>" as Controllers_Index_IndexController [[/Controllers/Index/IndexController.php IndexController Class]] {
@@ -454,7 +651,11 @@
     }
     package SAE as Controllers.SAE {
       class "ManageGroupsController\n<b>Controller to display the group management page.</b>" as Controllers_SAE_ManageGroupsController [[/Controllers/SAE/ManageGroupsController.php ManageGroupsController Class]] {
-        +control()
+        +control(saeId)
+        {static} +support(path, method)
+      }
+      class "DeleteSaeController\n<b>This class controls the deletion of an SAE via GET request.</b>" as Controllers_SAE_DeleteSaeController [[/Controllers/SAE/DeleteSaeController.php DeleteSaeController Class]] {
+        +control(saeId)
         {static} +support(path, method)
       }
       class "CreateSaePostController\n<b>Controller to handle the processing of the SAE creation form.</b>" as Controllers_SAE_CreateSaePostController [[/Controllers/SAE/CreateSaePostController.php CreateSaePostController Class]] {
@@ -465,12 +666,20 @@
         +control()
         {static} +support(path, method)
       }
+      class "ModifySaePostController\n<b>This class controls the modification of an SAE via POST request.</b>" as Controllers_SAE_ModifySaePostController [[/Controllers/SAE/ModifySaePostController.php ModifySaePostController Class]] {
+        +control(saeId)
+        {static} +support(path, method)
+      }
       class "PageSaeController\n<b>This class controls the SAE page.</b>" as Controllers_SAE_PageSaeController [[/Controllers/SAE/PageSaeController.php PageSaeController Class]] {
-        +control()
+        +control(saeId)
+        {static} +support(path, method)
+      }
+      class "ModifySaeController\n<b>Controller for displaying the SAE modification form.</b>" as Controllers_SAE_ModifySaeController [[/Controllers/SAE/ModifySaeController.php ModifySaeController Class]] {
+        +control(saeId)
         {static} +support(path, method)
       }
       class "ManageGroupsPostController\n<b>Controller to handle POST actions for group management.</b>" as Controllers_SAE_ManageGroupsPostController [[/Controllers/SAE/ManageGroupsPostController.php ManageGroupsPostController Class]] {
-        +control()
+        +control(saeId, action)
         -createGroup(saeId)
         -deleteGroup(saeId)
         -addStudent(saeId)
@@ -489,11 +698,11 @@
         +control()
         {static} +support(path, method)
       }
-      class "EditProfilePost\n<b>Edit Profile Post Controller</b>" as Controllers_Settings_EditProfilePost [[/Controllers/Settings/EditProfilePost.php EditProfilePost Class]] {
+      class "SettingsController\n<b>Settings Controller</b>" as Controllers_Settings_SettingsController [[/Controllers/Settings/SettingsController.php SettingsController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "SettingsController\n<b>Settings Controller</b>" as Controllers_Settings_SettingsController [[/Controllers/Settings/SettingsController.php SettingsController Class]] {
+      class "EditProfilePostController\n<b>Edit Profile Post Controller</b>" as Controllers_Settings_EditProfilePostController [[/Controllers/Settings/EditProfilePostController.php EditProfilePostController Class]] {
         +control()
         {static} +support(path, method)
       }
@@ -509,23 +718,23 @@
       }
     }
     package User as Controllers.User {
-      class "Logout\n<b>Logout controller.</b>" as Controllers_User_Logout [[/Controllers/User/Logout.php Logout Class]] {
+      class "LogoutController\n<b>Logout controller.</b>" as Controllers_User_LogoutController [[/Controllers/User/LogoutController.php LogoutController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "LoginPost\n<b>This class controls the login process (post).</b>" as Controllers_User_LoginPost [[/Controllers/User/LoginPost.php LoginPost Class]] {
+      class "LoginController\n<b>Class Login (GET)</b>" as Controllers_User_LoginController [[/Controllers/User/LoginController.php LoginController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "Login\n<b>Class Login (GET)</b>" as Controllers_User_Login [[/Controllers/User/Login.php Login Class]] {
+      class "RegisterPostController\n<b>This class controls the register process (post).</b>" as Controllers_User_RegisterPostController [[/Controllers/User/RegisterPostController.php RegisterPostController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "Register\n<b>This class controls the register process (get).</b>" as Controllers_User_Register [[/Controllers/User/Register.php Register Class]] {
+      class "LoginPostController\n<b>This class controls the login process (post).</b>" as Controllers_User_LoginPostController [[/Controllers/User/LoginPostController.php LoginPostController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "RegisterPost\n<b>This class controls the register process (post).</b>" as Controllers_User_RegisterPost [[/Controllers/User/RegisterPost.php RegisterPost Class]] {
+      class "RegisterController\n<b>This class controls the register process (get).</b>" as Controllers_User_RegisterController [[/Controllers/User/RegisterController.php RegisterController Class]] {
         +control()
         {static} +support(path, method)
       }
@@ -537,26 +746,57 @@
       }
     }
     package ToDoList as Controllers.ToDoList {
+      class "ToDoListAddPostController\n<b>Controller for handling To-Do List Add POST actions (AJAX).</b>" as Controllers_ToDoList_ToDoListAddPostController [[/Controllers/ToDoList/ToDoListAddPostController.php ToDoListAddPostController Class]] {
+        +control(saeId)
+        -sendError(message, code)
+        {static} +support(path, method)
+      }
       class "ToDoListController\n<b>Handles the control logic for the To-Do List page.</b>" as Controllers_ToDoList_ToDoListController [[/Controllers/ToDoList/ToDoListController.php ToDoListController Class]] {
+        +control(saeId)
+        {static} +support(path, method)
+      }
+      class "ToDoListDeletePostController\n<b>Controller for handling To-Do List Delete POST actions (AJAX).</b>" as Controllers_ToDoList_ToDoListDeletePostController [[/Controllers/ToDoList/ToDoListDeletePostController.php ToDoListDeletePostController Class]] {
+        +control(saeId, todoId)
+        -sendError(message, code)
+        {static} +support(path, method)
+      }
+      class "ToDoListUpdatePostController\n<b>Controller for handling To-Do List Update POST actions (AJAX).</b>" as Controllers_ToDoList_ToDoListUpdatePostController [[/Controllers/ToDoList/ToDoListUpdatePostController.php ToDoListUpdatePostController Class]] {
+        +control(saeId, todoId)
+        -sendError(message, code)
+        {static} +support(path, method)
+      }
+    }
+    package Password as Controllers.Password {
+      class "ResetPasswordController\n<b>This class controls the reset password process (get).</b>" as Controllers_Password_ResetPasswordController [[/Controllers/Password/ResetPasswordController.php ResetPasswordController Class]] {
         +control()
         {static} +support(path, method)
       }
-      class "ToDoListPost\n<b>Controller for handling To-Do List POST actions (AJAX).</b>" as Controllers_ToDoList_ToDoListPost [[/Controllers/ToDoList/ToDoListPost.php ToDoListPost Class]] {
+      class "ForgotPasswordPostController\n<b>Handles the POST request to the "/forgot-password" route.</b>" as Controllers_Password_ForgotPasswordPostController [[/Controllers/Password/ForgotPasswordPostController.php ForgotPasswordPostController Class]] {
         +control()
-        -parseUri()
-        -determineTargetGroupId(user, saeId, input)
-        -checkGroupAccess(user, saeId, groupId)
-        -handleAdd(groupId, input)
-        -handleUpdate(todoId, input)
-        -handleDelete(todoId)
-        -sendError(message, code)
+        {static} +support(path, method)
+      }
+      class "ResetPasswordPostController" as Controllers_Password_ResetPasswordPostController [[/Controllers/Password/ResetPasswordPostController.php ResetPasswordPostController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "ForgotPasswordController\n<b>This class controls the forgot password process (get).</b>" as Controllers_Password_ForgotPasswordController [[/Controllers/Password/ForgotPasswordController.php ForgotPasswordController Class]] {
+        +control()
         {static} +support(path, method)
       }
     }
   }
   package Services as Services {
     class "FileService\n<b>Service to handle file operations.</b>" as Services_FileService [[/Services/FileService.php FileService Class]] {
+      {static} -isPathSafe(filePath)
       {static} +saveSaeDescription(content, filename)
+      {static} +removeFile(filename)
+      {static} +getSaeDescription(filename)
+      {static} +updateSaeDescription(filename, content)
+    }
+    class "SAESubjectFileService\n<b>Service to handle file-related operations for SAE Subjects.</b>" as Services_SAESubjectFileService [[/Services/SAESubjectFileService.php SAESubjectFileService Class]] {
+      -repository : PdoSAESubjectRepository
+      +__construct(repository)
+      +getFileName(saeId)
     }
     class "TokenService\n<b>Class TokenService</b>" as Services_TokenService [[/Services/TokenService.php TokenService Class]] {
       {static} +generate()
@@ -586,106 +826,288 @@
       }
     }
   }
-  Controllers_BaseController ..> Models_User_User
+  Controllers_BaseController ..> Models_Entity_User_User
   Controllers_BaseController <|-- Controllers_Dashboard_DashboardController
+  Controllers_BaseController <|-- Controllers_Index_IndexController
+  Controllers_BaseController <|-- Controllers_Info_LegalNoticeController
+  Controllers_BaseController <|-- Controllers_Info_SiteMapController
+  Controllers_BaseController <|-- Controllers_Password_ForgotPasswordController
+  Controllers_BaseController <|-- Controllers_Password_ForgotPasswordPostController
+  Controllers_BaseController <|-- Controllers_Password_ResetPasswordController
+  Controllers_BaseController <|-- Controllers_Password_ResetPasswordPostController
   Controllers_BaseController <|-- Controllers_SAE_CreateSaeController
+  Controllers_BaseController <|-- Controllers_SAE_CreateSaePostController
+  Controllers_BaseController <|-- Controllers_SAE_DeleteSaeController
   Controllers_BaseController <|-- Controllers_SAE_ManageGroupsController
   Controllers_BaseController <|-- Controllers_SAE_ManageGroupsPostController
+  Controllers_BaseController <|-- Controllers_SAE_ModifySaeController
+  Controllers_BaseController <|-- Controllers_SAE_ModifySaePostController
   Controllers_BaseController <|-- Controllers_SAE_PageSaeController
   Controllers_BaseController <|-- Controllers_Settings_DeleteUserController
   Controllers_BaseController <|-- Controllers_Settings_EditProfileController
+  Controllers_BaseController <|-- Controllers_Settings_EditProfilePostController
   Controllers_BaseController <|-- Controllers_Settings_SettingsController
+  Controllers_BaseController <|-- Controllers_ToDoList_ToDoListAddPostController
   Controllers_BaseController <|-- Controllers_ToDoList_ToDoListController
-  Controllers_BaseController <|-- Controllers_ToDoList_ToDoListPost
-  Controllers_Dashboard_DashboardController ..> Models_SAE_Repository_SAESubjectRepository
+  Controllers_BaseController <|-- Controllers_ToDoList_ToDoListDeletePostController
+  Controllers_BaseController <|-- Controllers_ToDoList_ToDoListUpdatePostController
+  Controllers_BaseController <|-- Controllers_User_LoginController
+  Controllers_BaseController <|-- Controllers_User_LoginPostController
+  Controllers_BaseController <|-- Controllers_User_LogoutController
+  Controllers_BaseController <|-- Controllers_User_RegisterController
+  Controllers_BaseController <|-- Controllers_User_RegisterPostController
+  Controllers_Dashboard_DashboardController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_Dashboard_DashboardController ..> Models_UseCase_SAE_GetUserSAEsUseCase
   Controllers_Dashboard_DashboardController ..> Views_Dashboard_DashboardView
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
-  Controllers_SAE_CreateSaeController ..> Models_User_Client
+  Controllers_Password_ForgotPasswordController ..> Views_pwd_ForgotPasswordView
+  Controllers_Password_ForgotPasswordPostController ..> Models_Repository_User_PdoUserRepository
+  Controllers_Password_ForgotPasswordPostController ..> Models_UseCase_User_ProcessForgotPasswordUseCase
+  Controllers_Password_ForgotPasswordPostController ..> Views_pwd_ForgotPasswordView
+  Controllers_Password_ResetPasswordController ..> Services_TokenService
+  Controllers_Password_ResetPasswordController ..> Views_pwd_ResetPasswordView
+  Controllers_Password_ResetPasswordPostController ..> Models_Repository_User_PdoUserRepository
+  Controllers_Password_ResetPasswordPostController ..> Models_UseCase_User_HandlePasswordResetUseCase
+  Controllers_Password_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
+  Controllers_Password_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
+  Controllers_SAE_CreateSaeController ..> Models_Repository_User_PdoClientRepository
   Controllers_SAE_CreateSaeController ..> Views_SAE_CreateSaeView
-  Controllers_SAE_CreateSaePostController ..> Models_SAE_SAE
-  Controllers_SAE_CreateSaePostController ..> Models_User_Client
-  Controllers_SAE_CreateSaePostController ..> Models_User_User
-  Controllers_SAE_CreateSaePostController ..> Services_FileService
+  Controllers_SAE_CreateSaePostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_CreateSaePostController ..> Models_Repository_User_PdoClientRepository
+  Controllers_SAE_CreateSaePostController ..> Models_UseCase_SAE_CreateSAEUseCase
   Controllers_SAE_CreateSaePostController ..> Views_SAE_CreateSaeView
-  Controllers_SAE_ManageGroupsController ..> Models_SAE_SAE
-  Controllers_SAE_ManageGroupsController ..> Models_User_Professor
+  Controllers_SAE_DeleteSaeController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_DeleteSaeController ..> Models_UseCase_SAE_DeleteSAEUseCase
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_User_PdoClientRepository
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_SAE_ManageGroupsController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_SAE_ManageGroupsController ..> Models_UseCase_SAE_GetManageGroupsDataUseCase
   Controllers_SAE_ManageGroupsController ..> Views_SAE_ManageGroupsView
-  Controllers_SAE_ManageGroupsPostController ..> Models_SAE_SAE
-  Controllers_SAE_PageSaeController ..> Models_SAE_SAE
+  Controllers_SAE_ManageGroupsPostController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_SAE_ManageGroupsPostController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_SAE_ManageGroupsPostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_ManageGroupsPostController ..> Models_UseCase_SAE_AssignStudentToGroupUseCase
+  Controllers_SAE_ManageGroupsPostController ..> Models_UseCase_SAE_CreateSAEGroupUseCase
+  Controllers_SAE_ManageGroupsPostController ..> Models_UseCase_SAE_DeleteSAEGroupUseCase
+  Controllers_SAE_ManageGroupsPostController ..> Models_UseCase_SAE_RemoveStudentFromGroupUseCase
+  Controllers_SAE_ModifySaeController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_SAE_ModifySaeController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_SAE_ModifySaeController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_ModifySaeController ..> Models_Repository_User_PdoClientRepository
+  Controllers_SAE_ModifySaeController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_SAE_ModifySaeController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_SAE_ModifySaeController ..> Models_UseCase_SAE_GetCompleteSAEDataUseCase
+  Controllers_SAE_ModifySaeController ..> Views_SAE_ModifySaeView
+  Controllers_SAE_ModifySaePostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_ModifySaePostController ..> Models_UseCase_SAE_ModifySAEUseCase
+  Controllers_SAE_PageSaeController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_SAE_PageSaeController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_SAE_PageSaeController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_SAE_PageSaeController ..> Models_Repository_User_PdoClientRepository
+  Controllers_SAE_PageSaeController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_SAE_PageSaeController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_SAE_PageSaeController ..> Models_UseCase_SAE_GetCompleteSAEDataUseCase
   Controllers_SAE_PageSaeController ..> Views_PageSAE_PageSaeView
-  Controllers_Settings_DeleteUserController ..> Models_User_User
+  Controllers_Settings_DeleteUserController ..> Models_Repository_User_PdoUserRepository
+  Controllers_Settings_DeleteUserController ..> Models_UseCase_User_DeleteUserUseCase
   Controllers_Settings_DeleteUserController ..> Views_Settings_DeleteUserView
   Controllers_Settings_EditProfileController ..> Views_Settings_EditProfileView
-  Controllers_Settings_EditProfilePost ..> Models_User_User
-  Controllers_Settings_EditProfilePost ..> Views_Settings_EditProfileSuccessView
+  Controllers_Settings_EditProfilePostController ..> Models_Repository_User_PdoUserRepository
+  Controllers_Settings_EditProfilePostController ..> Models_UseCase_User_UpdateProfileUseCase
+  Controllers_Settings_EditProfilePostController ..> Views_Settings_EditProfileSuccessView
   Controllers_Settings_SettingsController ..> Views_Settings_SettingsView
-  Controllers_ToDoList_ToDoListController ..> Models_SAE_SAE
-  Controllers_ToDoList_ToDoListController ..> Models_ToDoList_ToDoList
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_ToDoList_PdoToDoListRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_User_PdoClientRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_UseCase_ToDoList_CreateTaskUseCase
+  Controllers_ToDoList_ToDoListAddPostController ..> Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase
+  Controllers_ToDoList_ToDoListController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_ToDoList_ToDoListController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_ToDoList_ToDoListController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_ToDoList_ToDoListController ..> Models_Repository_ToDoList_PdoToDoListRepository
+  Controllers_ToDoList_ToDoListController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_ToDoList_ToDoListController ..> Models_UseCase_ToDoList_GetToDoListContextUseCase
   Controllers_ToDoList_ToDoListController ..> Views_ToDoList_ToDoListView
-  Controllers_ToDoList_ToDoListPost ..> Models_SAE_SAE
-  Controllers_ToDoList_ToDoListPost ..> Models_ToDoList_ToDoList
-  Controllers_ToDoList_ToDoListPost ..> Models_User_User
-  Controllers_User_Login ..> Views_User_LoginView
-  Controllers_User_LoginPost ..> Models_User_User
-  Controllers_User_LoginPost ..> Views_User_LoginView
-  Controllers_User_Logout ..> Views_Index_IndexView
-  Controllers_User_Register ..> Views_User_RegisterView
-  Controllers_User_RegisterPost ..> Models_User_User
-  Controllers_User_RegisterPost ..> Views_User_RegisterSuccessView
-  Controllers_User_RegisterPost ..> Views_User_RegisterView
-  Controllers_pwd_ForgotPasswordController ..> Views_pwd_ForgotPasswordView
-  Controllers_pwd_ForgotPasswordPostController ..> Models_User_User
-  Controllers_pwd_ForgotPasswordPostController ..> Services_Auth_PasswordResetMailer
-  Controllers_pwd_ForgotPasswordPostController ..> Services_TokenService
-  Controllers_pwd_ForgotPasswordPostController ..> Views_pwd_ForgotPasswordView
-  Controllers_pwd_ResetPasswordController ..> Services_TokenService
-  Controllers_pwd_ResetPasswordController ..> Views_pwd_ResetPasswordView
-  Controllers_pwd_ResetPasswordPostController ..> Models_User_User
-  Controllers_pwd_ResetPasswordPostController ..> Services_TokenService
-  Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordSuccessView
-  Controllers_pwd_ResetPasswordPostController ..> Views_pwd_ResetPasswordView
-  Models_SAE_Repository_ParticipatedInRepository ..> Models_SAE_ParticipatedIn
-  Models_SAE_Repository_ParticipatedInRepository ..> Models_SAE_Repository_ParticipatedInRepository
-  Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_Repository_SAEGroupRepository
-  Models_SAE_Repository_SAEGroupRepository ..> Models_SAE_SAEGroup
-  Models_SAE_Repository_SAESubjectRepository ..> Models_SAE_Repository_SAESubjectRepository
-  Models_SAE_Repository_SAESubjectRepository ..> Models_SAE_SAESubject
-  Models_SAE_SAE "1" ..> "*" Models_SAE_SAESubject
-  Models_SAE_SAE ..> Models_SAE_Repository_SAEGroupRepository
-  Models_SAE_SAE ..> Models_SAE_Repository_SAESubjectRepository
-  Models_SAE_SAE ..> Models_SAE_SAE
-  Models_SAE_SAE ..> Models_SAE_SAEGroup
-  Models_SAE_SAE ..> Models_SAE_SAESubject
-  Models_SAE_SAE ..> Models_User_Professor
-  Models_SAE_SAE ..> Models_User_User
-  Models_User_User ..> Models_SAE_SAE
-  Models_User_User ..> Models_User_Client
-  Models_User_User ..> Models_User_Professor
-  Models_User_User ..> Models_User_Student
-  Models_User_User ..> Models_User_User
-  Models_User_User <|-- Models_User_Client
-  Models_User_User <|-- Models_User_Professor
-  Models_User_User <|-- Models_User_Student
-  Services_Auth_AttributionMailer ..> Models_SAE_Repository_ParticipatedInRepository
-  Services_Auth_AttributionMailer ..> Models_SAE_Repository_SAEGroupRepository
-  Services_Auth_AttributionMailer ..> Models_SAE_Repository_SAESubjectRepository
-  Services_Auth_AttributionMailer ..> Models_SAE_SAESubject
-  Services_Auth_AttributionMailer ..> Models_User_Student
-  Services_Auth_LastDateMailer ..> Models_SAE_Repository_ParticipatedInRepository
-  Services_Auth_LastDateMailer ..> Models_SAE_Repository_SAEGroupRepository
-  Services_Auth_LastDateMailer ..> Models_SAE_Repository_SAESubjectRepository
-  Services_Auth_LastDateMailer ..> Models_SAE_SAESubject
-  Services_Auth_LastDateMailer ..> Models_User_Student
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_ToDoList_PdoToDoListRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_User_PdoClientRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_UseCase_ToDoList_DeleteTaskUseCase
+  Controllers_ToDoList_ToDoListDeletePostController ..> Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_ToDoList_PdoToDoListRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_User_PdoClientRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_UseCase_ToDoList_UpdateTaskUseCase
+  Controllers_ToDoList_ToDoListUpdatePostController ..> Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase
+  Controllers_User_LoginController ..> Views_User_LoginView
+  Controllers_User_LoginPostController ..> Models_Repository_User_PdoUserRepository
+  Controllers_User_LoginPostController ..> Models_UseCase_User_LoginUseCase
+  Controllers_User_LoginPostController ..> Views_User_LoginView
+  Controllers_User_LogoutController ..> Views_Index_IndexView
+  Controllers_User_RegisterController ..> Views_User_RegisterView
+  Controllers_User_RegisterPostController ..> Models_Repository_User_PdoClientRepository
+  Controllers_User_RegisterPostController ..> Models_Repository_User_PdoProfessorRepository
+  Controllers_User_RegisterPostController ..> Models_Repository_User_PdoStudentRepository
+  Controllers_User_RegisterPostController ..> Models_Repository_User_PdoUserRepository
+  Controllers_User_RegisterPostController ..> Models_UseCase_User_RegisterUserUseCase
+  Controllers_User_RegisterPostController ..> Views_User_RegisterSuccessView
+  Controllers_User_RegisterPostController ..> Views_User_RegisterView
+  Models_Entity_User_User <|-- Models_Entity_User_Client
+  Models_Entity_User_User <|-- Models_Entity_User_Professor
+  Models_Entity_User_User <|-- Models_Entity_User_Student
+  Models_Entity_User_UserFactory ..> Models_Entity_User_User
+  Models_Repository_SAE_PdoSAEGroupRepository ..> Models_Entity_SAE_SAEGroup
+  Models_Repository_SAE_PdoSAESubjectRepository ..> Models_Entity_SAE_SAESubject
+  Models_Repository_ToDoList_PdoToDoListRepository ..> Models_Entity_ToDoItem_ToDoItem
+  Models_Repository_User_PdoClientRepository ..> Models_Entity_User_Client
+  Models_Repository_User_PdoClientRepository ..> Models_Repository_User_PdoUserRepository
+  Models_Repository_User_PdoProfessorRepository ..> Models_Entity_User_Professor
+  Models_Repository_User_PdoProfessorRepository ..> Models_Repository_User_PdoUserRepository
+  Models_Repository_User_PdoStudentRepository ..> Models_Entity_User_Student
+  Models_Repository_User_PdoStudentRepository ..> Models_Repository_User_PdoUserRepository
+  Models_Repository_User_PdoUserRepository ..> Models_Entity_User_User
+  Models_Repository_User_PdoUserRepository ..> Models_Entity_User_UserFactory
+  Models_UseCase_SAE_AssignProfessorToGroupUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_AssignProfessorToGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_AssignProfessorToGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_AssignStudentToGroupUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_AssignStudentToGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_ParticipatedInInterface
+  Models_UseCase_SAE_AssignStudentToGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_AssignStudentToGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_CreateSAEGroupUseCase ..> Models_Entity_SAE_SAEGroup
+  Models_UseCase_SAE_CreateSAEGroupUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_CreateSAEGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_CreateSAEGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_CreateSAEUseCase ..> Models_Entity_SAE_SAESubject
+  Models_UseCase_SAE_CreateSAEUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_CreateSAEUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_CreateSAEUseCase ..> Services_FileService
+  Models_UseCase_SAE_DeleteSAEGroupUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_DeleteSAEGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_DeleteSAEGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_DeleteSAEUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_DeleteSAEUseCase ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_SAE_DeleteSAEUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_DeleteSAEUseCase ..> Services_FileService
+  Models_UseCase_SAE_DeleteSAEUseCase ..> Services_SAESubjectFileService
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_Entity_SAE_SAESubject
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_SAE_InterfaceDB_ParticipatedInInterface
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_User_InterfaceDB_ClientInterface
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_User_InterfaceDB_ProfessorInterface
+  Models_UseCase_SAE_GetCompleteSAEDataUseCase ..> Models_UseCase_User_InterfaceDB_StudentInterface
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_User_PdoClientRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_User_PdoProfessorRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_Repository_User_PdoStudentRepository
+  Models_UseCase_SAE_GetManageGroupsDataUseCase ..> Models_UseCase_SAE_GetCompleteSAEDataUseCase
+  Models_UseCase_SAE_GetUserSAEsUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_GetUserSAEsUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_InterfaceDB_ParticipatedInInterface <|-- Models_Repository_SAE_PdoParticipatedInRepository
+  Models_UseCase_SAE_InterfaceDB_SAEGroupInterface <|-- Models_Repository_SAE_PdoSAEGroupRepository
+  Models_UseCase_SAE_InterfaceDB_SAESubjectInterface <|-- Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_SAE_ModifySAEUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_ModifySAEUseCase ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_SAE_ModifySAEUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_SAE_ModifySAEUseCase ..> Services_FileService
+  Models_UseCase_SAE_ModifySAEUseCase ..> Services_SAESubjectFileService
+  Models_UseCase_SAE_RemoveStudentFromGroupUseCase ..> Models_Entity_User_User
+  Models_UseCase_SAE_RemoveStudentFromGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_ParticipatedInInterface
+  Models_UseCase_SAE_RemoveStudentFromGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAEGroupInterface
+  Models_UseCase_SAE_RemoveStudentFromGroupUseCase ..> Models_UseCase_SAE_InterfaceDB_SAESubjectInterface
+  Models_UseCase_ToDoList_CreateTaskUseCase ..> Models_Entity_ToDoItem_ToDoItem
+  Models_UseCase_ToDoList_CreateTaskUseCase ..> Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface
+  Models_UseCase_ToDoList_DeleteTaskUseCase ..> Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface
+  Models_UseCase_ToDoList_GetTasksUseCase ..> Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Entity_User_User
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Repository_ToDoList_PdoToDoListRepository
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_Repository_User_PdoStudentRepository
+  Models_UseCase_ToDoList_GetToDoListContextUseCase ..> Models_UseCase_ToDoList_GetTasksUseCase
+  Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface <|-- Models_Repository_ToDoList_PdoToDoListRepository
+  Models_UseCase_ToDoList_UpdateTaskUseCase ..> Models_UseCase_ToDoList_InterfaceDB_ToDoListInterface
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Entity_User_User
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_User_PdoClientRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_User_PdoProfessorRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_Repository_User_PdoStudentRepository
+  Models_UseCase_ToDoList_ValidateToDoListModifyAccessUseCase ..> Models_UseCase_SAE_GetCompleteSAEDataUseCase
+  Models_UseCase_User_DeleteUserUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Models_UseCase_User_HandlePasswordResetUseCase ..> Models_Repository_User_PdoUserRepository
+  Models_UseCase_User_HandlePasswordResetUseCase ..> Models_UseCase_User_ResetPasswordUseCase
+  Models_UseCase_User_HandlePasswordResetUseCase ..> Services_TokenService
+  Models_UseCase_User_InterfaceDB_ClientInterface <|-- Models_Repository_User_PdoClientRepository
+  Models_UseCase_User_InterfaceDB_ProfessorInterface <|-- Models_Repository_User_PdoProfessorRepository
+  Models_UseCase_User_InterfaceDB_StudentInterface <|-- Models_Repository_User_PdoStudentRepository
+  Models_UseCase_User_InterfaceDB_UserInterface ..> Models_Entity_User_User
+  Models_UseCase_User_InterfaceDB_UserInterface <|-- Models_Repository_User_PdoUserRepository
+  Models_UseCase_User_LoginUseCase ..> Models_Entity_User_User
+  Models_UseCase_User_LoginUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Models_UseCase_User_ProcessForgotPasswordUseCase ..> Models_Repository_User_PdoUserRepository
+  Models_UseCase_User_ProcessForgotPasswordUseCase ..> Services_Auth_PasswordResetMailer
+  Models_UseCase_User_ProcessForgotPasswordUseCase ..> Services_TokenService
+  Models_UseCase_User_RegisterUserUseCase ..> Models_Entity_User_User
+  Models_UseCase_User_RegisterUserUseCase ..> Models_Entity_User_UserFactory
+  Models_UseCase_User_RegisterUserUseCase ..> Models_UseCase_User_InterfaceDB_ClientInterface
+  Models_UseCase_User_RegisterUserUseCase ..> Models_UseCase_User_InterfaceDB_ProfessorInterface
+  Models_UseCase_User_RegisterUserUseCase ..> Models_UseCase_User_InterfaceDB_StudentInterface
+  Models_UseCase_User_RegisterUserUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Models_UseCase_User_ResetPasswordUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Models_UseCase_User_UpdatePasswordUseCase ..> Models_Entity_User_User
+  Models_UseCase_User_UpdatePasswordUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Models_UseCase_User_UpdateProfileUseCase ..> Models_Entity_User_User
+  Models_UseCase_User_UpdateProfileUseCase ..> Models_UseCase_User_InterfaceDB_UserInterface
+  Services_Auth_AttributionMailer ..> Models_Entity_SAE_SAESubject
+  Services_Auth_AttributionMailer ..> Models_Entity_User_Student
+  Services_Auth_AttributionMailer ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Services_Auth_AttributionMailer ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Services_Auth_AttributionMailer ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Services_Auth_LastDateMailer ..> Models_Entity_SAE_SAESubject
+  Services_Auth_LastDateMailer ..> Models_Entity_User_Student
+  Services_Auth_LastDateMailer ..> Models_Repository_SAE_PdoParticipatedInRepository
+  Services_Auth_LastDateMailer ..> Models_Repository_SAE_PdoSAEGroupRepository
+  Services_Auth_LastDateMailer ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Services_SAESubjectFileService ..> Models_Repository_SAE_PdoSAESubjectRepository
+  Views_BaseSaeView ..> Models_Entity_SAE_SAESubject
+  Views_BaseSaeView ..> Models_Entity_User_User
   Views_BaseSaeView <|-- Views_PageSAE_PageSaeView
   Views_BaseSaeView <|-- Views_SAE_ManageGroupsView
+  Views_BaseSaeView <|-- Views_SAE_ModifySaeView
   Views_BaseSaeView <|-- Views_ToDoList_ToDoListView
-  Views_Dashboard_DashboardView ..> Models_SAE_SAESubject
-  Views_Dashboard_DashboardView ..> Models_User_Client
-  Views_Dashboard_DashboardView ..> Models_User_Student
-  Views_Dashboard_DashboardView ..> Models_User_User
-  Views_Settings_SettingsView ..> Models_User_User
-  Views_User_RegisterSuccessView ..> Models_User_Student
-  Views_User_RegisterSuccessView ..> Models_User_User
+  Views_Dashboard_DashboardView ..> Models_Entity_SAE_SAESubject
+  Views_Dashboard_DashboardView ..> Models_Entity_User_User
+  Views_PageSAE_PageSaeView ..> Models_Entity_SAE_SAESubject
+  Views_PageSAE_PageSaeView ..> Models_Entity_User_User
+  Views_PageSAE_PageSaeView ..> Services_FileService
+  Views_SAE_ModifySaeView ..> Models_Entity_User_User
+  Views_SAE_ModifySaeView ..> Services_FileService
+  Views_ToDoList_ToDoListView ..> Models_Entity_SAE_SAESubject
+  Views_ToDoList_ToDoListView ..> Models_Entity_ToDoItem_ToDoItem
+  Views_ToDoList_ToDoListView ..> Models_Entity_User_User
+  Views_User_RegisterSuccessView ..> Models_Entity_User_User
 @enduml
