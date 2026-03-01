@@ -71,10 +71,6 @@ class FileService
         $fileNameWithExt = $safeFilename . '_' . uniqid() . '.md';
         $fullPath = realpath(self::STORAGE_DIR) . '/' . $fileNameWithExt;
 
-        if (!self::isPathSafe($fullPath)) {
-            throw new Exception("Accès refusé : chemin non autorisé.");
-        }
-
         if (file_put_contents($fullPath, $content) === false) {
             throw new Exception("Impossible d'écrire le fichier de description.");
         }
@@ -98,7 +94,7 @@ class FileService
 
         $fullPath = realpath(self::STORAGE_DIR) . '/' . $filename;
 
-        if (!self::isPathSafe($fullPath) || !is_file($fullPath)) {
+        if (!is_file($fullPath)) {
             throw new Exception("Fichier non trouvé ou accès refusé.");
         }
 
