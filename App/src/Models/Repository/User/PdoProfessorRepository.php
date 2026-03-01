@@ -58,12 +58,6 @@ class PdoProfessorRepository implements ProfessorInterface
      * @param integer $id The professor ID.
      * @return Professor|null The professor entity or null if not found.
      */
-    /**
-     * Finds a professor by ID.
-     *
-     * @param integer $id The professor ID.
-     * @return Professor|null The professor entity or null if not found.
-     */
     public function findById(int $id): ?Professor
     {
         try {

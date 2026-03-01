@@ -64,15 +64,10 @@ class PdoClientRepository implements ClientInterface
      */
     public function findById(int $id): ?Client
     {
-        $user = $this->userRepository->findById($id);
-
-        if (!$user) {
-            return null;
-        }
 
         try {
             $stmt = $this->connection->prepare(
-                'SELECT organisation FROM clients WHERE client_id = :id'
+                'SELECT u.*, c.* FROM clients c, users u WHERE client_id = :id AND u.user_id = c.client_id'
             );
             $stmt->execute(['id' => $id]);
             $clientData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -113,10 +108,10 @@ class PdoClientRepository implements ClientInterface
                 'INSERT INTO clients (client_id, organisation)
                              VALUES (:client_id, :organisation)'
             );
-            $stmt->execute([
-                'client_id' => $userId,
-                'organisation' => $client->getOrganisation()
-            ]);
+            $stmt->bindValue(':client_id', $userId, PDO::PARAM_INT);
+            $stmt->bindValue(':organisation', $client->getOrganisation(), PDO::PARAM_STR);
+
+            $stmt->execute();
             $stmt->closeCursor();
 
             $this->connection->commit();
