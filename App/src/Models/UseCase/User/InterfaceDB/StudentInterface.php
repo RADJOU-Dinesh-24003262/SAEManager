@@ -22,22 +22,6 @@ use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 interface StudentInterface extends RepositoryInterface, RoleAccessInterface
 {
     /**
-     * Finds students by TD group.
-     *
-     * @param string $td The TD group.
-     * @return array<Student> Array of student entities.
-     */
-    public function findByTdGroup(string $td): array;
-
-    /**
-     * Finds students by TP group.
-     *
-     * @param string $tp The TP group.
-     * @return array<Student> Array of student entities.
-     */
-    public function findByTpGroup(string $tp): array;
-
-    /**
      * Checks if a student can modify a to-do.
      *
      * @param integer $studentId The student ID.

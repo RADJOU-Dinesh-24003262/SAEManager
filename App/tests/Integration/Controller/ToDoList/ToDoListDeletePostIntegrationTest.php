@@ -3,13 +3,12 @@
 namespace Tests\Integration\Controller\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListDeletePost;
+use Controllers\ToDoList\ToDoListDeletePostController;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**
- * Integration test for ToDoListDeletePost controller interacting with ToDoList model.
+ * Integration test for ToDoListDeletePostController controller interacting with ToDoList model.
  *
  * @category Tests
  * @package  Tests\Controllers\ToDoList
@@ -22,7 +21,7 @@ use Models\Entity\ToDoItem\ToDoItem;
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 #[CoversClass(ToDoItem::class)]
-#[CoversClass(ToDoListDeletePost::class)]
+#[CoversClass(ToDoListDeletePostController::class)]
 class ToDoListDeletePostIntegrationTest extends TestCase
 {
     /**
@@ -32,7 +31,7 @@ class ToDoListDeletePostIntegrationTest extends TestCase
      */
     public function testSupportReturnsTrueForValidPostRoute(): void
     {
-        $this->assertTrue(ToDoListDeletePost::support('/sae/99/to-do/delete/123', 'POST'));
+        $this->assertTrue(ToDoListDeletePostController::support('/sae/99/to-do/delete/123', 'POST'));
     }
 
     /**
@@ -42,7 +41,7 @@ class ToDoListDeletePostIntegrationTest extends TestCase
      */
     public function testSupportReturnsFalseForInvalidRouteOrMethod(): void
     {
-        $this->assertFalse(ToDoListDeletePost::support('/invalid', 'POST'));
-        $this->assertFalse(ToDoListDeletePost::support('/to-do-list/delete/123', 'GET'));
+        $this->assertFalse(ToDoListDeletePostController::support('/invalid', 'POST'));
+        $this->assertFalse(ToDoListDeletePostController::support('/to-do-list/delete/123', 'GET'));
     }
 }

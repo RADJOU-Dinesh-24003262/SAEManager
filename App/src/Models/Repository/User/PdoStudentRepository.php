@@ -3,6 +3,7 @@
 namespace Models\Repository\User;
 
 use Core\includes\Database;
+use Core\Models\BaseModel;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\StudentInterface;
@@ -11,6 +12,11 @@ use PDOException;
 
 /**
  * PDO implementation of StudentInterface.
+ *
+ * [Architecture Strategy]
+ * Type 2 Repository (Inherited/Polymorphic).
+ * This repository DOES NOT extend BaseRepository because it handles logic that involves
+ * joining with the parent `users` table instead of mapping perfectly to a single table.
  *
  * This is the Infrastructure layer implementation of the Interface.
  *
@@ -106,10 +112,10 @@ class PdoStudentRepository implements StudentInterface
     /**
      * Inserts a student into the database.
      *
-     * @param object $student The student object to insert.
+     * @param BaseModel $student The student object to insert.
      * @return integer|boolean The id of the inserted student or false on failure.
      */
-    public function insert(object $student): int|bool
+    public function insert(BaseModel $student): int|bool
     {
 
         if (!$student instanceof Student) {
@@ -151,57 +157,6 @@ class PdoStudentRepository implements StudentInterface
         }
     }
 
-    /**
-     * Finds students by TD group.
-     *
-     * @param string $td The TD group.
-     * @return array<Student> Array of student entities.
-     */
-    public function findByTdGroup(string $td): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT u.*, s.*
-                             FROM users u
-                             JOIN students s ON u.user_id = s.student_id
-                             WHERE s.td = :td
-                             ORDER BY u.last_name, u.first_name'
-            );
-            $stmt->execute(['td' => $td]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn($data) => new Student($data), $results);
-        } catch (PDOException $e) {
-            error_log("Error in findByTdGroup: " . $e->getMessage());
-            return [];
-        }
-    }
-
-    /**
-     * Finds students by TP group.
-     *
-     * @param string $tp The TP group.
-     * @return array<Student> Array of student entities.
-     */
-    public function findByTpGroup(string $tp): array
-    {
-        try {
-            $stmt = $this->connection->prepare(
-                'SELECT u.*, s.*
-                             FROM users u
-                             JOIN students s ON u.user_id = s.student_id
-                             WHERE s.tp = :tp
-                             ORDER BY u.last_name, u.first_name'
-            );
-            $stmt->execute(['tp' => $tp]);
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            return array_map(fn($data) => new Student($data), $results);
-        } catch (PDOException $e) {
-            error_log("Error in findByTpGroup: " . $e->getMessage());
-            return [];
-        }
-    }
 
     /**
      * Checks if a student can access a SAE.
@@ -252,10 +207,10 @@ class PdoStudentRepository implements StudentInterface
     /**
      * Updates an existing student.
      *
-     * @param object $student The student entity to update.
+     * @param BaseModel $student The student entity to update.
      * @return boolean True on success, false on failure.
      */
-    public function update(object $student): bool
+    public function update(BaseModel $student): bool
     {
         if (!$student instanceof Student) {
             return false;

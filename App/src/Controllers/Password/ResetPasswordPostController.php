@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers\pwd;
+namespace Controllers\Password;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
@@ -30,7 +30,7 @@ use Views\pwd\ResetPasswordView;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ResetPasswordPostController implements ControllerInterface
+class ResetPasswordPostController extends BaseController
 {
     /**
      * Principal manager of the controller

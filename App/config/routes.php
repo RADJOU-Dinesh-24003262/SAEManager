@@ -19,27 +19,27 @@ use Controllers\Dashboard\DashboardController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ForgotPasswordPostController;
-use Controllers\pwd\ResetPasswordController;
-use Controllers\pwd\ResetPasswordPostController;
+use Controllers\Password\ForgotPasswordController;
+use Controllers\Password\ForgotPasswordPostController;
+use Controllers\Password\ResetPasswordController;
+use Controllers\Password\ResetPasswordPostController;
 use Controllers\SAE\CreateSaeController;
 use Controllers\SAE\CreateSaePostController;
 use Controllers\SAE\ManageGroupsController;
 use Controllers\SAE\ManageGroupsPostController;
 use Controllers\Settings\DeleteUserController;
 use Controllers\Settings\EditProfileController;
-use Controllers\Settings\EditProfilePost;
+use Controllers\Settings\EditProfilePostController;
 use Controllers\Settings\SettingsController;
 use Controllers\ToDoList\ToDoListController;
-use Controllers\ToDoList\ToDoListAddPost;
-use Controllers\ToDoList\ToDoListUpdatePost;
-use Controllers\ToDoList\ToDoListDeletePost;
-use Controllers\User\Login;
-use Controllers\User\LoginPost;
-use Controllers\User\Logout;
-use Controllers\User\Register;
-use Controllers\User\RegisterPost;
+use Controllers\ToDoList\ToDoListAddPostController;
+use Controllers\ToDoList\ToDoListUpdatePostController;
+use Controllers\ToDoList\ToDoListDeletePostController;
+use Controllers\User\LoginController;
+use Controllers\User\LoginPostController;
+use Controllers\User\LogoutController;
+use Controllers\User\RegisterController;
+use Controllers\User\RegisterPostController;
 
 const ROUTES = [
     // ============================================================
@@ -56,15 +56,15 @@ const ROUTES = [
 
     // Authentication
     '/^\/login$/' => [
-        'GET' => ['controller' => Login::class , 'method' => 'control'],
-        'POST' => ['controller' => LoginPost::class , 'method' => 'control']
+        'GET' => ['controller' => LoginController::class , 'method' => 'control'],
+        'POST' => ['controller' => LoginPostController::class , 'method' => 'control']
     ],
     '/^\/register$/' => [
-        'GET' => ['controller' => Register::class , 'method' => 'control'],
-        'POST' => ['controller' => RegisterPost::class , 'method' => 'control']
+        'GET' => ['controller' => RegisterController::class , 'method' => 'control'],
+        'POST' => ['controller' => RegisterPostController::class , 'method' => 'control']
     ],
     '/^\/logout$/' => [
-        'GET' => ['controller' => Logout::class , 'method' => 'control']
+        'GET' => ['controller' => LogoutController::class , 'method' => 'control']
     ],
 
     // Password Reset
@@ -100,7 +100,7 @@ const ROUTES = [
     ],
     '/^\/settings\/edit-profile$/' => [
         'GET' => ['controller' => EditProfileController::class , 'method' => 'control'],
-        'POST' => ['controller' => EditProfilePost::class , 'method' => 'control']
+        'POST' => ['controller' => EditProfilePostController::class , 'method' => 'control']
     ],
     '/^\/settings\/delete$/' => [
         'GET' => ['controller' => DeleteUserController::class , 'method' => 'control']
@@ -138,12 +138,12 @@ const ROUTES = [
         'GET' => ['controller' => ToDoListController::class , 'method' => 'control'],
     ],
     '/^\/sae\/(?<saeId>\d+)\/to-do\/add$/' => [
-        'POST' => ['controller' => ToDoListAddPost::class , 'method' => 'control']
+        'POST' => ['controller' => ToDoListAddPostController::class , 'method' => 'control']
     ],
     '/^\/sae\/(?<saeId>\d+)\/to-do\/update\/(?<todoId>\d+)$/' => [
-        'POST' => ['controller' => ToDoListUpdatePost::class , 'method' => 'control']
+        'POST' => ['controller' => ToDoListUpdatePostController::class , 'method' => 'control']
     ],
     '/^\/sae\/(?<saeId>\d+)\/to-do\/delete\/(?<todoId>\d+)$/' => [
-        'POST' => ['controller' => ToDoListDeletePost::class , 'method' => 'control']
+        'POST' => ['controller' => ToDoListDeletePostController::class , 'method' => 'control']
     ],
 ];

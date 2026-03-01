@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers\pwd;
+namespace Controllers\Password;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Override;
 use Views\pwd\ForgotPasswordView;
 
@@ -22,7 +22,7 @@ use Views\pwd\ForgotPasswordView;
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ForgotPasswordController implements ControllerInterface
+class ForgotPasswordController extends BaseController
 {
     /**
      * Principal manager of the controller

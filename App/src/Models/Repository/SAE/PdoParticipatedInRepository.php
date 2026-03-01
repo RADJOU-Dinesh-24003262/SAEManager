@@ -10,6 +10,11 @@ use PDOException;
 /**
  * PDO implementation of ParticipatedInInterface.
  *
+ * [Architecture Strategy]
+ * Type 3 Repository (Association).
+ * This repository DOES NOT implement RepositoryInterface because it operates on an
+ * association table with a composite primary key, making standard CRUD methods inapplicable.
+ *
  * This is the Infrastructure layer implementation of the Interface.
  *
  * @category   Models
@@ -21,12 +26,6 @@ use PDOException;
  */
 class PdoParticipatedInRepository implements ParticipatedInInterface
 {
-    /**
-     * The singleton instance.
-     * @var PdoParticipatedInRepository|null
-     */
-    protected static ?PdoParticipatedInRepository $instance = null;
-
     /**
      * The database connection.
      * @var PDO

@@ -50,11 +50,7 @@ class ModifySaePostController extends BaseController
         $this->ensureProfessor();
 
         // CSRF Protection.
-        if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
-            header('Location: /sae/' . $saeId . '/modify');
-            exit();
-        }
+        $this->checkCsrf('MODIFY_SAE', '/sae/' . $saeId . '/modify');
 
         $data = $_POST;
         $validator = new FormSaeValidator();

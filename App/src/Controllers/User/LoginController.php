@@ -2,45 +2,47 @@
 
 namespace Controllers\User;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Override;
-use Views\User\RegisterView;
+use Views\User\LoginView;
 
 /**
- * This class controls the register process (get).
+ * Class Login (GET)
+ * This class controls the login process (get).
 
  * @category Controller
- *
+
  * @package Src
 
  * @subpackage Controllers/User
 
- * @author  Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
- * @author  François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
- * @author  William Edelstein <william.edelstein@etu.univ-amu.fr>
- * @author  Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
- * @author  Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
+ * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
+ * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
+ * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
+ * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ *
  * @license MIT License https://opensource.org/licenses/MIT
 
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class Register implements ControllerInterface
+class LoginController extends BaseController
 {
     /**
-     * Principal manager of the controller
+     * Principal manager of the controller.
      *
      * @return void
      */
     public function control(): void
     {
-
+        // Redirect to dashboard if already logged in.
         if (SessionService::has('user_id')) {
             header('Location: /dashboard');
             exit();
         }
 
-        $view = new RegisterView(['csrf_token' => SessionService::generateCsrfToken()]);
+        $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);
         $view->render();
     }
 
@@ -50,11 +52,11 @@ class Register implements ControllerInterface
      * @param string $path   The request URI path.
      * @param string $method The HTTP request method (e.g., GET, POST).
      *
-     * @return boolean True if the request is a GET to "/register", false otherwise.
+     * @return boolean True if the request is a GET to "/login", false otherwise.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === "/register" && $method === "GET";
+        return $path === "/login" && $method === "GET";
     }
 }

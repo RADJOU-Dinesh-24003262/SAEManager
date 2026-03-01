@@ -13,6 +13,11 @@ use PDOException;
 /**
  * PDO implementation of ProfessorInterface.
  *
+ * [Architecture Strategy]
+ * Type 2 Repository (Inherited/Polymorphic).
+ * This repository DOES NOT extend BaseRepository because it handles logic that involves
+ * joining with the parent `users` table instead of mapping perfectly to a single table.
+ *
  * This is the Infrastructure layer implementation of the Interface.
  *
  * @category   Models

@@ -26,31 +26,13 @@ use PDOException;
 class PdoSAEGroupRepository extends BaseRepository implements SAEGroupInterface
 {
     /**
-     * The singleton instance.
-     * @var PdoSAEGroupRepository|null
-     */
-    protected static ?PdoSAEGroupRepository $instance = null;
-
-    /**
-     * The table name.
-     *
-     * @var string
-     */
-    protected string $table = 'sae_groups';
-
-    /**
-     * The entity class name.
-     *
-     * @var class-string<SAEGroup>
-     */
-    protected string $entityClass = SAEGroup::class;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
         parent::__construct();
+        $this->table = 'sae_groups';
+        $this->entityClass = SAEGroup::class;
     }
 
     /**

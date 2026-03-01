@@ -2,7 +2,7 @@
 
 namespace Controllers\User;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Override;
 use Views\Index\IndexView;
@@ -22,7 +22,7 @@ use Views\Index\IndexView;
  * @license  MIT https://opensource.org/licenses/MIT
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager/
  */
-class Logout implements ControllerInterface
+class LogoutController extends BaseController
 {
     /**
      * Main controller logic for logout.

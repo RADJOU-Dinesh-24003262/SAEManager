@@ -2,7 +2,7 @@
 
 namespace Controllers\Info;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Override;
 use Views\Info\SiteMapView;
 
@@ -20,7 +20,7 @@ use Views\Info\SiteMapView;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class SiteMapController implements ControllerInterface
+class SiteMapController extends BaseController
 {
     /**
      * Principal manager of the controller
