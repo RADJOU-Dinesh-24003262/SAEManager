@@ -6,7 +6,7 @@ use Core\Utilis\SessionService;
 use Exception;
 
 /**
- * The abstract class which will be used to create all of the views.
+ * The abstract class which will be used to create all the views.
  *
  * It contains all the required methods and attributes to be used in the implemented views.
  *
@@ -194,6 +194,7 @@ abstract class AbstractView
 
             <ul>
                 <li><a href="/legal-notice" class="secondary">Mentions légales</a></li>
+                <li><a href="/conservation-date" class="secondary">Conservation des données</a></li>
                 <li><a href="/site-map" class="secondary">Plan du site</a></li>
             </ul>
         </nav>

@@ -1,19 +1,19 @@
 <?php
 
-namespace Views\Info;
+namespace Views\LegalTermsConditions;
 
 use Core\Views\AbstractView;
 use Override;
 
 /**
- * Class LegalNoticeView
- * This class represents the view for the legal notice page of the application.
+ * Class ConfigConservationDateView
+ * This class represents the view for the resume of the configuration of the conservation date page of the application.
  * It extends the AbstractView class and provides specific implementations
- * for rendering the legal notice page.
+ * for rendering the resume of the configuration of the conservation date page.
  *
  * @category   View
  * @package    Src
- * @subpackage Views/Info
+ * @subpackage Views/LegalTermsConditions
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -22,14 +22,15 @@ use Override;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class LegalNoticeView extends AbstractView
+class ConfigConservationDateView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
      *
      * @var string
      */
-    private const TEMPLATE_HTML = __DIR__ . '/legalNotice.html';
+    private const TEMPLATE_HTML = __DIR__ . '/config-conservation-date.html';
+
 
     /**
      * Returns the path to the HTML template file.
@@ -56,15 +57,15 @@ class LegalNoticeView extends AbstractView
     }
 
     /**
-     * Returns the name of the page 'Mentions Légales - SAE Manager' or
+     * Returns the name of the page 'Résumé des configurations des dates de conservations - SAE Manager' or
      * be used in some cases like displaying it by some isolated texts.
 
-     * @return string the name of the project 'Mentions Légales - SAE Manager'.
+     * @return string the name of the project 'Résumé des configurations des dates de conservations - SAE Manager'.
      */
     #[Override]
     protected function getPageTitle(): string
     {
-        return 'Mentions Légales - SAE Manager';
+        return 'Résumé des configurations des dates de conservations - SAE Manager';
     }
 
     /**
@@ -78,18 +79,18 @@ class LegalNoticeView extends AbstractView
     #[Override]
     protected function getNameCss(): string
     {
-        return 'legal-notice.css';
+        return 'config-conservation-date.css';
     }
     /**
-     * Returns additional HTML headers for the legal Notice page.
+     * Returns additional HTML headers for the site-map page.
      *
      * @return string The additional HTML headers.
      */
     #[Override]
     protected function getAdditionalHeaders(): string
     {
-        return '<meta name="description" content="Mentions légales de SAE Manager">
-                <meta name="keywords" content="SAE Manager, Mentions légales">
+        return '<meta name="description" content="Résumé des configurations des dates de conservations">
+                <meta name="keywords" content="SAE Manager, dates de conservations, configurations">
                 <meta name="author" content="Benhafessa-Edelstein-Dargentolle-Griguer-Radjou">
                 
                 <meta property="og:title" content="Notre site" />
