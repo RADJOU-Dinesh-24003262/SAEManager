@@ -535,6 +535,22 @@
         #getNameCss()
       }
     }
+    package LegalTermsConditions as Views.LegalTermsConditions {
+      class "ConfigConservationDateView\n<b>Class ConfigConservationDateView</b>" as Views_LegalTermsConditions_ConfigConservationDateView [[/Views/LegalTermsConditions/ConfigConservationDateView.php ConfigConservationDateView Class]] {
+        #templatePath()
+        #templateKeys()
+        #getPageTitle()
+        #getNameCss()
+        #getAdditionalHeaders()
+      }
+      class "LegalTermsConditionsView\n<b>Class LegalTermsConditionsView</b>" as Views_LegalTermsConditions_LegalTermsConditionsView [[/Views/LegalTermsConditions/LegalTermsConditionsView.php LegalTermsConditionsView Class]] {
+        #templatePath()
+        #templateKeys()
+        #getPageTitle()
+        #getNameCss()
+        #getAdditionalHeaders()
+      }
+    }
     package Settings as Views.Settings {
       class "EditProfileView\n<b>Edit Profile View</b>" as Views_Settings_EditProfileView [[/Views/Settings/EditProfileView.php EditProfileView Class]] {
         #templatePath()
@@ -686,6 +702,16 @@
         -removeStudent(saeId)
         -redirectWithSuccess(saeId, msg)
         -redirectWithError(saeId, msg)
+        {static} +support(path, method)
+      }
+    }
+    package LegalTermsConditions as Controllers.LegalTermsConditions {
+      class "LegalTermsConditionsController\n<b>This class controls the legal terms and conditions page.</b>" as Controllers_LegalTermsConditions_LegalTermsConditionsController [[/Controllers/LegalTermsConditions/LegalTermsConditionsController.php LegalTermsConditionsController Class]] {
+        +control()
+        {static} +support(path, method)
+      }
+      class "ConfigConservationDateController\n<b>This class controls the configuration of the conservation date page.</b>" as Controllers_LegalTermsConditions_ConfigConservationDateController [[/Controllers/LegalTermsConditions/ConfigConservationDateController.php ConfigConservationDateController Class]] {
+        +control()
         {static} +support(path, method)
       }
     }
@@ -862,6 +888,8 @@
   Controllers_Index_IndexController ..> Views_Index_IndexView
   Controllers_Info_LegalNoticeController ..> Views_Info_LegalNoticeView
   Controllers_Info_SiteMapController ..> Views_Info_SiteMapView
+  Controllers_LegalTermsConditions_ConfigConservationDateController ..> Views_LegalTermsConditions_ConfigConservationDateView
+  Controllers_LegalTermsConditions_LegalTermsConditionsController ..> Views_LegalTermsConditions_LegalTermsConditionsView
   Controllers_Password_ForgotPasswordController ..> Views_pwd_ForgotPasswordView
   Controllers_Password_ForgotPasswordPostController ..> Models_Repository_User_PdoUserRepository
   Controllers_Password_ForgotPasswordPostController ..> Models_UseCase_User_ProcessForgotPasswordUseCase
