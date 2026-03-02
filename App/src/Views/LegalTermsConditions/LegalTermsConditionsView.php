@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Views\LegalTermsConditions;
+namespace Views\LegalTermsConditions;
 
 use Core\Views\AbstractView;
 use Override;

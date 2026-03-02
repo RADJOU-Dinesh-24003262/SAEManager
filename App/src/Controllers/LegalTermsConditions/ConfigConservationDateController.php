@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\LegalTermsConditions;
+namespace Controllers\LegalTermsConditions;
 
-use App\Views\LegalTermsConditions\ConfigConservationDateView;
+use Views\LegalTermsConditions\ConfigConservationDateView;
 use Core\Controllers\ControllerInterface;
 use Override;
 
@@ -44,6 +44,6 @@ class ConfigConservationDateController implements ControllerInterface
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === "/config-conservation-date" && $method === "GET";
+        return $path === "/conservation-date" && $method === "GET";
     }
 }
