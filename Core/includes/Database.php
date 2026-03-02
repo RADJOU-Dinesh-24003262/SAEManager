@@ -47,7 +47,7 @@ class Database extends PDO
      * @param string $file Path to the configuration INI file.
      * @throws Exception If the configuration file cannot be read or connection fails.
      */
-    public function __construct(string $file = '../../App/config/my_settings.ini')
+    public function __construct(string $file = '../App/config/my_settings.ini')
     {
         // --- Test mode ---
         if (getenv('APP_ENV') === 'testing') {
@@ -99,7 +99,7 @@ class Database extends PDO
      * @return Database The singleton instance.
      * @throws Exception If connection fails.
      */
-    public static function getInstance(string $file = '../../App/config/my_settings.ini'): Database
+    public static function getInstance(string $file = '../App/config/my_settings.ini'): Database
     {
         if (self::$instance === null) {
             self::$instance = new self($file);
