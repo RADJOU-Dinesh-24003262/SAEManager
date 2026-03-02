@@ -4,6 +4,7 @@ namespace Views\SAE;
 
 use Core\Views\AbstractView;
 use Override;
+use Models\Entity\User\Client;
 
 /**
  * View for the SAE creation page.
@@ -23,6 +24,26 @@ class CreateSaeView extends AbstractView
      * @var string
      */
     private const TEMPLATE_HTML = __DIR__ . '/create-sae.html';
+
+
+    /**
+     * The clients data.
+     *
+     * @var array<Client>
+     */
+    private array $clients;
+
+
+    /**
+     * Constructor.
+     *
+     * @param array<string, mixed> $data The data to initialize the view with.
+     */
+    public function __construct(array $data = [])
+    {
+        $this->clients = $data['clients'];
+        parent::__construct($data);
+    }
 
     /**
      * Returns the path to the HTML template file.
@@ -44,12 +65,12 @@ class CreateSaeView extends AbstractView
     protected function templateKeys(): array
     {
         $clientsHtml = '<option value="">-- Choisir un client --</option>';
-        if (isset($this->data['clients']) && is_array($this->data['clients'])) {
-            foreach ($this->data['clients'] as $client) {
-                $name = $client['last_name'] . ' '
-                        . $client['first_name'] . ' (' . $client['organisation'] . ')';
-                $id = $client['user_id'];
-                $clientsHtml .= "<option value=\"$id\">$name</option>";
+        if (isset($this->clients)) {
+            foreach ($this->clients as $client) {
+                $name = $client->getLastName() . ' '
+                        . $client->getFirstName() . ' (' . $client->getOrganisation() . ')';
+                $clientId = $client->getUserId();
+                $clientsHtml .= "<option value=\"$clientId\">$name</option>";
             }
         }
 

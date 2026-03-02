@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\Controllers\SAE\PageSaeController;
+use Controllers\SAE\PageSaeController;
 use Controllers\Index\IndexController;
 use Controllers\Info\LegalNoticeController;
 use Controllers\Info\SiteMapController;
-use Controllers\pwd\ForgotPasswordController;
-use Controllers\pwd\ResetPasswordController;
+use Controllers\Password\ForgotPasswordController;
+use Controllers\Password\ResetPasswordController;
 use Controllers\ToDoList\ToDoListController;
-use Controllers\User\Register;
+use Controllers\User\RegisterController;
 use Core\Controllers\ControllerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,7 +25,7 @@ use ReflectionClass;
 #[CoversClass(SiteMapController::class)]
 #[CoversClass(PageSaeController::class)]
 #[CoversClass(ToDoListController::class)]
-#[CoversClass(Register::class)]
+#[CoversClass(RegisterController::class)]
 #[CoversClass(ForgotPasswordController::class)]
 #[CoversClass(ResetPasswordController::class)]
 class ControllerTest extends TestCase
@@ -134,9 +134,9 @@ class ControllerTest extends TestCase
     public function registerControllerSupportsCorrectRoute(): void
     {
         // Check that Register controller supports the correct routes
-        $this->assertTrue(Register::support('/register', 'GET'));
-        $this->assertFalse(Register::support('/register', 'POST'));
-        $this->assertFalse(Register::support('/signup', 'GET'));
+        $this->assertTrue(RegisterController::support('/register', 'GET'));
+        $this->assertFalse(RegisterController::support('/register', 'POST'));
+        $this->assertFalse(RegisterController::support('/signup', 'GET'));
     }
 
     #[Test]
@@ -145,7 +145,7 @@ class ControllerTest extends TestCase
         // Set a session to simulate a logged-in user
         $_SESSION['user_id'] = 'test@test.fr';
 
-        $controller = new Register();
+        $controller = new RegisterController();
 
         // Cannot test redirection directly because it uses header()
         // But we can check that the session exists
@@ -236,7 +236,7 @@ class ControllerTest extends TestCase
             [SiteMapController::class],
             [PageSaeController::class],
             [ToDoListController::class],
-            [Register::class],
+            [RegisterController::class],
             [ForgotPasswordController::class],
             [ResetPasswordController::class]
         ];

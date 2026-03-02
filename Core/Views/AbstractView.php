@@ -11,7 +11,6 @@ use Exception;
  * It contains all the required methods and attributes to be used in the implemented views.
  *
  * @category View
-
  * @package Src
  *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
@@ -19,9 +18,7 @@ use Exception;
  * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
  * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
-
  * @license MIT License https://opensource.org/licenses/MIT
-
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  **/
 abstract class AbstractView
@@ -37,7 +34,6 @@ abstract class AbstractView
      * Initializes the $data attribute with the array of data given when called.
      *
      * @param array<string, mixed> $data The array of data to be instantiated.
-
      * @return void Creates The instance of the class.
      */
     public function __construct(array $data = [])
@@ -211,7 +207,6 @@ abstract class AbstractView
 
     /**
      * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
-
      * @return string the name of the project 'SAE Manager'.
      */
     protected function getNavBar(): string
@@ -229,7 +224,6 @@ abstract class AbstractView
 
     /**
      * Returns the name of the project 'SAE Manager' or be used in some cases like displaying it by some isolated texts.
-
      * @return string the name of the project 'SAE Manager'.
      */
     protected function getPageTitle(): string

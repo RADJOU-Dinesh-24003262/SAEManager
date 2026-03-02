@@ -4,13 +4,16 @@ namespace Services\Auth;
 
 use Core\Utilis\EmailService;
 use Core\Utilis\Logger;
-use Models\SAE\Repository\SAESubjectRepository;
-use Models\User\Student;
-use Models\User\User;
-use Models\SAE\SAESubject;
+use Models\Entity\SAE\Repository\SAESubjectRepository;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
+use Models\Entity\SAE\SAESubject;
 use DateTime;
-use Models\SAE\Repository\SAEGroupRepository;
-use Models\SAE\Repository\ParticipatedInRepository;
+use Models\Entity\SAE\Repository\SAEGroupRepository;
+use Models\Entity\SAE\Repository\ParticipatedInRepository;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoSAESubjectRepository;
 
 /**
  * Service responsible for sending an attribution emails for SAE Manager.
@@ -37,12 +40,12 @@ class AttributionMailer
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
         Logger::log('MAIL_ATTRIBUTION', "Focus date for attribution: $dateBeginFocus");
 
-        $saeSubjectRepo = SAESubjectRepository::getInstance();
+        $saeSubjectRepo = new PdoSAESubjectRepository();
         $saeSubjects = $saeSubjectRepo->findByBeginDate($dateBeginFocus);
         Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($saeSubjects) . ' subjects starting on focus date.');
 
-        $saeGroupRepo = SAEGroupRepository::getInstance();
-        $participatedInRepo = ParticipatedInRepository::getInstance();
+        $saeGroupRepo = new PdoSAEGroupRepository();
+        $participatedInRepo = new PdoParticipatedInRepository();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
@@ -53,7 +56,7 @@ class AttributionMailer
             }
 
             Logger::log('MAIL_ATTRIBUTION', "Processing SAE ID: $saeId ({$saeSubject->getSubjectName()})");
-            $studentsGroup = $saeGroupRepo->findBySaeId($saeId);
+            $studentsGroup = $saeGroupRepo->findBySaeSubjectId($saeId);
 
             if (empty($studentsGroup)) {
                 Logger::log('MAIL_ATTRIBUTION', "No groups found for SAE ID: $saeId");
@@ -70,16 +73,13 @@ class AttributionMailer
                 }
 
                 // Use the updated method signature.
-                $students = $participatedInRepo->getGroupStudents($groupId);
+                $students = $saeGroupRepo->getStudentsInGroup($groupId);
 
                 Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($students) . " students in group ID: $groupId");
 
                 foreach ($students as $studentData) {
                     $student = new Student($studentData);
 
-                    // Re-fetching subject seems redundant if we already have $saeSubject,
-                    // but keeping logic close to original while logging.
-                    // Optimisation: use existing $saeSubject object.
                     $emailStudent = $student->getEmail();
                     Logger::log('MAIL_ATTRIBUTION', "Preparing to send email to: $emailStudent");
 

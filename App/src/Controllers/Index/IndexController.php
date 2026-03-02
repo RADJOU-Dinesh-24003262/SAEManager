@@ -2,7 +2,7 @@
 
 namespace Controllers\Index;
 
-use Core\Controllers\ControllerInterface;
+use Controllers\BaseController;
 use Core\Utilis\SessionService;
 use Override;
 use Views\Index\IndexView;
@@ -22,14 +22,13 @@ use Views\Index\IndexView;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class IndexController implements ControllerInterface
+class IndexController extends BaseController
 {
     /**
      * Principal manager of the controller
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
 

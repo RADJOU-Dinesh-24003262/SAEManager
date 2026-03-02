@@ -97,6 +97,8 @@ class ValidationServiceRegister extends FormValidator
         } elseif ($data['user_type'] === 'client') {
             $clientErrors = $this->validateClientFields($data);
             $errors = array_merge($errors, $clientErrors);
+        } else {
+            $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
         }
 
         if (!empty($errors)) {

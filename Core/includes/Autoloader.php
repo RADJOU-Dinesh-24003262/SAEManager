@@ -49,7 +49,11 @@ class Autoloader
                 if (str_starts_with($class, 'App\\')) {
                     $file = self::$projectRoot . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'src' .
                             DIRECTORY_SEPARATOR . substr($classPath, 4); // Remove 'App\' part.
-                } elseif (str_starts_with($class, 'Models\\') || str_starts_with($class, 'Services\\')) {
+                } elseif (
+                    str_starts_with($class, 'Models\\')
+                    || str_starts_with($class, 'Services\\') || str_starts_with($class, 'Controllers\\')
+                    || str_starts_with($class, 'Views\\') || str_starts_with($class, 'Validator\\')
+                ) {
                     // Handle 'Models', 'Services' namespaces which are under App/src.
                     $file = self::$projectRoot . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'src' .
                             DIRECTORY_SEPARATOR . $classPath;
@@ -60,7 +64,7 @@ class Autoloader
 
 
                 if ($file !== null && file_exists($file)) {
-                    include $file;
+                    require_once $file;
                 }
             }
         );

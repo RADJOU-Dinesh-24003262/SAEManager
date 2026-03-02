@@ -8,10 +8,10 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Models\User\Student;
-use Models\User\Professor;
-use Models\User\Client;
-use Models\User\User;
+use Models\Entity\User\Student;
+use Models\Entity\User\Professor;
+use Models\Entity\User\Client;
+use Models\Entity\User\User;
 use ReflectionClass;
 
 /**
@@ -166,83 +166,6 @@ class UserModelTest extends TestCase
     }
 
     // ========================================
-    // Tests pour User Factory Methods
-    // ========================================
-    #[Test]
-    #[DataProvider('userTypesProvider')]
-    public function createFromRegistrationDataCreatesCorrectType(string $type, string $expectedClass): void
-    {
-        /**
- * @var class-string $expectedClass
-*/
-        $data = [
-            'user_type' => $type,
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@test.fr',
-            'phone' => '0612345678',
-            'password' => 'password123'
-        ];
-
-        if ($type === 'student') {
-            $data['amu_id'] = 'test123';
-            $data['year'] = 1;
-            $data['td'] = 'TD1';
-            $data['tp'] = 'TPA';
-        } elseif ($type === 'professor') {
-            $data['amu_id'] = 'prof123';
-        } elseif ($type === 'client') {
-            $data['organisation'] = 'Test Org';
-        }
-
-        $user = User::createFromRegistrationData($data);
-
-        $this->assertInstanceOf($expectedClass, $user);
-        $this->assertEquals($type, $user->getUserType());
-    }
-
-    public static function userTypesProvider(): array
-    {
-        return [
-            'student' => ['student', Student::class],
-            'professor' => ['professor', Professor::class],
-            'client' => ['client', Client::class]
-        ];
-    }
-
-    #[Test]
-    public function createFromRegistrationDataThrowsExceptionForInvalidType(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Type d'utilisateur invalide");
-
-        User::createFromRegistrationData(
-            [
-            'user_type' => 'invalid_type',
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@test.fr',
-            'phone' => '0612345678',
-            'password' => 'password123'
-            ]
-        );
-    }
-
-    #[Test]
-    public function setPasswordHashesPasswordCorrectly(): void
-    {
-        $student = new Student(['first_name' => 'Test', 'last_name' => 'User']);
-        $plainPassword = 'mySecretPassword123';
-
-        $student->setPassword($plainPassword);
-        $hashedPassword = $student->getPasswordHash();
-
-        $this->assertNotEquals($plainPassword, $hashedPassword);
-        $this->assertTrue(password_verify($plainPassword, $hashedPassword));
-        $this->assertGreaterThan(50, strlen($hashedPassword)); // Hash should be long
-    }
-
-    // ========================================
     // Tests pour les getters
     // ========================================
     #[Test]
@@ -270,20 +193,6 @@ class UserModelTest extends TestCase
         $this->assertEquals('john.doe@test.fr', $student->getEmail());
         $this->assertEquals('0645678901', $student->getPhone());
         $this->assertNotEmpty($student->getPasswordHash());
-    }
-
-    // ========================================
-    // Tests pour existsByEmail (méthode statique)
-    // ========================================
-    #[Test]
-    public function existsByEmailReturnsFalseOnDatabaseError(): void
-    {
-        // Ce test vérifie que la méthode gère les erreurs PDO
-        // En mode test, si la base de données n'est pas disponible
-        $result = User::existsByEmail('nonexistent@test.fr');
-
-        // Le résultat peut être true ou false selon l'état de la base
-        $this->assertIsBool($result);
     }
 
     // ========================================
@@ -315,7 +224,7 @@ class UserModelTest extends TestCase
             ]
         );
 
-        $this->assertNull($student->getMajor());
+        $this->assertEquals('', $student->getMajor());
     }
 
     #[Test]
