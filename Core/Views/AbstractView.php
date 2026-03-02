@@ -194,7 +194,7 @@ abstract class AbstractView
 
             <ul>
                 <li><a href="/legal-notice" class="secondary">Mentions légales</a></li>
-                <li><a href="/config-conservation-date" class="secondary">Conservation des données</a></li>
+                <li><a href="/conservation-date" class="secondary">Conservation des données</a></li>
                 <li><a href="/site-map" class="secondary">Plan du site</a></li>
             </ul>
         </nav>

@@ -40,6 +40,8 @@ use Controllers\User\LoginPostController;
 use Controllers\User\LogoutController;
 use Controllers\User\RegisterController;
 use Controllers\User\RegisterPostController;
+use Controllers\LegalTermsConditions\ConfigConservationDateController;
+use Controllers\LegalTermsConditions\LegalTermsConditionsController;
 
 const ROUTES = [
     // ============================================================
@@ -146,4 +148,16 @@ const ROUTES = [
     '/^\/sae\/(?<saeId>\d+)\/to-do\/delete\/(?<todoId>\d+)$/' => [
         'POST' => ['controller' => ToDoListDeletePostController::class , 'method' => 'control']
     ],
+
+    // ============================================================
+    // General Conditions
+    // ============================================================
+
+    '/^\/conservation-date$/' => [
+        'GET' => ['controller' => ConfigConservationDateController::class , 'method' => 'control']
+    ],
+
+    '/^\/legal-terms-conditions$/' => [
+        'GET' => ['controller' => LegalTermsConditionsController::class , 'method' => 'control']
+    ]
 ];

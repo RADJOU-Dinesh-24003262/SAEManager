@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controllers\LegalTermsConditions;
+namespace Controllers\LegalTermsConditions;
 
-use App\Views\LegalTermsConditions\LegalTermsConditionsView;
+use Views\LegalTermsConditions\LegalTermsConditionsView;
 use Core\Controllers\ControllerInterface;
 use Override;
 
