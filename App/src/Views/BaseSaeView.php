@@ -3,6 +3,8 @@
 namespace Views;
 
 use Core\Views\AbstractView;
+use Models\Entity\SAE\SAESubject;
+use Models\Entity\User\User;
 
 /**
  * Class BaseSaeView
@@ -20,15 +22,38 @@ use Core\Views\AbstractView;
 abstract class BaseSaeView extends AbstractView
 {
     /**
+     * @var SAESubject
+     */
+    protected SAESubject $subject;
+
+    /**
+     * @var User
+     */
+    protected User $user;
+
+    /**
+     * Constructor.
+     *
+     * @param SAESubject $subject The SAE subject associated with the view.
+     * @param User       $user    The current user.
+     */
+    public function __construct(SAESubject $subject, User $user)
+    {
+        parent::__construct([]);
+        $this->subject = $subject;
+        $this->user = $user;
+    }
+
+    /**
      * Returns the common template keys for SAE pages.
      *
-     * @return array<string, string> The common template keys.
+     * @return array<string, int|string|null> The common template keys.
      */
     protected function getCommonSaeTemplateKeys(): array
     {
         return [
-            'SAE_NUM' => $this->data['sae']['subject']->getSaeSubjectId(),
-            'SAE_NAME' => $this->data['sae']['subject']->getSubjectName(),
+            'SAE_NUM' => $this->subject->getSaeSubjectId(),
+            'SAE_NAME' => $this->subject->getSubjectName(),
             'SAE_MENU' => $this->getMenuSae()
         ];
     }
@@ -40,8 +65,8 @@ abstract class BaseSaeView extends AbstractView
      */
     protected function getMenuSae(): string
     {
-        $user = $this->data['user'];
-        $saeId = $this->data['sae']['subject']->getSaeSubjectId();
+        $user = $this->user;
+        $saeId = $this->subject->getSaeSubjectId();
         $menu = '';
 
         if ($user->isStudent()) {
@@ -50,7 +75,7 @@ abstract class BaseSaeView extends AbstractView
             $menu .= '<li><a href="/sae/' . $saeId . '#contacts">👥 Contacts</a></li>';
         } elseif ($user->isProfessor()) {
             $menu .= '<li><h2>Navigation</h2></li>';
-            if ($user->getUserId() === $this->data['sae']['subject']->getResponsibleProfId()) {
+            if ($user->getUserId() === $this->subject->getResponsibleProfId()) {
                 $menu .= '<li><a href="/sae/' . $saeId . '/modify">✏️ Modifier la SAE</a></li>';
                 $menu .= '<li><a href="/sae/' . $saeId . '/groups">👥 Gérer les groupes</a></li>';
             }

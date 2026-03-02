@@ -34,7 +34,6 @@ class EditProfileController extends BaseController
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();
@@ -49,11 +48,11 @@ class EditProfileController extends BaseController
      *
      * @param  string $path   The request path.
      * @param  string $method The HTTP request method.
-     * @return boolean True if path is /edit-profile and the method is GET.
+     * @return boolean True if path is /settings/edit-profile and the method is GET.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === '/edit-profile' && $method === 'GET';
+        return $path === '/settings/edit-profile' && $method === 'GET';
     }
 }

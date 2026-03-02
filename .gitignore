@@ -17,3 +17,7 @@ logs/*
 package.json
 package-lock.json
 docs/*
+build/*
+*.log
+mettre en place des tranasctions sur BD.md
+asset/SQL_script/Database.sql

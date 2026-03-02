@@ -4,7 +4,9 @@ namespace Controllers\Settings;
 
 use Controllers\BaseController;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
+use Models\Repository\User\PdoUserRepository;
+use Models\UseCase\User\DeleteUserUseCase;
 use Override;
 use PDOException;
 use Views\Settings\DeleteUserView;
@@ -38,7 +40,6 @@ class DeleteUserController extends BaseController
      * @return void
      * @throws PDOException If there is a problem with database request.
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();
@@ -47,13 +48,12 @@ class DeleteUserController extends BaseController
 
         try {
             $email = $this->user->getEmail();
-            User::deleteByEmail($email);
+
+            $userRepository = new PdoUserRepository();
+            $deleteUserUseCase = new DeleteUserUseCase($userRepository);
+            $deleteUserUseCase->executeByEmail($email);
+
             $view = new DeleteUserView($data);
-
-            // Clear session.
-            session_unset();     // Unset all session variables.
-            session_destroy();   // Destroy the session.
-
             $view->render();
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
@@ -65,11 +65,11 @@ class DeleteUserController extends BaseController
      *
      * @param  string $path   The request path.
      * @param  string $method The HTTP request method.
-     * @return boolean True if path is /delete-user and the method is GET.
+     * @return boolean True if path is /settings/delete and the method is GET.
      */
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === '/delete-user' && $method === 'GET';
+        return $path === '/settings/delete' && $method === 'GET';
     }
 }

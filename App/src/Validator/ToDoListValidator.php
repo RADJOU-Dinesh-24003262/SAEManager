@@ -2,8 +2,7 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Exception;
+use Core\includes\exception\ExceptionValidation\ExceptionValidationToDoList;
 use Override;
 
 /**
@@ -27,33 +26,37 @@ use Override;
 class ToDoListValidator extends FormValidator
 {
     /**
-     * @var string[] $required Represent the description of the todolist.
+     * @var string[] $required Required fields (none enforced by default escape, handled in validate).
      */
-    protected $required = ['tododesc'];
+    protected $required = [];
 
     /**
-     * This method validates the values given in $data to validate the todolist with their description.
+     * This method validates the values given in $data.
      *
-     * @param  array<string, mixed> $data Represent the data in the database.
+     * @param  array<string, mixed> $data Data to validate.
      * @return void
-     * @throws ExceptionValidationEmpty All the errors that might have been found.
-     * @throws Exception If other validation rules fail.
+     * @throws ExceptionValidationToDoList If validation fails.
      */
     #[Override]
     public function validate(array $data): void
     {
-        if (empty($data['tododesc'])) {
-            throw new ExceptionValidationEmpty();
+        // Validate description if present.
+        if (array_key_exists('description', $data)) {
+            $desc = trim((string) $data['description']);
+            if (empty($desc)) {
+                throw new ExceptionValidationToDoList("La description ne doit pas être vide.");
+            }
+
+            if (strlen($desc) > 255) {
+                throw new ExceptionValidationToDoList("La description ne doit pas dépasser 255 caractères.");
+            }
         }
 
-        if (strlen($data['tododesc']) > 255) {
-            throw new Exception("La description ne doit pas dépasser 255 caractères.");
-        }
-
-        if (isset($data['priority'])) {
+        // Validate priority if present.
+        if (array_key_exists('priority', $data)) {
             $priority = intval($data['priority']);
             if (!in_array($priority, [1, 2, 3], true)) {
-                throw new Exception("Priorité invalide.");
+                throw new ExceptionValidationToDoList("Priorité invalide (doit être 1, 2 ou 3).");
             }
         }
     }

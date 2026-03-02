@@ -3,6 +3,8 @@
 namespace Core\Models\Repository;
 
 use Core\includes\Database;
+use Core\Models\BaseModel;
+use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Exception;
 use Override;
 use PDO;
@@ -23,7 +25,7 @@ use PDOException;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  *
- * @template T of object
+ * @template T of BaseModel
  * @implements RepositoryInterface<T>
  */
 abstract class BaseRepository implements RepositoryInterface
@@ -64,8 +66,7 @@ abstract class BaseRepository implements RepositoryInterface
      * @param integer $id The ID of the entry to find in the database.
      * @return T|null Returns the entity if found, null otherwise
      */
-    #[Override]
-    public function findById(int $id)
+    public function findById(int $id): ?BaseModel
     {
         try {
             $stmt = $this->connection->prepare(
@@ -82,12 +83,38 @@ abstract class BaseRepository implements RepositoryInterface
     }
 
     /**
+     * Finds all entities
+     *
+     * @return array<T> Returns an array of entities
+     */
+    public function findAll(): array
+    {
+        try {
+            $stmt = $this->connection->query("SELECT * FROM {$this->table}");
+
+            if ($stmt === false) {
+                return [];
+            }
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $entities = [];
+            foreach ($results as $row) {
+                $entities[] = new $this->entityClass($row);
+            }
+
+            return $entities;
+        } catch (PDOException $e) {
+            error_log("Error in findAll in {$this->table}: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
      * Deletes an entity by its ID
      *
      * @param integer $id The ID of the entity to delete.
      * @return boolean True on success, false on failure.
      */
-    #[Override]
     public function delete(int $id): bool
     {
         try {
@@ -116,10 +143,112 @@ abstract class BaseRepository implements RepositoryInterface
                 throw new PDOException("Failed to execute count query on {$this->table}");
             }
 
-            return (int) $stmt->fetchColumn();
+            return (int)$stmt->fetchColumn();
         } catch (PDOException $e) {
             error_log("Error in count in {$this->table}: " . $e->getMessage());
             return 0;
+        }
+    }
+
+    /**
+     * Updates data in the database.
+     *
+     * @param BaseModel $data The entity to update.
+     * @return boolean True on success, false on failure.
+     */
+    public function update(BaseModel $data): bool
+    {
+
+        $attributes = $data->toArray();
+        $query = "UPDATE {$this->table} SET ";
+        foreach ($attributes as $key => $value) {
+            if ($key === $this->getPrimaryKey()) {
+                continue;
+            }
+            $query .= "{$key} = :{$key}, ";
+        }
+        $query = substr($query, 0, -2);
+        $query .= " WHERE {$this->getPrimaryKey()} = :{$this->getPrimaryKey()}";
+
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare($query);
+
+            foreach ($attributes as $key => $value) {
+                $type = PDO::PARAM_STR;
+                if (is_int($value)) {
+                    $type = PDO::PARAM_INT;
+                } elseif (is_bool($value)) {
+                    $type = PDO::PARAM_BOOL;
+                } elseif (is_null($value)) {
+                    $type = PDO::PARAM_NULL;
+                }
+                $stmt->bindValue(":$key", $value, $type);
+            }
+
+            $result = $stmt->execute();
+            $this->connection->commit();
+
+            return $result;
+        } catch (PDOException $e) {
+            if ($this->connection->inTransaction()) {
+                $this->connection->rollBack();
+            }
+            error_log("Error in update in {$this->table}: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Inserts data into the database.
+     *
+     * @param BaseModel $data The entity to insert.
+     * @return integer|boolean The ID of the inserted row or false on failure.
+     */
+    public function insert(BaseModel $data): int|bool
+    {
+
+        $attributes = $data->toArray();
+        unset($attributes[$this->getPrimaryKey()]);
+        $query = "INSERT INTO {$this->table} (";
+        foreach ($attributes as $key => $value) {
+            $query .= "{$key}, ";
+        }
+        $query = substr($query, 0, -2);
+
+        $query .= ") VALUES (";
+        foreach ($attributes as $key => $value) {
+            $query .= ":{$key}, ";
+        }
+        $query = substr($query, 0, -2);
+        $query .= ")";
+
+        $this->connection->beginTransaction();
+        try {
+            $stmt = $this->connection->prepare($query);
+
+            foreach ($attributes as $key => $value) {
+                $type = \PDO::PARAM_STR;
+                if (is_int($value)) {
+                    $type = \PDO::PARAM_INT;
+                } elseif (is_bool($value)) {
+                    $type = \PDO::PARAM_BOOL;
+                } elseif (is_null($value)) {
+                    $type = \PDO::PARAM_NULL;
+                }
+                $stmt->bindValue(":$key", $value, $type);
+            }
+
+            $stmt->execute();
+            $id = (int)$this->connection->lastInsertId();
+            $this->connection->commit();
+            return $id;
+        } catch (\PDOException $e) {
+            if ($this->connection->inTransaction()) {
+                $this->connection->rollBack();
+            }
+            error_log("Error in insert in {$this->table}: " . $e->getMessage());
+            return false;
         }
     }
 }

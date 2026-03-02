@@ -3,7 +3,7 @@
 namespace Views\Settings;
 
 use Core\Views\AbstractView;
-use Models\User\User;
+use Models\Entity\User\User;
 use Override;
 
 /**
@@ -70,7 +70,7 @@ class SettingsView extends AbstractView
         $user = $this->data['user'];
 
         return [
-            'STATUS' => ucfirst($this->getUserTypeLabel($user)),
+            'STATUS' => $user->getRoleLabel(),
             'FIRSTNAME' => $user->getFirstName(),
             'LASTNAME' => $user->getLastName(),
             'EMAIL' => $user->getEmail(),
@@ -78,26 +78,7 @@ class SettingsView extends AbstractView
         ];
     }
 
-    /**
-     * Returns a user-friendly label based on the user's role.
-     *
-     * @param User $user The user instance.
-     *
-     * @return string The role label.
-     */
-    private function getUserTypeLabel(User $user): string
-    {
-        if ($user->isStudent()) {
-            return 'étudiant';
-        }
-        if ($user->isProfessor()) {
-            return 'professeur';
-        }
-        if ($user->isClient()) {
-            return 'client';
-        }
-        return 'utilisateur';
-    }
+
 
     /**
      * Returns the name of the CSS file associated with this view.
