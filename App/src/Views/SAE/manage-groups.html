@@ -3,7 +3,7 @@
     <h1>{{SAE_NAME}}</h1>
 </div>
 
-<article class="main_functionnality">
+<main class="main_functionnality">
     <ul class="menu_functionnality">
         {{SAE_MENU}}
     </ul>
@@ -17,7 +17,7 @@
 
                 {{messages}}
 
-                <div style="margin-top: 20px;">
+                <section style="margin-top: 20px;">
                     <h3>Créer un nouveau groupe</h3>
                     <form action="/sae/{{sae_id}}/groups/create" method="post" class="inline-form">
                         <input type="hidden" name="sae_id" value="{{sae_id}}">
@@ -30,17 +30,17 @@
                         </div>
                         <button type="submit" class="btn-primary">Créer le groupe</button>
                     </form>
-                </div>
+                </section>
 
                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #e0e0e0;">
 
-                <div>
+                <section>
                     <h3>Groupes existants</h3>
                     <div class="groups-grid">
                         {{groups_html}}
                     </div>
-                </div>
+                </section>
             </section>
         </article>
     </div>
-</article>
+</main>
