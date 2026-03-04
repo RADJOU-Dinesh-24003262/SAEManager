@@ -168,9 +168,9 @@ class DashboardView extends AbstractView
     {
         $html  = '<article class="sae-card">';
         $html .= '<div class="sae-header">';
-        $html .= '<div class="sae-icon" aria-hidden="true">' . (string) $sae->getSaeSubjectId() . '</div>';
+        $html .= '<h2 class="sae-icon" aria-hidden="true">' . (string) $sae->getSaeSubjectId() . '</h2>';
         $html .= '</div>';
-        $html .= '<div class="sae-body">';
+        $html .= '<section class="sae-body">';
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
 
         if (!empty($sae->getResponsibleProfId())) {
@@ -180,9 +180,9 @@ class DashboardView extends AbstractView
         $html .= '<div class="sae-actions">';
         $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
         if ($user->isProfessor()) {
-            $html .= '<a href=/sae/' . intval($sae->getSaeSubjectId()) . '/delete " >Supprimer la SAE</a>';
+            $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '/delete" >Supprimer la SAE</a>';
         }
-        $html .= '</div></div></article>';
+        $html .= '</div></section></article>';
 
         return $html;
     }

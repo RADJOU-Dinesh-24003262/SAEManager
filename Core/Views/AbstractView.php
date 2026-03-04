@@ -144,7 +144,7 @@ abstract class AbstractView
         </nav>
     </header>
 
-    <main class="container-fluid">
+
 ';
     }
 
@@ -170,7 +170,7 @@ abstract class AbstractView
     protected function renderFooter(): void
     {
         echo '
-    </main>
+
     <footer class="container-fluid">
         <hr>
         <nav>
