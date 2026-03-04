@@ -63,10 +63,9 @@ class Database extends PDO
             return;
         }
 
-
-	// --- Normal mode ---
+        // --- Normal mode ---
         $settings = parse_ini_file(__DIR__ . '/' . $file, true);
-	if ($settings === false) {
+        if ($settings === false) {
             throw new Exception('Unable to open configuration file: ' . $file);
         }
 

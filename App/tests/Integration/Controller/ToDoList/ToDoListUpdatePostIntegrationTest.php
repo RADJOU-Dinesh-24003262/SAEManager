@@ -5,11 +5,11 @@ namespace Tests\Integration\Controller\ToDoList;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListUpdatePostController;
+use Controllers\Sae\SaeToDoUpdatePostController;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**
- * Integration test for ToDoListUpdatePostController controller interacting with ToDoList model.
+ * Integration test for SaeToDoUpdatePostController controller interacting with ToDoList model.
  *
  * @category Tests
  * @package  Tests\Controllers\ToDoList
@@ -22,7 +22,7 @@ use Models\Entity\ToDoItem\ToDoItem;
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 #[CoversClass(ToDoItem::class)]
-#[CoversClass(ToDoListUpdatePostController::class)]
+#[CoversClass(SaeToDoUpdatePostController::class)]
 class ToDoListUpdatePostIntegrationTest extends TestCase
 {
     /**
@@ -32,7 +32,7 @@ class ToDoListUpdatePostIntegrationTest extends TestCase
      */
     public function testSupportReturnsTrueForValidPostRoute(): void
     {
-        $this->assertTrue(ToDoListUpdatePostController::support('/sae/10/to-do/update/5', 'POST'));
+        $this->assertTrue(SaeToDoUpdatePostController::support('/sae/10/to-do/update/5', 'POST'));
     }
 
     /**
@@ -42,7 +42,7 @@ class ToDoListUpdatePostIntegrationTest extends TestCase
      */
     public function testSupportReturnsFalseForInvalidRouteOrMethod(): void
     {
-        $this->assertFalse(ToDoListUpdatePostController::support('/invalid', 'POST'));
-        $this->assertFalse(ToDoListUpdatePostController::support('/to-do-list/update/5', 'GET'));
+        $this->assertFalse(SaeToDoUpdatePostController::support('/invalid', 'POST'));
+        $this->assertFalse(SaeToDoUpdatePostController::support('/to-do-list/update/5', 'GET'));
     }
 }

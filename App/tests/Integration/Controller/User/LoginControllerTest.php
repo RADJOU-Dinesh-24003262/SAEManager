@@ -2,7 +2,7 @@
 
 namespace tests\Integration\Controller\User;
 
-use Controllers\User\LoginPostController;
+use Controllers\Login\LoginPostController;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Utilis\SessionService;

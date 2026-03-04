@@ -4,8 +4,8 @@ namespace tests\Integration\Controller\User;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Controllers\User\LoginPostController;
-use Controllers\User\RegisterPostController;
+use Controllers\Login\LoginPostController;
+use Controllers\Register\RegisterPostController;
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 
