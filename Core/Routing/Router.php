@@ -112,13 +112,13 @@ class Router
             /* @var \Core\Controllers\ControllerInterface $controller */
             $controller = new $controllerClass();
             $controller->control(...$params);
-            exit();
+            return;
         } catch (\Throwable $e) {
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
             error_log("Erreur inattendue: " . $e->getTraceAsString() . $e->getMessage());
             http_response_code(500);
             header("Location: /");
-            exit();
+            return;
         }
     }
 
@@ -132,6 +132,6 @@ class Router
         http_response_code(404);
         SessionService::setFlash('error', "Page non existante.");
         header("Location: /");
-        exit();
+        return;
     }
 }
