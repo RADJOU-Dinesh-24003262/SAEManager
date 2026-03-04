@@ -27,6 +27,26 @@ class FileService
     private const STORAGE_DIR = __DIR__ . '/../../../storage/sae_descriptions';
 
     /**
+     * Validates that a file path is within the storage directory.
+     *
+     * @param string $filePath The full file path to validate.
+     *
+     * @return boolean True if the path is safe, false otherwise.
+     */
+    private static function isPathSafe(string $filePath): bool
+    {
+        $storageDir = realpath(self::STORAGE_DIR);
+
+        if (file_exists($filePath)) {
+            $realPath = realpath($filePath);
+            return $realPath && $storageDir && strpos($realPath, $storageDir) === 0;
+        }
+
+        $dir = realpath(dirname($filePath));
+        return $dir && $storageDir && strpos($dir, $storageDir) === 0;
+    }
+
+    /**
      * Saves content to a markdown file.
      *
      * @param string $content  The markdown content to save.
@@ -91,21 +111,17 @@ class FileService
      */
     public static function getSaeDescription(string $filename): string
     {
-        if (empty($filename) || preg_match('#\.\.|/|\\\\#', $filename)) {
-            throw new Exception("Nom de fichier invalide.");
-        }
-
         $fullPath = realpath(self::STORAGE_DIR) . '/' . $filename;
 
-        if (!is_file($fullPath)) {
-            throw new Exception("Fichier non trouvé.");
+        if (is_file($fullPath)) {
+            $content = file_get_contents($fullPath);
+        } else {
+            $content = "";
         }
-
-        $content = file_get_contents($fullPath);
-        if ($content === false) {
-            throw new Exception("Impossible de lire le fichier de description.");
-        }
-        return $content;
+        // A if ($content === false) {.
+        // A throw new Exception("Impossible de lire le fichier de description.");.
+        // A }.
+        return $content ? $content : '';
     }
 
     /**
@@ -125,8 +141,12 @@ class FileService
 
         $fullPath = realpath(self::STORAGE_DIR) . '/' . $filename;
 
-        if (!is_file($fullPath)) {
+        if (!self::isPathSafe($fullPath)) {
             throw new Exception("Fichier non trouvé ou accès refusé.");
+        }
+
+        if (!is_file($fullPath)) {
+            // Not found.
         }
 
         if (file_put_contents($fullPath, $content) === false) {

@@ -8,6 +8,13 @@ use Models\SAE\SAE;
 use Models\User\Client;
 use Override;
 use Views\SAE\ModifySaeView;
+use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
+use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\Repository\SAE\PdoSAEGroupRepository;
+use Models\Repository\SAE\PdoParticipatedInRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoClientRepository;
 
 /**
  * Controller for displaying the SAE modification form.
@@ -39,52 +46,57 @@ class ModifySaeController extends BaseController
      * Verifies permissions, fetches SAE data and available clients,
      * and renders the modification view.
      *
+     * @param integer $saeId The SAE ID.
+     *
      * @return void
      * @throws \Exception If the SAE is not found or an error occurs during data retrieval.
      */
-    #[Override]
-    public function control(): void
+    public function control(int $saeId = 0): void
     {
         $this->ensureProfessor();
 
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        if (!is_string($path)) {
-            $path = '';
-        }
-
-        if (preg_match('/^\/sae\/(\d+)\/modify$/', $path, $matches)) {
-            $saeId = intval($matches[1]);
-        } else {
-            header('Location: /dashboard');
-            exit;
-        }
-
-        if (!$this->user->canManageSAE($saeId)) {
-            SessionService::setFlash('errors', ["Vous n'avez pas la permission de modifier cette SAE."]);
-            header('Location: /sae/' . $saeId);
-            exit;
-        }
-
         try {
-            $sae = SAE::getInstance();
+            $useCase = new GetCompleteSAEDataUseCase(
+                new PdoSAESubjectRepository(),
+                new PdoSAEGroupRepository(),
+                new PdoParticipatedInRepository(),
+                new PdoStudentRepository(),
+                new PdoProfessorRepository(),
+                new PdoClientRepository()
+            );
 
             // Retrieve complete SAE data.
-            $saeData = $sae->getCompleteSAEData($saeId, $this->user);
+            $saeData = $useCase->execute($saeId, $this->user);
 
             if (!$saeData) {
-                throw new \Exception("SAE non trouvée");
+                throw new \Exception("SAE non trouvée ou accès refusé.");
+            }
+
+            $subject = $saeData['subject'];
+            if ($subject->getResponsibleProfId() !== $this->user->getUserId()) {
+                SessionService::setFlash('errors', ["Vous n'avez pas la permission de modifier cette SAE."]);
+                header('Location: /sae/' . $saeId);
+                exit;
             }
 
             // Retrieve the list of clients.
-            $clients = Client::getAllClients();
+            $clientRepo = new PdoClientRepository();
+            $clients = array_map(function ($client) {
+                return [
+                    'user_id' => $client->getUserId(),
+                    'first_name' => $client->getFirstName(),
+                    'last_name' => $client->getLastName(),
+                    'organisation' => $client->getOrganisation()
+                ];
+            }, $clientRepo->findAll());
 
             // Pass data to the view.
-            $view = new ModifySaeView([
-                'sae' => $saeData,
-                'clients' => $clients,
-                'user' => $this->user,
-                'csrf_token' => SessionService::generateCsrfToken()
-            ]);
+            $view = new ModifySaeView(
+                $saeData,
+                $clients,
+                $this->user,
+                SessionService::generateCsrfToken()
+            );
 
             $view->render();
         } catch (\Exception $e) {

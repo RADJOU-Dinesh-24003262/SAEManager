@@ -44,7 +44,7 @@
     "test-coverage": "phpunit --coverage-html coverage",
     "phpcs": "phpcs --standard=PSR12 App/src/",
     "phpcbf": "phpcbf --standard=PSR12 App/src/",
-    "phpstan": "phpstan analyse App/src/ --level=8",
+    "phpstan": "phpstan analyse App/src/ Core/ --level=8",
     "phpdoc": [
       "vendor/bin/phpdoc run --directory=App/src --target=docs/api --ignore='vendor/*,tests/*' --title='SAE Manager API Documentation' --template=default --force"
     ],

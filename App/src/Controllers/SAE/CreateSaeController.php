@@ -4,7 +4,7 @@ namespace Controllers\SAE;
 
 use Controllers\BaseController;
 use Exception;
-use Models\User\Client;
+use Models\Repository\User\PdoClientRepository;
 use Override;
 use Views\SAE\CreateSaeView;
 
@@ -26,12 +26,12 @@ class CreateSaeController extends BaseController
      * @return void
      * @throws Exception If an unknown user is encountered.
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureProfessor();
 
-        $clients = Client::getAllClients();
+        $clientInterface = new PdoClientRepository();
+        $clients = $clientInterface->findAll();
 
         $view = new CreateSaeView(['clients' => $clients]);
         $view->render();

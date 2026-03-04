@@ -64,7 +64,7 @@ class LegalNoticeView extends AbstractView
     #[Override]
     protected function getPageTitle(): string
     {
-        return 'Mentions Légales - SA EManager';
+        return 'Mentions Légales - SAE Manager';
     }
 
     /**

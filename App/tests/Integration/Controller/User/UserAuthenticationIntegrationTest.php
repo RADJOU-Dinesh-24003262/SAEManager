@@ -4,10 +4,10 @@ namespace tests\Integration\Controller\User;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Controllers\User\LoginPost;
-use Controllers\User\RegisterPost;
+use Controllers\User\LoginPostController;
+use Controllers\User\RegisterPostController;
 use Core\Utilis\SessionService;
-use Models\User\User;
+use Models\Entity\User\User;
 
 /**
  * Integration tests for user authentication flow
@@ -28,8 +28,8 @@ use Models\User\User;
  *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-#[CoversClass(LoginPost::class)]
-#[CoversClass(RegisterPost::class)]
+#[CoversClass(LoginPostController::class)]
+#[CoversClass(RegisterPostController::class)]
 #[CoversClass(User::class)]
 #[CoversClass(SessionService::class)]
 #[RunInSeparateProcess]
