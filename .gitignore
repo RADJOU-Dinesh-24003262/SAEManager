@@ -1,6 +1,6 @@
 .phpdoc*
 *.idea
-Core/includes/my_settings.ini
+App/config/my_settings.ini
 *.ini
 *.lock
 /vendor
@@ -19,3 +19,5 @@ package-lock.json
 docs/*
 build/*
 *.log
+mettre en place des tranasctions sur BD.md
+asset/SQL_script/Database.sql

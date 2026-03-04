@@ -34,7 +34,6 @@ class SettingsController extends BaseController
      *
      * @return void
      */
-    #[Override]
     public function control(): void
     {
         $this->ensureAuthenticated();
