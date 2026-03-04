@@ -1,21 +1,21 @@
-<div class="presentation_SAE">
-    <h1 class="num_resource">{{SAE_NUM}}</h1>
-    <h1>Modifier : {{SAE_NAME}}</h1>
-</div>
 
-<article class="main_functionnality">
+<main class="main_functionnality">
+    <section class="presentation_SAE">
+        <h1 class="num_resource">{{SAE_NUM}}</h1>
 
-    <div class="bloc_to_put">
-        <article>
-            <h2>Modifier la SAE</h2>
+        <h1>{{SAE_NAME}}</h1>
+        <br>
+    </section>
+    <article class="bloc_to_put">
+        <h2>Modifier la SAE</h2>
 
-            {{error_messages}}
-            {{success_message}}
+        {{error_messages}}
+        {{success_message}}
 
-            <form action="/sae/{{sae_id}}/modify" method="post" autocomplete="off" class="sae-form">
-                <input type="hidden" name="csrf_token" value="{{csrf_token}}">
-                <fieldset class="form-section">
-                    <legend>Informations Générales</legend>
+        <form action="/sae/{{sae_id}}/modify" method="post" autocomplete="off" class="sae-form">
+            <input type="hidden" name="csrf_token" value="{{csrf_token}}">
+            <fieldset class="form-section">
+                <legend>Informations Générales</legend>
 
                     <div class="form-group">
                         <label for="name">Nom du sujet <span class="required">*</span></label>
@@ -24,43 +24,42 @@
                                minlength="3" maxlength="255" class="form-control">
                     </div>
 
-                    <div class="form-group">
-                        <label for="client_id">Client commanditaire</label>
-                        <select id="client_id" name="client_id" class="form-control">
-                            {{clients_options}}
-                        </select>
-                    </div>
-                </fieldset>
+                <div class="form-group">
+                    <label for="client_id">Client commanditaire</label>
+                    <select id="client_id" name="client_id" class="form-control">
+                        {{clients_options}}
+                    </select>
+                </div>
+            </fieldset>
 
-                <fieldset class="form-section">
-                    <legend>Planning & Ressources</legend>
+            <fieldset class="form-section">
+                <legend>Planning & Ressources</legend>
 
-                    <div class="form-row">
-                        <div class="form-group half-width">
-                            <label for="begin_date">Date de début <span class="required">*</span></label>
-                            <input required type="date" id="begin_date" name="begin_date"
-                                   value="{{begin_date}}" class="form-control">
-                        </div>
-
-                        <div class="form-group half-width">
-                            <label for="end_date">Date de rendu <span class="required">*</span></label>
-                            <input required type="date" id="end_date" name="end_date"
-                                   value="{{end_date}}" class="form-control">
-                        </div>
+                <div class="form-row">
+                    <div class="form-group half-width">
+                        <label for="begin_date">Date de début <span class="required">*</span></label>
+                        <input required type="date" id="begin_date" name="begin_date"
+                               value="{{begin_date}}" class="form-control">
                     </div>
 
-                    <div class="form-group">
-                        <label for="description">Description (Markdown) <span class="required">*</span></label>
-                        <textarea required id="description" name="description"
-                                  rows="10" class="form-control">{{description}}</textarea>
+                    <div class="form-group half-width">
+                        <label for="end_date">Date de rendu <span class="required">*</span></label>
+                        <input required type="date" id="end_date" name="end_date"
+                               value="{{end_date}}" class="form-control">
                     </div>
-                </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description (Markdown) <span class="required">*</span></label>
+                    <textarea required id="description" name="description"
+                              rows="10" class="form-control">{{description}}</textarea>
+                </div>
+            </fieldset>
 
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Enregistrer les modifications</button>
                     <a href="/sae/{{sae_id}}" class="btn-secondary">Annuler</a>
                 </div>
             </form>
-        </article>
-    </div>
-</article>
+    </article>
+</main>
