@@ -2,9 +2,9 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use Core\includes\exception\ExceptionSpam;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Includes\Exception\ExceptionSpam;
+use Core\Utils\SessionService;
 use Override;
 
 /**

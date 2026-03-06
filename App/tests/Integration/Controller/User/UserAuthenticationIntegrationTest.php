@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Controllers\Login\LoginPostController;
 use Controllers\Register\RegisterPostController;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Models\Entity\User\User;
 
 /**

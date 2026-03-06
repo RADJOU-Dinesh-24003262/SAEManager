@@ -10,13 +10,13 @@ use Validator\FormValidator;
 use Validator\LoginValidator;
 use Validator\ResetPasswordValidator;
 use Validator\ForgotPasswordValidator;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use Core\includes\exception\ExceptionSpam;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Includes\Exception\ExceptionSpam;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\Utils\SessionService;
 
 /**
  * Tests complets pour tous les validateurs

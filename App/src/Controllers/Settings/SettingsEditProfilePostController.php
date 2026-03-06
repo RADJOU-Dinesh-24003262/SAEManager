@@ -3,7 +3,7 @@
 namespace Controllers\Settings;
 
 use Controllers\BaseController;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\UpdateProfileUseCase;

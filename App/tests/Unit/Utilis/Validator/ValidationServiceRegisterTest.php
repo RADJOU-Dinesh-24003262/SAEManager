@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Validator\ValidationServiceRegister;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegister;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 
 /**
  * Unit tests for ValidationServiceRegister

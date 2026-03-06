@@ -7,7 +7,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Validator\FormSaeValidator;
 use Validator\FormValidator;
-use Core\includes\exception\ExceptionValidation\ExeptionValidationSAECreation;
+use Core\Includes\Exception\ExceptionValidation\ExeptionValidationSAECreation;
 
 #[CoversClass(FormSaeValidator::class)]
 #[CoversClass(FormValidator::class)]

@@ -3,10 +3,10 @@
 namespace Controllers\Sae;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionDashboard;
-use Core\includes\exception\SAE\ExceptionAccessDenied;
-use Core\includes\exception\SAE\ExceptionSAE;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionDashboard;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionSAE;
+use Core\Utils\SessionService;
 use Exception;
 use Models\Repository\SAE\PdoParticipatedInRepository;
 use Models\Repository\SAE\PdoSAEGroupRepository;
@@ -15,7 +15,7 @@ use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoProfessorRepository;
 use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
-use Views\PageSAE\PageSaeView;
+use Views\Sae\PageSaeView;
 use Override;
 
 /**

@@ -3,12 +3,12 @@
 namespace Controllers\ForgotPassword;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
-use Core\includes\exception\ExceptionSpam;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionSpam;
+use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ProcessForgotPasswordUseCase;
@@ -16,7 +16,7 @@ use Override;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
 use Validator\ForgotPasswordValidator;
-use Views\pwd\ForgotPasswordView;
+use Views\Password\ForgotPasswordView;
 
 /**
  * Handles the POST request to the "/forgot-password" route.

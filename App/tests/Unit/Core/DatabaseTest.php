@@ -8,7 +8,7 @@ use PDOStatement;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\includes\Database;
+use Core\Includes\Database;
 
 /**
  * Unit tests for Database class

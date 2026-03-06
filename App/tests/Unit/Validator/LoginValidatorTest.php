@@ -9,9 +9,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use Validator\LoginValidator;
 use Validator\FormValidator;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 
 /**
  * Unit tests for LoginValidator

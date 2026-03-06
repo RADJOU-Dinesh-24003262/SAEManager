@@ -2,14 +2,14 @@
 
 namespace Models\UseCase\SAE;
 
-use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Models\Entity\User\Professor;
-use Models\Repository\SAE\PdoParticipatedInRepository;
-use Models\Repository\SAE\PdoSAEGroupRepository;
-use Models\Repository\SAE\PdoSAESubjectRepository;
-use Models\Repository\User\PdoClientRepository;
-use Models\Repository\User\PdoProfessorRepository;
-use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
+use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
+use Models\UseCase\User\InterfaceDB\ClientInterface;
+use Models\UseCase\User\InterfaceDB\ProfessorInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\Entity\User\User;
 
 /**
@@ -27,62 +27,62 @@ class GetManageGroupsDataUseCase
     /**
      * The SAE subject repository.
      *
-     * @var PdoSAESubjectRepository
+     * @var SAESubjectInterface
      */
-    private PdoSAESubjectRepository $subjectRepo;
+    private SAESubjectInterface $subjectRepo;
 
     /**
      * The SAE group repository.
      *
-     * @var PdoSAEGroupRepository
+     * @var SAEGroupInterface
      */
-    private PdoSAEGroupRepository $groupRepo;
+    private SAEGroupInterface $groupRepo;
 
     /**
      * The repository linking students to groups.
      *
-     * @var PdoParticipatedInRepository
+     * @var ParticipatedInInterface
      */
-    private PdoParticipatedInRepository $participatedInRepo;
+    private ParticipatedInInterface $participatedInRepo;
 
     /**
      * The student repository.
      *
-     * @var PdoStudentRepository
+     * @var StudentInterface
      */
-    private PdoStudentRepository $studentRepo;
+    private StudentInterface $studentRepo;
 
     /**
      * The professor repository.
      *
-     * @var PdoProfessorRepository
+     * @var ProfessorInterface
      */
-    private PdoProfessorRepository $professorRepo;
+    private ProfessorInterface $professorRepo;
 
     /**
      * The client repository.
      *
-     * @var PdoClientRepository
+     * @var ClientInterface
      */
-    private PdoClientRepository $clientRepo;
+    private ClientInterface $clientRepo;
 
     /**
      * Constructor.
      *
-     * @param PdoSAESubjectRepository     $subjectRepo        Repo for subjects.
-     * @param PdoSAEGroupRepository       $groupRepo          Repo for groups.
-     * @param PdoParticipatedInRepository $participatedInRepo Repo for student participations.
-     * @param PdoStudentRepository        $studentRepo        Repo for students.
-     * @param PdoProfessorRepository      $professorRepo      Repo for professors.
-     * @param PdoClientRepository         $clientRepo         Repo for clients.
+     * @param SAESubjectInterface     $subjectRepo        Repo for subjects.
+     * @param SAEGroupInterface       $groupRepo          Repo for groups.
+     * @param ParticipatedInInterface $participatedInRepo Repo for student participations.
+     * @param StudentInterface        $studentRepo        Repo for students.
+     * @param ProfessorInterface      $professorRepo      Repo for professors.
+     * @param ClientInterface         $clientRepo         Repo for clients.
      */
     public function __construct(
-        PdoSAESubjectRepository $subjectRepo,
-        PdoSAEGroupRepository $groupRepo,
-        PdoParticipatedInRepository $participatedInRepo,
-        PdoStudentRepository $studentRepo,
-        PdoProfessorRepository $professorRepo,
-        PdoClientRepository $clientRepo
+        SAESubjectInterface $subjectRepo,
+        SAEGroupInterface $groupRepo,
+        ParticipatedInInterface $participatedInRepo,
+        StudentInterface $studentRepo,
+        ProfessorInterface $professorRepo,
+        ClientInterface $clientRepo
     ) {
         $this->subjectRepo = $subjectRepo;
         $this->groupRepo = $groupRepo;

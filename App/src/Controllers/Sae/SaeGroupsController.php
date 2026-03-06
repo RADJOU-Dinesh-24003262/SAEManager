@@ -3,8 +3,8 @@
 namespace Controllers\Sae;
 
 use Controllers\BaseController;
-use Core\includes\exception\SAE\ExceptionAccessDenied;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
+use Core\Utils\SessionService;
 use Models\Entity\User\Professor;
 use Models\Repository\SAE\PdoParticipatedInRepository;
 use Models\Repository\SAE\PdoSAEGroupRepository;

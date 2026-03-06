@@ -2,8 +2,8 @@
 
 namespace Services\Auth;
 
-use Core\includes\exception\ExceptionEmailSendingFailed;
-use Core\Utilis\EmailService;
+use Core\Includes\Exception\ExceptionEmailSendingFailed;
+use Core\Utils\EmailService;
 
 /**
  * Service responsible for sending password reset emails for SAE Manager.

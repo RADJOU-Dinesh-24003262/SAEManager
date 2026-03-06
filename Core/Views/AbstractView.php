@@ -2,7 +2,7 @@
 
 namespace Core\Views;
 
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Exception;
 
 /**

@@ -6,10 +6,10 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Services\TokenService;
-use Core\Utilis\SessionService;
-use Core\includes\Database;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\Utils\SessionService;
+use Core\Includes\Database;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
 
 /**
  * Integration Test for TokenService

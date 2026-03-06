@@ -3,11 +3,11 @@
 namespace Controllers\Register;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
-use Core\Utilis\Logger;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
+use Core\Utils\Logger;
+use Core\Utils\SessionService;
 use Exception;
 use Models\Entity\User\User;
 use Models\Repository\User\{PdoStudentRepository, PdoProfessorRepository, PdoClientRepository};

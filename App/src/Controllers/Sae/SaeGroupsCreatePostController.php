@@ -3,7 +3,7 @@
 namespace Controllers\Sae;
 
 use Controllers\BaseController;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Models\Repository\SAE\PdoSAEGroupRepository;
 use Models\Repository\SAE\PdoSAESubjectRepository;
 use Models\UseCase\SAE\CreateSAEGroupUseCase;
