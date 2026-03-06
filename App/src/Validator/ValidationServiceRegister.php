@@ -69,7 +69,8 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister(
                 "password",
                 "string",
-                "Mot de passe trop court (min 8 caractères)."
+                "Obligation de 12 caractères minimum avec une majuscule, une minuscule, 
+                            un chiffre et un caractère spéciale pour le mot de passe."
             );
         }
 
