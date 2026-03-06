@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Validator;
+namespace Tests\Unit\Validator\Login;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
-use Validator\LoginValidator;
+use Validator\Login\LoginValidator;
 use Validator\FormValidator;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
@@ -158,34 +158,34 @@ class LoginValidatorTest extends TestCase
         $this->assertStringContainsString('&lt;', $escaped['email']);
         $this->assertStringContainsString('&lt;', $escaped['password']);
         $this->assertStringNotContainsString('<script>', $escaped['email']);
-        $this->assertStringNotContainsString('<b>', $escaped['password']);
+            $this -> assertStringNotContainsString('<b>', $escaped['password']);
     }
 
     #[Test]
     public function validatorDoesNotCheckPasswordStrength(): void
     {
-        $this->expectNotToPerformAssertions();
+        $this -> expectNotToPerformAssertions();
 
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
             'password' => '123' // Short password, but login doesn't check strength
         ];
 
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
+        $escaped = $this -> validator -> escape($data);
+        $this -> validator -> validate($escaped);
     }
 
     #[Test]
     public function validatorHasCorrectRequiredFields(): void
     {
-        $reflection = new ReflectionClass($this->validator);
-        $property = $reflection->getProperty('required');
-        $property->setAccessible(true);
-        $required = $property->getValue($this->validator);
+        $reflection = new ReflectionClass($this -> validator);
+        $property = $reflection -> getProperty('required');
+        $property -> setAccessible(true);
+        $required = $property -> getValue($this -> validator);
 
-        $this->assertContains('email', $required);
-        $this->assertContains('password', $required);
-        $this->assertCount(2, $required);
+        $this -> assertContains('email', $required);
+        $this -> assertContains('password', $required);
+        $this -> assertCount(2, $required);
     }
 
     #[Test]
@@ -197,14 +197,14 @@ class LoginValidatorTest extends TestCase
                 'password' => 'password'
             ];
 
-            $escaped = $this->validator->escape($data);
-            $this->validator->validate($escaped);
+            $escaped = $this -> validator -> escape($data);
+            $this -> validator -> validate($escaped);
 
-            $this->fail('Should have thrown exception');
+            $this -> fail('Should have thrown exception');
         } catch (ExceptionValidationLogin $e) {
-            $message = $e->getAdditionalInfo();
-            $this->assertNotEmpty($message);
-            $this->assertIsString($message);
+            $message = $e -> getAdditionalInfo();
+            $this -> assertNotEmpty($message);
+            $this -> assertIsString($message);
         }
     }
 
@@ -216,23 +216,23 @@ class LoginValidatorTest extends TestCase
             'password' => '  password with spaces  '
         ];
 
-        $escaped = $this->validator->escape($data);
+        $escaped = $this -> validator -> escape($data);
 
         // Escape should not trim password
-        $this->assertEquals('  password with spaces  ', $escaped['password']);
+        $this -> assertEquals('  password with spaces  ', $escaped['password']);
     }
 
     #[Test]
     public function emailIsCaseInsensitiveInValidation(): void
     {
-        $this->expectNotToPerformAssertions();
+        $this -> expectNotToPerformAssertions();
 
         $data = [
             'email' => 'Jean.Dupont@ETU.UNIV-AMU.FR',
             'password' => 'password'
         ];
 
-        $escaped = $this->validator->escape($data);
-        $this->validator->validate($escaped);
+        $escaped = $this -> validator -> escape($data);
+        $this -> validator -> validate($escaped);
     }
 }

@@ -1,9 +1,10 @@
 <?php
 
-namespace Validator;
+namespace Validator\ResetPassword;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Override;
+use Validator\FormValidator;
 
 /**
  * Class ResetPasswordValidator

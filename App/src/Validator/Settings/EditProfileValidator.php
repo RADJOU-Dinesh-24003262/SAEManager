@@ -1,6 +1,6 @@
 <?php
 
-namespace Validator;
+namespace Validator\Settings;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegister;
 use Override;

@@ -15,7 +15,7 @@ use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
-use Validator\ValidationServiceRegister;
+use Validator\Register\ValidationServiceRegister;
 use Views\User\RegisterSuccessView;
 use Views\User\RegisterView;
 

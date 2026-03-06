@@ -12,7 +12,7 @@ use Models\SAE\SAE;
 use Models\UseCase\SAE\ModifySAEUseCase;
 use Override;
 use Services\FileService;
-use Validator\FormSaeValidator;
+use Validator\Sae\FormSaeValidator;
 
 /**
  * This class controls the modification of an SAE via POST request.

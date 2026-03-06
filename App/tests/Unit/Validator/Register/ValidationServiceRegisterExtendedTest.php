@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Unit\Validator;
+namespace Tests\Unit\Validator\Register;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Validator\ValidationServiceRegister;
+use Validator\Register\ValidationServiceRegister;
 use Validator\FormValidator;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
@@ -339,38 +339,38 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     {
         $data = [
             'amu_id' => 'test<script>',
-            'first_name' => 'Jean<b>Bold</b>',
-            'last_name' => 'Dupont',
-            'user_type' => 'student',
-            'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
-            'phone' => '0612345678',
-            'year' => '1',
-            'td' => 'TD1',
-            'tp' => 'TPA',
-            'terms' => 'on'
+                'first_name' => 'Jean<b>Bold</b>',
+                    'last_name' => 'Dupont',
+                        'user_type' => 'student',
+                            'email' => 'jean.dupont@etu.univ-amu.fr',
+                                'password' => 'SecurePass123',
+                                    'passwordverif' => 'SecurePass123',
+                                        'phone' => '0612345678',
+                                            'year' => '1',
+                                                'td' => 'TD1',
+                                                    'tp' => 'TPA',
+                                                        'terms' => 'on'
         ];
 
-        $escaped = $this->validator->escape($data);
-        $this->assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
-        $this->assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
+                $escaped = $this -> validator -> escape($data);
+                $this -> assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
+                $this -> assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
     }
 
     #[Test]
     public function missingRequiredFieldThrowsException(): void
     {
-        $this->expectException(ExceptionValidationEmptys::class);
+        $this -> expectException(ExceptionValidationEmptys:: class);
 
         $data = [
             'amu_id' => '',
             'first_name' => 'Jean'
         ];
 
-        $this->validator->escape($data);
+        $this -> validator -> escape($data);
     }
 
-    // Helper methods
+                // Helper methods
     private function getValidStudentData(): array
     {
         return [

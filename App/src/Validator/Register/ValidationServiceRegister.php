@@ -1,10 +1,11 @@
 <?php
 
-namespace Validator;
+namespace Validator\Register;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegister;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
 use Override;
+use Validator\FormValidator;
 
 /**
  * Class ValidationServiceRegister

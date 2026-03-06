@@ -9,7 +9,7 @@ use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\UpdateProfileUseCase;
 use Override;
 use PDOException;
-use Validator\EditProfileValidator;
+use Validator\Settings\EditProfileValidator;
 use Views\Settings\EditProfileSuccessView;
 
 /**

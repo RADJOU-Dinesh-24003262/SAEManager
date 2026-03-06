@@ -1,11 +1,11 @@
 <?php
 
-namespace tests\Unit\Utilis\Validator;
+namespace Tests\Unit\Validator\Register;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Validator\ValidationServiceRegister;
+use Validator\Register\ValidationServiceRegister;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegister;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
