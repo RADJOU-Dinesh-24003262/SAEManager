@@ -14,7 +14,7 @@ use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ResetPasswordUseCase;
 use Override;
 use Services\TokenService;
-use Validator\ResetPasswordValidator;
+use Validator\ResetPassword\ResetPasswordValidator;
 use Views\Password\ResetPasswordSuccessView;
 use Views\Password\ResetPasswordView;
 

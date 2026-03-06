@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit\Validator;
+namespace Tests\Unit\Validator\Sae;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Validator\FormSaeValidator;
+use Validator\Sae\FormSaeValidator;
 use Validator\FormValidator;
 use Core\Includes\Exception\ExceptionValidation\ExeptionValidationSAECreation;
 

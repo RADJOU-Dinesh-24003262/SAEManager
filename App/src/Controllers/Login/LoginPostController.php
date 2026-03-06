@@ -12,7 +12,7 @@ use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\LoginUseCase;
 use Override;
-use Validator\LoginValidator;
+use Validator\Login\LoginValidator;
 use Views\User\LoginView;
 
 /**

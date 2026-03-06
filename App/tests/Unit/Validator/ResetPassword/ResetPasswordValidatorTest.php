@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit\Validator;
+namespace Tests\Unit\Validator\ResetPassword;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
-use Validator\ResetPasswordValidator;
+use Validator\ResetPassword\ResetPasswordValidator;
 use Validator\FormValidator;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
@@ -179,13 +179,13 @@ class ResetPasswordValidatorTest extends TestCase
                 'pwdverif' => 'short'
             ];
 
-            $escaped = $this->validator->escape($data);
-            $this->validator->validate($escaped);
+            $escaped = $this -> validator -> escape($data);
+            $this -> validator -> validate($escaped);
 
-            $this->fail('Should have thrown exception');
+            $this -> fail('Should have thrown exception');
         } catch (ExceptionValidationResetPassword $e) {
-            $this->assertEquals('pwdnew', $e->getField());
-            $this->assertNotEmpty($e->getAdditionalInfo());
+            $this -> assertEquals('pwdnew', $e -> getField());
+            $this -> assertNotEmpty($e -> getAdditionalInfo());
         }
     }
 
@@ -198,26 +198,26 @@ class ResetPasswordValidatorTest extends TestCase
                 'pwdverif' => 'DifferentPassword456'
             ];
 
-            $escaped = $this->validator->escape($data);
-            $this->validator->validate($escaped);
+            $escaped = $this -> validator -> escape($data);
+            $this -> validator -> validate($escaped);
 
-            $this->fail('Should have thrown exception');
+            $this -> fail('Should have thrown exception');
         } catch (ExceptionValidationResetPassword $e) {
-            $this->assertEquals('pwdverif', $e->getField());
-            $this->assertStringContainsString('correspondent', $e->getAdditionalInfo());
+            $this -> assertEquals('pwdverif', $e -> getField());
+            $this -> assertStringContainsString('correspondent', $e -> getAdditionalInfo());
         }
     }
 
     #[Test]
     public function validatorHasCorrectRequiredFields(): void
     {
-        $reflection = new ReflectionClass($this->validator);
-        $property = $reflection->getProperty('required');
-        $property->setAccessible(true);
-        $required = $property->getValue($this->validator);
+        $reflection = new ReflectionClass($this -> validator);
+        $property = $reflection -> getProperty('required');
+        $property -> setAccessible(true);
+        $required = $property -> getValue($this -> validator);
 
-        $this->assertContains('pwdnew', $required);
-        $this->assertContains('pwdverif', $required);
-        $this->assertCount(2, $required);
+        $this -> assertContains('pwdnew', $required);
+        $this -> assertContains('pwdverif', $required);
+        $this -> assertCount(2, $required);
     }
 }

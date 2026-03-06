@@ -1,9 +1,10 @@
 <?php
 
-namespace Validator;
+namespace Validator\Login;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Override;
+use Validator\FormValidator;
 
 /**
  * Class LoginValidator

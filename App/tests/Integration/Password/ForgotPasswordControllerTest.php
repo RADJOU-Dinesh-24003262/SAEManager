@@ -20,7 +20,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Validator\ForgotPasswordValidator;
+use Validator\ForgotPassword\ForgotPasswordValidator;
 
 /**
  * Integration tests for Forgot Password functionality

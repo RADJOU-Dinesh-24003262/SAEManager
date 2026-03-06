@@ -1,9 +1,10 @@
 <?php
 
-namespace Validator;
+namespace Validator\ForgotPassword;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\Includes\Exception\ExceptionSpam;
+use Validator\FormValidator;
 use Core\Utils\SessionService;
 use Override;
 

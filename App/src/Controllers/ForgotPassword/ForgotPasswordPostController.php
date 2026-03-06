@@ -15,7 +15,7 @@ use Models\UseCase\User\ProcessForgotPasswordUseCase;
 use Override;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
-use Validator\ForgotPasswordValidator;
+use Validator\ForgotPassword\ForgotPasswordValidator;
 use Views\Password\ForgotPasswordView;
 
 /**
