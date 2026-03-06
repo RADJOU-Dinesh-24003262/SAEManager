@@ -7,6 +7,7 @@ use Core\includes\exception\ExceptionPasswordUpdateFailed;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -53,6 +54,8 @@ class ResetPasswordPostController extends BaseController
 
             (new ResetPasswordSuccessView())->render();
             error_log("Mot de passe réinitialisé avec succès pour: " . $email);
+            Logger::log('Password Reset successfully', "Mot de passe reinitialisé : " . $this->user->getEmail(), $this->user->getUserId());
+
             return;
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', [$e->getMessage()]);

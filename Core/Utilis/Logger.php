@@ -21,6 +21,7 @@ class Logger
     private const LOG_DIR = __DIR__ . '/../../logs/';
     private const SECURITY_LOG = self::LOG_DIR . 'security.log';
     private const MAIL_LOG = self::LOG_DIR . 'mail.log';
+    private const SAE_LOG = self::LOG_DIR . 'sae.log';
 
     /**
      * Log a security event.
@@ -53,6 +54,9 @@ class Logger
         $targetFile = self::SECURITY_LOG;
         if (str_starts_with($action, 'MAIL_')) {
             $targetFile = self::MAIL_LOG;
+        }
+        if (str_starts_with($action, 'SAE_')) {
+            $targetFile = self::SAE_LOG;
         }
 
         // Ensure directory exists.

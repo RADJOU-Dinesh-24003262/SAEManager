@@ -8,6 +8,7 @@ use Core\includes\exception\ExceptionSpam;
 use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\includes\exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -63,6 +64,7 @@ class ForgotPasswordPostController extends BaseController
             $email = trim($data['email'] ?? '');
 
             error_log("Demande réinitialisation pour: {$email}");
+            Logger::log('Password Reset query', "Demande de changement de mot de passe : " . $this->user->getEmail(), $this->user->getUserId());
 
             $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
             $processForgotPasswordUseCase->execute($email);

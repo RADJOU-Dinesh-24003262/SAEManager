@@ -3,6 +3,7 @@
 namespace Controllers\Settings;
 
 use Controllers\BaseController;
+use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -55,6 +56,7 @@ class DeleteUserController extends BaseController
 
             $view = new DeleteUserView($data);
             $view->render();
+            Logger::log('User deleted', "Compte supprimé : " . $this->user->getEmail(), $this->user->getUserId());
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage());
         }

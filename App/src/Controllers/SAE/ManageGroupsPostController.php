@@ -3,6 +3,7 @@
 namespace Controllers\SAE;
 
 use Controllers\BaseController;
+use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Models\Repository\SAE\PdoParticipatedInRepository;
 use Models\Repository\SAE\PdoSAEGroupRepository;
@@ -76,6 +77,8 @@ class ManageGroupsPostController extends BaseController
         $useCase->execute($this->user, $saeId, $professorId);
 
         $this->redirectWithSuccess($saeId, 'Groupe créé avec succès.');
+        Logger::log('SAE_Group_Creation_failure', "Success de la création d'un groupe de SAE" . $this->user->getEmail(), $this->user->getUserId());
+
     }
 
     /**
@@ -100,6 +103,8 @@ class ManageGroupsPostController extends BaseController
         $useCase->execute($this->user, $groupId);
 
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
+        Logger::log('SAE_Group_Deletion_failure', "Success de la suppression d'un groupe de SAE" . $this->user->getEmail(), $this->user->getUserId());
+
     }
 
     /**
@@ -126,6 +131,8 @@ class ManageGroupsPostController extends BaseController
         $useCase->execute($this->user, $studentId, $groupId);
 
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
+        Logger::log('SAE_Group_Student_Added', "Success de l'ajout d'un utilisateur au groupe de SAE" . $this->user->getEmail(), $this->user->getUserId());
+
     }
 
     /**
@@ -152,6 +159,8 @@ class ManageGroupsPostController extends BaseController
         $useCase->execute($this->user, $studentId, $groupId);
 
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');
+        Logger::log('SAE_Group_Student_Removed', "Success de la suppression d'un utilisateur au groupe de SAE" . $this->user->getEmail(), $this->user->getUserId());
+
     }
 
     /**
