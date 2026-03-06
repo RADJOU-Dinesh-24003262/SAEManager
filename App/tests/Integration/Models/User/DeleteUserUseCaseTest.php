@@ -9,7 +9,7 @@ use Models\UseCase\User\DeleteUserUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\includes\Database;
+use Core\Includes\Database;
 use ReflectionClass;
 use Models\Entity\User\Student;
 

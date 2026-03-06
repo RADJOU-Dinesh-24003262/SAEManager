@@ -14,7 +14,7 @@ use Models\Entity\User\User;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Student;
 use Models\Entity\User\Client;
-use Core\includes\Database;
+use Core\Includes\Database;
 use Core\Models\Repository\BaseRepository;
 use Models\Repository\SAE\PdoSAEGroupRepository;
 use Models\Repository\SAE\PdoSAESubjectRepository;

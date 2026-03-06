@@ -12,10 +12,10 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
 use Models\UseCase\ToDoList\DeleteTaskUseCase;
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationToDoList;
-use Core\includes\exception\SAE\ExceptionAccessDenied;
-use Core\Utilis\Logger;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationToDoList;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
+use Core\Utils\Logger;
+use Core\Utils\SessionService;
 use Exception;
 use Override;
 

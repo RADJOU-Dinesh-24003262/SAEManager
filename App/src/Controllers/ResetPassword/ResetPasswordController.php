@@ -3,10 +3,10 @@
 namespace Controllers\ResetPassword;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Utils\SessionService;
 use Services\TokenService;
-use Views\pwd\ResetPasswordView;
+use Views\Password\ResetPasswordView;
 
 /**
  * This class controls the reset password process (get).

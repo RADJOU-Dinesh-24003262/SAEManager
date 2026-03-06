@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationRegister;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegister;
 use Override;
 use Validator\FormValidator;
 

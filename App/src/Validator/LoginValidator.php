@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Override;
 
 /**

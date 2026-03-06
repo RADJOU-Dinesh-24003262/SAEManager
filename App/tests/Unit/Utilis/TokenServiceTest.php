@@ -7,8 +7,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Services\TokenService;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
 
 /**
  * Complete unit tests for TokenService

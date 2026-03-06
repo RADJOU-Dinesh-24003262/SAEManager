@@ -3,8 +3,8 @@
 namespace Controllers\Sae;
 
 use Controllers\BaseController;
-use Core\includes\exception\SAE\ExceptionAccessDenied;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
+use Core\Utils\SessionService;
 use Models\SAE\SAE;
 use Override;
 use Services\FileService;

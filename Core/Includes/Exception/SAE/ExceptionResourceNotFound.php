@@ -1,0 +1,17 @@
+<?php
+
+namespace Core\Includes\Exception\SAE;
+
+/**
+ * Thrown when a requested resource (SAE, Group, etc.) cannot be found in the database.
+ *
+ * @category Exception
+ * @package  Core
+ * @subpackage Includes/exception/SAE
+ * @author   Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
+ * @license  MIT License https://opensource.org/licenses/MIT
+ * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
+ */
+class ExceptionResourceNotFound extends ExceptionSAE
+{
+}

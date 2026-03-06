@@ -25,7 +25,7 @@
   "autoload": {
     "psr-4": {
       "Core\\": "Core/",
-      "Utilis\\": "Core/Utilis/",
+      "Utils\\": "Core/Utils/",
       "Controllers\\": "App/src/Controllers/",
       "Models\\": "App/src/Models/",
       "Views\\": "App/src/Views/",

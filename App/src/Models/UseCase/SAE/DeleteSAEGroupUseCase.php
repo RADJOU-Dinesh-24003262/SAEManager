@@ -2,8 +2,8 @@
 
 namespace Models\UseCase\SAE;
 
-use Core\includes\exception\SAE\ExceptionAccessDenied;
-use Core\includes\exception\SAE\ExceptionResourceNotFound;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionResourceNotFound;
 use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Models\Entity\User\User;

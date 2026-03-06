@@ -3,11 +3,11 @@
 namespace Controllers;
 
 use Core\Controllers\ControllerInterface;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
-use Core\Utilis\Logger;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Core\Utils\Logger;
+use Core\Utils\SessionService;
 use Models\Entity\User\User;
-use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 
 /**
  * Abstract BaseController to handle common controller logic like authentication.

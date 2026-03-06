@@ -2,7 +2,7 @@
 
 namespace Services;
 
-use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Exception;
 use PDOException;
 
@@ -22,16 +22,16 @@ use PDOException;
 class SAESubjectFileService
 {
     /**
-     * @var PdoSAESubjectRepository
+     * @var SAESubjectInterface
      */
-    private PdoSAESubjectRepository $repository;
+    private SAESubjectInterface $repository;
 
     /**
      * Constructor.
      *
-     * @param PdoSAESubjectRepository $repository The repository to use to get the file name.
+     * @param SAESubjectInterface $repository The repository to use to get the file name.
      */
-    public function __construct(PdoSAESubjectRepository $repository)
+    public function __construct(SAESubjectInterface $repository)
     {
         $this->repository = $repository;
     }

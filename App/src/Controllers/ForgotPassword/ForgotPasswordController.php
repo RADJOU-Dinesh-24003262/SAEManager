@@ -4,7 +4,7 @@ namespace Controllers\ForgotPassword;
 
 use Controllers\BaseController;
 use Override;
-use Views\pwd\ForgotPasswordView;
+use Views\Password\ForgotPasswordView;
 
 /**
  * This class controls the forgot password process (get).

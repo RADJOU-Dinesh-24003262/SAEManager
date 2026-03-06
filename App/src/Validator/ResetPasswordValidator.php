@@ -2,7 +2,7 @@
 
 namespace Validator;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Override;
 
 /**

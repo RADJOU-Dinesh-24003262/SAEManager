@@ -13,7 +13,7 @@ use Models\Entity\User\User;
 use Models\Entity\User\Student;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Client;
-use Core\includes\Database;
+use Core\Includes\Database;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\RegisterUserUseCase;
 use Models\UseCase\User\LoginUseCase;

@@ -2,7 +2,9 @@
 
 namespace Core\Routing;
 
-use Core\Utilis\SessionService;
+use Core\Controllers\ControllerInterface;
+use Core\Utils\SessionService;
+use InvalidArgumentException;
 
 /**
  * Ultra-simple dynamic router.
@@ -100,16 +102,16 @@ class Router
      * @param array<int> $params          Extracted numeric parameters.
      *
      * @return void
-     * @throws \InvalidArgumentException If the controller does not implement the interface.
+     * @throws InvalidArgumentException If the controller does not implement the interface.
      */
     private function dispatch(string $controllerClass, array $params): void
     {
         try {
-            if (!is_subclass_of($controllerClass, \Core\Controllers\ControllerInterface::class)) {
-                throw new \InvalidArgumentException("Controller class must implement ControllerInterface");
+            if (!is_subclass_of($controllerClass, ControllerInterface::class)) {
+                throw new InvalidArgumentException("Controller class must implement ControllerInterface");
             }
 
-            /* @var \Core\Controllers\ControllerInterface $controller */
+            /* @var ControllerInterface $controller */
             $controller = new $controllerClass();
             $controller->control(...$params);
             return;
