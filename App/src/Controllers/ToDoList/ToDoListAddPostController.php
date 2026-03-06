@@ -81,7 +81,8 @@ class ToDoListAddPostController extends BaseController
             $task = $createTaskUseCase->execute(
                 $targetGroupId,
                 trim($input['description']),
-                intval($input['priority'])
+                intval($input['priority']),
+                trim($input['end_date'])
             );
 
             Logger::log('TODO_ADD', "Task added by user {$user->getUserId()} in SAE $saeId", $user->getUserId());
@@ -90,7 +91,8 @@ class ToDoListAddPostController extends BaseController
                 'success' => true,
                 'todo_id' => $task->getTodoId(),
                 'description' => $task->getTodoDesc(),
-                'priority' => $task->getPriority()
+                'priority' => $task->getPriority(),
+                'end_date' => $task->getEndDate()
             ]);
         } catch (ExceptionAccessDenied $e) {
             Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
