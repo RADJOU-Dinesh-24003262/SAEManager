@@ -63,6 +63,13 @@ class ToDoItem extends BaseModel
     protected int $priority = 2; // Default: Medium.
 
     /**
+     * The end date of the task
+     *
+     * @var null|string
+     */
+    protected ?string $end_date = null;
+
+    /**
      * Constructor.
      *
      * @param array<string, mixed> $data Initial data.
@@ -141,6 +148,16 @@ class ToDoItem extends BaseModel
         return $this->priority;
     }
 
+    /**
+     * Gets the end date of the task
+     *
+     * @return null|string
+     */
+    public function getEndDate(): ?string
+    {
+        return $this->end_date ?? null;
+    }
+
     // -----------------
     // Setters
     // -----------------
@@ -209,6 +226,17 @@ class ToDoItem extends BaseModel
     public function setPriority(int $priority): void
     {
         $this->priority = $priority;
+    }
+
+    /**
+     * Sets the end date of the task
+     *
+     * @param string $endDate
+     * @return void
+     */
+    public function setEndDate(string $endDate): void
+    {
+        $this->end_date = $endDate;
     }
 
     /**

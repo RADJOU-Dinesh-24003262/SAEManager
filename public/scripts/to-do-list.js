@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const newTaskPriority = document.getElementById('new-task-priority');
+    const newTaskEndDate = document.getElementById('new-end_date')
 
     // Extract SAE ID from URL
     const saeId = window.location.pathname.split('/')[2];
@@ -200,10 +201,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function addNewTask() {
         const description = newTaskInput.value.trim();
         const priority = newTaskPriority ? parseInt(newTaskPriority.value) : 2;
+        const endDate = newTaskEndDate.value;
 
         if (!description) return;
 
-        const payload = { description: description, priority: priority };
+        const payload = { description: description, priority: priority, end_date : endDate };
 
         try {
             newTaskInput.disabled = true;
@@ -249,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.className = `task-item ${pClass}`;
         li.dataset.id = data.todo_id;
         li.dataset.priority = data.priority;
+        li.dataset.endDate = data.endDate;
         
         li.innerHTML = `
             <div class="task-content">
@@ -263,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="2" ${data.priority == 2 ? 'selected' : ''}>Moyenne</option>
                     <option value="3" ${data.priority == 3 ? 'selected' : ''}>Basse</option>
                 </select>
+                <input type="date" id="end_date" name="end_date" value="${escapeHtml(data.endDate)}">
                 <button class="btn-delete" title="Supprimer">&times;</button>
             </div>
         `;

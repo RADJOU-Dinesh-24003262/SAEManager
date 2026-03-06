@@ -53,6 +53,7 @@ class UpdateTaskUseCase
         $task->setChecked((bool)$updates['checked']);
         $task->setPriority((int)$updates['priority']);
         $task->setTododesc((string)$updates['tododesc']);
+        $task->setEndDate((string)$updates['end_date']);
 
         if (!$this->toDoListInterface->update($task)) {
             throw new Exception("Impossible de mettre à jour la tâche.");

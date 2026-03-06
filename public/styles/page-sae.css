@@ -140,7 +140,7 @@ h3 {
     width: 100%;
 }
 
-.contact-section h5 {
+.contact-section h3 {
     color: var(--pico-primary-hover-background);
     font-size: 1.2em;
     margin-bottom: 10px;
@@ -148,7 +148,7 @@ h3 {
     padding-bottom: 5px;
 }
 
-.contact-section h6 {
+.contact-section h4 {
     color: var(--pico-primary-hover-background);
     font-size: 1em;
     margin-top: 15px;

@@ -43,13 +43,14 @@ class CreateTaskUseCase
      * @return ToDoItem The created task.
      * @throws Exception If creation fails.
      */
-    public function execute(int $groupId, string $description, int $priority): ToDoItem
+    public function execute(int $groupId, string $description, int $priority, string $endDate): ToDoItem
     {
         $task = new ToDoItem([
             'sae_group_id' => $groupId,
             'tododesc' => $description,
             'priority' => $priority,
-            'checked' => false
+            'checked' => false,
+            'end_date' => $endDate
         ]);
 
         $taskId = $this->toDoListInterface->insert($task);

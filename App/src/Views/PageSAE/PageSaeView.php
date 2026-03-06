@@ -150,7 +150,7 @@ class PageSaeView extends BaseSaeView
             $prof = $this->responsibleProf;
             $name = $prof['first_name'] . ' ' . $prof['last_name'];
             $email = $prof['email'];
-            $content .= '<div class="contact-section"><h5>🎓 Responsable de la SAE</h5>';
+            $content .= '<div class="contact-section"><h3>🎓 Responsable de la SAE</h3>';
             $content .= '<p>' . $name . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
@@ -174,9 +174,9 @@ class PageSaeView extends BaseSaeView
 
         if (!empty($associatedProfsToDisplay)) {
             if ($user->isStudent()) {
-                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur de votre groupe</h5><ul>';
+                $content .= '<div class="contact-section"><h3>👨‍🏫 Professeur de votre groupe</h3><ul>';
             } else {
-                $content .= '<div class="contact-section"><h5>👨‍🏫 Professeur(s) Associé(s)</h5><ul>';
+                $content .= '<div class="contact-section"><h3>👨‍🏫 Professeur(s) Associé(s)</h3><ul>';
             }
             foreach ($associatedProfsToDisplay as $prof) {
                 $pName = $prof['first_name'] . ' ' . $prof['last_name'];
@@ -192,7 +192,7 @@ class PageSaeView extends BaseSaeView
             $name = $client['first_name'] . ' ' . $client['last_name'];
             $email = $client['email'];
             $org = !empty($client['organisation']) ? ' (' . $client['organisation'] . ')' : '';
-            $content .= '<div class="contact-section"><h5>🏢 Client</h5>';
+            $content .= '<div class="contact-section"><h3>🏢 Client</h3>';
             $content .= '<p>' . $name . $org . ' - <a href="mailto:' . $email . '">' . $email . '</a></p></div>';
         }
 
@@ -204,7 +204,7 @@ class PageSaeView extends BaseSaeView
                 foreach ($this->groups as $groupData) {
                     $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
 
-                    $content .= '<div class="contact-section"><h5>👥 ' . $groupName . '</h5><ul>';
+                    $content .= '<div class="contact-section"><h3>👥 ' . $groupName . '</h3><ul>';
 
                     foreach ($groupData['students'] as $student) {
                         // Don't show the current user in the list? Optional. Showing everyone is fine.
@@ -221,12 +221,12 @@ class PageSaeView extends BaseSaeView
         } else {
             // Clients see all groups.
             if (!empty($this->groups)) {
-                $content .= '<div class="contact-section"><h5>👥 Groupes d\'étudiants</h5>';
+                $content .= '<div class="contact-section"><h3>👥 Groupes d\'étudiants</h3>';
 
                 foreach ($this->groups as $groupData) {
                     $groupName = 'Groupe ' . $groupData['group']->getSaeGroupId();
 
-                    $content .= '<h6>' . $groupName . '</h6><ul>';
+                    $content .= '<h4>' . $groupName . '</h4><ul>';
 
                     if (empty($groupData['students'])) {
                         $content .= '<li>Aucun étudiant.</li>';
