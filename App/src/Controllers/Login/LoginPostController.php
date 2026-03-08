@@ -7,6 +7,7 @@ use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utils\Logger;
+use Core\Utils\RateLimiter;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -71,6 +72,7 @@ class LoginPostController extends BaseController
             SessionService::set('user_id', $user->getEmail());
             Logger::log('LOGIN_SUCCESS', "Connexion réussie pour : " . $user->getEmail(), $user->getUserId());
             SessionService::set('USER', serialize($user));
+            RateLimiter::clear('login');
 
             header('Location: /dashboard');
             exit();
@@ -81,6 +83,7 @@ class LoginPostController extends BaseController
             }
             SessionService::setFlash('errors', $errors);
         } catch (ExceptionValidationLogin $e) {
+            RateLimiter::increment('login');
             Logger::log('LOGIN_FAIL', "Échec authentification pour : {$data['email']}", null, 'WARNING');
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         } catch (ExceptionFetchDataBD $e) {

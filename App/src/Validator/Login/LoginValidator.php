@@ -3,6 +3,7 @@
 namespace Validator\Login;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Utils\RateLimiter;
 use Override;
 use Validator\FormValidator;
 
@@ -48,6 +49,13 @@ class LoginValidator extends FormValidator
     {
         if (!$this->isValidEmail($data['email'])) {
             throw new ExceptionValidationLogin("L'adresse email n'est pas valide.");
+        }
+
+        // Anti-Bruteforce: 5 attempts max per 5 minutes (300 seconds).
+        if (!RateLimiter::check('login', 5, 300)) {
+            throw new ExceptionValidationLogin(
+                "Trop de tentatives de connexion échouées. Veuillez réessayer dans 5 minutes."
+            );
         }
     }
 }

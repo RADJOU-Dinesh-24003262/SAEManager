@@ -10,6 +10,7 @@ use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Utils\RateLimiter;
 use Core\Utils\SessionService;
 use Core\Views\AbstractView;
 use Exception;
@@ -145,8 +146,10 @@ class ForgotPasswordControllerTest extends TestCase
     #[Test]
     public function preventsTooManyRequests(): void
     {
-        // Simulate recent request
-        $_SESSION['last_forgot_password_request'] = time();
+        // Simulate recent requests to trigger limit
+        \Core\Utils\RateLimiter::increment('forgot_password');
+        \Core\Utils\RateLimiter::increment('forgot_password');
+
         $_POST = ['email' => 'jean.dupont@etu.univ-amu.fr'];
 
         ob_start();
@@ -157,6 +160,8 @@ class ForgotPasswordControllerTest extends TestCase
 
         // Should set spam error message on the html page.
         $this->assertStringContainsString('Veuillez attendre au moins 2 minutes avant de refaire une demande.', $content);
+
+        \Core\Utils\RateLimiter::clear('forgot_password');
     }
 
     #[Test]

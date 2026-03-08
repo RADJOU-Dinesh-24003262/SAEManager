@@ -8,6 +8,7 @@ use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Utils\RateLimiter;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
@@ -67,7 +68,7 @@ class ForgotPasswordPostController extends BaseController
             $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
             $processForgotPasswordUseCase->execute($email);
 
-            SessionService::set('last_forgot_password_request', time());
+            RateLimiter::increment('forgot_password');
 
             // Generic message to avoid revealing if the email exists.
             SessionService::setFlash(
