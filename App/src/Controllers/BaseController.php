@@ -8,6 +8,8 @@ use Core\Utils\Logger;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Includes\Exception\ExceptionCsrf;
+use Core\Includes\Exception\ExceptionSpam;
 
 /**
  * Abstract BaseController to handle common controller logic like authentication.
@@ -81,31 +83,50 @@ abstract class BaseController implements ControllerInterface
     protected function redirect(string $url): void
     {
         header("Location: $url");
-        exit;
+        return;
     }
 
     /**
-     * Checks if the CSRF token is valid. If not, it logs the attempt, sets a flash error, and redirects.
+     * Checks if the CSRF token is valid. If not, it logs the attempt and throws ExceptionCsrf.
      *
      * @param string $logActionName The prefix for the log message (e.g., 'LOGIN', 'REGISTER').
-     * @param string $redirectUrl   The URL to redirect to upon failure.
      * @return void
+     * @throws ExceptionCsrf If the CSRF token is invalid.
      */
-    protected function checkCsrf(string $logActionName, string $redirectUrl): void
+    protected function checkCsrf(string $logActionName): void
     {
         if (!SessionService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
-            Logger::log($logActionName . '_CSRF_FAIL', 'Tentative action avec token invalide.', null, 'WARNING');
-            SessionService::setFlash('errors', ['general' => 'Session invalide, veuillez réessayer.']);
-            header("Location: $redirectUrl");
-            exit();
+            Logger::log($logActionName . '_CSRF_FAIL', 'Attempted action with invalid token.', null, 'WARNING');
+            throw new ExceptionCsrf();
         }
     }
 
     /**
-     * Checks if the CSRF token is valid for an AJAX request. If not, it returns a 403 JSON response.
+     * Checks if the honeypot field is empty. If not, it logs the attempt and throws ExceptionSpam.
+     *
+     * @param string $logActionName The prefix for the log message (e.g., 'LOGIN', 'REGISTER').
+     * @return void
+     * @throws ExceptionSpam If the honeypot field is filled.
+     */
+    protected function checkHoneypot(string $logActionName): void
+    {
+        if (!empty($_POST['telephone'])) {
+            Logger::log(
+                $logActionName . '_SPAM_FAIL',
+                'Automated action attempt blocked by honeypot.',
+                null,
+                'WARNING'
+            );
+            throw new ExceptionSpam("Échec de la validation. Veuillez réessayer.");
+        }
+    }
+
+    /**
+     * Checks if the CSRF token is valid for an AJAX request. If not, it throws ExceptionCsrf.
      *
      * @param string $logActionName The prefix for the log message.
      * @return void
+     * @throws ExceptionCsrf If the CSRF token is invalid.
      */
     protected function checkCsrfAjax(string $logActionName): void
     {
@@ -113,9 +134,7 @@ abstract class BaseController implements ControllerInterface
         if (!SessionService::verifyCsrfToken($csrfToken)) {
             $userOrNull = isset($this->user) ? $this->user->getUserId() : null;
             Logger::log($logActionName . '_CSRF_FAIL', 'Invalid CSRF token.', $userOrNull, 'WARNING');
-            http_response_code(403);
-            echo json_encode(['success' => false, 'message' => 'Session invalide (CSRF).']);
-            exit();
+            throw new ExceptionCsrf("Session invalide (CSRF).");
         }
     }
 }

@@ -12,6 +12,7 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
 use Models\UseCase\ToDoList\DeleteTaskUseCase;
 use Controllers\BaseController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationToDoList;
 use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Core\Utils\Logger;
@@ -51,11 +52,10 @@ class SaeToDoDeletePostController extends BaseController
 
         header('Content-Type: application/json');
 
-        $this->checkCsrfAjax('TODO_DELETE');
-
         $user = $this->user;
 
         try {
+            $this->checkCsrfAjax('TODO_DELETE');
             $validateAccessUseCase = new ValidateToDoListModifyAccessUseCase(
                 new PdoSAESubjectRepository(),
                 new PdoSAEGroupRepository(),
@@ -73,6 +73,8 @@ class SaeToDoDeletePostController extends BaseController
             Logger::log('TODO_DELETE', "Task $todoId deleted by user {$user->getUserId()}", $user->getUserId());
 
             echo json_encode(['success' => true]);
+        } catch (ExceptionCsrf $e) {
+            $this->sendError($e->getMessage(), 403);
         } catch (ExceptionAccessDenied $e) {
             Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
             $this->sendError($e->getMessage(), ($e->getCode() ?: 403));
@@ -80,7 +82,7 @@ class SaeToDoDeletePostController extends BaseController
             Logger::log('TODO_VALIDATION_ERROR', $e->getMessage(), $user->getUserId(), 'INFO');
             $this->sendError($e->getMessage(), 400);
         } catch (Exception $e) {
-            Logger::log('TODO_ERROR', "Erreur interne: " . $e->getMessage(), $user->getUserId(), 'ERROR');
+            Logger::log('TODO_ERROR', "Internal Error: " . $e->getMessage(), $user->getUserId(), 'ERROR');
             $this->sendError("Erreur interne.", 500);
         }
     }

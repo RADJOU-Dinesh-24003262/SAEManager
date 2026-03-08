@@ -4,6 +4,8 @@ namespace Controllers\Login;
 
 use Controllers\BaseController;
 use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Includes\Exception\ExceptionCsrf;
+use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Core\Utils\Logger;
@@ -47,21 +49,19 @@ class LoginPostController extends BaseController
     {
 
         if (SessionService::has('user_id')) {
-            header('Location: /dashboard');
-            return;
+            $this->redirect('/dashboard');
         }
 
-        $this->checkCsrf('LOGIN', '/login');
-
-        $data = [];
-
         try {
+            $this->checkCsrf('LOGIN');
+            $this->checkHoneypot('LOGIN');
+
             $validator = new LoginValidator();
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
             $data['email'] = trim($data['email'] ?? '');
-            Logger::log('LOGIN_ATTEMPT', "Tentative de connexion pour : {$data['email']}");
+            Logger::log('LOGIN_ATTEMPT', "Attempted login for : {$data['email']}");
 
             $userRepository = new PdoUserRepository();
             $loginUseCase = new LoginUseCase($userRepository);
@@ -70,24 +70,25 @@ class LoginPostController extends BaseController
             SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
-            Logger::log('LOGIN_SUCCESS', "Connexion réussie pour : " . $user->getEmail(), $user->getUserId());
+            Logger::log('LOGIN_SUCCESS', "Successful login for : " . $user->getEmail(), $user->getUserId());
             SessionService::set('USER', serialize($user));
             RateLimiter::clear('login');
 
-            header('Location: /dashboard');
-            exit();
+            $this->redirect('/dashboard');
         } catch (ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
+        } catch (ExceptionCsrf | ExceptionSpam $e) {
+            SessionService::setFlash('errors', ['general' => $e->getMessage()]);
         } catch (ExceptionValidationLogin $e) {
             RateLimiter::increment('login');
-            Logger::log('LOGIN_FAIL', "Échec authentification pour : {$data['email']}", null, 'WARNING');
+            Logger::log('LOGIN_FAIL', "Failed login for : {$data['email']}", null, 'WARNING');
             SessionService::setFlash('errors', ['general' => 'Erreur de connexion : ' . $e->getMessage()]);
         } catch (ExceptionFetchDataBD $e) {
-            Logger::log('DB_ERROR', "Erreur BDD lors du login : " . $e->getMessage(), null, 'CRITICAL');
+            Logger::log('DB_ERROR', "Database error during login : " . $e->getMessage(), null, 'CRITICAL');
             SessionService::setFlash('errors', ['general' => 'Erreur technique.']);
         }
         $view = new LoginView(['csrf_token' => SessionService::generateCsrfToken()]);

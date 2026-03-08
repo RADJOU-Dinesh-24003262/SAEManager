@@ -3,6 +3,10 @@
 <main class="container-fluid">
     <form action="/register" method="post" autocomplete="on">
         <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
+        <!-- Honeypot anti-spam : invisible for humans, filled by bots -->
+        <div style="display:none; position:absolute; left:-9999px;" aria-hidden="true">
+            <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off" aria-label="Laissez ce champ vide">
+        </div>
 
         <fieldset role="presentation">
             <article>

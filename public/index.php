@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-include "../Core/includes/Autoloader.php";
+include "../Core/Includes/Autoloader.php";
 \Core\Includes\Autoloader::register();
 
 use Core\Routing\Router;
