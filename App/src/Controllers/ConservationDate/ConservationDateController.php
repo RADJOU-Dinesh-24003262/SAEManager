@@ -1,8 +1,8 @@
 <?php
 
-namespace Controllers\LegalTermsConditions;
+namespace Controllers\ConservationDate;
 
-use Views\LegalTermsConditions\ConfigConservationDateView;
+use Views\ConservationDate\ConservationDateView;
 use Core\Controllers\ControllerInterface;
 use Override;
 
@@ -11,7 +11,7 @@ use Override;
  *
  * @category   Controllers
  * @package    Src
- * @subpackage Controllers/LegalTermsConditions
+ * @subpackage Controllers/ConservationDate
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -20,7 +20,7 @@ use Override;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ConfigConservationDateController implements ControllerInterface
+class ConservationDateController implements ControllerInterface
 {
     /**
      * Principal manager of the controller
@@ -30,7 +30,7 @@ class ConfigConservationDateController implements ControllerInterface
     #[Override]
     public function control(): void
     {
-        $view = new ConfigConservationDateView();
+        $view = new ConservationDateView();
         $view->render();
     }
 
@@ -39,7 +39,7 @@ class ConfigConservationDateController implements ControllerInterface
      *
      * @param  string $path   The requested URI path.
      * @param  string $method The HTTP method used in the request.
-     * @return boolean True if the path is "/legal-terms-conditions" and the method is GET.
+     * @return boolean True if the path is "/conservation-date" and the method is GET.
      */
     #[Override]
     public static function support(string $path, string $method): bool
