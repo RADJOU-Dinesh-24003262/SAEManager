@@ -4,6 +4,7 @@ namespace Validator\ForgotPassword;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
 use Core\Includes\Exception\ExceptionSpam;
+use Core\Utils\RateLimiter;
 use Validator\FormValidator;
 use Core\Utils\SessionService;
 use Override;
@@ -57,7 +58,8 @@ class ForgotPasswordValidator extends FormValidator
     {
         if (!$this->isValidEmail($data['email'])) {
             throw new ExceptionValidationForgotPassword('email', 'string', "L'adresse email n'est pas valide.");
-        }if (SessionService::get('last_forgot_password_request', 0) > (time() - 120)) {
+        }
+        if (!RateLimiter::check('forgot_password', 2, 120)) {
             throw new ExceptionSpam("Veuillez attendre au moins 2 minutes avant de refaire une demande.");
         }
     }

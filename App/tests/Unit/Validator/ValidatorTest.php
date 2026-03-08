@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Validator;
 
+use Core\Utils\RateLimiter;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -247,7 +248,8 @@ class ValidatorTest extends TestCase
         $this -> expectExceptionMessage('au moins 2 minutes');
 
         // Simuler une demande récente
-        $_SESSION['last_forgot_password_request'] = time();
+        RateLimiter:: increment('forgot_password');
+        RateLimiter:: increment('forgot_password');
 
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
@@ -256,9 +258,11 @@ class ValidatorTest extends TestCase
             ]
         );
 
-        $validator -> validate($data);
-
-        unset($_SESSION['last_forgot_password_request']);
+        try {
+            $validator -> validate($data);
+        } finally {
+            RateLimiter:: clear('forgot_password');
+        }
     }
 
     #[Test]
@@ -266,8 +270,8 @@ class ValidatorTest extends TestCase
     {
         $this -> expectNotToPerformAssertions();
 
-        // Simuler une demande il y a plus de 2 minutes
-        $_SESSION['last_forgot_password_request'] = time() - 121;
+        // Ensure rate limit is clear
+        RateLimiter:: clear('forgot_password');
 
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
@@ -277,8 +281,6 @@ class ValidatorTest extends TestCase
         );
 
         $validator -> validate($data);
-
-        unset($_SESSION['last_forgot_password_request']);
     }
 
     // ========================================
