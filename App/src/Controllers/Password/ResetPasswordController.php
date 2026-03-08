@@ -6,6 +6,7 @@ use Controllers\BaseController;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utilis\SessionService;
 use Services\TokenService;
+use Override;
 use Views\pwd\ResetPasswordView;
 
 /**
@@ -55,7 +56,7 @@ class ResetPasswordController extends BaseController
      *
      * @return boolean True if the path is "/reset-password" and the method is GET, false otherwise.
      */
-    #[\Override]
+    #[Override]
     public static function support(string $path, string $method): bool
     {
         return $path === "/reset-password" && $method === "GET";
