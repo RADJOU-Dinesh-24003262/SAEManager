@@ -3,22 +3,20 @@
 namespace Models\UseCase\User;
 
 use Core\includes\exception\ExceptionEmailAlreadyExists;
-use InvalidArgumentException;
+use DateTimeImmutable;
+use Exception;
 use Models\Entity\User\Client;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Student;
-use Models\Entity\User\User;
 use Models\Entity\User\UserFactory;
+use Models\UseCase\User\InterfaceDB\PendingRegistrationInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
-use Models\UseCase\User\InterfaceDB\StudentInterface;
-use Models\UseCase\User\InterfaceDB\ProfessorInterface;
-use Models\UseCase\User\InterfaceDB\ClientInterface;
-use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 
 /**
  * Use Case for user registration.
  *
- * Handles the registration logic.
+ * Stores the user data in pending_registrations with a verification token.
+ * The account is only created in users once the confirmation link is clicked.
  *
  * @category   Models
  * @package    Src
@@ -30,101 +28,111 @@ use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 class RegisterUserUseCase
 {
     /**
-     * The Student repository interface.
-     * @var StudentInterface
+     * Token validity duration in seconds (10 minutes).
      */
-    private StudentInterface $studentInterface;
+    private const TOKEN_TTL = 600;
 
     /**
-     * The Professor repository interface.
-     * @var ProfessorInterface
-     */
-    private ProfessorInterface $professorInterface;
-
-    /**
-     * The Client repository interface.
-     * @var ClientInterface
-     */
-    private ClientInterface $clientInterface;
-
-    /**
-     * The User repository interface (for common checks like email existence).
+     * The User repository interface (email existence check).
      * @var UserInterface
      */
     private UserInterface $userInterface;
 
     /**
-     * The PDO interface.
-     * @var StudentInterface|ProfessorInterface|ClientInterface
+     * The PendingRegistration repository interface.
+     * @var PendingRegistrationInterface
      */
-    private StudentInterface|ProfessorInterface|ClientInterface $pdoInterface;
+    private PendingRegistrationInterface $pendingInterface;
 
     /**
      * Constructor.
      *
-     * @param StudentInterface   $studentInterface   The Student repository.
-     * @param ProfessorInterface $professorInterface The Professor repository.
-     * @param ClientInterface    $clientInterface    The Client repository.
-     * @param UserInterface      $userInterface      The User repository.
+     * @param UserInterface                $userInterface    The User repository.
+     * @param PendingRegistrationInterface $pendingInterface The PendingRegistration repository.
      */
     public function __construct(
-        StudentInterface $studentInterface,
-        ProfessorInterface $professorInterface,
-        ClientInterface $clientInterface,
-        UserInterface $userInterface
+        UserInterface                $userInterface,
+        PendingRegistrationInterface $pendingInterface
     ) {
-        $this->studentInterface = $studentInterface;
-        $this->professorInterface = $professorInterface;
-        $this->clientInterface = $clientInterface;
-        $this->userInterface = $userInterface;
+        $this->userInterface    = $userInterface;
+        $this->pendingInterface = $pendingInterface;
     }
 
     /**
-     * Registers a new user.
+     * Validates data and stores it in pending_registrations.
      *
      * @param array<string, mixed> $data The validated user data.
      *
-     * @return User|null The registered user.
+     * @return string The verification token to include in the confirmation email.
      *
-     * @throws ExceptionEmailAlreadyExists If the email is already in the database.
-     * @throws \Exception If the user creation fails.
+     * @throws ExceptionEmailAlreadyExists If the email already exists in users or pending_registrations.
+     * @throws Exception If the insert fails.
      */
-    public function execute(array $data): ?User
+    public function execute(array $data): string
     {
-        // 1. Create the user entity
+        // 1. Build entity — applies domain name logic, typing, etc.
         $user = UserFactory::create($data);
 
-        // 2. Set password (hash it)
         if (isset($data['password'])) {
             $user->setPassword($data['password']);
         }
 
-        // 3. Add domain name to email if needed
         $user->addDomainNameToEmail();
 
-        // 4. Check if email already exists
+        // 2. Check email not already confirmed in users
         if ($this->userInterface->existsByEmail($user->getEmail())) {
             throw new ExceptionEmailAlreadyExists($user->getEmail());
         }
 
-        $repositories = [
-            'student' => $this->studentInterface,
-            'professor' => $this->professorInterface,
-            'client' => $this->clientInterface,
-        ];
+        // 3. Check email not already pending
+        if ($this->pendingInterface->existsByEmail($user->getEmail())) {
+            throw new ExceptionEmailAlreadyExists($user->getEmail());
+        }
 
-        $this->pdoInterface = $repositories[$user->getUserType()];
+        // 4. Generate token and expiry
+        $token     = bin2hex(random_bytes(32));
+        $expiresAt = new DateTimeImmutable('+' . self::TOKEN_TTL . ' seconds');
 
-        $result = $this->pdoInterface->insert($user);
+        // 5. Extract role-specific fields
+        $amuId = null;
+        $td    = null;
+        $tp    = null;
+        $major = null;
+        $year  = null;
+
+        if ($user instanceof Student) {
+            $amuId = $user->getAmuId();
+            $td    = $user->getTd();
+            $tp    = $user->getTp();
+            $major = $user->getMajor();
+            $year  = $user->getYear();
+        } elseif ($user instanceof Professor) {
+            $amuId = $user->getAmuId();
+        }
+        // Client has no extra fields
+
+        // 6. Insert into pending_registrations
+        $result = $this->pendingInterface->insert(
+            token:     $token,
+            firstName: $user->getFirstName(),
+            lastName:  $user->getLastName(),
+            email:     $user->getEmail(),
+            phone:     $user->getPhone(),
+            password:  $user->getPasswordHash(),
+            status:    $user->getUserType(),
+            expiresAt: $expiresAt,
+            amuId:     $amuId,
+            td:        $td,
+            tp:        $tp,
+            major:     $major,
+            year:      $year
+        );
 
         if ($result === false) {
-            throw new \Exception("Failed to create user");
+            throw new Exception('Failed to store pending registration.');
         }
 
-        if (is_int($result)) {
-            $user->setUserId($result);
-        }
-
-        return $this->pdoInterface->findById($user->getUserId());
+        // 7. Return token for RegistrationMailer
+        return $token;
     }
 }

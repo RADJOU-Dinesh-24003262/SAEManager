@@ -9,33 +9,34 @@ use Core\includes\exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utilis\Logger;
 use Core\Utilis\SessionService;
 use Exception;
-use Models\Entity\User\User;
-use Models\Repository\User\{PdoStudentRepository, PdoProfessorRepository, PdoClientRepository};
+use Models\Repository\User\PdoPendingRegistrationRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
+use Services\Auth\RegistrationMailer;
 use Validator\ValidationServiceRegister;
-use Views\User\RegisterSuccessView;
+use Views\User\DoubleAuthentificationView;
+use Views\User\RegisterPendingView;
 use Views\User\RegisterView;
 
 /**
  * This class controls the register process (post).
-
+ *
  * @category Controller
-
+ *
  * @package Src
-
+ *
  * @subpackage Controllers/User
-
+ *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
  * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
-
+ *
  * @license MIT License https://opensource.org/licenses/MIT
-
+ *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterPostController extends BaseController
@@ -51,37 +52,32 @@ class RegisterPostController extends BaseController
     {
         $this->checkCsrf('REGISTER', '/register');
 
-        // Validate the data.
-        $validator = new ValidationServiceRegister();
-
         try {
-            $data = $validator->escape($_POST);
+            $validator = new ValidationServiceRegister();
+            $data      = $validator->escape($_POST);
             $validator->validate($data);
 
-            // Create the user.
-            $studentRepo = new PdoStudentRepository();
-            $professorRepo = new PdoProfessorRepository();
-            $clientRepo = new PdoClientRepository();
-            $userRepo = new PdoUserRepository();
+            $userRepo    = new PdoUserRepository();
+            $pendingRepo = new PdoPendingRegistrationRepository();
 
-            $registerUseCase = new RegisterUserUseCase(
-                $studentRepo,
-                $professorRepo,
-                $clientRepo,
-                $userRepo
+            $registerUseCase = new RegisterUserUseCase($userRepo, $pendingRepo);
+
+            // Retourne le token, ne crée pas encore l'utilisateur dans users
+            $token = $registerUseCase->execute($data);
+
+            // Envoi de l'email de confirmation
+            RegistrationMailer::send($data['email'], $token);
+
+            Logger::log(
+                'REGISTER_PENDING',
+                "Inscription en attente de confirmation: " . $data['email']
             );
 
-            $user = $registerUseCase->execute($data);
-
-            if ($user === null) {
-                throw new Exception("L'utilisateur n'a pas pu être récupéré après sa création.");
-            }
-
-            Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail());
-
-            $view = new RegisterSuccessView($user);
+            // Affiche la page "vérifiez votre boîte mail"
+            $view = new DoubleAuthentificationView($data['email']);
             $view->render();
             exit();
+
         } catch (ExceptionEmailAlreadyExists $e) {
             SessionService::setFlash('errors', ['email' => $e->getMessage()]);
             Logger::log('REGISTER_FAIL', "Email déjà utilisé: " . $e->getEmail(), null, 'INFO');
@@ -99,9 +95,11 @@ class RegisterPostController extends BaseController
             Logger::log('REGISTER_ERROR', "Erreur lors de l'inscription: " . $e->getMessage(), null, 'ERROR');
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
+
         $view = new RegisterView(['csrf_token' => SessionService::generateCsrfToken()]);
         $view->render();
     }
+
     /**
      * Determines whether this controller supports the given request.
      *
