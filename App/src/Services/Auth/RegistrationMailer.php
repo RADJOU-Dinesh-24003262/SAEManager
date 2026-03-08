@@ -47,7 +47,7 @@ class RegistrationMailer
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        return "{$protocol}://{$host}/reset-password?token={$token}";
+        return "{$protocol}://{$host}/mfa?token={$token}";
     }
 
     /**
@@ -100,9 +100,7 @@ class RegistrationMailer
             <p>Bonjour,</p>
             <p>Merci de vous être inscrit sur SAE Manager. Pour finaliser la création de votre compte, saisissez le code ci-dessous :</p>
 
-            <div class='otp-box'>
-                <span class='otp-code'>{$otpCode}</span>
-            </div>
+            <p>{$otpCode}</p>
 
             <div class='warning'>
                 <strong>⚠️ Important :</strong>

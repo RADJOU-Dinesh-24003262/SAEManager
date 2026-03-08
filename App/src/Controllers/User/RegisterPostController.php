@@ -62,10 +62,8 @@ class RegisterPostController extends BaseController
 
             $registerUseCase = new RegisterUserUseCase($userRepo, $pendingRepo);
 
-            // Retourne le token, ne crée pas encore l'utilisateur dans users
             $token = $registerUseCase->execute($data);
 
-            // Envoi de l'email de confirmation
             RegistrationMailer::send($data['email'], $token);
 
             Logger::log(
@@ -73,7 +71,6 @@ class RegisterPostController extends BaseController
                 "Inscription en attente de confirmation: " . $data['email']
             );
 
-            // Affiche la page "vérifiez votre boîte mail"
             $view = new DoubleAuthentificationView($data['email']);
             $view->render();
             exit();

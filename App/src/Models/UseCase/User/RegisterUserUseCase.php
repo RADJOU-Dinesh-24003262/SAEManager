@@ -77,8 +77,6 @@ class RegisterUserUseCase
             $user->setPassword($data['password']);
         }
 
-        $user->addDomainNameToEmail();
-
         // 2. Check email not already confirmed in users
         if ($this->userInterface->existsByEmail($user->getEmail())) {
             throw new ExceptionEmailAlreadyExists($user->getEmail());

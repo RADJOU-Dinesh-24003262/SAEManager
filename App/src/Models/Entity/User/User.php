@@ -95,18 +95,6 @@ abstract class User extends BaseModel
         return password_verify($password, $this->hashed_password);
     }
 
-    /**
-     * Adds domain name to email if not present.
-     *
-     * @return void
-     */
-    public function addDomainNameToEmail(): void
-    {
-        if (!str_contains($this->email, '@')) {
-            $this->email .= '@etu.univ-amu.fr';
-        }
-    }
-
     // -----------------
     // Getters
     // -----------------
