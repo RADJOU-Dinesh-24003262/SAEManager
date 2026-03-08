@@ -3,7 +3,9 @@
 namespace Controllers\Register;
 
 use Controllers\BaseController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utils\Logger;
@@ -49,12 +51,13 @@ class RegisterPostController extends BaseController
      */
     public function control(): void
     {
-        $this->checkCsrf('REGISTER', '/register');
-
         // Validate the data.
         $validator = new ValidationServiceRegister();
 
         try {
+            $this->checkCsrf('REGISTER');
+            $this->checkHoneypot('REGISTER');
+
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
@@ -77,26 +80,28 @@ class RegisterPostController extends BaseController
                 throw new Exception("L'utilisateur n'a pas pu être récupéré après sa création.");
             }
 
-            Logger::log('REGISTER_SUCCESS', "Nouvel utilisateur enregistré: " . $user->getEmail());
+            Logger::log('REGISTER_SUCCESS', "New user registered: " . $user->getEmail());
 
             $view = new RegisterSuccessView($user);
             $view->render();
             exit();
         } catch (ExceptionEmailAlreadyExists $e) {
             SessionService::setFlash('errors', ['email' => $e->getMessage()]);
-            Logger::log('REGISTER_FAIL', "Email déjà utilisé: " . $e->getEmail(), null, 'INFO');
+            Logger::log('REGISTER_FAIL', "Email already used: " . $e->getEmail(), null, 'INFO');
         } catch (ExceptionValidationRegisters | ExceptionValidationEmptys $e) {
             $errors = [];
             foreach ($e->getErrors() as $error) {
                 $errors[] = $error->getMessage();
             }
             SessionService::setFlash('errors', $errors);
-            Logger::log('REGISTER_FAIL', "Échec validation inscription IP: {$_SERVER['REMOTE_ADDR']}", null, 'INFO');
+            Logger::log('REGISTER_FAIL', "Registration validation failed IP: {$_SERVER['REMOTE_ADDR']}", null, 'INFO');
+        } catch (ExceptionCsrf | ExceptionSpam $e) {
+            SessionService::setFlash('errors', ['general' => $e->getMessage()]);
         } catch (PDOException $e) {
-            Logger::log('DB_ERROR', "Erreur BDD lors de l'inscription: " . $e->getMessage(), null, 'CRITICAL');
-            SessionService::setFlash('errors', ['general' => 'Une erreur est survenue, réessayez plus tard']);
+            Logger::log('DB_ERROR', "Database error during registration: " . $e->getMessage(), null, 'CRITICAL');
+            SessionService::setFlash('errors', ['general' => 'An error occurred, please try again later']);
         } catch (Exception $e) {
-            Logger::log('REGISTER_ERROR', "Erreur lors de l'inscription: " . $e->getMessage(), null, 'ERROR');
+            Logger::log('REGISTER_ERROR', "Error during registration: " . $e->getMessage(), null, 'ERROR');
             SessionService::setFlash('errors', ['general' => 'Erreur lors de l\'inscription: ' . $e->getMessage()]);
         }
         $view = new RegisterView(['csrf_token' => SessionService::generateCsrfToken()]);

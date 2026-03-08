@@ -12,6 +12,7 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
 use Models\UseCase\ToDoList\UpdateTaskUseCase;
 use Controllers\BaseController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationToDoList;
 use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Core\Utils\Logger;
@@ -52,12 +53,11 @@ class SaeToDoUpdatePostController extends BaseController
 
         header('Content-Type: application/json');
 
-        $this->checkCsrfAjax('TODO_UPDATE');
-
         $user = $this->user;
         $validator = new ToDoListValidator();
 
         try {
+            $this->checkCsrfAjax('TODO_UPDATE');
             $json = file_get_contents('php://input');
             $input = json_decode($json !== false ? $json : '{}', true) ?? [];
             if (!is_array($input)) {
@@ -84,6 +84,8 @@ class SaeToDoUpdatePostController extends BaseController
             Logger::log('TODO_UPDATE', "Task $todoId updated by user {$user->getUserId()}", $user->getUserId());
 
             echo json_encode(['success' => true]);
+        } catch (ExceptionCsrf $e) {
+            $this->sendError($e->getMessage(), 403);
         } catch (ExceptionAccessDenied $e) {
             Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
             $this->sendError($e->getMessage(), ($e->getCode() ?: 403));

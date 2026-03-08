@@ -1,45 +1,52 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"> 
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
 <url>
-  <loc>http://saemanager.alwaysdata.net/</loc>
-  <priority>0.7</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>1.00</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/login</loc>
-  <priority>0.4</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/login</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/register</loc>
-  <priority>0.4</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/register</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/legal-notice</loc>
-  <priority>0.4</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/legal-notice</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.60</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/forgot-password</loc>
-  <priority>0.4</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/conservation-date</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.60</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/conditions-generales</loc>
-  <priority>0.4</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/site-map</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.80</priority>
 </url>
 <url>
-  <loc>http://saemanager.alwaysdata.net/site-map</loc>
-  <priority>0.8</priority>
-  <changefreq>weekly</changefreq>
-  <lastmod>2025-10-07</lastmod>
+  <loc>https://saemanager.alwaysdata.net/forgot-password</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.6</priority>
 </url>
+<url>
+  <loc>https://saemanager.alwaysdata.net/legal-terms-conditions</loc>
+  <lastmod>2026-03-08T12:24:14+00:00</lastmod>
+  <priority>0.6</priority>
+</url>
+
+
 </urlset>

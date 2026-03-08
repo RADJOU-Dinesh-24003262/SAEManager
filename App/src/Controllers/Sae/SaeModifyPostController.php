@@ -3,6 +3,7 @@
 namespace Controllers\Sae;
 
 use Controllers\BaseController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExeptionValidationSAECreation;
 use Core\Utils\SessionService;
@@ -49,13 +50,13 @@ class SaeModifyPostController extends BaseController
     {
         $this->ensureProfessor();
 
-        // CSRF Protection.
-        $this->checkCsrf('MODIFY_SAE', '/sae/' . $saeId . '/modify');
-
         $data = $_POST;
         $validator = new FormSaeValidator();
 
         try {
+            // CSRF Protection.
+            $this->checkCsrf('MODIFY_SAE');
+
             // Extract description before escape to preserve Markdown.
             $description = $data['description'];
 
@@ -80,6 +81,10 @@ class SaeModifyPostController extends BaseController
 
             SessionService::setFlash('success', 'SAE modifiée avec succès');
             header('Location: /sae/' . $saeId);
+            exit();
+        } catch (ExceptionCsrf $e) {
+            SessionService::setFlash('errors', ['general' => $e->getMessage()]);
+            header('Location: /sae/' . $saeId . '/modify');
             exit();
         } catch (ExeptionValidationSAECreation $e) {
             SessionService::setFlash('errors', $e->getMessage());

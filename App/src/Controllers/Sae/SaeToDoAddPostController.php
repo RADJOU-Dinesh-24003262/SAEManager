@@ -12,6 +12,7 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\UseCase\ToDoList\ValidateToDoListModifyAccessUseCase;
 use Models\UseCase\ToDoList\CreateTaskUseCase;
 use Controllers\BaseController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationToDoList;
 use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Core\Utils\Logger;
@@ -51,12 +52,11 @@ class SaeToDoAddPostController extends BaseController
 
         header('Content-Type: application/json');
 
-        $this->checkCsrfAjax('TODO_ADD');
-
         $user = $this->user;
         $validator = new ToDoListValidator();
 
         try {
+            $this->checkCsrfAjax('TODO_ADD');
             $json = file_get_contents('php://input');
             $input = json_decode($json !== false ? $json : '{}', true) ?? [];
             if (!is_array($input)) {
@@ -92,6 +92,8 @@ class SaeToDoAddPostController extends BaseController
                 'description' => $task->getTodoDesc(),
                 'priority' => $task->getPriority()
             ]);
+        } catch (ExceptionCsrf $e) {
+            $this->sendError($e->getMessage(), 403);
         } catch (ExceptionAccessDenied $e) {
             Logger::log('TODO_ACCESS_DENIED', $e->getMessage(), $user->getUserId(), 'WARNING');
             $this->sendError($e->getMessage(), ($e->getCode() ?: 403));
@@ -99,7 +101,7 @@ class SaeToDoAddPostController extends BaseController
             Logger::log('TODO_VALIDATION_ERROR', $e->getMessage(), $user->getUserId(), 'INFO');
             $this->sendError($e->getMessage(), 400);
         } catch (Exception $e) {
-            Logger::log('TODO_ERROR', "Erreur interne: " . $e->getMessage(), $user->getUserId(), 'ERROR');
+            Logger::log('TODO_ERROR', "Internal Error: " . $e->getMessage(), $user->getUserId(), 'ERROR');
             $this->sendError("Erreur interne.", 500);
         }
     }
