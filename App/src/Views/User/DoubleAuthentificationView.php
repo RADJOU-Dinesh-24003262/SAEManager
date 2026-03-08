@@ -27,7 +27,7 @@ class DoubleAuthentificationView extends AbstractView
      *
      * @var string
      */
-    private const TEMPLATE_HTML = __DIR__ . '/register-pending.html';
+    private const TEMPLATE_HTML = __DIR__ . '/double-authentification.html';
 
     /**
      * Name of the CSS file for this view.

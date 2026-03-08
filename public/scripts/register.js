@@ -88,19 +88,13 @@ function toggleAmuMailParts(){
 
     const userType = userTypeSelect.value;
 
-    const studentMail = document.getElementById('mail-student');
-    const professorMail = document.getElementById('mail-professor');
     const mailHint = document.getElementById('email-hint');
 
-    studentMail.style.display = 'none';
-    professorMail.style.display = 'none';
     mailHint.style.display = 'none';
 
     if (userType === 'student') {
-        studentMail.style.display = 'inline-block';
         mailHint.style.display = 'inline-block';
     } else if (userType === 'professor') {
-        professorMail.style.display = 'inline-block';
         mailHint.style.display = 'inline-block';
     }
 }
