@@ -132,7 +132,7 @@ class Router
     private function handleNotFound(): void
     {
         http_response_code(404);
-        SessionService::setFlash('error', "Page non existante.");
+        SessionService::setFlash('errors', ["Page non existante."]);
         header("Location: /");
         return;
     }

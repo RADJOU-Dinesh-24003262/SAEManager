@@ -1,19 +1,19 @@
 <?php
 
-namespace Views\LegalTermsConditions;
+namespace Views\ConservationDate;
 
 use Core\Views\AbstractView;
 use Override;
 
 /**
- * Class ConfigConservationDateView
+ * Class ConservationDateView
  * This class represents the view for the resume of the configuration of the conservation date page of the application.
  * It extends the AbstractView class and provides specific implementations
  * for rendering the resume of the configuration of the conservation date page.
  *
  * @category   View
  * @package    Src
- * @subpackage Views/LegalTermsConditions
+ * @subpackage Views/ConservationDate
  * @author     Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author     François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author     William Edelstein <william.edelstein@etu.univ-amu.fr>
@@ -22,14 +22,14 @@ use Override;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ConfigConservationDateView extends AbstractView
+class ConservationDateView extends AbstractView
 {
     /**
      * The path of the HTML code to display for this view.
      *
      * @var string
      */
-    private const TEMPLATE_HTML = __DIR__ . '/config-conservation-date.html';
+    private const TEMPLATE_HTML = __DIR__ . '/conservation-date.html';
 
 
     /**
