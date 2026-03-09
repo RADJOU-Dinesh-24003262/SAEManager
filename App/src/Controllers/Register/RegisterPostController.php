@@ -17,7 +17,6 @@ use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
 use Services\Auth\RegistrationMailer;
-use Validator\ValidationServiceRegister;
 use Views\User\TwoFactorAuthentificationView;
 use Views\User\RegisterPendingView;
 use Validator\Register\ValidationServiceRegister;
@@ -73,7 +72,7 @@ class RegisterPostController extends BaseController
 
             RegistrationMailer::send($data['email'], $token);
 
-            Logger::log('REGISTER_SUCCESS', "New user registered: " . $user->getEmail());
+            Logger::log('REGISTER_ATTEMPTED', "New user registered in pending registrations: " . $data['email']);
 
             $view = new TwoFactorAuthentificationView($data['email']);
             $view->render();
