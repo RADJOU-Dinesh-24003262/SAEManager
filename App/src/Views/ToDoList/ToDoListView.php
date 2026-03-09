@@ -243,7 +243,7 @@ class ToDoListView extends BaseSaeView
             $html .= '<option value="2" selected>Moyenne</option>';
             $html .= '<option value="3">Basse</option>';
             $html .= '</select>';
-            $html .= '<input type="date" id="new-task-end_date" placeholder="Date d\'heure..." value="null">';
+            $html .= '<input type="date" id="new-end-date">';
             $html .= '<button id="add-task-btn" class="btn btn-primary">Ajouter</button>';
             $html .= '</div>';
         }
@@ -270,12 +270,12 @@ class ToDoListView extends BaseSaeView
         $priorityLabel = [1 => 'Haute', 2 => 'Moyenne', 3 => 'Basse'][$priority] ?? 'Moyenne';
 
         $html = '<li class="task-item ' . $priorityClass . '" data-id="' . $task->getTodoId() . '" ';
-        $html .= 'data-priority="' . $priority . '" data-end_date="' . $endDate. '" >';
+        $html .= 'data-priority="' . $priority . '" data-end_date="' . $endDate . '" >';
         $html .= '<div class="task-content">';
         $html .= '<label>';
         $html .= '<input type="checkbox" class="task-checkbox" ' . $checked . ' ' . $disabled . '>';
         $html .= '<span class="task-text">' . $task->getTodoDesc() . '</span>';
-        $html .= '<input type="date" id="new-task-end_date" value="' . $endDate . '">';
+        $html .= '<input type="date" class="new-end-date" value="' . $task->getEndDate() . '">';
         $html .= '</label>';
         $html .= '</div>';
 
