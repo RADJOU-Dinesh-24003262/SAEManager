@@ -2,7 +2,7 @@
 
 namespace Models\Repository\SAE;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
 use PDO;
 use PDOException;

@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\SAE;
 
-use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Models\Entity\SAE\SAESubject;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Models\Entity\User\User;

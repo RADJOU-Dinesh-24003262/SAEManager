@@ -2,10 +2,14 @@
 
 namespace Core\Routing;
 
-use Core\Utilis\SessionService;
+use Core\Controllers\ControllerInterface;
+use Core\Utils\SessionService;
+use InvalidArgumentException;
+use Models\Repository\Security\JsonIpBanRepository;
 
 /**
- * Simple router based on La Console framework pattern.
+ * Ultra-simple dynamic router.
+ * Translates the URL purely mathematically into a class name and instantiates it.
  *
  * @category   Routing
  * @package    Core
@@ -17,11 +21,6 @@ use Core\Utilis\SessionService;
  */
 class Router
 {
-    /**
-     * @var array<string, array<string, array{controller: string, method: string}>> Routes configuration
-     */
-    private array $routes;
-
     /**
      * @var string Requested path from URL
      */
@@ -40,93 +39,107 @@ class Router
      */
     public function __construct(string $path, string $method)
     {
-        $this->routes = ROUTES;
-        $this->requestedPath = $path;
+        $this->verifyIpNotBanned();
+        $this->requestedPath = rtrim(explode('?', $path)[0], '/');
         $this->requestedMethod = strtoupper($method);
-        $this->parseRoutes();
+        $this->parseAndDispatch();
     }
 
     /**
-     * Parse routes and dispatch to appropriate controller.
+     * Checks if the client IP is banned.
      *
      * @return void
      */
-    private function parseRoutes(): void
+    private function verifyIpNotBanned(): void
     {
-        foreach ($this->routes as $pattern => $route) {
-            if (preg_match($pattern, $this->requestedPath, $matches)) {
-                $params = array_filter(
-                    $matches,
-                    fn ($key) => !is_int($key),
-                    ARRAY_FILTER_USE_KEY
-                );
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+        $ipBanRepository = new JsonIpBanRepository();
+        if ($ipBanRepository->isBanned($ip)) {
+            http_response_code(403);
+            echo "Access Denied. Your IP address is temporarily banned.";
+            exit();
+        }
+    }
 
-                $this->dispatch($route, $params);
-                return;
+    /**
+     * Parse path dynamically by deducing the exact controller FQCN.
+     *
+     * @return void
+     */
+    private function parseAndDispatch(): void
+    {
+        if ($this->requestedPath === '' || $this->requestedPath === '/index' || $this->requestedPath === '/') {
+            $this->dispatch('\Controllers\Index\IndexController', []);
+            return;
+        }
+
+        $segments = array_values(array_filter(explode('/', trim($this->requestedPath, '/'))));
+
+        $words = [];
+        $params = [];
+
+        foreach ($segments as $segment) {
+            if (is_numeric($segment)) {
+                $params[] = (int)$segment;
+            } else {
+                // E.g. "edit-profile" -> "EditProfile".
+                $word = str_replace('-', ' ', $segment);
+                $word = str_replace(' ', '', ucwords($word));
+                $words[] = $word;
             }
         }
 
-        $this->handleNotFound();
-    }
-
-
-    /**
-     * Dispatch to controller.
-     *
-     * @param array<string, array{controller: string, method: string}> $route  Route configuration.
-     * @param array<string, string>                                    $params Route parameters.
-     *
-     * @return void
-     */
-    private function dispatch(array $route, array $params): void
-    {
-        // Check if HTTP method is supported for this route.
-        if (!isset($route[$this->requestedMethod])) {
+        if (empty($words)) {
             $this->handleNotFound();
             return;
         }
 
-        $routeConfig = $route[$this->requestedMethod];
-        $controllerClass = $routeConfig['controller'];
-        $method = $routeConfig['method'];
+        // Deduce controller name.
+        $module = ucfirst($words[0]);
+        $actionBaseName = implode('', $words);
 
+        if ($this->requestedMethod === 'POST' && !str_ends_with($actionBaseName, 'Post')) {
+            $actionBaseName .= 'Post';
+        }
 
+        $controllerName = $actionBaseName . 'Controller';
+        $fqcn = '\\Controllers\\' . $module . '\\' . $controllerName;
+
+        if (class_exists($fqcn)) {
+            $this->dispatch($fqcn, $params);
+        } else {
+            error_log("Router Error: Strict mathematical deduction of $fqcn failed for path {$this->requestedPath}");
+            $this->handleNotFound();
+        }
+    }
+
+    /**
+     * Dispatch to the matched controller.
+     *
+     * @param string     $controllerClass FQCN of the deduced controller.
+     * @param array<int> $params          Extracted numeric parameters.
+     *
+     * @return void
+     * @throws InvalidArgumentException If the controller does not implement the interface.
+     */
+    private function dispatch(string $controllerClass, array $params): void
+    {
         try {
-            $controller = new $controllerClass();
+            if (!is_subclass_of($controllerClass, ControllerInterface::class)) {
+                throw new InvalidArgumentException("Controller class must implement ControllerInterface");
+            }
 
-            $controller->$method(...$params);
-            exit();
+            /* @var ControllerInterface $controller */
+            $controller = new $controllerClass();
+            $controller->control(...$params);
+            return;
         } catch (\Throwable $e) {
             SessionService::setFlash('errors', ["Une erreur inattendue est survenue."]);
             error_log("Erreur inattendue: " . $e->getTraceAsString() . $e->getMessage());
             http_response_code(500);
             header("Location: /");
-            exit();
+            return;
         }
-    }
-
-    /**
-     * Explode path into segments.
-     *
-     * @param string $path The path to explode.
-     *
-     * @return array<string>
-     */
-    private function explodePath(string $path): array
-    {
-        return explode('/', rtrim(ltrim($path, '/'), '/'));
-    }
-
-    /**
-     * Check if a path part is a parameter (between {}).
-     *
-     * @param string $candidatePathPart The path part to check.
-     *
-     * @return boolean
-     */
-    private function isParam(string $candidatePathPart): bool
-    {
-        return str_contains($candidatePathPart, '{') && str_contains($candidatePathPart, '}');
     }
 
     /**
@@ -137,8 +150,8 @@ class Router
     private function handleNotFound(): void
     {
         http_response_code(404);
-        SessionService::setFlash('errors', "Page non existante.");
+        SessionService::setFlash('errors', ["Page non existante."]);
         header("Location: /");
-        exit();
+        return;
     }
 }

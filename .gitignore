@@ -21,3 +21,5 @@ build/*
 *.log
 mettre en place des tranasctions sur BD.md
 asset/SQL_script/Database.sql
+.idea/*
+storage/ip_bans.json

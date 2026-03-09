@@ -5,7 +5,6 @@ namespace Models\UseCase\SAE;
 use Exception;
 use Models\Entity\User\User;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
-use Models\Repository\SAE\PdoSAESubjectRepository;
 use Services\FileService;
 use Services\SAESubjectFileService;
 
@@ -59,7 +58,7 @@ class ModifySAEUseCase
             throw new Exception("Vous n'avez pas la permission de modifier cette SAE.");
         }
 
-        $fileService = new SAESubjectFileService(new PdoSAESubjectRepository());
+        $fileService = new SAESubjectFileService($this->subjectInterface);
         $fileName = $fileService->getFileName($saeId);
 
         if (!empty($fileName)) {

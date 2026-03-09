@@ -2,6 +2,7 @@
 
 namespace Tests\Integration\Models\User;
 
+use Core\Utils\SessionService;
 use Models\Entity\User\User;
 use Models\Repository\User\PdoUserRepository;
 use Models\Repository\User\PdoStudentRepository;
@@ -9,7 +10,7 @@ use Models\UseCase\User\DeleteUserUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\includes\Database;
+use Core\Includes\Database;
 use ReflectionClass;
 use Models\Entity\User\Student;
 
@@ -61,6 +62,7 @@ class DeleteUserUseCaseTest extends TestCase
         $createdUserId = $studentRepo->insert($user);
         $this->user = $studentRepo->findById($createdUserId);
         $this->userId = $createdUserId;
+        SessionService::start();
     }
 
     protected function tearDown(): void

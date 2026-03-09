@@ -2,10 +2,10 @@
 
 namespace Models\UseCase\User;
 
-use Core\includes\exception\ExceptionEmailAlreadyExists;
-use Core\includes\exception\ExceptionSpam;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Models\Repository\User\PdoUserRepository;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionSpam;
+use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Models\UseCase\User\InterfaceDB\UserInterface;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
 
@@ -21,16 +21,16 @@ use Services\TokenService;
 class ProcessForgotPasswordUseCase
 {
     /**
-     * @var PdoUserRepository
+     * @var UserInterface
      */
-    private PdoUserRepository $userRepository;
+    private UserInterface $userRepository;
 
     /**
      * Constructor.
      *
-     * @param PdoUserRepository $userRepository Repo for users.
+     * @param UserInterface $userRepository Repo for users.
      */
-    public function __construct(PdoUserRepository $userRepository)
+    public function __construct(UserInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models\UseCase\User;
 
-use Core\includes\exception\ExceptionValidation\ExceptionValidationLogin;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationLogin;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\LoginUseCase;

@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\User;
 
-use Core\includes\exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use InvalidArgumentException;
 use Models\Entity\User\Client;
 use Models\Entity\User\Professor;

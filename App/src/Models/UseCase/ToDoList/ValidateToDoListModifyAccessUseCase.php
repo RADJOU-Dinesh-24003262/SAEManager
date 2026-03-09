@@ -2,14 +2,14 @@
 
 namespace Models\UseCase\ToDoList;
 
-use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Models\Entity\User\User;
-use Models\Repository\SAE\PdoParticipatedInRepository;
-use Models\Repository\SAE\PdoSAEGroupRepository;
-use Models\Repository\SAE\PdoSAESubjectRepository;
-use Models\Repository\User\PdoClientRepository;
-use Models\Repository\User\PdoProfessorRepository;
-use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
+use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
+use Models\UseCase\User\InterfaceDB\ClientInterface;
+use Models\UseCase\User\InterfaceDB\ProfessorInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 
 /**
@@ -24,36 +24,36 @@ use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
  */
 class ValidateToDoListModifyAccessUseCase
 {
-    /** @var PdoSAESubjectRepository */
-    private PdoSAESubjectRepository $subjectRepo;
-    /** @var PdoSAEGroupRepository */
-    private PdoSAEGroupRepository $groupRepo;
-    /** @var PdoParticipatedInRepository */
-    private PdoParticipatedInRepository $participatedInRepo;
-    /** @var PdoStudentRepository */
-    private PdoStudentRepository $studentRepo;
-    /** @var PdoProfessorRepository */
-    private PdoProfessorRepository $professorRepo;
-    /** @var PdoClientRepository */
-    private PdoClientRepository $clientRepo;
+    /** @var SAESubjectInterface */
+    private SAESubjectInterface $subjectRepo;
+    /** @var SAEGroupInterface */
+    private SAEGroupInterface $groupRepo;
+    /** @var ParticipatedInInterface */
+    private ParticipatedInInterface $participatedInRepo;
+    /** @var StudentInterface */
+    private StudentInterface $studentRepo;
+    /** @var ProfessorInterface */
+    private ProfessorInterface $professorRepo;
+    /** @var ClientInterface */
+    private ClientInterface $clientRepo;
 
     /**
      * Constructor for ValidateToDoListModifyAccessUseCase.
      *
-     * @param PdoSAESubjectRepository     $subjectRepo        Repo for subjects.
-     * @param PdoSAEGroupRepository       $groupRepo          Repo for groups.
-     * @param PdoParticipatedInRepository $participatedInRepo Repo for student participations.
-     * @param PdoStudentRepository        $studentRepo        Repo for students.
-     * @param PdoProfessorRepository      $professorRepo      Repo for professors.
-     * @param PdoClientRepository         $clientRepo         Repo for clients.
+     * @param SAESubjectInterface     $subjectRepo        Repo for subjects.
+     * @param SAEGroupInterface       $groupRepo          Repo for groups.
+     * @param ParticipatedInInterface $participatedInRepo Repo for student participations.
+     * @param StudentInterface        $studentRepo        Repo for students.
+     * @param ProfessorInterface      $professorRepo      Repo for professors.
+     * @param ClientInterface         $clientRepo         Repo for clients.
      */
     public function __construct(
-        PdoSAESubjectRepository $subjectRepo,
-        PdoSAEGroupRepository $groupRepo,
-        PdoParticipatedInRepository $participatedInRepo,
-        PdoStudentRepository $studentRepo,
-        PdoProfessorRepository $professorRepo,
-        PdoClientRepository $clientRepo
+        SAESubjectInterface $subjectRepo,
+        SAEGroupInterface $groupRepo,
+        ParticipatedInInterface $participatedInRepo,
+        StudentInterface $studentRepo,
+        ProfessorInterface $professorRepo,
+        ClientInterface $clientRepo
     ) {
         $this->subjectRepo = $subjectRepo;
         $this->groupRepo = $groupRepo;
@@ -105,7 +105,7 @@ class ValidateToDoListModifyAccessUseCase
         }
 
         $groupData = reset($saeData['groups']);
-        $groupId = (int) $groupData['group']->getSaeGroupId();
+        $groupId = (int)$groupData['group']->getSaeGroupId();
 
         return $groupId;
     }
