@@ -188,7 +188,7 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
+                "L'email doit correspondre au format prenom.nom (minuscules).".$data['email'].$data['first_name'].$data['last_name']
             );
         }
 
