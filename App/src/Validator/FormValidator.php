@@ -150,7 +150,7 @@ abstract class FormValidator
         $hasLowercase = preg_match('/[a-z]/', $password);
         $hasDigit     = preg_match('/[0-9]/', $password);
 
-        $hasSpecialChar = preg_match('#[!"#$%&\'()*+,\-./:;<=>?@[\\\\\]^_`{|}~£€§µ°]#u', $password);
+        $hasSpecialChar = preg_match('/[\W_]/u', $password);
         return $hasUppercase && $hasLowercase && $hasDigit && $hasSpecialChar;
     }
 
