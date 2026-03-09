@@ -198,14 +198,6 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
         }
 
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
-            $errors[] = new ExceptionValidationRegister(
-                "email",
-                "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
-            );
-        }
-
         return $errors;
     }
 
