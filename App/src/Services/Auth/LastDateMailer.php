@@ -2,17 +2,17 @@
 
 namespace Services\Auth;
 
-use Core\Utilis\EmailService;
-use Core\Utilis\Logger;
+use Core\Utils\EmailService;
+use Core\Utils\Logger;
 use Models\Entity\SAE\Repository\SAESubjectRepository;
 use Models\Entity\SAE\Repository\SAEGroupRepository;
 use Models\Entity\SAE\Repository\ParticipatedInRepository;
 use Models\Entity\User\Student;
 use DateTime;
 use Models\Entity\SAE\SAESubject;
-use Models\Repository\SAE\PdoParticipatedInRepository;
-use Models\Repository\SAE\PdoSAEGroupRepository;
-use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
+use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 
 /**
  * Service responsible for sending reminder emails for SAE Manager.
@@ -30,22 +30,24 @@ class LastDateMailer
     /**
      * Sends a reminder email to the user about the SAE submission deadline.
      *
+     * @param SAESubjectInterface     $saeSubjectRepo     The SAE subject repository.
+     * @param SAEGroupInterface       $saeGroupRepo       The SAE group repository.
+     * @param ParticipatedInInterface $participatedInRepo The participated in repository.
      * @return void
      */
-    public static function send(): void
-    {
+    public static function send(
+        SAESubjectInterface $saeSubjectRepo,
+        SAEGroupInterface $saeGroupRepo,
+        ParticipatedInInterface $participatedInRepo
+    ): void {
         Logger::log('MAIL_LAST_DATE', 'Starting last date reminder email process.');
         $subjectOfMail = 'URGENT : Rappel date limite de rendu - SAE Manager';
 
         $dateEndFocus = (new DateTime('+3 days'))->format('Y-m-d');
         Logger::log('MAIL_LAST_DATE', "Focus date for reminder: $dateEndFocus");
 
-        $saeSubjectRepo = new PdoSAESubjectRepository();
         $saeSubjects = $saeSubjectRepo->findByEndDate($dateEndFocus);
         Logger::log('MAIL_LAST_DATE', 'Found ' . count($saeSubjects) . ' subjects ending on focus date.');
-
-        $saeGroupRepo = new PdoSAEGroupRepository();
-        $participatedInRepo = new PdoParticipatedInRepository();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
@@ -155,16 +157,16 @@ class LastDateMailer
                 <p>Bonjour <strong>{$prenom}</strong>,</p>
                 
                 <p>La date limite de rendu pour votre Situation d'Apprentissage et d'Évaluation (SAE) " .
-                    "approche à grands pas.</p>
+            "approche à grands pas.</p>
                 
                 <div class='warning-box'>
                     <div class='info-item'><span class='info-label'>Intitulé :</span> {$title}</div>
                     <div class='info-item'><span class='info-label'>Date limite de rendu :</span> " .
-                        "<strong>{$endDate}</strong></div>
+            "<strong>{$endDate}</strong></div>
                 </div>
                 
                 <p>Merci de vous assurer que votre travail est bien déposé avant cette date. " .
-                    "Tout retard pourrait entraîner des pénalités.</p>
+            "Tout retard pourrait entraîner des pénalités.</p>
                 
                 <div class='button-container'>
                     <a href='{$dashboardUrl}' class='button'>Déposer mon rendu</a>
@@ -218,19 +220,33 @@ Ceci est un email automatique, merci de ne pas y répondre.
     /**
      * Main method to execute the mailer.
      *
+     * @param SAESubjectInterface     $saeSubjectRepo     The SAE subject repository.
+     * @param SAEGroupInterface       $saeGroupRepo       The SAE group repository.
+     * @param ParticipatedInInterface $participatedInRepo The participated in repository.
+     *
      * @return void
      */
-    public static function main(): void
-    {
-        self::send(); // Will be changed later.
+    public static function main(
+        SAESubjectInterface $saeSubjectRepo,
+        SAEGroupInterface $saeGroupRepo,
+        ParticipatedInInterface $participatedInRepo
+    ): void {
+        self::send($saeSubjectRepo, $saeGroupRepo, $participatedInRepo);
     }
 }
 
 // phpcs:disable PSR1.Files.SideEffects
 // Execute if run directly.
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
+    // Will be changed during namespace refactoring if needed. Wait, we renamed it to Includes.
     require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
-    \Core\includes\Autoloader::register();
-    LastDateMailer::main();
+    \Core\Includes\Autoloader::register();
+
+    // We instantiate the repositories dynamically to avoid static coupling in the class.
+    $subjectClass = '\\Models\\Repository\\SAE\\PdoSAESubjectRepository';
+    $groupClass = '\\Models\\Repository\\SAE\\PdoSAEGroupRepository';
+    $partClass = '\\Models\\Repository\\SAE\\PdoParticipatedInRepository';
+
+    LastDateMailer::main(new $subjectClass(), new $groupClass(), new $partClass());
 }
 // phpcs:enable

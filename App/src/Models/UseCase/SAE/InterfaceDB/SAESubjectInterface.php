@@ -92,4 +92,20 @@ interface SAESubjectInterface extends RepositoryInterface
      * }|null
      */
     public function getClientInfo(int $saeId): ?array;
+
+    /**
+     * Finds SAE subjects by begin date.
+     *
+     * @param string $beginDate The begin date.
+     * @return array<SAESubject>
+     */
+    public function findByBeginDate(string $beginDate): array;
+
+    /**
+     * Finds SAE subjects by end date.
+     *
+     * @param string $endDate The end date.
+     * @return array<SAESubject>
+     */
+    public function findByEndDate(string $endDate): array;
 }

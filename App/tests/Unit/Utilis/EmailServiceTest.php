@@ -5,8 +5,8 @@ namespace Tests\Unit\Utilis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Utilis\EmailService;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
+use Core\Utils\EmailService;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 
 /**
  * Unit tests for EmailService

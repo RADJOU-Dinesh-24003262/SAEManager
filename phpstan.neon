@@ -4,9 +4,6 @@ parameters:
     - App/src/
     - Core/
   
-  bootstrapFiles:
-    - App/config/routes.php
-  
   excludePaths:
     - */vendor/*
     - */tests/*

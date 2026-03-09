@@ -2,7 +2,7 @@
 
 namespace Models\Repository\User;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Models\Entity\User\Client;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\ClientInterface;

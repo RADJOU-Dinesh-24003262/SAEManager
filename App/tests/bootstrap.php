@@ -7,7 +7,7 @@
  * PHPUnit Bootstrap File
  */
 
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 
 // Set error reporting
 error_reporting(E_ALL);

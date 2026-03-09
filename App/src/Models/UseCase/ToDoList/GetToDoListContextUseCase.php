@@ -2,14 +2,14 @@
 
 namespace Models\UseCase\ToDoList;
 
-use Core\includes\exception\SAE\ExceptionAccessDenied;
+use Core\Includes\Exception\SAE\ExceptionAccessDenied;
 use Exception;
 use Models\Entity\User\User;
-use Models\Repository\SAE\PdoParticipatedInRepository;
-use Models\Repository\SAE\PdoSAEGroupRepository;
-use Models\Repository\SAE\PdoSAESubjectRepository;
-use Models\Repository\ToDoList\PdoToDoListRepository;
-use Models\Repository\User\PdoStudentRepository;
+use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
+use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
+use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\UseCase\ToDoList\GetTasksUseCase;
 
 /**
@@ -27,53 +27,53 @@ class GetToDoListContextUseCase
     /**
      * The SAE subject repository.
      *
-     * @var PdoSAESubjectRepository
+     * @var SAESubjectInterface
      */
-    private PdoSAESubjectRepository $saeSubjectRepo;
+    private SAESubjectInterface $saeSubjectRepo;
 
     /**
      * The SAE group repository.
      *
-     * @var PdoSAEGroupRepository
+     * @var SAEGroupInterface
      */
-    private PdoSAEGroupRepository $saeGroupRepo;
+    private SAEGroupInterface $saeGroupRepo;
 
     /**
      * The participated in repository.
      *
-     * @var PdoParticipatedInRepository
+     * @var ParticipatedInInterface
      */
-    private PdoParticipatedInRepository $participatedInRepo;
+    private ParticipatedInInterface $participatedInRepo;
 
     /**
      * The student repository.
      *
-     * @var PdoStudentRepository
+     * @var StudentInterface
      */
-    private PdoStudentRepository $studentRepo;
+    private StudentInterface $studentRepo;
 
     /**
      * The to-do list repository.
      *
-     * @var PdoToDoListRepository
+     * @var ToDoListInterface
      */
-    private PdoToDoListRepository $todoListRepo;
+    private ToDoListInterface $todoListRepo;
 
     /**
      * Constructor.
      *
-     * @param PdoSAESubjectRepository     $saeSubjectRepo     The SAE subject repository.
-     * @param PdoSAEGroupRepository       $saeGroupRepo       The SAE group repository.
-     * @param PdoParticipatedInRepository $participatedInRepo The participated in repository.
-     * @param PdoStudentRepository        $studentRepo        The student repository.
-     * @param PdoToDoListRepository       $todoListRepo       The to-do list repository.
+     * @param SAESubjectInterface     $saeSubjectRepo     The SAE subject repository.
+     * @param SAEGroupInterface       $saeGroupRepo       The SAE group repository.
+     * @param ParticipatedInInterface $participatedInRepo The participated in repository.
+     * @param StudentInterface        $studentRepo        The student repository.
+     * @param ToDoListInterface       $todoListRepo       The to-do list repository.
      */
     public function __construct(
-        PdoSAESubjectRepository $saeSubjectRepo,
-        PdoSAEGroupRepository $saeGroupRepo,
-        PdoParticipatedInRepository $participatedInRepo,
-        PdoStudentRepository $studentRepo,
-        PdoToDoListRepository $todoListRepo
+        SAESubjectInterface $saeSubjectRepo,
+        SAEGroupInterface $saeGroupRepo,
+        ParticipatedInInterface $participatedInRepo,
+        StudentInterface $studentRepo,
+        ToDoListInterface $todoListRepo
     ) {
         $this->saeSubjectRepo = $saeSubjectRepo;
         $this->saeGroupRepo = $saeGroupRepo;

@@ -1,17 +1,14 @@
 <?php
 
 require_once __DIR__ . '/../vendor/autoload.php';
-include "../Core/includes/Autoloader.php";
-\Core\includes\Autoloader::register();
+include "../Core/Includes/Autoloader.php";
+\Core\Includes\Autoloader::register();
 
 use Core\Routing\Router;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 
 // Start the session
 SessionService::start();
-
-// Load route definitions
-require_once __DIR__ . '/../App/config/routes.php';
 
 // Get request path and method
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: "/";
