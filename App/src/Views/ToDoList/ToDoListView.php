@@ -6,7 +6,7 @@ use Models\Entity\SAE\SAESubject;
 use Models\Entity\User\User;
 use Override;
 use Views\BaseSaeView;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**

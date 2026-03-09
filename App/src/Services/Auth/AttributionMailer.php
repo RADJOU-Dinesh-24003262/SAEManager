@@ -2,8 +2,8 @@
 
 namespace Services\Auth;
 
-use Core\Utilis\EmailService;
-use Core\Utilis\Logger;
+use Core\Utils\EmailService;
+use Core\Utils\Logger;
 use Models\Entity\SAE\Repository\SAESubjectRepository;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;
@@ -11,9 +11,9 @@ use Models\Entity\SAE\SAESubject;
 use DateTime;
 use Models\Entity\SAE\Repository\SAEGroupRepository;
 use Models\Entity\SAE\Repository\ParticipatedInRepository;
-use Models\Repository\SAE\PdoParticipatedInRepository;
-use Models\Repository\SAE\PdoSAEGroupRepository;
-use Models\Repository\SAE\PdoSAESubjectRepository;
+use Models\UseCase\SAE\InterfaceDB\ParticipatedInInterface;
+use Models\UseCase\SAE\InterfaceDB\SAEGroupInterface;
+use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 
 /**
  * Service responsible for sending an attribution emails for SAE Manager.
@@ -31,21 +31,23 @@ class AttributionMailer
     /**
      * Sends a attribution email to the user about the SAE submission deadline.
      *
+     * @param SAESubjectInterface     $saeSubjectRepo     The SAE subject repository.
+     * @param SAEGroupInterface       $saeGroupRepo       The SAE group repository.
+     * @param ParticipatedInInterface $participatedInRepo The participated in repository.
      * @return void
      */
-    public static function sendAttribution(): void
-    {
+    public static function sendAttribution(
+        SAESubjectInterface $saeSubjectRepo,
+        SAEGroupInterface $saeGroupRepo,
+        ParticipatedInInterface $participatedInRepo
+    ): void {
         Logger::log('MAIL_ATTRIBUTION', 'Starting attribution email process.');
         $subjectOfMail = 'Nouvelle SAE attribuée - SAE Manager';
         $dateBeginFocus = (new DateTime('+1 days'))->format('Y-m-d');
         Logger::log('MAIL_ATTRIBUTION', "Focus date for attribution: $dateBeginFocus");
 
-        $saeSubjectRepo = new PdoSAESubjectRepository();
         $saeSubjects = $saeSubjectRepo->findByBeginDate($dateBeginFocus);
         Logger::log('MAIL_ATTRIBUTION', 'Found ' . count($saeSubjects) . ' subjects starting on focus date.');
-
-        $saeGroupRepo = new PdoSAEGroupRepository();
-        $participatedInRepo = new PdoParticipatedInRepository();
 
         foreach ($saeSubjects as $saeSubject) {
             $saeId = $saeSubject->getSaeSubjectId();
@@ -163,7 +165,7 @@ class AttributionMailer
                 </div>
                 
                 <p>Vous pouvez dès à présent consulter les détails de ce projet et contacter votre groupe sur " .
-                    "votre espace étudiant.</p>
+            "votre espace étudiant.</p>
                 
                 <div class='button-container'>
                     <a href='{$dashboardUrl}' class='button'>Accéder à mon espace</a>
@@ -217,11 +219,18 @@ Ceci est un email automatique, merci de ne pas y répondre.
     /**
      * Main method to execute the mailer.
      *
+     * @param SAESubjectInterface     $saeSubjectRepo     The SAE subject repository.
+     * @param SAEGroupInterface       $saeGroupRepo       The SAE group repository.
+     * @param ParticipatedInInterface $participatedInRepo The participated in repository.
+     *
      * @return void
      */
-    public static function main(): void
-    {
-        self::sendAttribution(); // Will be changed later.
+    public static function main(
+        SAESubjectInterface $saeSubjectRepo,
+        SAEGroupInterface $saeGroupRepo,
+        ParticipatedInInterface $participatedInRepo
+    ): void {
+        self::sendAttribution($saeSubjectRepo, $saeGroupRepo, $participatedInRepo); // Will be changed later.
     }
 }
 
@@ -229,7 +238,13 @@ Ceci est un email automatique, merci de ne pas y répondre.
 // Execute if run directly.
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
-    \Core\includes\Autoloader::register();
-    AttributionMailer::main();
+    \Core\Includes\Autoloader::register();
+
+    // We instantiate the repositories dynamically to avoid static coupling in the class.
+    $subjectClass = '\\Models\\Repository\\SAE\\PdoSAESubjectRepository';
+    $groupClass = '\\Models\\Repository\\SAE\\PdoSAEGroupRepository';
+    $partClass = '\\Models\\Repository\\SAE\\PdoParticipatedInRepository';
+
+    AttributionMailer::main(new $subjectClass(), new $groupClass(), new $partClass());
 }
 // phpcs:enable

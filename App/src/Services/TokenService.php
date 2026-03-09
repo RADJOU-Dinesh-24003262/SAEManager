@@ -2,10 +2,10 @@
 
 namespace Services;
 
-use Core\includes\Database;
-use Core\includes\exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionSpam;
+use Core\Includes\Database;
+use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\Exception\ExceptionSpam;
 use PDO;
 use PDOException;
 

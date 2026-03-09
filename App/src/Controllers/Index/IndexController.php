@@ -3,7 +3,7 @@
 namespace Controllers\Index;
 
 use Controllers\BaseController;
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
 use Override;
 use Views\Index\IndexView;
 
