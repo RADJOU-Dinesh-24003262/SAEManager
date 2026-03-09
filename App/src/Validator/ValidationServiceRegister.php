@@ -119,11 +119,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuEmail($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuStudentEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
+                "L'email doit correspondre au format prenom.nom(minuscules)@etu.univ-amu.fr"
             );
         }
 
@@ -184,11 +184,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuEmail($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuProfessorEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "L'email doit correspondre au format prenom.nom (minuscules).".$data['email'].$data['first_name'].$data['last_name']
+                "L'email doit correspondre au format prenom.nom(minuscules)@univ-amu.fr"
             );
         }
 
