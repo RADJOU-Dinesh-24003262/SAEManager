@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Metadata\Covers;
 use Validator\FormValidator;
 use Validator\Login\LoginValidator;
 use Validator\ResetPassword\ResetPasswordValidator;
@@ -32,6 +33,7 @@ use Core\Utils\SessionService;
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
 #[CoversClass(ExceptionValidationForgotPassword::class)]
+#[CoversClass(RateLimiter::class)]
 class ValidatorTest extends TestCase
 {
     // ========================================
