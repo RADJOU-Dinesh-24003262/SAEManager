@@ -10,6 +10,8 @@ use Models\Entity\User\User;
 use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionSpam;
+use Models\Repository\Security\JsonIpBanRepository;
+use Models\UseCase\Security\IpBanRepositoryInterface;
 
 /**
  * Abstract BaseController to handle common controller logic like authentication.
@@ -27,6 +29,11 @@ abstract class BaseController implements ControllerInterface
      * @var User The authenticated user.
      */
     protected User $user;
+
+    /**
+     * @var IpBanRepositoryInterface IP ban repository.
+     */
+    protected IpBanRepositoryInterface $ipBanRepository;
 
     /**
      * Ensures the user is authenticated.
@@ -102,7 +109,7 @@ abstract class BaseController implements ControllerInterface
     }
 
     /**
-     * Checks if the honeypot field is empty. If not, it logs the attempt and throws ExceptionSpam.
+     * Checks if the honeypot field is empty. If not, it bans the IP, logs the attempt and throws ExceptionSpam.
      *
      * @param string $logActionName The prefix for the log message (e.g., 'LOGIN', 'REGISTER').
      * @return void
@@ -111,14 +118,47 @@ abstract class BaseController implements ControllerInterface
     protected function checkHoneypot(string $logActionName): void
     {
         if (!empty($_POST['telephone'])) {
+            $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+            $this->getIpBanRepository()->banIp($ip, 3);
+
             Logger::log(
                 $logActionName . '_SPAM_FAIL',
-                'Automated action attempt blocked by honeypot.',
+                "Automated action attempt blocked by honeypot. IP $ip banned for 3 days.",
                 null,
                 'WARNING'
             );
-            throw new ExceptionSpam("Échec de la validation. Veuillez réessayer.");
+            throw new ExceptionSpam("Échec de la validation. Votre IP a été bannie pour 3 jours.");
         }
+    }
+
+    /**
+     * Multi-layer onion: ensures the IP is not banned.
+     * Exits with 403 if banned.
+     *
+     * @return void
+     */
+    protected function verifyIpNotBanned(): void
+    {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+        if ($this->getIpBanRepository()->isBanned($ip)) {
+            Logger::log('SECURITY_BLOCK', "Banned IP $ip attempted to access the site.", null, 'WARNING');
+            http_response_code(403);
+            echo "Access Denied. Your IP address is temporarily banned.";
+            exit();
+        }
+    }
+
+    /**
+     * Lazy loader for IP ban repository.
+     *
+     * @return IpBanRepositoryInterface
+     */
+    protected function getIpBanRepository(): IpBanRepositoryInterface
+    {
+        if (!isset($this->ipBanRepository)) {
+            $this->ipBanRepository = new JsonIpBanRepository();
+        }
+        return $this->ipBanRepository;
     }
 
     /**

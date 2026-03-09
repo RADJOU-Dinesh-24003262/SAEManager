@@ -20,7 +20,7 @@ class RateLimiter
      * Checks if the given action has exceeded the allowed attempts.
      * Starts tracking if not already present.
      *
-     * @param string  $action      The identifier for the action (e.g., 'login', 'forgot_pwd').
+     * @param string  $action      The identifier for the action (e.g., 'login', 'forgot_password').
      * @param integer $maxAttempts Maximum number of allowed attempts within the cooldown period.
      * @param integer $cooldown    Cooldown period in seconds before attempts are reset.
      *

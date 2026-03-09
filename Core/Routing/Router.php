@@ -5,6 +5,7 @@ namespace Core\Routing;
 use Core\Controllers\ControllerInterface;
 use Core\Utils\SessionService;
 use InvalidArgumentException;
+use Models\Repository\Security\JsonIpBanRepository;
 
 /**
  * Ultra-simple dynamic router.
@@ -38,9 +39,26 @@ class Router
      */
     public function __construct(string $path, string $method)
     {
+        $this->verifyIpNotBanned();
         $this->requestedPath = rtrim(explode('?', $path)[0], '/');
         $this->requestedMethod = strtoupper($method);
         $this->parseAndDispatch();
+    }
+
+    /**
+     * Checks if the client IP is banned.
+     *
+     * @return void
+     */
+    private function verifyIpNotBanned(): void
+    {
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+        $ipBanRepository = new JsonIpBanRepository();
+        if ($ipBanRepository->isBanned($ip)) {
+            http_response_code(403);
+            echo "Access Denied. Your IP address is temporarily banned.";
+            exit();
+        }
     }
 
     /**
