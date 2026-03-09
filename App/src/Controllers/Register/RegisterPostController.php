@@ -74,7 +74,7 @@ class RegisterPostController extends BaseController
 
             Logger::log('REGISTER_ATTEMPTED', "New user registered in pending registrations: " . $data['email']);
 
-            $view = new TwoFactorAuthentificationView($data['email']);
+            $vi²w = new TwoFactorAuthentificationView($data['email']);
             $view->render();
             exit();
         } catch (ExceptionEmailAlreadyExists $e) {

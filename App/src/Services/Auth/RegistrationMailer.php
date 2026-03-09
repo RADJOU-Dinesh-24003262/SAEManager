@@ -3,7 +3,7 @@
 namespace Services\Auth;
 
 use Core\includes\exception\ExceptionEmailSendingFailed;
-use Core\Utilis\EmailService;
+use Core\Utils\EmailService;
 
 /**
  * Service responsible for sending registration confirmation emails for SAE Manager.
