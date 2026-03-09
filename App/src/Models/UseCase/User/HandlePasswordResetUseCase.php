@@ -5,9 +5,9 @@ namespace Models\UseCase\User;
 use Core\Includes\Exception\ExceptionPasswordUpdateFailed;
 use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\ResetPasswordUseCase;
-use Services\TokenService;
 
 /**
  * Use case to handle password reset.
@@ -28,14 +28,17 @@ class HandlePasswordResetUseCase
      */
     private UserInterface $userRepository;
 
+    private PasswordResetInterface $passwordResetInterface;
+
     /**
      * Constructor.
      *
      * @param UserInterface $userRepository Repo for users.
      */
-    public function __construct(UserInterface $userRepository)
+    public function __construct(UserInterface $userRepository, PasswordResetInterface $passwordResetInterface)
     {
         $this->userRepository = $userRepository;
+        $this->passwordResetInterface = $passwordResetInterface;
     }
 
     /**
@@ -50,16 +53,10 @@ class HandlePasswordResetUseCase
      */
     public function execute(string $token, string $password): string
     {
-        // Validate token.
-        $tokenData = TokenService::validateToken($token);
-        $email = $tokenData['email'];
 
         // Reset password using existing UseCase (reusing existing logic adhering to DRY).
-        $resetPasswordUseCase = new ResetPasswordUseCase($this->userRepository);
-        $resetPasswordUseCase->execute($email, $password);
-
-        // Mark token as used.
-        TokenService::markTokenAsUsed($token);
+        $resetPasswordUseCase = new ResetPasswordUseCase($this->userRepository, $this->passwordResetInterface);
+        $email=$resetPasswordUseCase->execute( $password, $token);
 
         return $email;
     }

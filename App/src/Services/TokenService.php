@@ -106,7 +106,7 @@ class TokenService
      * @throws ExceptionInvalidToken If the token is invalid, expired, or already used.
      * @throws PDOException If a database error occurs.
      */
-    public static function validateToken(string $token): array
+    public static function validateToken(string $token, string $table): array
     {
         try {
             // Sanitize the token: allow only hexadecimal characters.
@@ -119,7 +119,7 @@ class TokenService
             $stmt = $db->prepare(
                 "
                 SELECT email, expires_at, used 
-                FROM password_resets 
+                FROM ".$table ."
                 WHERE token = :token
             "
             );
@@ -160,14 +160,14 @@ class TokenService
      *
      * @return boolean True if successful, false otherwise.
      */
-    public static function markTokenAsUsed(string $token): bool
+    public static function markTokenAsUsed(string $token, string $table): bool
     {
         try {
             $db = Database::getInstance();
 
             $stmt = $db->prepare(
                 "
-                UPDATE password_resets 
+                UPDATE " .$table ."
                 SET used = TRUE 
                 WHERE token = :token
             "
@@ -185,14 +185,14 @@ class TokenService
      *
      * @return void
      */
-    public static function cleanupExpiredTokens(): void
+    public static function cleanupExpiredTokens(string $table): void
     {
         try {
             $db = Database::getInstance();
 
             $stmt = $db->prepare(
                 "
-                DELETE FROM password_resets 
+                DELETE FROM ".$table ."
                 WHERE expires_at < NOW() OR used = TRUE
             "
             );

@@ -19,14 +19,13 @@ use Models\Entity\User\User;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ResetPasswordUseCase
+class CreateTokenResetUseCase
 {
     /**
      * The User repository interface.
      *
      * @var UserInterface
      */
-    private UserInterface $userInterface;
 
     private PasswordResetInterface $passwordResetInterface;
 
@@ -35,44 +34,25 @@ class ResetPasswordUseCase
      *
      * @param UserInterface $userInterface The User repository.
      */
-    public function __construct(UserInterface $userInterface, PasswordResetInterface $passwordResetInterface)
+    public function __construct(PasswordResetInterface $passwordResetInterface)
     {
-        $this->userInterface = $userInterface;
         $this->passwordResetInterface = $passwordResetInterface;
     }
 
     /**
      * Resets the user's password using email.
      *
-     * @param string $email       The user's email.
-     * @param string $newPassword The new password.
+     * @param string $token
      *
      * @return void
      *
      * @throws ExceptionPasswordUpdateFailed If user not found or update fails.
      */
-    public function execute(string $newPassword, string $token): string
+    public function execute(string $email): string
     {
         // Validate token.
-        $tokenData = $this->passwordResetInterface->validateToken($token);
-        $email = $tokenData['email'];
+        $token = $this->passwordResetInterface->createPasswordResetToken($email);
 
-        $user = $this->userInterface->findByEmail($email);
-
-
-        if (!$user) {
-            throw new ExceptionPasswordUpdateFailed("Utilisateur non trouvé.");
-        }
-
-        $user->setPassword($newPassword);
-
-        if (!$this->userInterface->updatePassword($user->getUserId(), $user->getPasswordHash())) {
-            throw new ExceptionPasswordUpdateFailed("Erreur technique lors de la réinitialisation du mot de passe.");
-        }
-        
-        // Mark token as used.
-        $this->passwordResetInterface->markTokenAsUsed($token);
-
-        return $email;
+        return $token;
     }
 }
