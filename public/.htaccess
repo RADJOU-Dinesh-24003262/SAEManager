@@ -61,7 +61,7 @@ ServerSignature Off
     Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), usb=(), web-share=()"
 
     # Content Security Policy (single-line value)
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests;"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' https://js.hcaptcha.com https://hcaptcha.com https://*.hcaptcha.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.hcaptcha.com; frame-src https://hcaptcha.com https://*.hcaptcha.com; connect-src 'self' https://hcaptcha.com https://*.hcaptcha.com; font-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'; upgrade-insecure-requests;"
 
     # Strict Transport Security (HSTS) — recommended value
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
@@ -114,3 +114,4 @@ ErrorDocument 500 /errors/500.php
 # 8. MISC
 # ---------------------------
 SetEnv TZ Europe/Paris
+

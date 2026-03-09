@@ -4,8 +4,9 @@
     <form action="/register" method="post" autocomplete="on">
         <input type="hidden" name="csrf_token" value="{{CSRF_TOKEN}}">
         <!-- Honeypot anti-spam : invisible for humans, filled by bots -->
-        <div style="display:none; position:absolute; left:-9999px;" aria-hidden="true">
-            <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off" aria-label="Laissez ce champ vide">
+        <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; overflow: hidden;" aria-hidden="true">
+            <label for="telephone">Si vous êtes humain, laissez ce champ vide.</label>
+            <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off">
         </div>
 
         <fieldset role="presentation">
@@ -82,7 +83,7 @@
                         id="email"
                         name="email"
                         aria-describedby="email-hint"
-                        style="margin-bottom: 1vh">
+                    style="margin-bottom: 1vh">
 
                 <small id="email-hint" style="display: none; margin-bottom: 2vh; opacity: 0.7">Format : prenom.nom@univ-amu.fr ou prenom.nom@etu.univ-amu.fr</small>
 
@@ -120,7 +121,7 @@
                         name="password"
                         minlength="8"
                         autocomplete="new-password"
-                        aria-describedby="pwd-desc">
+                    aria-describedby="pwd-desc">
                 <small id="pwd-desc">Au moins 8 caractères</small>
 
                 <label for="passwordverif">
@@ -218,6 +219,11 @@
         <small><abbr title="requis">*</abbr> Champs obligatoires</small>
         <br>
         <br>
+        <div class="h-captcha" data-sitekey="{{HCAPTCHA_SITEKEY}}"
+            style="display: flex; justify-content: center; margin-bottom: 20px;">
+        </div>
+        <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
         <button type="submit">S'inscrire</button>
     </form>
 </main>

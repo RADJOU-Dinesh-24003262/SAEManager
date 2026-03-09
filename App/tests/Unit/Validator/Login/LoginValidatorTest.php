@@ -2,6 +2,8 @@
 
 namespace Tests\Unit\Validator\Login;
 
+use Core\Utils\RateLimiter;
+use Core\Utils\SessionService;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,6 +23,8 @@ use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 #[CoversClass(ExceptionValidationLogin::class)]
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(ExceptionValidationEmpty::class)]
+#[CoversClass(RateLimiter::class)]
+#[CoversClass(SessionService::class)]
 class LoginValidatorTest extends TestCase
 {
     private LoginValidator $validator;
@@ -38,7 +42,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => 'SecurePass123'
+            'password' => 'SecurePass123',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -63,7 +68,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => $email,
-            'password' => 'AnyPassword'
+            'password' => 'AnyPassword',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -90,7 +96,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => $email,
-            'password' => 'AnyPassword'
+            'password' => 'AnyPassword',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -104,7 +111,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => '',
-            'password' => 'Password123'
+            'password' => 'Password123',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $this->validator->escape($data);
@@ -117,7 +125,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => ''
+            'password' => '',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $this->validator->escape($data);
@@ -130,7 +139,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => '',
-            'password' => ''
+            'password' => '',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $this->validator->escape($data);
@@ -150,7 +160,8 @@ class LoginValidatorTest extends TestCase
     {
         $data = [
             'email' => '<script>alert("xss")</script>@etu.univ-amu.fr',
-            'password' => '<b>bold</b>'
+            'password' => '<b>bold</b>',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -168,7 +179,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => '123' // Short password, but login doesn't check strength
+            'password' => '123', // Short password, but login doesn't check strength
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this -> validator -> escape($data);
@@ -185,6 +197,7 @@ class LoginValidatorTest extends TestCase
 
         $this -> assertContains('email', $required);
         $this -> assertContains('password', $required);
+        //$this -> assertContains('h-captcha-response', $required);
         $this -> assertCount(2, $required);
     }
 
@@ -194,7 +207,8 @@ class LoginValidatorTest extends TestCase
         try {
             $data = [
                 'email' => 'invalid-email',
-                'password' => 'password'
+                'password' => 'password',
+                'h-captcha-response' => 'test-captcha-success'
             ];
 
             $escaped = $this -> validator -> escape($data);
@@ -213,7 +227,8 @@ class LoginValidatorTest extends TestCase
     {
         $data = [
             'email' => 'jean.dupont@etu.univ-amu.fr',
-            'password' => '  password with spaces  '
+            'password' => '  password with spaces  ',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this -> validator -> escape($data);
@@ -229,7 +244,8 @@ class LoginValidatorTest extends TestCase
 
         $data = [
             'email' => 'Jean.Dupont@ETU.UNIV-AMU.FR',
-            'password' => 'password'
+            'password' => 'password',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this -> validator -> escape($data);
