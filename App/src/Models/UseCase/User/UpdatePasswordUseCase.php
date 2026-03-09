@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\User;
 
-use Core\includes\exception\ExceptionPasswordUpdateFailed;
+use Core\Includes\Exception\ExceptionPasswordUpdateFailed;
 use Models\Entity\User\User;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 

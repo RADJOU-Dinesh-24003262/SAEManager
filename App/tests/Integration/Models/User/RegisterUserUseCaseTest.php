@@ -15,9 +15,9 @@ use Models\UseCase\User\RegisterUserUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\includes\Database;
+use Core\Includes\Database;
 use ReflectionClass;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(PdoUserRepository::class)]
