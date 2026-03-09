@@ -16,7 +16,7 @@ use Override;
 use PDOException;
 use Services\Auth\RegistrationMailer;
 use Validator\ValidationServiceRegister;
-use Views\User\DoubleAuthentificationView;
+use Views\User\TwoFactorAuthentificationView;
 use Views\User\RegisterPendingView;
 use Views\User\RegisterView;
 
@@ -71,7 +71,7 @@ class RegisterPostController extends BaseController
                 "Inscription en attente de confirmation: " . $data['email']
             );
 
-            $view = new DoubleAuthentificationView($data['email']);
+            $view = new TwoFactorAuthentificationView($data['email']);
             $view->render();
             exit();
 

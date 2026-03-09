@@ -20,14 +20,14 @@ use Override;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class DoubleAuthentificationView extends AbstractView
+class TwoFactorAuthentificationView extends AbstractView
 {
     /**
      * Path to the HTML template file.
      *
      * @var string
      */
-    private const TEMPLATE_HTML = __DIR__ . '/double-authentification.html';
+    private const TEMPLATE_HTML = __DIR__ . '/two-factor-authentification.html';
 
     /**
      * Name of the CSS file for this view.
