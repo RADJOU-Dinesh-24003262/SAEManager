@@ -119,7 +119,7 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
@@ -184,7 +184,7 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
