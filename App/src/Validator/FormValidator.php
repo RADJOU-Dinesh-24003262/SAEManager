@@ -102,7 +102,7 @@ abstract class FormValidator
 
     /**
      * Returns the validity of the amUemail with the first and last name
-     * as a amU email should be firstname.lastname[numberIfDuplicated]@(etu\.)?univ-amu\.fr$/
+     * as a amU student email should be firstname.lastname[numberIfDuplicated]@etu.univ-amu.fr
      *
      * @param string $email The value to validate.
      * @param string $lname The last name of the user.
@@ -110,18 +110,36 @@ abstract class FormValidator
      *
      * @return boolean
      */
-    protected function isOwnAmuEmail(string $email, string $fname, string $lname): bool
+    protected function isOwnAmuStudentEmail(string $email, string $fname, string $lname): bool
     {
         $escapedFname = strtolower(preg_quote($fname, '/'));
         $escapedLname = strtolower(preg_quote($lname, '/'));
 
-        $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
-        print_r($ownEmailPattern);
-        print_r($escapedFname);
-        print_r($escapedLname);
+        $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@etu\.univ-amu\.fr$/";
 
-        return preg_match($ownEmailPattern, $email)
-            && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
+        return preg_match($ownEmailPattern, strtolower($email))
+            && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@etu\.univ-amu\.fr$/', $email);
+    }
+
+    /**
+     * Returns the validity of the amUemail with the first and last name
+     * as a amU staff email should be firstname.lastname[numberIfDuplicated]@univ-amu.fr
+     *
+     * @param string $email The value to validate.
+     * @param string $lname The last name of the user.
+     * @param string $fname The first name of the user.
+     *
+     * @return boolean
+     */
+    protected function isOwnAmuProfessorEmail(string $email, string $fname, string $lname): bool
+    {
+        $escapedFname = strtolower(preg_quote($fname, '/'));
+        $escapedLname = strtolower(preg_quote($lname, '/'));
+
+        $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@univ-amu\.fr$/";
+
+        return preg_match($ownEmailPattern, strtolower($email))
+            && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@univ-amu\.fr$/', $email);
     }
 
     /**
