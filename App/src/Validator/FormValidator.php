@@ -110,12 +110,15 @@ abstract class FormValidator
      *
      * @return boolean
      */
-    protected function isOwnAmuEmail(string $email, string $lname, string $fname): bool
+    protected function isOwnAmuEmail(string $email, string $fname, string $lname): bool
     {
         $escapedFname = strtolower(preg_quote($fname, '/'));
         $escapedLname = strtolower(preg_quote($lname, '/'));
 
         $ownEmailPattern = "/^{$escapedFname}\.{$escapedLname}(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/";
+        print_r($ownEmailPattern);
+        print_r($escapedFname);
+        print_r($escapedLname);
 
         return preg_match($ownEmailPattern, $email)
             && preg_match('/^[a-zA-ZÀ-ÿ\-\']+\.[a-zA-ZÀ-ÿ\-\']+(\.[0-9]+)?@(etu\.)?univ-amu\.fr$/', $email);
