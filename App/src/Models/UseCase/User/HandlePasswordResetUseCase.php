@@ -2,10 +2,10 @@
 
 namespace Models\UseCase\User;
 
-use Core\includes\exception\ExceptionPasswordUpdateFailed;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationResetPassword;
-use Models\Repository\User\PdoUserRepository;
+use Core\Includes\Exception\ExceptionPasswordUpdateFailed;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
+use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\UseCase\User\ResetPasswordUseCase;
 use Services\TokenService;
 
@@ -24,16 +24,16 @@ class HandlePasswordResetUseCase
     /**
      * The user repository.
      *
-     * @var PdoUserRepository
+     * @var UserInterface
      */
-    private PdoUserRepository $userRepository;
+    private UserInterface $userRepository;
 
     /**
      * Constructor.
      *
-     * @param PdoUserRepository $userRepository Repo for users.
+     * @param UserInterface $userRepository Repo for users.
      */
-    public function __construct(PdoUserRepository $userRepository)
+    public function __construct(UserInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }

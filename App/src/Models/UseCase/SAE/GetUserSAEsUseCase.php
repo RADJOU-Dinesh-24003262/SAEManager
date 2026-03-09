@@ -2,7 +2,7 @@
 
 namespace Models\UseCase\SAE;
 
-use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Models\Entity\SAE\SAESubject;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;
 use Models\Entity\User\User;

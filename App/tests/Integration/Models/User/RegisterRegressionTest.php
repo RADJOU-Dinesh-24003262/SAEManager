@@ -12,7 +12,7 @@ use Models\Entity\User\User;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Core\includes\Database;
+use Core\Includes\Database;
 use ReflectionClass;
 
 #[CoversClass(RegisterUserUseCase::class)]
