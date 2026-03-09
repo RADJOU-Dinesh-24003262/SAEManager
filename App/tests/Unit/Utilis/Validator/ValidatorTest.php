@@ -44,8 +44,8 @@ class ValidatorTest extends TestCase
         $validator = new LoginValidator();
         $data = $validator->escape(
             [
-            'email' => 'test@univ-amu.fr',
-            'password' => 'password123'
+                'email' => 'test@univ-amu.fr',
+                'password' => 'password123@'
             ]
         );
 
@@ -60,8 +60,8 @@ class ValidatorTest extends TestCase
         $validator = new LoginValidator();
         $validator->escape(
             [
-            'email' => '',
-            'password' => ''
+                'email' => '',
+                'password' => ''
             ]
         );
     }
@@ -75,8 +75,8 @@ class ValidatorTest extends TestCase
         $validator = new LoginValidator();
         $data = $validator->escape(
             [
-            'email' => $email,
-            'password' => 'password123'
+                'email' => $email,
+                'password' => 'password123'
             ]
         );
 
@@ -102,8 +102,8 @@ class ValidatorTest extends TestCase
         $validator = new LoginValidator();
         $data = $validator->escape(
             [
-            'email' => 'test<script>alert("xss")</script>@test.fr',
-            'password' => '<b>password</b>'
+                'email' => 'test<script>alert("xss")</script>@test.fr',
+                'password' => '<b>password</b>'
             ]
         );
 
@@ -122,8 +122,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator->escape(
             [
-            'pwdnew' => 'NewPassword123',
-            'pwdverif' => 'NewPassword123'
+                'pwdnew' => 'NewPassword123@',
+                'pwdverif' => 'NewPassword123@'
             ]
         );
 
@@ -134,13 +134,13 @@ class ValidatorTest extends TestCase
     public function resetPasswordValidatorRejectsShortPassword(): void
     {
         $this->expectException(ExceptionValidationResetPassword::class);
-        $this->expectExceptionMessage('au moins 8 caractères');
+        $this->expectExceptionMessage('Obligation de 12 caractères minimum');
 
         $validator = new ResetPasswordValidator();
         $data = $validator->escape(
             [
-            'pwdnew' => 'short',
-            'pwdverif' => 'short'
+                'pwdnew' => 'Short1!',
+                'pwdverif' => 'Short1!'
             ]
         );
 
@@ -156,8 +156,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator->escape(
             [
-            'pwdnew' => 'Password123',
-            'pwdverif' => 'DifferentPassword123'
+                'pwdnew' => 'Password123!',
+                'pwdverif' => 'DifferentPassword123!'
             ]
         );
 
@@ -173,8 +173,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator->escape(
             [
-            'pwdnew' => $password,
-            'pwdverif' => $password
+                'pwdnew' => $password,
+                'pwdverif' => $password
             ]
         );
 
@@ -184,12 +184,10 @@ class ValidatorTest extends TestCase
     public static function validPasswordsProvider(): array
     {
         return [
-            'exactly_8_chars' => ['12345678'],
-            'with_special' => ['P@ssw0rd!'],
-            'long_password' => ['ThisIsAVeryLongPasswordWithMoreThan20Characters'],
-            'with_spaces' => ['My Pass Word 123'],
-            'numbers_only' => ['12345678'],
-            'mixed_case' => ['AbCdEfGh']
+            'exactly_12_chars' => ['Password123!'],
+            'with_special' => ['P@ssw0rd2026!'],
+            'long_password' => ['ThisIsAVeryLongPasswordWithMoreThan20Characters1!'],
+            'with_spaces' => ['My P@ss Word 123']
         ];
     }
 
@@ -201,8 +199,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $validator->escape(
             [
-            'pwdnew' => '',
-            'pwdverif' => ''
+                'pwdnew' => '',
+                'pwdverif' => ''
             ]
         );
     }
@@ -218,7 +216,7 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator->escape(
             [
-            'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr'
             ]
         );
 
@@ -233,7 +231,7 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator->escape(
             [
-            'email' => 'not-an-email'
+                'email' => 'not-an-email'
             ]
         );
 
@@ -252,7 +250,7 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator->escape(
             [
-            'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr'
             ]
         );
 
@@ -272,7 +270,7 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator->escape(
             [
-            'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr'
             ]
         );
 
@@ -488,8 +486,8 @@ class ValidatorTest extends TestCase
 
         $data = $validator->escape(
             [
-            'pwdnew' => 'Pàsswørd123',
-            'pwdverif' => 'Pàsswørd123'
+                'pwdnew' => 'Pàsswørd1234!',
+                'pwdverif' => 'Pàsswørd1234!'
             ]
         );
 
@@ -508,8 +506,8 @@ class ValidatorTest extends TestCase
 
         $data = $validator->escape(
             [
-            'email' => $longEmail,
-            'password' => $longPassword
+                'email' => $longEmail,
+                'password' => $longPassword
             ]
         );
 

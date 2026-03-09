@@ -50,7 +50,7 @@ class ResetPasswordValidator extends FormValidator
                 'pwdnew',
                 'Not Valid',
                 "Obligation de 12 caractères minimum avec une majuscule, une minuscule, 
-                            un chiffre et un caractère spéciale."
+                            un chiffre et un caractère spécial."
             );
         }
         if (($data['pwdnew'] ?? '') !== ($data['pwdverif'] ?? '')) {
