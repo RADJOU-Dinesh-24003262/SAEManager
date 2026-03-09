@@ -121,6 +121,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
     {
         try {
             $stmt = $this->connection->prepare(
+                //Doit changer les champs pour avoir ceux de user
                 'SELECT * FROM pending_registrations
                  WHERE token = :token
                    AND used = false

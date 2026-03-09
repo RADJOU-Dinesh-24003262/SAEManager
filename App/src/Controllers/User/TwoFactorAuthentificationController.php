@@ -6,9 +6,11 @@ use Controllers\BaseController;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utils\SessionService;
 use Models\Repository\User\PdoPasswordResetRepository;
+use Models\Repository\User\PdoPendingRegistrationRepository;
 use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
 use Views\Password\ResetPasswordView;
+use Views\User\RegisterSuccessView;
 
 /**
  * This class controls the reset password process (get).
@@ -36,18 +38,18 @@ class TwoFactorAuthentificationController extends BaseController
         // Get the token from the URL.
         $token = $_GET['token'] ?? '';
         try {
+            $pendingRegistrationsRepository = new PdoPendingRegistrationRepository();
+            $data = $pendingRegistrationsRepository->findValidByToken($token);
 
             // Faire récupération de données dans pending_registrations puis recreer $user 
             // + fonctions de registerPost avant puis afficher registerSuccess avec $user
 
 
-            // Changer TokenService
 
-            // Validate the token.
-            $tokenData = (new ValidateTokenUseCase(new PdoPasswordResetRepository()))->execute($token);
+
 
             // Token is valid, render the reset password view.
-            $view = new ResetPasswordView($token, $tokenData['email']);
+            $view = new RegisterSuccessView($user);
             $view->render();
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', ['Erreur lors de la validation du lien: ' . $e->getMessage()]);
