@@ -46,7 +46,8 @@ class ValidatorTest extends TestCase
         $data = $validator->escape(
             [
             'email' => 'test@univ-amu.fr',
-            'password' => 'password123'
+            'password' => 'password123',
+            'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -62,7 +63,8 @@ class ValidatorTest extends TestCase
         $validator->escape(
             [
             'email' => '',
-            'password' => ''
+            'password' => '',
+            'h-captcha-response' => 'test-captcha-success'
             ]
         );
     }
@@ -77,7 +79,8 @@ class ValidatorTest extends TestCase
         $data = $validator->escape(
             [
             'email' => $email,
-            'password' => 'password123'
+            'password' => 'password123',
+            'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -104,7 +107,8 @@ class ValidatorTest extends TestCase
         $data = $validator->escape(
             [
             'email' => 'test<script>alert("xss")</script>@test.fr',
-            'password' => '<b>password</b>'
+            'password' => '<b>password</b>',
+            'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -219,7 +223,8 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
             [
-                'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr',
+                'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -234,7 +239,8 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
             [
-                'email' => 'not-an-email'
+                'email' => 'not-an-email',
+                'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -254,7 +260,8 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
             [
-                'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr',
+                'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -276,7 +283,8 @@ class ValidatorTest extends TestCase
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
             [
-                'email' => 'test@univ-amu.fr'
+                'email' => 'test@univ-amu.fr',
+                'h-captcha-response' => 'test-captcha-success'
             ]
         );
 
@@ -456,7 +464,8 @@ class ValidatorTest extends TestCase
 
         $maliciousData = [
             'email' => '<script>alert("XSS")</script>@test.fr',
-        'password' => '<img src=x onerror=alert("XSS")>'
+        'password' => '<img src=x onerror=alert("XSS")>',
+        'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $validator->escape($maliciousData);
@@ -473,7 +482,8 @@ class ValidatorTest extends TestCase
 
         $maliciousData = [
             'email' => "admin' OR '1'='1",
-            'password' => "' DROP TABLE users--"
+            'password' => "' DROP TABLE users--",
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $validator -> escape($maliciousData);
@@ -511,7 +521,8 @@ class ValidatorTest extends TestCase
         $data = $validator -> escape(
             [
                 'email' => $longEmail,
-                'password' => $longPassword
+                'password' => $longPassword,
+                'h-captcha-response' => 'test-captcha-success'
             ]
         );
 

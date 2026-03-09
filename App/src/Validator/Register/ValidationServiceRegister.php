@@ -51,6 +51,19 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
+        [$captchaSuccess, $captchaErrors] = $this->verifyCaptchaToken(
+            $data['h-captcha-response'] ?? '',
+            $_SERVER['REMOTE_ADDR'] ?? ''
+        );
+
+        if (!$captchaSuccess) {
+            $errors[] = new ExceptionValidationRegister(
+                "h-captcha-response",
+                "string",
+                "La validation hCaptcha a échoué."
+            );
+        }
+
         // Specific validations.
         if (!$this->isValidUserType($data['user_type'])) {
             $errors[] = new ExceptionValidationRegister("user_type", "string", "Type d'utilisateur invalide.");
