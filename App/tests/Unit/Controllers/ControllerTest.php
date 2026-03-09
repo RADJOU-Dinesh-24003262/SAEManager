@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Controllers;
 
-use Controllers\SAE\PageSaeController;
+use Controllers\Sae\SaeController;
 use Controllers\Index\IndexController;
-use Controllers\Info\LegalNoticeController;
-use Controllers\Info\SiteMapController;
-use Controllers\Password\ForgotPasswordController;
-use Controllers\Password\ResetPasswordController;
-use Controllers\ToDoList\ToDoListController;
-use Controllers\User\RegisterController;
+use Controllers\LegalNotice\LegalNoticeController;
+use Controllers\SiteMap\SiteMapController;
+use Controllers\ForgotPassword\ForgotPasswordController;
+use Controllers\ResetPassword\ResetPasswordController;
+use Controllers\Sae\SaeToDoController;
+use Controllers\Register\RegisterController;
 use Core\Controllers\ControllerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -23,8 +23,8 @@ use ReflectionClass;
 #[CoversClass(IndexController::class)]
 #[CoversClass(LegalNoticeController::class)]
 #[CoversClass(SiteMapController::class)]
-#[CoversClass(PageSaeController::class)]
-#[CoversClass(ToDoListController::class)]
+#[CoversClass(SaeController::class)]
+#[CoversClass(SaeToDoController::class)]
 #[CoversClass(RegisterController::class)]
 #[CoversClass(ForgotPasswordController::class)]
 #[CoversClass(ResetPasswordController::class)]
@@ -104,27 +104,27 @@ class ControllerTest extends TestCase
     }
 
     // ========================================
-    // Tests for PageSaeController
+    // Tests for SaeController
     // ========================================
     #[Test]
     public function pageSaeControllerSupportsCorrectRoute(): void
     {
-        // Check that PageSaeController supports the correct routes
-        $this->assertTrue(PageSaeController::support('/sae/1', 'GET'));
-        $this->assertFalse(PageSaeController::support('/sae/1', 'POST'));
-        $this->assertFalse(PageSaeController::support('/sae', 'GET'));
+        // Check that SaeController supports the correct routes
+        $this->assertTrue(SaeController::support('/sae/1', 'GET'));
+        $this->assertFalse(SaeController::support('/sae/1', 'POST'));
+        $this->assertFalse(SaeController::support('/sae', 'GET'));
     }
 
     // ========================================
-    // Tests for ToDoListController
+    // Tests for SaeToDoController
     // ========================================
     #[Test]
     public function toDoListControllerSupportsCorrectRoute(): void
     {
-        // Check that ToDoListController supports the correct routes
-        $this->assertTrue(ToDoListController::support('/sae/1/to-do', 'GET'));
-        $this->assertFalse(ToDoListController::support('/sae/1/to-do', 'POST'));
-        $this->assertFalse(ToDoListController::support('/sae/1/todo', 'GET'));
+        // Check that SaeToDoController supports the correct routes
+        $this->assertTrue(SaeToDoController::support('/sae/1/to-do', 'GET'));
+        $this->assertFalse(SaeToDoController::support('/sae/1/to-do', 'POST'));
+        $this->assertFalse(SaeToDoController::support('/sae/1/todo', 'GET'));
     }
 
     // ========================================
@@ -234,8 +234,8 @@ class ControllerTest extends TestCase
             [IndexController::class],
             [LegalNoticeController::class],
             [SiteMapController::class],
-            [PageSaeController::class],
-            [ToDoListController::class],
+            [SaeController::class],
+            [SaeToDoController::class],
             [RegisterController::class],
             [ForgotPasswordController::class],
             [ResetPasswordController::class]
@@ -260,7 +260,7 @@ class ControllerTest extends TestCase
         // Controllers should reject paths with trailing slashes
         $this->assertFalse(LegalNoticeController::support('/legal-notice/', 'GET'));
         $this->assertFalse(SiteMapController::support('/site-map/', 'GET'));
-        $this->assertFalse(ToDoListController::support('/to-do-list/', 'GET'));
+        $this->assertFalse(SaeToDoController::support('/to-do-list/', 'GET'));
     }
 
     #[Test]

@@ -10,6 +10,11 @@
             <h2 class="subtitle">Mot de passe : </h2>
             <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
 
+            <!-- Honeypot anti-spam : invisible for humans, filled by bots -->
+            <div style="display:none; position:absolute; left:-9999px;" aria-hidden="true">
+                <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off" aria-label="Laissez ce champ vide">
+            </div>
+
             <div class="button-container">
                 <button type="submit" class="button">Se connecter</button>
             </div>

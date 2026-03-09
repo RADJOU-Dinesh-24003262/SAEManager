@@ -2,7 +2,7 @@
 
 namespace Models\Repository\User;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Core\Models\BaseModel;
 use Models\Entity\User\Student;
 use Models\Entity\User\User;

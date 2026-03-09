@@ -3,9 +3,9 @@
 namespace Controllers\Dashboard;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionDashboard;
-use Core\includes\exception\SAE\ExceptionSAE;
-use Core\Utilis\SessionService;
+use Core\Includes\Exception\ExceptionDashboard;
+use Core\Includes\Exception\SAE\ExceptionSAE;
+use Core\Utils\SessionService;
 use Models\Repository\SAE\PdoSAESubjectRepository;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use Models\UseCase\SAE\GetUserSAEsUseCase;
@@ -47,7 +47,6 @@ class DashboardController extends BaseController
      * @throws ExceptionDashboard If user data is not found or invalid.
      *
      * @return void
-     * @throws ExceptionDashboard If the data if empty.
      */
     public function control(): void
     {
