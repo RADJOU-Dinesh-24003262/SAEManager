@@ -281,7 +281,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
-            'terms' => 'on'
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -303,7 +304,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
             'organisation' => 'Ma Société',
-            'terms' => 'on'
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -349,7 +351,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
                                             'year' => '1',
                                                 'td' => 'TD1',
                                                     'tp' => 'TPA',
-                                                        'terms' => 'on'
+                                                        'terms' => 'on',
+                                                            'h-captcha-response' => 'test-captcha-success'
         ];
 
                 $escaped = $this -> validator -> escape($data);
@@ -385,7 +388,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'year' => '1',
             'td' => 'TD1',
             'tp' => 'TPA',
-            'terms' => 'on'
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
     }
 }

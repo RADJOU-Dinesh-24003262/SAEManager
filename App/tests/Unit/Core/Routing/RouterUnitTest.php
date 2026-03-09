@@ -2,12 +2,15 @@
 
 namespace Tests\Unit\Core\Routing;
 
+use Models\Repository\Security\JsonIpBanRepository;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Core\Routing\Router;
 
 #[CoversClass(Router::class)]
+#[UsesClass(JsonIpBanRepository::class)]
 class RouterUnitTest extends TestCase
 {
     protected function setUp(): void
