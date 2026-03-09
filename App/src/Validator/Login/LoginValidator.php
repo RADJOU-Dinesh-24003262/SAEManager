@@ -47,6 +47,15 @@ class LoginValidator extends FormValidator
     #[Override]
     public function validate(array $data): void
     {
+        [$captchaSuccess, $captchaErrors] = $this->verifyCaptchaToken(
+            $data['h-captcha-response'] ?? '',
+            $_SERVER['REMOTE_ADDR'] ?? ''
+        );
+
+        if (!$captchaSuccess) {
+            throw new ExceptionValidationLogin("La validation hCaptcha a échoué.");
+        }
+
         if (!$this->isValidEmail($data['email'])) {
             throw new ExceptionValidationLogin("L'adresse email n'est pas valide.");
         }

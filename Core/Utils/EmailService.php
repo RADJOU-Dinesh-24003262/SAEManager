@@ -3,6 +3,7 @@
 namespace Core\Utils;
 
 use Core\Includes\Exception\ExceptionEmailSendingFailed;
+use Core\Utils\Config;
 
 /**
  * Class EmailService
@@ -26,20 +27,6 @@ use Core\Includes\Exception\ExceptionEmailSendingFailed;
 class EmailService
 {
     /**
-     * The email address to send mails from.
-     *
-     * @var string
-     */
-    private static string $fromEmail = 'noreply@saemanager.alwaysdata.net';
-
-    /**
-     * The sender name of the mails.
-     *
-     * @var string
-     */
-    private static string $fromName = 'SAE Manager';
-
-    /**
      * Sends an email with both HTML and plain text versions.
      *
      * @param string $to          The recipient's email address.
@@ -55,9 +42,12 @@ class EmailService
         // Headers for multipart email (HTML + text).
         $boundary = md5(uniqid('boundary_', true));
 
+        $fromEmail = Config::get('email', 'from_email', 'noreply@saemanager.alwaysdata.net');
+        $fromName = Config::get('email', 'from_name', 'SAE Manager');
+
         $headers = [
-            'From' => self::$fromName . ' <' . self::$fromEmail . '>',
-            'Reply-To' => self::$fromEmail,
+            'From' => $fromName . ' <' . $fromEmail . '>',
+            'Reply-To' => $fromEmail,
             'MIME-Version' => '1.0',
             'Content-Type' => 'multipart/alternative; boundary="' . $boundary . '"'
         ];
@@ -86,18 +76,5 @@ class EmailService
             error_log("Échec d'envoi d'email à: {$to}");
             throw new ExceptionEmailSendingFailed();
         }
-    }
-
-    /**
-     * Sets the sender configuration.
-     *
-     * @param string $email The sender email.
-     * @param string $name  The sender name.
-     * @return void
-     */
-    public static function setSender(string $email, string $name): void
-    {
-        self::$fromEmail = $email;
-        self::$fromName = $name;
     }
 }
