@@ -10,6 +10,7 @@ use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPassword;
+use Core\Utils\Config;
 use Core\Utils\RateLimiter;
 use Core\Utils\SessionService;
 use Core\Views\AbstractView;
@@ -40,6 +41,7 @@ use Validator\ForgotPassword\ForgotPasswordValidator;
 #[UsesClass(PdoUserRepository::class)]
 #[CoversClass(ExceptionSpam::class)]
 #[CoversClass(RateLimiter::class)]
+#[CoversClass(Config::class)]
 class ForgotPasswordControllerTest extends TestCase
 {
     protected function setUp(): void
@@ -48,12 +50,29 @@ class ForgotPasswordControllerTest extends TestCase
         $_SESSION = [];
         $_POST = [];
         $_SERVER['REQUEST_METHOD'] = 'GET';
+
+        // Inject mock Database
+        $mockDb = $this->createMock(Database::class);
+        $mockStmt = $this->createMock(\PDOStatement::class);
+
+        $mockDb->method('prepare')->willReturn($mockStmt);
+        $mockStmt->method('execute')->willReturn(true);
+        $mockStmt->method('fetchColumn')->willReturn(1); // User exists
+
+        Database::setInstance($mockDb);
     }
 
     protected function tearDown(): void
     {
         $_SESSION = [];
         $_POST = [];
+
+        // Reset Database singleton
+        $reflection = new \ReflectionClass(Database::class);
+        $instance = $reflection->getProperty('instance');
+        $instance->setAccessible(true);
+        $instance->setValue(null, null);
+
         parent::tearDown();
     }
 

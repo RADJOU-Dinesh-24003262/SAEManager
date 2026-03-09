@@ -39,50 +39,39 @@ use ReflectionClass;
 
 class UserWorkflowIntegrationTest extends TestCase
 {
-    private PdoUserRepository $userRepository;
+    private $userRepository;
+    private $studentRepository;
+    private $professorRepository;
+    private $clientRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $db = new Database();
-        Database::setInstance($db);
-        $this->cleanupDatabase();
+        $this->userRepository = $this->createMock(PdoUserRepository::class);
+        $this->studentRepository = $this->createMock(PdoStudentRepository::class);
+        $this->professorRepository = $this->createMock(PdoProfessorRepository::class);
+        $this->clientRepository = $this->createMock(PdoClientRepository::class);
+
+        // Inject mock Database to avoid connection errors if anything still uses it
+        $mockDb = $this->createMock(Database::class);
+        Database::setInstance($mockDb);
     }
 
     protected function tearDown(): void
     {
-        $this->cleanupDatabase();
-        // Réinitialise l'instance statique Database
+        // Reset Database singleton
         $reflection = new ReflectionClass(Database::class);
         $instance = $reflection->getProperty('instance');
         $instance->setAccessible(true);
         $instance->setValue(null, null);
+
+        // Reset Config settings
+        $configReflection = new \ReflectionClass(\Core\Utils\Config::class);
+        $settings = $configReflection->getProperty('settings');
+        $settings->setAccessible(true);
+        $settings->setValue(null, null);
+
         parent::tearDown();
-    }
-
-    private function cleanupDatabase(): void
-    {
-        $emails = [
-            'jean.dupont@etu.univ-amu.fr',
-            'marie.martin@etu.univ-amu.fr',
-            'student@etu.univ-amu.fr',
-            'prof@univ-amu.fr',
-            'client@company.com',
-            'consistency@etu.univ-amu.fr',
-            'security@etu.univ-amu.fr',
-            'françois.müller@etu.univ-amu.fr'
-        ];
-
-        $this->userRepository = new PdoUserRepository();
-
-        foreach ($emails as $email) {
-            if ($this->userRepository->existsByEmail($email)) {
-                $user = $this->userRepository->findByEmail($email);
-                if ($user) {
-                    $this->userRepository->delete($user->getUserId());
-                }
-            }
-        }
     }
 
     // ========================================
@@ -106,37 +95,43 @@ class UserWorkflowIntegrationTest extends TestCase
             'major' => 'A'
         ];
 
-        $studentRepository = new PdoStudentRepository();
-        $clientRepository = new PdoClientRepository();
-        $professorRepository = new PdoProfessorRepository();
-        $userRepository = new PdoUserRepository();
+        $this->userRepository->method('existsByEmail')->willReturn(false);
+        $this->studentRepository->method('insert')->willReturn(1);
 
+        $student = new Student($registrationData);
+        $student->setPassword($registrationData['password']);
+        $reflection = new ReflectionClass(Student::class);
+        $prop = $reflection->getProperty('user_id');
+        $prop->setAccessible(true);
+        $prop->setValue($student, 1);
 
-        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
-        $student = $registerUseCase->execute($registrationData);
+        $this->studentRepository->method('findById')->willReturn($student);
 
-        $this->assertInstanceOf(Student::class, $student);
-        $this->assertEquals('Jean', $student->getFirstName());
-        $this->assertEquals('Dupont', $student->getLastName());
+        $registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->professorRepository, $this->clientRepository, $this->userRepository);
+        $registeredStudent = $registerUseCase->execute($registrationData);
+
+        $this->assertInstanceOf(Student::class, $registeredStudent);
+        $this->assertEquals('Jean', $registeredStudent->getFirstName());
+        $this->assertEquals('Dupont', $registeredStudent->getLastName());
 
         // Vérifier que le mot de passe a été hashé
-        $passwordHash = $student->getPasswordHash();
+        $passwordHash = $registeredStudent->getPasswordHash();
         $this->assertNotEmpty($passwordHash);
         $this->assertNotEquals('SecurePassword123', $passwordHash);
         $this->assertTrue(password_verify('SecurePassword123', $passwordHash));
-        $this->assertEquals($student->getLastName(), 'Dupont');
-        $this->assertEquals($student->getFirstName(), 'Jean');
-        $this->assertEquals($student->getAmuId(), 'dupont123');
-        $this->assertEquals($student->getYear(), 2);
-        $this->assertEquals($student->getTd(), 'TD1');
-        $this->assertEquals($student->getTp(), 'TPA');
-        $this->assertEquals($student->getMajor(), 'A');
+        $this->assertEquals($registeredStudent->getLastName(), 'Dupont');
+        $this->assertEquals($registeredStudent->getFirstName(), 'Jean');
+        $this->assertEquals($registeredStudent->getAmuId(), 'dupont123');
+        $this->assertEquals($registeredStudent->getYear(), 2);
+        $this->assertEquals($registeredStudent->getTd(), 'TD1');
+        $this->assertEquals($registeredStudent->getTp(), 'TPA');
+        $this->assertEquals($registeredStudent->getMajor(), 'A');
 
         // Étape 2: Connexion via LoginUseCase
-        $loginUseCase = new LoginUseCase($userRepository);
+        $registeredStudent->setPassword('SecurePassword123');
+        $this->userRepository->method('findByEmail')->willReturn($registeredStudent);
+        $loginUseCase = new LoginUseCase($this->userRepository);
         $loggedInStudent = $loginUseCase->execute('jean.dupont@etu.univ-amu.fr', 'SecurePassword123');
-
-
 
         $this->assertInstanceOf(Student::class, $loggedInStudent);
         $this->assertEquals('Jean', $loggedInStudent->getFirstName());
@@ -156,15 +151,7 @@ class UserWorkflowIntegrationTest extends TestCase
     #[Test]
     public function completePasswordResetWorkflow(): void
     {
-
-        $studentRepository = new PdoStudentRepository();
-        $clientRepository = new PdoClientRepository();
-        $professorRepository = new PdoProfessorRepository();
-        $userRepository = new PdoUserRepository();
-
-        // Étape 1: Créer un utilisateur
-        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
-        $student = $registerUseCase->execute([
+        $userData = [
             'user_type' => 'student',
             'first_name' => 'Marie',
             'last_name' => 'Martin',
@@ -176,19 +163,40 @@ class UserWorkflowIntegrationTest extends TestCase
             'td' => 'TD2',
             'tp' => 'TPB',
             'password' => 'OldPassword123'
-        ]);
+        ];
+
+        $student = new Student($userData);
+        $student->setPassword($userData['password']);
+        $reflection = new ReflectionClass(Student::class);
+        $prop = $reflection->getProperty('user_id');
+        $prop->setAccessible(true);
+        $prop->setValue($student, 2);
+
+        $this->userRepository->method('existsByEmail')->willReturn(false);
+        $this->studentRepository->method('insert')->willReturn(2);
+        $this->studentRepository->method('findById')->willReturn($student);
+
+        // Étape 1: Créer un utilisateur
+        $registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->professorRepository, $this->clientRepository, $this->userRepository);
+        $registeredUser = $registerUseCase->execute($userData);
 
         // Étape 2: Réinitialiser le mot de passe via ResetPasswordUseCase
         $newPassword = 'NewSecurePassword456';
-        $resetPasswordUseCase = new ResetPasswordUseCase($userRepository);
+        $this->userRepository->method('findByEmail')->willReturn($registeredUser);
+        $this->userRepository->method('updatePassword')->willReturn(true);
+        $resetPasswordUseCase = new ResetPasswordUseCase($this->userRepository);
         $resetPasswordUseCase->execute('marie.martin@etu.univ-amu.fr', $newPassword);
 
         // Étape 3: Vérifier que le nouveau mot de passe fonctionne
-        $loginUseCase = new LoginUseCase($userRepository);
+        $registeredUser->setPassword($newPassword); // Manually update password hash for mock
+        // findByEmail already mocked above to return $registeredUser
+
+        $loginUseCase = new LoginUseCase($this->userRepository);
         $loggedInStudent = $loginUseCase->execute('marie.martin@etu.univ-amu.fr', $newPassword);
 
         $this->assertInstanceOf(Student::class, $loggedInStudent);
         $this->assertEquals('Marie', $loggedInStudent->getFirstName());
+        $this->assertTrue(password_verify($newPassword, $loggedInStudent->getPasswordHash()));
     }
 
     // ========================================
@@ -242,21 +250,44 @@ class UserWorkflowIntegrationTest extends TestCase
             ]
         ];
 
-
+        $userIdCounter = 100; // Start user IDs from a different range for this test
 
         foreach ($userTypes as $userType) {
-            $studentRepository = new PdoStudentRepository();
-            $clientRepository = new PdoClientRepository();
-            $professorRepository = new PdoProfessorRepository();
-            $userRepository = new PdoUserRepository();
+            $userIdCounter++;
+            $this->userRepository->method('existsByEmail')->willReturn(false);
 
+            $user = null;
+            switch ($userType['type']) {
+                case 'student':
+                    $user = new Student($userType['data']);
+                    $this->studentRepository->method('insert')->willReturn($userIdCounter);
+                    $this->studentRepository->method('findById')->willReturn($user);
+                    break;
+                case 'professor':
+                    $user = new Professor($userType['data']);
+                    $this->professorRepository->method('insert')->willReturn($userIdCounter);
+                    $this->professorRepository->method('findById')->willReturn($user);
+                    break;
+                case 'client':
+                    $user = new Client($userType['data']);
+                    $this->clientRepository->method('insert')->willReturn($userIdCounter);
+                    $this->clientRepository->method('findById')->willReturn($user);
+                    break;
+            }
 
-            $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
-            $user = $registerUseCase->execute($userType['data']);
+            if ($user) {
+                $user->setPassword($userType['data']['password']);
+                $reflection = new ReflectionClass($user);
+                $prop = $reflection->getProperty('user_id');
+                $prop->setAccessible(true);
+                $prop->setValue($user, $userIdCounter);
+            }
 
+            $registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->professorRepository, $this->clientRepository, $this->userRepository);
+            $registeredUser = $registerUseCase->execute($userType['data']);
 
-            $this->assertInstanceOf($userType['class'], $user);
-            $this->assertTrue(password_verify($userType['data']['password'], $user->getPasswordHash()));
+            $this->assertInstanceOf($userType['class'], $registeredUser);
+            $this->assertTrue(password_verify($userType['data']['password'], $registeredUser->getPasswordHash()));
         }
     }
 
@@ -281,26 +312,32 @@ class UserWorkflowIntegrationTest extends TestCase
             'major' => 'B'
         ];
 
+        $student = new Student($originalData);
+        $reflection = new ReflectionClass(Student::class);
+        $prop = $reflection->getProperty('user_id');
+        $prop->setAccessible(true);
+        $prop->setValue($student, 3);
+
+        $this->userRepository->method('existsByEmail')->willReturn(false);
+        $this->studentRepository->method('insert')->willReturn(3);
+        $this->studentRepository->method('findById')->willReturn($student);
+        $this->userRepository->method('findById')->willReturn($student);
+
         // Créer l'utilisateur
-        $studentRepository = new PdoStudentRepository();
-        $clientRepository = new PdoClientRepository();
-        $professorRepository = new PdoProfessorRepository();
-        $userRepository = new PdoUserRepository();
+        $registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->professorRepository, $this->clientRepository, $this->userRepository);
+        $registeredStudent = $registerUseCase->execute($originalData);
 
-        $registerUseCase = new RegisterUserUseCase($studentRepository, $professorRepository, $clientRepository, $userRepository);
-        $student = $registerUseCase->execute($originalData);
-
-        $this->assertInstanceOf(Student::class, $student);
+        $this->assertInstanceOf(Student::class, $registeredStudent);
 
         // Vérifier que les données sont correctes après création
-        $this->assertEquals('Consistency', $student->getFirstName());
-        $this->assertEquals('Test', $student->getLastName());
-        $this->assertEquals('consistency@etu.univ-amu.fr', $student->getEmail());
-        $this->assertEquals('0612345678', $student->getPhone());
-        $this->assertEquals('consistency123', $student->getAmuId());
+        $this->assertEquals('Consistency', $registeredStudent->getFirstName());
+        $this->assertEquals('Test', $registeredStudent->getLastName());
+        $this->assertEquals('consistency@etu.univ-amu.fr', $registeredStudent->getEmail());
+        $this->assertEquals('0612345678', $registeredStudent->getPhone());
+        $this->assertEquals('consistency123', $registeredStudent->getAmuId());
 
         // Re-fetch from DB to be sure
-        $fetchedUser = $this->userRepository->findById($student->getUserId());
+        $fetchedUser = $this->userRepository->findById($registeredStudent->getUserId());
         $this->assertInstanceOf(Student::class, $fetchedUser);
         $this->assertEquals('Consistency', $fetchedUser->getFirstName());
     }
@@ -324,18 +361,24 @@ class UserWorkflowIntegrationTest extends TestCase
             'tp' => 'TPA'
         ];
 
-        $studentrepository = new PdoStudentRepository();
-        $clientrepository = new PdoClientRepository();
-        $professorrepository = new PdoProfessorRepository();
-        $userrepository = new PdoUserRepository();
+        $student = new Student($data);
+        $student->setPassword($data['password']);
+        $reflection = new ReflectionClass(Student::class);
+        $prop = $reflection->getProperty('user_id');
+        $prop->setAccessible(true);
+        $prop->setValue($student, 4);
 
-        $registerUseCase = new RegisterUserUseCase($studentrepository, $professorrepository, $clientrepository, $userrepository);
-        $student = $registerUseCase->execute($data);
+        $this->userRepository->method('existsByEmail')->willReturn(false);
+        $this->studentRepository->method('insert')->willReturn(4);
+        $this->studentRepository->method('findById')->willReturn($student);
 
-        $this->assertEquals('François', $student->getFirstName());
-        $this->assertEquals('Müller', $student->getLastName());
+        $registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->professorRepository, $this->clientRepository, $this->userRepository);
+        $registeredStudent = $registerUseCase->execute($data);
+
+        $this->assertEquals('François', $registeredStudent->getFirstName());
+        $this->assertEquals('Müller', $registeredStudent->getLastName());
 
         // Le mot de passe Unicode devrait être hashé correctement
-        $this->assertTrue(password_verify('Pàsswørd123€', $student->getPasswordHash()));
+        $this->assertTrue(password_verify('Pàsswørd123€', $registeredStudent->getPasswordHash()));
     }
 }

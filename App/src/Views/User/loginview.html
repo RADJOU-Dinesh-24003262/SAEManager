@@ -11,8 +11,9 @@
             <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
 
             <!-- Honeypot anti-spam : invisible for humans, filled by bots -->
-            <div style="display:none; position:absolute; left:-9999px;" aria-hidden="true">
-                <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off" aria-label="Laissez ce champ vide">
+            <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; overflow: hidden;" aria-hidden="true">
+                <label for="telephone">Si vous êtes humain, laissez ce champ vide.</label>
+                <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off">
             </div>
 
             <div class="h-captcha" data-sitekey="{{HCAPTCHA_SITEKEY}}"
