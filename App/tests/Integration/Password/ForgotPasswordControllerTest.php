@@ -39,6 +39,7 @@ use Validator\ForgotPassword\ForgotPasswordValidator;
 #[UsesClass(BaseRepository::class)]
 #[UsesClass(PdoUserRepository::class)]
 #[CoversClass(ExceptionSpam::class)]
+#[CoversClass(RateLimiter::class)]
 class ForgotPasswordControllerTest extends TestCase
 {
     protected function setUp(): void
@@ -89,7 +90,10 @@ class ForgotPasswordControllerTest extends TestCase
     #[Test]
     public function postControllerRejectsEmptyEmail(): void
     {
-        $_POST = ['email' => ''];
+        $_POST = [
+            'email' => '',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $controller = new ForgotPasswordPostController();
@@ -105,7 +109,10 @@ class ForgotPasswordControllerTest extends TestCase
     #[Test]
     public function postControllerRejectsInvalidEmail(): void
     {
-        $_POST = ['email' => 'invalid-email'];
+        $_POST = [
+            'email' => 'invalid-email',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
         $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $controller = new ForgotPasswordPostController();
@@ -121,7 +128,10 @@ class ForgotPasswordControllerTest extends TestCase
     #[Test]
     public function postControllerSetsGenericSuccessMessage(): void
     {
-        $_POST = ['email' => 'jean.dupont@etu.univ-amu.fr'];
+        $_POST = [
+            'email' => 'jean.dupont@etu.univ-amu.fr',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
         $_SERVER['REQUEST_METHOD'] = 'POST';
         SessionService::remove('last_forgot_password_request');
 
@@ -150,7 +160,10 @@ class ForgotPasswordControllerTest extends TestCase
         \Core\Utils\RateLimiter::increment('forgot_password');
         \Core\Utils\RateLimiter::increment('forgot_password');
 
-        $_POST = ['email' => 'jean.dupont@etu.univ-amu.fr'];
+        $_POST = [
+            'email' => 'jean.dupont@etu.univ-amu.fr',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
 
         ob_start();
 
@@ -168,7 +181,10 @@ class ForgotPasswordControllerTest extends TestCase
     public function validatorAcceptsValidAmuEmail(): void
     {
         $validator = new ForgotPasswordValidator();
-        $data = ['email' => 'jean.dupont@etu.univ-amu.fr'];
+        $data = [
+            'email' => 'jean.dupont@etu.univ-amu.fr',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
 
         $escaped = $validator->escape($data);
 
@@ -181,7 +197,10 @@ class ForgotPasswordControllerTest extends TestCase
     public function validatorAcceptsValidNonEtuAmuEmail(): void
     {
         $validator = new ForgotPasswordValidator();
-        $data = ['email' => 'prof.dupont@univ-amu.fr'];
+        $data = [
+            'email' => 'prof.dupont@univ-amu.fr',
+            'h-captcha-response' => 'test-captcha-success'
+        ];
 
         $escaped = $validator->escape($data);
 

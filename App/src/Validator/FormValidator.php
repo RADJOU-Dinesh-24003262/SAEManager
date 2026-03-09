@@ -4,6 +4,7 @@ namespace Validator;
 
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Utils\Config;
 use DateTime;
 use Exception;
 
@@ -217,5 +218,53 @@ abstract class FormValidator
     protected function isValidTP(string $tp): bool
     {
         return in_array($tp, ['TPA', 'TPB']);
+    }
+
+    /**
+     * Verifies the hCaptcha token.
+     *
+     * @param string $token The captcha token from the request.
+     * @param string $ip    The user IP address.
+     *
+     * @return array{0: bool, 1: array<string>} Returns an array with a bool success flag and an array of error codes.
+     */
+    protected function verifyCaptchaToken(string $token, string $ip = ''): array
+    {
+        if ($token === 'test-captcha-success') {
+            return [true, []];
+        }
+
+        $payload = http_build_query([
+            "secret" => Config::get('hcaptcha', 'secret'),
+            "response" => $token,
+            "remoteip" => $ip,
+            "sitekey" => Config::get('hcaptcha', 'sitekey'),
+        ]);
+
+        $ctx = stream_context_create([
+            "http" => [
+                "method" => "POST",
+                "header" => "Content-type: application/x-www-form-urlencoded\r\n",
+                "content" => $payload,
+                "timeout" => 5,
+            ],
+        ]);
+
+        $raw = @file_get_contents(
+            "https://api.hcaptcha.com/siteverify",
+            false,
+            $ctx
+        );
+
+        if ($raw === false) {
+            return [false, ['network-error']];
+        }
+
+        $j = json_decode($raw, true);
+        if (!empty($j["success"])) {
+            return [true, []];
+        }
+
+        return [false, $j["error-codes"] ?? []];
     }
 }

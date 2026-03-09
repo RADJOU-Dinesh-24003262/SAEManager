@@ -51,7 +51,8 @@ class ValidationServiceRegisterTest extends TestCase
             'major' => 'A',
             'td' => 'TD1',
             'tp' => 'TPA',
-            'terms' => 'on'
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -218,7 +219,8 @@ class ValidationServiceRegisterTest extends TestCase
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
-            'terms' => 'on'
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
     }
 }

@@ -15,6 +15,10 @@
                 <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off" aria-label="Laissez ce champ vide">
             </div>
 
+            <div class="h-captcha" data-sitekey="{{HCAPTCHA_SITEKEY}}"
+                style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
             <div class="button-container">
                 <button type="submit" class="button">Se connecter</button>
             </div>

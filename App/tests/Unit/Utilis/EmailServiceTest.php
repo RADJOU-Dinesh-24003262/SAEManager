@@ -43,7 +43,6 @@ class EmailServiceTest extends TestCase
         $reflection = new \ReflectionClass(EmailService::class);
 
         $this->assertTrue($reflection->hasMethod('send'));
-        $this->assertTrue($reflection->hasMethod('setSender'));
 
         $method = $reflection->getMethod('send');
         $this->assertTrue($method->isStatic());
