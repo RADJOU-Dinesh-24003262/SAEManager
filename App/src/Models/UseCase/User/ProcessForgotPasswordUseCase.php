@@ -6,6 +6,7 @@ use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
 use Models\Repository\User\PdoPasswordResetRepository;
+use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
@@ -25,14 +26,17 @@ class ProcessForgotPasswordUseCase
      */
     private UserInterface $userRepository;
 
+    private PasswordResetInterface $passwordResetInterface;
+
     /**
      * Constructor.
      *
      * @param UserInterface $userRepository Repo for users.
      */
-    public function __construct(UserInterface $userRepository)
+    public function __construct(UserInterface $userRepository, PasswordResetInterface $passwordResetInterface)
     {
         $this->userRepository = $userRepository;
+        $this->passwordResetInterface = $passwordResetInterface;
     }
 
     /**
@@ -47,9 +51,10 @@ class ProcessForgotPasswordUseCase
     public function execute(string $email): void
     {
         if ($this->userRepository->existsByEmail($email)) {
+            
             // Create the password reset token.
-            $token = TokenService::createPasswordResetToken($email);
-            $tokenData = (new CreateTokenResetUseCase(new PdoPasswordResetRepository()))->execute($email);
+            $createTokenUseCase = new CreateTokenResetUseCase($this->passwordResetInterface);
+            $token = $createTokenUseCase->execute($email);
 
             // Send the email.
             PasswordResetMailer::send($email, $token);
