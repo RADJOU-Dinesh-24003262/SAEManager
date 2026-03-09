@@ -4,10 +4,11 @@ namespace Controllers\Password;
 
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
-use Core\Utilis\SessionService;
-use Services\TokenService;
+use Core\Utils\SessionService;
+use Models\Repository\User\PdoPasswordResetRepository;
+use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
-use Views\pwd\ResetPasswordView;
+use Views\Password\ResetPasswordView;
 
 /**
  * This class controls the reset password process (get).
@@ -43,7 +44,7 @@ class TwoFactorAuthentificationController extends BaseController
             // Changer TokenService
 
             // Validate the token.
-            $tokenData = TokenService::validateToken($token);
+            $tokenData = (new ValidateTokenUseCase(new PdoPasswordResetRepository()))->execute($token);
 
             // Token is valid, render the reset password view.
             $view = new ResetPasswordView($token, $tokenData['email']);

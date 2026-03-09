@@ -5,10 +5,10 @@ namespace Models\UseCase\User;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
+use Models\Repository\User\PdoPasswordResetRepository;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
-
 /**
  * Use Case for processing forgot password requests.
  *
@@ -49,6 +49,7 @@ class ProcessForgotPasswordUseCase
         if ($this->userRepository->existsByEmail($email)) {
             // Create the password reset token.
             $token = TokenService::createPasswordResetToken($email);
+            $tokenData = (new CreateTokenResetUseCase(new PdoPasswordResetRepository()))->execute($email);
 
             // Send the email.
             PasswordResetMailer::send($email, $token);
