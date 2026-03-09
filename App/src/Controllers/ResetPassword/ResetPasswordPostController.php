@@ -9,6 +9,7 @@ use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
+use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ResetPasswordUseCase;
@@ -47,7 +48,10 @@ class ResetPasswordPostController extends BaseController
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            $handlePasswordResetUseCase = new HandlePasswordResetUseCase(new PdoUserRepository());
+            $userRepository = new PdoUserRepository();
+            $passwordRepository = new PdoPasswordResetRepository();
+
+            $handlePasswordResetUseCase = new HandlePasswordResetUseCase($userRepository, $passwordRepository);
             $email = $handlePasswordResetUseCase->execute($token, $password);
 
             (new ResetPasswordSuccessView())->render();
