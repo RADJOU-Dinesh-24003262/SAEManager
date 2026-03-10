@@ -37,8 +37,8 @@ class ResetPasswordValidatorTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         $data = [
-            'pwdnew' => 'SecurePass123',
-            'pwdverif' => 'SecurePass123'
+            'pwdnew' => 'SecureP@ss1234!',
+            'pwdverif' => 'SecureP@ss1234!'
         ];
 
         $escaped = $this->validator->escape($data);
