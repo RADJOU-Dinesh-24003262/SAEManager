@@ -129,8 +129,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator -> escape(
             [
-                'pwdnew' => 'NewPassword123',
-                'pwdverif' => 'NewPassword123'
+                'pwdnew' => 'NewPassword123@!',
+                'pwdverif' => 'NewPassword123@!'
             ]
         );
 
