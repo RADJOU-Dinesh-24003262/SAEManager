@@ -72,8 +72,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidStudentData();
-        $data['password'] = 'Password123';
-        $data['passwordverif'] = 'DifferentPass456';
+        $data['password'] = 'ValidP@ss1234!';
+        $data['passwordverif'] = 'DiffP@ss5678!';
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
@@ -278,8 +278,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'last_name' => 'Dupont',
             'user_type' => 'professor',
             'email' => 'prof.dupont',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
+            'password' => 'SecureP@ss2026!',
+            'passwordverif' => 'SecureP@ss2026!',
             'phone' => '0612345678',
             'terms' => 'on',
             'h-captcha-response' => 'test-captcha-success'
@@ -300,8 +300,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'last_name' => 'Martin',
             'user_type' => 'client',
             'email' => 'client.martin@univ-amu.fr',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
+            'password' => 'SecureP@ss2026!',
+            'passwordverif' => 'SecureP@ss2026!',
             'phone' => '0612345678',
             'organisation' => 'Ma Société',
             'terms' => 'on',
@@ -345,8 +345,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
                     'last_name' => 'Dupont',
                         'user_type' => 'student',
                             'email' => 'jean.dupont@etu.univ-amu.fr',
-                                'password' => 'SecurePass123',
-                                    'passwordverif' => 'SecurePass123',
+                                'password' => 'SecureP@ss2026!',
+                                    'passwordverif' => 'SecureP@ss2026!',
                                         'phone' => '0612345678',
                                             'year' => '1',
                                                 'td' => 'TD1',
@@ -382,8 +382,8 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'last_name' => 'Dupont',
             'user_type' => 'student',
             'email' => 'jean.dupont',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
+            'password' => 'SecureP@ss2026!',
+            'passwordverif' => 'SecureP@ss2026!',
             'phone' => '0612345678',
             'year' => '1',
             'td' => 'TD1',

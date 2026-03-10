@@ -50,7 +50,8 @@ class ResetPasswordValidator extends FormValidator
             throw new ExceptionValidationResetPassword(
                 'pwdnew',
                 'Not Valid',
-                "Le mot de passe doit contenir au moins 8 caractères."
+                "Obligation de 12 caractères minimum avec une majuscule, une minuscule, 
+                            un chiffre et un caractère spécial."
             );
         }
         if (($data['pwdnew'] ?? '') !== ($data['pwdverif'] ?? '')) {
