@@ -48,10 +48,10 @@ class ResetPasswordValidatorTest extends TestCase
     public static function validPasswordsProvider(): array
     {
         return [
-            'eight_chars' => ['12345678', '12345678'],
-            'long_password' => ['ThisIsAVeryLongPassword123456', 'ThisIsAVeryLongPassword123456'],
+            'exactly_12_chars' => ['Valid12Chars!', 'Valid12Chars!'],
+            'long_password' => ['ThisIsAVeryLongPassword123456!', 'ThisIsAVeryLongPassword123456!'],
             'with_special_chars' => ['Pass@word123!', 'Pass@word123!'],
-            'mixed_case' => ['AbCdEfGh', 'AbCdEfGh']
+            'mixed_case_complex' => ['MixedCase123@', 'MixedCase123@']
         ];
     }
 
@@ -100,8 +100,8 @@ class ResetPasswordValidatorTest extends TestCase
         $this->expectException(ExceptionValidationResetPassword::class);
 
         $data = [
-            'pwdnew' => 'Password123',
-            'pwdverif' => 'DifferentPass456'
+            'pwdnew' => 'P@ssword2026!',
+            'pwdverif' => 'DifferentP@ssword2026!'
         ];
 
         $escaped = $this->validator->escape($data);
@@ -111,10 +111,10 @@ class ResetPasswordValidatorTest extends TestCase
     public static function mismatchedPasswordsProvider(): array
     {
         return [
-            'different_length' => ['12345678', '123456789'],
-            'different_case' => ['PASSWORD', 'password'],
-            'trailing_space' => ['password ', 'password'],
-            'leading_space' => [' password', 'password']
+            'different_length' => ['ValidP@ss123!', 'ValidP@ss1234!'],
+            'different_case' => ['ValidP@ss123!', 'validp@ss123!'],
+            'trailing_space' => ['ValidP@ss123! ', 'ValidP@ss123!'],
+            'leading_space' => [' ValidP@ss123!', 'ValidP@ss123!']
         ];
     }
 
@@ -194,8 +194,8 @@ class ResetPasswordValidatorTest extends TestCase
     {
         try {
             $data = [
-                'pwdnew' => 'ValidPassword123',
-                'pwdverif' => 'DifferentPassword456'
+                'pwdnew' => 'ValidP@ssword123!',
+                'pwdverif' => 'DifferentP@ssword456!'
             ];
 
             $escaped = $this -> validator -> escape($data);
