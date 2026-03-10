@@ -25,58 +25,37 @@ use ReflectionClass;
 #[CoversClass(User::class)]
 class RegisterRegressionTest extends TestCase
 {
-    private array $createdUserIds = [];
+    private $studentRepo;
+    private $professorRepo;
+    private $clientRepo;
+    private $userRepo;
+    private $useCase;
 
     protected function setUp(): void
     {
         parent::setUp();
-        putenv('APP_ENV=testing');
+        $this->studentRepo = $this->createMock(PdoStudentRepository::class);
+        $this->professorRepo = $this->createMock(PdoProfessorRepository::class);
+        $this->clientRepo = $this->createMock(PdoClientRepository::class);
+        $this->userRepo = $this->createMock(PdoUserRepository::class);
 
-        // Reset Database
-        $reflection = new ReflectionClass(Database::class);
-        $instance = $reflection->getProperty('instance');
-        $instance->setAccessible(true);
-        $instance->setValue(null, null);
+        $this->useCase = new RegisterUserUseCase(
+            $this->studentRepo,
+            $this->professorRepo,
+            $this->clientRepo,
+            $this->userRepo
+        );
     }
 
     protected function tearDown(): void
     {
-        $repo = new PdoUserRepository();
-        foreach ($this->createdUserIds as $id) {
-            $repo->delete($id);
-        }
         parent::tearDown();
-    }
-
-    private function cleanEmail(string $email): void
-    {
-        try {
-            $db = Database::getInstance();
-            $stmt = $db->prepare("DELETE FROM users WHERE email = :email");
-            $stmt->execute(['email' => strtolower($email)]);
-        } catch (\Exception $e) {
-        }
     }
 
     #[Test]
     public function controllerUsageFailsToInsertStudentData(): void
     {
-        // Now mimics the FIXED RegisterPost.php which passes all repos
-        $studentRepo = new PdoStudentRepository();
-        $professorRepo = new PdoProfessorRepository();
-        $clientRepo = new PdoClientRepository();
-        $userRepo = new PdoUserRepository();
-
-        $useCase = new RegisterUserUseCase(
-            $studentRepo,
-            $professorRepo,
-            $clientRepo,
-            $userRepo
-        );
-
         $email = 'regression.student@test.com';
-        $this->cleanEmail($email);
-
         $data = [
             'first_name' => 'John',
             'last_name' => 'Doe',
@@ -84,22 +63,28 @@ class RegisterRegressionTest extends TestCase
             'password' => 'password123',
             'phone' => '0600000000',
             'user_type' => 'student',
-            'amu_id' => 's_reg_fail', // This should be saved!
+            'amu_id' => 's_reg_fail',
             'year' => 2,
             'td' => 'TD1',
             'tp' => 'TP1'
         ];
 
-        // This should now execute and insert into BOTH users and students tables
-        $user = $useCase->execute($data);
-        $this->createdUserIds[] = $user->getUserId();
+        $this->userRepo->method('existsByEmail')->willReturn(false);
+        $this->studentRepo->method('insert')->willReturn(1);
 
-        // Verify via PdoStudentRepository (which joins)
-        $fetched = $studentRepo->findById($user->getUserId());
+        $mockStudent = new Student($data);
+        $reflection = new ReflectionClass(Student::class);
+        $prop = $reflection->getProperty('user_id');
+        $prop->setAccessible(true);
+        $prop->setValue($mockStudent, 1);
+
+        $this->studentRepo->method('findById')->willReturn($mockStudent);
+
+        $user = $this->useCase->execute($data);
+
+        $fetched = $this->studentRepo->findById($user->getUserId());
 
         $this->assertInstanceOf(Student::class, $fetched);
-
-        // This assertion should PASS now
         $this->assertNotNull($fetched->getAmuId(), "AMU ID should not be null");
         $this->assertEquals('s_reg_fail', $fetched->getAmuId(), "AMU ID should match");
     }

@@ -6,7 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Models\Repository\Security\JsonIpBanRepository;
 use Models\Entity\Security\IpBan;
 use DateTime;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
+#[CoversClass(JsonIpBanRepository::class)]
+#[UsesClass(IpBan::class)]
 class JsonIpBanRepositoryTest extends TestCase
 {
     private string $testFile;

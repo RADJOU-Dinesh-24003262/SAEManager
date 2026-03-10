@@ -1,0 +1,15 @@
+[database]
+driver = pgsql
+host = localhost
+;port = 5432
+schema = your_database_name
+username = your_username
+password = your_password
+
+[hcaptcha]
+sitekey = YOUR_SITE_KEY
+secret = YOUR_SECRET_KEY
+
+[email]
+from_email = noreply@yourdomain.com
+from_name = Your Application Name
