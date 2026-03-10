@@ -37,7 +37,7 @@ class ForgotPasswordValidator extends FormValidator
      *
      * @var array<string>
      */
-    protected $required = ['email'];
+    protected $required = ['email', 'h-captcha-response'];
 
     /**
      * Validates the provided data for a forgot password request.
@@ -61,6 +61,19 @@ class ForgotPasswordValidator extends FormValidator
         }
         if (!RateLimiter::check('forgot_password', 2, 120)) {
             throw new ExceptionSpam("Veuillez attendre au moins 2 minutes avant de refaire une demande.");
+        }
+
+        [$captchaSuccess, $captchaErrors] = $this->verifyCaptchaToken(
+            $data['h-captcha-response'] ?? '',
+            $_SERVER['REMOTE_ADDR'] ?? ''
+        );
+
+        if (!$captchaSuccess) {
+            throw new ExceptionValidationForgotPassword(
+                "h-captcha-response",
+                "string",
+                "La validation hCaptcha a échoué."
+            );
         }
     }
 }
