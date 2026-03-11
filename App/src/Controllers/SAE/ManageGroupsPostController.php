@@ -1,5 +1,4 @@
 <?php
-
 namespace Controllers\SAE;
 
 use Controllers\BaseController;
@@ -209,3 +208,4 @@ class ManageGroupsPostController extends BaseController
             );
     }
 }
+
