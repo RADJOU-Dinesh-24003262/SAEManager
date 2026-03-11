@@ -79,7 +79,6 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Groupe créé avec succès.');
         Logger::log('SAE_Group_Creation_failure', "Success de la création d'un groupe de SAE" .
             $this->user->getEmail(), $this->user->getUserId());
-
     }
 
     /**
@@ -106,7 +105,6 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Groupe supprimé.');
         Logger::log('SAE_Group_Deletion_failure', "Success de la suppression d'un groupe de SAE" .
             $this->user->getEmail(), $this->user->getUserId());
-
     }
 
     /**
@@ -135,7 +133,6 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Étudiant ajouté au groupe.');
         Logger::log('SAE_Group_Student_Added', "Success de l'ajout d'un utilisateur au groupe de SAE" .
             $this->user->getEmail(), $this->user->getUserId());
-
     }
 
     /**
@@ -164,7 +161,6 @@ class ManageGroupsPostController extends BaseController
         $this->redirectWithSuccess($saeId, 'Étudiant retiré du groupe.');
         Logger::log('SAE_Group_Student_Removed', "Success de la suppression d'un utilisateur au groupe de SAE" .
             $this->user->getEmail(), $this->user->getUserId());
-
     }
 
     /**

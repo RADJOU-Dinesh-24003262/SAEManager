@@ -81,25 +81,21 @@ class SaeCreatePostController extends BaseController
             SessionService::setFlash('errors', $e->getMessage());
             Logger::log('SAE_Creation_failure', "Echec de la creation d'une SAE : ExeptionValidationSAECreation" .
                 $this->user->getEmail(), $this->user->getUserId());
-
         } catch (ExceptionInvalidData $e) {
             SessionService::setFlash('errors', 'Données invalides fournies : ' . $e->getMessage());
             Logger::log('SAE_Creation_failure', "Echec de la creation d'une SAE : ExceptionInvalidData" .
                 $this->user->getEmail(), $this->user->getUserId());
-
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
             Logger::log('SAE_Creation_failure', "Echec de la creation d'une SAE : ExceptionValidationEmptys" .
                 $this->user->getEmail(), $this->user->getUserId());
-
         }
 
         $clientInterface = new PdoClientRepository();
         $clients = $clientInterface->findAll();
         Logger::log('SAE_Creation successful', "Creation d'une SAE reussie : " .
             $this->user->getEmail(), $this->user->getUserId());
-
 
         $view = new CreateSaeView(['clients' => $clients]);
         $view->render();
