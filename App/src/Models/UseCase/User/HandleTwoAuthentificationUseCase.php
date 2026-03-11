@@ -95,20 +95,13 @@ class HandleTwoAuthentificationUseCase
      */
     public function execute(string $token): User
     {
-        $data = $this->pendingRegistrationsInterface->findValidByToken($token);
 
+        $this->pendingRegistrationsInterface->purgeExpired();
+        
         $data = $this->pendingRegistrationsInterface->findValidByToken($token);
 
         if (!$data) {
             throw new ExceptionInvalidToken('Token invalide ou expiré.');
-        }
-
-        // Map pending_registrations fields to User entity fields.
-        if (isset($data['status']) && !isset($data['user_type'])) {
-            $data['user_type'] = $data['status'];
-        }
-        if (isset($data['password']) && !isset($data['hashed_password'])) {
-            $data['hashed_password'] = $data['password'];
         }
 
         $user = UserFactory::create($data);
@@ -130,6 +123,8 @@ class HandleTwoAuthentificationUseCase
         if (is_int($result)) {
             $user->setUserId($result);
         }
+
+        $this->pendingRegistrationsInterface->markAsUsed($token);
 
         return $this->pdoInterface->findById($user->getUserId());
     }
