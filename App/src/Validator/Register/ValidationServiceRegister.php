@@ -83,7 +83,8 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister(
                 "password",
                 "string",
-                "Obligation de 12 caractères minimum avec une majuscule, une minuscule, un chiffre et un caractère spécial."
+                "Obligation de 12 caractères minimum avec une majuscule, 
+                une minuscule, un chiffre et un caractère spécial."
             );
         }
 
