@@ -82,6 +82,6 @@ class TwoFactorAuthentificationController extends BaseController
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === "/two-factor-authentificator" && $method === "GET";
+        return $path === "/two-factor-authentification" && $method === "GET";
     }
 }
