@@ -1,4 +1,5 @@
 <?php
+
 namespace Models\UseCase\User\InterfaceDB;
 
 /**
@@ -44,14 +45,14 @@ interface PasswordResetInterface
      *
      * @param string $token The token to mark as used.
      *
-     * @return bool True if successful, false otherwise.
+     * @return boolean True if successful, false otherwise.
      */
     public function markTokenAsUsed(string $token): bool;
 
     /**
      * Deletes all expired or used tokens from the database.
      *
-     * @return int Number of deleted rows.
+     * @return integer Number of deleted rows.
      */
     public function purgeExpiredTokens(): int;
 }

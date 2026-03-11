@@ -31,24 +31,24 @@ interface PendingRegistrationInterface
      * @param string|null       $td        TD group (student only).
      * @param string|null       $tp        TP group (student only).
      * @param string|null       $major     Major (student only).
-     * @param int|null          $year      Year of study (student only).
+     * @param integer|null      $year      Year of study (student only).
      *
-     * @return bool True on success, false on failure.
+     * @return boolean True on success, false on failure.
      */
     public function insert(
-        string            $token,
-        string            $firstName,
-        string            $lastName,
-        string            $email,
-        string            $phone,
-        string            $password,
-        string            $status,
+        string $token,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $phone,
+        string $password,
+        string $status,
         DateTimeImmutable $expiresAt,
-        ?string           $amuId = null,
-        ?string           $td    = null,
-        ?string           $tp    = null,
-        ?string           $major = null,
-        ?int              $year  = null
+        ?string $amuId = null,
+        ?string $td = null,
+        ?string $tp = null,
+        ?string $major = null,
+        ?int $year = null
     ): bool;
 
     /**
@@ -67,7 +67,7 @@ interface PendingRegistrationInterface
      *
      * @param string $email The email address.
      *
-     * @return bool True if a pending registration exists.
+     * @return boolean True if a pending registration exists.
      */
     public function existsByEmail(string $email): bool;
 
@@ -76,7 +76,7 @@ interface PendingRegistrationInterface
      *
      * @param string $token The verification token.
      *
-     * @return bool True on success, false on failure.
+     * @return boolean True on success, false on failure.
      */
     public function markAsUsed(string $token): bool;
 
@@ -84,7 +84,7 @@ interface PendingRegistrationInterface
      * Deletes all expired or used pending registrations.
      * To be called periodically to keep the table clean.
      *
-     * @return int Number of deleted rows.
+     * @return integer Number of deleted rows.
      */
     public function purgeExpired(): int;
 }

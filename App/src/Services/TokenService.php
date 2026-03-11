@@ -119,7 +119,7 @@ class TokenService
             $stmt = $db->prepare(
                 "
                 SELECT email, expires_at, used 
-                FROM ".$table ."
+                FROM " . $table . "
                 WHERE token = :token
             "
             );
@@ -167,7 +167,7 @@ class TokenService
 
             $stmt = $db->prepare(
                 "
-                UPDATE " .$table ."
+                UPDATE " . $table . "
                 SET used = TRUE 
                 WHERE token = :token
             "
@@ -192,7 +192,7 @@ class TokenService
 
             $stmt = $db->prepare(
                 "
-                DELETE FROM ".$table ."
+                DELETE FROM " . $table . "
                 WHERE expires_at < NOW() OR used = TRUE
             "
             );

@@ -52,25 +52,25 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
      * @param string|null       $td        TD group (student only).
      * @param string|null       $tp        TP group (student only).
      * @param string|null       $major     Major (student only).
-     * @param int|null          $year      Year of study (student only).
+     * @param integer|null      $year      Year of study (student only).
      *
-     * @return bool True on success, false on failure.
+     * @return boolean True on success, false on failure.
      */
     #[Override]
     public function insert(
-        string            $token,
-        string            $firstName,
-        string            $lastName,
-        string            $email,
-        string            $phone,
-        string            $password,
-        string            $status,
+        string $token,
+        string $firstName,
+        string $lastName,
+        string $email,
+        string $phone,
+        string $password,
+        string $status,
         DateTimeImmutable $expiresAt,
-        ?string           $amuId = null,
-        ?string           $td    = null,
-        ?string           $tp    = null,
-        ?string           $major = null,
-        ?int              $year  = null
+        ?string $amuId = null,
+        ?string $td = null,
+        ?string $tp = null,
+        ?string $major = null,
+        ?int $year = null
     ): bool {
         $query = "INSERT INTO pending_registrations 
                     (token, first_name, last_name, email, phone, password, status, expires_at,
@@ -82,19 +82,19 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
         $this->connection->beginTransaction();
         try {
             $stmt = $this->connection->prepare($query);
-            $stmt->bindValue(':token',      $token);
+            $stmt->bindValue(':token', $token);
             $stmt->bindValue(':first_name', $firstName);
-            $stmt->bindValue(':last_name',  $lastName);
-            $stmt->bindValue(':email',      strtolower($email));
-            $stmt->bindValue(':phone',      $phone);
-            $stmt->bindValue(':password',   $password);
-            $stmt->bindValue(':status',     $status);
+            $stmt->bindValue(':last_name', $lastName);
+            $stmt->bindValue(':email', strtolower($email));
+            $stmt->bindValue(':phone', $phone);
+            $stmt->bindValue(':password', $password);
+            $stmt->bindValue(':status', $status);
             $stmt->bindValue(':expires_at', $expiresAt->format('Y-m-d H:i:sP'));
-            $stmt->bindValue(':amu_id',     $amuId,  PDO::PARAM_STR);
-            $stmt->bindValue(':td',         $td,     PDO::PARAM_STR);
-            $stmt->bindValue(':tp',         $tp,     PDO::PARAM_STR);
-            $stmt->bindValue(':major',      $major,  PDO::PARAM_STR);
-            $stmt->bindValue(':year',       $year,   PDO::PARAM_INT);
+            $stmt->bindValue(':amu_id', $amuId, PDO::PARAM_STR);
+            $stmt->bindValue(':td', $td, PDO::PARAM_STR);
+            $stmt->bindValue(':tp', $tp, PDO::PARAM_STR);
+            $stmt->bindValue(':major', $major, PDO::PARAM_STR);
+            $stmt->bindValue(':year', $year, PDO::PARAM_INT);
 
             $result = $stmt->execute();
             $this->connection->commit();
@@ -121,7 +121,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                //Doit changer les champs pour avoir ceux de user
+                // Doit changer les champs pour avoir ceux de user
                 'SELECT * FROM pending_registrations
                  WHERE token = :token
                    AND used = false
@@ -144,7 +144,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
      *
      * @param string $email The email address.
      *
-     * @return bool True if a pending registration exists.
+     * @return boolean True if a pending registration exists.
      */
     #[Override]
     public function existsByEmail(string $email): bool
@@ -169,7 +169,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
      *
      * @param string $token The verification token.
      *
-     * @return bool True on success, false on failure.
+     * @return boolean True on success, false on failure.
      */
     #[Override]
     public function markAsUsed(string $token): bool
@@ -189,7 +189,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
      * Deletes all expired or used pending registrations.
      * To be called periodically to keep the table clean.
      *
-     * @return int Number of deleted rows.
+     * @return integer Number of deleted rows.
      */
     #[Override]
     public function purgeExpired(): int
