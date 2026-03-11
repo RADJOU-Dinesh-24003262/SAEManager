@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskBtn = document.getElementById('add-task-btn');
     const newTaskInput = document.getElementById('new-task-input');
     const newTaskPriority = document.getElementById('new-task-priority');
+    const newTaskEndDate = document.getElementById('new-end-date');
 
     // Extract SAE ID from URL
     const saeId = window.location.pathname.split('/')[2];
@@ -27,35 +28,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Handle Checkbox (Complete/Uncomplete)
         if (target.classList.contains('task-checkbox')) {
             const isChecked = target.checked;
-            
+
             // Optimistic UI Update: Move task between lists
             if (isChecked) {
                 completedList.appendChild(listItem);
                 listItem.classList.add('completed');
                 // Disable priority select if checked
                 const select = listItem.querySelector('.priority-select');
-                if(select) select.disabled = true;
+                if (select) select.disabled = true;
             } else {
                 pendingList.appendChild(listItem);
                 listItem.classList.remove('completed');
                 // Enable priority select if unchecked
                 const select = listItem.querySelector('.priority-select');
-                if(select) select.disabled = false;
+                if (select) select.disabled = false;
                 sortList(pendingList); // Re-sort pending list when moving back
             }
-            
+
             checkEmptyLists();
 
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/update/${todoId}`, {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ checked: isChecked })
+                    body: JSON.stringify({checked: isChecked})
                 });
-                
+
                 // Check if response is JSON
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.indexOf("application/json") !== -1) {
@@ -87,25 +88,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (target.classList.contains('priority-select')) {
             const newPriority = parseInt(target.value);
             const oldPriority = parseInt(listItem.dataset.priority); // Track old priority
-            
+
             // Optimistic Update
             listItem.dataset.priority = newPriority;
             listItem.classList.remove('priority-high', 'priority-medium', 'priority-low');
             const priorityClass = {1: 'priority-high', 2: 'priority-medium', 3: 'priority-low'}[newPriority];
             listItem.classList.add(priorityClass);
-            
+
             sortList(pendingList); // Sort immediately
 
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/update/${todoId}`, {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
-                    body: JSON.stringify({ priority: newPriority })
+                    body: JSON.stringify({priority: newPriority})
                 });
-                
+
                 const contentType = response.headers.get("content-type");
                 if (contentType && contentType.indexOf("application/json") !== -1) {
                     const data = await response.json();
@@ -133,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await fetch(`/sae/${saeId}/to-do/delete/${todoId}`, {
                     method: 'POST',
-                    headers: { 
+                    headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
@@ -150,7 +151,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Erreur lors de la suppression : " + error.message);
             }
         }
-    };
+        // 4. handle the end_date of the task
+        if (target.classList.contains('task-end-date')) {
+            const newDate = target.value;
+            const oldDate = listItem.dataset.end_date;
+
+            listItem.dataset.end_date = newDate;
+
+            try {
+                const response = await fetch(`/sae/${saeId}/to-do/update/${todoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({end_date: newDate})
+                });
+
+                const data = await response.json();
+                if (!data.success) throw new Error(data.message);
+                listItem.dataset.end_date = newDate;
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Erreur lors de la mise à jour de date : " + error.message);
+                // Revert UI
+                target.value = oldDate;
+                listItem.dataset.end_date = oldDate;
+            }
+        }
+    }
 
     if (pendingList) pendingList.addEventListener('change', handleTaskClick);
     if (pendingList) pendingList.addEventListener('click', handleTaskClick);
@@ -200,10 +230,11 @@ document.addEventListener('DOMContentLoaded', () => {
     async function addNewTask() {
         const description = newTaskInput.value.trim();
         const priority = newTaskPriority ? parseInt(newTaskPriority.value) : 2;
+        const endDate = newTaskEndDate.value;
 
         if (!description) return;
 
-        const payload = { description: description, priority: priority };
+        const payload = { description: description, priority: priority, end_date : endDate };
 
         try {
             newTaskInput.disabled = true;
@@ -249,6 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         li.className = `task-item ${pClass}`;
         li.dataset.id = data.todo_id;
         li.dataset.priority = data.priority;
+        li.dataset.end_date = data.end_date;
         
         li.innerHTML = `
             <div class="task-content">
@@ -263,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <option value="2" ${data.priority == 2 ? 'selected' : ''}>Moyenne</option>
                     <option value="3" ${data.priority == 3 ? 'selected' : ''}>Basse</option>
                 </select>
+                <input type="date" class="new-end-date" value="${escapeHtml(data.end_date)}">
                 <button class="btn-delete" title="Supprimer">&times;</button>
             </div>
         `;

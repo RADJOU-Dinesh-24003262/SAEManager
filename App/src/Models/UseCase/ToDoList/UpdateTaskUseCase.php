@@ -51,7 +51,8 @@ class UpdateTaskUseCase
         }
 
         foreach ($updates as $key => $value) {
-            $task->{'set' . $key}($value);
+            $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+            $task->$method($value);
         }
 
 

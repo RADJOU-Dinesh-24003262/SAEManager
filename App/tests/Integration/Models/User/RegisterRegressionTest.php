@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Core\Includes\Database;
+use Models\Entity\User\UserFactory;
 use ReflectionClass;
 
 #[CoversClass(RegisterUserUseCase::class)]
@@ -23,6 +24,7 @@ use ReflectionClass;
 #[CoversClass(PdoClientRepository::class)]
 #[CoversClass(Database::class)]
 #[CoversClass(User::class)]
+#[CoversClass(UserFactory::class)]
 class RegisterRegressionTest extends TestCase
 {
     private $studentRepo;
