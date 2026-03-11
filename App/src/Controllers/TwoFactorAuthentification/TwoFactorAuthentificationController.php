@@ -48,8 +48,6 @@ class TwoFactorAuthentificationController extends BaseController
             $clientRepo = new PdoClientRepository();
             $userRepo = new PdoUserRepository();
 
-            $data = $pendingRegistrationsRepository->findValidByToken($token);
-
             // Faire récupération de données dans pending_registrations puis recreer $user
             // + fonctions de registerPost avant puis afficher registerSuccess avec $user
             $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(                
@@ -84,6 +82,6 @@ class TwoFactorAuthentificationController extends BaseController
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === "/mfa" && $method === "GET";
+        return $path === "/two-factor-authentificator" && $method === "GET";
     }
 }
