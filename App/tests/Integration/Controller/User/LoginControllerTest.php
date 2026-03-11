@@ -3,13 +3,16 @@
 namespace tests\Integration\Controller\User;
 
 use Controllers\Login\LoginPostController;
+use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Utils\Logger;
 use Core\Utils\SessionService;
 use Core\Views\AbstractView;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use PSpell\Config;
 use Validator\FormValidator;
 
 /**
@@ -21,6 +24,9 @@ use Validator\FormValidator;
 #[CoversClass(ExceptionValidationEmpty::class)]
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(AbstractView::class)]
+#[CoversClass(ExceptionCsrf::class)]
+#[CoversClass(Config::class)]
+#[CoversClass(Logger::class)]
 #[RunInSeparateProcess]
 class LoginControllerTest extends TestCase
 {

@@ -29,6 +29,7 @@ use Models\UseCase\SAE\DeleteSAEGroupUseCase;
 use Models\UseCase\SAE\AssignProfessorToGroupUseCase;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use ReflectionClass;
+use Services\FileService;
 
 #[CoversClass(CreateSAEUseCase::class)]
 #[CoversClass(CreateSAEGroupUseCase::class)]
@@ -53,6 +54,7 @@ use ReflectionClass;
 #[CoversClass(PdoStudentRepository::class)]
 #[CoversClass(PdoUserRepository::class)]
 #[CoversClass(UserFactory::class)]
+#[CoversClass(FileService::class)]
 
 class SAEServiceIntegrationTest extends TestCase
 {
