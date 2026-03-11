@@ -144,7 +144,15 @@ abstract class FormValidator
      */
     protected function isValidPassword(string $password): bool
     {
-        return strlen($password) >= 8;
+        if (mb_strlen($password) < 12) {
+            return false;
+        }
+        $hasUppercase = preg_match('/[A-Z]/', $password);
+        $hasLowercase = preg_match('/[a-z]/', $password);
+        $hasDigit     = preg_match('/[0-9]/', $password);
+
+        $hasSpecialChar = preg_match('/[\W_]/u', $password);
+        return $hasUppercase && $hasLowercase && $hasDigit && $hasSpecialChar;
     }
 
     /**

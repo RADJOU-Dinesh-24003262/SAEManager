@@ -44,8 +44,8 @@ class ValidationServiceRegisterTest extends TestCase
             'last_name' => 'Dupont',
             'user_type' => 'student',
             'email' => 'jean.dupont',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
+            'password' => 'SecureP@ss2026!',
+            'passwordverif' => 'SecureP@ss2026!',
             'phone' => '0612345678',
             'year' => '2',
             'major' => 'A',
@@ -109,8 +109,8 @@ class ValidationServiceRegisterTest extends TestCase
         $this->expectException(ExceptionValidationRegisters::class);
 
         $data = $this->getValidBaseData();
-        $data['password'] = 'Password123';
-        $data['passwordverif'] = 'DifferentPass123';
+        $data['password'] = 'ValidP@ssword123!';
+        $data['passwordverif'] = 'DiffP@ssword456!';
 
         $escaped = $this->validator->escape($data);
         $this->validator->validate($escaped);
@@ -216,8 +216,8 @@ class ValidationServiceRegisterTest extends TestCase
             'last_name' => 'Dupont',
             'user_type' => 'professor',
             'email' => 'jean.dupont',
-            'password' => 'SecurePass123',
-            'passwordverif' => 'SecurePass123',
+            'password' => 'SecureP@ss2026!',
+            'passwordverif' => 'SecureP@ss2026!',
             'phone' => '0612345678',
             'terms' => 'on',
             'h-captcha-response' => 'test-captcha-success'
