@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Core\Includes\Database;
-use PSpell\Config;
+use Core\Utilis\Config;
 
 /**
  * Unit tests for Database class
