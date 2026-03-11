@@ -72,10 +72,10 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
         ?string $organisation = null
     ): bool {
         $query = "INSERT INTO pending_registrations 
-                    (token, first_name, last_name, email, phone, password, status, expires_at,
+                    (token, first_name, last_name, email, phone, hashed_password, user_type, expires_at,
                      amu_id, td, tp, major, year, organisation)
                   VALUES 
-                    (:token, :first_name, :last_name, :email, :phone, :password, :status, :expires_at,
+                    (:token, :first_name, :last_name, :email, :phone, :hashed_password, :user_type, :expires_at,
                      :amu_id, :td, :tp, :major, :year, :organisation)";
 
         $this->connection->beginTransaction();
@@ -86,8 +86,8 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
             $stmt->bindValue(':last_name', $lastName);
             $stmt->bindValue(':email', strtolower($email));
             $stmt->bindValue(':phone', $phone);
-            $stmt->bindValue(':password', $password);
-            $stmt->bindValue(':status', $status);
+            $stmt->bindValue(':hashed_password', $password);
+            $stmt->bindValue(':user_type', $status);
             $stmt->bindValue(':expires_at', $expiresAt->format('Y-m-d H:i:sP'));
             $stmt->bindValue(':amu_id', $amuId, PDO::PARAM_STR);
             $stmt->bindValue(':td', $td, PDO::PARAM_STR);
