@@ -47,7 +47,7 @@ class RegistrationMailer
     {
         $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        return "{$protocol}://{$host}/mfa?token={$token}";
+        return "{$protocol}://{$host}/two-factor-authentification?token={$token}";
     }
 
     /**
