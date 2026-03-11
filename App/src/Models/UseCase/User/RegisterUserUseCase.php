@@ -52,7 +52,7 @@ class RegisterUserUseCase
      * @param PendingRegistrationInterface $pendingInterface The PendingRegistration repository.
      */
     public function __construct(
-        UserInterface                $userInterface,
+        UserInterface $userInterface,
         PendingRegistrationInterface $pendingInterface
     ) {
         $this->userInterface    = $userInterface;
@@ -109,7 +109,6 @@ class RegisterUserUseCase
             $amuId = $user->getAmuId();
         }
         // Client has no extra fields
-
         // 6. Insert into pending_registrations
         $result = $this->pendingInterface->insert(
             token:     $token,

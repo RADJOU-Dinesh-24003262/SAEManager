@@ -56,7 +56,7 @@ class HandlePasswordResetUseCase
 
         // Reset password using existing UseCase (reusing existing logic adhering to DRY).
         $resetPasswordUseCase = new ResetPasswordUseCase($this->userRepository, $this->passwordResetInterface);
-        $email=$resetPasswordUseCase->execute( $password, $token);
+        $email = $resetPasswordUseCase->execute($password, $token);
 
         return $email;
     }

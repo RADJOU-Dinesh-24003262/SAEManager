@@ -5,13 +5,17 @@ namespace Controllers\Password;
 use Controllers\BaseController;
 use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utils\SessionService;
+use HandleTwoAuthentificationUseCase;
+use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoPendingRegistrationRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
 use Views\Password\ResetPasswordView;
 use Views\User\RegisterSuccessView;
-
 /**
  * This class controls the reset password process (get).
  *
@@ -39,12 +43,23 @@ class TwoFactorAuthentificationController extends BaseController
         $token = $_GET['token'] ?? '';
         try {
             $pendingRegistrationsRepository = new PdoPendingRegistrationRepository();
+            $studentRepo = new PdoStudentRepository();
+            $professorRepo = new PdoProfessorRepository();
+            $clientRepo = new PdoClientRepository();
+            $userRepo = new PdoUserRepository();
+
             $data = $pendingRegistrationsRepository->findValidByToken($token);
 
-            // Faire récupération de données dans pending_registrations puis recreer $user 
+            // Faire récupération de données dans pending_registrations puis recreer $user
             // + fonctions de registerPost avant puis afficher registerSuccess avec $user
-
-
+            $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(                
+                $studentRepo,
+                $professorRepo,
+                $clientRepo,
+                $userRepo,
+                $pendingRegistrationsRepository);
+                
+            $user = $handleTwoAuthentificationUseCase->execute($token);
 
 
 

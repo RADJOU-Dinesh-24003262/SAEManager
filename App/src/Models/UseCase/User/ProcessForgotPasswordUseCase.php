@@ -10,6 +10,7 @@ use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Services\Auth\PasswordResetMailer;
 use Services\TokenService;
+
 /**
  * Use Case for processing forgot password requests.
  *
@@ -51,7 +52,6 @@ class ProcessForgotPasswordUseCase
     public function execute(string $email): void
     {
         if ($this->userRepository->existsByEmail($email)) {
-            
             // Create the password reset token.
             $createTokenUseCase = new CreateTokenResetUseCase($this->passwordResetInterface);
             $token = $createTokenUseCase->execute($email);

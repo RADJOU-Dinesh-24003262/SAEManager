@@ -69,7 +69,7 @@ class ResetPasswordUseCase
         if (!$this->userInterface->updatePassword($user->getUserId(), $user->getPasswordHash())) {
             throw new ExceptionPasswordUpdateFailed("Erreur technique lors de la réinitialisation du mot de passe.");
         }
-        
+
         // Mark token as used.
         $this->passwordResetInterface->markTokenAsUsed($token);
 
