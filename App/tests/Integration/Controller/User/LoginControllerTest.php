@@ -12,7 +12,7 @@ use Core\Views\AbstractView;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Core\Utilis\Config;
+use Core\Utils\Config;
 use Validator\FormValidator;
 
 /**
