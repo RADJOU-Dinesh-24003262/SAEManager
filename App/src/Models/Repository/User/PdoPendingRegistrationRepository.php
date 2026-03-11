@@ -12,9 +12,6 @@ use DateTimeImmutable;
 /**
  * PDO implementation of PendingRegistrationInterface.
  *
- * This is the Infrastructure layer implementation of the Interface.
- * It implements the Interface defined in the Use Cases layer.
- *
  * @category   Models
  * @package    Src
  * @subpackage Models/Repository/User
@@ -40,19 +37,20 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
     /**
      * Inserts a new pending registration.
      *
-     * @param string            $token     The verification token.
-     * @param string            $firstName The user's first name.
-     * @param string            $lastName  The user's last name.
-     * @param string            $email     The user's email address.
-     * @param string            $phone     The user's phone number.
-     * @param string            $password  The hashed password.
-     * @param string            $status    The user type (student, professor, client).
-     * @param DateTimeImmutable $expiresAt The token expiry date.
-     * @param string|null       $amuId     AMU identifier (student/professor only).
-     * @param string|null       $td        TD group (student only).
-     * @param string|null       $tp        TP group (student only).
-     * @param string|null       $major     Major (student only).
-     * @param integer|null      $year      Year of study (student only).
+     * @param string            $token        The verification token.
+     * @param string            $firstName    The user's first name.
+     * @param string            $lastName     The user's last name.
+     * @param string            $email        The user's email address.
+     * @param string            $phone        The user's phone number.
+     * @param string            $password     The hashed password.
+     * @param string            $status       The user type (student, professor, client).
+     * @param DateTimeImmutable $expiresAt    The token expiry date.
+     * @param string|null       $amuId        AMU identifier (student/professor only).
+     * @param string|null       $td           TD group (student only).
+     * @param string|null       $tp           TP group (student only).
+     * @param string|null       $major        Major (student only).
+     * @param integer|null      $year         Year of study (student only).
+     * @param string|null       $organisation Organisation (client only).
      *
      * @return boolean True on success, false on failure.
      */
@@ -70,14 +68,15 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
         ?string $td = null,
         ?string $tp = null,
         ?string $major = null,
-        ?int $year = null
+        ?int $year = null,
+        ?string $organisation = null
     ): bool {
         $query = "INSERT INTO pending_registrations 
                     (token, first_name, last_name, email, phone, password, status, expires_at,
-                     amu_id, td, tp, major, year)
+                     amu_id, td, tp, major, year, organisation)
                   VALUES 
                     (:token, :first_name, :last_name, :email, :phone, :password, :status, :expires_at,
-                     :amu_id, :td, :tp, :major, :year)";
+                     :amu_id, :td, :tp, :major, :year, :organisation)";
 
         $this->connection->beginTransaction();
         try {
@@ -95,6 +94,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
             $stmt->bindValue(':tp', $tp, PDO::PARAM_STR);
             $stmt->bindValue(':major', $major, PDO::PARAM_STR);
             $stmt->bindValue(':year', $year, PDO::PARAM_INT);
+            $stmt->bindValue(':organisation', $organisation, PDO::PARAM_STR);
 
             $result = $stmt->execute();
             $this->connection->commit();
@@ -121,7 +121,6 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
     {
         try {
             $stmt = $this->connection->prepare(
-                // Doit changer les champs pour avoir ceux de user
                 'SELECT * FROM pending_registrations
                  WHERE token = :token
                    AND used = false
