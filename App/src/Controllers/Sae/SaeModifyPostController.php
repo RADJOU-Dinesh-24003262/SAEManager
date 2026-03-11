@@ -94,7 +94,7 @@ class SaeModifyPostController extends BaseController
         } catch (ExeptionValidationSAECreation $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /sae/' . $saeId . '/modify');
-            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : ExeptionValidationSAECreation" .
+            Logger::log('SAE_Modification_Failed', "Echec de modification de la SAE : ExeptionValidationSAECreation" .
                 $this->user->getEmail(), $this->user->getUserId());
             exit();
         } catch (ExceptionValidationEmptys $e) {
