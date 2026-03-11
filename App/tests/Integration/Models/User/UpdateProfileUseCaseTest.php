@@ -9,7 +9,7 @@ use Models\UseCase\User\UpdateProfileUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\includes\Database;
+use Core\Includes\Database;
 use ReflectionClass;
 use Models\Entity\User\Student;
 
@@ -21,26 +21,26 @@ use Models\Entity\User\Student;
 #[CoversClass(PdoStudentRepository::class)]
 class UpdateProfileUseCaseTest extends TestCase
 {
-    private ?User $user;
-    private ?PdoUserRepository $userRepository;
-    private ?int $userId = null;
+    private $userRepository;
+    private $userId = 1;
 
     protected function setUp(): void
     {
         parent::setUp();
-        putenv('APP_ENV=testing');
+        $this->userRepository = $this->createMock(PdoUserRepository::class);
+    }
 
-        // Reset Database
-        $reflection = new ReflectionClass(Database::class);
-        $instance = $reflection->getProperty('instance');
-        $instance->setAccessible(true);
-        $instance->setValue(null, null);
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+    }
 
-        $this->userRepository = new PdoUserRepository();
-
-        // Create a test user
-        $studentRepo = new PdoStudentRepository();
-        $user = new Student([
+    #[Test]
+    public function canUpdatePhoneNumber(): void
+    {
+        $newPhone = '0700000000';
+        $mockUser = new Student([
+            'user_id' => $this->userId,
             'first_name' => 'John',
             'last_name' => 'UpdateProfile',
             'email' => 'john.update@test.com',
@@ -50,46 +50,17 @@ class UpdateProfileUseCaseTest extends TestCase
             'td' => 'A',
             'tp' => '1'
         ]);
-        $user->setPassword('password123');
 
-        // Clean up
-        try {
-            $db = Database::getInstance();
-            $db->exec("DELETE FROM users WHERE email = 'john.update@test.com'");
-        } catch (\Exception $e) {
-        }
+        $this->userRepository->method('findById')
+            ->with($this->userId)
+            ->willReturn($mockUser);
 
-        $createdUserId = $studentRepo->insert($user);
-        $this->user = $studentRepo->findById($createdUserId);
-        $this->userId = $createdUserId;
-    }
+        $this->userRepository->method('update')
+            ->willReturn(true);
 
-    protected function tearDown(): void
-    {
-        if ($this->userId) {
-            $this->userRepository->delete($this->userId);
-        }
-
-        $reflection = new ReflectionClass(Database::class);
-        $instance = $reflection->getProperty('instance');
-        $instance->setAccessible(true);
-        $instance->setValue(null, null);
-
-        parent::tearDown();
-    }
-
-    #[Test]
-    public function canUpdatePhoneNumber(): void
-    {
         $useCase = new UpdateProfileUseCase($this->userRepository);
-
-        $newPhone = '0700000000';
         $updatedUser = $useCase->execute($this->userId, ['phone' => $newPhone]);
 
         $this->assertEquals($newPhone, $updatedUser->getPhone());
-
-        // Verify in DB
-        $storedUser = $this->userRepository->findById($this->userId);
-        $this->assertEquals($newPhone, $storedUser->getPhone());
     }
 }

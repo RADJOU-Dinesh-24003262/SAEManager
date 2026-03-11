@@ -2,7 +2,8 @@
 
 namespace Core\Views;
 
-use Core\Utilis\SessionService;
+use Core\Utils\SessionService;
+use Core\Utils\Config;
 use Exception;
 
 /**
@@ -65,7 +66,10 @@ abstract class AbstractView
         }
 
         // Replacement of template keys with actual values.
-        foreach ($this->templateKeys() as $key => $value) {
+        $keys = $this->templateKeys();
+        $keys['HCAPTCHA_SITEKEY'] = Config::get('hcaptcha', 'sitekey');
+
+        foreach ($keys as $key => $value) {
             $template = str_replace("{{{$key}}}", $value, $template);
         }
 
@@ -183,7 +187,7 @@ abstract class AbstractView
 
             <ul>
                 <li>+33 02 50 65 14 4 </li>
-                <li>📧 <a href="mailto:sae.manager@gmail.com">Email</a></li>
+                <li>📧 <a href="mailto:contact@saemanager.alwaysdata.net">Email</a></li>
             </ul>
 
             <ul>

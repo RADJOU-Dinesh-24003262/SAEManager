@@ -2,7 +2,7 @@
 
 namespace Models\Repository\SAE;
 
-use Core\includes\exception\ExceptionBD\ExceptionFetchDataBD;
+use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\Models\Repository\BaseRepository;
 use Models\Entity\SAE\SAESubject;
 use Models\UseCase\SAE\InterfaceDB\SAESubjectInterface;

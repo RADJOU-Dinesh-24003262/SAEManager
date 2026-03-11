@@ -2,7 +2,7 @@
 
 namespace Core\Models\Repository;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Core\Models\BaseModel;
 use Core\Models\UseCase\InterfaceDB\RepositoryInterface;
 use Exception;

@@ -10,6 +10,16 @@
             <h2 class="subtitle">Mot de passe : </h2>
             <input type="password" name="password" class="textinput" placeholder="Entrez votre mot de passe" required>
 
+            <!-- Honeypot anti-spam : invisible for humans, filled by bots -->
+            <div style="opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; overflow: hidden;" aria-hidden="true">
+                <label for="telephone">Si vous êtes humain, laissez ce champ vide.</label>
+                <input type="text" id="telephone" name="telephone" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="h-captcha" data-sitekey="{{HCAPTCHA_SITEKEY}}"
+                style="display: flex; justify-content: center; margin-bottom: 20px;"></div>
+            <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
             <div class="button-container">
                 <button type="submit" class="button">Se connecter</button>
             </div>

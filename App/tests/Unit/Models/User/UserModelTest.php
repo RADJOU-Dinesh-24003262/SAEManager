@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Models\User;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;

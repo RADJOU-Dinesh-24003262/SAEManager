@@ -5,8 +5,8 @@ namespace Tests\Unit\Utilis;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Utilis\EmailService;
-use Core\includes\exception\ExceptionEmailAlreadyExists;
+use Core\Utils\EmailService;
+use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 
 /**
  * Unit tests for EmailService
@@ -43,7 +43,6 @@ class EmailServiceTest extends TestCase
         $reflection = new \ReflectionClass(EmailService::class);
 
         $this->assertTrue($reflection->hasMethod('send'));
-        $this->assertTrue($reflection->hasMethod('setSender'));
 
         $method = $reflection->getMethod('send');
         $this->assertTrue($method->isStatic());

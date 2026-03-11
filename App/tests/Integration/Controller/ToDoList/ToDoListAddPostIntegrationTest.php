@@ -4,11 +4,11 @@ namespace Tests\Integration\Controller\ToDoList;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Controllers\ToDoList\ToDoListAddPostController;
+use Controllers\Sae\SaeToDoAddPostController;
 use Models\Entity\ToDoItem\ToDoItem;
 
 /**
- * Integration test for ToDoListAddPostController controller interacting with ToDoList model.
+ * Integration test for SaeToDoAddPostController controller interacting with ToDoList model.
  *
  * @category Tests
  * @package  Tests\Controllers\ToDoList
@@ -21,7 +21,7 @@ use Models\Entity\ToDoItem\ToDoItem;
  * @link     https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 #[CoversClass(ToDoItem::class)]
-#[CoversClass(ToDoListAddPostController::class)]
+#[CoversClass(SaeToDoAddPostController::class)]
 class ToDoListAddPostIntegrationTest extends TestCase
 {
     /**
@@ -31,7 +31,7 @@ class ToDoListAddPostIntegrationTest extends TestCase
      */
     public function testSupportReturnsTrueForValidPostRoute(): void
     {
-        $this->assertTrue(ToDoListAddPostController::support('/sae/1/to-do/add', 'POST'));
+        $this->assertTrue(SaeToDoAddPostController::support('/sae/1/to-do/add', 'POST'));
     }
 
     /**
@@ -41,7 +41,7 @@ class ToDoListAddPostIntegrationTest extends TestCase
      */
     public function testSupportReturnsFalseForInvalidRouteOrMethod(): void
     {
-        $this->assertFalse(ToDoListAddPostController::support('/invalid', 'POST'));
-        $this->assertFalse(ToDoListAddPostController::support('/to-do-list', 'GET'));
+        $this->assertFalse(SaeToDoAddPostController::support('/invalid', 'POST'));
+        $this->assertFalse(SaeToDoAddPostController::support('/to-do-list', 'GET'));
     }
 }

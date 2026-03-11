@@ -2,10 +2,10 @@
 
 namespace tests\Integration\Controller\User;
 
-use Controllers\User\LoginPostController;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmpty;
-use Core\includes\exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\Utilis\SessionService;
+use Controllers\Login\LoginPostController;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
+use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
+use Core\Utils\SessionService;
 use Core\Views\AbstractView;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
