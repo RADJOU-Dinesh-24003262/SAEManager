@@ -16,6 +16,7 @@ use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
 use Views\Password\ResetPasswordView;
 use Views\User\RegisterSuccessView;
+
 /**
  * This class controls the reset password process (get).
  *
@@ -50,13 +51,14 @@ class TwoFactorAuthentificationController extends BaseController
 
             // Faire récupération de données dans pending_registrations puis recreer $user
             // + fonctions de registerPost avant puis afficher registerSuccess avec $user
-            $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(                
+            $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(
                 $studentRepo,
                 $professorRepo,
                 $clientRepo,
                 $userRepo,
-                $pendingRegistrationsRepository);
-                
+                $pendingRegistrationsRepository
+            );
+
             $user = $handleTwoAuthentificationUseCase->execute($token);
 
 

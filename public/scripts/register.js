@@ -125,3 +125,4 @@ userTypeSelect.addEventListener('change', () => {
 toggleStudentFields();
 toggleAmuFields();
 toggleAmuMailParts();
+toggleClientFields(); 
