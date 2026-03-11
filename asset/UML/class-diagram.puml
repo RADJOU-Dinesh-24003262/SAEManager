@@ -175,6 +175,7 @@
           #tododesc : string
           #checked : boolean
           #priority : integer
+          #end_date : null|string
           +__construct(data)
           +getTodoId()
           +getSaeSubjectId()
@@ -182,12 +183,14 @@
           +getTodoDesc()
           +isChecked()
           +getPriority()
+          +getEndDate()
           +setTodoId(todoId)
           +setSaeSubjectId(saeSubjectId)
           +setSaeGroupId(saeGroupId)
           +setTododesc(tododesc)
           +setChecked(checked)
           +setPriority(priority)
+          +setEndDate(endDate)
           +getId()
         }
       }
@@ -442,7 +445,7 @@
         class "CreateTaskUseCase\n<b>Use Case for creating a task.</b>" as Models_UseCase_ToDoList_CreateTaskUseCase [[/Models/UseCase/ToDoList/CreateTaskUseCase.php CreateTaskUseCase Class]] {
           -toDoListInterface : ToDoListInterface
           +__construct(toDoListInterface)
-          +execute(groupId, description, priority)
+          +execute(groupId, description, priority, endDate)
         }
         class "GetToDoListContextUseCase\n<b>Use case to get context data for Todo list.</b>" as Models_UseCase_ToDoList_GetToDoListContextUseCase [[/Models/UseCase/ToDoList/GetToDoListContextUseCase.php GetToDoListContextUseCase Class]] {
           -saeSubjectRepo : SAESubjectInterface
