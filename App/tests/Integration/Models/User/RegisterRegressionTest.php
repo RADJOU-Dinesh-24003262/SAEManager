@@ -8,10 +8,19 @@ use Models\UseCase\User\RegisterUserUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
+use Core\Models\BaseModel;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
+use Models\Entity\User\UserFactory;
 use Services\TokenService;
 
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(TokenService::class)]
+#[CoversClass(UserFactory::class)]
+#[UsesClass(BaseModel::class)]
+#[UsesClass(Student::class)]
+#[UsesClass(User::class)]
 class RegisterRegressionTest extends TestCase
 {
     private $userRepo;
@@ -53,7 +62,7 @@ class RegisterRegressionTest extends TestCase
         $this->pendingRepo->expects($this->once())
             ->method('insert')
             ->with(
-                $this->isType('string'), // Token is now dynamically generated
+                $this->isString(), // Token is now dynamically generated
                 'John',
                 'Doe',
                 $email,
