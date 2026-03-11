@@ -22,8 +22,8 @@ class ToDoListIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->pdoMock = $this->createMock(PDO::class);
-        $this->statementMock = $this->createMock(PDOStatement::class);
+        $this->pdoMock = $this->createMock(PdoToDoListRepository::class);
+        $this->statementMock = $this->createMock(PdoToDoListRepository::class);
 
         $this->repository = new PdoToDoListRepository($this->pdoMock);
     }
