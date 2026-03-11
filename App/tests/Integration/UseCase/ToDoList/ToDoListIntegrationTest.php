@@ -15,7 +15,6 @@ use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
 #[CoversClass(CreateTaskUseCase::class)]
 #[CoversClass(DeleteTaskUseCase::class)]
 #[CoversClass(UpdateTaskUseCase::class)]
-#[CoversClass(ToDoListInterface::class)]
 class ToDoListIntegrationTest extends TestCase
 {
     private $repository;
