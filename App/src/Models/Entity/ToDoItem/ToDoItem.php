@@ -231,10 +231,10 @@ class ToDoItem extends BaseModel
     /**
      * Sets the end date of the task
      *
-     * @param string $endDate
+     * @param string|null $endDate The end date of the task.
      * @return void
      */
-    public function setEndDate(string $endDate): void
+    public function setEndDate(?string $endDate): void
     {
         $this->end_date = $endDate;
     }
