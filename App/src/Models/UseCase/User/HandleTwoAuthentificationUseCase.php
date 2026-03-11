@@ -14,6 +14,7 @@ use Models\UseCase\User\InterfaceDB\PendingRegistrationInterface;
 use Models\UseCase\User\InterfaceDB\ProfessorInterface;
 use Models\UseCase\User\InterfaceDB\StudentInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
+
 /**
  * Use Case for user registration.
  *
@@ -97,7 +98,7 @@ class HandleTwoAuthentificationUseCase
     {
 
         $this->pendingRegistrationsInterface->purgeExpired();
-        
+
         $data = $this->pendingRegistrationsInterface->findValidByToken($token);
 
         if (!$data) {
@@ -105,7 +106,7 @@ class HandleTwoAuthentificationUseCase
         }
 
         $user = UserFactory::create($data);
-        
+
         $repositories = [
             'student' => $this->studentInterface,
             'professor' => $this->professorInterface,
