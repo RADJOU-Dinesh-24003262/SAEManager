@@ -1,5 +1,7 @@
 <?php
 
+namespace Models\UseCase\User;
+
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use Models\Entity\User\User;
 use Models\Entity\User\UserFactory;
@@ -91,7 +93,8 @@ class HandleTwoAuthentificationUseCase
     {
         $data = $this->pendingRegistrationsInterface->findValidByToken($token);
         $user = UserFactory::create($data);
-                $repositories = [
+        
+        $repositories = [
             'student' => $this->studentInterface,
             'professor' => $this->professorInterface,
             'client' => $this->clientInterface,

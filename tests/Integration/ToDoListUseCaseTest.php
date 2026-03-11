@@ -2,7 +2,7 @@
 
 namespace App\Tests\Integration;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Models\Entity\ToDoList\ToDoList;
 use Models\Repository\ToDoList\PdoToDoListRepository;
 use Models\Repository\User\PdoStudentRepository;
