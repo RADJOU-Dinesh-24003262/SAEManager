@@ -8,8 +8,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Core\Routing\Router;
+use Core\Utils\SessionService;
 
 #[CoversClass(Router::class)]
+#[CoversClass(SessionService::class)]
 #[UsesClass(JsonIpBanRepository::class)]
 class RouterUnitTest extends TestCase
 {

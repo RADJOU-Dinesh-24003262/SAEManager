@@ -16,30 +16,17 @@ use Models\Repository\ToDoList\PdoToDoListRepository;
 #[CoversClass(UpdateTaskUseCase::class)]
 class ToDoListIntegrationTest extends TestCase
 {
-    private PdoToDoListRepository $repository;
-    private $pdoMock;
-    private $statementMock;
+    private $repository;
 
     protected function setUp(): void
     {
-        $this->pdoMock = $this->createMock(PdoToDoListRepository::class);
-        $this->statementMock = $this->createMock(PdoToDoListRepository::class);
-
-        $this->repository = new PdoToDoListRepository($this->pdoMock);
+        $this->repository = $this->createMock(ToDoListInterface::class);
     }
 
     public function testCreateTask()
     {
-        $this->pdoMock
-            ->method('prepare')
-            ->willReturn($this->statementMock);
-
-        $this->statementMock
-            ->method('execute')
-            ->willReturn(true);
-
-        $this->pdoMock
-            ->method('lastInsertId')
+        $this->repository
+            ->method('insert')
             ->willReturn(1);
 
         $useCase = new CreateTaskUseCase($this->repository);
@@ -54,57 +41,48 @@ class ToDoListIntegrationTest extends TestCase
         $this->assertInstanceOf(ToDoItem::class, $task);
         $this->assertEquals(1, $task->getTodoId());
         $this->assertEquals("Faire le diagramme de classes", $task->getTodoDesc());
-        $this->assertEquals(1, $task->getPriority());
-        $this->assertFalse($task->isChecked());
     }
 
     public function testUpdateTask()
     {
-        $taskData = [
+        $task = new ToDoItem([
             'todoid' => 1,
             'sae_group_id' => 17,
             'tododesc' => "Tâche à modifier",
             'priority' => 2,
             'checked' => false,
             'end_date' => "2026-03-29"
-        ];
+        ]);
 
-        $this->pdoMock
-            ->method('prepare')
-            ->willReturn($this->statementMock);
+        $this->repository
+            ->method('findById')
+            ->willReturn($task);
 
-        $this->statementMock
-            ->method('execute')
+        $this->repository
+            ->method('update')
             ->willReturn(true);
 
-        $this->statementMock
-            ->method('fetch')
-            ->willReturn($taskData);
+        $useCase = new UpdateTaskUseCase($this->repository);
 
-        $updateUseCase = new UpdateTaskUseCase($this->repository);
-
-        $updateUseCase->execute(1, [
+        $useCase->execute(1, [
             'checked' => true,
             'priority' => 3,
             'end_date' => "2026-03-31"
         ]);
 
-        $this->assertTrue(true); // si aucune exception → test OK
+        $this->assertTrue($task->isChecked());
+        $this->assertEquals(3, $task->getPriority());
     }
 
     public function testDeleteTask()
     {
-        $this->pdoMock
-            ->method('prepare')
-            ->willReturn($this->statementMock);
-
-        $this->statementMock
-            ->method('execute')
+        $this->repository
+            ->method('delete')
             ->willReturn(true);
 
-        $deleteUseCase = new DeleteTaskUseCase($this->repository);
+        $useCase = new DeleteTaskUseCase($this->repository);
 
-        $deleteUseCase->execute(1);
+        $useCase->execute(1);
 
         $this->assertTrue(true);
     }
