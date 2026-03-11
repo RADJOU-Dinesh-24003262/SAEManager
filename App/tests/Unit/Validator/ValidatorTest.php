@@ -129,8 +129,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator -> escape(
             [
-                'pwdnew' => 'NewPassword123',
-                'pwdverif' => 'NewPassword123'
+                'pwdnew' => 'NewPassword123@!',
+                'pwdverif' => 'NewPassword123@!'
             ]
         );
 
@@ -141,13 +141,13 @@ class ValidatorTest extends TestCase
     public function resetPasswordValidatorRejectsShortPassword(): void
     {
         $this -> expectException(ExceptionValidationResetPassword:: class);
-        $this -> expectExceptionMessage('au moins 8 caractères');
+        $this -> expectExceptionMessage('Obligation de 12 caractères minimum');
 
         $validator = new ResetPasswordValidator();
         $data = $validator -> escape(
             [
-                'pwdnew' => 'short',
-                'pwdverif' => 'short'
+                'pwdnew' => 'Short123!',
+                'pwdverif' => 'Short123!'
             ]
         );
 
@@ -163,8 +163,8 @@ class ValidatorTest extends TestCase
         $validator = new ResetPasswordValidator();
         $data = $validator -> escape(
             [
-                'pwdnew' => 'Password123',
-                'pwdverif' => 'DifferentPassword123'
+                'pwdnew' => 'P@ssword2026!',
+                'pwdverif' => 'DifferentP@ssword2026!'
             ]
         );
 
@@ -191,12 +191,10 @@ class ValidatorTest extends TestCase
     public static function validPasswordsProvider(): array
     {
         return [
-            'exactly_8_chars' => ['12345678'],
-            'with_special' => ['P@ssw0rd!'],
-            'long_password' => ['ThisIsAVeryLongPasswordWithMoreThan20Characters'],
-            'with_spaces' => ['My Pass Word 123'],
-            'numbers_only' => ['12345678'],
-            'mixed_case' => ['AbCdEfGh']
+            'exactly_12_chars' => ['Password123!'],
+            'with_special' => ['P@ssw0rd2026!'],
+            'long_password' => ['ThisIsAVeryLongPasswordWithMoreThan20Characters1!'],
+            'with_spaces' => ['My P@ss Word 123']
         ];
     }
 
@@ -502,8 +500,8 @@ class ValidatorTest extends TestCase
 
         $data = $validator -> escape(
             [
-                'pwdnew' => 'Pàsswørd123',
-                'pwdverif' => 'Pàsswørd123'
+                'pwdnew' => 'Pàsswørd1234!',
+                'pwdverif' => 'Pàsswørd1234!'
             ]
         );
 
