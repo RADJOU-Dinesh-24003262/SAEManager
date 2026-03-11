@@ -5,7 +5,6 @@ namespace Models\UseCase\User;
 use DateTimeImmutable;
 use Exception;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
-use InvalidArgumentException;
 use Models\Entity\User\Client;
 use Models\Entity\User\Professor;
 use Models\Entity\User\Student;
@@ -71,33 +70,34 @@ class RegisterUserUseCase
      */
     public function execute(array $data): string
     {
-        // 1. Build entity — applies domain name logic, typing, etc.
+        // 1. Build entity.
         $user = UserFactory::create($data);
 
         if (isset($data['password'])) {
             $user->setPassword($data['password']);
         }
 
-        // 2. Check email not already confirmed in users
+        // 2. Check email not already confirmed in users.
         if ($this->userInterface->existsByEmail($user->getEmail())) {
             throw new ExceptionEmailAlreadyExists($user->getEmail());
         }
 
-        // 3. Check email not already pending
+        // 3. Check email not already pending.
         if ($this->pendingInterface->existsByEmail($user->getEmail())) {
             throw new ExceptionEmailAlreadyExists($user->getEmail());
         }
 
-        // 4. Generate token and expiry
+        // 4. Generate token and expiry.
         $token     = bin2hex(random_bytes(32));
         $expiresAt = new DateTimeImmutable('+' . self::TOKEN_TTL . ' seconds');
 
-        // 5. Extract role-specific fields
-        $amuId = null;
-        $td    = null;
-        $tp    = null;
-        $major = null;
-        $year  = null;
+        // 5. Extract role-specific fields.
+        $amuId        = null;
+        $td           = null;
+        $tp           = null;
+        $major        = null;
+        $year         = null;
+        $organisation = null;
 
         if ($user instanceof Student) {
             $amuId = $user->getAmuId();
@@ -107,30 +107,33 @@ class RegisterUserUseCase
             $year  = $user->getYear();
         } elseif ($user instanceof Professor) {
             $amuId = $user->getAmuId();
+        } elseif ($user instanceof Client) {
+            $organisation = $user->getOrganisation();
         }
-        // Client has no extra fields
-        // 6. Insert into pending_registrations
+
+        // 6. Insert into pending_registrations.
         $result = $this->pendingInterface->insert(
-            token:     $token,
-            firstName: $user->getFirstName(),
-            lastName:  $user->getLastName(),
-            email:     $user->getEmail(),
-            phone:     $user->getPhone(),
-            password:  $user->getPasswordHash(),
-            status:    $user->getUserType(),
-            expiresAt: $expiresAt,
-            amuId:     $amuId,
-            td:        $td,
-            tp:        $tp,
-            major:     $major,
-            year:      $year
+            token:        $token,
+            firstName:    $user->getFirstName(),
+            lastName:     $user->getLastName(),
+            email:        $user->getEmail(),
+            phone:        $user->getPhone(),
+            password:     $user->getPasswordHash(),
+            status:       $user->getUserType(),
+            expiresAt:    $expiresAt,
+            amuId:        $amuId,
+            td:           $td,
+            tp:           $tp,
+            major:        $major,
+            year:         $year,
+            organisation: $organisation
         );
 
         if ($result === false) {
             throw new Exception('Failed to store pending registration.');
         }
 
-        // 7. Return token for RegistrationMailer
+        // 7. Return token for RegistrationMailer.
         return $token;
     }
 }

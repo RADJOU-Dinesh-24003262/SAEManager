@@ -19,19 +19,20 @@ interface PendingRegistrationInterface
     /**
      * Inserts a new pending registration.
      *
-     * @param string            $token     The verification token.
-     * @param string            $firstName The user's first name.
-     * @param string            $lastName  The user's last name.
-     * @param string            $email     The user's email address.
-     * @param string            $phone     The user's phone number.
-     * @param string            $password  The hashed password.
-     * @param string            $status    The user type (student, professor, client).
-     * @param DateTimeImmutable $expiresAt The token expiry date.
-     * @param string|null       $amuId     AMU identifier (student/professor only).
-     * @param string|null       $td        TD group (student only).
-     * @param string|null       $tp        TP group (student only).
-     * @param string|null       $major     Major (student only).
-     * @param integer|null      $year      Year of study (student only).
+     * @param string            $token        The verification token.
+     * @param string            $firstName    The user's first name.
+     * @param string            $lastName     The user's last name.
+     * @param string            $email        The user's email address.
+     * @param string            $phone        The user's phone number.
+     * @param string            $password     The hashed password.
+     * @param string            $status       The user type (student, professor, client).
+     * @param DateTimeImmutable $expiresAt    The token expiry date.
+     * @param string|null       $amuId        AMU identifier (student/professor only).
+     * @param string|null       $td           TD group (student only).
+     * @param string|null       $tp           TP group (student only).
+     * @param string|null       $major        Major (student only).
+     * @param integer|null      $year         Year of study (student only).
+     * @param string|null       $organisation Organisation (client only).
      *
      * @return boolean True on success, false on failure.
      */
@@ -48,7 +49,8 @@ interface PendingRegistrationInterface
         ?string $td = null,
         ?string $tp = null,
         ?string $major = null,
-        ?int $year = null
+        ?int $year = null,
+        ?string $organisation = null
     ): bool;
 
     /**
