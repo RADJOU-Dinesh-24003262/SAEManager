@@ -2,7 +2,11 @@
 
 namespace Models\UseCase\User;
 
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Models\Entity\User\Client;
+use Models\Entity\User\Professor;
+use Models\Entity\User\Student;
 use Models\Entity\User\User;
 use Models\Entity\User\UserFactory;
 use Models\UseCase\User\InterfaceDB\ClientInterface;
@@ -92,6 +96,21 @@ class HandleTwoAuthentificationUseCase
     public function execute(string $token): User
     {
         $data = $this->pendingRegistrationsInterface->findValidByToken($token);
+
+        $data = $this->pendingRegistrationsInterface->findValidByToken($token);
+
+        if (!$data) {
+            throw new ExceptionInvalidToken('Token invalide ou expiré.');
+        }
+
+        // Map pending_registrations fields to User entity fields.
+        if (isset($data['status']) && !isset($data['user_type'])) {
+            $data['user_type'] = $data['status'];
+        }
+        if (isset($data['password']) && !isset($data['hashed_password'])) {
+            $data['hashed_password'] = $data['password'];
+        }
+
         $user = UserFactory::create($data);
         
         $repositories = [
