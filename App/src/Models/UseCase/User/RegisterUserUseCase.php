@@ -11,6 +11,7 @@ use Models\Entity\User\Student;
 use Models\Entity\User\UserFactory;
 use Models\UseCase\User\InterfaceDB\PendingRegistrationInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
+use Services\TokenService;
 
 /**
  * Use Case for user registration.
@@ -88,7 +89,7 @@ class RegisterUserUseCase
         }
 
         // 4. Generate token and expiry.
-        $token     = bin2hex(random_bytes(32));
+        $token     = TokenService::generate();
         $expiresAt = new DateTimeImmutable('+' . self::TOKEN_TTL . ' seconds');
 
         // 5. Extract role-specific fields.
