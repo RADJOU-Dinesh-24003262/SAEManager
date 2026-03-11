@@ -1,11 +1,11 @@
 <?php
 
-namespace Controllers\Password;
+namespace Controllers\TwoFactorAuthentification;
 
 use Controllers\BaseController;
-use Core\includes\exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utils\SessionService;
-use HandleTwoAuthentificationUseCase;
+use Models\UseCase\User\HandleTwoAuthentificationUseCase;
 use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoPendingRegistrationRepository;

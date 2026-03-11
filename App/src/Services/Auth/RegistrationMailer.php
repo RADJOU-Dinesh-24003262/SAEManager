@@ -2,7 +2,7 @@
 
 namespace Services\Auth;
 
-use Core\includes\exception\ExceptionEmailSendingFailed;
+use Core\Includes\exception\ExceptionEmailSendingFailed;
 use Core\Utils\EmailService;
 
 /**

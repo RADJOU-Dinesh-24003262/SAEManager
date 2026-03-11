@@ -2,7 +2,7 @@
 
 namespace Models\Repository\User;
 
-use Core\includes\Database;
+use Core\Includes\Database;
 use Models\UseCase\User\InterfaceDB\PendingRegistrationInterface;
 use Override;
 use PDO;
