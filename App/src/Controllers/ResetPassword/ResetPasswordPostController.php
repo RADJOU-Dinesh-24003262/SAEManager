@@ -54,7 +54,8 @@ class ResetPasswordPostController extends BaseController
 
             (new ResetPasswordSuccessView())->render();
             error_log("Mot de passe réinitialisé avec succès pour: " . $email);
-            Logger::log('Password Reset successfully', "Mot de passe reinitialisé : " . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('Password Reset successfully', "Mot de passe reinitialisé : " .
+                $this->user->getEmail(), $this->user->getUserId());
 
             return;
         } catch (ExceptionInvalidToken $e) {

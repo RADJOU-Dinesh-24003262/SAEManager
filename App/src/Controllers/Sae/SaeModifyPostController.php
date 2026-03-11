@@ -79,7 +79,8 @@ class SaeModifyPostController extends BaseController
 
             $useCase->execute($saeId, $updateData, $description, $this->user);
 
-            Logger::log('SAE_Modified_Successfully', "Success de la modification de la SAE" . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('SAE_Modified_Successfully', "Success de la modification de la SAE" .
+                $this->user->getEmail(), $this->user->getUserId());
 
 
 
@@ -93,19 +94,22 @@ class SaeModifyPostController extends BaseController
         } catch (ExeptionValidationSAECreation $e) {
             SessionService::setFlash('errors', $e->getMessage());
             header('Location: /sae/' . $saeId . '/modify');
-            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : ExeptionValidationSAECreation" . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : ExeptionValidationSAECreation" .
+                $this->user->getEmail(), $this->user->getUserId());
             exit();
         } catch (ExceptionValidationEmptys $e) {
             $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
             header('Location: /sae/' . $saeId . '/modify');
-            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : ExceptionValidationEmptys" . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : ExceptionValidationEmptys" .
+                $this->user->getEmail(), $this->user->getUserId());
 
             exit();
         } catch (Exception $e) {
             SessionService::setFlash('errors', ['Erreur : ' . $e->getMessage()]);
             header('Location: /sae/' . $saeId . '/modify');
-            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : Exception" . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('SAE_Modification_Failed', "Echec de la modification de la SAE : Exception" .
+                $this->user->getEmail(), $this->user->getUserId());
 
             exit();
         }

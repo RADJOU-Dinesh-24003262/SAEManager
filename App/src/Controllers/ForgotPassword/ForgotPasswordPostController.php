@@ -65,7 +65,8 @@ class ForgotPasswordPostController extends BaseController
             $email = trim($data['email'] ?? '');
 
             error_log("Demande réinitialisation pour: {$email}");
-            Logger::log('Password Reset query', "Demande de changement de mot de passe : " . $this->user->getEmail(), $this->user->getUserId());
+            Logger::log('Password Reset query', "Demande de changement de mot de passe : " .
+                $this->user->getEmail(), $this->user->getUserId());
 
             $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
             $processForgotPasswordUseCase->execute($email);
