@@ -39,14 +39,6 @@ class UserFactory
     public static function create(array $data): User
     {
 
-        // Map pending_registrations fields to User entity fields.
-        if (isset($data['status']) && !isset($data['user_type'])) {
-            $data['user_type'] = $data['status'];
-        }
-        if (isset($data['password']) && !isset($data['hashed_password'])) {
-            $data['hashed_password'] = $data['password'];
-        }
-
         $type = $data['user_type'] ?? 'student';
 
         $className = self::$typeRegistry[$type];
