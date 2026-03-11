@@ -99,15 +99,6 @@ class HandleTwoAuthentificationUseCase
             throw new ExceptionInvalidToken('Token invalide ou expiré.');
         }
 
-        // 2. Map pending_registrations fields to User entity fields.
-        if (isset($data['status']) && !isset($data['user_type'])) {
-            $data['user_type'] = $data['status'];
-        }
-        if (isset($data['password']) && !isset($data['hashed_password'])) {
-            $data['hashed_password'] = $data['password'];
-        }
-        // organisation is already correctly named, no mapping needed.
-
         // 3. Build the User entity.
         $user = UserFactory::create($data);
 
