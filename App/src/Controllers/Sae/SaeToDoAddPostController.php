@@ -74,6 +74,7 @@ class SaeToDoAddPostController extends BaseController
 
             $targetGroupId = $validateAccessUseCase->execute($user, $saeId);
 
+
             $input = $validator->escape($input);
             $validator->validate($input);
 
@@ -84,7 +85,6 @@ class SaeToDoAddPostController extends BaseController
                 intval($input['priority']),
                 trim($input['end_date'])
             );
-
             Logger::log('TODO_ADD', "Task added by user {$user->getUserId()} in SAE $saeId", $user->getUserId());
 
             echo json_encode([

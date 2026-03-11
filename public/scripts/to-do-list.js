@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Erreur lors de la suppression : " + error.message);
             }
         }
-
+        // 4. handle the end_date of the task
         if (target.classList.contains('task-end-date')) {
             const newDate = target.value;
             const oldDate = listItem.dataset.end_date;

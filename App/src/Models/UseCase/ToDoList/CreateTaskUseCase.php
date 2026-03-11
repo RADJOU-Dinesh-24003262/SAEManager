@@ -39,6 +39,7 @@ class CreateTaskUseCase
      * @param integer $groupId     The group ID.
      * @param string  $description The task description.
      * @param integer $priority    The task priority.
+     * @param string  $endDate     The end date of the task.
      *
      * @return ToDoItem The created task.
      * @throws Exception If creation fails.

@@ -275,7 +275,7 @@ class ToDoListView extends BaseSaeView
         $html .= '<label>';
         $html .= '<input type="checkbox" class="task-checkbox" ' . $checked . ' ' . $disabled . '>';
         $html .= '<span class="task-text">' . $task->getTodoDesc() . '</span>';
-        $html .= '<input type="date" class="new-end-date" value="' . $task->getEndDate() . '">';
+        $html .= '<input type="date" class="task-end-date" value="' . $task->getEndDate() . '">';
         $html .= '</label>';
         $html .= '</div>';
 
