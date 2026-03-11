@@ -9,11 +9,13 @@ use Models\UseCase\ToDoList\CreateTaskUseCase;
 use Models\UseCase\ToDoList\UpdateTaskUseCase;
 use Models\UseCase\ToDoList\DeleteTaskUseCase;
 use Models\Repository\ToDoList\PdoToDoListRepository;
+use Models\UseCase\ToDoList\InterfaceDB\ToDoListInterface;
 
 #[CoversClass(TodoItem::class)]
 #[CoversClass(CreateTaskUseCase::class)]
 #[CoversClass(DeleteTaskUseCase::class)]
 #[CoversClass(UpdateTaskUseCase::class)]
+#[CoversClass(ToDoListInterface::class)]
 class ToDoListIntegrationTest extends TestCase
 {
     private $repository;
