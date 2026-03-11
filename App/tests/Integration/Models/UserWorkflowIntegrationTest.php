@@ -24,6 +24,7 @@ use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\TokenRepositoryInterface;
 use Services\TokenService;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
  * Tests d'intégration pour les workflows complets User
@@ -41,6 +42,7 @@ use ReflectionClass;
 #[CoversClass(Professor::class)]
 #[CoversClass(Client::class)]
 #[CoversClass(UserFactory::class)]
+#[UsesClass(TokenService::class)]
 
 class UserWorkflowIntegrationTest extends TestCase
 {

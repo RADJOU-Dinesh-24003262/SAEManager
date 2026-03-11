@@ -13,8 +13,7 @@ use Controllers\Mock\MockTestPostController;
 
 #[CoversClass(Router::class)]
 #[UsesClass(JsonIpBanRepository::class)]
-#[UsesClass(MockGetController::class)]
-#[UsesClass(MockTestPostController::class)]
+
 class RouterUnitTest extends TestCase
 {
     protected function setUp(): void

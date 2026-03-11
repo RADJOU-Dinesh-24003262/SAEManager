@@ -8,12 +8,15 @@ use PDOStatement;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Core\Includes\Database;
+use Core\Utils\Config;
 
 /**
  * Unit tests for Database class
  */
 #[CoversClass(Database::class)]
+#[UsesClass(Config::class)]
 class DatabaseTest extends TestCase
 {
     protected function tearDown(): void

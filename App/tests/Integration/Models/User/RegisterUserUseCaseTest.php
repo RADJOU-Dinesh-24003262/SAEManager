@@ -10,11 +10,23 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use PHPUnit\Framework\Attributes\UsesClass;
+use Core\Models\BaseModel;
+use Models\Entity\User\Student;
+use Models\Entity\User\Professor;
+use Models\Entity\User\Client;
+use Models\Entity\User\User;
 use Services\TokenService;
 
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(UserFactory::class)]
 #[CoversClass(TokenService::class)]
+#[CoversClass(ExceptionEmailAlreadyExists::class)]
+#[UsesClass(BaseModel::class)]
+#[UsesClass(Student::class)]
+#[UsesClass(Professor::class)]
+#[UsesClass(Client::class)]
+#[UsesClass(User::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
     private $userRepo;
