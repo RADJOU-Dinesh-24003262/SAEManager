@@ -13,7 +13,9 @@ use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ResetPasswordUseCase;
+use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
+use Services\TokenService;
 use Validator\ResetPassword\ResetPasswordValidator;
 use Views\Password\ResetPasswordSuccessView;
 use Views\Password\ResetPasswordView;
@@ -50,9 +52,15 @@ class ResetPasswordPostController extends BaseController
 
             $userRepository = new PdoUserRepository();
             $passwordRepository = new PdoPasswordResetRepository();
+            $tokenService = new TokenService();
+            $validateTokenUseCase = new ValidateTokenUseCase($passwordRepository, $tokenService);
 
-            $handlePasswordResetUseCase = new HandlePasswordResetUseCase($userRepository, $passwordRepository);
-            $email = $handlePasswordResetUseCase->execute($token, $password);
+            $resetPasswordUseCase = new ResetPasswordUseCase(
+                $userRepository,
+                $passwordRepository,
+                $validateTokenUseCase
+            );
+            $email = $resetPasswordUseCase->execute($password, $token);
 
             (new ResetPasswordSuccessView())->render();
             error_log("Mot de passe réinitialisé avec succès pour: " . $email);

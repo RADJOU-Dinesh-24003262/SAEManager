@@ -16,6 +16,7 @@ use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ProcessForgotPasswordUseCase;
 use Override;
 use Services\Auth\PasswordResetMailer;
+use Services\TokenService;
 use Validator\ForgotPassword\ForgotPasswordValidator;
 use Views\Password\ForgotPasswordView;
 
@@ -66,7 +67,10 @@ class ForgotPasswordPostController extends BaseController
             error_log("Demande réinitialisation pour: {$email}");
             $userRepository = new PdoUserRepository();
             $passwordResetInterface = new PdoPasswordResetRepository();
-            $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase($userRepository, $passwordResetInterface);
+            $tokenService = new TokenService();
+
+            $processForgotPasswordUseCase =
+                new ProcessForgotPasswordUseCase($userRepository, $passwordResetInterface, $tokenService);
             $processForgotPasswordUseCase->execute($email);
 
             RateLimiter::increment('forgot_password');

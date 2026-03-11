@@ -105,8 +105,6 @@ class Router
         $controllerName = $actionBaseName . 'Controller';
         $fqcn = '\\Controllers\\' . $module . '\\' . $controllerName;
 
-        error_log($fqcn);
-
         if (class_exists($fqcn)) {
             $this->dispatch($fqcn, $params);
         } else {

@@ -2,61 +2,35 @@
 
 namespace Tests\Integration\Models\User;
 
-use Models\Entity\User\User;
-use Models\Entity\User\Student;
-use Models\Entity\User\Professor;
-use Models\Entity\User\Client;
 use Models\Entity\User\UserFactory;
 use Models\Repository\User\PdoUserRepository;
-use Models\Repository\User\PdoStudentRepository;
-use Models\Repository\User\PdoProfessorRepository;
-use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoPendingRegistrationRepository;
 use Models\UseCase\User\RegisterUserUseCase;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Core\Includes\Database;
-use ReflectionClass;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
+use Services\TokenService;
 
 #[CoversClass(RegisterUserUseCase::class)]
-#[CoversClass(PdoUserRepository::class)]
-#[CoversClass(PdoStudentRepository::class)]
-#[CoversClass(PdoProfessorRepository::class)]
-#[CoversClass(PdoClientRepository::class)]
-#[CoversClass(User::class)]
-#[CoversClass(Student::class)]
-#[CoversClass(Professor::class)]
-#[CoversClass(Client::class)]
-#[CoversClass(ExceptionEmailAlreadyExists::class)]
 #[CoversClass(UserFactory::class)]
+#[CoversClass(TokenService::class)]
 class RegisterUserUseCaseTest extends TestCase
 {
-    private $studentRepo;
-    private $professorRepo;
-    private $clientRepo;
     private $userRepo;
+    private $pendingRepo;
     private $useCase;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->studentRepo = $this->createMock(PdoStudentRepository::class);
-        $this->professorRepo = $this->createMock(PdoProfessorRepository::class);
-        $this->clientRepo = $this->createMock(PdoClientRepository::class);
         $this->userRepo = $this->createMock(PdoUserRepository::class);
+        $this->pendingRepo = $this->createMock(PdoPendingRegistrationRepository::class);
 
         $this->useCase = new RegisterUserUseCase(
-            $this->studentRepo,
-            $this->professorRepo,
-            $this->clientRepo,
-            $this->userRepo
+            $this->userRepo,
+            $this->pendingRepo
         );
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
     }
 
     #[Test]
@@ -76,21 +50,12 @@ class RegisterUserUseCaseTest extends TestCase
         ];
 
         $this->userRepo->method('existsByEmail')->willReturn(false);
-        $this->studentRepo->method('insert')->willReturn(1);
+        $this->pendingRepo->method('existsByEmail')->willReturn(false);
+        $this->pendingRepo->method('insert')->willReturn(true);
 
-        $mockStudent = new Student($data);
-        $reflection = new ReflectionClass(Student::class);
-        $prop = $reflection->getProperty('user_id');
-        $prop->setAccessible(true);
-        $prop->setValue($mockStudent, 1);
+        $token = $this->useCase->execute($data);
 
-        $this->studentRepo->method('findById')->willReturn($mockStudent);
-
-        $user = $this->useCase->execute($data);
-
-        $this->assertNotNull($user);
-        $this->assertInstanceOf(Student::class, $user);
-        $this->assertEquals('john.student.reg@test.com', $user->getEmail());
+        $this->assertTrue(TokenService::isValidFormat($token));
     }
 
     #[Test]
@@ -107,21 +72,12 @@ class RegisterUserUseCaseTest extends TestCase
         ];
 
         $this->userRepo->method('existsByEmail')->willReturn(false);
-        $this->professorRepo->method('insert')->willReturn(2);
+        $this->pendingRepo->method('existsByEmail')->willReturn(false);
+        $this->pendingRepo->method('insert')->willReturn(true);
 
-        $mockProf = new Professor($data);
-        $reflection = new ReflectionClass(Professor::class);
-        $prop = $reflection->getProperty('user_id');
-        $prop->setAccessible(true);
-        $prop->setValue($mockProf, 2);
+        $token = $this->useCase->execute($data);
 
-        $this->professorRepo->method('findById')->willReturn($mockProf);
-
-        $user = $this->useCase->execute($data);
-
-        $this->assertNotNull($user);
-        $this->assertInstanceOf(Professor::class, $user);
-        $this->assertEquals('prof.reg@test.com', $user->getEmail());
+        $this->assertTrue(TokenService::isValidFormat($token));
     }
 
     #[Test]
@@ -138,25 +94,16 @@ class RegisterUserUseCaseTest extends TestCase
         ];
 
         $this->userRepo->method('existsByEmail')->willReturn(false);
-        $this->clientRepo->method('insert')->willReturn(3);
+        $this->pendingRepo->method('existsByEmail')->willReturn(false);
+        $this->pendingRepo->method('insert')->willReturn(true);
 
-        $mockClient = new Client($data);
-        $reflection = new ReflectionClass(Client::class);
-        $prop = $reflection->getProperty('user_id');
-        $prop->setAccessible(true);
-        $prop->setValue($mockClient, 3);
+        $token = $this->useCase->execute($data);
 
-        $this->clientRepo->method('findById')->willReturn($mockClient);
-
-        $user = $this->useCase->execute($data);
-
-        $this->assertNotNull($user);
-        $this->assertInstanceOf(Client::class, $user);
-        $this->assertEquals('client.reg@test.com', $user->getEmail());
+        $this->assertTrue(TokenService::isValidFormat($token));
     }
 
     #[Test]
-    public function cannotRegisterDuplicateEmail(): void
+    public function cannotRegisterDuplicateEmailInUsers(): void
     {
         $data = [
             'first_name' => 'Dup',
@@ -164,14 +111,30 @@ class RegisterUserUseCaseTest extends TestCase
             'email' => 'dup.student@test.com',
             'password' => 'password123',
             'phone' => '0600000004',
-            'user_type' => 'student',
-            'amu_id' => 's_dup_1',
-            'year' => 1,
-            'td' => 'A',
-            'tp' => '1'
+            'user_type' => 'student'
         ];
 
         $this->userRepo->method('existsByEmail')->willReturn(true);
+
+        $this->expectException(ExceptionEmailAlreadyExists::class);
+
+        $this->useCase->execute($data);
+    }
+
+    #[Test]
+    public function cannotRegisterDuplicateEmailInPending(): void
+    {
+        $data = [
+            'first_name' => 'Dup',
+            'last_name' => 'Two',
+            'email' => 'dup.student2@test.com',
+            'password' => 'password123',
+            'phone' => '0600000005',
+            'user_type' => 'student'
+        ];
+
+        $this->userRepo->method('existsByEmail')->willReturn(false);
+        $this->pendingRepo->method('existsByEmail')->willReturn(true);
 
         $this->expectException(ExceptionEmailAlreadyExists::class);
 

@@ -14,7 +14,7 @@ use DateTimeImmutable;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-interface PendingRegistrationInterface
+interface PendingRegistrationInterface extends TokenRepositoryInterface
 {
     /**
      * Inserts a new pending registration.
@@ -54,18 +54,7 @@ interface PendingRegistrationInterface
     ): bool;
 
     /**
-     * Finds a pending registration by token.
-     * Returns null if not found, expired, or already used.
-     *
-     * @param string $token The verification token.
-     *
-     * @return array<string, mixed>|null The pending registration data or null.
-     */
-    public function findValidByToken(string $token): ?array;
-
-    /**
      * Checks if a pending registration exists for the given email.
-     * Only checks non-expired and unused entries.
      *
      * @param string $email The email address.
      *
@@ -74,7 +63,7 @@ interface PendingRegistrationInterface
     public function existsByEmail(string $email): bool;
 
     /**
-     * Marks a pending registration as used.
+     * Marks a pending registration's token as used.
      *
      * @param string $token The verification token.
      *
@@ -83,10 +72,9 @@ interface PendingRegistrationInterface
     public function markAsUsed(string $token): bool;
 
     /**
-     * Deletes all expired or used pending registrations.
-     * To be called periodically to keep the table clean.
+     * Purges expired pending registrations.
      *
-     * @return integer Number of deleted rows.
+     * @return void
      */
-    public function purgeExpired(): int;
+    public function purgeExpired(): void;
 }

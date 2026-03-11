@@ -106,8 +106,8 @@ abstract class FormValidator
      * as a amU student email should be firstname.lastname[numberIfDuplicated]@etu.univ-amu.fr
      *
      * @param string $email The value to validate.
-     * @param string $lname The last name of the user.
      * @param string $fname The first name of the user.
+     * @param string $lname The last name of the user.
      *
      * @return boolean
      */
@@ -127,8 +127,8 @@ abstract class FormValidator
      * as a amU staff email should be firstname.lastname[numberIfDuplicated]@univ-amu.fr
      *
      * @param string $email The value to validate.
-     * @param string $lname The last name of the user.
      * @param string $fname The first name of the user.
+     * @param string $lname The last name of the user.
      *
      * @return boolean
      */

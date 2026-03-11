@@ -5,7 +5,6 @@ namespace Models\UseCase\User;
 use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use Core\Includes\Exception\ExceptionSpam;
 use Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed;
-use Models\Repository\User\PdoPasswordResetRepository;
 use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Services\Auth\PasswordResetMailer;
@@ -27,34 +26,55 @@ class ProcessForgotPasswordUseCase
      */
     private UserInterface $userRepository;
 
+    /**
+     * @var PasswordResetInterface
+     */
     private PasswordResetInterface $passwordResetInterface;
+
+    /**
+     * @var TokenService
+     */
+    private TokenService $tokenService;
 
     /**
      * Constructor.
      *
-     * @param UserInterface $userRepository Repo for users.
+     * @param UserInterface          $userRepository         Repo for users.
+     * @param PasswordResetInterface $passwordResetInterface Repo for resets.
+     * @param TokenService           $tokenService           Service for tokens.
      */
-    public function __construct(UserInterface $userRepository, PasswordResetInterface $passwordResetInterface)
-    {
+    public function __construct(
+        UserInterface $userRepository,
+        PasswordResetInterface $passwordResetInterface,
+        TokenService $tokenService
+    ) {
         $this->userRepository = $userRepository;
         $this->passwordResetInterface = $passwordResetInterface;
+        $this->tokenService = $tokenService;
     }
 
     /**
      * Execute the process.
      *
      * @param string $email The email address.
+     *
      * @return void
+     *
      * @throws ExceptionCreationTokenFailed If token generation fails.
-     * @throws ExceptionEmailAlreadyExists If email exists.
-     * @throws ExceptionSpam If spam detected.
      */
     public function execute(string $email): void
     {
         if ($this->userRepository->existsByEmail($email)) {
-            // Create the password reset token.
-            $createTokenUseCase = new CreateTokenResetUseCase($this->passwordResetInterface);
-            $token = $createTokenUseCase->execute($email);
+            $this->passwordResetInterface->purgeExpiredTokens();
+
+            $token = $this->tokenService->generate();
+            $expiresAt = new \DateTimeImmutable('+10 minutes');
+
+            $success = $this->passwordResetInterface->insert($email, $token, $expiresAt);
+
+            if (!$success) {
+                throw new ExceptionCreationTokenFailed();
+            }
 
             // Send the email.
             PasswordResetMailer::send($email, $token);
