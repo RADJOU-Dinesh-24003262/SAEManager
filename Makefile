@@ -55,7 +55,7 @@ generate-uml: ## Génère les diagrammes de classes
 	./vendor/bin/php-class-diagram --exclude='Validator' \
 	--svg-topurl='https://github.com/RADJOU-Dinesh-24003262/SAEManager/tree/dev/App/src' \
 	App/src  > asset/UML/class-diagram.puml
-	java -jar plantuml.jar -tsvg asset/UML/class-diagram.puml
+	java -jar asset/UML/plantuml.jar -tsvg asset/UML/class-diagram.puml
 
 
 fix: ## Corrige automatiquement les erreurs de style
