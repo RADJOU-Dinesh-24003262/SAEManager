@@ -3,7 +3,7 @@
 namespace Controllers\TwoFactorAuthentification;
 
 use Controllers\BaseController;
-use Core\Includes\exception\ExceptionToken\ExceptionInvalidToken;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utils\SessionService;
 use Models\UseCase\User\HandleTwoAuthentificationUseCase;
 use Models\Repository\User\PdoClientRepository;
@@ -14,6 +14,7 @@ use Models\Repository\User\PdoStudentRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
+use Services\TokenService;
 use Views\Password\ResetPasswordView;
 use Views\User\RegisterSuccessView;
 
@@ -49,14 +50,15 @@ class TwoFactorAuthentificationController extends BaseController
             $clientRepo = new PdoClientRepository();
             $userRepo = new PdoUserRepository();
 
-            // Faire récupération de données dans pending_registrations puis recreer $user
-            // + fonctions de registerPost avant puis afficher registerSuccess avec $user
+            $tokenService = new TokenService();
+            $validateTokenUseCase = new ValidateTokenUseCase($pendingRegistrationsRepository, $tokenService);
+
             $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(
                 $studentRepo,
                 $professorRepo,
                 $clientRepo,
-                $userRepo,
-                $pendingRegistrationsRepository
+                $pendingRegistrationsRepository,
+                $validateTokenUseCase
             );
 
             $user = $handleTwoAuthentificationUseCase->execute($token);

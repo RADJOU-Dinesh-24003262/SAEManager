@@ -3,6 +3,7 @@
 namespace Models\UseCase\User;
 
 use Core\Includes\Exception\ExceptionPasswordUpdateFailed;
+use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
 use Models\UseCase\User\InterfaceDB\PasswordResetInterface;
 use Models\UseCase\User\InterfaceDB\UserInterface;
 use Models\Entity\User\User;
@@ -28,37 +29,53 @@ class ResetPasswordUseCase
      */
     private UserInterface $userInterface;
 
+    /**
+     * @var PasswordResetInterface
+     */
     private PasswordResetInterface $passwordResetInterface;
+
+    /**
+     * The Validate Token use case.
+     *
+     * @var ValidateTokenUseCase
+     */
+    private ValidateTokenUseCase $validateTokenUseCase;
 
     /**
      * Constructor.
      *
-     * @param UserInterface $userInterface The User repository.
+     * @param UserInterface          $userInterface          The User repository.
+     * @param PasswordResetInterface $passwordResetInterface The password reset repository.
+     * @param ValidateTokenUseCase   $validateTokenUseCase   The Validate token use case.
      */
-    public function __construct(UserInterface $userInterface, PasswordResetInterface $passwordResetInterface)
-    {
+    public function __construct(
+        UserInterface $userInterface,
+        PasswordResetInterface $passwordResetInterface,
+        ValidateTokenUseCase $validateTokenUseCase
+    ) {
         $this->userInterface = $userInterface;
         $this->passwordResetInterface = $passwordResetInterface;
+        $this->validateTokenUseCase = $validateTokenUseCase;
     }
 
     /**
      * Resets the user's password using email.
      *
-     * @param string $email       The user's email.
      * @param string $newPassword The new password.
+     * @param string $token       The reset token.
      *
-     * @return void
+     * @return string The user email.
      *
-     * @throws ExceptionPasswordUpdateFailed If user not found or update fails.
+     * @throws ExceptionPasswordUpdateFailed If password update fails.
      */
     public function execute(string $newPassword, string $token): string
     {
-        // Validate token.
-        $tokenData = $this->passwordResetInterface->validateToken($token);
+        /* @var array<string, mixed> $tokenData */
+        $tokenData = $this->validateTokenUseCase->execute($token);
+
         $email = $tokenData['email'];
 
         $user = $this->userInterface->findByEmail($email);
-
 
         if (!$user) {
             throw new ExceptionPasswordUpdateFailed("Utilisateur non trouvé.");
@@ -71,7 +88,7 @@ class ResetPasswordUseCase
         }
 
         // Mark token as used.
-        $this->passwordResetInterface->markTokenAsUsed($token);
+        $this->passwordResetInterface->markAsUsed($token);
 
         return $email;
     }

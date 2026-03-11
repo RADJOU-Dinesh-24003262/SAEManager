@@ -42,43 +42,36 @@ class PdoPasswordResetRepository implements PasswordResetInterface
     }
 
     /**
-     * Returns a 64-character long secure random hexadecimal string.
+     * Inserts a password reset token into the database.
      *
-     * @return string
-     */
-    private function generate(): string
-    {
-        return bin2hex(random_bytes(32));
-    }
-
-    /**
-     * {@inheritDoc}
+     * Stores the token with the associated email, creation timestamp,
+     * expiration date, and marks it as unused.
+     *
+     * @param string             $email     The email address associated with the reset request.
+     * @param string             $token     The generated password reset token.
+     * @param \DateTimeImmutable $expiresAt The expiration date and time of the token.
+     *
+     * @return boolean Returns true on successful insertion, false on failure.
+     *
+     * @throws ExceptionSpam If too many reset requests are detected for the email address.
      */
     #[Override]
-    public function createPasswordResetToken(string $email): string
+    public function insert(string $email, string $token, \DateTimeImmutable $expiresAt): bool
     {
         try {
-            $this->purgeExpiredTokens();
-
-            $token     = $this->generate();
-            $createdAt = date('Y-m-d H:i:s');
-            $expiresAt = date('Y-m-d H:i:s', strtotime('+10 minutes'));
-
             $stmt = $this->connection->prepare(
                 'INSERT INTO ' . self::TABLE . ' (email, token, created_at, expires_at, used)
                  VALUES (LOWER(:email), :token, :created_at, :expires_at, FALSE)'
             );
 
-            $stmt->execute([
+            return $stmt->execute([
                 'email'      => $email,
                 'token'      => $token,
-                'created_at' => $createdAt,
-                'expires_at' => $expiresAt,
+                'created_at' => date('Y-m-d H:i:s'),
+                'expires_at' => $expiresAt->format('Y-m-d H:i:s'),
             ]);
-
-            return $token ?: throw new ExceptionCreationTokenFailed();
         } catch (PDOException $e) {
-            error_log('Erreur création token: ' . $e->getMessage());
+            error_log('Erreur insertion token password reset: ' . $e->getMessage());
 
             if (str_contains($e->getMessage(), 'TOO_MANY_RESET_REQUESTS')) {
                 error_log("Trop de demandes de réinitialisation pour: {$email}");
@@ -88,21 +81,21 @@ class PdoPasswordResetRepository implements PasswordResetInterface
                 );
             }
 
-            throw new ExceptionCreationTokenFailed();
+            return false;
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Finds token data by its string value.
+     *
+     * @param string $token The token string.
+     *
+     * @return array<string, mixed>|null The token data or null if not found.
      */
     #[Override]
-    public function validateToken(string $token): array
+    public function findByToken(string $token): ?array
     {
         try {
-            if (!preg_match('/^[a-f0-9]{64}$/i', $token)) {
-                throw new ExceptionInvalidToken('Ce lien de réinitialisation est invalide.');
-            }
-
             $stmt = $this->connection->prepare(
                 'SELECT email, expires_at, used
                  FROM ' . self::TABLE . '
@@ -113,33 +106,22 @@ class PdoPasswordResetRepository implements PasswordResetInterface
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
-            if (!$result) {
-                throw new ExceptionInvalidToken(
-                    'Ce lien de réinitialisation est invalide ou a expiré. '
-                    . 'Veuillez faire une nouvelle demande.'
-                );
-            }
-
-            if ($result['used']) {
-                throw new ExceptionInvalidToken('Ce lien de réinitialisation a déjà été utilisé.');
-            }
-
-            if (strtotime($result['expires_at']) < time()) {
-                throw new ExceptionInvalidToken('Ce lien de réinitialisation a expiré.');
-            }
-
-            return $result;
+            return $result ?: null;
         } catch (PDOException $e) {
-            error_log('Erreur validation token: ' . $e->getMessage());
-            throw new ExceptionInvalidToken('Erreur lors de la validation du lien. Veuillez réessayer plus tard.');
+            error_log('Erreur recherche token: ' . $e->getMessage());
+            return null;
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Marks a token as used.
+     *
+     * @param string $token The token string.
+     *
+     * @return boolean True on success, false on failure.
      */
     #[Override]
-    public function markTokenAsUsed(string $token): bool
+    public function markAsUsed(string $token): bool
     {
         try {
             $stmt = $this->connection->prepare(
@@ -156,7 +138,9 @@ class PdoPasswordResetRepository implements PasswordResetInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Removes expired and used tokens from the database.
+     *
+     * @return integer The number of tokens removed.
      */
     #[Override]
     public function purgeExpiredTokens(): int

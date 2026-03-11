@@ -8,6 +8,7 @@ use Core\Utils\SessionService;
 use Models\Repository\User\PdoPasswordResetRepository;
 use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ValidateTokenUseCase;
+use Services\TokenService;
 use Views\Password\ResetPasswordView;
 use Override;
 
@@ -38,7 +39,8 @@ class ResetPasswordController extends BaseController
         $token = $_GET['token'] ?? '';
         try {
             // Validate the token.
-            $tokenData = (new ValidateTokenUseCase(new PdoPasswordResetRepository()))->execute($token);
+            $tokenService = new TokenService();
+            $tokenData = (new ValidateTokenUseCase(new PdoPasswordResetRepository(), $tokenService))->execute($token);
 
             // Token is valid, render the reset password view.
             $view = new ResetPasswordView($token, $tokenData['email']);

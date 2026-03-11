@@ -46,16 +46,18 @@ class HandleTwoAuthentificationUseCase
     private ClientInterface $clientInterface;
 
     /**
-     * The User repository interface.
-     * @var UserInterface
-     */
-    private UserInterface $userInterface;
-
-    /**
      * The PendingRegistration repository interface.
+     *
      * @var PendingRegistrationInterface
      */
     private PendingRegistrationInterface $pendingRegistrationsInterface;
+
+    /**
+     * The Validate Token use case.
+     *
+     * @var ValidateTokenUseCase
+     */
+    private ValidateTokenUseCase $validateTokenUseCase;
 
     /**
      * Constructor.
@@ -63,21 +65,21 @@ class HandleTwoAuthentificationUseCase
      * @param StudentInterface             $studentInterface             The Student repository.
      * @param ProfessorInterface           $professorInterface           The Professor repository.
      * @param ClientInterface              $clientInterface              The Client repository.
-     * @param UserInterface                $userInterface                The User repository.
      * @param PendingRegistrationInterface $pendingRegistrationInterface The PendingRegistration repository.
+     * @param ValidateTokenUseCase         $validateTokenUseCase         The ValidateToken use case.
      */
     public function __construct(
         StudentInterface $studentInterface,
         ProfessorInterface $professorInterface,
         ClientInterface $clientInterface,
-        UserInterface $userInterface,
-        PendingRegistrationInterface $pendingRegistrationInterface
+        PendingRegistrationInterface $pendingRegistrationInterface,
+        ValidateTokenUseCase $validateTokenUseCase
     ) {
-        $this->studentInterface              = $studentInterface;
-        $this->professorInterface            = $professorInterface;
-        $this->clientInterface               = $clientInterface;
-        $this->userInterface                 = $userInterface;
+        $this->studentInterface = $studentInterface;
+        $this->professorInterface = $professorInterface;
+        $this->clientInterface = $clientInterface;
         $this->pendingRegistrationsInterface = $pendingRegistrationInterface;
+        $this->validateTokenUseCase = $validateTokenUseCase;
     }
 
     /**
@@ -87,26 +89,21 @@ class HandleTwoAuthentificationUseCase
      *
      * @return User The newly created user.
      *
-     * @throws ExceptionInvalidToken If the token is invalid or expired.
-     * @throws \Exception            If user creation fails.
+     * @throws \Exception If the token is invalid or user creation fails.
      */
     public function execute(string $token): User
     {
         // 1. Fetch and validate pending registration.
-        $data = $this->pendingRegistrationsInterface->findValidByToken($token);
-
-        if (!$data) {
-            throw new ExceptionInvalidToken('Token invalide ou expiré.');
-        }
+        $data = $this->validateTokenUseCase->execute($token, 'confirmation');
 
         // 3. Build the User entity.
         $user = UserFactory::create($data);
 
         // 4. Select the correct repository based on user type.
         $repositories = [
-            'student'   => $this->studentInterface,
+            'student' => $this->studentInterface,
             'professor' => $this->professorInterface,
-            'client'    => $this->clientInterface,
+            'client' => $this->clientInterface,
         ];
 
         if (!isset($repositories[$user->getUserType()])) {
@@ -131,6 +128,12 @@ class HandleTwoAuthentificationUseCase
         $this->pendingRegistrationsInterface->purgeExpired();
 
         // 7. Return the fully hydrated user from DB.
-        return $pdoInterface->findById($user->getUserId());
+        $user = $pdoInterface->findById($user->getUserId());
+
+        if (!$user instanceof User) {
+            throw new \Exception("Utilisateur non trouvé après création.");
+        }
+
+        return $user;
     }
 }

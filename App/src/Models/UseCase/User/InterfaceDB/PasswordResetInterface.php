@@ -2,6 +2,8 @@
 
 namespace Models\UseCase\User\InterfaceDB;
 
+use Core\Includes\Exception\ExceptionSpam;
+
 /**
  * Interface for password_resets token repository.
  *
@@ -12,42 +14,20 @@ namespace Models\UseCase\User\InterfaceDB;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-interface PasswordResetInterface
+interface PasswordResetInterface extends TokenRepositoryInterface
 {
     /**
-     * Creates a password reset token for the given email address.
+     * Inserts a new password reset token.
      *
-     * Deletes existing tokens for the email, removes expired tokens,
-     * generates a new secure token, and stores it with a 10-minute expiry.
+     * @param string             $email     The email address.
+     * @param string             $token     The generated secure token.
+     * @param \DateTimeImmutable $expiresAt The expiration date.
      *
-     * @param string $email The email address to associate with the reset token.
+     * @return boolean True on success, false on failure.
      *
-     * @return string The newly generated token.
-     *
-     * @throws \Core\Includes\Exception\ExceptionToken\ExceptionCreationTokenFailed If a database error occurs.
-     * @throws \Core\Includes\Exception\ExceptionSpam                               If too many reset requests are detected.
+     * @throws ExceptionSpam If too many reset requests are detected.
      */
-    public function createPasswordResetToken(string $email): string;
-
-    /**
-     * Validates the given token and returns the associated data (email, expires_at, used).
-     *
-     * @param string $token The token to validate.
-     *
-     * @return array{email: string, expires_at: string, used: int|bool} The token details if valid.
-     *
-     * @throws \Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken If the token is invalid, expired, or already used.
-     */
-    public function validateToken(string $token): array;
-
-    /**
-     * Marks the token as used in the database.
-     *
-     * @param string $token The token to mark as used.
-     *
-     * @return boolean True if successful, false otherwise.
-     */
-    public function markTokenAsUsed(string $token): bool;
+    public function insert(string $email, string $token, \DateTimeImmutable $expiresAt): bool;
 
     /**
      * Deletes all expired or used tokens from the database.

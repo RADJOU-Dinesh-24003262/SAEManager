@@ -8,9 +8,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Core\Routing\Router;
+use Controllers\Mock\MockGetController;
+use Controllers\Mock\MockTestPostController;
 
 #[CoversClass(Router::class)]
 #[UsesClass(JsonIpBanRepository::class)]
+#[UsesClass(MockGetController::class)]
+#[UsesClass(MockTestPostController::class)]
 class RouterUnitTest extends TestCase
 {
     protected function setUp(): void

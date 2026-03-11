@@ -99,7 +99,7 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
             $result = $stmt->execute();
             $this->connection->commit();
             return $result;
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }
@@ -110,29 +110,27 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
 
     /**
      * Finds a pending registration by token.
-     * Returns null if not found, expired, or already used.
      *
      * @param string $token The verification token.
      *
      * @return array<string, mixed>|null The pending registration data or null.
      */
     #[Override]
-    public function findValidByToken(string $token): ?array
+    public function findByToken(string $token): ?array
     {
         try {
             $stmt = $this->connection->prepare(
                 'SELECT * FROM pending_registrations
-                 WHERE token = :token
-                   AND used = false
-                   AND expires_at > now()'
+                 WHERE token = :token'
             );
             $stmt->execute(['token' => $token]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            /* @var array<string, mixed>|false $data */
+            $data = $stmt->fetch(\PDO::FETCH_ASSOC);
             $stmt->closeCursor();
 
             return $data ?: null;
         } catch (PDOException $e) {
-            error_log('Error in findValidByToken: ' . $e->getMessage());
+            error_log('Error in findByToken: ' . $e->getMessage());
             return null;
         }
     }
@@ -188,10 +186,10 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
      * Deletes all expired or used pending registrations.
      * To be called periodically to keep the table clean.
      *
-     * @return integer Number of deleted rows.
+     * @return void
      */
     #[Override]
-    public function purgeExpired(): int
+    public function purgeExpired(): void
     {
         try {
             $stmt = $this->connection->prepare(
@@ -199,10 +197,8 @@ class PdoPendingRegistrationRepository implements PendingRegistrationInterface
                  WHERE used = true OR expires_at <= now()'
             );
             $stmt->execute();
-            return $stmt->rowCount();
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             error_log('Error purging expired pending registrations: ' . $e->getMessage());
-            return 0;
         }
     }
 }

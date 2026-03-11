@@ -2,7 +2,7 @@
 
 namespace Services\Auth;
 
-use Core\Includes\exception\ExceptionEmailSendingFailed;
+use Core\Includes\Exception\ExceptionEmailSendingFailed;
 use Core\Utils\EmailService;
 
 /**
@@ -98,7 +98,8 @@ class RegistrationMailer
         <div class='content'>
             <h2>Confirmez votre inscription</h2>
             <p>Bonjour,</p>
-            <p>Merci de vous être inscrit sur SAE Manager. Pour finaliser la création de votre compte, saisissez le code ci-dessous :</p>
+            <p>Merci de vous être inscrit sur SAE Manager.
+            Pour finaliser la création de votre compte, saisissez le code ci-dessous :</p>
 
             <p>{$otpCode}</p>
 

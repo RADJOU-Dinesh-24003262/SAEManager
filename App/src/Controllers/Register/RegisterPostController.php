@@ -17,6 +17,7 @@ use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
 use Services\Auth\RegistrationMailer;
+use Services\TokenService;
 use Views\User\TwoFactorAuthentificationView;
 use Views\User\RegisterPendingView;
 use Validator\Register\ValidationServiceRegister;
@@ -65,6 +66,7 @@ class RegisterPostController extends BaseController
 
             $userRepo    = new PdoUserRepository();
             $pendingRepo = new PdoPendingRegistrationRepository();
+            $tokenService = new TokenService();
 
             $registerUseCase = new RegisterUserUseCase($userRepo, $pendingRepo);
 

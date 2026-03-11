@@ -277,7 +277,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'first_name' => 'Prof',
             'last_name' => 'Dupont',
             'user_type' => 'professor',
-            'email' => 'prof.dupont',
+            'email' => 'prof.dupont@univ-amu.fr',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
@@ -341,18 +341,18 @@ class ValidationServiceRegisterExtendedTest extends TestCase
     {
         $data = [
             'amu_id' => 'test<script>',
-                'first_name' => 'Jean<b>Bold</b>',
-                    'last_name' => 'Dupont',
-                        'user_type' => 'student',
-                            'email' => 'jean.dupont@etu.univ-amu.fr',
-                                'password' => 'SecurePass123',
-                                    'passwordverif' => 'SecurePass123',
-                                        'phone' => '0612345678',
-                                            'year' => '1',
-                                                'td' => 'TD1',
-                                                    'tp' => 'TPA',
-                                                        'terms' => 'on',
-                                                            'h-captcha-response' => 'test-captcha-success'
+            'first_name' => 'Jean<b>Bold</b>',
+            'last_name' => 'Dupont',
+            'user_type' => 'student',
+            'email' => 'jean.dupont@etu.univ-amu.fr',
+            'password' => 'SecurePass123',
+            'passwordverif' => 'SecurePass123',
+            'phone' => '0612345678',
+            'year' => '1',
+            'td' => 'TD1',
+            'tp' => 'TPA',
+            'terms' => 'on',
+            'h-captcha-response' => 'test-captcha-success'
         ];
 
                 $escaped = $this -> validator -> escape($data);
@@ -381,7 +381,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'first_name' => 'Jean',
             'last_name' => 'Dupont',
             'user_type' => 'student',
-            'email' => 'jean.dupont',
+            'email' => 'jean.dupont@etu.univ-amu.fr',
             'password' => 'SecurePass123',
             'passwordverif' => 'SecurePass123',
             'phone' => '0612345678',
