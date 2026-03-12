@@ -239,7 +239,7 @@ Ceci est un email automatique, merci de ne pas y répondre.
 // Execute if run directly.
 if (basename(__FILE__) == basename($_SERVER["SCRIPT_FILENAME"])) {
     // Will be changed during namespace refactoring if needed. Wait, we renamed it to Includes.
-    require_once __DIR__ . '/../../../../Core/includes/Autoloader.php';
+    require_once __DIR__ . '/../../../../Core/Includes/Autoloader.php';
     \Core\Includes\Autoloader::register();
 
     // We instantiate the repositories dynamically to avoid static coupling in the class.

@@ -17,6 +17,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Models\UseCase\User\InterfaceDB\PendingRegistrationInterface;
+use Models\UseCase\User\InterfaceDB\ProfessorInterface;
+use Models\UseCase\User\InterfaceDB\StudentInterface;
+use Models\UseCase\User\InterfaceDB\ClientInterface;
+use Services\TokenService;
 
 #[CoversClass(RegisterUserUseCase::class)]
 #[CoversClass(User::class)]
@@ -26,18 +31,16 @@ use PHPUnit\Framework\Attributes\CoversClass;
 class RegisterUserUseCaseTest extends TestCase
 {
     private UserInterface|MockObject $userRepository;
-    private StudentInterface|MockObject $studentRepository;
-    private ProfessorInterface|MockObject $profRepository;
-    private ClientInterface|MockObject $clientRepository;
+    private PendingRegistrationInterface|MockObject $pendingRepository;
+    private TokenService $tokenService;
     private RegisterUserUseCase $registerUseCase;
 
     protected function setUp(): void
     {
-        $this->userRepository = $this->createMock(PdoUserRepository::class);
-        $this->studentRepository = $this->createMock(PdoStudentRepository::class);
-        $this->profRepository = $this->createMock(PdoProfessorRepository::class);
-        $this->clientRepository = $this->createMock(PdoClientRepository::class);
-        $this->registerUseCase = new RegisterUserUseCase($this->studentRepository, $this->profRepository, $this->clientRepository, $this->userRepository);
+        $this->userRepository = $this->createMock(UserInterface::class);
+        $this->pendingRepository = $this->createMock(PendingRegistrationInterface::class);
+        $this->tokenService = new TokenService();
+        $this->registerUseCase = new RegisterUserUseCase($this->userRepository, $this->pendingRepository, $this->tokenService);
     }
 
     #[Test]
@@ -60,20 +63,18 @@ class RegisterUserUseCaseTest extends TestCase
             ->method('existsByEmail')
             ->willReturn(false);
 
-        $this->studentRepository->expects($this->once())
+        $this->pendingRepository->expects($this->once())
             ->method('insert')
-            ->willReturnCallback(function (User $user) {
-                return 1;
-            });
+            ->willReturn(true);
 
-        $this->studentRepository->expects($this->once())
-            ->method('findById')
-            ->willReturn(new Student($data));
+        $this->pendingRepository->expects($this->once())
+            ->method('existsByEmail')
+            ->willReturn(false);
 
-        $user = $this->registerUseCase->execute($data);
+        $token = $this->registerUseCase->execute($data);
 
-        $this->assertInstanceOf(Student::class, $user);
-        $this->assertEquals('John', $user->getFirstName());
+        $this->assertIsString($token);
+        $this->assertNotEmpty($token);
     }
 
     #[Test]

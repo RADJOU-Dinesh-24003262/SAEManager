@@ -38,6 +38,7 @@ class UserFactory
      */
     public static function create(array $data): User
     {
+
         $type = $data['user_type'] ?? 'student';
 
         $className = self::$typeRegistry[$type];

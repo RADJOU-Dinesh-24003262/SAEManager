@@ -11,6 +11,7 @@ use Core\Includes\Exception\ExceptionValidation\ExceptionValidationForgotPasswor
 use Core\Utils\RateLimiter;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
+use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ProcessForgotPasswordUseCase;
 use Override;
@@ -64,8 +65,12 @@ class ForgotPasswordPostController extends BaseController
             $email = trim($data['email'] ?? '');
 
             error_log("Demande réinitialisation pour: {$email}");
+            $userRepository = new PdoUserRepository();
+            $passwordResetInterface = new PdoPasswordResetRepository();
+            $tokenService = new TokenService();
 
-            $processForgotPasswordUseCase = new ProcessForgotPasswordUseCase(new PdoUserRepository());
+            $processForgotPasswordUseCase =
+                new ProcessForgotPasswordUseCase($userRepository, $passwordResetInterface, $tokenService);
             $processForgotPasswordUseCase->execute($email);
 
             RateLimiter::increment('forgot_password');

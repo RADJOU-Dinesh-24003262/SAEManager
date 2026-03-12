@@ -3,6 +3,7 @@
 App/config/my_settings.ini
 *.ini
 *.lock
+.vscode/*
 /vendor
 .phpunit*
 *coverage*
