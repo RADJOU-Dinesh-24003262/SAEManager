@@ -31,8 +31,9 @@ class ExceptionCreationTokenFailed extends Exception
      *                         Defaults to "Erreur lors de la création du token. Veuillez réessayer plus tard.".
      * @return void
      */
-    public function __construct(string $message = "Erreur lors de la création du token. Veuillez réessayer plus tard.")
-    {
+    public function __construct(
+        string $message = "Erreur lors de la création du token. Veuillez réessayer plus tard."
+    ) {
         parent::__construct($message);
     }
 }
