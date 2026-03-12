@@ -29,4 +29,11 @@ interface TokenRepositoryInterface
      * @return boolean True on success, false on failure.
      */
     public function markAsUsed(string $token): bool;
+
+    /**
+     * Purges expired and used tokens from the database.
+     *
+     * @return void
+     */
+    public function purgeExpired(): void;
 }

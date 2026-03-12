@@ -47,7 +47,8 @@ class ProcessForgotPasswordUseCase
         UserInterface $userRepository,
         PasswordResetInterface $passwordResetInterface,
         TokenService $tokenService
-    ) {
+        )
+    {
         $this->userRepository = $userRepository;
         $this->passwordResetInterface = $passwordResetInterface;
         $this->tokenService = $tokenService;
@@ -65,7 +66,7 @@ class ProcessForgotPasswordUseCase
     public function execute(string $email): void
     {
         if ($this->userRepository->existsByEmail($email)) {
-            $this->passwordResetInterface->purgeExpiredTokens();
+            $this->passwordResetInterface->purgeExpired();
 
             $token = $this->tokenService->generate();
             $expiresAt = new \DateTimeImmutable('+10 minutes');
