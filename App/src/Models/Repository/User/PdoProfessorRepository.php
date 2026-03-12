@@ -136,7 +136,7 @@ class PdoProfessorRepository implements ProfessorInterface
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($data) => new Professor($data), $results);
+            return array_map(fn ($data) => new Professor($data), $results);
         } catch (PDOException $e) {
             error_log("Error in findAll (Professor): " . $e->getMessage());
             return [];

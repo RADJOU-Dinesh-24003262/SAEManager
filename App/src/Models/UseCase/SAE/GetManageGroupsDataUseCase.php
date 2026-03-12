@@ -125,12 +125,12 @@ class GetManageGroupsDataUseCase
 
         // Get available students.
         $students = $this->studentRepo->findStudentsNotInSAE($saeId);
-        $availableStudents = array_map(fn($s) => $s->toArray(), $students);
+        $availableStudents = array_map(fn ($s) => $s->toArray(), $students);
 
         // Get available professors.
         $profsAvailable = [];
         $profs = $this->professorRepo->findAll();
-        $profsAvailable = array_map(fn($p) => $p->toArray(), $profs);
+        $profsAvailable = array_map(fn ($p) => $p->toArray(), $profs);
 
         return [
             'sae' => $saeData,

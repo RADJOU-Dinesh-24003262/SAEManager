@@ -145,6 +145,7 @@ class PageSaeView extends BaseSaeView
         $user = $this->user;
         $content = '';
 
+        print_r($this->groups);
         // 1. Responsible Professor
         if (!empty($this->responsibleProf)) {
             $prof = $this->responsibleProf;

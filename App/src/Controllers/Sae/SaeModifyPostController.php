@@ -85,7 +85,7 @@ class SaeModifyPostController extends BaseController
             header('Location: /sae/' . $saeId . '/modify');
             exit();
         } catch (ExceptionValidationEmptys $e) {
-            $errors = array_map(fn($error) => $error->getMessage(), $e->getErrors());
+            $errors = array_map(fn ($error) => $error->getMessage(), $e->getErrors());
             SessionService::setFlash('errors', $errors);
             header('Location: /sae/' . $saeId . '/modify');
             exit();

@@ -134,7 +134,7 @@ class ToDoListView extends BaseSaeView
         }
 
         // If professor and no group selected.
-        if ($this->user->isProfessor()) {
+        if ($this->user->isProfessor() || $this->user->isClient()) {
             return $this->renderGroupList($this->allGroups);
         }
 
@@ -184,7 +184,7 @@ class ToDoListView extends BaseSaeView
         $html = '<h2>Tableau de bord - Groupe ' . $groupId . '</h2>';
 
         // Add a "Back to groups" button for professors.
-        if ($this->user->isProfessor()) {
+        if ($this->user->isProfessor() || $this->user->isClient()) {
             $saeId = $this->subject->getSaeSubjectId();
             $html .= '<a href="/sae/' . $saeId . '/to-do" class="btn btn-secondary" ';
             $html .= 'style="margin-bottom: 1rem; display: inline-block;">&larr; Retour aux groupes</a>';

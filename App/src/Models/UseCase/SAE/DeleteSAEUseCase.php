@@ -63,7 +63,7 @@ class DeleteSAEUseCase
             try {
                 FileService::removeFile($fileName);
             } catch (Exception $e) {
-            // Ignore file not found errors if we are deleting.
+                // Ignore file not found errors if we are deleting.
             }
         }
 

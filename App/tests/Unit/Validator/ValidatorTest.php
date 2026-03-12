@@ -115,7 +115,7 @@ class ValidatorTest extends TestCase
         );
 
         $this->assertStringNotContainsString('<script>', $data['email']);
-            $this -> assertStringNotContainsString('<b>', $data['password']);
+        $this -> assertStringNotContainsString('<b>', $data['password']);
     }
 
     // ========================================
@@ -140,7 +140,7 @@ class ValidatorTest extends TestCase
     #[Test]
     public function resetPasswordValidatorRejectsShortPassword(): void
     {
-        $this -> expectException(ExceptionValidationResetPassword:: class);
+        $this -> expectException(ExceptionValidationResetPassword::class);
         $this -> expectExceptionMessage('Obligation de 12 caractères minimum');
 
         $validator = new ResetPasswordValidator();
@@ -157,7 +157,7 @@ class ValidatorTest extends TestCase
     #[Test]
     public function resetPasswordValidatorRejectsMismatchedPasswords(): void
     {
-        $this -> expectException(ExceptionValidationResetPassword:: class);
+        $this -> expectException(ExceptionValidationResetPassword::class);
         $this -> expectExceptionMessage('ne correspondent pas');
 
         $validator = new ResetPasswordValidator();
@@ -201,7 +201,7 @@ class ValidatorTest extends TestCase
     #[Test]
     public function resetPasswordValidatorThrowsExceptionForEmptyFields(): void
     {
-        $this -> expectException(ExceptionValidationEmptys:: class);
+        $this -> expectException(ExceptionValidationEmptys::class);
 
         $validator = new ResetPasswordValidator();
         $validator -> escape(
@@ -234,7 +234,7 @@ class ValidatorTest extends TestCase
     #[Test]
     public function forgotPasswordValidatorRejectsInvalidEmail(): void
     {
-        $this -> expectException(ExceptionValidationForgotPassword:: class);
+        $this -> expectException(ExceptionValidationForgotPassword::class);
 
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
@@ -250,12 +250,12 @@ class ValidatorTest extends TestCase
     #[Test]
     public function forgotPasswordValidatorThrowsSpamExceptionWhenTooManyRequests(): void
     {
-        $this -> expectException(ExceptionSpam:: class);
+        $this -> expectException(ExceptionSpam::class);
         $this -> expectExceptionMessage('au moins 2 minutes');
 
         // Simuler une demande récente
-        RateLimiter:: increment('forgot_password');
-        RateLimiter:: increment('forgot_password');
+        RateLimiter::increment('forgot_password');
+        RateLimiter::increment('forgot_password');
 
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
@@ -268,7 +268,7 @@ class ValidatorTest extends TestCase
         try {
             $validator -> validate($data);
         } finally {
-            RateLimiter:: clear('forgot_password');
+            RateLimiter::clear('forgot_password');
         }
     }
 
@@ -278,7 +278,7 @@ class ValidatorTest extends TestCase
         $this -> expectNotToPerformAssertions();
 
         // Ensure rate limit is clear
-        RateLimiter:: clear('forgot_password');
+        RateLimiter::clear('forgot_password');
 
         $validator = new ForgotPasswordValidator();
         $data = $validator -> escape(
@@ -472,7 +472,7 @@ class ValidatorTest extends TestCase
 
         $this->assertStringNotContainsString('<script>', $escaped['email']);
         $this -> assertStringNotContainsString('<img', $escaped['password']);
-            $this -> assertStringContainsString('&lt;', $escaped['email']);
+        $this -> assertStringContainsString('&lt;', $escaped['email']);
     }
 
     #[Test]

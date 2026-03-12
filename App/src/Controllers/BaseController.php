@@ -7,7 +7,6 @@ use Core\Includes\Exception\ExceptionEmailAlreadyExists;
 use Core\Utils\Logger;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
-use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionSpam;
 use Models\Repository\Security\JsonIpBanRepository;
@@ -52,7 +51,7 @@ abstract class BaseController implements ControllerInterface
         }
 
         // Load and validate user from session.
-        $userId = SessionService::get('user_id_pk'); // Use primary key ID
+        $userId = SessionService::get('user_id_pk'); // Use primary key ID.
 
         if (!$userId) {
             SessionService::remove('user_id_pk');

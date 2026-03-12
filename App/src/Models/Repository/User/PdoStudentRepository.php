@@ -99,7 +99,7 @@ class PdoStudentRepository implements StudentInterface
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($data) => new Student($data), $results);
+            return array_map(fn ($data) => new Student($data), $results);
         } catch (PDOException $e) {
             error_log("Error in findAll (Student): " . $e->getMessage());
             return [];
@@ -297,7 +297,7 @@ class PdoStudentRepository implements StudentInterface
             $stmt->execute(['sae_id' => $saeId]);
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($data) => new Student($data), $results);
+            return array_map(fn ($data) => new Student($data), $results);
         } catch (PDOException $e) {
             error_log("Error in findStudentsNotInSAE: " . $e->getMessage());
             return [];

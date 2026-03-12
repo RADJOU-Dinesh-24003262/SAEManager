@@ -141,7 +141,7 @@ class PdoClientRepository implements ClientInterface
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            return array_map(fn($data) => new Client($data), $results);
+            return array_map(fn ($data) => new Client($data), $results);
         } catch (PDOException $e) {
             error_log("Error in findAll (Client): " . $e->getMessage());
             return [];

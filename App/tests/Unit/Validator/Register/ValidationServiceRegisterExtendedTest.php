@@ -355,15 +355,15 @@ class ValidationServiceRegisterExtendedTest extends TestCase
             'h-captcha-response' => 'test-captcha-success'
         ];
 
-                $escaped = $this -> validator -> escape($data);
-                $this -> assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
-                $this -> assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
+        $escaped = $this -> validator -> escape($data);
+        $this -> assertStringContainsString('&lt;script&gt;', $escaped['amu_id']);
+        $this -> assertStringContainsString('&lt;b&gt;', $escaped['first_name']);
     }
 
     #[Test]
     public function missingRequiredFieldThrowsException(): void
     {
-        $this -> expectException(ExceptionValidationEmptys:: class);
+        $this -> expectException(ExceptionValidationEmptys::class);
 
         $data = [
             'amu_id' => '',
@@ -373,7 +373,7 @@ class ValidationServiceRegisterExtendedTest extends TestCase
         $this -> validator -> escape($data);
     }
 
-                // Helper methods
+    // Helper methods
     private function getValidStudentData(): array
     {
         return [

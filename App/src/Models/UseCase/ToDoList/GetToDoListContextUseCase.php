@@ -117,12 +117,17 @@ class GetToDoListContextUseCase
                 throw new ExceptionAccessDenied("Accès refusé à cette SAE.");
             }
             $currentGroupId = $this->participatedInRepo->getStudentGroupId($user->getUserId(), $saeId);
-        } elseif ($user->isProfessor()) {
+        } elseif ($user->isProfessor() || $user->isClient()) {
+            error_log("[GetToDoListContext] user_type=" . $user->getUserType() . " requestedGroupId=" .
+            var_export($requestedGroupId, true) . " allGroups_count=" . count($allGroups));
             // Check if a specific group is selected via GET parameter.
             if ($requestedGroupId !== null) {
                 // Verify if the professor has access to this group (exists in this SAE).
                 foreach ($allGroups as $groupData) {
-                    if ($groupData['group']->getSaeGroupId() == $requestedGroupId) {
+                    $gid = (int)$groupData['group']->getSaeGroupId();
+                    $rid = (int)$requestedGroupId;
+                    error_log("[GetToDoListContext] comparing group $gid === $rid: " . var_export($gid === $rid, true));
+                    if ($gid === $rid) {
                         $currentGroupId = $requestedGroupId;
                         break;
                     }

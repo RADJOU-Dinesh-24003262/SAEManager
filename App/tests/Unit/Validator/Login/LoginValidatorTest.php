@@ -169,7 +169,7 @@ class LoginValidatorTest extends TestCase
         $this->assertStringContainsString('&lt;', $escaped['email']);
         $this->assertStringContainsString('&lt;', $escaped['password']);
         $this->assertStringNotContainsString('<script>', $escaped['email']);
-            $this -> assertStringNotContainsString('<b>', $escaped['password']);
+        $this -> assertStringNotContainsString('<b>', $escaped['password']);
     }
 
     #[Test]
