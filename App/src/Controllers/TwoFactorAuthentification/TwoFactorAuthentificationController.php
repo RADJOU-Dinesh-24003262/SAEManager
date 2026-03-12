@@ -1,16 +1,22 @@
 <?php
 
-namespace Controllers\ResetPassword;
+namespace Controllers\TwoFactorAuthentification;
 
 use Controllers\BaseController;
 use Core\Includes\Exception\ExceptionToken\ExceptionInvalidToken;
 use Core\Utils\SessionService;
+use Models\UseCase\User\HandleTwoAuthentificationUseCase;
+use Models\Repository\User\PdoClientRepository;
 use Models\Repository\User\PdoPasswordResetRepository;
-use Models\UseCase\User\HandlePasswordResetUseCase;
+use Models\Repository\User\PdoPendingRegistrationRepository;
+use Models\Repository\User\PdoProfessorRepository;
+use Models\Repository\User\PdoStudentRepository;
+use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\ValidateTokenUseCase;
+use Override;
 use Services\TokenService;
 use Views\Password\ResetPasswordView;
-use Override;
+use Views\User\RegisterSuccessView;
 
 /**
  * This class controls the reset password process (get).
@@ -26,7 +32,7 @@ use Override;
  * @license    MIT License https://opensource.org/licenses/MIT
  * @link       https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
-class ResetPasswordController extends BaseController
+class TwoFactorAuthentificationController extends BaseController
 {
     /**
      * Principal manager of the controller.
@@ -38,16 +44,33 @@ class ResetPasswordController extends BaseController
         // Get the token from the URL.
         $token = $_GET['token'] ?? '';
         try {
-            // Validate the token.
+            $pendingRegistrationsRepository = new PdoPendingRegistrationRepository();
+            $studentRepo = new PdoStudentRepository();
+            $professorRepo = new PdoProfessorRepository();
+            $clientRepo = new PdoClientRepository();
+            $userRepo = new PdoUserRepository();
+
             $tokenService = new TokenService();
-            $tokenData = (new ValidateTokenUseCase(new PdoPasswordResetRepository(), $tokenService))->execute($token);
+            $validateTokenUseCase = new ValidateTokenUseCase($pendingRegistrationsRepository, $tokenService);
+
+            $handleTwoAuthentificationUseCase = new HandleTwoAuthentificationUseCase(
+                $studentRepo,
+                $professorRepo,
+                $clientRepo,
+                $pendingRegistrationsRepository,
+                $validateTokenUseCase
+            );
+
+            $user = $handleTwoAuthentificationUseCase->execute($token);
+
+
 
             // Token is valid, render the reset password view.
-            $view = new ResetPasswordView($token, $tokenData['email']);
+            $view = new RegisterSuccessView($user);
             $view->render();
         } catch (ExceptionInvalidToken $e) {
             SessionService::setFlash('errors', ['Erreur lors de la validation du lien: ' . $e->getMessage()]);
-            header('Location: /forgot-password');
+            header('Location: /register');
             exit();
         }
     }
@@ -63,6 +86,6 @@ class ResetPasswordController extends BaseController
     #[Override]
     public static function support(string $path, string $method): bool
     {
-        return $path === "/reset-password" && $method === "GET";
+        return $path === "/two-factor-authentification" && $method === "GET";
     }
 }

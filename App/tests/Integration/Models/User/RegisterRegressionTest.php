@@ -2,60 +2,45 @@
 
 namespace Tests\Integration\Models\User;
 
-use Models\Entity\User\Student;
 use Models\Repository\User\PdoUserRepository;
-use Models\Repository\User\PdoStudentRepository;
-use Models\Repository\User\PdoProfessorRepository;
-use Models\Repository\User\PdoClientRepository;
+use Models\Repository\User\PdoPendingRegistrationRepository;
 use Models\UseCase\User\RegisterUserUseCase;
-use Models\Entity\User\User;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
-use Core\Includes\Database;
+use PHPUnit\Framework\Attributes\UsesClass;
+use Core\Models\BaseModel;
+use Models\Entity\User\Student;
+use Models\Entity\User\User;
 use Models\Entity\User\UserFactory;
-use ReflectionClass;
+use Services\TokenService;
 
 #[CoversClass(RegisterUserUseCase::class)]
-#[CoversClass(Student::class)]
-#[CoversClass(PdoUserRepository::class)]
-#[CoversClass(PdoStudentRepository::class)]
-#[CoversClass(PdoProfessorRepository::class)]
-#[CoversClass(PdoClientRepository::class)]
-#[CoversClass(Database::class)]
-#[CoversClass(User::class)]
+#[CoversClass(TokenService::class)]
 #[CoversClass(UserFactory::class)]
+#[UsesClass(BaseModel::class)]
+#[UsesClass(Student::class)]
+#[UsesClass(User::class)]
 class RegisterRegressionTest extends TestCase
 {
-    private $studentRepo;
-    private $professorRepo;
-    private $clientRepo;
     private $userRepo;
+    private $pendingRepo;
     private $useCase;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->studentRepo = $this->createMock(PdoStudentRepository::class);
-        $this->professorRepo = $this->createMock(PdoProfessorRepository::class);
-        $this->clientRepo = $this->createMock(PdoClientRepository::class);
         $this->userRepo = $this->createMock(PdoUserRepository::class);
+        $this->pendingRepo = $this->createMock(PdoPendingRegistrationRepository::class);
 
         $this->useCase = new RegisterUserUseCase(
-            $this->studentRepo,
-            $this->professorRepo,
-            $this->clientRepo,
-            $this->userRepo
+            $this->userRepo,
+            $this->pendingRepo
         );
     }
 
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     #[Test]
-    public function controllerUsageFailsToInsertStudentData(): void
+    public function testAMUIdIsExtractedProperlyBeforeInsert(): void
     {
         $email = 'regression.student@test.com';
         $data = [
@@ -72,22 +57,29 @@ class RegisterRegressionTest extends TestCase
         ];
 
         $this->userRepo->method('existsByEmail')->willReturn(false);
-        $this->studentRepo->method('insert')->willReturn(1);
+        $this->pendingRepo->method('existsByEmail')->willReturn(false);
 
-        $mockStudent = new Student($data);
-        $reflection = new ReflectionClass(Student::class);
-        $prop = $reflection->getProperty('user_id');
-        $prop->setAccessible(true);
-        $prop->setValue($mockStudent, 1);
+        $this->pendingRepo->expects($this->once())
+            ->method('insert')
+            ->with(
+                $this->isString(), // Token is now dynamically generated
+                'John',
+                'Doe',
+                $email,
+                '0600000000',
+                $this->anything(), // Handled by password_hash
+                'student',
+                $this->anything(), // expiresAt
+                's_reg_fail',      // AMU ID must be passed here
+                'TD1',
+                'TP1',
+                null,
+                2,
+                null
+            )->willReturn(true);
 
-        $this->studentRepo->method('findById')->willReturn($mockStudent);
+        $token = $this->useCase->execute($data);
 
-        $user = $this->useCase->execute($data);
-
-        $fetched = $this->studentRepo->findById($user->getUserId());
-
-        $this->assertInstanceOf(Student::class, $fetched);
-        $this->assertNotNull($fetched->getAmuId(), "AMU ID should not be null");
-        $this->assertEquals('s_reg_fail', $fetched->getAmuId(), "AMU ID should match");
+        $this->assertTrue(TokenService::isValidFormat($token));
     }
 }
