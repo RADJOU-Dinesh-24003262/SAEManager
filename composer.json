@@ -36,7 +36,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Tests\\": "App/tests/"
+      "Tests\\": "App/tests/",
+      "Controllers\\Mock\\": "App/tests/Unit/Core/Routing/"
     }
   },
   "scripts": {

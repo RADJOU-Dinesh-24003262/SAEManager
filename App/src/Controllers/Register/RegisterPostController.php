@@ -11,33 +11,36 @@ use Core\Includes\Exception\ExceptionValidation\ExceptionValidationRegisters;
 use Core\Utils\Logger;
 use Core\Utils\SessionService;
 use Exception;
-use Models\Entity\User\User;
-use Models\Repository\User\{PdoStudentRepository, PdoProfessorRepository, PdoClientRepository};
+use Models\Repository\User\PdoPendingRegistrationRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\RegisterUserUseCase;
 use Override;
 use PDOException;
+use Services\Auth\RegistrationMailer;
+use Services\TokenService;
+use Views\User\TwoFactorAuthentificationView;
+use Views\User\RegisterPendingView;
 use Validator\Register\ValidationServiceRegister;
 use Views\User\RegisterSuccessView;
 use Views\User\RegisterView;
 
 /**
  * This class controls the register process (post).
-
+ *
  * @category Controller
-
+ *
  * @package Src
-
+ *
  * @subpackage Controllers/User
-
+ *
  * @author Alexandre Benhafessa <alexandre.benhafessa@etu.univ-amu.fr>
  * @author François Dargentolle <francois.dargentolle@etu.univ-amu.fr>
  * @author William Edelstein <william.edelstein@etu.univ-amu.fr>
  * @author Nathan Griguer <nathan.griguer@etu.univ-amu.fr>
  * @author Dinesh Radjou <dinesh.radjou@etu.univ-amu.fr>
-
+ *
  * @license MIT License https://opensource.org/licenses/MIT
-
+ *
  * @link https://github.com/RADJOU-Dinesh-24003262/SAEManager
  */
 class RegisterPostController extends BaseController
@@ -61,28 +64,19 @@ class RegisterPostController extends BaseController
             $data = $validator->escape($_POST);
             $validator->validate($data);
 
-            // Create the user.
-            $studentRepo = new PdoStudentRepository();
-            $professorRepo = new PdoProfessorRepository();
-            $clientRepo = new PdoClientRepository();
-            $userRepo = new PdoUserRepository();
+            $userRepo    = new PdoUserRepository();
+            $pendingRepo = new PdoPendingRegistrationRepository();
+            $tokenService = new TokenService();
 
-            $registerUseCase = new RegisterUserUseCase(
-                $studentRepo,
-                $professorRepo,
-                $clientRepo,
-                $userRepo
-            );
+            $registerUseCase = new RegisterUserUseCase($userRepo, $pendingRepo);
 
-            $user = $registerUseCase->execute($data);
+            $token = $registerUseCase->execute($data);
 
-            if ($user === null) {
-                throw new Exception("L'utilisateur n'a pas pu être récupéré après sa création.");
-            }
+            RegistrationMailer::send($data['email'], $token);
 
-            Logger::log('REGISTER_SUCCESS', "New user registered: " . $user->getEmail());
+            Logger::log('REGISTER_ATTEMPTED', "New user registered in pending registrations: " . $data['email']);
 
-            $view = new RegisterSuccessView($user);
+            $view = new TwoFactorAuthentificationView($data['email']);
             $view->render();
             exit();
         } catch (ExceptionEmailAlreadyExists $e) {

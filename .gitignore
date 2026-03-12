@@ -3,9 +3,11 @@
 App/config/my_settings.ini
 *.ini
 *.lock
+.vscode/*
 /vendor
 .phpunit*
 *coverage*
+.vscode/*
 *.xml
 .php-cs-fixer.cache
 .php-cs-fixer.dist.php

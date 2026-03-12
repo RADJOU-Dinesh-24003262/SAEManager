@@ -9,9 +9,11 @@ use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationResetPassword;
 use Core\Utils\SessionService;
 use Models\Entity\User\User;
+use Models\Repository\User\PdoPasswordResetRepository;
 use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\User\HandlePasswordResetUseCase;
 use Models\UseCase\User\ResetPasswordUseCase;
+use Models\UseCase\User\ValidateTokenUseCase;
 use Override;
 use Services\TokenService;
 use Validator\ResetPassword\ResetPasswordValidator;
@@ -48,8 +50,17 @@ class ResetPasswordPostController extends BaseController
             $validator->validate($data);
             $password = $data['pwdnew'] ?? '';
 
-            $handlePasswordResetUseCase = new HandlePasswordResetUseCase(new PdoUserRepository());
-            $email = $handlePasswordResetUseCase->execute($token, $password);
+            $userRepository = new PdoUserRepository();
+            $passwordRepository = new PdoPasswordResetRepository();
+            $tokenService = new TokenService();
+            $validateTokenUseCase = new ValidateTokenUseCase($passwordRepository, $tokenService);
+
+            $resetPasswordUseCase = new ResetPasswordUseCase(
+                $userRepository,
+                $passwordRepository,
+                $validateTokenUseCase
+            );
+            $email = $resetPasswordUseCase->execute($password, $token);
 
             (new ResetPasswordSuccessView())->render();
             error_log("Mot de passe réinitialisé avec succès pour: " . $email);

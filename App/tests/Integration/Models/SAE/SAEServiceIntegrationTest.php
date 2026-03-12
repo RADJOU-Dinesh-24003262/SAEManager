@@ -30,6 +30,7 @@ use Models\UseCase\SAE\AssignProfessorToGroupUseCase;
 use Models\UseCase\SAE\GetCompleteSAEDataUseCase;
 use ReflectionClass;
 use Services\FileService;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 #[CoversClass(CreateSAEUseCase::class)]
 #[CoversClass(CreateSAEGroupUseCase::class)]
@@ -54,7 +55,7 @@ use Services\FileService;
 #[CoversClass(PdoStudentRepository::class)]
 #[CoversClass(PdoUserRepository::class)]
 #[CoversClass(UserFactory::class)]
-#[CoversClass(FileService::class)]
+#[UsesClass(FileService::class)]
 
 class SAEServiceIntegrationTest extends TestCase
 {

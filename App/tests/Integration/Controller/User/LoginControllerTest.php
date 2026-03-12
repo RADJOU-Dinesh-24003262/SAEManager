@@ -3,17 +3,18 @@
 namespace tests\Integration\Controller\User;
 
 use Controllers\Login\LoginPostController;
-use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmpty;
 use Core\Includes\Exception\ExceptionValidation\ExceptionValidationEmptys;
-use Core\Utils\Logger;
 use Core\Utils\SessionService;
 use Core\Views\AbstractView;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Core\Utils\Config;
 use Validator\FormValidator;
+use Core\Utils\Logger;
+use Core\Utils\Config;
+use Core\Includes\Exception\ExceptionCsrf;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
  * Integration test for the LoginPostController controller.
@@ -24,9 +25,9 @@ use Validator\FormValidator;
 #[CoversClass(ExceptionValidationEmpty::class)]
 #[CoversClass(ExceptionValidationEmptys::class)]
 #[CoversClass(AbstractView::class)]
-#[CoversClass(ExceptionCsrf::class)]
-#[CoversClass(Config::class)]
-#[CoversClass(Logger::class)]
+#[UsesClass(Logger::class)]
+#[UsesClass(Config::class)]
+#[UsesClass(ExceptionCsrf::class)]
 #[RunInSeparateProcess]
 class LoginControllerTest extends TestCase
 {

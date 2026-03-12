@@ -35,12 +35,18 @@ class UserFactory
      *
      * @param array<string, mixed> $data The user data.
      * @return User The instantiated User.
+     * @throws \InvalidArgumentException If the user type is unknown.
      */
     public static function create(array $data): User
     {
+
         $type = $data['user_type'] ?? 'student';
 
-        $className = self::$typeRegistry[$type];
+        $className = self::$typeRegistry[$type] ?? null;
+
+        if ($className === null) {
+            throw new \InvalidArgumentException("Type d'utilisateur inconnu : " . $type);
+        }
 
         return new $className($data);
     }

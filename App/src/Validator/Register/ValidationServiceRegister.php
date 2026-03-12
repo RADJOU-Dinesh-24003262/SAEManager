@@ -83,7 +83,8 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister(
                 "password",
                 "string",
-                "Mot de passe trop court (min 8 caractères)."
+                "Obligation de 12 caractères minimum avec une majuscule, 
+                une minuscule, un chiffre et un caractère spécial."
             );
         }
 
@@ -133,11 +134,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuStudentEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
+                "L'email doit correspondre au format prenom.nom(minuscules)@etu.univ-amu.fr"
             );
         }
 
@@ -198,11 +199,11 @@ class ValidationServiceRegister extends FormValidator
     {
         $errors = [];
 
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
+        if (!$this->isOwnAmuProfessorEmail($data['email'], $data['first_name'], $data['last_name'])) {
             $errors[] = new ExceptionValidationRegister(
                 "email",
                 "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
+                "L'email doit correspondre au format prenom.nom(minuscules)@univ-amu.fr"
             );
         }
 
@@ -210,14 +211,6 @@ class ValidationServiceRegister extends FormValidator
             $errors[] = new ExceptionValidationRegister('amu_id', 'string', "Identifiant Amu requis.");
         } elseif (!$this->isValidAmuId($data['amu_id'])) {
             $errors[] = new ExceptionValidationRegister("amu_id", "string", "Identifiant Amu invalide.");
-        }
-
-        if (!$this->isOwnAmuPrefix($data['email'], $data['first_name'], $data['last_name'])) {
-            $errors[] = new ExceptionValidationRegister(
-                "email",
-                "string",
-                "L'email doit correspondre au format prenom.nom (minuscules)."
-            );
         }
 
         return $errors;
