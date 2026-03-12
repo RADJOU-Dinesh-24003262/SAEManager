@@ -28,5 +28,4 @@ interface PasswordResetInterface extends TokenRepositoryInterface
      * @throws ExceptionSpam If too many reset requests are detected.
      */
     public function insert(string $email, string $token, \DateTimeImmutable $expiresAt): bool;
-
 }

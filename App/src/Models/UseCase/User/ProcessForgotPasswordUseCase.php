@@ -47,8 +47,7 @@ class ProcessForgotPasswordUseCase
         UserInterface $userRepository,
         PasswordResetInterface $passwordResetInterface,
         TokenService $tokenService
-        )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->passwordResetInterface = $passwordResetInterface;
         $this->tokenService = $tokenService;
