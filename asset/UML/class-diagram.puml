@@ -970,6 +970,7 @@
   }
   Controllers_BaseController ..> Models_Entity_User_User
   Controllers_BaseController ..> Models_Repository_Security_JsonIpBanRepository
+  Controllers_BaseController ..> Models_Repository_User_PdoUserRepository
   Controllers_BaseController ..> Models_UseCase_Security_IpBanRepositoryInterface
   Controllers_BaseController <|-- Controllers_Dashboard_DashboardController
   Controllers_BaseController <|-- Controllers_ForgotPassword_ForgotPasswordController
