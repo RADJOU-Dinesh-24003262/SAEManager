@@ -55,7 +55,6 @@ class SettingsEditProfilePostController extends BaseController
         $user = $updateProfileUseCase->execute($this->user->getUserId(), $data);
 
 
-        SessionService::set('USER', serialize($user));
 
         $view = new EditProfileSuccessView($data);
         $view->render();

@@ -70,8 +70,8 @@ class LoginPostController extends BaseController
             SessionService::regenerateId();
 
             SessionService::set('user_id', $user->getEmail());
+            SessionService::set('user_id_pk', $user->getUserId());
             Logger::log('LOGIN_SUCCESS', "Successful login for : " . $user->getEmail(), $user->getUserId());
-            SessionService::set('USER', serialize($user));
             RateLimiter::clear('login');
 
             $this->redirect('/dashboard');

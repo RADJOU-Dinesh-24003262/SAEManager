@@ -11,6 +11,7 @@ use Core\Includes\Exception\ExceptionBD\ExceptionFetchDataBD;
 use Core\Includes\Exception\ExceptionCsrf;
 use Core\Includes\Exception\ExceptionSpam;
 use Models\Repository\Security\JsonIpBanRepository;
+use Models\Repository\User\PdoUserRepository;
 use Models\UseCase\Security\IpBanRepositoryInterface;
 
 /**
@@ -51,12 +52,23 @@ abstract class BaseController implements ControllerInterface
         }
 
         // Load and validate user from session.
-        $user = unserialize(SessionService::get('USER'));
+        $userId = SessionService::get('user_id_pk'); // Use primary key ID
 
-        if (!$user || !($user instanceof User)) {
-            SessionService::remove('USER');
+        if (!$userId) {
+            SessionService::remove('user_id_pk');
             SessionService::remove('user_id');
-            SessionService::setFlash('errors', ['Session invalide, veuillez vous reconnecter.']);
+            SessionService::setFlash('errors', ['Session expirée, veuillez vous reconnecter.']);
+            header('Location: /login');
+            exit();
+        }
+
+        $repository = new PdoUserRepository();
+        $user = $repository->findById((int)$userId);
+
+        if (!$user) {
+            SessionService::remove('user_id_pk');
+            SessionService::remove('user_id');
+            SessionService::setFlash('errors', ['Utilisateur introuvable, veuillez vous reconnecter.']);
             header('Location: /login');
             exit();
         }
