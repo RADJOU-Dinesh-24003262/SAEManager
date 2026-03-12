@@ -338,6 +338,7 @@ class PageSaeView extends BaseSaeView
             $content .= '<p>Aucune description disponible.</p>';
         } else {
             $parsedown = new Parsedown();
+            $parsedown->setSafeMode(true);
             $content .= '<article><div class="sae-subject-file">' . $parsedown->text($description) . '</div></article>';
         }
         return $content;

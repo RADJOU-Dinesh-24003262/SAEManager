@@ -158,7 +158,7 @@ class ValidateToDoListModifyAccessUseCaseTest extends TestCase
         $user->method('getUserType')->willReturn('student');
         $user->method('isStudent')->willReturn(true);
         $user->method('getUserId')->willReturn(1);
-        
+
         $this->studentRepo->expects($this->exactly(2))
             ->method('canAccessSAE')
             ->willReturn(true);

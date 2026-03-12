@@ -124,4 +124,20 @@ class CreateSaeValidatorTest extends TestCase
 
         $this->validator->validate($data);
     }
+
+    #[Test]
+    public function escapeMethodCorrectlyNeutralizesHtmlTags(): void
+    {
+        $data = [
+            'subject_name' => '<b>Test</b>',
+            'description' => '<script>alert("xss")</script>',
+            'begin_date' => '2023-01-01',
+            'end_date' => '2023-02-01'
+        ];
+
+        $escapedData = $this->validator->escape($data);
+
+        $this->assertEquals('&lt;b&gt;Test&lt;/b&gt;', $escapedData['subject_name']);
+        $this->assertEquals('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;', $escapedData['description']);
+    }
 }

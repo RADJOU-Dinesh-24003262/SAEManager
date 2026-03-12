@@ -57,14 +57,8 @@ class SaeModifyPostController extends BaseController
             // CSRF Protection.
             $this->checkCsrf('MODIFY_SAE');
 
-            // Extract description before escape to preserve Markdown.
-            $description = $data['description'];
-
             // Basic sanitization.
             $data = $validator->escape($data);
-
-            // Restore description for length check and saving.
-            $data['description'] = $description;
 
             $updateData = [
                 'subject_name' => $data['subject_name'],
@@ -76,7 +70,7 @@ class SaeModifyPostController extends BaseController
             $repository = new PdoSAESubjectRepository();
             $useCase = new ModifySAEUseCase($repository);
 
-            $useCase->execute($saeId, $updateData, $description, $this->user);
+            $useCase->execute($saeId, $updateData, $data['description'], $this->user);
 
 
             SessionService::setFlash('success', 'SAE modifiée avec succès');

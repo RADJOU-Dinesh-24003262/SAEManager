@@ -29,13 +29,13 @@ class PdoToDoListRepositoryTest extends TestCase
         // Mock PDO and PDOStatement
         $this->mockPdo = $this->createMock(PDO::class);
         $this->mockStmt = $this->createMock(PDOStatement::class);
-        
+
         // Disable original constructor which hits Database singleton
         $this->repository = $this->getMockBuilder(PdoToDoListRepository::class)
             ->disableOriginalConstructor()
             ->onlyMethods([])
             ->getMock();
-        
+
         $reflectionRepo = new \ReflectionClass(PdoToDoListRepository::class);
         $tableProp = $reflectionRepo->getProperty('table');
         $tableProp->setAccessible(true);
@@ -44,7 +44,7 @@ class PdoToDoListRepositoryTest extends TestCase
         $entityClassProp = $reflectionRepo->getProperty('entityClass');
         $entityClassProp->setAccessible(true);
         $entityClassProp->setValue($this->repository, ToDoItem::class);
-        
+
         // Force the connection property for safety
         $refConn = $reflectionRepo->getParentClass()->getProperty('connection');
         $connProp = $refConn;
@@ -81,7 +81,7 @@ class PdoToDoListRepositoryTest extends TestCase
         $matcher = $this->exactly(5);
         $this->mockStmt->expects($matcher)
             ->method('bindValue')
-            ->willReturnCallback(function($param, $value, $type) use ($matcher) {
+            ->willReturnCallback(function ($param, $value, $type) use ($matcher) {
                 $expected = [
                     1 => [':sae_group_id', 10, PDO::PARAM_INT],
                     2 => [':tododesc', 'Test task with date', PDO::PARAM_STR],
@@ -131,7 +131,7 @@ class PdoToDoListRepositoryTest extends TestCase
         $matcher = $this->exactly(5);
         $this->mockStmt->expects($matcher)
             ->method('bindValue')
-            ->willReturnCallback(function($param, $value, $type) use ($matcher) {
+            ->willReturnCallback(function ($param, $value, $type) use ($matcher) {
                 $expected = [
                     1 => [':sae_group_id', 10, PDO::PARAM_INT],
                     2 => [':tododesc', 'Test task no date', PDO::PARAM_STR],

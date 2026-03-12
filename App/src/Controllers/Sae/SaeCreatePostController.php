@@ -46,14 +46,8 @@ class SaeCreatePostController extends BaseController
         $validator = new FormSaeValidator();
 
         try {
-            // Extract description before escape to preserve Markdown.
-            $description = $data['description'];
-
             // Basic sanitization.
             $data = $validator->escape($data);
-
-            // Restore description for length check and saving.
-            $data['description'] = $description;
 
             // Validation.
             $validator->validate($data);
@@ -66,7 +60,7 @@ class SaeCreatePostController extends BaseController
                 'subject_name' => $data['subject_name'],
                 'begin_date' => $data['begin_date'],
                 'end_date' => $data['end_date'],
-                'description' => $description
+                'description' => $data['description']
             ];
 
             $subjectInterface = new PdoSAESubjectRepository();
