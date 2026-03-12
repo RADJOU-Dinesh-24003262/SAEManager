@@ -59,6 +59,9 @@ class ValidateTokenUseCase
      */
     public function execute(string $token, string $context = 'réinitialisation'): array
     {
+        // Purge any expired/used tokens first.
+        $this->tokenRepository->purgeExpired();
+
         // 1. Check physical token format. Default to hex 64.
         if (!$this->tokenService->isValidFormat($token)) {
             throw new ExceptionInvalidToken("Ce lien de {$context} est invalide.");
@@ -70,7 +73,7 @@ class ValidateTokenUseCase
         if (!$tokenData) {
             throw new ExceptionInvalidToken(
                 "Ce lien de {$context} est invalide ou a expiré. Veuillez faire une nouvelle demande."
-            );
+                );
         }
 
         // 3. Check if token was already used.

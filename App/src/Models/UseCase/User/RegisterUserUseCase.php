@@ -80,6 +80,8 @@ class RegisterUserUseCase
             $user->setPassword($data['password']);
         }
 
+        $this->pendingInterface->purgeExpired();
+
         // 2. Check email not already confirmed in users.
         if ($this->userInterface->existsByEmail($user->getEmail())) {
             throw new ExceptionEmailAlreadyExists($user->getEmail());

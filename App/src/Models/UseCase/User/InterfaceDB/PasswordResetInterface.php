@@ -29,10 +29,4 @@ interface PasswordResetInterface extends TokenRepositoryInterface
      */
     public function insert(string $email, string $token, \DateTimeImmutable $expiresAt): bool;
 
-    /**
-     * Deletes all expired or used tokens from the database.
-     *
-     * @return integer Number of deleted rows.
-     */
-    public function purgeExpiredTokens(): int;
 }

@@ -140,10 +140,10 @@ class PdoPasswordResetRepository implements PasswordResetInterface
     /**
      * Removes expired and used tokens from the database.
      *
-     * @return integer The number of tokens removed.
+     * @return void
      */
     #[Override]
-    public function purgeExpiredTokens(): int
+    public function purgeExpired(): void
     {
         try {
             $stmt = $this->connection->prepare(
@@ -152,10 +152,8 @@ class PdoPasswordResetRepository implements PasswordResetInterface
             );
 
             $stmt->execute();
-            return $stmt->rowCount();
         } catch (PDOException $e) {
             error_log('Erreur nettoyage tokens: ' . $e->getMessage());
-            return 0;
         }
     }
 }
