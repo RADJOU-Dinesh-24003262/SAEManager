@@ -51,7 +51,7 @@ interface PendingRegistrationInterface extends TokenRepositoryInterface
         ?string $major = null,
         ?int $year = null,
         ?string $organisation = null
-        ): bool;
+    ): bool;
 
     /**
      * Checks if a pending registration exists for the given email.
@@ -70,5 +70,4 @@ interface PendingRegistrationInterface extends TokenRepositoryInterface
      * @return boolean True on success, false on failure.
      */
     public function markAsUsed(string $token): bool;
-
 }

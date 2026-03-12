@@ -173,10 +173,6 @@ class DashboardView extends AbstractView
         $html .= '<section class="sae-body">';
         $html .= '<h3>' . $sae->getSubjectName() . '</h3>';
 
-        if (!empty($sae->getResponsibleProfId())) {
-            $html .= '<p><strong>Enseignant :</strong> ' . 'Inconnu' . '</p>';
-        }
-
         $html .= '<div class="sae-actions">';
         $html .= '<a href="/sae/' . intval($sae->getSaeSubjectId()) . '" class="btn btn-primary">Voir détails</a>';
         if ($user->isProfessor()) {

@@ -73,7 +73,7 @@ class ValidateTokenUseCase
         if (!$tokenData) {
             throw new ExceptionInvalidToken(
                 "Ce lien de {$context} est invalide ou a expiré. Veuillez faire une nouvelle demande."
-                );
+            );
         }
 
         // 3. Check if token was already used.
